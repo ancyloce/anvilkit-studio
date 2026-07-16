@@ -111,9 +111,10 @@ describe("FieldsPanel — section grouping", () => {
 				},
 			},
 		});
-		renderPanel(
-			[<FieldStub key="title" fieldName="title" />, <FieldStub key="size" fieldName="size" />],
-		);
+		renderPanel([
+			<FieldStub key="title" fieldName="title" />,
+			<FieldStub key="size" fieldName="size" />,
+		]);
 		expect(screen.getByTestId("field-title")).toBeInTheDocument();
 		expect(screen.getByTestId("field-size")).toBeInTheDocument();
 		expect(
@@ -139,9 +140,11 @@ describe("FieldsPanel — section grouping", () => {
 				},
 			},
 		});
-		renderPanel(
-			[<FieldStub key="title" fieldName="title" />, <FieldStub key="width" fieldName="width" />, <FieldStub key="background" fieldName="background" />],
-		);
+		renderPanel([
+			<FieldStub key="title" fieldName="title" />,
+			<FieldStub key="width" fieldName="width" />,
+			<FieldStub key="background" fieldName="background" />,
+		]);
 
 		await waitFor(() =>
 			expect(
@@ -178,9 +181,11 @@ describe("FieldsPanel — section grouping", () => {
 				},
 			},
 		});
-		renderPanel(
-			[<FieldStub key="a" fieldName="a" />, <FieldStub key="b" fieldName="b" />, <FieldStub key="c" fieldName="c" />],
-		);
+		renderPanel([
+			<FieldStub key="a" fieldName="a" />,
+			<FieldStub key="b" fieldName="b" />,
+			<FieldStub key="c" fieldName="c" />,
+		]);
 		await waitFor(() =>
 			expect(
 				screen.getByTestId("ak-inspector-section-fields:Hero:content"),
@@ -208,7 +213,10 @@ describe("FieldsPanel — section grouping", () => {
 			},
 		});
 		renderPanel(
-			[<FieldStub key="w" fieldName="w" />, <FieldStub key="x" fieldName="x" />],
+			[
+				<FieldStub key="w" fieldName="w" />,
+				<FieldStub key="x" fieldName="x" />,
+			],
 			"fields-sections-advanced",
 		);
 		await waitFor(() =>
@@ -243,9 +251,11 @@ describe("FieldsPanel — section grouping", () => {
 				},
 			},
 		});
-		renderPanel(
-			[<FieldStub key="second" fieldName="second" />, <FieldStub key="first" fieldName="first" />, <FieldStub key="custom" fieldName="custom" />],
-		);
+		renderPanel([
+			<FieldStub key="second" fieldName="second" />,
+			<FieldStub key="first" fieldName="first" />,
+			<FieldStub key="custom" fieldName="custom" />,
+		]);
 		await waitFor(() =>
 			expect(
 				screen.getByTestId("ak-inspector-section-fields:Hero:Branding"),
