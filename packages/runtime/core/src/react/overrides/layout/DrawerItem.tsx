@@ -21,8 +21,9 @@
  */
 
 import { Component as GenericComponentIcon } from "lucide-react";
-import { type ReactNode, useMemo } from "react";
+import { type ReactNode, useMemo, useState } from "react";
 
+import { StudioErrorBoundary } from "@/components/StudioErrorBoundary";
 import { readComponentPresentation } from "@/overrides/utils/component-presentation";
 import { useReactivePuck } from "@/overrides/utils/use-reactive-puck";
 import { Item, ItemContent, ItemHeader, ItemTitle } from "@/primitives";
@@ -103,7 +104,14 @@ function DrawerItemPlaceholder(): ReactNode {
 	);
 }
 
-/** Fallback chain: thumbnail → custom preview → component icon → generic placeholder. */
+/**
+ * Fallback chain: thumbnail → custom preview → component icon →
+ * generic placeholder. Each tier degrades to the NEXT tier on
+ * failure instead of breaking the panel: a thumbnail that 404s flips
+ * local error state (`onError`), and a custom preview node that
+ * throws during render is caught by a per-tile error boundary — one
+ * bad component tile can never blank the whole library.
+ */
 function GridPreview({
 	thumbnail,
 	preview,
@@ -115,31 +123,39 @@ function GridPreview({
 	readonly icon?: ReactNode;
 	readonly title: string;
 }): ReactNode {
-	if (thumbnail !== undefined) {
+	const [thumbnailFailed, setThumbnailFailed] = useState(false);
+
+	const iconTier =
+		icon !== undefined ? (
+			<div className="flex size-full items-center justify-center text-[var(--ak-studio-muted-fg)] [&_svg]:size-8">
+				{icon}
+			</div>
+		) : (
+			<DrawerItemPlaceholder />
+		);
+
+	if (thumbnail !== undefined && !thumbnailFailed) {
 		return (
 			<img
 				src={thumbnail}
 				alt={`${title} preview`}
+				loading="lazy"
 				draggable={false}
 				className="size-full object-cover"
+				onError={() => setThumbnailFailed(true)}
 			/>
 		);
 	}
 	if (preview !== undefined) {
 		return (
-			<div className="flex size-full items-center justify-center">
-				{preview}
-			</div>
+			<StudioErrorBoundary fallback={() => iconTier}>
+				<div className="flex size-full items-center justify-center">
+					{preview}
+				</div>
+			</StudioErrorBoundary>
 		);
 	}
-	if (icon !== undefined) {
-		return (
-			<div className="flex size-full items-center justify-center text-[var(--ak-studio-muted-fg)] [&_svg]:size-8">
-				{icon}
-			</div>
-		);
-	}
-	return <DrawerItemPlaceholder />;
+	return iconTier;
 }
 
 export function DrawerItem({ name, children }: DrawerItemProps): ReactNode {
@@ -202,7 +218,8 @@ export function DrawerItem({ name, children }: DrawerItemProps): ReactNode {
 			className="group/drawer-item h-full cursor-grab items-stretch rounded-md bg-[var(--ak-studio-muted)] p-0 text-center text-[var(--ak-studio-fg)] hover:border-[var(--ak-studio-accent)] active:cursor-grabbing overflow-hidden"
 			data-drawer-item={name}
 		>
-			<ItemHeader className="relative aspect-[4/3] h-auto w-full overflow-hidden">
+			{/* 16:10, not 4:3 — task §5.4: compact ratio, no oversized cards. */}
+			<ItemHeader className="relative aspect-[16/10] h-auto w-full overflow-hidden">
 				<GridPreview
 					thumbnail={presentation.thumbnail}
 					preview={presentation.preview}

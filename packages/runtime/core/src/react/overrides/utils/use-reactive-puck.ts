@@ -43,3 +43,29 @@ export function useReactivePuck<T>(selector: (snapshot: PuckSnapshot) => T): T {
 	}
 	return _useReactivePuck(selector);
 }
+
+/**
+ * {@link useReactivePuck}, but tolerant of rendering outside a
+ * `<Puck>` provider — returns `fallback` there instead of throwing.
+ *
+ * Why the try/catch around a hook is safe here: Puck's `usePuck`
+ * calls `useContext` FIRST and throws before any further hook when
+ * the context is absent (verified against `createUsePuck` in
+ * `@puckeditor/core@0.22`). A mounted component can never move in or
+ * out of the provider without remounting, so the hook count is stable
+ * per component instance — exactly the invariant the Rules of Hooks
+ * protect. This exists for renderers that production always mounts
+ * inside `<Puck>` but that unit tests (and potentially hosts) mount
+ * bare — optional enhancements like the reset affordance degrade to
+ * `fallback` instead of crashing the field.
+ */
+export function useOptionalReactivePuck<T>(
+	selector: (snapshot: PuckSnapshot) => T,
+	fallback: T,
+): T {
+	try {
+		return useReactivePuck(selector);
+	} catch {
+		return fallback;
+	}
+}
