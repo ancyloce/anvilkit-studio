@@ -169,10 +169,10 @@ export function LayersPanel(): ReactNode {
 
 	return (
 		<div className="flex min-h-0 flex-1 flex-col" data-testid="ak-layer-layers">
-			<div className="flex h-8 shrink-0 items-center justify-center gap-1 px-2 border-b border-[var(--ak-studio-border)]">
-				<h3 className="grow truncate text-sm font-medium text-[var(--ak-studio-fg)]">
-					{msg("studio.module.layer.layers.title")}
-				</h3>
+			{/* No title row here — the Pages/Layers <TabsTab> in `LayerModule`
+			    already conveys which mode is active (task Phase 6: avoid
+			    duplicating that title inside the panel body). */}
+			<div className="flex h-8 shrink-0 items-center justify-end gap-1 px-2 border-b border-[var(--ak-studio-border)]">
 				<DropdownMenu>
 					<Tooltip>
 						<TooltipTrigger

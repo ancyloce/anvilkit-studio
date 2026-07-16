@@ -589,7 +589,7 @@ function useImageModuleElement(): ReactNode {
 			isLocalSource &&
 			source?.delete !== undefined ? (
 				<div
-					className="flex h-9 shrink-0 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-muted)] px-2 text-xs"
+					className="flex h-9 shrink-0 items-center gap-2 bg-[var(--ak-studio-muted)] px-2 text-xs"
 					data-testid="ak-image-selection-toolbar"
 				>
 					<span className="grow text-[var(--ak-studio-fg)]">

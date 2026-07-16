@@ -10,7 +10,7 @@
  * + `resolveDrop` unit tests in `use-layer-tree.test.ts`.
  */
 
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { LayerTree } from "@/layout/sidebar/modules/layer/components/LayerTree";
@@ -53,12 +53,17 @@ afterEach(() => {
 	mockPuckSnapshot.selectedItem = null;
 });
 
-function Setup({ children }: { readonly children: ReactNode }): ReactElement {
+function Setup({
+	children,
+	storeId = `tree-${Math.random().toString(36).slice(2)}`,
+}: {
+	readonly children: ReactNode;
+	/** Stable id so `rerender()` reuses the same store across passes. */
+	readonly storeId?: string;
+}): ReactElement {
 	return (
 		<EditorI18nProvider>
-			<EditorUiStoreProvider
-				storeId={`tree-${Math.random().toString(36).slice(2)}`}
-			>
+			<EditorUiStoreProvider storeId={storeId}>
 				{children}
 			</EditorUiStoreProvider>
 		</EditorI18nProvider>
@@ -135,5 +140,49 @@ describe("LayerTree — selected row treatment (DESIGN.md §11)", () => {
 		expect(inner.className).toContain("bg-[var(--editor-selection-soft)]");
 		expect(inner.className).toContain("ring-[var(--editor-selection)]");
 		expect(inner.className).not.toMatch(/bg-\[var\(--editor-selection\)\]/);
+	});
+});
+
+describe("LayerTree — canvas→sidebar selection sync (task Phase 6)", () => {
+	it("expands a collapsed ancestor and scrolls the selected row into view when selection changes externally (e.g. a canvas click)", async () => {
+		const scrollIntoViewMock = vi.fn();
+		Element.prototype.scrollIntoView = scrollIntoViewMock;
+
+		mockPuckSnapshot.appState.data = {
+			content: [{ type: "Layout", props: { id: "layout-1" } }],
+			zones: {
+				"layout-1:default": [{ type: "Text", props: { id: "text-2" } }],
+			},
+		};
+		mockPuckSnapshot.config.components = { Layout: {}, Text: {} };
+
+		const storeId = `sync-${Math.random().toString(36).slice(2)}`;
+		const { rerender } = render(
+			<Setup storeId={storeId}>
+				<LayerTree />
+			</Setup>,
+		);
+
+		// Collapse layout-1 so its child is hidden.
+		fireEvent.click(screen.getByTestId("ak-layer-toggle-layout-1"));
+		expect(screen.queryByTestId("ak-layer-node-text-2")).toBeNull();
+
+		// Simulate a canvas click selecting the nested, currently-hidden child.
+		mockPuckSnapshot.selectedItem = { props: { id: "text-2" } };
+		rerender(
+			<Setup storeId={storeId}>
+				<LayerTree />
+			</Setup>,
+		);
+
+		await vi.waitFor(() => {
+			expect(screen.getByTestId("ak-layer-node-text-2")).not.toBeNull();
+		});
+		expect(
+			screen.getByTestId("ak-layer-node-text-2").getAttribute("data-selected"),
+		).toBe("true");
+		await vi.waitFor(() => {
+			expect(scrollIntoViewMock).toHaveBeenCalled();
+		});
 	});
 });

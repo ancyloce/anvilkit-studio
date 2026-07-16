@@ -14,6 +14,7 @@
  * change. Puck's drag pipeline keeps owning the inner button.
  */
 
+import type { Config as PuckConfig } from "@puckeditor/core";
 import { useGetPuck } from "@puckeditor/core";
 import {
 	Children,
@@ -22,6 +23,10 @@ import {
 	type ReactNode,
 	useMemo,
 } from "react";
+import {
+	matchesPresentationQuery,
+	readComponentPresentation,
+} from "@/overrides/utils/component-presentation";
 import { Accordion } from "@/primitives/accordion";
 import {
 	useComponentViewMode,
@@ -41,10 +46,31 @@ interface DrawerItemElementProps {
 	readonly children?: ReactNode;
 }
 
-function matchesQuery(name: string | undefined, query: string): boolean {
+/**
+ * task Phase 9: matches name (as before), plus the friendly title,
+ * description, and keywords a component optionally provides via
+ * `readComponentPresentation` (Puck's own `label`/`metadata`), plus
+ * the component's declared Puck category — "search should match
+ * name, keywords, description, category."
+ */
+function matchesInsertQuery(
+	name: string,
+	category: string | undefined,
+	config: PuckConfig | undefined,
+	query: string,
+): boolean {
 	if (query.length === 0) return true;
-	if (name === undefined) return true;
-	return name.toLowerCase().includes(query.toLowerCase());
+	if (
+		category !== undefined &&
+		category.toLowerCase().includes(query.toLowerCase())
+	) {
+		return true;
+	}
+	const componentConfig = config?.components?.[name] as
+		| { label?: string; metadata?: unknown }
+		| undefined;
+	const presentation = readComponentPresentation(componentConfig, name);
+	return matchesPresentationQuery(presentation, name, query);
 }
 
 function sortSectionsByOrder(
@@ -121,12 +147,12 @@ export function InsertDrawerBody({
 			const name = child.props.name;
 			if (name === undefined) continue;
 			total += 1;
+			const category = categoryIndex.get(name);
 			if (search.length > 0) {
-				if (!matchesQuery(name, search)) continue;
+				if (!matchesInsertQuery(name, category, config, search)) continue;
 				flat.push(child);
 				continue;
 			}
-			const category = categoryIndex.get(name);
 			for (const section of sortedSections) {
 				if (section.predicate(name, { category })) {
 					items.get(section.id)?.push(child);
@@ -136,7 +162,7 @@ export function InsertDrawerBody({
 		}
 
 		return { sectionItems: items, flatMatches: flat, totalItems: total };
-	}, [children, search, sortedSections, categoryIndex]);
+	}, [children, search, sortedSections, categoryIndex, config]);
 
 	// Empty-library state takes precedence — if Puck handed us no
 	// Drawer.Items at all, neither sections nor search results matter.

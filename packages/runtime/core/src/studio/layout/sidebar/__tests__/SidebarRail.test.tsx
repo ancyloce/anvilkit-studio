@@ -193,4 +193,49 @@ describe("SidebarRail", () => {
 		expect(insert.className).toContain("aria-selected:text-[var(--brand)]");
 		expect(insert.className).not.toMatch(/aria-selected:bg-\[var\(--brand\)/);
 	});
+
+	describe("core/extension grouping divider (task Phase 12)", () => {
+		it("omits the divider when no extension modules are visible", () => {
+			render(
+				<EditorUiStoreProvider storeId="rail-divider-none">
+					<SidebarRegistryProvider value={createSidebarRegistryStore()}>
+						<SidebarRail />
+					</SidebarRegistryProvider>
+				</EditorUiStoreProvider>,
+			);
+			expect(screen.getAllByRole("tab")).toHaveLength(2);
+			expect(screen.queryByTestId("ak-rail-group-divider")).toBeNull();
+		});
+
+		it("renders exactly one divider between the core and extension groups", () => {
+			renderRail("rail-divider-present");
+			const divider = screen.getByTestId("ak-rail-group-divider");
+			const tabs = screen.getAllByRole("tab");
+			// Divider sits after layer (last core tab) and before image
+			// (first extension tab) — DOM order, not just presence.
+			const layerIndex = tabs.findIndex((t) => t.id === "ak-rail-tab-layer");
+			const imageIndex = tabs.findIndex((t) => t.id === "ak-rail-tab-image");
+			const dividerPosition =
+				tabs[layerIndex]?.compareDocumentPosition(divider);
+			expect(
+				(dividerPosition ?? 0) & Node.DOCUMENT_POSITION_FOLLOWING,
+			).toBeTruthy();
+			const imagePosition = divider.compareDocumentPosition(
+				tabs[imageIndex] as Node,
+			);
+			expect(imagePosition & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+		});
+
+		it("does not affect roving keyboard focus (divider is not a tab)", () => {
+			renderRail("rail-divider-keynav");
+			const tabs = screen.getAllByRole("tab");
+			tabs[1]?.focus();
+			fireEvent.keyDown(document.activeElement as Element, {
+				key: "ArrowDown",
+			});
+			// Moves straight from layer (index 1) to image (index 2) — the
+			// divider between them is skipped, not focused.
+			expect(document.activeElement).toBe(tabs[2]);
+		});
+	});
 });

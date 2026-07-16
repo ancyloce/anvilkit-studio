@@ -40,7 +40,15 @@ const FAKE_CONFIG: PuckConfig = {
 		actions: { components: ["Button"] },
 		forms: { components: ["Input"] },
 	},
-	components: {},
+	components: {
+		Hero: {
+			label: "Hero",
+			metadata: {
+				description: "A large marketing banner with a call to action.",
+				keywords: ["cta", "banner"],
+			},
+		},
+	},
 } as unknown as PuckConfig;
 
 vi.mock("@puckeditor/core", async () => {
@@ -321,5 +329,55 @@ describe("InsertDrawerBody", () => {
 		// BentoGrid still lands in top (marketing) since favorites
 		// matched only Hero.
 		expect(top.querySelector('[data-testid="item-BentoGrid"]')).toBeTruthy();
+	});
+
+	// task Phase 9: search now matches category, description, and
+	// keywords too — not just the raw component name.
+	describe("presentation-aware search matching", () => {
+		function PrimeSearch({ query }: { readonly query: string }): null {
+			const setQuery = useEditorUiStore((s) => s.setDrawerSearch);
+			useEffect(() => {
+				setQuery(query);
+			}, [setQuery, query]);
+			return null;
+		}
+
+		it("matches items by their declared Puck category", () => {
+			render(
+				<Providers>
+					<PrimeSearch query="marketing" />
+					<InsertDrawerBody>{demoItems()}</InsertDrawerBody>
+				</Providers>,
+			);
+			// Both marketing-category components match, even though
+			// neither's name contains "marketing".
+			expect(screen.getByTestId("item-Hero")).toBeTruthy();
+			expect(screen.getByTestId("item-BentoGrid")).toBeTruthy();
+			expect(screen.queryByTestId("item-Navbar")).toBeNull();
+		});
+
+		it("matches an item by its component description", () => {
+			render(
+				<Providers>
+					<PrimeSearch query="call to action" />
+					<InsertDrawerBody>{demoItems()}</InsertDrawerBody>
+				</Providers>,
+			);
+			expect(screen.getByTestId("item-Hero")).toBeTruthy();
+			// BentoGrid has no matching description and isn't in a
+			// category named "call to action".
+			expect(screen.queryByTestId("item-BentoGrid")).toBeNull();
+		});
+
+		it("matches an item by a declared keyword", () => {
+			render(
+				<Providers>
+					<PrimeSearch query="cta" />
+					<InsertDrawerBody>{demoItems()}</InsertDrawerBody>
+				</Providers>,
+			);
+			expect(screen.getByTestId("item-Hero")).toBeTruthy();
+			expect(screen.queryByTestId("item-Button")).toBeNull();
+		});
 	});
 });

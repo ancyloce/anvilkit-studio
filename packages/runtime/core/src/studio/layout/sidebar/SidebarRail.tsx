@@ -32,6 +32,7 @@ import {
 	Type as TypeIcon,
 } from "lucide-react";
 import {
+	Fragment,
 	type KeyboardEvent,
 	memo,
 	type ReactNode,
@@ -65,46 +66,70 @@ interface RailModule {
 	 * modules (`insert`, `layer`).
 	 */
 	readonly isVisible?: (registry: SidebarRegistryState) => boolean;
+	/**
+	 * `core` modules (Insert, Layers) are always present. `extension`
+	 * modules are host/plugin-contributed and only ever appear below a
+	 * subtle grouping divider (task Phase 12), so the always-available
+	 * tools stay visually distinct from optional ones as the rail
+	 * grows.
+	 */
+	readonly group: "core" | "extension";
 }
 
 const RAIL_MODULES: readonly RailModule[] = [
-	{ key: "insert", icon: PlusIcon, labelKey: "studio.module.insert.name" },
-	{ key: "layer", icon: LayersIcon, labelKey: "studio.module.layer.name" },
+	{
+		key: "insert",
+		icon: PlusIcon,
+		labelKey: "studio.module.insert.name",
+		group: "core",
+	},
+	{
+		key: "layer",
+		icon: LayersIcon,
+		labelKey: "studio.module.layer.name",
+		group: "core",
+	},
 	{
 		key: "image",
 		icon: ImageIcon,
 		labelKey: "studio.module.image.name",
 		isVisible: (s) => s.assetSource !== null,
+		group: "extension",
 	},
 	{
 		key: "text",
 		icon: TypeIcon,
 		labelKey: "studio.module.text.name",
 		isVisible: (s) => s.copyPacks.size > 0,
+		group: "extension",
 	},
 	{
 		key: "copilot",
 		icon: SparklesIcon,
 		labelKey: "studio.module.copilot.name",
 		isVisible: (s) => s.copilotPanel !== null,
+		group: "extension",
 	},
 	{
 		key: "history",
 		icon: HistoryIcon,
 		labelKey: "studio.module.history.name",
 		isVisible: (s) => s.historyPanel !== null,
+		group: "extension",
 	},
 	{
 		key: "design-system",
 		icon: PaletteIcon,
 		labelKey: "studio.module.designSystem.name",
 		isVisible: (s) => s.designSystemPanel !== null,
+		group: "extension",
 	},
 	{
 		key: "seo",
 		icon: SearchIcon,
 		labelKey: "studio.module.seo.name",
 		isVisible: (s) => s.seoPanel !== null,
+		group: "extension",
 	},
 ];
 
@@ -221,33 +246,48 @@ export const SidebarRail = memo(function SidebarRail({
 					className="flex h-fit w-fit flex-col items-center justify-start gap-1.5 rounded-none bg-transparent p-0 pt-2 text-current"
 					onKeyDown={handleKeyDown}
 				>
-					{visibleModules.map(({ key, icon: Icon, labelKey }) => (
-						<Tooltip key={key}>
-							<TooltipTrigger
-								render={
-									<TabsTab
-										value={key}
-										id={railTabId(key)}
-										aria-controls={SIDEBAR_PANEL_ID}
-										aria-label={msg(labelKey)}
-										onClick={() => handleTabClick(key)}
-										// Neutral active surface + Electric Iris icon + a 2px
-										// logical-start indicator painted via inset box-shadow
-										// (no layout shift). Targets `aria-selected` (Tailwind's
-										// built-in ARIA variant) rather than the primitive's own
-										// `data-[selected]:text-foreground` default — the
-										// underlying base-ui Tabs only ever sets `data-active` /
-										// `aria-selected`, never a `data-selected` attribute, so
-										// the primitive's own selector is inert (DESIGN.md §7.2:
-										// no fully-blue active button).
-										className="size-9 rounded-md p-0 text-[var(--ak-studio-muted-fg)] aria-selected:bg-[var(--editor-panel-raised)] aria-selected:text-[var(--brand)] aria-selected:shadow-[inset_2px_0_0_0_var(--brand)]"
-									>
-										<Icon aria-hidden="true" className="size-4" />
-									</TabsTab>
-								}
-							/>
-							<TooltipContent side="right">{msg(labelKey)}</TooltipContent>
-						</Tooltip>
+					{visibleModules.map(({ key, icon: Icon, labelKey, group }, index) => (
+						<Fragment key={key}>
+							{group === "extension" &&
+							visibleModules[index - 1]?.group === "core" ? (
+								// Subtle grouping divider (task Phase 12): separates the
+								// always-present core modules from host/plugin-contributed
+								// extension modules once at least one is visible. Not a
+								// `role="tab"`, so it's naturally skipped by `handleKeyDown`'s
+								// `[role="tab"]` query and base-ui's own roving focus.
+								<div
+									aria-hidden="true"
+									data-testid="ak-rail-group-divider"
+									className="h-px w-6 shrink-0 bg-[var(--ak-studio-border)]"
+								/>
+							) : null}
+							<Tooltip>
+								<TooltipTrigger
+									render={
+										<TabsTab
+											value={key}
+											id={railTabId(key)}
+											aria-controls={SIDEBAR_PANEL_ID}
+											aria-label={msg(labelKey)}
+											onClick={() => handleTabClick(key)}
+											// Neutral active surface + Electric Iris icon + a 2px
+											// logical-start indicator painted via inset box-shadow
+											// (no layout shift). Targets `aria-selected` (Tailwind's
+											// built-in ARIA variant) rather than the primitive's own
+											// `data-[selected]:text-foreground` default — the
+											// underlying base-ui Tabs only ever sets `data-active` /
+											// `aria-selected`, never a `data-selected` attribute, so
+											// the primitive's own selector is inert (DESIGN.md §7.2:
+											// no fully-blue active button).
+											className="size-9 rounded-md p-0 text-[var(--ak-studio-muted-fg)] aria-selected:bg-[var(--editor-panel-raised)] aria-selected:text-[var(--brand)] aria-selected:shadow-[inset_2px_0_0_0_var(--brand)]"
+										>
+											<Icon aria-hidden="true" className="size-4" />
+										</TabsTab>
+									}
+								/>
+								<TooltipContent side="right">{msg(labelKey)}</TooltipContent>
+							</Tooltip>
+						</Fragment>
 					))}
 				</TabsList>
 			</Tabs>

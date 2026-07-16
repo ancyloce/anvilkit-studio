@@ -37,6 +37,7 @@ vi.mock("@puckeditor/core", () => ({
 
 import {
 	collectSubtreeZones,
+	findAncestorIds,
 	findNode,
 	flattenVisibleRows,
 	isCycleDrop,
@@ -238,6 +239,82 @@ describe("flattenVisibleRows", () => {
 			"layout-1",
 			"text-1",
 		]);
+	});
+});
+
+describe("findAncestorIds", () => {
+	// layout-1 (root)
+	//   └ default zone → layout-2
+	//       └ default zone → text-3
+	// text-1 (root, leaf, sibling of layout-1)
+	const tree: LayerNode[] = [
+		{
+			id: "layout-1",
+			type: "Layout",
+			label: "Layout",
+			zone: ROOT_ZONE,
+			index: 0,
+			depth: 0,
+			childZones: [
+				{
+					zoneKey: "layout-1:default",
+					slotName: "default",
+					items: [
+						{
+							id: "layout-2",
+							type: "Layout",
+							label: "Layout",
+							zone: "layout-1:default",
+							index: 0,
+							depth: 1,
+							childZones: [
+								{
+									zoneKey: "layout-2:default",
+									slotName: "default",
+									items: [
+										{
+											id: "text-3",
+											type: "Text",
+											label: "Text",
+											zone: "layout-2:default",
+											index: 0,
+											depth: 2,
+											childZones: [],
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+			],
+		},
+		{
+			id: "text-1",
+			type: "Text",
+			label: "Text",
+			zone: ROOT_ZONE,
+			index: 1,
+			depth: 0,
+			childZones: [],
+		},
+	];
+
+	it("returns the full ancestor chain for a deeply nested node", () => {
+		expect(findAncestorIds(tree, "text-3")).toEqual(["layout-1", "layout-2"]);
+	});
+
+	it("returns a single-element chain for a direct child", () => {
+		expect(findAncestorIds(tree, "layout-2")).toEqual(["layout-1"]);
+	});
+
+	it("returns an empty chain for a root node", () => {
+		expect(findAncestorIds(tree, "layout-1")).toEqual([]);
+		expect(findAncestorIds(tree, "text-1")).toEqual([]);
+	});
+
+	it("returns an empty chain for an id that does not exist", () => {
+		expect(findAncestorIds(tree, "nonexistent")).toEqual([]);
 	});
 });
 

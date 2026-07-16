@@ -319,6 +319,34 @@ export function findNode(
 }
 
 /**
+ * Depth-first path of ancestor ids from a root down to (but not
+ * including) `targetId`, or `[]` when the id is a root node or is not
+ * found. Used to auto-expand a selected node's ancestor chain when
+ * canvas selection changes (task Phase 6 — canvas→sidebar sync;
+ * previously only sidebar→canvas existed via
+ * `useScrollComponentIntoView`).
+ */
+export function findAncestorIds(
+	roots: readonly LayerNode[],
+	targetId: string,
+): readonly string[] {
+	const path: string[] = [];
+	const walk = (nodes: readonly LayerNode[]): boolean => {
+		for (const node of nodes) {
+			if (node.id === targetId) return true;
+			for (const childZone of node.childZones) {
+				path.push(node.id);
+				if (walk(childZone.items)) return true;
+				path.pop();
+			}
+		}
+		return false;
+	};
+	walk(roots);
+	return path;
+}
+
+/**
  * Build an `id → node` index for O(1) lookups (review finding P-2).
  * Callers memoize this on `roots` so repeated lookups during a drag /
  * a11y announcements don't each re-walk + allocate a flat node list.

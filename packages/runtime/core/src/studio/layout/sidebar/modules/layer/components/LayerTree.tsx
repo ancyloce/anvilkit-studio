@@ -51,6 +51,7 @@ import {
 	resolveDrop,
 	useLayerTree,
 } from "../hooks/use-layer-tree";
+import { useSyncSelectedLayerIntoView } from "../hooks/use-sync-selected-layer-into-view";
 import { LayerRow } from "./LayerRow";
 
 /** Droppable id namespace so zone keys never collide with component ids. */
@@ -213,6 +214,17 @@ export function LayerTree(): ReactNode {
 	const handleToggle = useCallback(
 		(id: string, next: boolean): void => setOutlineExpanded(id, next),
 		[setOutlineExpanded],
+	);
+
+	// Canvas→sidebar selection sync (task Phase 6): expand ancestors of
+	// the selected node and scroll its row into view, regardless of
+	// whether the selection came from a canvas click or a layer-row
+	// click — `selectedId` already reflects both.
+	useSyncSelectedLayerIntoView(
+		roots,
+		selectedId,
+		outlineExpanded,
+		setOutlineExpanded,
 	);
 
 	const flatRows = useMemo(

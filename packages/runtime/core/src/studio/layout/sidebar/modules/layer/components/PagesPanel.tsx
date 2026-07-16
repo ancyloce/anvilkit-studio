@@ -193,13 +193,13 @@ function usePagesPanelElement(): ReactNode {
 
 	return (
 		<div
-			className="ak-pages-panel flex shrink-0 flex-col border-b border-[var(--ak-studio-border)]"
+			className="ak-pages-panel flex min-h-0 flex-1 flex-col"
 			data-testid="ak-layer-pages"
 		>
-			<div className="flex h-8 shrink-0 items-center justify-center gap-1 px-2 border-b border-[var(--ak-studio-border)]">
-				<h3 className="grow truncate text-sm font-medium text-[var(--ak-studio-fg)]">
-					{msg("studio.module.layer.pages.title")}
-				</h3>
+			{/* No title row here — the Pages/Layers <TabsTab> in `LayerModule`
+			    already conveys which mode is active (task Phase 6: avoid
+			    duplicating that title inside the panel body). */}
+			<div className="flex h-8 shrink-0 items-center justify-end gap-1 px-2 border-b border-[var(--ak-studio-border)]">
 				<Tooltip>
 					<TooltipTrigger
 						render={
@@ -224,7 +224,7 @@ function usePagesPanelElement(): ReactNode {
 			</div>
 			{selectedIds.size > 0 && typeof handlers.onDelete === "function" ? (
 				<div
-					className="flex h-9 shrink-0 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-muted)] px-2 text-xs"
+					className="flex h-9 shrink-0 items-center gap-2 bg-[var(--ak-studio-muted)] px-2 text-xs"
 					data-testid="ak-layer-pages-selection-toolbar"
 				>
 					<span className="grow text-[var(--ak-studio-fg)]">
@@ -265,7 +265,7 @@ function usePagesPanelElement(): ReactNode {
 					/>
 				</div>
 			) : null}
-			<div className="max-h-52 min-h-0 overflow-auto py-3">
+			<div className="min-h-0 flex-1 overflow-auto py-3">
 				{loadError ? (
 					<EmptyState
 						message={msg("studio.module.layer.pages.error")}
@@ -310,16 +310,20 @@ function usePagesPanelElement(): ReactNode {
 								{/*
 								 * Below 50 pages `Windowed` emits bare keyed fragments
 								 * (DOM byte-identical to the old `.map`); at/above 50 it
-								 * swaps in a virtualized scroll viewport so DOM node count
-								 * stays bounded. `maxHeight` matches the `max-h-52` (208px)
-								 * outer scroller so the two don't double-scroll.
+								 * swaps in a virtualized scroll viewport. `maxHeight="100%"`
+								 * fills the flex-1 outer scroller (task Phase 6: Pages is
+								 * now the sole content of its tab, not height-capped
+								 * alongside Layers) — the outer div's own `overflow-auto`
+								 * only does anything in the below-threshold branch, since
+								 * the virtualized branch's inner viewport always exactly
+								 * fills it, so there's no competing/double scroll.
 								 */}
 								<Windowed
 									items={filteredPages}
 									itemKey={pageKey}
 									renderItem={renderPageRow}
 									estimateSize={24}
-									maxHeight={208}
+									maxHeight="100%"
 									data-testid="ak-layer-pages-virtualized"
 								/>
 							</ul>

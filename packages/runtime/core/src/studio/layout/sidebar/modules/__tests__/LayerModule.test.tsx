@@ -48,18 +48,19 @@ afterEach(cleanup);
 
 interface SetupOptions {
 	readonly pages?: StudioPagesSource;
+	/** Stable id so a test can unmount/remount against the same store. */
+	readonly storeId?: string;
 }
 
 function Setup({
 	children,
 	pages,
+	storeId = `layer-${Math.random().toString(36).slice(2)}`,
 }: { readonly children: ReactNode } & SetupOptions): ReactElement {
 	const registry = createSidebarRegistryStore();
 	return (
 		<EditorI18nProvider>
-			<EditorUiStoreProvider
-				storeId={`layer-${Math.random().toString(36).slice(2)}`}
-			>
+			<EditorUiStoreProvider storeId={storeId}>
 				<SidebarRegistryProvider value={registry}>
 					<StudioPagesSourceProvider value={pages}>
 						{children}
@@ -201,5 +202,61 @@ describe("LayerModule", () => {
 		);
 		fireEvent.click(screen.getByTestId("ak-layer-pages-add"));
 		expect(screen.getByTestId("ak-layer-add-page-dialog")).toBeTruthy();
+	});
+});
+
+describe("LayerModule — Pages/Layers tabs (task Phase 6)", () => {
+	it("defaults to the Pages tab active", () => {
+		render(
+			<Setup>
+				<LayerModule />
+			</Setup>,
+		);
+		expect(screen.getByTestId("ak-layer-tab-pages")).toHaveAttribute(
+			"aria-selected",
+			"true",
+		);
+		expect(screen.getByTestId("ak-layer-tab-layers")).toHaveAttribute(
+			"aria-selected",
+			"false",
+		);
+	});
+
+	it("switches the active mode when the Layers tab is clicked", () => {
+		render(
+			<Setup>
+				<LayerModule />
+			</Setup>,
+		);
+		fireEvent.click(screen.getByTestId("ak-layer-tab-layers"));
+		expect(screen.getByTestId("ak-layer-tab-layers")).toHaveAttribute(
+			"aria-selected",
+			"true",
+		);
+		expect(screen.getByTestId("ak-layer-tab-pages")).toHaveAttribute(
+			"aria-selected",
+			"false",
+		);
+	});
+
+	it("persists the active mode across remounts of the same Studio instance", () => {
+		const storeId = `layer-mode-${Math.random().toString(36).slice(2)}`;
+		const { unmount } = render(
+			<Setup storeId={storeId}>
+				<LayerModule />
+			</Setup>,
+		);
+		fireEvent.click(screen.getByTestId("ak-layer-tab-layers"));
+		unmount();
+
+		render(
+			<Setup storeId={storeId}>
+				<LayerModule />
+			</Setup>,
+		);
+		expect(screen.getByTestId("ak-layer-tab-layers")).toHaveAttribute(
+			"aria-selected",
+			"true",
+		);
 	});
 });
