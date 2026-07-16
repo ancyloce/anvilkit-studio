@@ -78,18 +78,42 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Derive tags + OCI labels: `latest` on the default branch plus an
-      # immutable short-SHA tag for traceability/rollback.
-      - name: Extract Docker metadata
+      # immutable short-SHA tag for traceability/rollback. Generate these
+      # locally so a transient GitHub repository API response cannot block the
+      # image build before it starts.
+      - name: Generate Docker metadata
         id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ steps.img.outputs.ref }}
-          tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,format=short
-          labels: |
-            org.opencontainers.image.title=anvilkit-${{ matrix.app }}
-            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          IMAGE_REF: ${{ steps.img.outputs.ref }}
+          SOURCE: ${{ github.server_url }}/${{ github.repository }}
+          TITLE: anvilkit-${{ matrix.app }}
+        run: |
+          short_sha="${GITHUB_SHA:0:7}"
+          version="sha-${short_sha}"
+          created="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+
+          if [[ "${GITHUB_REF}" == "refs/heads/${DEFAULT_BRANCH}" ]]; then
+            version="latest"
+          fi
+
+          {
+            echo "tags<<EOF"
+            if [[ "${GITHUB_REF}" == "refs/heads/${DEFAULT_BRANCH}" ]]; then
+              echo "${IMAGE_REF}:latest"
+            fi
+            echo "${IMAGE_REF}:sha-${short_sha}"
+            echo "EOF"
+
+            echo "labels<<EOF"
+            echo "org.opencontainers.image.title=${TITLE}"
+            echo "org.opencontainers.image.url=${SOURCE}"
+            echo "org.opencontainers.image.source=${SOURCE}"
+            echo "org.opencontainers.image.version=${version}"
+            echo "org.opencontainers.image.created=${created}"
+            echo "org.opencontainers.image.revision=${GITHUB_SHA}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       # 4. Build and push. build-push-action v6 also emits a build summary
       #    (logs/record) attached to the run, so build output is preserved.
@@ -192,18 +216,42 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Derive tags + OCI labels: `latest` on the default branch plus an
-      # immutable short-SHA tag for traceability/rollback.
-      - name: Extract Docker metadata
+      # immutable short-SHA tag for traceability/rollback. Generate these
+      # locally so a transient GitHub repository API response cannot block the
+      # image build before it starts.
+      - name: Generate Docker metadata
         id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ steps.img.outputs.ref }}
-          tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,format=short
-          labels: |
-            org.opencontainers.image.title=anvilkit-collab
-            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          IMAGE_REF: ${{ steps.img.outputs.ref }}
+          SOURCE: ${{ github.server_url }}/${{ github.repository }}
+          TITLE: anvilkit-collab
+        run: |
+          short_sha="${GITHUB_SHA:0:7}"
+          version="sha-${short_sha}"
+          created="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+
+          if [[ "${GITHUB_REF}" == "refs/heads/${DEFAULT_BRANCH}" ]]; then
+            version="latest"
+          fi
+
+          {
+            echo "tags<<EOF"
+            if [[ "${GITHUB_REF}" == "refs/heads/${DEFAULT_BRANCH}" ]]; then
+              echo "${IMAGE_REF}:latest"
+            fi
+            echo "${IMAGE_REF}:sha-${short_sha}"
+            echo "EOF"
+
+            echo "labels<<EOF"
+            echo "org.opencontainers.image.title=${TITLE}"
+            echo "org.opencontainers.image.url=${SOURCE}"
+            echo "org.opencontainers.image.source=${SOURCE}"
+            echo "org.opencontainers.image.version=${version}"
+            echo "org.opencontainers.image.created=${created}"
+            echo "org.opencontainers.image.revision=${GITHUB_SHA}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       # 4. Build and push. Context is apps/collab (the collab Dockerfile COPYs
       #    from the context root), NOT the monorepo root.
