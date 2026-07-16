@@ -392,7 +392,10 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 	// opacity tweens are auto-reduced; essential layout motion is kept.
 	const studioBody = (
 		<MotionConfig reducedMotion="user">
-			<TooltipProvider delay={200}>
+			{/* DESIGN.md §7.13: 500ms initial delay, 150ms grouping window
+			    so adjacent icon tooltips (rail, action bar) open instantly
+			    once the user is already "in" a hover sequence. */}
+			<TooltipProvider delay={500} timeout={150}>
 				<ThemeSyncBoundary />
 				<Toaster position="bottom-right" closeButton />
 				{viewportOverlays.map((overlay) => {
