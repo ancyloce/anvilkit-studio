@@ -146,9 +146,10 @@ export function runAdapterContractTests(
 			});
 			expect(updated?.title).toBe("Renamed");
 			expect(updated?.version).toBe("2.0.0");
-			expect((updated?.published as DemoPageData).root.props?.seo?.title).toBe(
-				"Renamed SEO",
-			);
+			expect(
+				(updated?.published as DemoPageData | undefined)?.root.props?.seo
+					?.title,
+			).toBe("Renamed SEO");
 			expect(
 				await storage.updateSettings("missing", {
 					title: "x",
@@ -197,7 +198,9 @@ export function runAdapterContractTests(
 			expect(copy?.id).not.toBe(source.id);
 			expect(copy?.slug).toBe("home-copy");
 			expect(copy?.status).toBe("draft");
-			expect((copy?.draft as DemoPageData).root.props?.slug).toBe("home-copy");
+			expect((copy?.draft as DemoPageData | undefined)?.root.props?.slug).toBe(
+				"home-copy",
+			);
 			const custom = await storage.duplicate(source.id, {
 				slug: "home-2",
 				title: "Home Two",
@@ -231,7 +234,9 @@ export function runAdapterContractTests(
 			if (draftRoot.props !== undefined) draftRoot.props.title = "MUTATED";
 			const reread = await storage.getById(created.id);
 			expect(reread?.title).toBe("Home");
-			expect((reread?.draft as DemoPageData).root.props?.title).toBe("Home");
+			expect(
+				(reread?.draft as DemoPageData | undefined)?.root.props?.title,
+			).toBe("Home");
 		});
 	});
 }
