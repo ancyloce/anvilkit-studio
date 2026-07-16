@@ -17,7 +17,7 @@ import { memo, type ReactNode, type RefObject, useCallback } from "react";
 import { useMsg } from "@/state/editor-i18n-context";
 import {
 	useActiveTab,
-	useEditorUiStore,
+	useDrawerCollapsed,
 } from "@/state/slices/editor-ui-selectors";
 import type { EditorTab } from "@/state/slices/editor-ui-store";
 import { CopilotModule } from "./sidebar/modules/CopilotModule";
@@ -84,8 +84,7 @@ function StudioSidebarPanelHost({
 }: StudioSidebarPanelHostProps): ReactNode {
 	const msg = useMsg();
 	const [activeTab] = useActiveTab();
-	const drawerCollapsed = useEditorUiStore((s) => s.drawerCollapsed);
-	const setDrawerCollapsed = useEditorUiStore((s) => s.setDrawerCollapsed);
+	const [drawerCollapsed, setDrawerCollapsed] = useDrawerCollapsed();
 	const actions = useSidebarHeaderActions();
 
 	const handleClose = useCallback(() => {

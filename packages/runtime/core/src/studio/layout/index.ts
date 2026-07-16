@@ -23,7 +23,6 @@ export {
 	StudioLoadingScreen,
 	type StudioLoadingScreenProps,
 } from "./StudioLoadingScreen";
-export { StudioToolbar } from "./StudioToolbar";
 export {
 	StudioViewportPreview,
 	type StudioViewportPreviewProps,

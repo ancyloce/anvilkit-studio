@@ -98,7 +98,7 @@ export function PublishPanel(): ReactNode {
 							<div className="flex flex-col gap-1.5">
 								<Button
 									variant="outline"
-									size="sm"
+									size="default"
 									className="justify-start"
 									onClick={() => {
 										if (onSaveDraft !== undefined) void onSaveDraft();
@@ -111,7 +111,7 @@ export function PublishPanel(): ReactNode {
 								</Button>
 								<Button
 									variant="default"
-									size="sm"
+									size="default"
 									className="justify-start"
 									onClick={() => {
 										// Read the LIVE document at click time so the host
@@ -131,14 +131,17 @@ export function PublishPanel(): ReactNode {
 							<p className="mb-1 text-xs font-medium uppercase tracking-wide text-[var(--ak-studio-muted-fg)]">
 								{msg("studio.publishPanel.section.export")}
 							</p>
+							{/* Trigger stays enabled even when nothing is exportable —
+							    disabling it would hide the reason (empty registry vs.
+							    unwired handler) behind a dead control. Per-format
+							    `MenuItem`s below still disable individually. */}
 							<Menu>
 								<MenuTrigger
 									render={
 										<Button
 											variant="outline"
-											size="sm"
+											size="default"
 											className="w-full justify-start gap-2"
-											disabled={!exportEnabled}
 										>
 											<Download className="size-4" aria-hidden="true" />
 											<span>{msg("studio.publishPanel.section.export")}</span>
