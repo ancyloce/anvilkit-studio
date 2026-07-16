@@ -151,7 +151,9 @@ describe("studioOverrides preset smoke", () => {
 		const iframe = studioOverrides.iframe;
 		if (iframe === undefined) throw new Error("iframe missing");
 		render(
-			<>{iframe({ children: <span data-testid="iframe-child">in</span> })}</>,
+			<EditorUiStoreProvider storeId="smoke-canvas-iframe">
+				{iframe({ children: <span data-testid="iframe-child">in</span> })}
+			</EditorUiStoreProvider>,
 		);
 		expect(screen.getByTestId("iframe-child")).toBeInTheDocument();
 	});
