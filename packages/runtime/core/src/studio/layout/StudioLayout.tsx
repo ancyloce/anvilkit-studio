@@ -52,10 +52,39 @@
  *   keeps the default `"preserve-relative-size"` behavior) — DESIGN.md
  *   §1.3: opening/resizing a panel never changes the canvas's configured
  *   breakpoint, only the space available to it.
+ * - The canvas panel's `minSize` (720px, DESIGN.md §6) is a HARD floor —
+ *   on a viewport too narrow to fit it plus both side panels' current
+ *   widths, the constraint solver squeezes the (collapsible) left panel
+ *   down to 0 to make room. That's correct, desired behavior, but it
+ *   means `onResize` can fire with a collapsed size for a reason that has
+ *   nothing to do with the user closing the panel. `onResize` alone can't
+ *   tell the two apart, so the group's `onLayoutChanged` callback tracks
+ *   `meta.isUserInteraction` (true only for an actual pointer/keyboard
+ *   drag, false for constraint recompute / imperative calls / mount) in
+ *   `isUserPanelResizeRef`, and both resize handlers gate on it — a
+ *   narrow-viewport squeeze must never get persisted to
+ *   `drawerCollapsed`/`inspectorCollapsed` the way an explicit user
+ *   drag-to-close does.
+ * - The library's own "collapsed" flag is sticky — nothing but an
+ *   explicit `.expand()` clears it, so a panel auto-collapsed by the
+ *   squeeze above does NOT un-collapse on its own once the window widens
+ *   back out (a plain browser-resize recompute just proportionally
+ *   rescales the existing, already-0, size). `onLayoutChanged` bumps
+ *   `autoLayoutTick` on every non-user change so the two sync effects
+ *   below re-run and retry `.expand()` — a no-op while there's still not
+ *   enough room (the constraint solver immediately re-collapses it), but
+ *   the panel that recovers the moment there is.
  */
 
 import { Puck } from "@puckeditor/core";
-import { memo, type ReactNode, useCallback, useEffect, useRef } from "react";
+import {
+	memo,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import type { PanelImperativeHandle, PanelSize } from "react-resizable-panels";
 import { useChromeProps } from "@/context/chrome-props";
 import {
@@ -108,6 +137,24 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 	const railRef = useRef<SidebarRailHandle | null>(null);
 	const leftPanelRef = useRef<PanelImperativeHandle | null>(null);
 	const inspectorPanelRef = useRef<PanelImperativeHandle | null>(null);
+	// Tracks whether the *most recent* layout change was a direct user
+	// drag/keyboard resize, per `onLayoutChanged`'s `meta.isUserInteraction`
+	// (false for constraint recompute, imperative API calls, initial mount).
+	// `handleLeftPanelResize`/`handleInspectorResize` gate on this so a
+	// narrow-viewport squeeze (e.g. the canvas panel's hard `minSize` forcing
+	// the left panel to 0 because there isn't room for both) never gets
+	// mistaken for the user explicitly closing the panel and persisted to
+	// `drawerCollapsed`/`inspectorCollapsed`.
+	const isUserPanelResizeRef = useRef(false);
+	// Bumped by `onLayoutChanged` on every non-user layout change (see the
+	// file doc) so the two sync effects below retry `.expand()` after a
+	// browser-window resize, in case there's room again. Gated on the
+	// layout actually differing from the last notification — a retried
+	// `.expand()` that the constraint solver immediately re-collapses
+	// (still not enough room) re-notifies with the SAME layout, and
+	// without this guard that would loop forever.
+	const lastAutoLayoutRef = useRef<string | null>(null);
+	const [autoLayoutTick, setAutoLayoutTick] = useState(0);
 
 	const [focusMode] = useFocusMode();
 	const [drawerCollapsed, setDrawerCollapsed] = useDrawerCollapsed();
@@ -124,6 +171,7 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 	// the panel itself is the source of truth for "what's currently
 	// painted," this effect only reacts to state changes that did NOT
 	// originate from a drag.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: autoLayoutTick isn't read in the body — it's a deliberate re-run trigger so a narrow-viewport auto-collapse retries `.expand()` once the window widens back out (see the file doc)
 	useEffect(() => {
 		const panel = leftPanelRef.current;
 		if (panel === null) return;
@@ -132,7 +180,7 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 		} else if (showLeftPanel && panel.isCollapsed()) {
 			panel.expand();
 		}
-	}, [showLeftPanel]);
+	}, [showLeftPanel, autoLayoutTick]);
 
 	// Sync store-driven collapse (Focus Mode toggling, or a future
 	// explicit inspector collapse control) to the panel's imperative
@@ -140,6 +188,7 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 	// below — the panel itself is the source of truth for "what's
 	// currently painted," this effect only reacts to state changes
 	// that did NOT originate from a drag.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: autoLayoutTick isn't read in the body — see the matching comment on the left-panel effect above
 	useEffect(() => {
 		const panel = inspectorPanelRef.current;
 		if (panel === null) return;
@@ -148,7 +197,7 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 		} else if (!inspectorEffectivelyCollapsed && panel.isCollapsed()) {
 			panel.expand();
 		}
-	}, [inspectorEffectivelyCollapsed]);
+	}, [inspectorEffectivelyCollapsed, autoLayoutTick]);
 
 	const handleLeftPanelResize = useCallback(
 		(
@@ -159,12 +208,16 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 			// Skip the mount-time call (`prevPanelSize` is `undefined` only
 			// on mount) so restoring a persisted width doesn't immediately
 			// re-persist the same value right back. Also skip while Focus
-			// Mode is driving the collapse itself — this callback only
-			// exists to report a *user* drag back to the store, and Focus
-			// Mode is a session-only override that must not mutate
-			// `drawerCollapsed` when it programmatically collapses/expands
-			// the panel.
-			if (prevPanelSize === undefined || focusMode) return;
+			// Mode is driving the collapse itself, and skip anything that
+			// wasn't a direct user drag (e.g. a narrow-viewport constraint
+			// squeeze) — see `isUserPanelResizeRef` above.
+			if (
+				prevPanelSize === undefined ||
+				focusMode ||
+				!isUserPanelResizeRef.current
+			) {
+				return;
+			}
 			if (panelSize.inPixels <= 0) {
 				setDrawerCollapsed(true);
 				return;
@@ -181,9 +234,16 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 			_id: unknown,
 			prevPanelSize: PanelSize | undefined,
 		) => {
-			// Also skip while Focus Mode is driving the collapse itself —
-			// see the matching comment on `handleLeftPanelResize` above.
-			if (prevPanelSize === undefined || focusMode) return;
+			// Also skip while Focus Mode is driving the collapse itself, and
+			// skip non-user-driven changes — see the matching comments on
+			// `handleLeftPanelResize` above.
+			if (
+				prevPanelSize === undefined ||
+				focusMode ||
+				!isUserPanelResizeRef.current
+			) {
+				return;
+			}
 			if (panelSize.inPixels <= 0) {
 				setInspectorCollapsed(true);
 				return;
@@ -214,6 +274,16 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 				<ResizablePanelGroup
 					orientation="horizontal"
 					className="min-h-0 flex-1 overflow-hidden"
+					onLayoutChanged={(layout, meta) => {
+						isUserPanelResizeRef.current = meta.isUserInteraction;
+						if (!meta.isUserInteraction) {
+							const serialized = JSON.stringify(layout);
+							if (serialized !== lastAutoLayoutRef.current) {
+								lastAutoLayoutRef.current = serialized;
+								setAutoLayoutTick((t) => t + 1);
+							}
+						}
+					}}
 				>
 					<ResizablePanel
 						id="ak-left-panel"
