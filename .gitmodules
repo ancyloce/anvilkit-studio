@@ -49,3 +49,6 @@
 [submodule "packages/analytics/react"]
 	path = packages/capabilities/analytics/react
 	url = https://github.com/ancyloce/anvilkit-analytics-react.git
+[submodule "packages/capabilities/canvas/templates"]
+	path = packages/capabilities/canvas/templates
+	url = https://github.com/ancyloce/anvilkit-canvas-templates.git
