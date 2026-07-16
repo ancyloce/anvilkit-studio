@@ -37,8 +37,9 @@ export interface InsertTileGridProps {
 
 /** Switch to the windowed viewport at/above this child count. */
 const WINDOW_THRESHOLD = 50;
-/** One grid-row height estimate (square tile + label), matches flat search. */
-const TILE_ESTIMATE_PX = 88;
+/** One grid-row height estimate: 16:10 preview (~80px at the default
+ * panel width) + label row + row gap. */
+const TILE_ESTIMATE_PX = 112;
 const GRID_LANES = 2;
 
 function tileKey(child: ReactNode, index: number): string {

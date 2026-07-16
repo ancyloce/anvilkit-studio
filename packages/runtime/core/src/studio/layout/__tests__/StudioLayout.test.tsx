@@ -7,11 +7,22 @@
  * `react-resizable-panels`' own suite already covers drag mechanics, and
  * jsdom has no real layout engine to make that reliable. Instead they
  * pin the parts this integration owns: which panels are wrapped by the
- * library (`[data-panel]` presence + the configured `id`s), that the
- * inspector never unmounts regardless of collapse/Focus Mode state (the
- * pre-existing "always mounted, no canvas reflow" invariant), and that
- * Focus Mode hides the left panel without touching its underlying
- * `drawerCollapsed` preference.
+ * library (`[data-panel]` presence + the configured `id`s — a fixed set
+ * of 3, regardless of collapse/Focus Mode state, see below), that both
+ * the left panel and the inspector never unmount from the `Group` (the
+ * pre-existing "always mounted, no canvas reflow" invariant — only their
+ * *content* conditionally unmounts), and that Focus Mode hides the left
+ * panel without touching its underlying `drawerCollapsed` preference.
+ *
+ * Regression: the left panel used to be conditionally included/excluded
+ * from the `Group`'s children (the `Panel` itself, not just its content).
+ * Toggling that panel *count* on a live `Group` races
+ * `react-resizable-panels`' internal layout cache and throws `Invalid N
+ * panel layout: ...` the next time the group's `ResizeObserver` fires —
+ * reproduced against the real dev server, not just here in jsdom. The
+ * fix keeps all 3 `Panel`s permanently mounted and drives visibility via
+ * the library's own `collapsible` + `collapsedSize={0}` + imperative
+ * `panelRef`, mirroring the inspector's pre-existing pattern.
  */
 
 import { cleanup, render, screen } from "@testing-library/react";
@@ -97,14 +108,41 @@ describe("StudioLayout panel shell", () => {
 		expect(container.querySelectorAll("[data-separator]").length).toBe(2);
 	});
 
-	it("omits the left panel entirely when drawerCollapsed is true (unchanged pre-Phase-5 behavior)", () => {
+	it("keeps exactly 3 registered Panels regardless of drawerCollapsed/Focus Mode (regression: conditional Panel mounting threw 'Invalid N panel layout')", () => {
+		const store = createEditorUiStore({ storeId: `layout-${Math.random()}` });
+		const { container, rerender } = renderLayout(store);
+		const panelCount = () => container.querySelectorAll("[data-panel]").length;
+
+		expect(panelCount()).toBe(3);
+
+		store.getState().setDrawerCollapsed(true);
+		rerender(
+			<Setup store={store}>
+				<StudioLayout />
+			</Setup>,
+		);
+		expect(panelCount()).toBe(3);
+
+		store.getState().setDrawerCollapsed(false);
+		store.getState().setFocusMode(true);
+		rerender(
+			<Setup store={store}>
+				<StudioLayout />
+			</Setup>,
+		);
+		expect(panelCount()).toBe(3);
+	});
+
+	it("unmounts the left panel's content (not the Panel wrapper) when drawerCollapsed is true", () => {
 		const store = createEditorUiStore({ storeId: `layout-${Math.random()}` });
 		store.getState().setDrawerCollapsed(true);
 		const { container } = renderLayout(store);
 
+		// The Panel wrapper stays registered with the Group (see the
+		// dedicated regression test above) — only its content unmounts.
 		expect(
 			container.querySelector('[data-panel][id="ak-left-panel"]'),
-		).toBeNull();
+		).not.toBeNull();
 		expect(screen.queryByTestId("puck-components-mock")).toBeNull();
 		// Canvas + inspector still render.
 		expect(screen.getByTestId("puck-preview-mock")).not.toBeNull();
@@ -119,14 +157,16 @@ describe("StudioLayout panel shell", () => {
 		expect(screen.getByTestId("puck-fields-mock")).not.toBeNull();
 	});
 
-	it("Focus Mode hides the left panel and collapses the inspector without mutating drawerCollapsed/inspectorCollapsed", () => {
+	it("Focus Mode hides the left panel's content and collapses the inspector without mutating drawerCollapsed/inspectorCollapsed", () => {
 		const store = createEditorUiStore({ storeId: `layout-${Math.random()}` });
 		store.getState().setFocusMode(true);
 		const { container } = renderLayout(store);
 
+		// The Panel wrapper stays registered with the Group — only its
+		// content unmounts (see the dedicated panel-count regression test).
 		expect(
 			container.querySelector('[data-panel][id="ak-left-panel"]'),
-		).toBeNull();
+		).not.toBeNull();
 		expect(screen.queryByTestId("puck-components-mock")).toBeNull();
 		// The inspector stays mounted (Focus Mode collapses it visually via
 		// the panel API, it does not unmount it).
@@ -139,12 +179,10 @@ describe("StudioLayout panel shell", () => {
 		store.getState().setFocusMode(false);
 	});
 
-	it("restores the left panel and inspector to their prior state when Focus Mode turns off", () => {
+	it("restores the left panel's content when Focus Mode turns off", () => {
 		const store = createEditorUiStore({ storeId: `layout-${Math.random()}` });
-		const { container, rerender } = renderLayout(store);
-		expect(
-			container.querySelector('[data-panel][id="ak-left-panel"]'),
-		).not.toBeNull();
+		const { rerender } = renderLayout(store);
+		expect(screen.queryByTestId("puck-components-mock")).not.toBeNull();
 
 		store.getState().setFocusMode(true);
 		rerender(
@@ -152,9 +190,7 @@ describe("StudioLayout panel shell", () => {
 				<StudioLayout />
 			</Setup>,
 		);
-		expect(
-			container.querySelector('[data-panel][id="ak-left-panel"]'),
-		).toBeNull();
+		expect(screen.queryByTestId("puck-components-mock")).toBeNull();
 
 		store.getState().setFocusMode(false);
 		rerender(
@@ -162,8 +198,6 @@ describe("StudioLayout panel shell", () => {
 				<StudioLayout />
 			</Setup>,
 		);
-		expect(
-			container.querySelector('[data-panel][id="ak-left-panel"]'),
-		).not.toBeNull();
+		expect(screen.queryByTestId("puck-components-mock")).not.toBeNull();
 	});
 });
