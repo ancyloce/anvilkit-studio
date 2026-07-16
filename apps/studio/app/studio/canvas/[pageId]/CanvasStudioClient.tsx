@@ -21,7 +21,6 @@ import {
 	type CanvasPersistenceAdapter,
 	localStorageCanvasAdapter,
 } from "@anvilkit/plugin-canvas-studio";
-import { canvasToPdf, canvasToSvg } from "@anvilkit/plugin-export-canvas";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -128,47 +127,12 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 		[],
 	);
 
-	// I2-3 canvas export now ships *inside* the editor as a header plugin
-	// (`createCanvasExportPlugin`). PNG/JSON are built in (live stage + IR); the
-	// host only injects the SVG/PDF serializers from @anvilkit/plugin-export-canvas.
-	// The editor passes the live stage + active page through the exporter context,
-	// so no `onStageReady` wiring is needed here. Stable identity (module-level
-	// serializers) keeps the header from re-rendering.
-	const headerPlugins = useMemo(
-		() => [
-			createCanvasExportPlugin({
-				exporters: {
-					svg: async ({ ir, activePageId }) => {
-						const { svg, warnings } = await canvasToSvg(ir, activePageId);
-						return {
-							filename: `${ir.title || activePageId}.svg`,
-							data: svg,
-							mimeType: "image/svg+xml",
-							warnings,
-						};
-					},
-					pdf: async ({ ir, activePageId, stage }) => {
-						if (!stage) throw new Error("PDF export needs a ready stage.");
-						const dataUrl = stage.toDataURL({
-							pixelRatio: 2,
-							mimeType: "image/png",
-						});
-						const { pdf, warnings } = await canvasToPdf(ir, {
-							rasters: [{ pageId: activePageId, image: dataUrl }],
-							pages: [activePageId],
-						});
-						return {
-							filename: `${ir.title || activePageId}.pdf`,
-							data: pdf,
-							mimeType: "application/pdf",
-							warnings,
-						};
-					},
-				},
-			}),
-		],
-		[],
-	);
+	// PRD 0012 FR-151/§15.16: the editor now ships built-in SVG/PDF/PNG/JPEG/
+	// WebP/JSON exporters (SVG via core's serializer, PDF via multi-page
+	// raster-embed), so the host no longer injects serializers here — the
+	// default plugin covers all six formats and honors page scope. Brand
+	// tokens resolve against the `brandKit` passed to `<CanvasEditorSurface>`.
+	const headerPlugins = useMemo(() => [createCanvasExportPlugin()], []);
 
 	useEffect(() => {
 		let cancelled = false;
