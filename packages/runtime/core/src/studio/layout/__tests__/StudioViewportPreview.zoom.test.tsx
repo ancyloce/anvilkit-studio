@@ -15,6 +15,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { StudioViewportPreview } from "@/layout/StudioViewportPreview";
 import { EditorI18nProvider, EditorUiStoreProvider } from "@/state/index";
 import {
+	useCanvasRootHeight,
 	useCanvasViewport,
 	useCanvasZoom,
 } from "@/state/slices/editor-ui-selectors";
@@ -97,16 +98,33 @@ function Setup({ children }: { readonly children: ReactNode }): ReactElement {
 function ZoomHarness({
 	zoom,
 	viewportId,
+	contentHeight,
 }: {
 	readonly zoom: number;
 	readonly viewportId: string;
+	// The real page content height, as reported from inside the iframe
+	// (`CanvasIframe`'s `#frame-root` observer) via `canvasRootHeight` —
+	// `<Puck.Preview>` is mocked out below, so tests drive this directly
+	// through the store instead of a real iframe round-trip.
+	readonly contentHeight?: number;
 }): ReactElement {
 	const [, setZoom] = useCanvasZoom();
 	const [, setViewport] = useCanvasViewport();
+	const [, setCanvasRootHeight] = useCanvasRootHeight();
 	useEffect(() => {
 		setZoom(zoom);
 		setViewport(viewportId);
-	}, [zoom, viewportId, setZoom, setViewport]);
+		if (contentHeight !== undefined) {
+			setCanvasRootHeight(contentHeight);
+		}
+	}, [
+		zoom,
+		viewportId,
+		contentHeight,
+		setZoom,
+		setViewport,
+		setCanvasRootHeight,
+	]);
 	return <StudioViewportPreview />;
 }
 
@@ -121,7 +139,11 @@ describe("StudioViewportPreview zoom stage geometry", () => {
 	])("sizes the zoom stage to naturalSize * %s zoom", (zoom) => {
 		const { container } = render(
 			<Setup>
-				<ZoomHarness zoom={zoom} viewportId="desktop" />
+				<ZoomHarness
+					zoom={zoom}
+					viewportId="desktop"
+					contentHeight={FRAME_NATURAL_HEIGHT}
+				/>
 			</Setup>,
 		);
 
@@ -130,7 +152,11 @@ describe("StudioViewportPreview zoom stage geometry", () => {
 		expect(frameEl).not.toBeNull();
 		expect(workspaceEl).not.toBeNull();
 
-		fireResize(frameEl as Element, DESKTOP_NATURAL_WIDTH, FRAME_NATURAL_HEIGHT);
+		// Width comes from a real `ResizeObserver` on the workspace;
+		// height comes from the store (`contentHeight` above) — the
+		// canvas frame's own box is never observed (see the file doc:
+		// an iframe never auto-grows to its content, so that would be
+		// circular).
 		fireResize(workspaceEl as Element, WORKSPACE_WIDTH, WORKSPACE_HEIGHT);
 
 		const stage = container.querySelector(
@@ -139,6 +165,32 @@ describe("StudioViewportPreview zoom stage geometry", () => {
 		expect(stage).not.toBeNull();
 		expect(stage.style.width).toBe(`${DESKTOP_NATURAL_WIDTH * zoom}px`);
 		expect(stage.style.height).toBe(`${FRAME_NATURAL_HEIGHT * zoom}px`);
+	});
+
+	// Regression: the canvas frame must carry an explicit `height` (not
+	// just `min-height`) equal to the real content height reported from
+	// inside the iframe. Puck's own `.PuckPreview`/iframe
+	// `{ height: 100% }` chain can only resolve against an ancestor
+	// with a DEFINITE `height` — a `min-height` alone never establishes
+	// a percentage basis — so without this the iframe silently
+	// collapses to the browser's 150px UA default and real page content
+	// (however tall) renders hidden behind an iframe-internal
+	// scrollbar. This is what "the canvas area is not fully expanded"
+	// looked like in practice.
+	it("sets the frame's explicit height to the real (store-reported) content height, not just min-height", () => {
+		const { container } = render(
+			<Setup>
+				<ZoomHarness
+					zoom={1}
+					viewportId="desktop"
+					contentHeight={FRAME_NATURAL_HEIGHT}
+				/>
+			</Setup>,
+		);
+		const frameEl = container.querySelector(
+			"[data-ak-canvas-frame]",
+		) as HTMLElement;
+		expect(frameEl.style.height).toBe(`${FRAME_NATURAL_HEIGHT}px`);
 	});
 
 	it("preserves the configured viewport's natural (unscaled) width regardless of zoom", () => {

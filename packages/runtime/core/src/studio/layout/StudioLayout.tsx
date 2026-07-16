@@ -22,17 +22,27 @@
  * at `studio/primitives/resizable.tsx` — this is the first call site).
  * The rail is deliberately OUTSIDE the group (its width never changes).
  *
- * - Left panel: collapse stays exactly as it was pre-Phase-5
- *   (`drawerCollapsed`, toggled by the rail / the panel's own close
- *   button / `Esc`) — collapsing still fully unmounts `<StudioSidebarPanel>`,
- *   so it is conditionally included in the `Group`'s children rather than
- *   using the library's `collapsible` prop.
+ * Both side panels are ALWAYS mounted as `Panel`s — never conditionally
+ * included in the `Group`'s children. A live `Group`'s registered panel
+ * *count* must stay constant: adding/removing a `Panel` element while the
+ * `Group` is mounted races the library's internal layout cache (it can
+ * retain a stale entry for the just-removed panel id, which then throws
+ * `Invalid N panel layout` the next time the group's `ResizeObserver`
+ * fires — see `react-resizable-panels` issues around conditional panels).
+ * Both panels instead use the library's own `collapsible` +
+ * `collapsedSize={0}` + imperative `panelRef` to reach zero width:
+ * - Left panel: `showLeftPanel` (Focus Mode / `drawerCollapsed`) drives
+ *   `.collapse()`/`.expand()` via effect. `<StudioSidebarPanel>` itself
+ *   still fully unmounts when hidden (only the `Panel` *wrapper* stays
+ *   mounted) — its own internal state/effects tear down exactly as
+ *   pre-Phase-5, just via conditional children instead of a conditional
+ *   `Panel`.
  * - Inspector: MUST stay always-mounted (pre-existing invariant — see the
- *   comment on the `<Puck.Fields>` panel below), so it uses the library's
- *   own `collapsible` + `collapsedSize={0}` + imperative `panelRef`
- *   instead of conditional rendering. `inspectorCollapsed` syncs
- *   bidirectionally: a store-driven toggle calls `.collapse()`/`.expand()`;
- *   dragging the handle to 0 reports back through `onResize`.
+ *   comment on the `<Puck.Fields>` panel below), so its content itself
+ *   never conditionally renders, only the `Panel`'s collapsed state does.
+ * - Both: the store-driven collapse flag syncs bidirectionally — a
+ *   store-driven toggle calls `.collapse()`/`.expand()`; dragging the
+ *   handle to 0 reports back through `onResize`.
  * - Focus Mode is a session-only viewing override (not persisted, see
  *   `editor-ui-store.ts`): while active, both panels render hidden
  *   regardless of their individually stored collapsed/width state, and
@@ -96,16 +106,33 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 		...propOverrides,
 	};
 	const railRef = useRef<SidebarRailHandle | null>(null);
+	const leftPanelRef = useRef<PanelImperativeHandle | null>(null);
 	const inspectorPanelRef = useRef<PanelImperativeHandle | null>(null);
 
 	const [focusMode] = useFocusMode();
-	const [drawerCollapsed] = useDrawerCollapsed();
+	const [drawerCollapsed, setDrawerCollapsed] = useDrawerCollapsed();
 	const [leftPanelWidth, setLeftPanelWidth] = useLeftPanelWidth();
 	const [inspectorWidth, setInspectorWidth] = useInspectorWidth();
 	const [inspectorCollapsed, setInspectorCollapsed] = useInspectorCollapsed();
 
 	const showLeftPanel = !focusMode && !drawerCollapsed;
 	const inspectorEffectivelyCollapsed = focusMode || inspectorCollapsed;
+
+	// Sync store-driven collapse (Focus Mode toggling, the rail, the
+	// panel's own close button, `Esc`) to the panel's imperative API.
+	// Drag-to-collapse is handled the other way, in `onResize` below —
+	// the panel itself is the source of truth for "what's currently
+	// painted," this effect only reacts to state changes that did NOT
+	// originate from a drag.
+	useEffect(() => {
+		const panel = leftPanelRef.current;
+		if (panel === null) return;
+		if (!showLeftPanel && !panel.isCollapsed()) {
+			panel.collapse();
+		} else if (showLeftPanel && panel.isCollapsed()) {
+			panel.expand();
+		}
+	}, [showLeftPanel]);
 
 	// Sync store-driven collapse (Focus Mode toggling, or a future
 	// explicit inspector collapse control) to the panel's imperative
@@ -131,11 +158,21 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 		) => {
 			// Skip the mount-time call (`prevPanelSize` is `undefined` only
 			// on mount) so restoring a persisted width doesn't immediately
-			// re-persist the same value right back.
-			if (prevPanelSize === undefined) return;
+			// re-persist the same value right back. Also skip while Focus
+			// Mode is driving the collapse itself — this callback only
+			// exists to report a *user* drag back to the store, and Focus
+			// Mode is a session-only override that must not mutate
+			// `drawerCollapsed` when it programmatically collapses/expands
+			// the panel.
+			if (prevPanelSize === undefined || focusMode) return;
+			if (panelSize.inPixels <= 0) {
+				setDrawerCollapsed(true);
+				return;
+			}
+			setDrawerCollapsed(false);
 			setLeftPanelWidth(panelSize.inPixels);
 		},
-		[setLeftPanelWidth],
+		[focusMode, setDrawerCollapsed, setLeftPanelWidth],
 	);
 
 	const handleInspectorResize = useCallback(

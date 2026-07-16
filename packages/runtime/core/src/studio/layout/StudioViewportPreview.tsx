@@ -11,19 +11,39 @@
  *
  * `Workspace > Zoom Stage > Canvas Frame > Puck.Preview` fixes this:
  * the Zoom Stage is a plain, untransformed box explicitly sized to
- * `naturalSize * zoom` (via `useCanvasFrameSize`, which reads
- * `ResizeObserver`'s pre-transform content box), so the workspace's
- * scrollable content genuinely reflects the visual size at any zoom
- * level. The Canvas Frame keeps the natural (unscaled) width/height and
- * owns the `transform: scale(zoom)` with `transform-origin: top left`,
- * so its scaled visual box exactly fills the Zoom Stage's declared box.
+ * `naturalSize * zoom` (width via `useCanvasFrameSize`'s
+ * `ResizeObserver` on the workspace; height via `canvasRootHeight`,
+ * see below), so the workspace's scrollable content genuinely reflects
+ * the visual size at any zoom level. The Canvas Frame keeps the
+ * natural (unscaled) width/height and owns the `transform: scale(zoom)`
+ * with `transform-origin: top left`, so its scaled visual box exactly
+ * fills the Zoom Stage's declared box.
+ *
+ * ### Why the frame's height comes from the store, not a local `ResizeObserver`
+ *
+ * An `<iframe>` (what `<Puck.Preview>` renders) is a replaced element:
+ * unlike a normal block child, its box never auto-grows to match its
+ * own document's content, so observing the Canvas Frame's OWN
+ * rendered box for "natural height" is circular — that box's height
+ * is entirely a function of the CSS we put on it, never of what's
+ * actually inside the iframe. `canvasRootHeight` (`useCanvasRootHeight`)
+ * is measured from INSIDE the iframe instead — see `CanvasIframe.tsx`,
+ * which observes Puck's own `#frame-root` mount sentinel (real DOM
+ * content, not a replaced element, so its box genuinely reflects the
+ * portal-mounted page) and reports it up through the editor UI store.
+ * That value becomes the frame's explicit `height` below, which is
+ * also what lets Puck's own `_PuckPreview-frame_ { height: 100% }`
+ * resolve down to the iframe — a `min-height` alone never establishes
+ * a percentage basis, so without this the iframe collapses to the
+ * browser's UA-default 150px regardless of the surrounding chrome.
  */
 
 import { Puck } from "@puckeditor/core";
-import { memo, type ReactNode, useMemo } from "react";
+import { memo, type ReactNode, useMemo, useRef } from "react";
 import { useChromeProps } from "@/context/chrome-props";
 import { cn } from "@/shared/cn";
 import {
+	useCanvasRootHeight,
 	useCanvasViewport,
 	useCanvasZoom,
 } from "@/state/slices/editor-ui-selectors";
@@ -42,6 +62,7 @@ function StudioViewportPreviewImpl({
 }: StudioViewportPreviewProps): ReactNode {
 	const [viewportId] = useCanvasViewport();
 	const [zoom] = useCanvasZoom();
+	const [canvasRootHeight] = useCanvasRootHeight();
 	const { viewports = FULL_WIDTH_VIEWPORTS } = useChromeProps();
 
 	const viewport = useMemo(
@@ -53,8 +74,7 @@ function StudioViewportPreviewImpl({
 
 	const { ref: workspaceRef, size: workspaceSize } =
 		useCanvasFrameSize<HTMLDivElement>();
-	const { ref: frameRef, size: frameSize } =
-		useCanvasFrameSize<HTMLDivElement>();
+	const frameRef = useRef<HTMLDivElement>(null);
 
 	// The "full" viewport preset (DESIGN.md §1.3: viewport width is
 	// always a distinct, labeled value) has no fixed pixel width — its
@@ -68,16 +88,21 @@ function StudioViewportPreviewImpl({
 		: (viewport.width as number);
 
 	// The frame's own natural height is always content-driven (every
-	// current viewport preset uses `height: "auto"`). `min-height` keeps
-	// the frame's background/border filling the workspace for short
-	// pages, expressed in the frame's own (unscaled) coordinate space so
-	// it still exactly fills the workspace once the `zoom` transform is
-	// applied (`workspaceHeight / zoom`, not `workspaceHeight`).
+	// current viewport preset uses `height: "auto"`) — `naturalHeight`
+	// is the REAL page content height reported from inside the iframe
+	// (see the file doc). `min-height` keeps the frame's background/
+	// border filling the workspace for short pages, expressed in the
+	// frame's own (unscaled) coordinate space so it still exactly fills
+	// the workspace once the `zoom` transform is applied
+	// (`workspaceHeight / zoom`, not `workspaceHeight`); CSS resolves
+	// the larger of the two (`height` vs `min-height`) automatically —
+	// the zoom stage below floors the same way via its own CSS
+	// `minHeight: "100%"`, so no JS-side `Math.max` is needed here.
 	const frameMinHeight =
 		workspaceSize.height > 0 && zoom > 0
 			? workspaceSize.height / zoom
 			: undefined;
-	const naturalHeight = frameSize.height;
+	const naturalHeight = canvasRootHeight;
 
 	const stageWidth = naturalWidth > 0 ? naturalWidth * zoom : undefined;
 	const stageHeight = naturalHeight > 0 ? naturalHeight * zoom : undefined;
@@ -105,6 +130,14 @@ function StudioViewportPreviewImpl({
 						data-ak-canvas-frame
 						style={{
 							width: naturalWidth > 0 ? naturalWidth : undefined,
+							// `height` (not just `minHeight`) is required: Puck's
+							// own `.PuckPreview`/iframe `{ height: 100% }` chain
+							// can only resolve against an ancestor with a
+							// DEFINITE `height` — `min-height` alone never
+							// establishes a percentage basis, so without this
+							// the iframe silently collapses to the browser's
+							// 150px UA default regardless of real content size.
+							height: naturalHeight > 0 ? naturalHeight : undefined,
 							minHeight: frameMinHeight,
 							transform: `scale(${zoom})`,
 							transformOrigin: "top left",
