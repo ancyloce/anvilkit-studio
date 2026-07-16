@@ -87,9 +87,7 @@ describe("field chrome — description", () => {
 
 	it("renders no description node without metadata", () => {
 		renderText({ label: "Title" }, "Hello");
-		expect(screen.getByRole("textbox")).not.toHaveAttribute(
-			"aria-describedby",
-		);
+		expect(screen.getByRole("textbox")).not.toHaveAttribute("aria-describedby");
 	});
 });
 

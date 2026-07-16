@@ -46,4 +46,25 @@ describe("styles.src.css scoping", () => {
 			/(^|[};])\s*\*\s*\{[^}]*scrollbar-(color|width)/m;
 		expect(bareUniversalScrollbar.test(code)).toBe(false);
 	});
+
+	it("scopes every drawer-item drag/focus rule under [data-ak-studio-root]", () => {
+		const drawerRules = code.match(/[^{}]*data-puck-drawer-item[^{]*\{/g);
+		expect(drawerRules).not.toBeNull();
+		for (const selector of drawerRules ?? []) {
+			expect(selector).toMatch(/data-ak-studio-root/);
+		}
+	});
+
+	it("reserves the brand outline for the dragging state, not hover", () => {
+		// The dragging rule uses the brand selection token…
+		const draggingRule = code.match(/\[data-dnd-dragging\][^{]*\{[^}]*\}/g);
+		expect(
+			draggingRule?.some((rule) => rule.includes("--editor-selection")),
+		).toBe(true);
+		// …and no :hover rule in this stylesheet paints a brand token.
+		const hoverRules = code.match(/[^{}]*:hover[^{]*\{[^}]*\}/g) ?? [];
+		for (const rule of hoverRules) {
+			expect(rule).not.toMatch(/--brand|--editor-selection/);
+		}
+	});
 });

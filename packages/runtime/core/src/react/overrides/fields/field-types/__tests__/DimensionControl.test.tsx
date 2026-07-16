@@ -6,6 +6,7 @@
  */
 
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
@@ -81,19 +82,21 @@ describe("DimensionControl", () => {
 		expect(onCommit).toHaveBeenLastCalledWith("240px");
 	});
 
-	it("preserves the numeric value when switching dimensional units", () => {
+	it("preserves the numeric value when switching dimensional units", async () => {
+		const user = userEvent.setup();
 		const onCommit = vi.fn();
 		renderControl("100px", onCommit);
-		fireEvent.click(screen.getByLabelText("Unit"));
-		fireEvent.click(screen.getByRole("option", { name: "%" }));
+		await user.click(screen.getByLabelText("Unit"));
+		await user.click(await screen.findByRole("option", { name: "%" }));
 		expect(onCommit).toHaveBeenLastCalledWith("100%");
 	});
 
-	it("stores a bare semantic keyword and disables the numeric input", () => {
+	it("stores a bare semantic keyword and disables the numeric input", async () => {
+		const user = userEvent.setup();
 		const onCommit = vi.fn();
 		const { rerender } = renderControl("100px", onCommit);
-		fireEvent.click(screen.getByLabelText("Unit"));
-		fireEvent.click(screen.getByRole("option", { name: "auto" }));
+		await user.click(screen.getByLabelText("Unit"));
+		await user.click(await screen.findByRole("option", { name: "auto" }));
 		expect(onCommit).toHaveBeenLastCalledWith("auto");
 
 		rerender(
@@ -111,12 +114,13 @@ describe("DimensionControl", () => {
 		expect(screen.getByLabelText("Width")).toBeDisabled();
 	});
 
-	it("restores the remembered number when switching back from a keyword", () => {
+	it("restores the remembered number when switching back from a keyword", async () => {
+		const user = userEvent.setup();
 		const onCommit = vi.fn();
 		const { rerender } = renderControl("120px", onCommit);
 		// Switch to keyword, then back to a dimensional unit.
-		fireEvent.click(screen.getByLabelText("Unit"));
-		fireEvent.click(screen.getByRole("option", { name: "auto" }));
+		await user.click(screen.getByLabelText("Unit"));
+		await user.click(await screen.findByRole("option", { name: "auto" }));
 		rerender(
 			<EditorI18nProvider>
 				<DimensionControl
@@ -129,8 +133,8 @@ describe("DimensionControl", () => {
 				/>
 			</EditorI18nProvider>,
 		);
-		fireEvent.click(screen.getByLabelText("Unit"));
-		fireEvent.click(screen.getByRole("option", { name: "%" }));
+		await user.click(screen.getByLabelText("Unit"));
+		await user.click(await screen.findByRole("option", { name: "%" }));
 		expect(onCommit).toHaveBeenLastCalledWith("120%");
 	});
 

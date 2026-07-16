@@ -64,6 +64,7 @@ export function useOptionalReactivePuck<T>(
 	fallback: T,
 ): T {
 	try {
+		// biome-ignore lint/correctness/useHookAtTopLevel: Puck's usePuck throws from useContext (its first hook) when no provider exists, and a component instance can never gain/lose the provider without remounting — hook order is stable in both environments (see file doc above).
 		return useReactivePuck(selector);
 	} catch {
 		return fallback;

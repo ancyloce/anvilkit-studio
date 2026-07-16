@@ -8,7 +8,7 @@
  * `metadata` shape without touching a real Puck instance.
  */
 
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { useEffect, useSyncExternalStore } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { EditorUiStoreProvider, useEditorUiStore } from "@/state/index";
@@ -164,5 +164,81 @@ describe("DrawerItem — list mode", () => {
 		renderInListMode("Hero", "drawer-item-list-no-desc");
 		expect(screen.getByText("Hero")).toBeInTheDocument();
 		expect(screen.queryByText(/./, { selector: "p" })).toBeNull();
+	});
+});
+
+function Exploding(): never {
+	throw new Error("preview blew up");
+}
+
+describe("DrawerItem — preview resilience (task §5.3)", () => {
+	it("uses a compact 16:10 preview ratio, not 4:3", () => {
+		componentsStub = { Hero: { label: "Hero" } };
+		const { container } = renderItem("Hero", "drawer-item-ratio");
+		expect(container.querySelector(".aspect-\\[16\\/10\\]")).not.toBeNull();
+		expect(container.querySelector(".aspect-\\[4\\/3\\]")).toBeNull();
+	});
+
+	it("lazy-loads thumbnails", () => {
+		componentsStub = {
+			Hero: {
+				label: "Hero",
+				metadata: { thumbnail: "https://example.com/hero.png" },
+			},
+		};
+		renderItem("Hero", "drawer-item-lazy");
+		expect(screen.getByAltText("Hero preview")).toHaveAttribute(
+			"loading",
+			"lazy",
+		);
+	});
+
+	it("falls back to the icon tier when the thumbnail image fails to load", () => {
+		componentsStub = {
+			Hero: {
+				label: "Hero",
+				metadata: {
+					thumbnail: "https://example.com/404.png",
+					icon: <svg data-testid="fallback-icon" />,
+				},
+			},
+		};
+		renderItem("Hero", "drawer-item-thumb-error");
+		fireEvent.error(screen.getByAltText("Hero preview"));
+		expect(screen.queryByAltText("Hero preview")).toBeNull();
+		expect(screen.getByTestId("fallback-icon")).toBeInTheDocument();
+	});
+
+	it("catches a throwing custom preview and falls back instead of crashing the tile", () => {
+		const errorSpy = vi
+			.spyOn(console, "error")
+			.mockImplementation(() => undefined);
+		try {
+			componentsStub = {
+				Hero: {
+					label: "Hero",
+					metadata: {
+						preview: <Exploding />,
+						icon: <svg data-testid="boundary-icon" />,
+					},
+				},
+			};
+			const { container } = renderItem("Hero", "drawer-item-preview-error");
+			expect(screen.getByTestId("boundary-icon")).toBeInTheDocument();
+			// The tile itself survived — title still renders.
+			expect(container.textContent).toContain("Hero");
+		} finally {
+			errorSpy.mockRestore();
+		}
+	});
+
+	it("keeps normal hover neutral — no brand accent border class on the grid tile", () => {
+		componentsStub = { Hero: { label: "Hero" } };
+		const { container } = renderItem("Hero", "drawer-item-neutral-hover");
+		const tile = container.querySelector("[data-drawer-item='Hero']");
+		expect(tile).not.toBeNull();
+		expect(tile?.className ?? "").not.toContain(
+			"hover:border-[var(--ak-studio-accent)]",
+		);
 	});
 });
