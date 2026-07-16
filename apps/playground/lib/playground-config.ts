@@ -1,5 +1,5 @@
 import {
-	createHeroConfig,
+	componentConfig as heroConfig,
 	type HeroProps,
 	defaultProps as heroDefaultProps,
 } from "@anvilkit/hero";
@@ -16,7 +16,7 @@ export const playgroundConfig: Config<PlaygroundComponents> = {
 		content: { title: "Content", components: ["Hero"] },
 	},
 	components: {
-		Hero: createHeroConfig(),
+		Hero: heroConfig,
 	},
 };
 
