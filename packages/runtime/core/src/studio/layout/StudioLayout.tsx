@@ -181,7 +181,9 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 			_id: unknown,
 			prevPanelSize: PanelSize | undefined,
 		) => {
-			if (prevPanelSize === undefined) return;
+			// Also skip while Focus Mode is driving the collapse itself —
+			// see the matching comment on `handleLeftPanelResize` above.
+			if (prevPanelSize === undefined || focusMode) return;
 			if (panelSize.inPixels <= 0) {
 				setInspectorCollapsed(true);
 				return;
@@ -189,7 +191,7 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 			setInspectorCollapsed(false);
 			setInspectorWidth(panelSize.inPixels);
 		},
-		[setInspectorCollapsed, setInspectorWidth],
+		[focusMode, setInspectorCollapsed, setInspectorWidth],
 	);
 
 	return (
@@ -213,21 +215,20 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 					orientation="horizontal"
 					className="min-h-0 flex-1 overflow-hidden"
 				>
-					{showLeftPanel ? (
-						<>
-							<ResizablePanel
-								id="ak-left-panel"
-								defaultSize={leftPanelWidth}
-								minSize={LEFT_PANEL_MIN_WIDTH}
-								maxSize={LEFT_PANEL_MAX_WIDTH}
-								groupResizeBehavior="preserve-pixel-size"
-								onResize={handleLeftPanelResize}
-							>
-								<StudioSidebarPanel railRef={railRef} />
-							</ResizablePanel>
-							<ResizableHandle />
-						</>
-					) : null}
+					<ResizablePanel
+						id="ak-left-panel"
+						panelRef={leftPanelRef}
+						defaultSize={showLeftPanel ? leftPanelWidth : 0}
+						minSize={LEFT_PANEL_MIN_WIDTH}
+						maxSize={LEFT_PANEL_MAX_WIDTH}
+						collapsible
+						collapsedSize={0}
+						groupResizeBehavior="preserve-pixel-size"
+						onResize={handleLeftPanelResize}
+					>
+						{showLeftPanel ? <StudioSidebarPanel railRef={railRef} /> : null}
+					</ResizablePanel>
+					<ResizableHandle />
 					<ResizablePanel id="ak-canvas-panel" minSize={CANVAS_PANEL_MIN_WIDTH}>
 						<main className="flex h-full min-w-0 flex-col">
 							<StudioViewportPreview />
