@@ -1,7 +1,7 @@
 "use client";
 
+import { type HTMLMotionProps, motion } from "motion/react";
 import * as React from "react";
-import { motion, type HTMLMotionProps } from "motion/react";
 
 type ShimmeringTextProps = Omit<HTMLMotionProps<"span">, "children"> & {
 	text: string;
@@ -30,7 +30,10 @@ function ShimmeringText({
 	shimmeringColor = "var(--color-neutral-300)",
 	...props
 }: ShimmeringTextProps) {
-	const characterKeys = React.useMemo(() => getCharacterKeys(text), [text]);
+	const characterKeys = React.useMemo(
+		() => getCharacterKeys(text ?? ""),
+		[text],
+	);
 
 	return (
 		<motion.span
