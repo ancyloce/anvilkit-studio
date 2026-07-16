@@ -5,7 +5,10 @@
 
 import { describe, expect, it } from "vitest";
 
-import { computeActionBarPosition } from "@/overrides/utils/action-bar-position";
+import {
+	clampRectIntoViewport,
+	computeActionBarPosition,
+} from "@/overrides/utils/action-bar-position";
 
 const VIEWPORT = { x: 0, y: 0, width: 1000, height: 600 };
 const BAR = { width: 80, height: 24 };
@@ -75,5 +78,55 @@ describe("computeActionBarPosition", () => {
 		});
 		expect(Number.isFinite(result.x)).toBe(true);
 		expect(Number.isFinite(result.y)).toBe(true);
+	});
+});
+
+describe("clampRectIntoViewport", () => {
+	it("returns a no-op correction when the rect already fits", () => {
+		const result = clampRectIntoViewport(
+			{ x: 100, y: 100, width: 80, height: 24 },
+			VIEWPORT,
+		);
+		expect(result).toEqual({ dx: 0, dy: 0 });
+	});
+
+	it("nudges left when the rect overflows the right edge", () => {
+		const result = clampRectIntoViewport(
+			{ x: 960, y: 100, width: 80, height: 24 },
+			VIEWPORT,
+			4,
+		);
+		// maxX = 1000 - 80 - 4 = 916; rect.x = 960 → dx = 916 - 960 = -44
+		expect(result.dx).toBe(-44);
+		expect(result.dy).toBe(0);
+	});
+
+	it("nudges down when the rect overflows the top edge", () => {
+		const result = clampRectIntoViewport(
+			{ x: 100, y: -10, width: 80, height: 24 },
+			VIEWPORT,
+			4,
+		);
+		expect(result.dx).toBe(0);
+		expect(result.dy).toBe(14);
+	});
+
+	it("nudges on both axes when the rect overflows a corner", () => {
+		const result = clampRectIntoViewport(
+			{ x: 990, y: 590, width: 80, height: 24 },
+			VIEWPORT,
+			4,
+		);
+		expect(result.dx).toBeLessThan(0);
+		expect(result.dy).toBeLessThan(0);
+	});
+
+	it("prefers the min bound (never returns a negative-size clamp range) when the rect is larger than the viewport", () => {
+		const result = clampRectIntoViewport(
+			{ x: 0, y: 0, width: 2000, height: 24 },
+			VIEWPORT,
+			4,
+		);
+		expect(Number.isFinite(result.dx)).toBe(true);
 	});
 });

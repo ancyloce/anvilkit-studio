@@ -51,6 +51,14 @@ export interface FieldLabelOverrideProps {
 	readonly el?: "label" | "div";
 	readonly readOnly?: boolean;
 	readonly className?: string;
+	/**
+	 * `"stacked"` (default): label row above the control, used by every
+	 * existing field type. `"row"`: compact two-column layout (label
+	 * left, control right) for short controls that don't need their own
+	 * line — task Phase 7, introduced for the boolean `Switch` case in
+	 * `RadioField`. Every other field type keeps `"stacked"` unchanged.
+	 */
+	readonly layout?: "stacked" | "row";
 }
 
 const fieldTypeIcons = {
@@ -130,7 +138,30 @@ export function FieldLabel({
 	el = "label",
 	readOnly = false,
 	className,
+	layout = "stacked",
 }: FieldLabelOverrideProps): ReactNode {
+	if (layout === "row") {
+		return (
+			<Field
+				orientation="horizontal"
+				className={cn(
+					"justify-between text-sm text-[var(--ak-studio-fg)]",
+					className,
+				)}
+			>
+				<FieldTitle className={labelClassName}>
+					<LabelContent
+						icon={icon}
+						label={label}
+						readOnly={readOnly}
+						type={type}
+					/>
+				</FieldTitle>
+				{children}
+			</Field>
+		);
+	}
+
 	if (el === "div") {
 		return (
 			<Field className={cn(rootClassName, className)}>

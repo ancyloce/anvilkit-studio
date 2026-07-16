@@ -28,6 +28,7 @@ interface MockPuckState {
 		data: { content: { type: string; props: { id: string } }[] };
 	};
 	getSelectorForId: (id: string) => { index: number; zone: string } | undefined;
+	config: { components: Record<string, { label?: string }> };
 }
 
 let puckState: MockPuckState;
@@ -63,6 +64,7 @@ function freshState(): MockPuckState {
 		selectedItem: null,
 		appState: { ui: { itemSelector: null }, data: { content: [] } },
 		getSelectorForId: () => undefined,
+		config: { components: {} },
 	};
 }
 
@@ -112,6 +114,7 @@ describe("useBreadcrumbs reacts to selection changes", () => {
 					data: { content: [{ type: "Hero", props: { id: "h-1" } }] },
 				},
 				getSelectorForId: () => undefined,
+				config: { components: {} },
 			});
 		});
 
@@ -119,8 +122,41 @@ describe("useBreadcrumbs reacts to selection changes", () => {
 	});
 });
 
-describe("ComponentOverlay reacts to tree position changes", () => {
-	it("flips label placement when the component becomes/stops being topmost in root", () => {
+// task Phase 8: label placement now flips on measured geometry (is
+// there room above the component, in ITS OWN document's viewport —
+// correct whether that document is the canvas iframe or the parent),
+// not on tree-structural position. Component overlays across a
+// document don't have real layout under jsdom, so
+// `getBoundingClientRect` is stubbed directly rather than driven
+// through the Puck mock this file otherwise uses.
+describe("ComponentOverlay label placement (task Phase 8: geometry-based edge flip)", () => {
+	let mockTop = 200;
+
+	beforeEach(() => {
+		mockTop = 200;
+		vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
+			() =>
+				({
+					top: mockTop,
+					left: 0,
+					right: 0,
+					bottom: mockTop,
+					width: 0,
+					height: 0,
+					x: 0,
+					y: mockTop,
+					toJSON() {
+						return this;
+					},
+				}) as DOMRect,
+		);
+	});
+
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
+
+	it("places the label above when there is enough room above the component", () => {
 		const { container } = render(
 			<ComponentOverlay
 				hover={false}
@@ -131,20 +167,65 @@ describe("ComponentOverlay reacts to tree position changes", () => {
 				<div />
 			</ComponentOverlay>,
 		);
-		const overlay = () =>
-			container.querySelector("[data-ak-overlay]") as HTMLElement;
-		// Not topmost initially (getSelectorForId → undefined).
-		expect(overlay().getAttribute("data-label-position")).toBe("above");
+		const overlay = container.querySelector("[data-ak-overlay]");
+		expect(overlay?.getAttribute("data-label-position")).toBe("above");
+	});
 
+	it("flips the label inside when there is not enough room above", () => {
+		mockTop = 10;
+		const { container } = render(
+			<ComponentOverlay
+				hover={false}
+				isSelected
+				componentId="c-1"
+				componentType="Hero"
+			>
+				<div />
+			</ComponentOverlay>,
+		);
+		const overlay = container.querySelector("[data-ak-overlay]");
+		expect(overlay?.getAttribute("data-label-position")).toBe("inside");
+	});
+
+	it("re-measures and flips on window resize", () => {
+		const { container } = render(
+			<ComponentOverlay
+				hover={false}
+				isSelected
+				componentId="c-1"
+				componentType="Hero"
+			>
+				<div />
+			</ComponentOverlay>,
+		);
+		const overlay = container.querySelector("[data-ak-overlay]");
+		expect(overlay?.getAttribute("data-label-position")).toBe("above");
+
+		act(() => {
+			mockTop = 5;
+			window.dispatchEvent(new Event("resize"));
+		});
+		expect(overlay?.getAttribute("data-label-position")).toBe("inside");
+	});
+
+	it("uses the friendly config label instead of the raw component type", () => {
 		act(() => {
 			setPuckState({
 				...freshState(),
-				getSelectorForId: () => ({
-					index: 0,
-					zone: "root:default-zone",
-				}),
+				config: { components: { Hero: { label: "Hero Banner" } } },
 			});
 		});
-		expect(overlay().getAttribute("data-label-position")).toBe("inside");
+		render(
+			<ComponentOverlay
+				hover={false}
+				isSelected
+				componentId="c-1"
+				componentType="Hero"
+			>
+				<div />
+			</ComponentOverlay>,
+		);
+		expect(screen.getByText("Hero Banner")).toBeTruthy();
+		expect(screen.queryByText("Hero")).toBeNull();
 	});
 });

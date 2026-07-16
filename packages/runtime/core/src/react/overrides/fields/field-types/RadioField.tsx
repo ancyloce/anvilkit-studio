@@ -6,6 +6,13 @@
  *
  * Puck options can carry any serializable value, so each option is
  * assigned a stable internal id and resolved back on selection.
+ *
+ * task Phase 7 / DESIGN.md §10 ("Don't... use Yes/No segmented controls
+ * for ordinary booleans"): a `radio` field whose exactly-2 options are
+ * the literal values `true` and `false` renders as a `Switch` instead
+ * of the segmented control — every other radio field (including other
+ * 2-option fields like alignment left/right, which are NOT boolean)
+ * keeps the unchanged segmented presentation.
  */
 
 import type {
@@ -14,6 +21,7 @@ import type {
 } from "@puckeditor/core";
 import { type ReactNode } from "react";
 import { FieldLabel } from "@/overrides/layout/FieldLabel";
+import { Switch } from "@/primitives/switch";
 import {
 	Toggle,
 	ToggleGroup,
@@ -26,6 +34,12 @@ import {
 } from "./option-ids";
 import type { FieldRendererProps } from "./TextField";
 
+function isBooleanShaped(options: PuckRadioField["options"]): boolean {
+	if (options.length !== 2) return false;
+	const values = options.map((option) => option.value);
+	return values.includes(true) && values.includes(false);
+}
+
 export function RadioField({
 	field,
 	value,
@@ -33,6 +47,29 @@ export function RadioField({
 	readOnly,
 	name,
 }: FieldRendererProps<PuckRadioField, OptionValue | undefined>): ReactNode {
+	if (isBooleanShaped(field.options)) {
+		return (
+			<FieldLabel
+				icon={field.labelIcon}
+				label={field.label ?? name}
+				type="radio"
+				el="div"
+				layout="row"
+				readOnly={readOnly}
+			>
+				<Switch
+					checked={value === true}
+					disabled={readOnly}
+					aria-label={field.label ?? name}
+					onCheckedChange={(checked) => {
+						if (readOnly === true) return;
+						onChange(checked as never);
+					}}
+				/>
+			</FieldLabel>
+		);
+	}
+
 	const selectedIndex = findOptionIndex(field.options, value);
 	const selected = selectedIndex === -1 ? [] : [optionId(selectedIndex)];
 

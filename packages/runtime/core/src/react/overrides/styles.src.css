@@ -353,30 +353,50 @@
 	--ring: var(--ak-studio-theme);
 }
 
-::-webkit-scrollbar {
+/*
+ * Scrollbar styling is scoped to the Studio root subtree and to
+ * portaled Studio surfaces (`[data-ak-studio-theme]` — dialogs,
+ * popovers, dropdown menus rendered via React portals outside the
+ * root DOM node, PRD §7.2). Never a bare `*`/`::-webkit-scrollbar`:
+ * that would restyle every scrollable element in the host app
+ * (DESIGN.md §2.3 "no global CSS leakage").
+ */
+:is(
+	[data-ak-studio-root],
+	[data-ak-studio-root] *,
+	[data-ak-studio-theme],
+	[data-ak-studio-theme] *
+)::-webkit-scrollbar {
 	width: 4px;
 }
 
-::-webkit-scrollbar-track {
+:is(
+	[data-ak-studio-root],
+	[data-ak-studio-root] *,
+	[data-ak-studio-theme],
+	[data-ak-studio-theme] *
+)::-webkit-scrollbar-track {
 	background: transparent;
 }
 
-::-webkit-scrollbar-thumb {
+:is(
+	[data-ak-studio-root],
+	[data-ak-studio-root] *,
+	[data-ak-studio-theme],
+	[data-ak-studio-theme] *
+)::-webkit-scrollbar-thumb {
 	background: var(--ak-studio-muted);
 	border-radius: 20px;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-	background: var(--ak-studio-muted);
-}
-
-* {
+:is(
+	[data-ak-studio-root],
+	[data-ak-studio-root] *,
+	[data-ak-studio-theme],
+	[data-ak-studio-theme] *
+) {
 	scrollbar-color: var(--ak-studio-muted) transparent;
 	scrollbar-width: thin;
-}
-
-.dark * {
-	scrollbar-color: var(--ak-studio-muted) transparent;
 }
 
 /*

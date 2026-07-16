@@ -66,3 +66,36 @@ function clamp(value: number, min: number, max: number): number {
 	}
 	return Math.max(min, Math.min(max, value));
 }
+
+export interface ViewportCorrection {
+	readonly dx: number;
+	readonly dy: number;
+}
+
+/**
+ * Corrective `(dx, dy)` translation to pull an already-placed rect back
+ * inside `viewport` (task Phase 8).
+ *
+ * Puck's `actionBar` override (`{label, children, parentAction}`, no
+ * target/viewport/zoom) owns the bar's base position itself — unlike
+ * `computeActionBarPosition` above, which derives an absolute anchor
+ * from a target rect we don't have here, this is a pure post-hoc
+ * correction: measure where Puck actually put the bar
+ * (`getBoundingClientRect()`), and nudge it back in bounds only if it
+ * overflows. Returns `{dx: 0, dy: 0}` (no-op) when `rect` already fits.
+ */
+export function clampRectIntoViewport(
+	rect: Rect,
+	viewport: Rect,
+	margin = 4,
+): ViewportCorrection {
+	const minX = viewport.x + margin;
+	const maxX = viewport.x + viewport.width - rect.width - margin;
+	const minY = viewport.y + margin;
+	const maxY = viewport.y + viewport.height - rect.height - margin;
+
+	const clampedX = clamp(rect.x, minX, maxX);
+	const clampedY = clamp(rect.y, minY, maxY);
+
+	return { dx: clampedX - rect.x, dy: clampedY - rect.y };
+}

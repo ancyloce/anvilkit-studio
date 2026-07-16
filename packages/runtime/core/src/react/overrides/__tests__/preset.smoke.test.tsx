@@ -12,16 +12,24 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Button } from "@/primitives/button";
 import { Input } from "@/primitives/input";
+import { EditorUiStoreProvider } from "@/state/index";
 
-// `ComponentOverlay` calls `useGetPuck()` to detect the topmost
-// component and suppress its label. The hook throws outside `<Puck>`,
-// so stub it for these isolated render tests. The selector returned
-// here points to a non-root zone so the label always renders.
+// `ComponentOverlay` reads `config.components[type].label` via
+// `useReactivePuck` (built on `createUsePuck`) for the label tab's
+// friendly display name (task Phase 8), falling back to the raw
+// `componentType` when the config has no matching entry — exactly
+// what an empty `components` map below exercises. The hook throws
+// outside `<Puck>`, so stub it for these isolated render tests.
+const puckSnapshotStub = {
+	config: { components: {} as Record<string, { label?: string }> },
+	getSelectorForId: (_id: string) => ({ index: 1, zone: "some-zone" }),
+};
 vi.mock("@puckeditor/core", () => ({
-	useGetPuck: () => () => ({
-		getSelectorForId: (_id: string) => ({ index: 1, zone: "some-zone" }),
-	}),
-	createUsePuck: () => () => undefined,
+	useGetPuck: () => () => puckSnapshotStub,
+	createUsePuck:
+		() =>
+		<T,>(selector: (s: typeof puckSnapshotStub) => T): T =>
+			selector(puckSnapshotStub),
 }));
 
 afterEach(cleanup);
@@ -45,7 +53,11 @@ describe("studioOverrides preset smoke", () => {
 	it("renders DrawerItem with the supplied name", () => {
 		const drawerItem = studioOverrides.drawerItem;
 		if (drawerItem === undefined) throw new Error("drawerItem missing");
-		render(<>{drawerItem({ name: "Hero", children: <span>drag</span> })}</>);
+		render(
+			<EditorUiStoreProvider storeId="smoke-drawer-item">
+				{drawerItem({ name: "Hero", children: <span>drag</span> })}
+			</EditorUiStoreProvider>,
+		);
 		expect(screen.getByText("Hero")).toBeInTheDocument();
 	});
 
