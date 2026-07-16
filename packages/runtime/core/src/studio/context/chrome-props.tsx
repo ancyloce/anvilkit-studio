@@ -33,6 +33,14 @@ export interface ChromeProps {
 	 * header. `null` or omitted hides the hint.
 	 */
 	readonly lastSavedAt?: Date | null;
+	/**
+	 * Set by the host when the most recent save/publish attempt failed.
+	 * Drives the header's compact save-status chip ("Error"); clear it
+	 * (`undefined`/`null`) once the host has resolved or retried. Purely a
+	 * status signal — the header does not interpret the value, only its
+	 * presence.
+	 */
+	readonly saveError?: unknown;
 	/** When `true`, the Publish control is disabled and shows its busy label. */
 	readonly isPublishing?: boolean;
 	/** Receives the live editor document (read from the Puck API at click time). */
@@ -44,6 +52,15 @@ export interface ChromeProps {
 	 * omitted, the Preview button renders disabled.
 	 */
 	readonly onPreview?: (data: Data) => void;
+	/**
+	 * Invoked by the header's Share control. The control only renders
+	 * when a collaboration plugin fills the `collaborators` header slot
+	 * (Core stays decoupled from optional plugins — see
+	 * `StudioHeader.logic.ts#selectCollaboratorsSlot`); when the slot is
+	 * filled but this is omitted, Share renders disabled rather than as
+	 * a dead click.
+	 */
+	readonly onShare?: () => void;
 	/** Responsive viewport presets for the toolbar's viewport selector. */
 	readonly viewports?: readonly StudioViewport[];
 	/**

@@ -42,8 +42,14 @@ export interface WindowedProps<T> {
 	readonly lanes?: number;
 	/** Switch to virtualization at/above this count. Default `50`. */
 	readonly threshold?: number;
-	/** Scroll viewport height (px) when virtualized. Default `320`. */
-	readonly maxHeight?: number;
+	/**
+	 * Scroll viewport height when virtualized: a fixed px number, or
+	 * `"100%"` to fill a flex/grid ancestor that already constrains the
+	 * available height (task Phase 6 — a panel that's the sole content
+	 * of its tab, rather than sharing space with a sibling under a
+	 * fixed cap). Default `320`.
+	 */
+	readonly maxHeight?: number | "100%";
 	/** testid for the virtualized scroll viewport (perf assertions). */
 	readonly "data-testid"?: string;
 }
@@ -96,7 +102,7 @@ function Virtualized<T>(props: {
 	itemKey: (item: T, index: number) => string;
 	estimateSize: number;
 	lanes: number;
-	maxHeight: number;
+	maxHeight: number | "100%";
 	testId?: string;
 	scrollRef: React.RefObject<HTMLDivElement | null>;
 }): ReactNode {
