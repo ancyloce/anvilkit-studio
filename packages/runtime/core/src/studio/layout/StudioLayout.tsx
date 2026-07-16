@@ -69,11 +69,20 @@
  *   explicit `.expand()` clears it, so a panel auto-collapsed by the
  *   squeeze above does NOT un-collapse on its own once the window widens
  *   back out (a plain browser-resize recompute just proportionally
- *   rescales the existing, already-0, size). `onLayoutChanged` bumps
- *   `autoLayoutTick` on every non-user change so the two sync effects
- *   below re-run and retry `.expand()` — a no-op while there's still not
- *   enough room (the constraint solver immediately re-collapses it), but
- *   the panel that recovers the moment there is.
+ *   rescales the existing, already-0, size). A ResizeObserver on the
+ *   group element bumps `autoLayoutTick` when the group WIDENS so the
+ *   two sync effects below re-run and retry `.expand()` — growth is the
+ *   only event that can create new room. The retry deliberately does
+ *   NOT key off `onLayoutChanged`: the sync effects' own imperative
+ *   `.expand()`/`.collapse()` calls fire that callback too, and on a
+ *   viewport with room for only one side panel expanding either
+ *   (collapsible) panel makes the constraint solver collapse the OTHER
+ *   one to satisfy the canvas's hard `minSize` — so tick-on-layout-change
+ *   had the two effects re-triggering each other forever ("Maximum
+ *   update depth exceeded") through alternating layouts that a
+ *   same-layout-as-last-time guard can never catch. Our imperative calls
+ *   never change the group's own box, so observing the group element
+ *   cannot feed back.
  */
 
 import { Puck } from "@puckeditor/core";
@@ -146,15 +155,31 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 	// mistaken for the user explicitly closing the panel and persisted to
 	// `drawerCollapsed`/`inspectorCollapsed`.
 	const isUserPanelResizeRef = useRef(false);
-	// Bumped by `onLayoutChanged` on every non-user layout change (see the
-	// file doc) so the two sync effects below retry `.expand()` after a
-	// browser-window resize, in case there's room again. Gated on the
-	// layout actually differing from the last notification — a retried
-	// `.expand()` that the constraint solver immediately re-collapses
-	// (still not enough room) re-notifies with the SAME layout, and
-	// without this guard that would loop forever.
-	const lastAutoLayoutRef = useRef<string | null>(null);
+	// Bumped when the group element widens (see the file doc) so the two
+	// sync effects below retry `.expand()` after a browser-window resize,
+	// in case there's room again. Deliberately driven by a ResizeObserver
+	// on the group element, NOT by `onLayoutChanged` — the sync effects'
+	// own imperative calls fire that callback too, and on a viewport with
+	// room for only one side panel the two effects would re-trigger each
+	// other through it forever (each `.expand()` makes the constraint
+	// solver collapse the other collapsible panel).
+	const groupElementRef = useRef<HTMLDivElement | null>(null);
 	const [autoLayoutTick, setAutoLayoutTick] = useState(0);
+
+	useEffect(() => {
+		const element = groupElementRef.current;
+		if (element === null) return;
+		let lastWidth = element.getBoundingClientRect().width;
+		const observer = new ResizeObserver(() => {
+			const width = element.getBoundingClientRect().width;
+			if (width > lastWidth) {
+				setAutoLayoutTick((tick) => tick + 1);
+			}
+			lastWidth = width;
+		});
+		observer.observe(element);
+		return () => observer.disconnect();
+	}, []);
 
 	const [focusMode] = useFocusMode();
 	const [drawerCollapsed, setDrawerCollapsed] = useDrawerCollapsed();
@@ -274,15 +299,9 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 				<ResizablePanelGroup
 					orientation="horizontal"
 					className="min-h-0 flex-1 overflow-hidden"
-					onLayoutChanged={(layout, meta) => {
+					elementRef={groupElementRef}
+					onLayoutChanged={(_layout, meta) => {
 						isUserPanelResizeRef.current = meta.isUserInteraction;
-						if (!meta.isUserInteraction) {
-							const serialized = JSON.stringify(layout);
-							if (serialized !== lastAutoLayoutRef.current) {
-								lastAutoLayoutRef.current = serialized;
-								setAutoLayoutTick((t) => t + 1);
-							}
-						}
 					}}
 				>
 					<ResizablePanel
