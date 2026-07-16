@@ -164,3 +164,12 @@ export function useFocusMode(): readonly [boolean, (v: boolean) => void] {
 		useShallow((s) => [s.focusMode, s.setFocusMode] as const),
 	);
 }
+
+export function useCanvasRootHeight(): readonly [
+	number,
+	(height: number) => void,
+] {
+	return useEditorUiStore(
+		useShallow((s) => [s.canvasRootHeight, s.setCanvasRootHeight] as const),
+	);
+}
