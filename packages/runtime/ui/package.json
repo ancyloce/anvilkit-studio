@@ -13,7 +13,7 @@
 				"default": "./dist/index.js"
 			},
 			"require": {
-				"types": "./dist/index.d.cts",
+				"types": "./dist/cjs/index.d.cts",
 				"default": "./dist/index.cjs"
 			}
 		},
@@ -24,7 +24,7 @@
 				"default": "./dist/presence/index.js"
 			},
 			"require": {
-				"types": "./dist/presence/index.d.cts",
+				"types": "./dist/cjs/presence/index.d.cts",
 				"default": "./dist/presence/index.cjs"
 			}
 		},
@@ -34,7 +34,7 @@
 				"default": "./dist/presence/*.js"
 			},
 			"require": {
-				"types": "./dist/presence/*.d.cts",
+				"types": "./dist/cjs/presence/*.d.cts",
 				"default": "./dist/presence/*.cjs"
 			}
 		},
@@ -44,7 +44,7 @@
 				"default": "./dist/*.js"
 			},
 			"require": {
-				"types": "./dist/*.d.cts",
+				"types": "./dist/cjs/*.d.cts",
 				"default": "./dist/*.cjs"
 			}
 		},
@@ -54,7 +54,7 @@
 				"default": "./dist/hooks/*.js"
 			},
 			"require": {
-				"types": "./dist/hooks/*.d.cts",
+				"types": "./dist/cjs/hooks/*.d.cts",
 				"default": "./dist/hooks/*.cjs"
 			}
 		},
@@ -64,7 +64,7 @@
 				"default": "./dist/lib/*.js"
 			},
 			"require": {
-				"types": "./dist/lib/*.d.cts",
+				"types": "./dist/cjs/lib/*.d.cts",
 				"default": "./dist/lib/*.cjs"
 			}
 		}

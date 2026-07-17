@@ -24,6 +24,7 @@ export default defineConfig({
 			bundle: false,
 			dts: {
 				autoExtension: true,
+				distPath: "./dist/cjs",
 			},
 			format: "cjs",
 		},

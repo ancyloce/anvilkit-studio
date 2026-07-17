@@ -76,6 +76,7 @@ function HoleBackground({
 		setLines(state, numberOfLines, strokeColor);
 		setParticles(state, particleRGBColor);
 	});
+	const getDpiEvent = React.useEffectEvent(() => state.render.dpi);
 
 	React.useEffect(() => {
 		const canvas = canvasRef.current;
@@ -89,7 +90,8 @@ function HoleBackground({
 			if (!ctx) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			ctx.save();
-			ctx.scale(state.render.dpi, state.render.dpi);
+			const dpi = getDpiEvent();
+			ctx.scale(dpi, dpi);
 			moveDiscsEvent();
 			moveParticlesEvent();
 			drawDiscsEvent(ctx);

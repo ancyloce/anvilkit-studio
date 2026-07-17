@@ -13,7 +13,7 @@
 				"default": "./dist/index.js"
 			},
 			"require": {
-				"types": "./dist/index.d.cts",
+				"types": "./dist/cjs/index.d.cts",
 				"default": "./dist/index.cjs"
 			}
 		},
@@ -23,7 +23,7 @@
 				"default": "./dist/types/index.js"
 			},
 			"require": {
-				"types": "./dist/types/index.d.cts",
+				"types": "./dist/cjs/types/index.d.cts",
 				"default": "./dist/types/index.cjs"
 			}
 		},
@@ -33,7 +33,7 @@
 				"default": "./dist/runtime/index.js"
 			},
 			"require": {
-				"types": "./dist/runtime/index.d.cts",
+				"types": "./dist/cjs/runtime/index.d.cts",
 				"default": "./dist/runtime/index.cjs"
 			}
 		},
@@ -43,7 +43,7 @@
 				"default": "./dist/config/index.js"
 			},
 			"require": {
-				"types": "./dist/config/index.d.cts",
+				"types": "./dist/cjs/config/index.d.cts",
 				"default": "./dist/config/index.cjs"
 			}
 		},
@@ -53,7 +53,7 @@
 				"default": "./dist/i18n/index.js"
 			},
 			"require": {
-				"types": "./dist/i18n/index.d.cts",
+				"types": "./dist/cjs/i18n/index.d.cts",
 				"default": "./dist/i18n/index.cjs"
 			}
 		},
@@ -63,7 +63,7 @@
 				"default": "./dist/i18n/icu/index.js"
 			},
 			"require": {
-				"types": "./dist/i18n/icu/index.d.cts",
+				"types": "./dist/cjs/i18n/icu/index.d.cts",
 				"default": "./dist/i18n/icu/index.cjs"
 			}
 		},
@@ -73,7 +73,7 @@
 				"default": "./dist/react/index.js"
 			},
 			"require": {
-				"types": "./dist/react/index.d.cts",
+				"types": "./dist/cjs/react/index.d.cts",
 				"default": "./dist/react/index.cjs"
 			}
 		},
@@ -83,7 +83,7 @@
 				"default": "./dist/compat/index.js"
 			},
 			"require": {
-				"types": "./dist/compat/index.d.cts",
+				"types": "./dist/cjs/compat/index.d.cts",
 				"default": "./dist/compat/index.cjs"
 			}
 		},
@@ -93,7 +93,7 @@
 				"default": "./dist/testing/index.js"
 			},
 			"require": {
-				"types": "./dist/testing/index.d.cts",
+				"types": "./dist/cjs/testing/index.d.cts",
 				"default": "./dist/testing/index.cjs"
 			}
 		},
@@ -103,7 +103,7 @@
 				"default": "./dist/templates/index.js"
 			},
 			"require": {
-				"types": "./dist/templates/index.d.cts",
+				"types": "./dist/cjs/templates/index.d.cts",
 				"default": "./dist/templates/index.cjs"
 			}
 		},
@@ -113,7 +113,7 @@
 				"default": "./dist/section/index.js"
 			},
 			"require": {
-				"types": "./dist/section/index.d.cts",
+				"types": "./dist/cjs/section/index.d.cts",
 				"default": "./dist/section/index.cjs"
 			}
 		},
@@ -123,7 +123,7 @@
 				"default": "./dist/react/overrides/index.js"
 			},
 			"require": {
-				"types": "./dist/react/overrides/index.d.cts",
+				"types": "./dist/cjs/react/overrides/index.d.cts",
 				"default": "./dist/react/overrides/index.cjs"
 			}
 		},

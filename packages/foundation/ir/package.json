@@ -13,7 +13,7 @@
 				"default": "./dist/index.js"
 			},
 			"require": {
-				"types": "./dist/index.d.cts",
+				"types": "./dist/cjs/index.d.cts",
 				"default": "./dist/index.cjs"
 			}
 		},
@@ -23,7 +23,7 @@
 				"default": "./dist/collect-assets.js"
 			},
 			"require": {
-				"types": "./dist/collect-assets.d.cts",
+				"types": "./dist/cjs/collect-assets.d.cts",
 				"default": "./dist/collect-assets.cjs"
 			}
 		},
@@ -33,7 +33,7 @@
 				"default": "./dist/identify-slots.js"
 			},
 			"require": {
-				"types": "./dist/identify-slots.d.cts",
+				"types": "./dist/cjs/identify-slots.d.cts",
 				"default": "./dist/identify-slots.cjs"
 			}
 		},
@@ -43,7 +43,7 @@
 				"default": "./dist/ir-to-puck-data.js"
 			},
 			"require": {
-				"types": "./dist/ir-to-puck-data.d.cts",
+				"types": "./dist/cjs/ir-to-puck-data.d.cts",
 				"default": "./dist/ir-to-puck-data.cjs"
 			}
 		},
@@ -53,7 +53,7 @@
 				"default": "./dist/puck-data-to-ir.js"
 			},
 			"require": {
-				"types": "./dist/puck-data-to-ir.d.cts",
+				"types": "./dist/cjs/puck-data-to-ir.d.cts",
 				"default": "./dist/puck-data-to-ir.cjs"
 			}
 		},
@@ -63,7 +63,7 @@
 				"default": "./dist/migrations/index.js"
 			},
 			"require": {
-				"types": "./dist/migrations/index.d.cts",
+				"types": "./dist/cjs/migrations/index.d.cts",
 				"default": "./dist/migrations/index.cjs"
 			}
 		}
