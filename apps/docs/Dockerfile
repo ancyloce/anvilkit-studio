@@ -27,7 +27,7 @@ COPY . .
 # packages/capabilities/analytics/*, and packages/tooling/configs/* — so
 # those shared packages' node_modules get resolved by whichever `pnpm
 # install` runs LAST. The components store pins its own (unpatched, and for
-# analytics/*, a newer typescript@7.0.2 vs. the root's 6.0.3) dependency
+# analytics/*, a newer typescript@7.0.2 vs. the root's 7.0.2) dependency
 # tree, so running it last silently swaps in different deps for those shared
 # packages — for analytics/react this forces rsbuild-plugin-dts onto its
 # "tsgo" (TypeScript-Go native-preview) declaration backend, which fails
