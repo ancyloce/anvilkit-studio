@@ -71,18 +71,18 @@ export class SqlitePageStorageAdapter implements PageStorageAdapter {
 			.select({ data: pages.data })
 			.from(pages)
 			.all()
-			.map((row) => deserialize(row.data))
-			.filter((record) => {
+			.flatMap((row) => {
+				const record = deserialize(row.data);
 				if (params?.status !== undefined && record.status !== params.status) {
-					return false;
+					return [];
 				}
 				if (
 					params?.parentFolder !== undefined &&
 					parentFolderOf(record) !== params.parentFolder
 				) {
-					return false;
+					return [];
 				}
-				return true;
+				return [record];
 			})
 			.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 	}

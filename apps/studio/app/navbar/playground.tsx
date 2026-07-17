@@ -44,6 +44,13 @@ function createId(prefix: string) {
 	return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
+function preventPreviewNavigation(event: MouseEvent<HTMLDivElement>) {
+	const target = event.target;
+	if (target instanceof HTMLElement && target.closest("a")) {
+		event.preventDefault();
+	}
+}
+
 export function createEditableItem(
 	item?: Partial<NavbarMenuItem>,
 ): EditableItem {
@@ -311,14 +318,6 @@ export function NavbarPlayground() {
 		logoMode,
 		logoText,
 	});
-
-	const preventPreviewNavigation = (event: MouseEvent<HTMLDivElement>) => {
-		const target = event.target;
-
-		if (target instanceof HTMLElement && target.closest("a")) {
-			event.preventDefault();
-		}
-	};
 
 	return (
 		<main className="min-h-screen">

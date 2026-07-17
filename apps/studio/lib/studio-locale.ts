@@ -7,9 +7,9 @@
  * would get localized chrome but English component field labels until
  * their next switch.
  *
- * Returns "en" on the server and on any parse failure; call from a
- * mount effect (not a `useState` initializer) so the SSR and first
- * client render agree and hydration stays clean.
+ * Returns "en" on the server and on any parse failure. Client components
+ * consume this through `useSyncExternalStore`, with "en" as the server
+ * snapshot, so hydration stays clean without a post-paint locale flash.
  */
 export function readPersistedStudioLocale(storeId: string): string {
 	if (typeof window === "undefined") {
@@ -26,5 +26,31 @@ export function readPersistedStudioLocale(storeId: string): string {
 			: "en";
 	} catch {
 		return "en";
+	}
+}
+
+const studioLocaleListeners = new Set<() => void>();
+
+/** Subscribe to same-tab locale changes and cross-tab persistence updates. */
+export function subscribeToPersistedStudioLocale(
+	listener: () => void,
+): () => void {
+	studioLocaleListeners.add(listener);
+	const handleStorage = (event: StorageEvent) => {
+		if (event.key?.startsWith("anvilkit-core-locale-")) {
+			listener();
+		}
+	};
+	window.addEventListener("storage", handleStorage);
+	return () => {
+		studioLocaleListeners.delete(listener);
+		window.removeEventListener("storage", handleStorage);
+	};
+}
+
+/** Notify subscribers after Studio persists an uncontrolled locale switch. */
+export function notifyPersistedStudioLocaleChanged(): void {
+	for (const listener of studioLocaleListeners) {
+		listener();
 	}
 }

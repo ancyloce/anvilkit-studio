@@ -20,7 +20,15 @@ import { createPageSeoPlugin } from "@anvilkit/plugin-page-seo";
 import type { PageRootProps } from "@anvilkit/schema";
 import type { Config, Data } from "@puckeditor/core";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+	useCallback,
+	useEffect,
+	useEffectEvent,
+	useMemo,
+	useRef,
+	useState,
+	useSyncExternalStore,
+} from "react";
 import { useDemoIdentity } from "@/lib/collab-identity";
 import { resolveCollabRelayUrl } from "@/lib/collab-relay-url";
 import { createCopilotSidebarPlugin } from "@/lib/copilot-sidebar-plugin";
@@ -51,7 +59,11 @@ import {
 	getDemoDataFromSearchParam,
 } from "@/lib/puck-demo";
 import { smokeTestPlugin } from "@/lib/smoke-test-plugin";
-import { readPersistedStudioLocale } from "@/lib/studio-locale";
+import {
+	notifyPersistedStudioLocaleChanged,
+	readPersistedStudioLocale,
+	subscribeToPersistedStudioLocale,
+} from "@/lib/studio-locale";
 import { tokenSwatchComponentConfig } from "@/lib/token-swatch-component";
 import { AssetManagerE2EPanel } from "./asset-manager-e2e-panel";
 import { DemoToolsExportPanel } from "./demo-tools-export-panel";
@@ -118,6 +130,23 @@ const demoChromeMessages: Readonly<Record<string, string>> = {
 // cookie / router segment. Module scope ⇒ referentially stable.
 function handleLocaleChange(locale: string): void {
 	console.info("[demo] studio locale switched →", locale);
+}
+
+// Stash a slugless / in-progress document in the durable `__preview__`
+// scratch slot. Returns `false` (and the caller aborts) on a transport error.
+async function storePreviewScratch(
+	data: Data<DemoComponents, PageRootProps>,
+): Promise<boolean> {
+	try {
+		const res = await fetch("/api/pages/preview", {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({ data }),
+		});
+		return res.ok;
+	} catch {
+		return false;
+	}
 }
 
 // Editor-only config: extends the shared `demoConfig` with the
@@ -271,11 +300,11 @@ export default function PuckEditorPage() {
 	// then kept in sync via the wrapped handler below. Drives the
 	// locale-aware Puck config — Puck field labels are plain strings, so
 	// they only change when the config object is rebuilt.
-	const [studioLocale, setStudioLocale] = useState("en");
-
-	useEffect(() => {
-		setStudioLocale(readPersistedStudioLocale("demo-editor"));
-	}, []);
+	const studioLocale = useSyncExternalStore(
+		subscribeToPersistedStudioLocale,
+		() => readPersistedStudioLocale("demo-editor"),
+		() => "en",
+	);
 
 	// Rebuilding puckConfig rotates the plugin-compile key (a deliberate
 	// recompile): the editor re-seeds from `data`, same semantics as the
@@ -292,7 +321,7 @@ export default function PuckEditorPage() {
 
 	const handleStudioLocaleChange = useCallback((locale: string) => {
 		handleLocaleChange(locale);
-		setStudioLocale(locale);
+		notifyPersistedStudioLocaleChanged();
 	}, []);
 	// Phase G E2E hook: `?messageOverrides=<urlencoded JSON>` layers onto
 	// the demo's chrome labels so the sidebar-modules spec can exercise the
@@ -374,6 +403,7 @@ export default function PuckEditorPage() {
 			}),
 		[],
 	);
+	const [pageDataMap] = useState(createDemoPagesData);
 
 	// Durable pages source for the layer sidebar module: keeps the rail's
 	// deterministic seed ids + locked/reorder/optimistic-duplicate behavior, and
@@ -390,9 +420,9 @@ export default function PuckEditorPage() {
 				// the active page by the sync effect below); `updateRootProps`
 				// writes rename/SEO edits back into it so the rail, breadcrumb, and
 				// renderer all read one source. `getRootProps` deliberately reads
-				// only `pageDataMapRef` (never `activePageIdRef`) — the source's
+				// only `pageDataMap` (never `activePageIdRef`) — the source's
 				// first `list()` runs during render before `activePageIdRef` is set.
-				getRootProps: (id) => pageDataMapRef.current[id]?.root.props,
+				getRootProps: (id) => pageDataMap[id]?.root.props,
 				updateRootProps: (id, patch) => {
 					const applyPatch = (
 						doc: Data<DemoComponents, PageRootProps>,
@@ -405,16 +435,16 @@ export default function PuckEditorPage() {
 							props: { ...(doc.root.props as PageRootProps), ...patch },
 						},
 					});
-					const existing = pageDataMapRef.current[id];
+					const existing = pageDataMap[id];
 					if (existing !== undefined) {
-						pageDataMapRef.current[id] = applyPatch(existing);
+						pageDataMap[id] = applyPatch(existing);
 					}
 					if (id === activePageIdRef.current) {
 						setPublishedData((current) => applyPatch(current));
 					}
 				},
 			}),
-		[],
+		[pageDataMap],
 	);
 
 	// Locale switcher: config-centric — `demoStudioConfig.i18n.showLocaleSwitch`
@@ -430,49 +460,45 @@ export default function PuckEditorPage() {
 	// `key` prop) so Puck re-initializes with the new document. The header
 	// breadcrumb title updates independently in core (it reads the same
 	// source's `active` flag).
-	const pageDataMapRef = useRef<
-		Record<string, Data<DemoComponents, PageRootProps>>
-	>(createDemoPagesData());
 	// The demo source's `list()` is synchronous; the union return type from
 	// `StudioPagesSource` is narrowed with a cast here.
 	const readActivePageId = useCallback((): string => {
 		const list = pagesSource.list() as readonly StudioPage[];
 		return list.find((page) => page.active)?.id ?? list[0]?.id ?? "home";
 	}, [pagesSource]);
-	const activePageIdRef = useRef<string>(readActivePageId());
-	const [activePageId, setActivePageId] = useState<string>(
-		activePageIdRef.current,
-	);
+	const readActivePageIdEvent = useEffectEvent(readActivePageId);
+	const [initialActivePageId] = useState(readActivePageId);
+	const activePageIdRef = useRef<string>(initialActivePageId);
+	const [activePageId, setActivePageId] = useState<string>(initialActivePageId);
 
 	// Refresh the analytics context the editor adapter's processor reads at emit
 	// time (declared above). Primitive context only — active page id, demo
 	// workspace, and the collab identity id (or "demo-user").
-	analyticsContextRef.current = {
-		pageId: activePageId,
-		workspaceId: "demo-workspace",
-		userId: demoIdentity?.id ?? "demo-user",
-	};
+	useEffect(() => {
+		analyticsContextRef.current = {
+			pageId: activePageId,
+			workspaceId: "demo-workspace",
+			userId: demoIdentity?.id ?? "demo-user",
+		};
+	}, [activePageId, demoIdentity?.id]);
 
 	useEffect(() => {
 		const syncActivePage = (): void => {
-			const next = readActivePageId();
+			const next = readActivePageIdEvent();
 			const prev = activePageIdRef.current;
 			if (next === prev) return;
 			// Stash the outgoing page's current document, then load the
 			// incoming one (falling back to the default showcase for pages
 			// created at runtime). The functional updater reads the latest
 			// `publishedData` without re-subscribing on every edit.
-			setPublishedData((current) => {
-				pageDataMapRef.current[prev] = current;
-				return pageDataMapRef.current[next] ?? createDemoData();
-			});
+			setPublishedData(pageDataMap[next] ?? createDemoData());
 			activePageIdRef.current = next;
 			setActivePageId(next);
 		};
 		syncActivePage();
 		const unsubscribe = pagesSource.subscribe?.(syncActivePage);
 		return () => unsubscribe?.();
-	}, [pagesSource, readActivePageId]);
+	}, [pageDataMap, pagesSource]);
 
 	// Mirror the active page's live document into the page-data map so the
 	// pages-source derives its title/SEO (from `root.props`) off fresh data
@@ -481,8 +507,8 @@ export default function PuckEditorPage() {
 	// swaps so `getRootProps(activeId)` never reads a stale snapshot.
 	useEffect(() => {
 		const id = activePageIdRef.current;
-		if (id.length > 0) pageDataMapRef.current[id] = publishedData;
-	}, [publishedData]);
+		if (id.length > 0) pageDataMap[id] = publishedData;
+	}, [pageDataMap, publishedData]);
 
 	// Collab plugins live in `@anvilkit/collab-ui` / `@anvilkit/plugin-collab-yjs`,
 	// which (together with the provider libs) pull in the whole yjs stack
@@ -511,11 +537,13 @@ export default function PuckEditorPage() {
 	// This is the recommended pattern for the `websocketUrl` one-liner — it
 	// keeps the socket stable across the host's incidental re-renders.
 	const demoIdentityRef = useRef(demoIdentity);
-	demoIdentityRef.current = demoIdentity;
 	const setDemoIdentityNameRef = useRef(setDemoIdentityName);
-	setDemoIdentityNameRef.current = setDemoIdentityName;
 	const showRemoteCursorsRef = useRef(showRemoteCursors);
-	showRemoteCursorsRef.current = showRemoteCursors;
+	useEffect(() => {
+		demoIdentityRef.current = demoIdentity;
+		setDemoIdentityNameRef.current = setDemoIdentityName;
+		showRemoteCursorsRef.current = showRemoteCursors;
+	}, [demoIdentity, setDemoIdentityName, showRemoteCursors]);
 
 	useEffect(() => {
 		if (!collabEnabled || !demoIdentityReady) {
@@ -805,23 +833,6 @@ export default function PuckEditorPage() {
 			previewWindow.location.href = previewUrl;
 		} else {
 			window.open(previewUrl, "_blank", "noopener,noreferrer");
-		}
-	}
-
-	// Stash a slugless / in-progress document in the durable `__preview__`
-	// scratch slot. Returns `false` (and the caller aborts) on a transport error.
-	async function storePreviewScratch(
-		data: Data<DemoComponents, PageRootProps>,
-	): Promise<boolean> {
-		try {
-			const res = await fetch("/api/pages/preview", {
-				method: "POST",
-				headers: { "content-type": "application/json" },
-				body: JSON.stringify({ data }),
-			});
-			return res.ok;
-		} catch {
-			return false;
 		}
 	}
 

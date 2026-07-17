@@ -4,11 +4,21 @@ import { createConsoleAdapter } from "@anvilkit/analytics-core";
 import { createCollabPlugin } from "@anvilkit/collab-ui";
 import { Studio } from "@anvilkit/core";
 import type { Config, Data } from "@puckeditor/core";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+	useSyncExternalStore,
+} from "react";
 
 import { resolveCollabRelayUrl } from "@/lib/collab-relay-url";
 import { createDemoConfig, createDemoData, demoConfig } from "@/lib/puck-demo";
-import { readPersistedStudioLocale } from "@/lib/studio-locale";
+import {
+	notifyPersistedStudioLocaleChanged,
+	readPersistedStudioLocale,
+	subscribeToPersistedStudioLocale,
+} from "@/lib/studio-locale";
 
 // Studio config: mounts the built-in header LanguageSwitcher via
 // `i18n.showLocaleSwitch` (replacing the old `headerEnd` wiring). No
@@ -87,11 +97,11 @@ export default function CollabDemoPage() {
 	// component field labels follow the chrome. Note a locale switch rotates
 	// the compile key, which re-registers the collab plugin — the transport
 	// reconnects and re-syncs from the CRDT (the room stays source of truth).
-	const [studioLocale, setStudioLocale] = useState("en");
-
-	useEffect(() => {
-		setStudioLocale(readPersistedStudioLocale("demo-collab"));
-	}, []);
+	const studioLocale = useSyncExternalStore(
+		subscribeToPersistedStudioLocale,
+		() => readPersistedStudioLocale("demo-collab"),
+		() => "en",
+	);
 
 	const localizedConfig = useMemo(
 		() => (studioLocale === "en" ? demoConfig : createDemoConfig(studioLocale)),
@@ -99,7 +109,8 @@ export default function CollabDemoPage() {
 	);
 
 	const handleLocaleChange = useCallback((locale: string) => {
-		setStudioLocale(locale);
+		void locale;
+		notifyPersistedStudioLocaleChanged();
 	}, []);
 
 	// F9: editor-side analytics (collab path). Same console adapter as the

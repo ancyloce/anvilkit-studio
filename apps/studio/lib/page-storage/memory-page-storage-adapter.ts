@@ -63,19 +63,18 @@ export class MemoryPageStorageAdapter implements PageStorageAdapter {
 
 	async list(params?: ListPagesParams): Promise<PageRecord[]> {
 		return [...this.records.values()]
-			.filter((record) => {
+			.flatMap((record) => {
 				if (params?.status !== undefined && record.status !== params.status) {
-					return false;
+					return [];
 				}
 				if (
 					params?.parentFolder !== undefined &&
 					parentFolderOf(record) !== params.parentFolder
 				) {
-					return false;
+					return [];
 				}
-				return true;
+				return [clone(record)];
 			})
-			.map((record) => clone(record))
 			.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 	}
 
