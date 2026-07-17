@@ -337,11 +337,11 @@ describe("useCanvasDropController", () => {
 		dropAt({ kind: "text", body: "NEW BODY" }, 5, 60);
 
 		expect(dispatch).toHaveBeenCalledTimes(1);
-		const props = (
-			dispatch.mock.calls[0]?.[0] as {
-				data: { props: Record<string, unknown> };
-			}
-		).data.props;
+		const action = dispatch.mock.calls[0]?.[0] as
+			| { data: { props: Record<string, unknown> } }
+			| undefined;
+		if (!action) throw new Error("Expected canvas dispatch");
+		const props = action.data.props;
 		expect(props["description"]).toBe("NEW BODY");
 		expect(props["headline"]).toBe("Old headline");
 		expect(toastWarning).not.toHaveBeenCalled();
@@ -364,11 +364,11 @@ describe("useCanvasDropController", () => {
 		renderHook(() => useCanvasDropController(document), { wrapper });
 		dropAt({ kind: "text", body: "Team" }, 5, 5);
 
-		const props = (
-			dispatch.mock.calls[0]?.[0] as {
-				data: { props: { plans: { name: string }[] } };
-			}
-		).data.props;
+		const action = dispatch.mock.calls[0]?.[0] as
+			| { data: { props: { plans: { name: string }[] } } }
+			| undefined;
+		if (!action) throw new Error("Expected canvas dispatch");
+		const props = action.data.props;
 		expect(props.plans[1]?.name).toBe("Team");
 		expect(props.plans[0]?.name).toBe("Free");
 	});
@@ -387,11 +387,11 @@ describe("useCanvasDropController", () => {
 		renderHook(() => useCanvasDropController(document), { wrapper });
 		dropAt({ kind: "image", url: "/new.png", alt: "New alt" }, 5, 5);
 
-		const props = (
-			dispatch.mock.calls[0]?.[0] as {
-				data: { props: { gallery: { src: string; alt: string }[] } };
-			}
-		).data.props;
+		const action = dispatch.mock.calls[0]?.[0] as
+			| { data: { props: { gallery: { src: string; alt: string }[] } } }
+			| undefined;
+		if (!action) throw new Error("Expected canvas dispatch");
+		const props = action.data.props;
 		expect(props.gallery[0]?.src).toBe("/new.png");
 		expect(props.gallery[0]?.alt).toBe("New alt");
 	});
@@ -407,11 +407,11 @@ describe("useCanvasDropController", () => {
 		renderHook(() => useCanvasDropController(document), { wrapper });
 		dropAt({ kind: "text", body: "FALLBACK" }, 5, 5);
 
-		const props = (
-			dispatch.mock.calls[0]?.[0] as {
-				data: { props: Record<string, unknown> };
-			}
-		).data.props;
+		const action = dispatch.mock.calls[0]?.[0] as
+			| { data: { props: Record<string, unknown> } }
+			| undefined;
+		if (!action) throw new Error("Expected canvas dispatch");
+		const props = action.data.props;
 		expect(props["text"]).toBe("FALLBACK");
 		expect(toastWarning).not.toHaveBeenCalled();
 	});
