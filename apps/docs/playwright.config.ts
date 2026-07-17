@@ -17,6 +17,15 @@ export default defineConfig({
 	use: {
 		baseURL: "http://localhost:4321",
 		trace: "on-first-retry",
+		// Force CPU rasterization — the same headless-GPU hang apps/studio's
+		// Canvas Studio route needed this fix for (Konva's 2D-canvas render
+		// hard-locks the main thread under headless Chromium's GPU/SwiftShader
+		// path on this WSL2 box; CPU-only 2D canvas is plenty here). The docs
+		// playground's canvas overlay is the same Konva stage, so it needs the
+		// same flags before any spec drives it.
+		launchOptions: {
+			args: ["--disable-gpu", "--disable-software-rasterizer"],
+		},
 	},
 	projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 	webServer: {
