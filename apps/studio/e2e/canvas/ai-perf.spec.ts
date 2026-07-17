@@ -25,7 +25,16 @@ import { expect, type Page, test } from "@playwright/test";
  *    carried (`box.x + 400`) ran off-canvas and had never actually executed
  *    (the test was `test.fixme` the whole time those constants existed).
  */
-test.describe.configure({ mode: "serial", timeout: 120_000 });
+/**
+ * Headroom for the one-time dev-server compile of the Konva chunk, ported
+ * from `editor-core.spec.ts` — this file's own `gotoCanvas` (same route) hit
+ * the identical cold-compile-looks-like-a-hang symptom that constant's header
+ * documents: a fixed 30 s wait here was never enough to distinguish "still
+ * compiling" from "actually broken" on a cold `pnpm dev`.
+ */
+const COLD_MOUNT_TIMEOUT_MS = 420_000;
+
+test.describe.configure({ mode: "serial", timeout: COLD_MOUNT_TIMEOUT_MS });
 
 /** Stage coordinates as FRACTIONS of the stage box (0..1) — see header note. */
 function atStage(
@@ -42,9 +51,10 @@ async function gotoCanvas(page: Page, pageId: string): Promise<void> {
 		timeout: 30_000,
 	});
 	// The `<CanvasWorkspace>` shell surfaces only after the ssr:false editor
-	// surface finishes its (Konva-bearing) dynamic import.
+	// surface finishes its (Konva-bearing) dynamic import — which, on a cold
+	// dev server, means waiting out a multi-minute compile.
 	await expect(page.getByTestId("canvas-workspace-root")).toBeVisible({
-		timeout: 30_000,
+		timeout: COLD_MOUNT_TIMEOUT_MS,
 	});
 }
 
