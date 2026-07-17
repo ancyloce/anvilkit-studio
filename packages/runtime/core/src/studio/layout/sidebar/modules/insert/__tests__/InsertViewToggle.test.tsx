@@ -5,6 +5,7 @@
 
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
+import { useEffect } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 import { InsertViewToggle } from "@/layout/sidebar/modules/insert/InsertViewToggle";
 import {
@@ -21,7 +22,9 @@ function Probe({
 	readonly onMode: (m: "grid" | "list") => void;
 }): null {
 	const mode = useEditorUiStore((s) => s.componentViewMode);
-	onMode(mode);
+	useEffect(() => {
+		onMode(mode);
+	}, [mode, onMode]);
 	return null;
 }
 

@@ -35,6 +35,7 @@ const MotionProgressIndicator = motion.create(ProgressPrimitives.Indicator);
 
 function ProgressIndicator({
 	transition = { type: "spring", stiffness: 100, damping: 30 },
+	style,
 	...props
 }: ProgressIndicatorProps) {
 	const { value } = useProgress();
@@ -42,8 +43,9 @@ function ProgressIndicator({
 	return (
 		<MotionProgressIndicator
 			data-slot="progress-indicator"
-			animate={{ width: `${value}%` }}
+			animate={{ scaleX: value / 100 }}
 			transition={transition}
+			style={{ transformOrigin: "left center", ...style }}
 			{...props}
 		/>
 	);

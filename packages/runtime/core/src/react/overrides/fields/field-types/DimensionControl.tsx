@@ -21,7 +21,7 @@
  * than destroying the expression — no silent coercion, ever.
  */
 
-import { type ReactNode, useCallback, useMemo, useRef } from "react";
+import { type ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { Input } from "@/primitives/input";
 import {
@@ -136,12 +136,14 @@ export function DimensionControl({
 	// a value.
 	const lastUnitRef = useRef<string>(fallbackUnit);
 	const lastAmountRef = useRef<string>("");
-	if (parsed.kind === "number") {
-		if (parsed.unit !== undefined && parsed.unit.length > 0) {
-			lastUnitRef.current = parsed.unit;
+	useEffect(() => {
+		if (parsed.kind === "number") {
+			if (parsed.unit !== undefined && parsed.unit.length > 0) {
+				lastUnitRef.current = parsed.unit;
+			}
+			lastAmountRef.current = parsed.amount ?? "";
 		}
-		lastAmountRef.current = parsed.amount ?? "";
-	}
+	}, [parsed]);
 	const activeUnit =
 		parsed.kind === "number" && parsed.unit !== undefined && parsed.unit !== ""
 			? parsed.unit

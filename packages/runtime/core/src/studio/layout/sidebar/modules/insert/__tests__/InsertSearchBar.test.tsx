@@ -11,6 +11,7 @@ import {
 	screen,
 } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
+import { useEffect } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { InsertSearchBar } from "@/layout/sidebar/modules/insert/InsertSearchBar";
 import {
@@ -26,7 +27,9 @@ afterEach(() => {
 
 function Probe({ onValue }: { readonly onValue: (v: string) => void }): null {
 	const value = useEditorUiStore((s) => s.drawerSearch);
-	onValue(value);
+	useEffect(() => {
+		onValue(value);
+	}, [onValue, value]);
 	return null;
 }
 
