@@ -85,7 +85,7 @@
 		"react-dom": ">=19.0.0"
 	},
 	"scripts": {
-		"build": "rslib build",
+		"build": "rslib build --lib esm && rslib build --lib cjs --no-clean",
 		"dev": "rslib build --watch",
 		"lint": "pnpm exec biome lint package.json tsconfig.json rslib.config.ts vitest.config.ts src/**/*.ts src/**/*.tsx src/globals.css",
 		"generate:component": "turbo gen react-component",

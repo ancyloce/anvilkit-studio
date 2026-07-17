@@ -27,7 +27,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "rslib build",
+		"build": "rslib build --lib esm && rslib build --lib cjs --no-clean",
 		"dev": "rslib build --watch",
 		"format": "pnpm exec biome format --write src rslib.config.ts vitest.config.ts",
 		"typecheck": "tsc --noEmit",

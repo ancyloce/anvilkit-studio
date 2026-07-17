@@ -195,7 +195,7 @@
 		"vitest": "^4.1.10"
 	},
 	"scripts": {
-		"build": "rslib build && pnpm build:css",
+		"build": "rslib build --lib esm && rslib build --lib cjs --no-clean && pnpm build:css",
 		"build:css": "tailwindcss -i ./src/react/overrides/styles.src.css -o ./dist/react/overrides/styles.css --minify",
 		"dev": "rslib build --watch",
 		"lint": "pnpm exec biome lint package.json tsconfig.json tsconfig.test.json rslib.config.ts vitest.config.ts src scripts",

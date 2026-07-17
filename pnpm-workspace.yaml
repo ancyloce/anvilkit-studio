@@ -17,6 +17,15 @@ packages:
   - "packages/extensions/templates/*"
   - "packages/tooling/*"
   - "packages/tooling/configs/*"
+minimumReleaseAge: 10080
+trustPolicy: no-downgrade
+trustPolicyExclude:
+  # Mature transitive releases already present in the reviewed lockfile. These
+  # predate consistent npm provenance, so pnpm reports them as trust downgrades;
+  # keep the exception pinned to the exact versions instead of disabling the
+  # policy for either package family.
+  - nanoid@3.3.14
+  - semver@6.3.1
 allowBuilds:
   # better-sqlite3 ships a prebuilt binary via prebuild-install; its install
   # script must run so the demo's SQLite page-storage adapter can `require`
@@ -42,13 +51,13 @@ minimumReleaseAgeExclude:
   - '@vitest/spy@4.1.7'
   - '@vitest/utils@4.1.7'
   - vitest@4.1.7
-  - '@turbo/darwin-64@2.9.15'
-  - '@turbo/darwin-arm64@2.9.15'
-  - '@turbo/linux-64@2.9.15'
-  - '@turbo/linux-arm64@2.9.15'
-  - '@turbo/windows-64@2.9.15'
-  - '@turbo/windows-arm64@2.9.15'
-  - turbo@2.9.15
+  - '@turbo/darwin-64@2.9.15 || 2.10.5'
+  - '@turbo/darwin-arm64@2.9.15 || 2.10.5'
+  - '@turbo/linux-64@2.9.15 || 2.10.5'
+  - '@turbo/linux-arm64@2.9.15 || 2.10.5'
+  - '@turbo/windows-64@2.9.15 || 2.10.5'
+  - '@turbo/windows-arm64@2.9.15 || 2.10.5'
+  - turbo@2.9.15 || 2.10.5
   - deslop-js@0.5.8
   # pnpm's minimumReleaseAgeExclude check returns at the FIRST entry whose
   # package name matches, then asks "is this version in that one entry?". So a
@@ -119,4 +128,4 @@ overrides:
   # render time and bails with "The page model should be a reflection
   # when rendering the 'reflection' page kind."
   typedoc: 0.28.19
-  typescript: 6.0.3
+  typescript: 7.0.2
