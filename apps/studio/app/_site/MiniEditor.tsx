@@ -44,10 +44,10 @@ const ACCENT_KEYS: readonly Accent[] = ["iris", "ember"];
  */
 export function MiniEditor() {
 	const t = useDemoT();
-	const [eyebrow, setEyebrow] = useState(t("mini.default.eyebrow"));
-	const [headline, setHeadline] = useState(t("mini.default.headline"));
-	const [body, setBody] = useState(t("mini.default.body"));
-	const [ctaLabel, setCtaLabel] = useState(t("mini.default.cta"));
+	const [eyebrow, setEyebrow] = useState(() => t("mini.default.eyebrow"));
+	const [headline, setHeadline] = useState(() => t("mini.default.headline"));
+	const [body, setBody] = useState(() => t("mini.default.body"));
+	const [ctaLabel, setCtaLabel] = useState(() => t("mini.default.cta"));
 	const [accent, setAccent] = useState<Accent>("iris");
 	const [align, setAlign] = useState<Align>("center");
 

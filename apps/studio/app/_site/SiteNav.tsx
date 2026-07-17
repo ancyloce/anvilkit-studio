@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import {
 	useCallback,
 	useEffect,
+	useEffectEvent,
 	useLayoutEffect,
 	useRef,
 	useState,
@@ -216,7 +217,9 @@ function NavLinksGlass({
 		isNavLinkActive(link, pathname),
 	);
 	const activeRef = useRef(activeIndex);
-	activeRef.current = activeIndex;
+	useEffect(() => {
+		activeRef.current = activeIndex;
+	}, [activeIndex]);
 
 	const lensRef = useRef<LiquidGlassHandle>(null);
 	const groupRef = useRef<HTMLElement>(null);
@@ -324,6 +327,7 @@ function NavLinksGlass({
 		},
 		[reducedMotion],
 	);
+	const glideToEvent = useEffectEvent(glideTo);
 
 	// Rest the lens on the active route's link: snap on first layout, spring on
 	// subsequent route changes.
@@ -338,13 +342,13 @@ function NavLinksGlass({
 	// Keep the lens on its link across viewport + font-driven layout changes.
 	useEffect(() => {
 		if (plain) return;
-		const reset = () => glideTo(activeRef.current, false);
+		const reset = () => glideToEvent(activeRef.current, false);
 		window.addEventListener("resize", reset);
 		// Re-measure once webfonts swap in (label widths shift). Ignore failures —
 		// `fonts.ready` only rejects in environments without the Font Loading API.
 		document.fonts?.ready?.then(reset, () => undefined);
 		return () => window.removeEventListener("resize", reset);
-	}, [plain, glideTo]);
+	}, [plain]);
 
 	useEffect(
 		() => () => {
