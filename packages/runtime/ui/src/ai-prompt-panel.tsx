@@ -279,9 +279,9 @@ function AiPromptPanel(props: AiPromptPanelProps): React.ReactElement {
 											data-testid="ai-prompt-panel-error-issues"
 											className="flex list-disc flex-col gap-1 pl-5 text-destructive"
 										>
-											{errorIssues.map((issue, index) => (
+											{errorIssues.map((issue) => (
 												<li
-													key={`${issue.path}:${index}`}
+													key={`${issue.severity}:${issue.path}:${issue.message}`}
 													className="break-words"
 												>
 													<span className="font-mono text-xs">
@@ -297,9 +297,9 @@ function AiPromptPanel(props: AiPromptPanelProps): React.ReactElement {
 											data-testid="ai-prompt-panel-warn-issues"
 											className="flex list-disc flex-col gap-1 pl-5 text-muted-foreground"
 										>
-											{warnIssues.map((issue, index) => (
+											{warnIssues.map((issue) => (
 												<li
-													key={`${issue.path}:${index}`}
+													key={`${issue.severity}:${issue.path}:${issue.message}`}
 													className="break-words"
 												>
 													<span className="font-mono text-xs">

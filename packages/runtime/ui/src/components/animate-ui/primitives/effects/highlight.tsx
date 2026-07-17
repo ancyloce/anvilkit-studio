@@ -279,18 +279,11 @@ function Highlight<T extends React.ElementType = "div">({
 						{boundsState && (
 							<motion.div
 								data-slot="motion-highlight"
+								layout
 								animate={{
-									top: boundsState.top,
-									left: boundsState.left,
-									width: boundsState.width,
-									height: boundsState.height,
 									opacity: 1,
 								}}
 								initial={{
-									top: boundsState.top,
-									left: boundsState.left,
-									width: boundsState.width,
-									height: boundsState.height,
 									opacity: 0,
 								}}
 								exit={{
@@ -301,7 +294,15 @@ function Highlight<T extends React.ElementType = "div">({
 									},
 								}}
 								transition={transition}
-								style={{ position: "absolute", zIndex: 0, ...style }}
+								style={{
+									position: "absolute",
+									top: boundsState.top,
+									left: boundsState.left,
+									width: boundsState.width,
+									height: boundsState.height,
+									zIndex: 0,
+									...style,
+								}}
 								className={cn(className, activeClassNameState)}
 							/>
 						)}

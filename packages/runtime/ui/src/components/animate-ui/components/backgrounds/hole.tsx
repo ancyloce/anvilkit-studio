@@ -35,12 +35,12 @@ function HoleBackground({
 	...props
 }: HoleBackgroundProps) {
 	const canvasRef = React.useRef<HTMLCanvasElement>(null);
-	const stateRef = React.useRef<HoleState>(createHoleState());
+	const [state] = React.useState<HoleState>(createHoleState);
 
 	const initEvent = React.useEffectEvent(() => {
 		const canvas = canvasRef.current;
 		if (!canvas) return;
-		initHole(stateRef.current, canvas, {
+		initHole(state, canvas, {
 			numberOfDiscs,
 			numberOfLines,
 			strokeColor,
@@ -48,33 +48,33 @@ function HoleBackground({
 		});
 	});
 	const moveDiscsEvent = React.useEffectEvent(() => {
-		moveDiscs(stateRef.current);
+		moveDiscs(state);
 	});
 	const moveParticlesEvent = React.useEffectEvent(() => {
-		moveParticles(stateRef.current, particleRGBColor);
+		moveParticles(state, particleRGBColor);
 	});
 	const drawDiscsEvent = React.useEffectEvent(
 		(ctx: CanvasRenderingContext2D) => {
-			drawDiscs(ctx, stateRef.current, strokeColor);
+			drawDiscs(ctx, state, strokeColor);
 		},
 	);
 	const drawLinesEvent = React.useEffectEvent(
 		(ctx: CanvasRenderingContext2D) => {
-			drawLines(ctx, stateRef.current);
+			drawLines(ctx, state);
 		},
 	);
 	const drawParticlesEvent = React.useEffectEvent(
 		(ctx: CanvasRenderingContext2D) => {
-			drawParticles(ctx, stateRef.current);
+			drawParticles(ctx, state);
 		},
 	);
 	const resizeEvent = React.useEffectEvent(() => {
 		const canvas = canvasRef.current;
 		if (!canvas) return;
-		setSize(stateRef.current, canvas);
-		setDiscs(stateRef.current, numberOfDiscs);
-		setLines(stateRef.current, numberOfLines, strokeColor);
-		setParticles(stateRef.current, particleRGBColor);
+		setSize(state, canvas);
+		setDiscs(state, numberOfDiscs);
+		setLines(state, numberOfLines, strokeColor);
+		setParticles(state, particleRGBColor);
 	});
 
 	React.useEffect(() => {
@@ -89,7 +89,7 @@ function HoleBackground({
 			if (!ctx) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			ctx.save();
-			ctx.scale(stateRef.current.render.dpi, stateRef.current.render.dpi);
+			ctx.scale(state.render.dpi, state.render.dpi);
 			moveDiscsEvent();
 			moveParticlesEvent();
 			drawDiscsEvent(ctx);
