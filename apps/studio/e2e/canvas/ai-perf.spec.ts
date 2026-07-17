@@ -4,10 +4,11 @@ import { expect, type Page, test } from "@playwright/test";
  * PRD §9.2 scenarios 5 (AI text-to-image → node) and 7 (large-scene pan perf),
  * on the standalone canvas route (`/studio/canvas/<id>`).
  *
- * #5 (AI panel, DOM-driven) runs. #7 is `test.fixme`: it pans the live canvas,
- * which react-konva does not render under React 19.2.7 / Next 16 (see the
- * editor-core.spec.ts header for the full root cause). `--disable-gpu` in
- * playwright.config.ts prevents the separate headless-GPU hang so #5 can run.
+ * UNBLOCKED 2026-07-17 (was `test.fixme` since ~2026-05). #7's stated blocking
+ * reason ("react-konva does not render under Playwright") was the same claim
+ * `editor-core.spec.ts`'s header documents as resolved 2026-07-12 — it no
+ * longer reproduces. `--disable-gpu` in playwright.config.ts prevents the
+ * separate headless-GPU hang so both #5 and #7 can run.
  *
  * Coverage notes:
  *  • #5: the AI route guard (503 PROVIDER_DISABLED) + mock-provider result are
@@ -17,9 +18,23 @@ import { expect, type Page, test } from "@playwright/test";
  *    the panel surfaces a result.
  *  • #7: true FPS / perf-trace assertions are out of scope for Playwright here;
  *    this seeds 200 nodes and asserts mount + a responsive pan as a smoke proxy.
- *    Hard FPS budgets live in the `bench/` harness (I2-4).
+ *    Hard FPS budgets live in the `bench/` harness (I2-4). Its pan gesture uses
+ *    STAGE-FRACTION coordinates (see `atStage` below, ported from
+ *    `editor-core.spec.ts`) — the stage is zoom-to-fit and only ~162×162px at
+ *    the default viewport, so the absolute-pixel offsets this test originally
+ *    carried (`box.x + 400`) ran off-canvas and had never actually executed
+ *    (the test was `test.fixme` the whole time those constants existed).
  */
 test.describe.configure({ mode: "serial", timeout: 120_000 });
+
+/** Stage coordinates as FRACTIONS of the stage box (0..1) — see header note. */
+function atStage(
+	box: { x: number; y: number; width: number; height: number },
+	fx: number,
+	fy: number,
+) {
+	return { x: box.x + box.width * fx, y: box.y + box.height * fy };
+}
 
 async function gotoCanvas(page: Page, pageId: string): Promise<void> {
 	await page.goto(`/studio/canvas/${pageId}`);
@@ -92,7 +107,7 @@ test.describe("Canvas Studio — AI + perf (PRD §9.2)", () => {
 		await expect(page.getByTestId("ai-image-error")).toHaveCount(0);
 	});
 
-	test.fixme("#7 renders a 200-node scene and stays responsive during a pan", async ({
+	test("#7 renders a 200-node scene and stays responsive during a pan", async ({
 		page,
 	}) => {
 		const pageId = `e2e-perf-${Date.now()}`;
@@ -118,10 +133,12 @@ test.describe("Canvas Studio — AI + perf (PRD §9.2)", () => {
 		const canvas = page.locator('[data-testid="pages-canvas"] canvas').first();
 		const box = await canvas.boundingBox();
 		if (!box) throw new Error("stage canvas not found");
+		const from = atStage(box, 0.3, 0.3);
+		const to = atStage(box, 0.7, 0.65);
 		const started = Date.now();
-		await page.mouse.move(box.x + 200, box.y + 200);
+		await page.mouse.move(from.x, from.y);
 		await page.mouse.down();
-		await page.mouse.move(box.x + 400, box.y + 350, { steps: 20 });
+		await page.mouse.move(to.x, to.y, { steps: 20 });
 		await page.mouse.up();
 		expect(Date.now() - started).toBeLessThan(3000);
 	});

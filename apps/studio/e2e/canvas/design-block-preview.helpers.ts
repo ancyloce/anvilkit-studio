@@ -26,6 +26,45 @@ async function waitForStage(page: Page): Promise<void> {
 }
 
 /**
+ * Resolve the (currently sole) Design Block layer row's Puck node id, the
+ * same lookup {@link insertDesignBlockAndCommitPreview} uses internally —
+ * extracted so a caller can re-resolve it after a commit (e.g. to reopen the
+ * same linked design a second time) without re-inserting a block.
+ */
+export async function findDesignBlockNodeId(page: Page): Promise<string> {
+	const row = page
+		.getByTestId("ak-layer-layers")
+		.locator('[data-testid^="ak-layer-node-"]')
+		.filter({ hasText: "Design Block" })
+		.first();
+	const testid = await row.getAttribute("data-testid");
+	const puckNodeId = (testid ?? "").replace("ak-layer-node-", "");
+	expect(puckNodeId.length, "resolved a Puck node id").toBeGreaterThan(0);
+	return puckNodeId;
+}
+
+/**
+ * Fire the plugin's public `CANVAS_OPEN_EVENT` for a specific node and wait
+ * for the stage to paint. `designId` is deliberately left empty — the
+ * listener resolves the design from the node's OWN current props (its
+ * persisted `design://` ref after a prior commit, or a fresh one when
+ * unlinked), the same intent the in-block affordance dispatches.
+ */
+export async function openCanvasForNode(
+	page: Page,
+	puckNodeId: string,
+): Promise<void> {
+	await page.evaluate((nodeId) => {
+		window.dispatchEvent(
+			new CustomEvent("anvilkit-canvas:open", {
+				detail: { designId: "", puckNodeId: nodeId, artboardId: null },
+			}),
+		);
+	}, puckNodeId);
+	await waitForStage(page);
+}
+
+/**
  * Insert a DesignBlock, open it on the canvas, and commit — leaving the block
  * showing its exported preview. Returns the editor preview `FrameLocator`
  * (Puck renders components inside `iframe#preview-frame`). Assumes the caller is
@@ -68,24 +107,10 @@ export async function insertDesignBlockAndCommitPreview(
 	});
 
 	// Reopen the canvas FOR THIS node via the plugin's open event.
-	const row = page
-		.getByTestId("ak-layer-layers")
-		.locator('[data-testid^="ak-layer-node-"]')
-		.filter({ hasText: "Design Block" })
-		.first();
-	const testid = await row.getAttribute("data-testid");
-	const puckNodeId = (testid ?? "").replace("ak-layer-node-", "");
-	expect(puckNodeId.length, "resolved a Puck node id").toBeGreaterThan(0);
-	await page.evaluate((nodeId) => {
-		window.dispatchEvent(
-			new CustomEvent("anvilkit-canvas:open", {
-				detail: { designId: "", puckNodeId: nodeId, artboardId: null },
-			}),
-		);
-	}, puckNodeId);
+	const puckNodeId = await findDesignBlockNodeId(page);
+	await openCanvasForNode(page, puckNodeId);
 
 	// Wait for the stage to paint, then commit + close.
-	await waitForStage(page);
 	await page.waitForTimeout(1000);
 	await page.getByTestId("workspace-back").click();
 
