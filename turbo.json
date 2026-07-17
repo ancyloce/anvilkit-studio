@@ -51,7 +51,7 @@
 			"dependsOn": ["^build"]
 		},
 		"check:all": {
-			"dependsOn": ["build"],
+			"dependsOn": ["build", "^check:all"],
 			"cache": false
 		},
 		"size": {
