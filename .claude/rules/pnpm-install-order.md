@@ -29,7 +29,7 @@ tree for those shared packages, causing two distinct failure modes:
   nested workspace). Any root-workspace test that renders `@anvilkit/ui`
   crashes.
 - **Spurious `TS7016` in `analytics/react`** — the components store pins a
-  newer `typescript@7.0.2` vs. the root's `6.0.3`, which forces
+  newer `typescript@7.0.2` vs. the root's `7.0.2`, which forces
   `rsbuild-plugin-dts` onto its `tsgo` (TypeScript-Go native-preview)
   declaration backend, which fails resolving a sibling workspace package's
   types.
@@ -40,6 +40,6 @@ instance" step that fails CI fast if this ever regresses. Both
 install order — if you add another Dockerfile or CI job that runs `pnpm
 install` against this repo, mirror it there too.
 
-Separately: the root lockfile pins `typescript@6.0.3` while the workspace
+Separately: the root lockfile pins `typescript@7.0.2` while the workspace
 declares `^7.0.2` — pre-existing drift, not fixed by the install-order rule
 above. Do not conflate the two.
