@@ -25,14 +25,12 @@ export const NODE_META_LIMITS = Object.freeze({
 	versionPattern: SEMVER_PATTERN,
 } as const);
 
-const NodeMetaSchema = z
-	.object({
-		locked: z.boolean().optional(),
-		owner: z.string().max(NODE_META_LIMITS.ownerMaxLength).optional(),
-		version: z.string().regex(SEMVER_PATTERN).optional(),
-		notes: z.string().max(NODE_META_LIMITS.notesMaxLength).optional(),
-	})
-	.strict();
+const NodeMetaSchema = z.strictObject({
+	locked: z.boolean().optional(),
+	owner: z.string().max(NODE_META_LIMITS.ownerMaxLength).optional(),
+	version: z.string().regex(SEMVER_PATTERN).optional(),
+	notes: z.string().max(NODE_META_LIMITS.notesMaxLength).optional(),
+});
 
 export interface NodeMetaIssue {
 	readonly code: "INVALID_NODE_META";

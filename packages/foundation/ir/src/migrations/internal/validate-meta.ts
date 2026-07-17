@@ -31,29 +31,27 @@ export const PAGE_IR_NODE_META_LIMITS = Object.freeze({
 	versionPattern: SEMVER_PATTERN,
 } as const);
 
-const PageIRNodeMetaSchema: z.ZodType<PageIRNodeMeta> = z
-	.object({
-		locked: z.boolean().optional(),
-		owner: z
-			.string()
-			.max(PAGE_IR_NODE_META_LIMITS.ownerMaxLength, {
-				message: `owner must be ≤ ${PAGE_IR_NODE_META_LIMITS.ownerMaxLength} characters`,
-			})
-			.optional(),
-		version: z
-			.string()
-			.regex(SEMVER_PATTERN, {
-				message: "version must match the semver pattern MAJOR.MINOR.PATCH",
-			})
-			.optional(),
-		notes: z
-			.string()
-			.max(PAGE_IR_NODE_META_LIMITS.notesMaxLength, {
-				message: `notes must be ≤ ${PAGE_IR_NODE_META_LIMITS.notesMaxLength} characters`,
-			})
-			.optional(),
-	})
-	.strict();
+const PageIRNodeMetaSchema: z.ZodType<PageIRNodeMeta> = z.strictObject({
+	locked: z.boolean().optional(),
+	owner: z
+		.string()
+		.max(PAGE_IR_NODE_META_LIMITS.ownerMaxLength, {
+			message: `owner must be ≤ ${PAGE_IR_NODE_META_LIMITS.ownerMaxLength} characters`,
+		})
+		.optional(),
+	version: z
+		.string()
+		.regex(SEMVER_PATTERN, {
+			message: "version must match the semver pattern MAJOR.MINOR.PATCH",
+		})
+		.optional(),
+	notes: z
+		.string()
+		.max(PAGE_IR_NODE_META_LIMITS.notesMaxLength, {
+			message: `notes must be ≤ ${PAGE_IR_NODE_META_LIMITS.notesMaxLength} characters`,
+		})
+		.optional(),
+});
 
 export interface NodeMetaValidationResult {
 	readonly ok: boolean;
