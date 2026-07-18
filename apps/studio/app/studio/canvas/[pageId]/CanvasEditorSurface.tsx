@@ -3,7 +3,10 @@
 import type { CanvasIR } from "@anvilkit/canvas-core";
 import {
 	type BrandKit,
+	type CanvasAssetUploader,
 	type CanvasHeaderPlugin,
+	type CanvasPersistenceAdapter,
+	type CanvasRecoveryAdapter,
 	CanvasWorkspace,
 	useCanvasStudio,
 } from "@anvilkit/canvas-editor";
@@ -18,8 +21,6 @@ export interface CanvasEditorSurfaceProps {
 	initialIR: CanvasIR;
 	initialActivePageId: string;
 	brandKit: BrandKit;
-	/** Mirrors `<CanvasStudio onChange>`; the host persists + tracks the IR. */
-	onChange: (ir: CanvasIR) => void;
 	onActivePageChange: (pageId: string) => void;
 	/** Required by the `image` tool — resolves the asset id to place. */
 	onPickAsset: () => Promise<string>;
@@ -29,6 +30,17 @@ export interface CanvasEditorSurfaceProps {
 	 * `@anvilkit/plugin-export-canvas`).
 	 */
 	headerPlugins: readonly CanvasHeaderPlugin[];
+	/**
+	 * PRD 0012 §15.16: the editor's built-in save pipeline (save pill, dirty
+	 * state, debounced auto-save, beforeunload guard, unmount flush) owns
+	 * persistence now — the host supplies storage, not save timing. Replaces
+	 * the former host-level `onChange → adapter.save()` path.
+	 */
+	persistenceAdapter: CanvasPersistenceAdapter;
+	/** FR-164: local crash-recovery store (absent where IndexedDB is). */
+	recoveryAdapter?: CanvasRecoveryAdapter;
+	/** FR-091: upload transport behind drag-and-drop and the Uploads panel. */
+	assetUploader: CanvasAssetUploader;
 }
 
 /**
@@ -129,10 +141,12 @@ export default function CanvasEditorSurface({
 	initialIR,
 	initialActivePageId,
 	brandKit,
-	onChange,
 	onActivePageChange,
 	onPickAsset,
 	headerPlugins,
+	persistenceAdapter,
+	recoveryAdapter,
+	assetUploader,
 }: CanvasEditorSurfaceProps) {
 	return (
 		<CanvasWorkspace
@@ -142,9 +156,11 @@ export default function CanvasEditorSurface({
 			brandKit={brandKit}
 			templates={DEMO_TEMPLATES}
 			onPickAsset={onPickAsset}
-			onChange={(ir) => onChange(ir)}
 			onActivePageChange={onActivePageChange}
 			headerPlugins={headerPlugins}
+			persistenceAdapter={persistenceAdapter}
+			{...(recoveryAdapter ? { recoveryAdapter } : {})}
+			assetUploader={assetUploader}
 		>
 			<div className="sr-only">
 				<HostSceneReadout />

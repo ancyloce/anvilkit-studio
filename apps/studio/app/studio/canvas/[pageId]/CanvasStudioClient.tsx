@@ -8,7 +8,11 @@ import {
 } from "@anvilkit/canvas-core";
 import {
 	type BrandKit,
+	type CanvasAssetUploader,
+	type CanvasRecoveryAdapter,
 	createCanvasExportPlugin,
+	createIndexedDbRecoveryAdapter,
+	type CanvasPersistenceAdapter as EditorPersistenceAdapter,
 } from "@anvilkit/canvas-editor";
 import type { PostProcessUpload } from "@anvilkit/plugin-ai-image";
 import { createAiJobClient } from "@anvilkit/plugin-ai-image";
@@ -26,6 +30,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import "@anvilkit/canvas-editor/styles.css";
 import { selectAiImageProvider } from "@/lib/ai-image/provider-selection";
+import { createDataUrlCanvasUploader } from "@/lib/canvas-asset-uploader";
 
 // The whole editor surface (CanvasStudio + Konva + the host toolbar/panels)
 // loads behind an ssr:false dynamic boundary so Konva and the canvas-editor
@@ -127,6 +132,34 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 		[],
 	);
 
+	// PRD 0012 §15.16: hand persistence to the editor's built-in save pipeline
+	// (save pill, dirty state, debounced auto-save, beforeunload guard, unmount
+	// flush) instead of saving on every onChange. The bridge keys saves by this
+	// route's pageId — the same key `adapter.load` reads — never by `ir.id`.
+	const persistenceAdapter = useMemo<EditorPersistenceAdapter>(
+		() => ({
+			save: async ({ ir }) => {
+				await Promise.resolve(adapter.save(pageId, ir));
+				return {};
+			},
+		}),
+		[adapter, pageId],
+	);
+	// FR-164: crash recovery in IndexedDB (absent under SSR/jsdom).
+	const recoveryAdapter = useMemo<CanvasRecoveryAdapter | undefined>(
+		() =>
+			typeof indexedDB === "undefined"
+				? undefined
+				: createIndexedDbRecoveryAdapter(),
+		[],
+	);
+	// FR-091: drag-and-drop / Uploads-panel transport (shared bridge; default
+	// 1 MB cap sized for this route's localStorage persistence).
+	const assetUploader = useMemo<CanvasAssetUploader>(
+		() => createDataUrlCanvasUploader(),
+		[],
+	);
+
 	// PRD 0012 FR-151/§15.16: the editor now ships built-in SVG/PDF/PNG/JPEG/
 	// WebP/JSON exporters (SVG via core's serializer, PDF via multi-page
 	// raster-embed), so the host no longer injects serializers here — the
@@ -174,9 +207,9 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 						brandKit={DEMO_BRAND_KIT}
 						onPickAsset={onPickAsset}
 						headerPlugins={headerPlugins}
-						onChange={(ir) => {
-							adapter.save(pageId, ir);
-						}}
+						persistenceAdapter={persistenceAdapter}
+						{...(recoveryAdapter ? { recoveryAdapter } : {})}
+						assetUploader={assetUploader}
 						onActivePageChange={(id) => {
 							activePageRef.current = id;
 						}}
