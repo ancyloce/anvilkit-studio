@@ -128,4 +128,34 @@ overrides:
   # render time and bails with "The page model should be a reflection
   # when rendering the 'reflection' page kind."
   typedoc: 0.28.19
+  # Carve-outs from the `typescript: 7.0.2` pin below for madge's dependency
+  # chain, which requires the JS-based compiler API (`ts.Extension`,
+  # `ts.createCompilerHost`, ...) that the native tsgo typescript@7 no longer
+  # exposes — under 7.0.2 it crashes at require time ("Cannot read properties
+  # of undefined (reading 'Cjs')"), breaking every package `check:circular`
+  # and the root `pnpm madge` CI gate. 6.0.3 is the `@typescript/old` JS
+  # compiler that typescript@7.0.2 itself depends on, so no new compiler
+  # version enters the graph. Two pnpm 11 gotchas encoded here:
+  # (1) scoped `parent>child` overrides only beat a bare override for REGULAR
+  #     dependencies, and only when listed BEFORE it (first match wins) — so
+  #     keep these above the bare `typescript:` pin;
+  # (2) they never win for PEER dependencies, so .pnpmfile.cjs converts the
+  #     typescript peer of detective-typescript and typescript-estree into a
+  #     regular dependency first. filing-cabinet already has a regular
+  #     typescript dependency, so it only needs the override.
+  "detective-typescript>typescript": 6.0.3
+  "@typescript-eslint/typescript-estree>typescript": 6.0.3
+  "filing-cabinet>typescript": 6.0.3
+  # typedoc (api-snapshot gates + docs generators) is the same old-API story:
+  # its peer range stops at 6.0.x and it crashes at import under 7.0.2
+  # ("reading 'PropertyDeclaration'"). Keyed to 6.0.3 it remains the single
+  # typedoc + typescript pair the pin above exists to guarantee.
+  "typedoc>typescript": 6.0.3
+  # apps/playground builds with `next build --webpack`, and Next's webpack
+  # path verifies TypeScript by probing typescript/lib/typescript.js — a file
+  # the native tsgo typescript@7 no longer ships (it then tries to
+  # yarn-install typescript and dies on workspace: protocol). Turbopack apps
+  # (studio) are unaffected. Key just the playground importer to the 6.0.3 JS
+  # compiler so Next's verification and in-build type check work.
+  "playground>typescript": 6.0.3
   typescript: 7.0.2
