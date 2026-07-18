@@ -159,9 +159,11 @@ export const lazyCanvasStudioPlugin: StudioPlugin = lazyPlugin(
 		// Template catalog rides the same lazy chunk boundary as the plugin —
 		// `@anvilkit/canvas-templates` is a private workspace package consumed
 		// as data here (canvas-m0-009).
-		const [mod, templatesMod] = await Promise.all([
+		const [mod, templatesMod, assetMod] = await Promise.all([
 			import("@anvilkit/plugin-canvas-studio"),
 			import("@anvilkit/canvas-templates"),
+			// Upload transport rides the same lazy boundary (PRD 0012 §15.16).
+			import("@anvilkit/plugin-asset-manager"),
 		]);
 		const adapter =
 			typeof globalThis.localStorage === "undefined"
@@ -172,9 +174,37 @@ export const lazyCanvasStudioPlugin: StudioPlugin = lazyPlugin(
 						delete: () => undefined,
 					}
 				: mod.localStorageCanvasAdapter({ namespace: "playground-canvas" });
+		// FR-091 upload bridge, mirroring apps/studio's `createDataUrlCanvasUploader`:
+		// data-URL encode via the asset manager (default 1 MB cap — designs
+		// persist to localStorage), ids re-minted as UUIDs so the adapter's
+		// per-mount `asset-N` counter can't clobber earlier uploads in
+		// persisted `ir.assets`.
+		const adapt = assetMod.dataUrlUploader();
 		return mod.createCanvasStudioPlugin({
 			adapter,
 			templates: Object.values(templatesMod.canvasTemplates),
+			assetUploader: {
+				upload: (files) =>
+					Promise.all(
+						files.map(async (file) => {
+							const uploaded = await adapt(file);
+							return {
+								id: crypto.randomUUID(),
+								uri: uploaded.url,
+								...(uploaded.meta?.mimeType
+									? { mimeType: uploaded.meta.mimeType }
+									: {}),
+								...(uploaded.meta?.width !== undefined &&
+								uploaded.meta?.height !== undefined
+									? {
+											width: uploaded.meta.width,
+											height: uploaded.meta.height,
+										}
+									: {}),
+							};
+						}),
+					),
+			},
 			onPickAsset: async () => HOST_IMAGE_ASSET_ID,
 			seedAssets: {
 				[HOST_IMAGE_ASSET_ID]: {
