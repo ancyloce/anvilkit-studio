@@ -29,7 +29,7 @@ pnpm install
 pnpm --filter studio dev
 ```
 
-Open `http://localhost:3000`. The studio `dev` script supervises a local collaboration relay alongside `next dev`; use `pnpm --filter studio dev:next-only` to skip the relay.
+Open `http://localhost:3000`. The studio `dev` script supervises a local collaboration relay alongside `next dev`; use `pnpm --filter studio dev:turbopack` to skip the relay.
 
 Other entry points:
 
