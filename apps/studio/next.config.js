@@ -31,6 +31,13 @@ const nextConfig = {
 		// /ui, and /collab-ui (all in `transpilePackages`).
 		optimizePackageImports: ["lucide-react", "motion"],
 	},
+	// `pnpm typecheck` (`tsc --noEmit`) is the authoritative type-check gate
+	// (CLAUDE.md Verification/Definition of Done); `next build`'s own internal
+	// TypeScript pass is redundant and, on this Next 16.2.9 + Turbopack combo,
+	// crashes with "The 'id' argument must be of type string. Received
+	// undefined" partway through — unrelated to any real type error (`pnpm
+	// typecheck` passes clean on the exact same source).
+	typescript: { ignoreBuildErrors: true },
 	transpilePackages: [
 		"@anvilkit/analytics-core",
 		"@anvilkit/analytics-react",
@@ -66,21 +73,17 @@ const nextConfig = {
 		"@anvilkit/ui",
 		"@anvilkit/validator",
 	],
-	webpack: (config) => {
-		// Konva ships `lib/index-node.js` as its CJS main entry, which
-		// hard-requires the native `canvas` package. The Canvas Studio
-		// route mounts the editor strictly via
-		// `next/dynamic({ ssr: false })`, so Konva never executes on
-		// the server at runtime — but webpack still walks the import
-		// graph at build time. Stub the `canvas` resolution so the
-		// server compile doesn't fail looking for a native module we
-		// never invoke.
-		config.resolve.alias = {
-			...config.resolve.alias,
-			canvas: false,
-		};
-		return config;
-	},
+	// Konva ships `lib/index-node.js` as its CJS main entry, which
+	// hard-requires the native `canvas` package. The Canvas Studio route
+	// mounts the editor strictly via `next/dynamic({ ssr: false })`, so Konva
+	// never executes on the server at runtime. Under webpack this needed an
+	// explicit `resolve.alias: { canvas: false }` stub so the server compile
+	// didn't fail looking for a native module we never invoke. Turbopack does
+	// not need it — verified 2026-07-17: `next build --turbopack` compiles
+	// clean with no `canvas` config at all — and `turbopack.resolveAlias`
+	// rejects a literal `false` value outright (`boolean values are invalid in
+	// exports field entries`, a Turbopack panic), so there is no direct
+	// equivalent to port even if it were needed.
 };
 
 export default withBundleAnalyzer(nextConfig);

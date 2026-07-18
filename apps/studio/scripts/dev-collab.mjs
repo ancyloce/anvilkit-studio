@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Supervisor for `pnpm dev:collab`: runs the y-websocket reference relay
-// alongside `next dev --webpack` and guarantees they come up and go down
+// alongside `next dev --turbopack` and guarantees they come up and go down
 // together.
 //
 // Why a Node supervisor instead of an inline `relay & trap ...; next dev`
@@ -53,7 +53,7 @@ const relayPort =
 	RELAY_KIND === "hocuspocus"
 		? process.env.COLLAB_HOCUSPOCUS_PORT || "31234"
 		: process.env.COLLAB_RELAY_PORT || "21234";
-const nextArgs = ["dev", "--webpack", ...process.argv.slice(2)];
+const nextArgs = ["dev", "--turbopack", ...process.argv.slice(2)];
 
 const OWNER = String(process.pid);
 const childEnv = { ...process.env, ANVILKIT_DEVCOLLAB_OWNER: OWNER };

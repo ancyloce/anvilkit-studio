@@ -10,7 +10,7 @@
  * Implementation notes:
  *   - `webServer.command` is `pnpm dev`, not `pnpm build && pnpm start`.
  *     The goal is fast feedback; a production build for a smoke test
- *     is overkill. Cold starts under `next dev --webpack` in this
+ *     is overkill. Cold starts under `next dev --turbopack` in this
  *     workspace take 60-90 s to first 200 response (observed in WSL2
  *     local runs), so `timeout` is set to 180 s for headroom.
  *   - `reuseExistingServer` is true locally so repeated `pnpm e2e`

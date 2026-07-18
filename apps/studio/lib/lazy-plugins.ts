@@ -256,9 +256,11 @@ export const lazyCanvasStudioPlugin: StudioPlugin = lazyPlugin(
 		// Template catalog rides the same lazy chunk boundary as the plugin —
 		// `@anvilkit/canvas-templates` is a private workspace package consumed
 		// as data here (canvas-m0-009).
-		const [mod, templatesMod] = await Promise.all([
+		const [mod, templatesMod, uploaderMod] = await Promise.all([
 			import("@anvilkit/plugin-canvas-studio"),
 			import("@anvilkit/canvas-templates"),
+			// Rides the lazy boundary like the rest of the canvas graph.
+			import("@/lib/canvas-asset-uploader"),
 		]);
 		const adapter =
 			typeof globalThis.localStorage === "undefined"
@@ -272,6 +274,9 @@ export const lazyCanvasStudioPlugin: StudioPlugin = lazyPlugin(
 		return mod.createCanvasStudioPlugin({
 			adapter,
 			templates: Object.values(templatesMod.canvasTemplates),
+			// PRD 0012 §15.16: upload transport for the overlay's drag-and-drop
+			// and Uploads panel (1 MB cap — designs persist to localStorage).
+			assetUploader: uploaderMod.createDataUrlCanvasUploader(),
 			// Demo image picker: the editor's `image` tool resolves this to an
 			// asset id and places a node referencing it. We return a fixed host
 			// image and seed it into every opened design (mirrors the standalone

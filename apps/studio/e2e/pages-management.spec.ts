@@ -78,7 +78,7 @@ async function openRowMenu(page: Page, pageId: string): Promise<void> {
 	await page.getByTestId(menuTrigger(pageId)).click({ force: true });
 }
 
-// Cold-compile of `/puck/editor` under `next dev --webpack` runs
+// Cold-compile of `/puck/editor` under `next dev --turbopack` runs
 // 60–90 s on a fresh dev server (cf. `playwright.config.ts`). Bump
 // the per-test timeout and serialize so the first test warms the
 // route and subsequent ones inherit the compiled chunks.

@@ -59,6 +59,25 @@ async function drawRectOnOverlay(page: Page): Promise<void> {
 	await page.mouse.up();
 }
 
+/**
+ * Count of top-level layer rows in the currently-open canvas overlay. The
+ * overlay mounts the same `<CanvasWorkspace>` shell the standalone canvas
+ * route does, but WITHOUT that route's `canvas-node-count` host debug
+ * readout (`CanvasEditorSurface.tsx`'s `HostSceneReadout` is standalone-route
+ * only) — the Layers panel's row count is the overlay-reachable equivalent.
+ * Only the row `<div>` itself carries `data-selected`; the nested
+ * toggle/lock/visibility/rename buttons (also prefixed `layer-row-<id>-…`)
+ * do not, so this selector can't double-count them.
+ */
+async function overlayLayerRowCount(page: Page): Promise<number> {
+	await page.getByTestId("panel-dock-layers").click();
+	return page
+		.locator(
+			'[data-testid="canvas-mode-overlay"] [data-testid^="layer-row-"][data-selected]',
+		)
+		.count();
+}
+
 test.describe("Canvas Studio — Puck bridge (PRD §9.2)", () => {
 	test("plugin-canvas-studio registers the Open Canvas header action", async ({
 		page,
@@ -107,7 +126,7 @@ test.describe("Canvas Studio — Puck bridge (PRD §9.2)", () => {
 		const puckNodeId = await findDesignBlockNodeId(page);
 		await openCanvasForNode(page, puckNodeId);
 		await drawRectOnOverlay(page);
-		await expect(page.getByTestId("canvas-node-count")).toHaveText("1");
+		await expect.poll(() => overlayLayerRowCount(page)).toBe(1);
 		await page.getByTestId("workspace-back").click();
 		await expect(page.getByTestId("canvas-mode-overlay")).toBeHidden({
 			timeout: 15_000,
@@ -118,6 +137,6 @@ test.describe("Canvas Studio — Puck bridge (PRD §9.2)", () => {
 		// be there, proving the adapter round-tripped the IR, not just that the
 		// overlay opened.
 		await openCanvasForNode(page, puckNodeId);
-		await expect(page.getByTestId("canvas-node-count")).toHaveText("1");
+		await expect.poll(() => overlayLayerRowCount(page)).toBe(1);
 	});
 });
