@@ -8,7 +8,7 @@ import {
 	createInitialData,
 	type PlaygroundComponents,
 	playgroundConfig,
-} from "@/lib/playground-config";
+} from "../../lib/playground-config";
 
 export default function EditorPage(): ReactElement {
 	const [data, setData] = useState<Data<PlaygroundComponents>>(() =>
