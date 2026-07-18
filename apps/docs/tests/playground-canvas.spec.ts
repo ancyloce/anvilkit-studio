@@ -54,6 +54,9 @@ test.describe("Docs playground — canvas overlay (F5)", () => {
 			.locator('[data-testid="ak-rail-tab-layer"], #ak-rail-tab-layer')
 			.first()
 			.click();
+		// The Pages & Layers module defaults its inner sub-tab to "Pages" —
+		// `LayersPanel` (and its Insert-layer button) only mounts under "Layers".
+		await page.getByTestId("ak-layer-tab-layers").click();
 		await page.getByTestId("ak-layer-layers-add").click();
 		await expect(page.getByTestId("ak-layer-quickadd-popup")).toBeVisible({
 			timeout: 10_000,
