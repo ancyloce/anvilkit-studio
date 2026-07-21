@@ -141,7 +141,7 @@
 		"access": "public"
 	},
 	"peerDependencies": {
-		"@puckeditor/core": "^0.22.1",
+		"@puckeditor/core": "^0.22.2",
 		"react": ">=19.0.0",
 		"react-dom": ">=19.0.0"
 	},
@@ -172,7 +172,7 @@
 		"@anvilkit/analytics-core": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
-		"@puckeditor/core": "^0.22.1",
+		"@puckeditor/core": "^0.22.2",
 		"@rsbuild/plugin-react": "^2.1.0",
 		"@rslib/core": "^0.23.2",
 		"@tailwindcss/cli": "4.3.2",

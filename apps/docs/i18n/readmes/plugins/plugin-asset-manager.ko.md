@@ -10,7 +10,7 @@ Anvilkit Studio를 위한 헤드리스 에셋 관리자 플러그인입니다. �
 pnpm add @anvilkit/plugin-asset-manager @anvilkit/core react react-dom @puckeditor/core
 ```
 
-선택적이지 않은 peer: `react >=19.2.0`, `react-dom >=19.2.0`, `@puckeditor/core ^0.22.1`.
+선택적이지 않은 peer: `react >=19.2.0`, `react-dom >=19.2.0`, `@puckeditor/core ^0.22.2`.
 
 서브경로 가져오기:
 
