@@ -175,4 +175,55 @@ test.describe("Canvas Studio — save and lock enforcement", () => {
 		const remaining = await readScene(page);
 		expect(remaining.nodes[0]?.id).toBe(lockedTargetId);
 	});
+
+	test("#3 an unsaved edit actually fires the beforeunload guard", async ({
+		page,
+	}) => {
+		// #1 waits for the save pill to reach `saved` BEFORE reloading
+		// specifically so the beforeunload guard "cannot interfere" — which
+		// means the guard itself (CanvasStudio.tsx's `window.addEventListener
+		// ("beforeunload", ...)`, ~line 865) has never been proven to actually
+		// fire. This test does the opposite on purpose: reload while the
+		// document is still dirty/saving, so `controller.canLeave()` is false
+		// and the handler calls `e.preventDefault()`.
+		await gotoCanvas(page, `e2e-beforeunload-${Date.now()}`);
+		await draw(page, "rect", 0.15, 0.15, 0.45, 0.4);
+		await expect(page.getByTestId("canvas-node-count")).toHaveText("1");
+
+		// Auto-save is debounced 1.5s (DEFAULT_AUTO_SAVE.debounceMs); checked
+		// immediately after the edit, this is still dirty (or already saving),
+		// never `saved`.
+		await expect(page.getByTestId("workspace-save-status")).toHaveAttribute(
+			"data-status",
+			/^(dirty|saving)$/,
+		);
+
+		let dialogFired = false;
+		page.once("dialog", (dialog) => {
+			dialogFired = true;
+			void dialog.dismiss();
+		});
+
+		// `page.reload()` drives a real navigation — the same path a user's
+		// reload takes, including firing `beforeunload` — and the rect-drawing
+		// drag above already gave the page real user-activation (Chromium
+		// otherwise skips the prompt on a page with no user gesture). This
+		// does surface the dialog (confirmed: the `dialogFired` poll below
+		// passes). Critically, do NOT `await` the reload directly: dismissing
+		// the dialog means "stay" — the navigation is cancelled — so a
+		// `page.reload()` call that's awaited for a completed "load" hangs for
+		// the entire test budget waiting for a navigation that will never
+		// happen (confirmed empirically: `await page.reload()` here failed
+		// with "Test timeout of 420000ms exceeded ... waiting for navigation
+		// until load"). Fire it and let its eventual (never-resolving, until
+		// Playwright's own action-timeout) promise settle in the background.
+		void page.reload().catch(() => {});
+
+		await expect.poll(() => dialogFired).toBe(true);
+
+		// The dialog was dismissed (i.e. "stay") — the guard did its job, so
+		// the unsaved edit is still here, unreloaded.
+		await expect(page.getByTestId("canvas-studio-mount")).toBeVisible();
+		await expect(page.getByTestId("canvas-node-count")).toHaveText("1");
+	});
 });

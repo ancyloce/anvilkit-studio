@@ -81,6 +81,15 @@ async function drawRect(
 	await dragOnStage(page, fx1, fy1, fx2, fy2);
 }
 
+/** Single click on the Konva stage, in stage fractions (0..1). */
+async function clickStage(page: Page, fx: number, fy: number): Promise<void> {
+	const canvas = page.locator('[data-testid="pages-canvas"] canvas').first();
+	const box = await canvas.boundingBox();
+	if (!box) throw new Error("canvas stage not found");
+	const at = atStage(box, fx, fy);
+	await page.mouse.click(at.x, at.y);
+}
+
 const modifier = process.platform === "darwin" ? "Meta" : "Control";
 
 test.describe("Canvas Studio — keyboard shortcuts (PRD 0012 FR-040)", () => {
@@ -218,5 +227,51 @@ test.describe("Canvas Studio — keyboard shortcuts (PRD 0012 FR-040)", () => {
 		await expect(page.getByTestId("canvas-selected-count")).toHaveText("1");
 		await page.keyboard.press("Escape");
 		await expect(page.getByTestId("canvas-selected-count")).toHaveText("0");
+	});
+
+	test("#7 Escape exits inline text editing without touching selection or tool (text-editing outranks tool/selection)", async ({
+		page,
+	}) => {
+		await gotoCanvas(page, `e2e-kbd-escape-text-${Date.now()}`);
+
+		// Creating a text node auto-selects it and opens the inline editor
+		// (text-tool.ts's onPointerDown). FR-012 (tool-completion.ts's
+		// `shouldReturnToSelect`) reverts ANY creation tool — text included —
+		// to Select the moment its `node.create` commits, so by the time the
+		// overlay is open the active tool is already back to "select" (verified
+		// empirically: asserting `elements-tool-text` stays active here fails —
+		// it's "select" already). The node stays selected while editing either
+		// way, which is what this test actually needs.
+		await selectTool(page, "text");
+		await clickStage(page, 0.4, 0.4);
+		await expect(page.getByTestId("canvas-node-count")).toHaveText("1");
+		await expect(page.getByTestId("canvas-selected-count")).toHaveText("1");
+		const overlay = page.getByTestId("text-editor-overlay");
+		await expect(overlay).toBeVisible();
+		await expect(overlay).toBeFocused();
+		await expect(page.getByTestId("elements-tool-select")).toHaveAttribute(
+			"data-active",
+			"true",
+		);
+
+		// ONE Escape press here is consumed entirely by the overlay's own
+		// keydown handler (TextEditorOverlay.tsx's handleKeyDown) — the
+		// workspace shortcut registry's typing guard
+		// (WorkspaceShortcutLayer.tsx) skips keystrokes whose target is a
+		// TEXTAREA, so cancel-action.ts's `tool`/`selection` steps never run.
+		// The overlay closing while the selection and tool stay untouched IS
+		// the proof that `text-editing` outranks them in the precedence stack
+		// (cancel-action.ts's cancelImpl) — if the registry HAD handled this
+		// Escape instead, the `selection` step would have cleared the
+		// selection (the tool is already Select, so `tool` is a no-op step,
+		// leaving `selection` as the next candidate).
+		await page.keyboard.press("Escape");
+
+		await expect(overlay).toBeHidden();
+		await expect(page.getByTestId("canvas-selected-count")).toHaveText("1");
+		await expect(page.getByTestId("elements-tool-select")).toHaveAttribute(
+			"data-active",
+			"true",
+		);
 	});
 });

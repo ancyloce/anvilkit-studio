@@ -37,6 +37,9 @@ type SceneNode = {
 	type: string;
 	x: number;
 	y: number;
+	width: number;
+	height: number;
+	rotation: number;
 	text?: string;
 };
 type SceneDebug = {
@@ -225,5 +228,98 @@ test.describe("Canvas Studio — editor authoring (PRD §9.2)", () => {
 
 		await page.getByTestId("host-undo").dispatchEvent("click");
 		await expect.poll(async () => firstNode(await readScene(page)).x).toBe(x0);
+	});
+
+	test("#4 real pointer-drag moves a selected node's body", async ({
+		page,
+	}) => {
+		await gotoCanvas(page, `e2e-move-drag-${Date.now()}`);
+
+		await selectTool(page, "rect");
+		await dragOnStage(page, 0.2, 0.2, 0.5, 0.45);
+		await expect(page.getByTestId("canvas-node-count")).toHaveText("1");
+
+		// FR-012 auto-reverts the tool to Select on commit; wait for it so the
+		// move-drag below lands on the select tool's hit-test path rather than
+		// racing a still-active creation tool (see save-and-lock.spec.ts's
+		// `draw()` helper for the same race).
+		await expect
+			.poll(async () => (await readScene(page)).activeTool)
+			.toBe("select");
+		await page.getByTestId("host-select-all").dispatchEvent("click");
+		await expect(page.getByTestId("canvas-selected-count")).toHaveText("1");
+
+		const before = firstNode(await readScene(page));
+
+		// Real pointer drag starting on the node's own body — its center sits
+		// well inside the 0.2..0.5 / 0.2..0.45 rect just drawn — not the
+		// `host-nudge-x` scripted button.
+		await dragOnStage(page, 0.35, 0.325, 0.65, 0.6);
+
+		const after = firstNode(await readScene(page));
+		expect(after.x).not.toBe(before.x);
+		expect(after.y).not.toBe(before.y);
+	});
+
+	test("#5 real pointer-drag resizes via a corner Transformer handle", async ({
+		page,
+	}) => {
+		await gotoCanvas(page, `e2e-resize-drag-${Date.now()}`);
+
+		await selectTool(page, "rect");
+		await dragOnStage(page, 0.25, 0.25, 0.55, 0.55);
+		await expect(page.getByTestId("canvas-node-count")).toHaveText("1");
+		await expect
+			.poll(async () => (await readScene(page)).activeTool)
+			.toBe("select");
+		await page.getByTestId("host-select-all").dispatchEvent("click");
+		await expect(page.getByTestId("canvas-selected-count")).toHaveText("1");
+
+		const before = firstNode(await readScene(page));
+
+		// The bottom-right corner Transformer anchor sits exactly at the
+		// selected node's bounding-box corner (CanvasTransformer.tsx) — drag it
+		// outward to grow the box. Generous tolerance: sub-pixel handle-grab
+		// precision on a ~150px stage isn't guaranteed exact, so assert
+		// directional growth only, not specific pixel values.
+		await dragOnStage(page, 0.55, 0.55, 0.8, 0.8);
+
+		await expect
+			.poll(async () => firstNode(await readScene(page)).width)
+			.toBeGreaterThan(before.width);
+		const after = firstNode(await readScene(page));
+		expect(after.height).toBeGreaterThan(before.height);
+	});
+
+	test("#6 real pointer-drag rotates via the rotate handle", async ({
+		page,
+	}) => {
+		await gotoCanvas(page, `e2e-rotate-drag-${Date.now()}`);
+
+		// Keep headroom BELOW the rect: the rotate handle parks
+		// `rotateAnchorOffset={34}` screen-px below the bounding box's
+		// bottom-center point (CanvasTransformer.tsx). A y-span within
+		// ~0.1..0.4 leaves the 34px-offset handle on the tiny (~150-162px)
+		// zoom-to-fit stage instead of pushing it off the bottom edge.
+		await selectTool(page, "rect");
+		await dragOnStage(page, 0.3, 0.15, 0.6, 0.35);
+		await expect(page.getByTestId("canvas-node-count")).toHaveText("1");
+		await expect
+			.poll(async () => (await readScene(page)).activeTool)
+			.toBe("select");
+		await page.getByTestId("host-select-all").dispatchEvent("click");
+		await expect(page.getByTestId("canvas-selected-count")).toHaveText("1");
+
+		const before = firstNode(await readScene(page));
+		expect(before.rotation).toBe(0);
+
+		// Drag the rotate handle (parked below the box's bottom-center, i.e.
+		// roughly stage-fraction (0.45, 0.57) for this box) well off to the
+		// side to sweep a large angle around the node's center.
+		await dragOnStage(page, 0.45, 0.57, 0.75, 0.4);
+
+		await expect
+			.poll(async () => Math.abs(firstNode(await readScene(page)).rotation))
+			.toBeGreaterThan(5);
 	});
 });
