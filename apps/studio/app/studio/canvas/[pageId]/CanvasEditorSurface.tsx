@@ -74,6 +74,9 @@ function HostSceneReadout() {
 			type: n.type,
 			x: n.transform.x,
 			y: n.transform.y,
+			width: n.bounds.width,
+			height: n.bounds.height,
+			rotation: n.transform.rotation,
 			text: n.type === "text" ? n.text : undefined,
 		})),
 	});
