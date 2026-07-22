@@ -624,6 +624,10 @@ export function aiHostAdapter(options: AiHostAdapterOptions): StudioPlugin {
 
 								puckApi.dispatch({
 									type: "setData",
+									// Puck's store interceptor excludes `setData` from
+									// history unless this flag is set; without it an
+									// AI-applied document cannot be undone.
+									recordHistory: true,
 									data: parsed,
 								});
 							} catch (error) {

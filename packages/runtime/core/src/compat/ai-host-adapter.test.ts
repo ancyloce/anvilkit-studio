@@ -27,7 +27,8 @@
  * - The deprecation warning fires exactly once per process.
  * - Mocked `fetch` receives a POST to `${aiHost}/generate` carrying
  *   `{ currentData: ctx.getData() }` as JSON.
- * - The response body is dispatched as `{ type: "setData", data }`.
+ * - The response body is dispatched as `{ type: "setData", data }` with
+ *   `recordHistory: true`, so an AI-applied document is undoable.
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -223,9 +224,14 @@ describe("aiHostAdapter — onClick wiring", () => {
 		expect(init?.headers).toEqual({ "Content-Type": "application/json" });
 		expect(JSON.parse(String(init?.body))).toEqual({ currentData });
 
-		// And the response is dispatched as `setData`.
+		// And the response is dispatched as an undoable `setData`
+		// (recordHistory — review 0009 finding).
 		expect(dispatch).toHaveBeenCalledTimes(1);
-		expect(dispatch).toHaveBeenCalledWith({ type: "setData", data: newData });
+		expect(dispatch).toHaveBeenCalledWith({
+			type: "setData",
+			recordHistory: true,
+			data: newData,
+		});
 	});
 
 	it("refuses responses that reference component types missing from Puck config", async () => {
@@ -441,7 +447,11 @@ describe("aiHostAdapter — onClick wiring", () => {
 		await registration.headerActions?.[0]?.onClick(ctx);
 
 		expect(dispatch).toHaveBeenCalledTimes(1);
-		expect(dispatch).toHaveBeenCalledWith({ type: "setData", data: safeData });
+		expect(dispatch).toHaveBeenCalledWith({
+			type: "setData",
+			recordHistory: true,
+			data: safeData,
+		});
 	});
 
 	it("respects a custom apiPath override", async () => {
