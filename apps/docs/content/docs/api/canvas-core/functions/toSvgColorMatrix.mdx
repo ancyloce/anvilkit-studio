@@ -1,0 +1,25 @@
+---
+title: "toSvgColorMatrix"
+description: "@anvilkit/canvas-core · toSvgColorMatrix"
+---
+
+```ts
+function toSvgColorMatrix(matrix): number[];
+```
+
+Defined in: [ir/image-adjustments.ts:169](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/image-adjustments.ts#L169)
+
+The 20-value `feColorMatrix type="matrix"` form: each RGBA output row is
+`[r g b a offset]`. Our 3x4 rows are `[r g b offset]` with no alpha
+dependence, so an alpha coefficient of 0 is inserted before each offset,
+and the alpha row is identity.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `matrix` | readonly `number`[] |
+
+## Returns
+
+`number`[]

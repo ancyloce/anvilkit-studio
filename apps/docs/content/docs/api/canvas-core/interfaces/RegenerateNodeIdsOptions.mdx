@@ -1,0 +1,12 @@
+---
+title: "RegenerateNodeIdsOptions"
+description: "@anvilkit/canvas-core · RegenerateNodeIdsOptions"
+---
+
+Defined in: [ir/regenerate-ids.ts:8](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/regenerate-ids.ts#L8)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="idfactory"&gt;&lt;/a&gt; `idFactory?` | () =&gt; `string` | Fresh-id source (default `crypto.randomUUID`). Inject a deterministic factory for reproducible output — ids are assigned in pre-order (parent before children, children in document order), the same visitation order as [walkPage](../functions/walkPage). | [ir/regenerate-ids.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/regenerate-ids.ts#L15) |

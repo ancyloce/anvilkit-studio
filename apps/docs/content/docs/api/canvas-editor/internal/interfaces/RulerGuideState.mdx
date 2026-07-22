@@ -1,0 +1,29 @@
+---
+title: "RulerGuideState"
+description: "@anvilkit/canvas-editor · RulerGuideState"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L23)
+
+Workspace-chrome state for rulers and guides (C-02, FR-110/111/113).
+Persistent guide POSITIONS live in the document (`page.layoutAids.guides`,
+committed via the action layer); everything here is UI-only — visibility
+toggles, the lock switch, and the transient drag-from-ruler preview — and
+must never enter Canvas IR.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="centerlinesvisible"&gt;&lt;/a&gt; `centerLinesVisible` | `boolean` | FR-113 center-line display aid (pure chrome, never persisted). | [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L31) |
+| &lt;a id="guideslocked"&gt;&lt;/a&gt; `guidesLocked` | `boolean` | FR-111 lock guides — locked guides render but cannot be dragged. | [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L29) |
+| &lt;a id="guidesvisible"&gt;&lt;/a&gt; `guidesVisible` | `boolean` | FR-111 hide guides (positions stay in the document). | [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L27) |
+| &lt;a id="layoutaidsvisible"&gt;&lt;/a&gt; `layoutAidsVisible` | `boolean` | FR-113 margin/bleed/safe-area rendering toggle for pages that have them. | [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L33) |
+| &lt;a id="pendingguide"&gt;&lt;/a&gt; `pendingGuide` | [`PendingGuide`](PendingGuide.md) \| `null` | Live drag-from-ruler preview; null when no drag is in progress. | [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L35) |
+| &lt;a id="rulersvisible"&gt;&lt;/a&gt; `rulersVisible` | `boolean` | FR-110 ruler visibility. Off by default (existing hosts keep their look). | [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L25) |
+| &lt;a id="setcenterlinesvisible"&gt;&lt;/a&gt; `setCenterLinesVisible` | (`visible`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L39) |
+| &lt;a id="setguideslocked"&gt;&lt;/a&gt; `setGuidesLocked` | (`locked`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L38) |
+| &lt;a id="setguidesvisible"&gt;&lt;/a&gt; `setGuidesVisible` | (`visible`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L37) |
+| &lt;a id="setlayoutaidsvisible"&gt;&lt;/a&gt; `setLayoutAidsVisible` | (`visible`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L40) |
+| &lt;a id="setpendingguide"&gt;&lt;/a&gt; `setPendingGuide` | (`pending`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L41) |
+| &lt;a id="setrulersvisible"&gt;&lt;/a&gt; `setRulersVisible` | (`visible`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/ruler-guide-store.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ruler-guide-store.ts#L36) |

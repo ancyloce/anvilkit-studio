@@ -7,18 +7,30 @@ description: "@anvilkit/canvas-editor · imageTool"
 const imageTool: Tool;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/tools/image-tool.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/image-tool.ts#L28)
+Defined in: [packages/capabilities/canvas/editor/src/tools/image-tool.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/image-tool.ts#L42)
 
-MVP-7: single click → host's pickAsset() resolves → exactly one undo step
-commits. pointermove/pointerup are not implemented (no drag interaction),
-so the MVP-7 down→move*→up sequence yields ≤ 1 undoable action.
+MVP-7: single click → host's pickAsset()/pickAssets() resolves → exactly
+one undo step commits. pointermove/pointerup are not implemented (no drag
+interaction), so the MVP-7 down→move*→up sequence yields ≤ 1 undoable
+action.
 
-If pickAsset rejects (user cancels) or returns an empty string, no commit
-fires. The async resolution happens out-of-band — selection is set once
-the promise resolves, which can be after the pointer interaction is over.
+If the picker rejects (user cancels) or returns nothing, no commit fires.
+The async resolution happens out-of-band — selection is set once the
+promise resolves, which can be after the pointer interaction is over.
 
 Clicking INSIDE a frame targets that frame (the innermost one, per
-findFrameAtPoint) and places the image as its clipped child rather
-than dropping a loose image on top of it. Filling an image well may need two
-commands (the child + the frame's placeholder), which is why this goes
-through `commitBatch` — one gesture stays one undo step.
+[findFrameAtPoint](#)) and places ONE image (the first picked, when
+several were picked — a frame's image well is a single slot) as its
+clipped child rather than dropping a loose image on top of it. Filling an
+image well may need two commands (the child + the frame's placeholder),
+which is why this goes through `commitBatch` — one gesture stays one undo
+step.
+
+FR-090 (B-10) multi-select: when `ctx.pickAssets` is wired (a full
+`assetPicker` adapter) and the user picks more than one image on a click
+that lands OUTSIDE a frame, every picked image is inserted at once —
+grid-arranged around the click point via the same
+buildAssetInsertCommands core the multi-file drop path uses, so
+multi-pick and multi-drop look identical. Picking exactly one image keeps
+the original single-asset behavior (no `asset.put`, default size) byte for
+byte, whether it came from `pickAssets` or the legacy `pickAsset`.

@@ -1,0 +1,15 @@
+---
+title: "svgExporter"
+description: "@anvilkit/canvas-editor · svgExporter"
+---
+
+```ts
+const svgExporter: CanvasExporter;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/header/exporters.ts:132](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/exporters.ts#L132)
+
+Built-in SVG exporter (FR-151, AC-010): core's `serializePageToSvg` on the
+requested page, with brand tokens resolved against the editor's brand kit
+(same resolution the stage uses). The serializer module is `import()`ed so
+its weight stays out of the eager editor bundle.

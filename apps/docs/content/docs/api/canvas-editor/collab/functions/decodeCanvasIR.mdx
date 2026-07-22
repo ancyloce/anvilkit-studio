@@ -4,23 +4,35 @@ description: "@anvilkit/canvas-editor · decodeCanvasIR"
 ---
 
 ```ts
-function decodeCanvasIR(raw): CanvasIR;
+function decodeCanvasIR(raw, runtime?): CanvasIR;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/collab/encode.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/encode.ts#L21)
+Defined in: [packages/capabilities/canvas/editor/src/collab/encode.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/encode.ts#L36)
 
-Parse + validate a remote payload. Unlike the plugin's `decodeIR` (which
-only checks `version === "1"`), this runs canvas-core's full
-[CanvasIRSchema](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/validators.ts) — a hostile or corrupt peer cannot inject a
-structurally-invalid IR into the local scene. Throws on invalid input;
-callers in observers must wrap this in try/catch (never throw out of a
-Yjs observer).
+Parse, forward-migrate, then validate a remote payload (P0-8).
+
+Previously this ran only `CanvasIRSchema.parse` — no migration — so a peer
+on an older supported document version (e.g. `version: "1"`) was rejected
+outright even though core ships a migration for exactly that case, and a
+peer using a runtime with custom node kinds had every custom node rejected
+by the closed built-in schema. Routing through `runtime.migrate` (or core's
+`migrateCanvasIR` when no `runtime` is supplied — the same default,
+built-in-only path `migrateCanvasIR` always was) fixes both: old versions
+migrate forward, and a runtime's extension-aware `irSchema` validates
+custom nodes instead of rejecting them.
+
+A hostile or corrupt peer still cannot inject a structurally-invalid IR
+into the local scene — `runtime.migrate`/`migrateCanvasIR` end in the same
+Zod validation `CanvasIRSchema.parse` always ran. Throws on invalid input
+OR an unsupported version; callers in observers must wrap this in
+try/catch (never throw out of a Yjs observer).
 
 ## Parameters
 
 | Parameter | Type |
 | ------ | ------ |
 | `raw` | `string` |
+| `runtime?` | `CanvasRuntime` |
 
 ## Returns
 

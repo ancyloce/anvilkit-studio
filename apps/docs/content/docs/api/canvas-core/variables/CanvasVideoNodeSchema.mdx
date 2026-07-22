@@ -20,8 +20,8 @@ const CanvasVideoNodeSchema: ZodObject<{
   type: ZodLiteral<"video">;
   visible: ZodOptional<ZodBoolean>;
   volume: ZodOptional<ZodNumber>;
-  zIndex: ZodNumber;
+  zIndex: ZodOptional<ZodNumber>;
 }, $loose>;
 ```
 
-Defined in: [ir/validators.ts:412](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L412)
+Defined in: [ir/validators.ts:519](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L519)

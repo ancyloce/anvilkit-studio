@@ -3,7 +3,7 @@ title: "CommandApplyOptions"
 description: "@anvilkit/canvas-core · CommandApplyOptions"
 ---
 
-Defined in: [commands/types.ts:179](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L179)
+Defined in: [commands/types.ts:319](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L319)
 
 ## Extended by
 
@@ -12,6 +12,7 @@ Defined in: [commands/types.ts:179](https://github.com/ancyloce/anvilkit-studio/
 
 ## Properties
 
-| Property | Type | Defined in |
-| ------ | ------ | ------ |
-| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | [commands/types.ts:180](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L180) |
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="enforcelocked"&gt;&lt;/a&gt; `enforceLocked?` | `boolean` | When true, commands that mutate a `locked` node throw a typed `node-locked` [CanvasCommandError](../classes/CanvasCommandError) instead of applying (A-02, PRD 0012 FR-024). Default OFF for backward compatibility — existing consumers (brand apply with its own `includeLocked` semantics, extensions, collab replay) are unaffected unless they opt in. The editor's action layer enables it for user-initiated operations. Exemption: a `node.update` whose patch touches `locked` always applies — that is how a locked node gets unlocked. Inside a `batch` the option propagates to every sub-command; the batch stays all-or-nothing. | [commands/types.ts:332](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L332) |
+| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | - | [commands/types.ts:320](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L320) |

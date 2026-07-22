@@ -1,0 +1,36 @@
+---
+title: "CanvasAssetUploader"
+description: "@anvilkit/canvas-editor · CanvasAssetUploader"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/assets/adapter-types.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/assets/adapter-types.ts#L69)
+
+FR-091: host-provided upload transport.
+
+Compatibility note: the contract is batch-shaped, but the editor invokes
+`upload()` once per file so progress and cancellation attribute to a single
+task (`fileIndex` is 0 in editor-initiated calls). Adapters written against
+the original batch contract remain valid — a one-element `files` array is a
+legal batch — and both new context fields are optional, so pre-progress
+adapters keep compiling and working unchanged.
+
+## Methods
+
+### upload()
+
+```ts
+upload(files, context): Promise<readonly CanvasPickedAsset[]>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/assets/adapter-types.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/assets/adapter-types.ts#L70)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `files` | readonly `File`[] |
+| `context` | `CanvasAssetUploadContext` |
+
+#### Returns
+
+`Promise`\<readonly [`CanvasPickedAsset`](CanvasPickedAsset.md)[]\>

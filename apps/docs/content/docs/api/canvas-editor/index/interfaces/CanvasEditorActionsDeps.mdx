@@ -1,0 +1,18 @@
+---
+title: "CanvasEditorActionsDeps"
+description: "@anvilkit/canvas-editor · CanvasEditorActionsDeps"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:324](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L324)
+
+Build a [CanvasEditorActions](CanvasEditorActions.md) facade over a studio context. For
+non-React callers and tests; components should prefer
+[useCanvasActions](../functions/useCanvasActions). The context's `getIR`/stores are read at call
+time, so the facade stays correct across edits as long as `ctx` itself is
+the live context object.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="toaster"&gt;&lt;/a&gt; `toaster?` | [`CanvasToaster`](../../internal/interfaces/CanvasToaster) | Feedback sink (A-09); defaults to the silent no-op toaster. | [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:326](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L326) |

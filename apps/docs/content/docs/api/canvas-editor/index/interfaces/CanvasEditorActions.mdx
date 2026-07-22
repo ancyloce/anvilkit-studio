@@ -1,0 +1,552 @@
+---
+title: "CanvasEditorActions"
+description: "@anvilkit/canvas-editor · CanvasEditorActions"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L75)
+
+The unified editor action layer (M0-01, PRD 0012 §19). Every UI surface —
+toolbars, context menus, keyboard handlers, panels, inspectors — routes
+document operations through ONE of these actions instead of building
+commands locally, so behavior (locked-node protection, batch boundaries,
+selection updates, undo granularity) stays identical everywhere.
+
+The skeleton wraps the existing selection free functions; later phases add
+clipboard, zoom, save, and export here. Each action reads live state
+(selection, IR, active page) at CALL time — holding the object across
+renders is safe.
+
+## Extended by
+
+- [`CanvasStudioActions`](CanvasStudioActions.md)
+
+## Methods
+
+### addGuide()
+
+```ts
+addGuide(axis, position): number;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:147](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L147)
+
+FR-111 persistent guides (C-02) — each call is ONE `page.set-layout-aids`
+commit (one undo entry) on the active page. Positions are page
+coordinates in the page's own unit. `addGuide` returns the new guide's
+index on its axis (or -1 with no active page).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `axis` | [`CanvasGuideAxis`](../../internal/type-aliases/CanvasGuideAxis) |
+| `position` | `number` |
+
+#### Returns
+
+`number`
+
+***
+
+### alignSelection()
+
+```ts
+alignSelection(edge): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:95](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L95)
+
+Align the multi-selection to an edge, as one undo entry.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `edge` | `AlignEdge` |
+
+#### Returns
+
+`void`
+
+***
+
+### cancel()
+
+```ts
+cancel(): CanvasCancelStep;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:140](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L140)
+
+FR-040 Escape stack — one press, one step; returns the step that ran.
+
+#### Returns
+
+`CanvasCancelStep`
+
+***
+
+### clearGuides()
+
+```ts
+clearGuides(): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:150](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L150)
+
+#### Returns
+
+`void`
+
+***
+
+### copySelection()
+
+```ts
+copySelection(): Promise<number>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:117](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L117)
+
+FR-020 copy — internal clipboard + system clipboard when available.
+
+#### Returns
+
+`Promise`\<`number`\>
+
+***
+
+### copyStyle()
+
+```ts
+copyStyle(): boolean;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:158](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L158)
+
+FR-120/121 copy/paste style (C-05). `copyStyle` captures the primary
+selected node's portable style; `pasteStyle` applies it to every
+selected unlocked node as ONE batch of `node.applyStyle` commands,
+reporting ignored/incompatible fields via toast. `hasCopiedStyle`
+drives menu enablement.
+
+#### Returns
+
+`boolean`
+
+***
+
+### cutSelection()
+
+```ts
+cutSelection(): Promise<string[]>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:119](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L119)
+
+FR-022 cut — copy, then a single-undo-entry delete.
+
+#### Returns
+
+`Promise`\<`string`[]\>
+
+***
+
+### deleteSelection()
+
+```ts
+deleteSelection(): string[];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L83)
+
+Delete every deletable selected node as ONE undo entry (FR-024): locked
+nodes and page roots are skipped, descendants of a selected ancestor are
+skipped (the ancestor's `node.delete` already removes them — a second
+delete inside the batch would fail and roll the transaction back), and
+the selection is cleared afterwards. Returns the deleted node ids.
+
+#### Returns
+
+`string`[]
+
+***
+
+### distributeSelection()
+
+```ts
+distributeSelection(axis): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:97](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L97)
+
+Distribute the multi-selection along an axis, as one undo entry.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `axis` | [`CanvasDistributeAxis`](../type-aliases/CanvasDistributeAxis) |
+
+#### Returns
+
+`void`
+
+***
+
+### duplicateSelection()
+
+```ts
+duplicateSelection(): string[];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:123](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L123)
+
+FR-023 duplicate — fresh ids, next to the original, one batch.
+
+#### Returns
+
+`string`[]
+
+***
+
+### groupSelection()
+
+```ts
+groupSelection(): string | null;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L88)
+
+Wrap the multi-selection in a new group and select it. Returns the new
+group id, or `null` when the selection cannot be grouped.
+
+#### Returns
+
+`string` \| `null`
+
+***
+
+### hasCopiedStyle()
+
+```ts
+hasCopiedStyle(): boolean;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:160](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L160)
+
+#### Returns
+
+`boolean`
+
+***
+
+### moveGuide()
+
+```ts
+moveGuide(
+   axis, 
+   index, 
+   position): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:148](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L148)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `axis` | [`CanvasGuideAxis`](../../internal/type-aliases/CanvasGuideAxis) |
+| `index` | `number` |
+| `position` | `number` |
+
+#### Returns
+
+`void`
+
+***
+
+### paste()
+
+```ts
+paste(): Promise<string[]>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L121)
+
+FR-021 paste — system payload preferred, internal fallback; one batch.
+
+#### Returns
+
+`Promise`\<`string`[]\>
+
+***
+
+### pasteStyle()
+
+```ts
+pasteStyle(): string[];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:159](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L159)
+
+#### Returns
+
+`string`[]
+
+***
+
+### removeGuide()
+
+```ts
+removeGuide(axis, index): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:149](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L149)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `axis` | [`CanvasGuideAxis`](../../internal/type-aliases/CanvasGuideAxis) |
+| `index` | `number` |
+
+#### Returns
+
+`void`
+
+***
+
+### renameNode()
+
+```ts
+renameNode(nodeId, name): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:132](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L132)
+
+Rename a single node (layer-panel inline rename, node context menu) —
+targets `nodeId` directly rather than the current selection, since the
+node being renamed need not be selected. No-op when the id is unknown or
+the trimmed name is unchanged (avoids a spurious undo entry).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `nodeId` | `string` |
+| `name` | `string` |
+
+#### Returns
+
+`void`
+
+***
+
+### reorderSelection()
+
+```ts
+reorderSelection(direction): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:125](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L125)
+
+FR-031 layer order — move the selection within its parent, one batch.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `direction` | `CanvasReorderDirection` |
+
+#### Returns
+
+`void`
+
+***
+
+### requestExport()
+
+```ts
+requestExport(scope?): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:173](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L173)
+
+FR-152/§11.2 export — open the export dialog preselected to a page scope
+(`"current"` default, `"all"`, or `"selection"`). The export UI (mounted
+via `createCanvasExportPlugin`) performs the render + download; this is the
+stable host trigger that doesn't require reaching into stores. A no-op when
+no export UI is mounted.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `scope?` | `"current"` \| `"all"` \| `"selection"` |
+
+#### Returns
+
+`void`
+
+***
+
+### resetZoom()
+
+```ts
+resetZoom(): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:138](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L138)
+
+#### Returns
+
+`void`
+
+***
+
+### save()
+
+```ts
+save(): Promise<boolean>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:165](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L165)
+
+FR-160 save — delegates to the host `persistenceAdapter` wiring. Resolves
+`false` when no adapter is configured (nothing to persist).
+
+#### Returns
+
+`Promise`\<`boolean`\>
+
+***
+
+### tidyUpSelection()
+
+```ts
+tidyUpSelection(): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:99](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L99)
+
+FR-072 Tidy Up (C-12): grid-arrange the multi-selection, one undo entry.
+
+#### Returns
+
+`void`
+
+***
+
+### toggleLockSelection()
+
+```ts
+toggleLockSelection(): boolean | null;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:107](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L107)
+
+Toggle the lock state of the whole selection as ONE undo entry
+(FR-040 Lock / FR-054): locks when any selected node is unlocked,
+unlocks when all are locked. Locking clears the selection (locked nodes
+are un-hittable — see ElementControls); unlocking keeps it. Returns the
+new lock state, or null for an empty selection.
+
+#### Returns
+
+`boolean` \| `null`
+
+***
+
+### toggleVisibilitySelection()
+
+```ts
+toggleVisibilitySelection(): boolean | null;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:115](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L115)
+
+Toggle the visibility of the whole selection as ONE undo entry
+(FR-031 Show/Hide, FR-054): hides when any selected node is visible,
+shows when all are hidden. Locked nodes are skipped (a locked hidden
+node stays hidden). Returns the new visible state, or null for an empty
+selection.
+
+#### Returns
+
+`boolean` \| `null`
+
+***
+
+### ungroupSelection()
+
+```ts
+ungroupSelection(): string[];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:93](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L93)
+
+Dissolve every selected non-root group (one undo entry when several) and
+select the lifted children. Returns the lifted child ids.
+
+#### Returns
+
+`string`[]
+
+***
+
+### zoomIn()
+
+```ts
+zoomIn(): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:134](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L134)
+
+FR-043 zoom — viewport-store only, never a history entry.
+
+#### Returns
+
+`void`
+
+***
+
+### zoomOut()
+
+```ts
+zoomOut(): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:135](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L135)
+
+#### Returns
+
+`void`
+
+***
+
+### zoomToFit()
+
+```ts
+zoomToFit(): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:136](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L136)
+
+#### Returns
+
+`void`
+
+***
+
+### zoomToSelection()
+
+```ts
+zoomToSelection(): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:137](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L137)
+
+#### Returns
+
+`void`

@@ -29,8 +29,20 @@ type CanvasChange =
 }
   | {
   kind: "page";
-  op: "create" | "delete" | "rename" | "reorder";
+  op:   | "create"
+     | "delete"
+     | "rename"
+     | "reorder"
+     | "resize"
+     | "background"
+     | "layout-aids"
+     | "duplicate";
   pageId: string;
+}
+  | {
+  assetId: string;
+  kind: "asset";
+  op: "put" | "remove";
 };
 ```
 

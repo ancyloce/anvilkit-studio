@@ -1,0 +1,19 @@
+---
+title: "RegenerateNodeIdsResult"
+description: "@anvilkit/canvas-core · RegenerateNodeIdsResult"
+---
+
+Defined in: [ir/regenerate-ids.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/regenerate-ids.ts#L18)
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` *extends* [`CanvasNode`](../type-aliases/CanvasNode) | [`CanvasNode`](../type-aliases/CanvasNode) |
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="idmap"&gt;&lt;/a&gt; `idMap` | `ReadonlyMap`\&lt;`string`, `string`\&gt; | old id → new id, one entry per node in the subtree. | [ir/regenerate-ids.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/regenerate-ids.ts#L22) |
+| &lt;a id="node"&gt;&lt;/a&gt; `node` | `T` | The remapped deep copy. The input node is never mutated. | [ir/regenerate-ids.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/regenerate-ids.ts#L20) |

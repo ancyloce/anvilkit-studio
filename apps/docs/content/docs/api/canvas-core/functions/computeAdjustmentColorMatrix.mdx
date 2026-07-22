@@ -1,0 +1,23 @@
+---
+title: "computeAdjustmentColorMatrix"
+description: "@anvilkit/canvas-core · computeAdjustmentColorMatrix"
+---
+
+```ts
+function computeAdjustmentColorMatrix(adjustments): number[] | null;
+```
+
+Defined in: [ir/image-adjustments.ts:113](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/image-adjustments.ts#L113)
+
+Compile adjustments into the combined 3x4 color transform, or `null` when
+every color adjustment is neutral (blur alone never needs a matrix).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `adjustments` | [`CanvasImageAdjustments`](../interfaces/CanvasImageAdjustments) |
+
+## Returns
+
+`number`[] \| `null`

@@ -7,7 +7,19 @@ description: "@anvilkit/canvas-editor · PropertyInspector"
 function PropertyInspector(__namedParameters): Element;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/panels/PropertyInspector.tsx:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/PropertyInspector.tsx#L76)
+Defined in: [packages/capabilities/canvas/editor/src/panels/PropertyInspector.tsx:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/PropertyInspector.tsx#L39)
+
+Right-hand property inspector (M0-07 architecture, completed in B-12):
+- no selection → the ACTIVE PAGE's properties (FR-070),
+- single selection → full per-kind sections,
+- multi selection → the shared Layer/Transform/Appearance sections over
+  every selected node, with mixed values rendered as "Mixed" and commits
+  fanning out as ONE batch (§10 contract via the fields' `contract` prop);
+  when every selected node also shares one KIND (`summary.sharedKind`),
+  the kind-specific section (Fill/Stroke/CornerRadius for a shape, the
+  text fields, the media section, …) renders too, over the whole
+  selection, via the same mixed-value/one-batch mechanism (FR-070 gap
+  closure — a mixed-kind selection still only gets the shared sections).
 
 ## Parameters
 

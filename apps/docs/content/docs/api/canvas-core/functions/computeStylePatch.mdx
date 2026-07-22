@@ -1,0 +1,27 @@
+---
+title: "computeStylePatch"
+description: "@anvilkit/canvas-core · computeStylePatch"
+---
+
+```ts
+function computeStylePatch(node, style): StylePatchResult;
+```
+
+Defined in: [commands/apply-style.ts:141](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L141)
+
+FR-121: intersect a style payload with the target's compatible keys. Pure —
+the `node.applyStyle` command and any pre-commit UI reporting both call
+this, so what the command applies and what the UI reports never diverge.
+Applying `effects` also clears a legacy `shadow` so the target has one
+source of truth afterwards.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `node` | [`CanvasNode`](../type-aliases/CanvasNode) |
+| `style` | [`CanvasNodeStyle`](../interfaces/CanvasNodeStyle) |
+
+## Returns
+
+[`StylePatchResult`](../interfaces/StylePatchResult)

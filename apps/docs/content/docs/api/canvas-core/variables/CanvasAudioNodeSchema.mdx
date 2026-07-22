@@ -19,8 +19,8 @@ const CanvasAudioNodeSchema: ZodObject<{
   type: ZodLiteral<"audio">;
   visible: ZodOptional<ZodBoolean>;
   volume: ZodOptional<ZodNumber>;
-  zIndex: ZodNumber;
+  zIndex: ZodOptional<ZodNumber>;
 }, $loose>;
 ```
 
-Defined in: [ir/validators.ts:418](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L418)
+Defined in: [ir/validators.ts:525](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L525)

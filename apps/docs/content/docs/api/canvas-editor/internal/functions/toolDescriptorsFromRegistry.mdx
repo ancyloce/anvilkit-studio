@@ -1,0 +1,28 @@
+---
+title: "toolDescriptorsFromRegistry"
+description: "@anvilkit/canvas-editor · toolDescriptorsFromRegistry"
+---
+
+```ts
+function toolDescriptorsFromRegistry(registry): readonly RegistryToolDescriptor[];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/chrome/icons.ts:160](https://github.com/ancyloce/anvilkit-studio/blob/main/src/chrome/icons.ts#L160)
+
+Merge [TOOL\_RAIL\_ITEMS](../variables/TOOL_RAIL_ITEMS) (built-ins, in rail order) with the
+extension-registered tools of the effective registry (registry order) into
+ONE descriptor list — the single source for the tool strip, its "More
+tools" overflow, and the Elements panel. `registry` is normally
+`useCanvasStudio().toolRegistry`; `undefined` (e.g. a partial test context)
+yields the built-ins alone. A registry override of a BUILT-IN id keeps the
+rail's own metadata — overriding behavior must not reshuffle the chrome.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `registry` | \| `Partial`\&lt;`Record`\&lt;[`ToolId`](../../index/type-aliases/ToolId), [`Tool`](../interfaces/Tool)\&gt;\&gt; \| `undefined` |
+
+## Returns
+
+readonly [`RegistryToolDescriptor`](../interfaces/RegistryToolDescriptor)[]

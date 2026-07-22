@@ -3,14 +3,16 @@ title: "TextFieldProps"
 description: "@anvilkit/canvas-editor · TextFieldProps"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/panels/fields.tsx:126](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L126)
+Defined in: [packages/capabilities/canvas/editor/src/panels/fields.tsx:278](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L278)
 
 ## Properties
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="datatestid"&gt;&lt;/a&gt; `dataTestId` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:129](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L129) |
-| &lt;a id="label"&gt;&lt;/a&gt; `label` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:127](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L127) |
-| &lt;a id="oncommit"&gt;&lt;/a&gt; `onCommit` | (`next`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:130](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L130) |
-| &lt;a id="title"&gt;&lt;/a&gt; `title?` | `string` | Native tooltip, e.g. flagging an unresolved brand-token value (canvas-m1-013). | [packages/capabilities/canvas/editor/src/panels/fields.tsx:132](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L132) |
-| &lt;a id="value"&gt;&lt;/a&gt; `value` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:128](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L128) |
+| &lt;a id="contract"&gt;&lt;/a&gt; `contract?` | [`FieldContractTarget`](FieldContractTarget.md)\&lt;`string`\&gt; | §10 field-input contract (B-12): preview + coalesced commit + revert. | [packages/capabilities/canvas/editor/src/panels/fields.tsx:285](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L285) |
+| &lt;a id="datatestid"&gt;&lt;/a&gt; `dataTestId` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:281](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L281) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:279](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L279) |
+| &lt;a id="mixed"&gt;&lt;/a&gt; `mixed?` | `boolean` | Multi-selection mixed value (B-12): renders an empty "Mixed" field. | [packages/capabilities/canvas/editor/src/panels/fields.tsx:287](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L287) |
+| &lt;a id="oncommit"&gt;&lt;/a&gt; `onCommit?` | (`next`) =&gt; `void` | Legacy commit path; ignored when [contract](#contract) is present. | [packages/capabilities/canvas/editor/src/panels/fields.tsx:283](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L283) |
+| &lt;a id="title"&gt;&lt;/a&gt; `title?` | `string` | Native tooltip, e.g. flagging an unresolved brand-token value (canvas-m1-013). | [packages/capabilities/canvas/editor/src/panels/fields.tsx:289](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L289) |
+| &lt;a id="value"&gt;&lt;/a&gt; `value` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:280](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L280) |

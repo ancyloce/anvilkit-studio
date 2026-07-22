@@ -1,0 +1,28 @@
+---
+title: "CanvasExportActionRequest"
+description: "@anvilkit/canvas-editor · CanvasExportActionRequest"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/header/export-action.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/export-action.ts#L43)
+
+PRD §11.2 headless export request — format + page scope + output knobs.
+
+Named `*ActionRequest`, not the PRD's bare `CanvasExportRequest`: that name
+is already taken by the export DIALOG's popover knobs
+(`quality`/`resolution`/`stripMetadata`, `header/types.ts`). Same
+disambiguation `@anvilkit/canvas-core`'s `CanvasExportJobRequest` already
+documents for its own sibling collision with this package's `header/types.ts`
+(`export/types.ts`'s module doc comment) — the "Job" qualifier there and the
+"Action" qualifier here both exist so a THIRD unrelated concept never has to
+fight over the bare `CanvasExportRequest`/`CanvasExportResult` names.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="format"&gt;&lt;/a&gt; `format` | `readonly` | [`CanvasExportFormat`](../type-aliases/CanvasExportFormat) | - | [packages/capabilities/canvas/editor/src/header/export-action.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/export-action.ts#L44) |
+| &lt;a id="includebackground"&gt;&lt;/a&gt; `includeBackground?` | `readonly` | `boolean` | Paint the page background for raster formats. Defaults to `true`. | [packages/capabilities/canvas/editor/src/header/export-action.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/export-action.ts#L54) |
+| &lt;a id="pageids"&gt;&lt;/a&gt; `pageIds?` | `readonly` | readonly `string`[] | Page ids for `scope: "pages"` (FR-152 selected pages). | [packages/capabilities/canvas/editor/src/header/export-action.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/export-action.ts#L48) |
+| &lt;a id="quality"&gt;&lt;/a&gt; `quality?` | `readonly` | `number` | 0–100. Defaults to 92. Ignored by PNG/vector/data formats. | [packages/capabilities/canvas/editor/src/header/export-action.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/export-action.ts#L50) |
+| &lt;a id="resolution"&gt;&lt;/a&gt; `resolution?` | `readonly` | `number` | Output scale factor. Defaults to 1. | [packages/capabilities/canvas/editor/src/header/export-action.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/export-action.ts#L52) |
+| &lt;a id="scope"&gt;&lt;/a&gt; `scope?` | `readonly` | `"current"` \| `"all"` \| `"pages"` \| `"selection"` | Defaults to `"current"`. | [packages/capabilities/canvas/editor/src/header/export-action.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/export-action.ts#L46) |

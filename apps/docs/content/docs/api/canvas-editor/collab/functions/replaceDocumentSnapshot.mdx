@@ -1,0 +1,50 @@
+---
+title: "replaceDocumentSnapshot"
+description: "@anvilkit/canvas-editor · replaceDocumentSnapshot"
+---
+
+```ts
+function replaceDocumentSnapshot(
+   stores, 
+   ir, 
+   options): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/stores/replace-document.ts:93](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L93)
+
+Replace the live document with a new, UNRELATED `CanvasIR` snapshot — not a
+normal edit. `sceneStore.getState().setIR(ir)` alone (the pre-P0-9 behavior
+of the Yjs binding) leaves every other store holding state computed
+against the OLD document: undo/redo inverses that reference nodes the new
+document may not have, a selection/focus/draft/editing/crop/pen/path-edit
+gesture mid-flight against a node that may no longer exist, stale smart
+guides, and an active page id the new document may not contain.
+
+This coordinates all of it in one call:
+- resets undo/redo history (a foreign snapshot invalidates every recorded
+  inverse — an undo after this point must never apply against the wrong
+  document);
+- clears selection, focus, in-progress draft/edit/crop/pen/path-edit
+  gestures, and smart guides;
+- aborts and clears any in-flight AI job (its `ai-placeholder` node may be
+  gone);
+- swaps the IR;
+- reconciles the active page, falling back to the new document's first
+  page when the current active id isn't present in it.
+
+The active-page fallback is computed BEFORE any store update and the `ir`/
+`activePageId` writes happen back-to-back at the end, so the window where a
+subscriber could observe the new `ir` paired with a since-removed
+`activePageId` is as small as two independent zustand stores allow.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `stores` | [`DocumentStores`](../interfaces/DocumentStores) |
+| `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) |
+| `options` | [`ReplaceDocumentSnapshotOptions`](../interfaces/ReplaceDocumentSnapshotOptions) |
+
+## Returns
+
+`void`

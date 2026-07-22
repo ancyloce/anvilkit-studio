@@ -4,7 +4,9 @@ description: "@anvilkit/canvas-core · CanvasSafeAreaSchema"
 ---
 
 ```ts
-const CanvasSafeAreaSchema: z.ZodType<CanvasSafeArea>;
+const CanvasSafeAreaSchema: z.ZodType<CanvasSafeArea> = CanvasInsetsSchema;
 ```
 
-Defined in: [templates/validators.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/validators.ts#L15)
+Defined in: [templates/validators.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/validators.ts#L16)
+
+Alias of the shared insets schema (PRD 0012 §9.3) — kept as a named export for existing consumers.

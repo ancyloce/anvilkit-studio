@@ -1,0 +1,22 @@
+---
+title: "DocumentSnapshotSource"
+description: "@anvilkit/canvas-editor · DocumentSnapshotSource"
+---
+
+```ts
+type DocumentSnapshotSource = 
+  | "initial-load"
+  | "document-switch"
+  | "remote-update"
+  | "template-load"
+  | "recovery";
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/stores/replace-document.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L56)
+
+Where a document snapshot passed to [replaceDocumentSnapshot](../functions/replaceDocumentSnapshot) came
+from. Every source is reconciled identically today (see the function doc)
+— the enum exists so callers state their intent explicitly and so a future
+source-specific policy (e.g. skipping the history reset on the very first
+`"initial-load"`, which is already a no-op against an empty history) has
+somewhere to hang without a signature change.

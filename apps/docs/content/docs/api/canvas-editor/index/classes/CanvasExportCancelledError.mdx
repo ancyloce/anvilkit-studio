@@ -1,0 +1,44 @@
+---
+title: "CanvasExportCancelledError"
+description: "@anvilkit/canvas-editor · CanvasExportCancelledError"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:84](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L84)
+
+Thrown by a multi-page built-in exporter (PDF) when
+[CanvasExportRequest.isCancelled](../interfaces/CanvasExportRequest#iscancelled) starts returning `true` between
+page iterations (FR-154). The export dialog's `runExport` catches this
+specifically and marks the export `"cancelled"` instead of `"failed"`,
+discarding the artifact instead of downloading it. A host-injected
+multi-page exporter honoring `isCancelled` may throw the same class to get
+identical cancel semantics.
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new CanvasExportCancelledError(message?): CanvasExportCancelledError;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L85)
+
+#### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `message` | `string` | `"Canvas export was cancelled."` |
+
+#### Returns
+
+`CanvasExportCancelledError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```

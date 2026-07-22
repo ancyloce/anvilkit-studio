@@ -1,0 +1,21 @@
+---
+title: "CanvasSaveInput"
+description: "@anvilkit/canvas-editor · CanvasSaveInput"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/types.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L9)
+
+## File
+
+FR-160 persistence adapter contract (B-08, PRD 0012 §11.1). The
+editor owns WHEN to save (manual, debounced auto-save, flush) and the save
+status lifecycle; the host owns storage, auth, and transport.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="documentid"&gt;&lt;/a&gt; `documentId` | `string` | - | [packages/capabilities/canvas/editor/src/persistence/types.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L11) |
+| &lt;a id="ir"&gt;&lt;/a&gt; `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) | - | [packages/capabilities/canvas/editor/src/persistence/types.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L10) |
+| &lt;a id="revision"&gt;&lt;/a&gt; `revision` | `number` | History state id of the snapshot (FR-161). Round-tripped so the editor checkpoints exactly the state the host persisted, even when responses arrive out of order. | [packages/capabilities/canvas/editor/src/persistence/types.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L17) |
+| &lt;a id="signal"&gt;&lt;/a&gt; `signal` | `AbortSignal` | FR-162: aborts when this save is superseded by teardown (`dispose()`) before it settles. An adapter that ignores it still behaves correctly — the controller already discards a response that arrives after disposal — but honoring it lets the adapter cancel the underlying I/O instead of letting it run to completion for nothing. | [packages/capabilities/canvas/editor/src/persistence/types.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L25) |

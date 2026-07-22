@@ -3,7 +3,7 @@ title: "CanvasRichTextNode"
 description: "@anvilkit/canvas-core · CanvasRichTextNode"
 ---
 
-Defined in: [ir/types.ts:403](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L403)
+Defined in: [ir/types.ts:553](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L553)
 
 Multi-span, multi-paragraph text with real wrapping.
 
@@ -29,19 +29,21 @@ carries `d` alongside their bounds.
 
 | Property | Type | Description | Inherited from | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="blendmode"&gt;&lt;/a&gt; `blendMode?` | `string` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`blendMode`](CanvasNodeBase.md#blendmode) | [ir/types.ts:226](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L226) |
-| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | [`CanvasBounds`](CanvasBounds.md) | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`bounds`](CanvasNodeBase.md#bounds) | [ir/types.ts:222](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L222) |
-| &lt;a id="height"&gt;&lt;/a&gt; `height?` | `number` | Fixed height. Omit to let the measured content decide (`auto-height`). | - | [ir/types.ts:408](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L408) |
-| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`id`](CanvasNodeBase.md#id) | [ir/types.ts:219](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L219) |
-| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `boolean` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`locked`](CanvasNodeBase.md#locked) | [ir/types.ts:225](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L225) |
-| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | [`CanvasNodeMeta`](CanvasNodeMeta.md) | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`meta`](CanvasNodeBase.md#meta) | [ir/types.ts:228](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L228) |
-| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `string` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`name`](CanvasNodeBase.md#name) | [ir/types.ts:220](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L220) |
-| &lt;a id="opacity"&gt;&lt;/a&gt; `opacity?` | `number` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`opacity`](CanvasNodeBase.md#opacity) | [ir/types.ts:223](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L223) |
-| &lt;a id="overflow"&gt;&lt;/a&gt; `overflow?` | [`RichTextOverflow`](../type-aliases/RichTextOverflow) | - | - | [ir/types.ts:410](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L410) |
-| &lt;a id="paragraphs"&gt;&lt;/a&gt; `paragraphs` | [`RichTextParagraph`](RichTextParagraph.md)[] | - | - | [ir/types.ts:409](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L409) |
-| &lt;a id="transform"&gt;&lt;/a&gt; `transform` | [`CanvasTransform`](CanvasTransform.md) | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`transform`](CanvasNodeBase.md#transform) | [ir/types.ts:221](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L221) |
-| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"rich-text"` | - | - | [ir/types.ts:404](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L404) |
-| &lt;a id="visible"&gt;&lt;/a&gt; `visible?` | `boolean` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`visible`](CanvasNodeBase.md#visible) | [ir/types.ts:224](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L224) |
-| &lt;a id="width"&gt;&lt;/a&gt; `width` | `number` | The wrap width, in local units. | - | [ir/types.ts:406](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L406) |
-| &lt;a id="wrap"&gt;&lt;/a&gt; `wrap?` | [`RichTextWrap`](../type-aliases/RichTextWrap) | - | - | [ir/types.ts:411](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L411) |
-| &lt;a id="zindex"&gt;&lt;/a&gt; `zIndex` | `number` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`zIndex`](CanvasNodeBase.md#zindex) | [ir/types.ts:227](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L227) |
+| &lt;a id="blendmode"&gt;&lt;/a&gt; `blendMode?` | `string` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`blendMode`](CanvasNodeBase.md#blendmode) | [ir/types.ts:322](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L322) |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | [`CanvasBounds`](CanvasBounds.md) | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`bounds`](CanvasNodeBase.md#bounds) | [ir/types.ts:318](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L318) |
+| &lt;a id="height"&gt;&lt;/a&gt; `height?` | `number` | Fixed height. Omit to let the measured content decide (`auto-height`). | - | [ir/types.ts:564](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L564) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`id`](CanvasNodeBase.md#id) | [ir/types.ts:315](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L315) |
+| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `boolean` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`locked`](CanvasNodeBase.md#locked) | [ir/types.ts:321](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L321) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | [`CanvasNodeMeta`](CanvasNodeMeta.md) | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`meta`](CanvasNodeBase.md#meta) | [ir/types.ts:331](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L331) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `string` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`name`](CanvasNodeBase.md#name) | [ir/types.ts:316](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L316) |
+| &lt;a id="opacity"&gt;&lt;/a&gt; `opacity?` | `number` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`opacity`](CanvasNodeBase.md#opacity) | [ir/types.ts:319](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L319) |
+| &lt;a id="overflow"&gt;&lt;/a&gt; `overflow?` | [`RichTextOverflow`](../type-aliases/RichTextOverflow) | - | - | [ir/types.ts:566](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L566) |
+| &lt;a id="paragraphs"&gt;&lt;/a&gt; `paragraphs` | [`RichTextParagraph`](RichTextParagraph.md)[] | - | - | [ir/types.ts:565](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L565) |
+| &lt;a id="sizing"&gt;&lt;/a&gt; `sizing?` | `"fixed"` \| `"auto-width"` | FR-081 sizing mode (B-03c): `auto-width` lets the measured content decide the box width (the editor keeps `width` synced to the measurement); absent/`fixed` keeps the explicit `width` authoritative. | - | [ir/types.ts:560](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L560) |
+| &lt;a id="transform"&gt;&lt;/a&gt; `transform` | [`CanvasTransform`](CanvasTransform.md) | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`transform`](CanvasNodeBase.md#transform) | [ir/types.ts:317](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L317) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"rich-text"` | - | - | [ir/types.ts:554](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L554) |
+| &lt;a id="verticalalign"&gt;&lt;/a&gt; `verticalAlign?` | [`CanvasVerticalAlign`](../type-aliases/CanvasVerticalAlign) | FR-081 vertical alignment of the laid-out text block within `bounds` (PRD 0012 §7.9). `top` (default when absent) aligns to the top edge; `middle` centers; `bottom` aligns to the bottom edge. Applies only when the box is taller than its content — i.e. with an explicit `height` or `bounds.height` larger than the measured text height. | - | [ir/types.ts:575](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L575) |
+| &lt;a id="visible"&gt;&lt;/a&gt; `visible?` | `boolean` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`visible`](CanvasNodeBase.md#visible) | [ir/types.ts:320](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L320) |
+| &lt;a id="width"&gt;&lt;/a&gt; `width` | `number` | The wrap width, in local units. | - | [ir/types.ts:562](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L562) |
+| &lt;a id="wrap"&gt;&lt;/a&gt; `wrap?` | [`RichTextWrap`](../type-aliases/RichTextWrap) | - | - | [ir/types.ts:567](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L567) |
+| &lt;a id="zindex"&gt;&lt;/a&gt; `zIndex?` | `number` | Reserved for future explicit paint-order control — currently unused (C-9). Paint order is entirely determined by each container's `children` array order; no code in `@anvilkit/canvas-core` or `@anvilkit/canvas-editor` reads this field. Optional so callers (including AI-generated payloads) aren't forced to supply a value that has no effect. | [`CanvasNodeBase`](CanvasNodeBase.md).[`zIndex`](CanvasNodeBase.md#zindex) | [ir/types.ts:330](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L330) |

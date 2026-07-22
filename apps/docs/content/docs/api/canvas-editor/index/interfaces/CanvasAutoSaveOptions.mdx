@@ -1,0 +1,15 @@
+---
+title: "CanvasAutoSaveOptions"
+description: "@anvilkit/canvas-editor · CanvasAutoSaveOptions"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/types.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L62)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="debouncems"&gt;&lt;/a&gt; `debounceMs?` | `number` | Quiet period after the last change before an auto-save fires. | [packages/capabilities/canvas/editor/src/persistence/types.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L64) |
+| &lt;a id="maxretries"&gt;&lt;/a&gt; `maxRetries?` | `number` | Failed-save retries before giving up until the next change. | [packages/capabilities/canvas/editor/src/persistence/types.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L68) |
+| &lt;a id="maxwaitms"&gt;&lt;/a&gt; `maxWaitMs?` | `number` | Ceiling: a save fires at most this long after the FIRST unsaved change. | [packages/capabilities/canvas/editor/src/persistence/types.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L66) |
+| &lt;a id="retrybasems"&gt;&lt;/a&gt; `retryBaseMs?` | `number` | Base for exponential retry backoff (base, 2×base, 4×base…). | [packages/capabilities/canvas/editor/src/persistence/types.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L70) |

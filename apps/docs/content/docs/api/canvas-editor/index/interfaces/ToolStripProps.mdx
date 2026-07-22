@@ -1,0 +1,21 @@
+---
+title: "ToolStripProps"
+description: "@anvilkit/canvas-editor · ToolStripProps"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/toolstrip/ToolStrip.tsx:77](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/toolstrip/ToolStrip.tsx#L77)
+
+`<CanvasWorkspace toolStrip>` options (FR-010), mirroring the `shortcuts`
+boolean-or-options pattern.
+
+## Extends
+
+- [`CanvasToolStripOptions`](CanvasToolStripOptions.md)
+
+## Properties
+
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="classname"&gt;&lt;/a&gt; `className?` | `string` | - | - | [packages/capabilities/canvas/editor/src/workspace/toolstrip/ToolStrip.tsx:78](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/toolstrip/ToolStrip.tsx#L78) |
+| &lt;a id="items"&gt;&lt;/a&gt; `items?` | readonly [`ToolId`](../type-aliases/ToolId)[] | Filters/reorders the visible rail. Ids resolve against the EFFECTIVE descriptors, so an extension tool id may be promoted into the rail (a promoted tool leaves the "More tools" overflow); unknown ids are dropped. Extension tools NOT listed stay in the overflow; built-ins not listed are hidden. | [`CanvasToolStripOptions`](CanvasToolStripOptions.md).[`items`](CanvasToolStripOptions.md#items) | [packages/capabilities/canvas/editor/src/workspace/toolstrip/ToolStrip.tsx:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/toolstrip/ToolStrip.tsx#L68) |
+| &lt;a id="renderer"&gt;&lt;/a&gt; `renderer?` | (`props`) =&gt; `ReactNode` | Replaces the strip's rendering entirely — the workspace still positions the cluster over the canvas. Receives the effective descriptors plus live active-tool state. | [`CanvasToolStripOptions`](CanvasToolStripOptions.md).[`renderer`](CanvasToolStripOptions.md#renderer) | [packages/capabilities/canvas/editor/src/workspace/toolstrip/ToolStrip.tsx:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/toolstrip/ToolStrip.tsx#L74) |

@@ -1,0 +1,27 @@
+---
+title: "effectiveToolDescriptors"
+description: "@anvilkit/canvas-editor · effectiveToolDescriptors"
+---
+
+```ts
+function effectiveToolDescriptors(registry, t): readonly EffectiveToolDescriptor[];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/toolstrip/effective-tools.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/toolstrip/effective-tools.ts#L61)
+
+Resolve the EFFECTIVE tool registry into display-ready descriptors:
+built-ins (rail order) first, then extension tools (registry order) with a
+fallback icon when they declare none. `registry` is normally
+`useCanvasStudio().toolRegistry`; `undefined` (partial test contexts)
+yields the built-in rail alone.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `registry` | \| `Partial`\&lt;`Record`\&lt;[`ToolId`](../type-aliases/ToolId), [`Tool`](../../internal/interfaces/Tool)\&gt;\&gt; \| `undefined` |
+| `t` | [`CanvasT`](../type-aliases/CanvasT) |
+
+## Returns
+
+readonly [`EffectiveToolDescriptor`](../interfaces/EffectiveToolDescriptor)[]

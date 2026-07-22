@@ -3,7 +3,7 @@ title: "CanvasExportJobOptions"
 description: "@anvilkit/canvas-core · CanvasExportJobOptions"
 ---
 
-Defined in: [export/types.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L55)
+Defined in: [export/types.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L60)
 
 Format-specific knobs for one export job. Deliberately narrower than the
 plugin's `CanvasExportOptions`: `canvasIR`/`page` move to
@@ -25,10 +25,10 @@ FR-043 (canvas-m3-004)'s concern, not this one's.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="dpi"&gt;&lt;/a&gt; `dpi?` | `readonly` | `number` | Fallback DPI for unit→px/pt conversion. | [export/types.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L57) |
-| &lt;a id="filename"&gt;&lt;/a&gt; `filename?` | `readonly` | `string` | Base filename (no extension). | [export/types.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L61) |
-| &lt;a id="pdf"&gt;&lt;/a&gt; `pdf?` | `readonly` | \{ `author?`: `string`; `title?`: `string`; \} | - | [export/types.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L62) |
-| `pdf.author?` | `readonly` | `string` | - | [export/types.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L64) |
-| `pdf.title?` | `readonly` | `string` | - | [export/types.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L63) |
-| &lt;a id="pretty"&gt;&lt;/a&gt; `pretty?` | `readonly` | `boolean` | Pretty-print text-based output (SVG/JSON). | [export/types.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L59) |
-| &lt;a id="print"&gt;&lt;/a&gt; `print?` | `readonly` | [`CanvasPrintPdfMetadata`](CanvasPrintPdfMetadata.md) | Print-oriented metadata for the `"pdf-print"` format (FR-043, canvas-m3-004). Ignored by every other format. | [export/types.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L67) |
+| &lt;a id="dpi"&gt;&lt;/a&gt; `dpi?` | `readonly` | `number` | Fallback DPI for unit→px/pt conversion. | [export/types.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L62) |
+| &lt;a id="filename"&gt;&lt;/a&gt; `filename?` | `readonly` | `string` | Base filename (no extension). | [export/types.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L66) |
+| &lt;a id="pdf"&gt;&lt;/a&gt; `pdf?` | `readonly` | \{ `author?`: `string`; `title?`: `string`; \} | - | [export/types.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L67) |
+| `pdf.author?` | `readonly` | `string` | - | [export/types.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L69) |
+| `pdf.title?` | `readonly` | `string` | - | [export/types.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L68) |
+| &lt;a id="pretty"&gt;&lt;/a&gt; `pretty?` | `readonly` | `boolean` | Pretty-print text-based output (SVG/JSON). | [export/types.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L64) |
+| &lt;a id="print"&gt;&lt;/a&gt; `print?` | `readonly` | [`CanvasPrintPdfMetadata`](CanvasPrintPdfMetadata.md) | Print-oriented metadata for the `"pdf-print"` format (FR-043, canvas-m3-004). Ignored by every other format. | [export/types.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L72) |

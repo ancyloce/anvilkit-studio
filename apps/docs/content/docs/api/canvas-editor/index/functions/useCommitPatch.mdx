@@ -7,11 +7,13 @@ description: "@anvilkit/canvas-editor · useCommitPatch"
 function useCommitPatch(): CommitPatch;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/panels/fields.tsx:221](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L221)
+Defined in: [packages/capabilities/canvas/editor/src/panels/fields.tsx:627](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L627)
 
 Returns a stable [CommitPatch](../type-aliases/CommitPatch) bound to the current studio context.
 Identical to the inspector's former local `commitPatch` — every field
-mutation flows through `ctx.commit({ type: "node.update", … })`.
+mutation flows through `ctx.commit({ type: "node.update", … })`. Discrete
+controls (switches, selects, buttons) keep using this; continuous fields
+upgrade to the `contract` prop (§10, B-12).
 
 ## Returns
 

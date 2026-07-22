@@ -1,0 +1,27 @@
+---
+title: "ToolStrip"
+description: "@anvilkit/canvas-editor · ToolStrip"
+---
+
+```ts
+function ToolStrip(__namedParameters): Element;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/toolstrip/ToolStrip.tsx:89](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/toolstrip/ToolStrip.tsx#L89)
+
+The floating tool strip (B-06, PRD 0012 FR-010 — the v2 layout decision:
+a floating cluster INSIDE the canvas section, not a new grid column).
+The rail renders the built-in `TOOL_RAIL_ITEMS` (or the `items` selection);
+extension-registered tools surface under a "More tools" overflow menu at
+the strip's end. Tooltips carry the registry-derived shortcut labels.
+Hidden or replaced via `<CanvasWorkspace toolStrip>`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `__namedParameters` | [`ToolStripProps`](../interfaces/ToolStripProps) |
+
+## Returns
+
+`Element`

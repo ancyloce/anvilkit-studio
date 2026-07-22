@@ -1,0 +1,46 @@
+---
+title: "CanvasTemplateProvider"
+description: "@anvilkit/canvas-editor · CanvasTemplateProvider"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/templates/template-provider.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L31)
+
+## Methods
+
+### getById()
+
+```ts
+getById(id): Promise<CanvasTemplateEntry | null>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/templates/template-provider.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L33)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+
+#### Returns
+
+`Promise`\&lt;[`CanvasTemplateEntry`](CanvasTemplateEntry.md) \| `null`\&gt;
+
+***
+
+### search()
+
+```ts
+search(query): Promise<CanvasTemplateSearchResult>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/templates/template-provider.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L32)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `query` | [`CanvasTemplateSearchQuery`](CanvasTemplateSearchQuery.md) |
+
+#### Returns
+
+`Promise`\<[`CanvasTemplateSearchResult`](CanvasTemplateSearchResult.md)\>

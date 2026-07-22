@@ -1,0 +1,19 @@
+---
+title: "createCoreShortcutBindings"
+description: "@anvilkit/canvas-editor · createCoreShortcutBindings"
+---
+
+```ts
+function createCoreShortcutBindings(): CanvasShortcutBinding[];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:156](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L156)
+
+The built-in FR-040 bindings shipped by A-04. Later Phase-1a tasks extend
+this list in place: clipboard (A-05), zoom/view (A-07), tools (A-10).
+NOTE: Lock is `Ctrl/Cmd+Shift+L` — plain `Ctrl+L` is reserved by browsers
+for address-bar focus and cannot be intercepted reliably (PRD FR-040 note).
+
+## Returns
+
+[`CanvasShortcutBinding`](../interfaces/CanvasShortcutBinding)[]

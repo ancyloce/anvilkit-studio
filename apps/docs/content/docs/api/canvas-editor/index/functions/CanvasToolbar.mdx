@@ -7,12 +7,17 @@ description: "@anvilkit/canvas-editor · CanvasToolbar"
 function CanvasToolbar(__namedParameters): Element | null;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/workspace/layout/CanvasToolbar.tsx:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/layout/CanvasToolbar.tsx#L39)
+Defined in: [packages/capabilities/canvas/editor/src/workspace/layout/CanvasToolbar.tsx:195](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/layout/CanvasToolbar.tsx#L195)
 
 Dynamic property toolbar — a floating, centered pill above the page (Canva
-style). Surfaces the most-used quick props for the selected node
-(fill · border · width · opacity), committing through the shared
-`node.update` pipeline. Renders nothing when the selection is empty.
+style). Surfaces the most-used quick props for the whole selection
+(FR-180): fill · border · width · opacity · position for shapes, typography
+for text / rich-text selections, crop · replace · fit · adjust for a single
+image — committing through the §10 field contract (transient preview, ONE
+coalesced undo entry per completed interaction, Escape revert), mixed-value
+aware across a multi-selection. Renders nothing when the selection is empty
+or while an inline text editor is open (the `RichTextToolbar` owns that
+mode).
 
 ## Parameters
 

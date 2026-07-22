@@ -1,0 +1,33 @@
+---
+title: "CanvasToaster"
+description: "@anvilkit/canvas-editor · CanvasToaster"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/context/toast-context.tsx:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/toast-context.tsx#L26)
+
+Minimal toast seam the ACTION LAYER can depend on (A-09). Lives in
+`context/` (interaction-core) with no UI-primitive dependency so
+`actions/` can fire feedback without importing workspace chrome. The
+workspace shell provides a real implementation (`CanvasToastHost`, backed
+by `@anvilkit/ui/toast`); headless `<CanvasStudio>` embeds have none and
+fall back to a silent no-op — feedback is a shell concern.
+
+## Methods
+
+### add()
+
+```ts
+add(input): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/context/toast-context.tsx:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/toast-context.tsx#L27)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`CanvasToastInput`](CanvasToastInput.md) |
+
+#### Returns
+
+`void`

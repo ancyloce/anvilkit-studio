@@ -1,0 +1,18 @@
+---
+title: "CanvasUnloadSaveInput"
+description: "@anvilkit/canvas-editor · CanvasUnloadSaveInput"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/types.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L38)
+
+Payload for the optional [CanvasPersistenceAdapter.saveOnUnload](CanvasPersistenceAdapter.md#saveonunload)
+capability. No `signal`: the page is going away and nothing can await or
+abort the transport.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="documentid"&gt;&lt;/a&gt; `documentId` | `string` | - | [packages/capabilities/canvas/editor/src/persistence/types.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L40) |
+| &lt;a id="ir"&gt;&lt;/a&gt; `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) | - | [packages/capabilities/canvas/editor/src/persistence/types.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L39) |
+| &lt;a id="revision"&gt;&lt;/a&gt; `revision` | `number` | History state id of the snapshot (same semantics as [CanvasSaveInput.revision](CanvasSaveInput.md#revision)). | [packages/capabilities/canvas/editor/src/persistence/types.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L42) |

@@ -7,21 +7,25 @@ description: "@anvilkit/canvas-editor · index"
 
 | Interface | Description |
 | ------ | ------ |
+| [CanvasCollabAdapter](interfaces/CanvasCollabAdapter.md) | Minimal, transport- and consistency-model-agnostic surface a canvas collaboration adapter exposes to a host (P0-10). `createCanvasYjsBinding` below is the only implementation today, and it is whole-document last-writer-wins — see its doc comment for the full, explicit caveat. This interface exists so a FUTURE adapter with a different consistency model (a per-node CRDT, or a replicated command log built on `CanvasChangeRecord`-style records) can be swapped in behind the same shape without every call site changing. It is deliberately NOT a promise of conflict-free merging — that property is implementation-specific, and whichever adapter claims it must document it explicitly, the same way this one documents that it does NOT. |
 | [CanvasPeerInfo](interfaces/CanvasPeerInfo.md) | - |
 | [CanvasPresence](interfaces/CanvasPresence.md) | - |
 | [CanvasPresenceCursor](interfaces/CanvasPresenceCursor.md) | - |
 | [CanvasPresenceSelection](interfaces/CanvasPresenceSelection.md) | - |
 | [CanvasPresenceSource](interfaces/CanvasPresenceSource.md) | The minimal shape `useCanvasPresence` consumes — satisfied by a [CanvasYjsBinding](interfaces/CanvasYjsBinding.md)'s `presence` bridge, or any fake in tests. Declared structurally so this module imports NO yjs: the `/collab` React seam stays free of the CRDT runtime. |
 | [CanvasPresenceState](interfaces/CanvasPresenceState.md) | - |
-| [CanvasYjsBinding](interfaces/CanvasYjsBinding.md) | - |
+| [CanvasYjsBinding](interfaces/CanvasYjsBinding.md) | Minimal, transport- and consistency-model-agnostic surface a canvas collaboration adapter exposes to a host (P0-10). `createCanvasYjsBinding` below is the only implementation today, and it is whole-document last-writer-wins — see its doc comment for the full, explicit caveat. This interface exists so a FUTURE adapter with a different consistency model (a per-node CRDT, or a replicated command log built on `CanvasChangeRecord`-style records) can be swapped in behind the same shape without every call site changing. It is deliberately NOT a promise of conflict-free merging — that property is implementation-specific, and whichever adapter claims it must document it explicitly, the same way this one documents that it does NOT. |
 | [CreateCanvasPresenceOptions](interfaces/CreateCanvasPresenceOptions.md) | - |
 | [CreateCanvasYjsBindingOptions](interfaces/CreateCanvasYjsBindingOptions.md) | - |
+| [DocumentStores](interfaces/DocumentStores.md) | Every store `replaceDocumentSnapshot` (P0-9) coordinates. A subset of `CanvasStudioContextValue` — deliberately typed against the individual store APIs (not the context) so this module has no React/context dependency and can be reused from `collab/binding.ts`, which only ever holds bare store handles. |
+| [ReplaceDocumentSnapshotOptions](interfaces/ReplaceDocumentSnapshotOptions.md) | - |
 
 ## Type Aliases
 
 | Type Alias | Description |
 | ------ | ------ |
 | [CanvasBindingUnsubscribe](type-aliases/CanvasBindingUnsubscribe.md) | Presence / awareness types for the canvas collab prototype (I3-1). |
+| [DocumentSnapshotSource](type-aliases/DocumentSnapshotSource.md) | Where a document snapshot passed to [replaceDocumentSnapshot](functions/replaceDocumentSnapshot.md) came from. Every source is reconciled identically today (see the function doc) — the enum exists so callers state their intent explicitly and so a future source-specific policy (e.g. skipping the history reset on the very first `"initial-load"`, which is already a no-op against an empty history) has somewhere to hang without a signature change. |
 
 ## Variables
 
@@ -40,8 +44,9 @@ description: "@anvilkit/canvas-editor · index"
 | ------ | ------ |
 | [createCanvasPresence](functions/createCanvasPresence.md) | Bridge between a `y-protocols/awareness` instance and the canvas presence contract. Ported from `plugin-collab-yjs`'s `createAwarenessBridge`, minus the metrics coupling: |
 | [createCanvasYjsBinding](functions/createCanvasYjsBinding.md) | Bind a canvas [SceneStoreApi](#) to a `Y.Doc` (I3-1 prototype). Mirrors `plugin-collab-yjs`'s `createYjsAdapter`, adapted for `CanvasIR` and a zustand store rather than the PageIR snapshot contract. |
-| [decodeCanvasIR](functions/decodeCanvasIR.md) | Parse + validate a remote payload. Unlike the plugin's `decodeIR` (which only checks `version === "1"`), this runs canvas-core's full [CanvasIRSchema](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/validators.ts) — a hostile or corrupt peer cannot inject a structurally-invalid IR into the local scene. Throws on invalid input; callers in observers must wrap this in try/catch (never throw out of a Yjs observer). |
+| [decodeCanvasIR](functions/decodeCanvasIR.md) | Parse, forward-migrate, then validate a remote payload (P0-8). |
 | [encodeCanvasIR](functions/encodeCanvasIR.md) | Serialize a [CanvasIR](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) to a stable JSON string with sorted object keys. Two replicas observing the same logical IR must produce byte-identical Y.Map values; otherwise last-writer-wins would flap on key-order differences alone. Mirrors `plugin-collab-yjs`'s `encodeIR`. |
+| [replaceDocumentSnapshot](functions/replaceDocumentSnapshot.md) | Replace the live document with a new, UNRELATED `CanvasIR` snapshot — not a normal edit. `sceneStore.getState().setIR(ir)` alone (the pre-P0-9 behavior of the Yjs binding) leaves every other store holding state computed against the OLD document: undo/redo inverses that reference nodes the new document may not have, a selection/focus/draft/editing/crop/pen/path-edit gesture mid-flight against a node that may no longer exist, stale smart guides, and an active page id the new document may not contain. |
 | [sanitizeDisplayName](functions/sanitizeDisplayName.md) | Strip ASCII control characters (0x00–0x1f) and DEL (0x7f) from a display name, then cap to [MAX\_DISPLAY\_NAME\_LENGTH](variables/MAX_DISPLAY_NAME_LENGTH.md). Filters by code point to avoid a control-character regex literal. Does NOT escape HTML — hosts rendering the name into `innerHTML` must still escape; this only blunts control-character injection. |
 | [useCanvasPresence](functions/useCanvasPresence.md) | Subscribe to validated remote peer presence (cursors / selections) from the nearest [CanvasPresenceContext](variables/CanvasPresenceContext.md). Returns `[]` when no provider is mounted. This is the data seam for the deferred collab UI (I3-1): the presence layer (`<RemoteCursors>` / `<RemoteSelections>`) can read it once cursor/selection rendering ships, without changing the binding. |
 | [validateCanvasPeerInfo](functions/validateCanvasPeerInfo.md) | - |

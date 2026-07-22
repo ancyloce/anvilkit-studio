@@ -1,0 +1,24 @@
+---
+title: "validateClipboardPayload"
+description: "@anvilkit/canvas-core · validateClipboardPayload"
+---
+
+```ts
+function validateClipboardPayload(data): CanvasClipboardPayload;
+```
+
+Defined in: [clipboard/payload.ts:114](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L114)
+
+Validate an already-parsed candidate payload: version, schema, node-count
+cap, and tree-depth cap. Throws [CanvasClipboardError](../classes/CanvasClipboardError); returns the
+schema-validated payload (unknown keys preserved).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `data` | `unknown` |
+
+## Returns
+
+[`CanvasClipboardPayload`](../interfaces/CanvasClipboardPayload)

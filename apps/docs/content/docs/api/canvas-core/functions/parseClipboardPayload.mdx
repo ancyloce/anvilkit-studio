@@ -1,0 +1,24 @@
+---
+title: "parseClipboardPayload"
+description: "@anvilkit/canvas-core · parseClipboardPayload"
+---
+
+```ts
+function parseClipboardPayload(text): CanvasClipboardPayload;
+```
+
+Defined in: [clipboard/payload.ts:162](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L162)
+
+Parse serialized clipboard text (byte-size cap → JSON → full validation).
+This is the entry point for text arriving from the SYSTEM clipboard —
+treat it as hostile (PRD §14.1).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `text` | `string` |
+
+## Returns
+
+[`CanvasClipboardPayload`](../interfaces/CanvasClipboardPayload)

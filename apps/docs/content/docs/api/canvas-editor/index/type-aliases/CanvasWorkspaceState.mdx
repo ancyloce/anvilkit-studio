@@ -1,0 +1,24 @@
+---
+title: "CanvasWorkspaceState"
+description: "@anvilkit/canvas-editor · CanvasWorkspaceState"
+---
+
+```ts
+type CanvasWorkspaceState = Omit<WorkspaceUiState, 
+  | "setActiveDockId"
+  | "addRecentTemplate"
+  | "setPanelOpen"
+  | "setInspectorCollapsed"
+  | "setPanelWidth"
+  | "restoreLayout"
+  | "setPanelSearch"
+| "reset">;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L56)
+
+Plain data slice of [WorkspaceUiState](../interfaces/WorkspaceUiState) — action methods stripped.
+Public export (PRD §11.1) for `CanvasWorkspaceProps.initialWorkspaceState`,
+a host seed for a freshly-mounted workspace (FR-002 territory: distinct
+from `restoreLayout()`'s hardcoded default — see
+[CreateWorkspaceUiStoreOptions.initialWorkspaceState](../interfaces/CreateWorkspaceUiStoreOptions#initialworkspacestate)).

@@ -7,18 +7,28 @@ description: "@anvilkit/canvas-editor · exportStageContentDataURL"
 function exportStageContentDataURL(stage, options?): string;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/render/export-stage.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/render/export-stage.ts#L31)
+Defined in: [packages/capabilities/canvas/editor/src/render/export-stage.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/render/export-stage.ts#L55)
 
 Serialize a live editor stage to a data URL with the editor-only chrome
-layers hidden, so the exported preview shows only design content — not the
-selection transformer, smart guides, or remote-presence overlays the user
-happened to have on screen at export time.
+layers hidden and the viewport's live pan/zoom neutralized, so the exported
+preview shows only design content, at the page's real 1:1 scale/position —
+not the transformer handles, guides, or remote-presence overlays the user
+happened to have on screen, nor whatever pan/zoom their viewport happened
+to be at, at export time. Every caller of this function shares this
+guarantee (E-14) — earlier, only the built-in raster exporters neutralized
+the viewport themselves (E-8); `CanvasExportBridge`-driven DesignBlock
+previews had no such reset, so a saved preview shifted/cropped (and its
+resolution varied with zoom) whenever the stage was panned/zoomed.
 
 Konva's `toDataURL` composes only visible layers, so we flip the chrome
 layers invisible for the duration of the serialize and restore them in a
 `finally` (the stage is normally about to unmount, but we never leave it in
-a mutated visual state). Stages that don't expose `getLayers` (e.g. unit-test
-fakes) fall through to a plain `toDataURL` — there are no layers to hide.
+a mutated visual state). Named chrome GROUPS inside kept layers (see
+CHROME\_GROUP\_NAMES) get the same hide/restore treatment via
+`stage.find`. Scale/position are snapshotted, reset to 1:1/0:0, and
+restored the same way. Stages that don't expose `getLayers`/`find`/
+`scale`/`position` (e.g. unit-test fakes) skip whichever step they don't
+support.
 
 ## Parameters
 

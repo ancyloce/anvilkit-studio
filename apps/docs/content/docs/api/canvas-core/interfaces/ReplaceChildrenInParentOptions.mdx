@@ -3,7 +3,7 @@ title: "ReplaceChildrenInParentOptions"
 description: "@anvilkit/canvas-core · ReplaceChildrenInParentOptions"
 ---
 
-Defined in: [ir/mutations.ts:545](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L545)
+Defined in: [ir/mutations.ts:560](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L560)
 
 ## Extends
 
@@ -13,6 +13,6 @@ Defined in: [ir/mutations.ts:545](https://github.com/ancyloce/anvilkit-studio/bl
 
 | Property | Type | Description | Inherited from | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | - | `NowOption.now` | [ir/mutations.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L39) |
-| &lt;a id="parentid"&gt;&lt;/a&gt; `parentId` | `string` | - | - | [ir/mutations.ts:546](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L546) |
-| &lt;a id="replace"&gt;&lt;/a&gt; `replace` | (`children`) =&gt; [`CanvasNode`](../type-aliases/CanvasNode)[] | Receives the parent container's current children and returns the replacement array. Runs inside a single tree rewrite, so a batch edit (e.g. grouping or ungrouping N siblings) costs one O(n) pass instead of N insert/remove passes. The caller owns IR invariants (unique ids, no cycles) within the returned array. | - | [ir/mutations.ts:554](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L554) |
+| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | - | `NowOption.now` | [ir/mutations.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L38) |
+| &lt;a id="parentid"&gt;&lt;/a&gt; `parentId` | `string` | - | - | [ir/mutations.ts:561](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L561) |
+| &lt;a id="replace"&gt;&lt;/a&gt; `replace` | (`children`) =&gt; [`CanvasNode`](../type-aliases/CanvasNode)[] | Receives the parent container's current children and returns the replacement array. Runs inside a single tree rewrite, so a batch edit (e.g. grouping or ungrouping N siblings) costs one O(n) pass instead of N insert/remove passes. The caller owns IR invariants (unique ids, no cycles) within the returned array. | - | [ir/mutations.ts:569](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L569) |

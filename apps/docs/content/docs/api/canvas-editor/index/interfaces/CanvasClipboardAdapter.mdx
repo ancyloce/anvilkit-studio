@@ -1,0 +1,55 @@
+---
+title: "CanvasClipboardAdapter"
+description: "@anvilkit/canvas-editor · CanvasClipboardAdapter"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/clipboard-adapter.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/clipboard-adapter.ts#L12)
+
+## File
+
+§11.1 clipboard adapter contract (PRD 0012). The editor owns
+selection collection, payload validation/versioning, paste offsetting, and
+the single-undo-entry command batch (`clipboard-actions.ts`); a
+host-supplied adapter can override HOW text reaches the platform clipboard
+(e.g. an Electron/native bridge where the Web Clipboard API isn't
+available or isn't the right transport). Falls back to
+`system-clipboard.ts`'s `navigator.clipboard` wrapper when absent — same
+signatures, same "never throw, degrade to false/null" contract.
+
+## Methods
+
+### read()
+
+```ts
+read(): Promise<string | null>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/clipboard-adapter.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/clipboard-adapter.ts#L14)
+
+Read clipboard text, or `null` when unavailable/denied — never throws.
+
+#### Returns
+
+`Promise`\&lt;`string` \| `null`\&gt;
+
+***
+
+### write()
+
+```ts
+write(text): Promise<boolean>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/clipboard-adapter.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/clipboard-adapter.ts#L16)
+
+Write clipboard text; resolves `false` on failure — never throws.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `text` | `string` |
+
+#### Returns
+
+`Promise`\<`boolean`\>

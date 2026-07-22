@@ -1,0 +1,81 @@
+---
+title: "CanvasCollabAdapter"
+description: "@anvilkit/canvas-editor · CanvasCollabAdapter"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L74)
+
+Minimal, transport- and consistency-model-agnostic surface a canvas
+collaboration adapter exposes to a host (P0-10). `createCanvasYjsBinding`
+below is the only implementation today, and it is whole-document
+last-writer-wins — see its doc comment for the full, explicit caveat. This
+interface exists so a FUTURE adapter with a different consistency model (a
+per-node CRDT, or a replicated command log built on
+`CanvasChangeRecord`-style records) can be swapped in behind the same
+shape without every call site changing. It is deliberately NOT a promise of
+conflict-free merging — that property is implementation-specific, and
+whichever adapter claims it must document it explicitly, the same way this
+one documents that it does NOT.
+
+## Extended by
+
+- [`CanvasYjsBinding`](CanvasYjsBinding.md)
+
+## Methods
+
+### current()
+
+```ts
+current(): 
+  | CanvasIR
+  | undefined;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L82)
+
+The current document snapshot, or `undefined` if not yet available/parseable.
+
+#### Returns
+
+  \| [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts)
+  \| `undefined`
+
+***
+
+### destroy()
+
+```ts
+destroy(): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:84](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L84)
+
+Detach all observers/listeners this adapter registered. Idempotent.
+
+#### Returns
+
+`void`
+
+***
+
+### subscribe()
+
+```ts
+subscribe(onRemote): CanvasBindingUnsubscribe;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L78)
+
+Fires on REMOTE writes only (origin != localPeer) with the decoded IR
+ and the authoring peer, when the peer is known. Local pushes never fire
+ this.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `onRemote` | (`ir`, `peer?`) =&gt; `void` |
+
+#### Returns
+
+[`CanvasBindingUnsubscribe`](../type-aliases/CanvasBindingUnsubscribe)

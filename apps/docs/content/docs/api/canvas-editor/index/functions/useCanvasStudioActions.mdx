@@ -1,0 +1,20 @@
+---
+title: "useCanvasStudioActions"
+description: "@anvilkit/canvas-editor · useCanvasStudioActions"
+---
+
+```ts
+function useCanvasStudioActions(): CanvasStudioActions;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/header/export-action.ts:217](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/export-action.ts#L217)
+
+[CanvasStudioActions](../interfaces/CanvasStudioActions) as a hook — the `export`-augmented sibling of
+[useCanvasActions](useCanvasActions.md). Unlike `useCanvasActions` (which only reads the
+STABLE store handles so it never re-renders on commit), this hook also
+reads the full reactive `useCanvasStudio()` context because `export()`
+needs the live `stage`/`brandKit` at call time.
+
+## Returns
+
+[`CanvasStudioActions`](../interfaces/CanvasStudioActions)

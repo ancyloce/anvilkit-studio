@@ -1,0 +1,30 @@
+---
+title: "CanvasInvariantIssueCode"
+description: "@anvilkit/canvas-core · CanvasInvariantIssueCode"
+---
+
+```ts
+type CanvasInvariantIssueCode = 
+  | "duplicate-page-id"
+  | "duplicate-node-id"
+  | "invalid-page-root"
+  | "asset-key-id-mismatch"
+  | "dangling-asset-reference"
+  | "excessive-tree-depth";
+```
+
+Defined in: [ir/invariants.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L20)
+
+Semantic invariant validation (P0-6) — deliberately separate from
+`ir/validators.ts`'s Zod schemas. A schema checks SHAPE (is `id` a
+non-empty string, is `pages` an array with >= 1 element); it cannot express
+whole-document facts like "every node id is unique" or "every `assetId` a
+node references exists in `ir.assets`" — those require walking the tree and
+cross-referencing, which is exactly what this module does.
+
+This is NOT wired into `applyCommand`/`applyCommands`/`migrateCanvasIR` by
+default: those stay O(1)-per-field (schema) or O(single-node) (a command),
+not O(document) on every call. Call `validateCanvasIRInvariants` explicitly
+at a trust boundary instead — decoding a persisted/remote document, a CI
+fixture check, or a host's own post-batch assertion — where an O(document)
+pass is proportionate to the cost already being paid there.

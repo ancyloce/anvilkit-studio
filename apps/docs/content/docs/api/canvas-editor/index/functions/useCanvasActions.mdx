@@ -1,0 +1,20 @@
+---
+title: "useCanvasActions"
+description: "@anvilkit/canvas-editor · useCanvasActions"
+---
+
+```ts
+function useCanvasActions(): CanvasEditorActions;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/actions/editor-actions.ts:378](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/editor-actions.ts#L378)
+
+The action layer as a hook. Built on [useCanvasStores](useCanvasStores.md) (the stable
+context half), so consumers do NOT re-render on every commit and the
+returned object keeps a stable identity for the lifetime of the editor
+(PRD 0012 §13.3). Live state (`ir`, `activePageId`) is resolved from the
+stores at call time.
+
+## Returns
+
+[`CanvasEditorActions`](../interfaces/CanvasEditorActions)

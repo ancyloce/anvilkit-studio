@@ -1,0 +1,42 @@
+---
+title: "CanvasExportEmptyError"
+description: "@anvilkit/canvas-editor · CanvasExportEmptyError"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L98)
+
+Thrown when a requested export scope resolves to nothing exportable — an
+empty selection, or a `"pages"` request whose ids no longer exist on the
+document. Callers map it to their own "Nothing to export" surface (the
+dialog's `export-store` fail phase; the headless `export()` action's
+rejected promise).
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new CanvasExportEmptyError(message?): CanvasExportEmptyError;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:99](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L99)
+
+#### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `message` | `string` | `"Nothing to export"` |
+
+#### Returns
+
+`CanvasExportEmptyError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```

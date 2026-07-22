@@ -1,0 +1,24 @@
+---
+title: "CommandApplyFn"
+description: "@anvilkit/canvas-editor · CommandApplyFn"
+---
+
+```ts
+type CommandApplyFn = (ir, cmd, options) => CommandApplyResult<AnyCanvasCommand>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/stores/history-store.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/history-store.ts#L26)
+
+The shape both core's `applyCommand` and a `CanvasRuntime.apply` satisfy.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) |
+| `cmd` | [`AnyCanvasCommand`](AnyCanvasCommand.md) |
+| `options` | `CommandApplyOptions` |
+
+## Returns
+
+`CommandApplyResult`\<[`AnyCanvasCommand`](AnyCanvasCommand.md)\>

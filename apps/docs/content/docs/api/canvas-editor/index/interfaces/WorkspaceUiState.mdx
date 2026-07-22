@@ -3,17 +3,42 @@ title: "WorkspaceUiState"
 description: "@anvilkit/canvas-editor · WorkspaceUiState"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L22)
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L23)
 
 ## Properties
 
-| Property | Modifier | Type | Defined in |
-| ------ | ------ | ------ | ------ |
-| &lt;a id="activedockid"&gt;&lt;/a&gt; `activeDockId` | `readonly` | `"text"` \| `"templates"` \| `"ai"` \| `"elements"` \| `"brand"` \| `"uploads"` \| `"layers"` | [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L23) |
-| &lt;a id="inspectorcollapsed"&gt;&lt;/a&gt; `inspectorCollapsed` | `readonly` | `boolean` | [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L24) |
-| &lt;a id="panelsearch"&gt;&lt;/a&gt; `panelSearch` | `readonly` | `string` | [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L25) |
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="activedockid"&gt;&lt;/a&gt; `activeDockId` | `readonly` | `"text"` \| `"templates"` \| `"ai"` \| `"elements"` \| `"brand"` \| `"uploads"` \| `"layers"` | - | [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L24) |
+| &lt;a id="inspectorcollapsed"&gt;&lt;/a&gt; `inspectorCollapsed` | `readonly` | `boolean` | - | [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L25) |
+| &lt;a id="panelopen"&gt;&lt;/a&gt; `panelOpen` | `readonly` | `boolean` | Whether the Tab Panel is shown. Transient (not persisted). Desktop ignores it; the ≤768px overlay layout (B-14) opens/closes the floating panel with it, and re-clicking the active dock item toggles it. | [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L32) |
+| &lt;a id="panelsearch"&gt;&lt;/a&gt; `panelSearch` | `readonly` | `string` | - | [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L33) |
+| &lt;a id="panelwidth"&gt;&lt;/a&gt; `panelWidth` | `readonly` | `number` | - | [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L26) |
+| &lt;a id="recenttemplateids"&gt;&lt;/a&gt; `recentTemplateIds` | `readonly` | readonly `string`[] | FR-130 recently-used templates (C-06), most recent first, capped. Persisted. | [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L35) |
 
 ## Methods
+
+### addRecentTemplate()
+
+```ts
+addRecentTemplate(id): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L38)
+
+Record a template application; moves an existing id to the front.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+
+#### Returns
+
+`void`
+
+***
 
 ### reset()
 
@@ -21,7 +46,23 @@ Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-u
 reset(): void;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L29)
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L46)
+
+#### Returns
+
+`void`
+
+***
+
+### restoreLayout()
+
+```ts
+restoreLayout(): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L44)
+
+FR-130 restore-default-layout: dock tab, inspector, panel width (B-14).
 
 #### Returns
 
@@ -35,7 +76,7 @@ Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-u
 setActiveDockId(id): void;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L26)
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L36)
 
 #### Parameters
 
@@ -55,7 +96,7 @@ Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-u
 setInspectorCollapsed(collapsed): void;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L27)
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L40)
 
 #### Parameters
 
@@ -69,19 +110,61 @@ Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-u
 
 ***
 
+### setPanelOpen()
+
+```ts
+setPanelOpen(open): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L39)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `open` | `boolean` |
+
+#### Returns
+
+`void`
+
+***
+
 ### setPanelSearch()
 
 ```ts
 setPanelSearch(query): void;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L28)
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L45)
 
 #### Parameters
 
 | Parameter | Type |
 | ------ | ------ |
 | `query` | `string` |
+
+#### Returns
+
+`void`
+
+***
+
+### setPanelWidth()
+
+```ts
+setPanelWidth(width): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L42)
+
+Clamped to [PANEL\_WIDTH\_MIN, PANEL\_WIDTH\_MAX] (B-14).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `width` | `number` |
 
 #### Returns
 

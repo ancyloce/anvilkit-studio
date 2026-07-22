@@ -11,8 +11,10 @@ is open.
 
 ## Properties
 
-| Property | Type | Defined in |
-| ------ | ------ | ------ |
-| &lt;a id="clearediting"&gt;&lt;/a&gt; `clearEditing` | () =&gt; `void` | [packages/capabilities/canvas/editor/src/stores/editing-store.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/editing-store.ts#L11) |
-| &lt;a id="editingnodeid"&gt;&lt;/a&gt; `editingNodeId` | `string` \| `null` | [packages/capabilities/canvas/editor/src/stores/editing-store.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/editing-store.ts#L9) |
-| &lt;a id="setediting"&gt;&lt;/a&gt; `setEditing` | (`id`) =&gt; `void` | [packages/capabilities/canvas/editor/src/stores/editing-store.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/editing-store.ts#L10) |
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="clearediting"&gt;&lt;/a&gt; `clearEditing` | () =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/editing-store.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/editing-store.ts#L11) |
+| &lt;a id="editingnodeid"&gt;&lt;/a&gt; `editingNodeId` | `string` \| `null` | - | [packages/capabilities/canvas/editor/src/stores/editing-store.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/editing-store.ts#L9) |
+| &lt;a id="setediting"&gt;&lt;/a&gt; `setEditing` | (`id`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/editing-store.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/editing-store.ts#L10) |
+| &lt;a id="settextareael"&gt;&lt;/a&gt; `setTextareaEl` | (`el`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/editing-store.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/editing-store.ts#L20) |
+| &lt;a id="textareael"&gt;&lt;/a&gt; `textareaEl` | `HTMLTextAreaElement` \| `null` | The live TextEditorOverlay textarea DOM node, while one is mounted (null otherwise). Lets a sibling control (RichTextToolbar) read the user's UNCOMMITTED live draft before building a patch, instead of the stale last-committed IR content (E-4) — the same "read the live DOM value" principle the overlay's own commit-on-blur already uses. | [packages/capabilities/canvas/editor/src/stores/editing-store.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/editing-store.ts#L19) |

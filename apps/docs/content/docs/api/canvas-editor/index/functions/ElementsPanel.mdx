@@ -7,12 +7,13 @@ description: "@anvilkit/canvas-editor · ElementsPanel"
 function ElementsPanel(__namedParameters): Element;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/panels/ElementsPanel.tsx:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/ElementsPanel.tsx#L26)
+Defined in: [packages/capabilities/canvas/editor/src/panels/ElementsPanel.tsx:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/ElementsPanel.tsx#L34)
 
 The Canva-shell "Elements" panel — the new home for the drawing tools.
-Renders each [TOOL\_RAIL\_ITEMS](../../internal/variables/TOOL_RAIL_ITEMS) entry as a button bound to `toolStore`;
-the active tool is highlighted. It is the drawing-tool surface for the
-`CanvasWorkspace` shell (decision §1.3.2).
+Renders each effective tool (built-in rail + extension-registered tools,
+FR-010) as a button bound to `toolStore`; the active tool is highlighted.
+It is the drawing-tool surface for the `CanvasWorkspace` shell (decision
+§1.3.2). The `tools` prop still overrides the list entirely.
 
 ## Parameters
 

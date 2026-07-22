@@ -4,7 +4,10 @@ description: "@anvilkit/canvas-editor · WORKSPACE_UI_STORE_PERSIST_VERSION"
 ---
 
 ```ts
-const WORKSPACE_UI_STORE_PERSIST_VERSION: 1 = 1;
+const WORKSPACE_UI_STORE_PERSIST_VERSION: 3 = 3;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L48)
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:103](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L103)
+
+v2 (B-14): adds `panelWidth`; v1 payloads migrate with the default.
+v3 (C-06): adds `recentTemplateIds`; older payloads migrate with `[]`.

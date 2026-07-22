@@ -16,8 +16,8 @@ const CanvasGroupNodeSchema: ZodObject<{
   transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
   type: ZodLiteral<"group">;
   visible: ZodOptional<ZodBoolean>;
-  zIndex: ZodNumber;
+  zIndex: ZodOptional<ZodNumber>;
 }, $loose>;
 ```
 
-Defined in: [ir/validators.ts:436](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L436)
+Defined in: [ir/validators.ts:543](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L543)

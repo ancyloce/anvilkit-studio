@@ -4,22 +4,31 @@ description: "@anvilkit/canvas-editor · deletePage"
 ---
 
 ```ts
-function deletePage(ctx, pageId): void;
+function deletePage(
+   ctx, 
+   pageId, 
+   toaster?): void;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/pages/page-actions.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/pages/page-actions.ts#L68)
+Defined in: [packages/capabilities/canvas/editor/src/pages/page-actions.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/src/pages/page-actions.ts#L81)
 
-Delete a page. No-op when only one page remains (last-page guard — empty
-IR would render the "no active page" fallback in `<CanvasStudio>`).
+Delete a page. Blocked when only one page remains (last-page guard — an
+empty IR would render the "no active page" fallback in `<CanvasStudio>`);
+FR-170 fires a warning toast so a blocked delete is never a silent no-op,
+regardless of which UI entry point (row button, context menu, toolbar
+icon) triggered it — every caller routes through this one guard, so the
+toast fires exactly once per attempt. Reuses the same copy as the
+disabled delete controls' tooltip (`canvas.nav.cannotDeleteOnly`).
 If the deleted page was active, moves active to the page at the same index
 (or the previous one if the deleted was last).
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `ctx` | [`CanvasStudioContextValue`](../interfaces/CanvasStudioContextValue) |
-| `pageId` | `string` |
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `ctx` | [`CanvasStudioContextValue`](../interfaces/CanvasStudioContextValue) | `undefined` |
+| `pageId` | `string` | `undefined` |
+| `toaster` | [`CanvasToaster`](../../internal/interfaces/CanvasToaster) | `NOOP_CANVAS_TOASTER` |
 
 ## Returns
 

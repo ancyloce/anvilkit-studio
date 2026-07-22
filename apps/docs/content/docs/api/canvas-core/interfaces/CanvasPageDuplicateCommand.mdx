@@ -1,0 +1,30 @@
+---
+title: "CanvasPageDuplicateCommand"
+description: "@anvilkit/canvas-core · CanvasPageDuplicateCommand"
+---
+
+Defined in: [commands/types.ts:191](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L191)
+
+Duplicate a page (§9.1/§23, PRD 0012): deep-clones `sourcePageId`'s node
+tree with fresh ids via `regenerateNodeIds` (M0-05), preserves the source
+page's `size`/`background`/`layoutAids`/other page-level fields, and
+inserts the duplicate immediately after the source. This is real command
+domain logic (ID regeneration + positioning), not something a consumer
+should assemble client-side from `clonePage` + `page.create`.
+
+`newPageId` follows the same caller-supplies-the-id convention
+`page.create`'s `page.id` uses — deterministic/testable/replayable, and it
+lets `commandToChange` (`change-events.ts`) derive a `"page"` change record
+from the command shape alone, exactly like every other id-producing
+built-in. `name` overrides the default `"<source name> copy"` label. The
+inverse is a `page.delete` for `newPageId`, removing exactly the duplicate
+and leaving the source and all other pages untouched.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `string` | [commands/types.ts:195](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L195) |
+| &lt;a id="newpageid"&gt;&lt;/a&gt; `newPageId` | `string` | [commands/types.ts:194](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L194) |
+| &lt;a id="sourcepageid"&gt;&lt;/a&gt; `sourcePageId` | `string` | [commands/types.ts:193](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L193) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"page.duplicate"` | [commands/types.ts:192](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L192) |

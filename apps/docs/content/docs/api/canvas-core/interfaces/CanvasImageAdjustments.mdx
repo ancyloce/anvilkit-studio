@@ -1,0 +1,26 @@
+---
+title: "CanvasImageAdjustments"
+description: "@anvilkit/canvas-core · CanvasImageAdjustments"
+---
+
+Defined in: [ir/types.ts:127](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L127)
+
+Non-destructive image adjustments (C-04, FR-100). All fields optional;
+absent = neutral. Ranges: `brightness`/`contrast`/`saturation`/`exposure`/
+`temperature`/`tint` -1..1, `grayscale`/`sepia` 0..1, `blur` 0..100 (page
+units). Rendering math lives in `ir/image-adjustments.ts` — one color
+matrix shared by the editor canvas and the SVG serializer.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="blur"&gt;&lt;/a&gt; `blur?` | `number` | [ir/types.ts:134](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L134) |
+| &lt;a id="brightness"&gt;&lt;/a&gt; `brightness?` | `number` | [ir/types.ts:128](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L128) |
+| &lt;a id="contrast"&gt;&lt;/a&gt; `contrast?` | `number` | [ir/types.ts:129](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L129) |
+| &lt;a id="exposure"&gt;&lt;/a&gt; `exposure?` | `number` | [ir/types.ts:131](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L131) |
+| &lt;a id="grayscale"&gt;&lt;/a&gt; `grayscale?` | `number` | [ir/types.ts:135](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L135) |
+| &lt;a id="saturation"&gt;&lt;/a&gt; `saturation?` | `number` | [ir/types.ts:130](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L130) |
+| &lt;a id="sepia"&gt;&lt;/a&gt; `sepia?` | `number` | [ir/types.ts:136](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L136) |
+| &lt;a id="temperature"&gt;&lt;/a&gt; `temperature?` | `number` | [ir/types.ts:132](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L132) |
+| &lt;a id="tint"&gt;&lt;/a&gt; `tint?` | `number` | [ir/types.ts:133](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L133) |

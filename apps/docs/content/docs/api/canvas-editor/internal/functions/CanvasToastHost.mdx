@@ -1,0 +1,27 @@
+---
+title: "CanvasToastHost"
+description: "@anvilkit/canvas-editor · CanvasToastHost"
+---
+
+```ts
+function CanvasToastHost(__namedParameters): Element;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/toasts/CanvasToastHost.tsx:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/toasts/CanvasToastHost.tsx#L23)
+
+Workspace toast host (A-09): mounts the `@anvilkit/ui/toast` primitive
+(Base UI manager + viewport) and provides the editor's [CanvasToaster](../interfaces/CanvasToaster)
+seam so the action layer and panels can fire feedback. One manager per
+workspace instance — multiple editors on a page don't share stacks.
+The full FR-170 surface (queueing policies, loading toasts) lands in B-05.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `__namedParameters` | \{ `children`: `ReactNode`; \} |
+| `__namedParameters.children` | `ReactNode` |
+
+## Returns
+
+`Element`

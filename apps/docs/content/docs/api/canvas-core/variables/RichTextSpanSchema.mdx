@@ -11,6 +11,7 @@ const RichTextSpanSchema: ZodObject<{
   fontWeight: ZodOptional<ZodString>;
   italic: ZodOptional<ZodBoolean>;
   letterSpacing: ZodOptional<ZodNumber>;
+  strikethrough: ZodOptional<ZodBoolean>;
   text: ZodString;
   textTransform: ZodOptional<ZodEnum<{
      capitalize: "capitalize";
@@ -22,7 +23,7 @@ const RichTextSpanSchema: ZodObject<{
 }, $loose>;
 ```
 
-Defined in: [ir/validators.ts:336](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L336)
+Defined in: [ir/validators.ts:436](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L436)
 
 A rich-text span. Every style field is optional — an omitted field means
 "inherit from the host's default", which is resolved at measure/render time,

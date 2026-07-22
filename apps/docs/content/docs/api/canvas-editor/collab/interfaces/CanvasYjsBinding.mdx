@@ -3,13 +3,29 @@ title: "CanvasYjsBinding"
 description: "@anvilkit/canvas-editor · CanvasYjsBinding"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L38)
+Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L87)
+
+Minimal, transport- and consistency-model-agnostic surface a canvas
+collaboration adapter exposes to a host (P0-10). `createCanvasYjsBinding`
+below is the only implementation today, and it is whole-document
+last-writer-wins — see its doc comment for the full, explicit caveat. This
+interface exists so a FUTURE adapter with a different consistency model (a
+per-node CRDT, or a replicated command log built on
+`CanvasChangeRecord`-style records) can be swapped in behind the same
+shape without every call site changing. It is deliberately NOT a promise of
+conflict-free merging — that property is implementation-specific, and
+whichever adapter claims it must document it explicitly, the same way this
+one documents that it does NOT.
+
+## Extends
+
+- [`CanvasCollabAdapter`](CanvasCollabAdapter.md)
 
 ## Properties
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="presence"&gt;&lt;/a&gt; `presence` | `readonly` | [`CanvasPresence`](CanvasPresence.md) | Presence / awareness bridge. | [packages/capabilities/canvas/editor/src/collab/binding.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L47) |
+| &lt;a id="presence"&gt;&lt;/a&gt; `presence` | `readonly` | [`CanvasPresence`](CanvasPresence.md) | Presence / awareness bridge. Yjs-specific — not part of the transport-agnostic [CanvasCollabAdapter](CanvasCollabAdapter.md) surface. | [packages/capabilities/canvas/editor/src/collab/binding.ts:90](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L90) |
 
 ## Methods
 
@@ -21,14 +37,18 @@ current():
   | undefined;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L45)
+Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L82)
 
-Decode the current IR from the doc, or `undefined` if empty/unparseable.
+The current document snapshot, or `undefined` if not yet available/parseable.
 
 #### Returns
 
   \| [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts)
   \| `undefined`
+
+#### Inherited from
+
+[`CanvasCollabAdapter`](CanvasCollabAdapter.md).[`current`](CanvasCollabAdapter.md#current)
 
 ***
 
@@ -38,13 +58,17 @@ Decode the current IR from the doc, or `undefined` if empty/unparseable.
 destroy(): void;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L49)
+Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:84](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L84)
 
-Detach all observers + awareness listeners. Idempotent.
+Detach all observers/listeners this adapter registered. Idempotent.
 
 #### Returns
 
 `void`
+
+#### Inherited from
+
+[`CanvasCollabAdapter`](CanvasCollabAdapter.md).[`destroy`](CanvasCollabAdapter.md#destroy)
 
 ***
 
@@ -54,10 +78,11 @@ Detach all observers + awareness listeners. Idempotent.
 subscribe(onRemote): CanvasBindingUnsubscribe;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L41)
+Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L78)
 
 Fires on REMOTE writes only (origin != localPeer) with the decoded IR
- and the authoring peer. Local pushes never fire this.
+ and the authoring peer, when the peer is known. Local pushes never fire
+ this.
 
 #### Parameters
 
@@ -68,3 +93,7 @@ Fires on REMOTE writes only (origin != localPeer) with the decoded IR
 #### Returns
 
 [`CanvasBindingUnsubscribe`](../type-aliases/CanvasBindingUnsubscribe)
+
+#### Inherited from
+
+[`CanvasCollabAdapter`](CanvasCollabAdapter.md).[`subscribe`](CanvasCollabAdapter.md#subscribe)

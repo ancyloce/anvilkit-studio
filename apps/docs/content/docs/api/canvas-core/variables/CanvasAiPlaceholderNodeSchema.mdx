@@ -22,8 +22,8 @@ const CanvasAiPlaceholderNodeSchema: ZodObject<{
   transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
   type: ZodLiteral<"ai-placeholder">;
   visible: ZodOptional<ZodBoolean>;
-  zIndex: ZodNumber;
+  zIndex: ZodOptional<ZodNumber>;
 }, $loose>;
 ```
 
-Defined in: [ir/validators.ts:391](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L391)
+Defined in: [ir/validators.ts:498](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L498)

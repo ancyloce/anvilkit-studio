@@ -4,10 +4,21 @@ description: "@anvilkit/canvas-core · createCommandRegistry"
 ---
 
 ```ts
-function createCommandRegistry(): CanvasCommandRegistry;
+function createCommandRegistry(builtins?): CanvasCommandRegistry;
 ```
 
-Defined in: [extensions/command-registry.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/command-registry.ts#L28)
+Defined in: [extensions/command-registry.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/command-registry.ts#L58)
+
+Create a command registry. `builtins` names every built-in command type
+(e.g. `canvas-runtime.ts`'s `BUILTIN_COMMAND_TYPES`) so `register()` can
+reject an attempt to shadow one instead of silently accepting a handler
+that dispatch will never reach.
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `builtins` | `Iterable`\&lt;`string`\&gt; | `[]` |
 
 ## Returns
 

@@ -1,0 +1,17 @@
+---
+title: "CanvasAssetRemoveCommand"
+description: "@anvilkit/canvas-core · CanvasAssetRemoveCommand"
+---
+
+Defined in: [commands/types.ts:260](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L260)
+
+Remove an asset-table entry. The command layer does NOT check for nodes
+still referencing the asset (invariants are a trust-boundary tool, not
+auto-wired — see `ir/invariants.ts`); callers own that check.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="assetid"&gt;&lt;/a&gt; `assetId` | `string` | [commands/types.ts:262](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L262) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"asset.remove"` | [commands/types.ts:261](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L261) |

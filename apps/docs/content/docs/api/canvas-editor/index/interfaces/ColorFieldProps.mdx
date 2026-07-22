@@ -3,14 +3,17 @@ title: "ColorFieldProps"
 description: "@anvilkit/canvas-editor · ColorFieldProps"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/panels/fields.tsx:164](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L164)
+Defined in: [packages/capabilities/canvas/editor/src/panels/fields.tsx:343](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L343)
 
 ## Properties
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="datatestid"&gt;&lt;/a&gt; `dataTestId` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:167](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L167) |
-| &lt;a id="label"&gt;&lt;/a&gt; `label` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:165](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L165) |
-| &lt;a id="oncommit"&gt;&lt;/a&gt; `onCommit` | (`next`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:168](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L168) |
-| &lt;a id="title"&gt;&lt;/a&gt; `title?` | `string` | Native tooltip, e.g. flagging an unresolved brand-token value (canvas-m1-013). | [packages/capabilities/canvas/editor/src/panels/fields.tsx:170](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L170) |
-| &lt;a id="value"&gt;&lt;/a&gt; `value` | `string` \| `undefined` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:166](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L166) |
+| &lt;a id="contract"&gt;&lt;/a&gt; `contract?` | [`FieldContractTarget`](FieldContractTarget.md)\&lt;`string`\&gt; | §10 field-input contract (B-12): preview + coalesced commit + revert. | [packages/capabilities/canvas/editor/src/panels/fields.tsx:350](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L350) |
+| &lt;a id="datatestid"&gt;&lt;/a&gt; `dataTestId` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:346](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L346) |
+| &lt;a id="eyedropper"&gt;&lt;/a&gt; `eyeDropper?` | () =&gt; `Promise`\&lt;`string` \| `null`\&gt; | FR-074 eyedropper adapter seam. Resolve to a hex color, or `null` when the user cancelled. Defaults to the platform `EyeDropper` API when the browser provides it; when neither an adapter nor platform support exists, no eyedropper button renders (graceful fallback). | [packages/capabilities/canvas/editor/src/panels/fields.tsx:361](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L361) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:344](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L344) |
+| &lt;a id="oncommit"&gt;&lt;/a&gt; `onCommit?` | (`next`) =&gt; `void` | Legacy commit path; ignored when [contract](#contract) is present. | [packages/capabilities/canvas/editor/src/panels/fields.tsx:348](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L348) |
+| &lt;a id="rgb"&gt;&lt;/a&gt; `rgb?` | `boolean` | FR-074: hide the R/G/B numeric inputs for space-constrained hosts. | [packages/capabilities/canvas/editor/src/panels/fields.tsx:354](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L354) |
+| &lt;a id="title"&gt;&lt;/a&gt; `title?` | `string` | Native tooltip, e.g. flagging an unresolved brand-token value (canvas-m1-013). | [packages/capabilities/canvas/editor/src/panels/fields.tsx:352](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L352) |
+| &lt;a id="value"&gt;&lt;/a&gt; `value` | `string` \| `undefined` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:345](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L345) |

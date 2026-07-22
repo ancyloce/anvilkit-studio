@@ -1,0 +1,36 @@
+---
+title: "CanvasNodeStyle"
+description: "@anvilkit/canvas-core · CanvasNodeStyle"
+---
+
+Defined in: [commands/apply-style.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L22)
+
+Copy/paste style (C-05, FR-120/121). A `CanvasNodeStyle` is the portable
+style payload: appearance only — never id, position, size, rotation,
+children, asset ids, or text content. Shadows travel exclusively as
+`effects` (extraction lifts a legacy `shadow` through core's ONE resolver),
+so pasting always writes the C-03 model.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="adjustments"&gt;&lt;/a&gt; `adjustments?` | [`CanvasImageAdjustments`](CanvasImageAdjustments.md) | [commands/apply-style.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L41) |
+| &lt;a id="align"&gt;&lt;/a&gt; `align?` | [`CanvasTextAlign`](../type-aliases/CanvasTextAlign) | [commands/apply-style.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L40) |
+| &lt;a id="arrowend"&gt;&lt;/a&gt; `arrowEnd?` | [`CanvasArrowHead`](../type-aliases/CanvasArrowHead) | [commands/apply-style.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L31) |
+| &lt;a id="arrowstart"&gt;&lt;/a&gt; `arrowStart?` | [`CanvasArrowHead`](../type-aliases/CanvasArrowHead) | [commands/apply-style.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L30) |
+| &lt;a id="blendmode"&gt;&lt;/a&gt; `blendMode?` | `string` | [commands/apply-style.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L33) |
+| &lt;a id="cornerradii"&gt;&lt;/a&gt; `cornerRadii?` | [`CanvasCornerRadii`](CanvasCornerRadii.md) | [commands/apply-style.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L35) |
+| &lt;a id="effects"&gt;&lt;/a&gt; `effects?` | [`CanvasEffect`](../type-aliases/CanvasEffect)[] | [commands/apply-style.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L36) |
+| &lt;a id="fill"&gt;&lt;/a&gt; `fill?` | [`CanvasFill`](../type-aliases/CanvasFill) | [commands/apply-style.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L23) |
+| &lt;a id="fontfamily"&gt;&lt;/a&gt; `fontFamily?` | [`CanvasFontFamily`](../type-aliases/CanvasFontFamily) | [commands/apply-style.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L37) |
+| &lt;a id="fontsize"&gt;&lt;/a&gt; `fontSize?` | `number` | [commands/apply-style.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L38) |
+| &lt;a id="fontweight"&gt;&lt;/a&gt; `fontWeight?` | `string` | [commands/apply-style.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L39) |
+| &lt;a id="opacity"&gt;&lt;/a&gt; `opacity?` | `number` | [commands/apply-style.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L32) |
+| &lt;a id="radius"&gt;&lt;/a&gt; `radius?` | `number` | [commands/apply-style.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L34) |
+| &lt;a id="stroke"&gt;&lt;/a&gt; `stroke?` | `string` | [commands/apply-style.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L24) |
+| &lt;a id="strokecap"&gt;&lt;/a&gt; `strokeCap?` | `"butt"` \| `"round"` \| `"square"` | [commands/apply-style.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L28) |
+| &lt;a id="strokedash"&gt;&lt;/a&gt; `strokeDash?` | `number`[] | [commands/apply-style.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L27) |
+| &lt;a id="strokejoin"&gt;&lt;/a&gt; `strokeJoin?` | `"round"` \| `"miter"` \| `"bevel"` | [commands/apply-style.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L29) |
+| &lt;a id="strokeopacity"&gt;&lt;/a&gt; `strokeOpacity?` | `number` | [commands/apply-style.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L26) |
+| &lt;a id="strokewidth"&gt;&lt;/a&gt; `strokeWidth?` | `number` | [commands/apply-style.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L25) |

@@ -1,0 +1,25 @@
+---
+title: "CanvasExportResultArtifact"
+description: "@anvilkit/canvas-editor · CanvasExportResultArtifact"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/context/canvas-studio-context.tsx:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/canvas-studio-context.tsx#L74)
+
+One artifact from a completed export — PRD §11.1 `onExport` / §11.2
+`CanvasStudioActions.export()`. Canonical home for
+`header/export-action.ts`'s identically-named type (re-exported from there
+unchanged, so `@anvilkit/canvas-editor`'s public import path is untouched):
+`header/` (rank 2, editor-surfaces) is where the export machinery that
+PRODUCES this shape lives, but [CanvasStudioContextValue.onExport](CanvasStudioContextValue.md#onexport)
+below needs it on THIS file's context value, and `check-layering.mjs`
+ranks `context/` (rank 1, interaction-core) below `header/` — this file may
+never import FROM header/, only the reverse. Defining the result shape
+here (header/ imports it back) keeps ONE canonical type instead of two.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="blob"&gt;&lt;/a&gt; `blob` | `readonly` | `Blob` | - | [packages/capabilities/canvas/editor/src/context/canvas-studio-context.tsx:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/canvas-studio-context.tsx#L76) |
+| &lt;a id="filename"&gt;&lt;/a&gt; `filename` | `readonly` | `string` | - | [packages/capabilities/canvas/editor/src/context/canvas-studio-context.tsx:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/canvas-studio-context.tsx#L75) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId?` | `readonly` | `string` | Which page this artifact renders. Absent for whole-document formats (PDF/JSON), which pack every requested page into ONE artifact. | [packages/capabilities/canvas/editor/src/context/canvas-studio-context.tsx:79](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/canvas-studio-context.tsx#L79) |

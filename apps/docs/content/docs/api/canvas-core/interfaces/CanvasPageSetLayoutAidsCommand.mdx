@@ -1,0 +1,21 @@
+---
+title: "CanvasPageSetLayoutAidsCommand"
+description: "@anvilkit/canvas-core · CanvasPageSetLayoutAidsCommand"
+---
+
+Defined in: [commands/types.ts:219](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L219)
+
+Set (or clear, with `to: undefined`) a page's layout aids — persistent
+guides, margin, bleed, safe area (C-01, PRD 0012 §9.3/FR-111/FR-113).
+Whole-object replace: guide add/move/delete are expressed by writing the
+full next `layoutAids` value, keeping the inverse trivial and exact. The
+inverse restores the ACTUAL prior value, even when `from` is stale.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="from"&gt;&lt;/a&gt; `from?` | [`CanvasPageLayoutAids`](CanvasPageLayoutAids.md) | [commands/types.ts:222](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L222) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId` | `string` | [commands/types.ts:221](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L221) |
+| &lt;a id="to"&gt;&lt;/a&gt; `to` | [`CanvasPageLayoutAids`](CanvasPageLayoutAids.md) \| `undefined` | [commands/types.ts:223](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L223) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"page.set-layout-aids"` | [commands/types.ts:220](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L220) |

@@ -1,0 +1,76 @@
+---
+title: "CanvasPersistenceAdapter"
+description: "@anvilkit/canvas-editor · CanvasPersistenceAdapter"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L45)
+
+## Methods
+
+### load()?
+
+```ts
+optional load(documentId): Promise<CanvasIR>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/types.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L47)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `documentId` | `string` |
+
+#### Returns
+
+`Promise`\<[`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts)\>
+
+***
+
+### save()
+
+```ts
+save(input): Promise<CanvasSaveResult>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/types.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L46)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`CanvasSaveInput`](CanvasSaveInput.md) |
+
+#### Returns
+
+`Promise`\<[`CanvasSaveResult`](CanvasSaveResult.md)\>
+
+***
+
+### saveOnUnload()?
+
+```ts
+optional saveOnUnload(input): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/types.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/types.ts#L59)
+
+FR-160/163 optional unload transport. Browsers do NOT keep a page alive
+for Promises during `beforeunload`/`pagehide`, so the editor never awaits
+`save()` there — it only warns. A host that wants best-effort persistence
+of unsaved changes on tab close can implement this with a synchronous
+fire-and-forget transport (`navigator.sendBeacon`, `fetch` with
+`keepalive: true`, or synchronous storage such as localStorage). The
+editor calls it at most once per unload, only while dirty, and ignores
+the return value. Absent this capability, unsaved changes on unload are
+covered only by the leave warning and the recovery adapter (FR-164).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`CanvasUnloadSaveInput`](CanvasUnloadSaveInput.md) |
+
+#### Returns
+
+`void`

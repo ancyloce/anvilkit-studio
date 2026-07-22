@@ -1,0 +1,23 @@
+---
+title: "AnyCanvasCommand"
+description: "@anvilkit/canvas-editor · AnyCanvasCommand"
+---
+
+```ts
+type AnyCanvasCommand = 
+  | CanvasCommand
+  | {
+  type: string;
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/stores/history-store.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/history-store.ts#L23)
+
+A command dispatched through the commit pipeline (P0-7): a built-in
+`CanvasCommand`, or a custom command type a host-injected `CanvasRuntime`
+knows how to apply. Widened from the closed `CanvasCommand` union so a host
+with a runtime can call `commit`/`commitBatch`/`commitCoalesced` with a
+custom command and no cast; dispatch itself is delegated to
+`CreateHistoryStoreOptions.apply` (defaults to core's `applyCommand`, which
+only recognizes the built-in union — an unrecognized custom command falls
+through its switch exactly as before this option existed).

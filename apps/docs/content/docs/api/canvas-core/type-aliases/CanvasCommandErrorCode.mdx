@@ -11,8 +11,11 @@ type CanvasCommandErrorCode =
   | "page-not-found"
   | "kind-mismatch"
   | "asset-mismatch"
+  | "asset-not-found"
   | "index-out-of-range"
-  | "invariant-violated";
+  | "invariant-violated"
+  | "node-locked"
+  | "unknown-command";
 ```
 
-Defined in: [commands/runtime.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/runtime.ts#L44)
+Defined in: [commands/runtime.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/runtime.ts#L63)

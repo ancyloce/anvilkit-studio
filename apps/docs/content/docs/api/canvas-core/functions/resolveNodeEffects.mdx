@@ -1,0 +1,33 @@
+---
+title: "resolveNodeEffects"
+description: "@anvilkit/canvas-core · resolveNodeEffects"
+---
+
+```ts
+function resolveNodeEffects(node): readonly CanvasEffect[];
+```
+
+Defined in: [ir/effects.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/effects.ts#L19)
+
+The ONE effect resolver (C-03, §9.4) — every consumer (the editor's Konva
+renderer, the SVG serializer, the inspector) resolves a node's effects
+through this so canvas, export, and UI can never disagree.
+
+Precedence: a present `effects` array wins outright — including an EMPTY
+one, which means "explicitly no effects" (that is how an edit removes a
+legacy shadow without deleting history). Only when `effects` is absent does
+the legacy `shadow` field apply, interpreted as a single drop-shadow with
+no spread. The legacy field is never mutated here; writes that upgrade a
+node to the new model are the editor's job.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `node` | \{ `effects?`: [`CanvasEffect`](../type-aliases/CanvasEffect)[]; `shadow?`: [`CanvasShadow`](../interfaces/CanvasShadow); \} |
+| `node.effects?` | [`CanvasEffect`](../type-aliases/CanvasEffect)[] |
+| `node.shadow?` | [`CanvasShadow`](../interfaces/CanvasShadow) |
+
+## Returns
+
+readonly [`CanvasEffect`](../type-aliases/CanvasEffect)[]

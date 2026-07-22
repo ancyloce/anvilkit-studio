@@ -1,0 +1,24 @@
+---
+title: "CanvasTemplateSearchQuery"
+description: "@anvilkit/canvas-editor · CanvasTemplateSearchQuery"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/templates/template-provider.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L10)
+
+Provider-based template API (C-06, FR-131). Hosts back the Templates panel
+with a remote catalog by implementing these two methods; the static
+`CanvasStudioProps.templates` array stays fully supported — it is wrapped
+in [createStaticTemplateProvider](../functions/createStaticTemplateProvider) so the panel always speaks ONE
+protocol.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="category"&gt;&lt;/a&gt; `category?` | `readonly` | `string` | Exact category, or absent for all. | [packages/capabilities/canvas/editor/src/templates/template-provider.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L14) |
+| &lt;a id="cursor"&gt;&lt;/a&gt; `cursor?` | `readonly` | `string` | Opaque cursor from a previous result's `nextCursor`. | [packages/capabilities/canvas/editor/src/templates/template-provider.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L18) |
+| &lt;a id="limit"&gt;&lt;/a&gt; `limit?` | `readonly` | `number` | Page size; providers may clamp. | [packages/capabilities/canvas/editor/src/templates/template-provider.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L20) |
+| &lt;a id="size"&gt;&lt;/a&gt; `size?` | `readonly` | \{ `height`: `number`; `width`: `number`; \} | FR-130 size filter: first-page dimensions, in page units. | [packages/capabilities/canvas/editor/src/templates/template-provider.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L16) |
+| `size.height` | `readonly` | `number` | - | [packages/capabilities/canvas/editor/src/templates/template-provider.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L16) |
+| `size.width` | `readonly` | `number` | - | [packages/capabilities/canvas/editor/src/templates/template-provider.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L16) |
+| &lt;a id="text"&gt;&lt;/a&gt; `text?` | `readonly` | `string` | Free-text search over title/description/tags. | [packages/capabilities/canvas/editor/src/templates/template-provider.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L12) |

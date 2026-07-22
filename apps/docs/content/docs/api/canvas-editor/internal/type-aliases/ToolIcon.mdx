@@ -1,0 +1,15 @@
+---
+title: "ToolIcon"
+description: "@anvilkit/canvas-editor · ToolIcon"
+---
+
+```ts
+type ToolIcon = ComponentType<LucideProps>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/tools/tool-types.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L87)
+
+Icon component for a tool's chrome presentation (FR-010). Structurally
+identical to `chrome/icons.ts`'s `ChromeIcon` — re-declared here because
+`tools/` sits BELOW `chrome/` in `check-layering.mjs` and may not import
+from it. Any lucide icon (or props-compatible `<svg>` component) fits.

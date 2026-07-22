@@ -1,0 +1,66 @@
+---
+title: "CanvasRecoveryAdapter"
+description: "@anvilkit/canvas-editor · CanvasRecoveryAdapter"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/recovery.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/recovery.ts#L21)
+
+## Methods
+
+### clear()
+
+```ts
+clear(documentId): Promise<void>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/recovery.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/recovery.ts#L24)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `documentId` | `string` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### read()
+
+```ts
+read(documentId): Promise<CanvasRecoverySnapshot | null>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/recovery.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/recovery.ts#L23)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `documentId` | `string` |
+
+#### Returns
+
+`Promise`\&lt;[`CanvasRecoverySnapshot`](CanvasRecoverySnapshot.md) \| `null`\&gt;
+
+***
+
+### write()
+
+```ts
+write(snapshot): Promise<void>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/recovery.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/recovery.ts#L22)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `snapshot` | [`CanvasRecoverySnapshot`](CanvasRecoverySnapshot.md) |
+
+#### Returns
+
+`Promise`\<`void`\>

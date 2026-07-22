@@ -7,15 +7,39 @@ description: "@anvilkit/canvas-editor · createCanvasYjsBinding"
 function createCanvasYjsBinding(options): CanvasYjsBinding;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L70)
+Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:135](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L135)
 
 Bind a canvas [SceneStoreApi](#) to a `Y.Doc` (I3-1 prototype). Mirrors
 `plugin-collab-yjs`'s `createYjsAdapter`, adapted for `CanvasIR` and a
 zustand store rather than the PageIR snapshot contract.
 
-Encoding is whole-document JSON-blob last-writer-wins under
-[CANVAS\_IR\_KEY](../variables/CANVAS_IR_KEY) (the documented alpha posture; native per-node merge is
-the GA follow-up). Echo loops are prevented two ways:
+## Consistency model (P0-10 — read before integrating)
+
+This is **whole-document, last-writer-wins**, not a CRDT over the document
+tree. The entire `CanvasIR` is serialized to one JSON string and stored
+under one `Y.Map` key ([CANVAS\_IR\_KEY](../variables/CANVAS_IR_KEY)); Yjs's own LWW register
+semantics resolve a concurrent write on THAT KEY, not per-node or
+per-field. Concretely:
+
+- Two peers editing DIFFERENT nodes at the same time do **not** merge —
+  whichever peer's write reaches the shared doc last wins outright, and the
+  other peer's concurrent edit is silently discarded (not queued, not
+  conflict-flagged).
+- There is no operational transform, no per-node CRDT, and no field-level
+  merge of any kind. "Real-time collaboration" here means "every peer
+  converges to the same final document," not "no edits are lost."
+- Presence/awareness (cursors, remote selections) IS fine-grained and
+  low-latency — only DOCUMENT content is whole-blob LWW.
+
+This is an intentional alpha/prototype posture (I3-1), not a production
+collaboration guarantee. A GA implementation needs per-node or per-field
+merge (a real CRDT over the tree, or a replicated, causally-ordered command
+log built on `CanvasChangeRecord`) — out of scope here; this function
+is typed against the transport-agnostic [CanvasCollabAdapter](../interfaces/CanvasCollabAdapter) shape
+specifically so that future implementation can replace it without changing
+call sites.
+
+Echo loops are prevented two ways:
 
 - the Yjs observer ignores transactions whose origin is the local peer
   ([isLocalOrigin](#)), so our own writes never re-apply;

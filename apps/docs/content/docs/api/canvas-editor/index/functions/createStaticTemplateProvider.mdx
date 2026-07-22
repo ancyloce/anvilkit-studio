@@ -1,0 +1,26 @@
+---
+title: "createStaticTemplateProvider"
+description: "@anvilkit/canvas-editor · createStaticTemplateProvider"
+---
+
+```ts
+function createStaticTemplateProvider(templates, options?): CanvasTemplateProvider;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/templates/template-provider.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L66)
+
+Wrap a static template array in the provider protocol: synchronous
+filtering with offset-cursor pagination. This is what the panel uses for
+`CanvasStudioProps.templates`, and a convenient base for host tests.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `templates` | readonly [`CanvasTemplateEntry`](../interfaces/CanvasTemplateEntry)[] |
+| `options` | \{ `pageSize?`: `number`; \} |
+| `options.pageSize?` | `number` |
+
+## Returns
+
+[`CanvasTemplateProvider`](../interfaces/CanvasTemplateProvider)

@@ -1,0 +1,33 @@
+---
+title: "CanvasIRShape"
+description: "@anvilkit/canvas-core · CanvasIRShape"
+---
+
+```ts
+const CanvasIRShape: {
+  assets: ZodRecord<ZodString, ZodType<CanvasAssetRef, unknown, $ZodTypeInternals<CanvasAssetRef, unknown>>>;
+  documentKind: ZodOptional<ZodType<CanvasDocumentKind, unknown, $ZodTypeInternals<CanvasDocumentKind, unknown>>>;
+  id: ZodString;
+  metadata: ZodType<CanvasIRMetadata, unknown, $ZodTypeInternals<CanvasIRMetadata, unknown>>;
+  title: ZodString;
+  version: ZodLiteral<"2">;
+};
+```
+
+Defined in: [ir/validators.ts:651](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L651)
+
+`CanvasIR`'s own fields other than `pages`, split out for the same reason
+as [CanvasPageShape](CanvasPageShape.md): `pages` must bind to whichever page schema is
+being assembled (static vs. extension-aware), while every other top-level
+field must validate identically either way (P0-3).
+
+## Type Declaration
+
+| Name | Type | Default value | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="property-assets"&gt;&lt;/a&gt; `assets` | `ZodRecord`\&lt;`ZodString`, `ZodType`\&lt;[`CanvasAssetRef`](../interfaces/CanvasAssetRef), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasAssetRef`](../interfaces/CanvasAssetRef), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:656](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L656) |
+| &lt;a id="property-documentkind"&gt;&lt;/a&gt; `documentKind` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasDocumentKind`](../type-aliases/CanvasDocumentKind), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasDocumentKind`](../type-aliases/CanvasDocumentKind), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:653](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L653) |
+| &lt;a id="property-id"&gt;&lt;/a&gt; `id` | `ZodString` | - | [ir/validators.ts:654](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L654) |
+| &lt;a id="property-metadata"&gt;&lt;/a&gt; `metadata` | `ZodType`\&lt;[`CanvasIRMetadata`](../interfaces/CanvasIRMetadata), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasIRMetadata`](../interfaces/CanvasIRMetadata), `unknown`\&gt;\&gt; | `CanvasIRMetadataSchema` | [ir/validators.ts:657](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L657) |
+| &lt;a id="property-title"&gt;&lt;/a&gt; `title` | `ZodString` | - | [ir/validators.ts:655](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L655) |
+| &lt;a id="property-version"&gt;&lt;/a&gt; `version` | `ZodLiteral`\&lt;`"2"`\&gt; | - | [ir/validators.ts:652](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L652) |

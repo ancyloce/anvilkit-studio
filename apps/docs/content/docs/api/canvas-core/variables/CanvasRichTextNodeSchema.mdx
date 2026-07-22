@@ -33,6 +33,7 @@ const CanvasRichTextNodeSchema: ZodObject<{
         fontWeight: ZodOptional<ZodString>;
         italic: ZodOptional<ZodBoolean>;
         letterSpacing: ZodOptional<ZodNumber>;
+        strikethrough: ZodOptional<ZodBoolean>;
         text: ZodString;
         textTransform: ZodOptional<ZodEnum<{
            capitalize: ...;
@@ -43,8 +44,17 @@ const CanvasRichTextNodeSchema: ZodObject<{
         underline: ZodOptional<ZodBoolean>;
      }, $loose>>;
   }, $loose>>;
+  sizing: ZodOptional<ZodEnum<{
+     auto-width: "auto-width";
+     fixed: "fixed";
+  }>>;
   transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
   type: ZodLiteral<"rich-text">;
+  verticalAlign: ZodOptional<ZodEnum<{
+     bottom: "bottom";
+     middle: "middle";
+     top: "top";
+  }>>;
   visible: ZodOptional<ZodBoolean>;
   width: ZodNumber;
   wrap: ZodOptional<ZodEnum<{
@@ -52,8 +62,8 @@ const CanvasRichTextNodeSchema: ZodObject<{
      none: "none";
      word: "word";
   }>>;
-  zIndex: ZodNumber;
+  zIndex: ZodOptional<ZodNumber>;
 }, $loose>;
 ```
 
-Defined in: [ir/validators.ts:358](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L358)
+Defined in: [ir/validators.ts:459](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L459)

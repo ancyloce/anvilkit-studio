@@ -1,0 +1,31 @@
+---
+title: "DocumentStores"
+description: "@anvilkit/canvas-editor · DocumentStores"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/stores/replace-document.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L24)
+
+Every store `replaceDocumentSnapshot` (P0-9) coordinates. A subset of
+`CanvasStudioContextValue` — deliberately typed against the individual
+store APIs (not the context) so this module has no React/context
+dependency and can be reused from `collab/binding.ts`, which only ever
+holds bare store handles.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="aijobstore"&gt;&lt;/a&gt; `aiJobStore` | `readonly` | [`AiJobStoreApi`](../../internal/type-aliases/AiJobStoreApi) | - | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L36) |
+| &lt;a id="cropstore"&gt;&lt;/a&gt; `cropStore` | `readonly` | [`CropStoreApi`](../../internal/type-aliases/CropStoreApi) | - | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L32) |
+| &lt;a id="draftstore"&gt;&lt;/a&gt; `draftStore` | `readonly` | [`DraftStoreApi`](../../internal/type-aliases/DraftStoreApi) | - | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L30) |
+| &lt;a id="editingstore"&gt;&lt;/a&gt; `editingStore` | `readonly` | [`EditingStoreApi`](../../internal/type-aliases/EditingStoreApi) | - | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L31) |
+| &lt;a id="fieldpreviewstore"&gt;&lt;/a&gt; `fieldPreviewStore?` | `readonly` | `FieldPreviewStoreApi` | Optional so existing hand-built store bags keep compiling (B-12). | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L38) |
+| &lt;a id="focusstore"&gt;&lt;/a&gt; `focusStore` | `readonly` | `CanvasFocusStoreApi` | - | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L29) |
+| &lt;a id="guidesstore"&gt;&lt;/a&gt; `guidesStore` | `readonly` | [`GuidesStoreApi`](../../internal/type-aliases/GuidesStoreApi) | - | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L35) |
+| &lt;a id="historystore"&gt;&lt;/a&gt; `historyStore` | `readonly` | [`HistoryStoreApi`](../../internal/type-aliases/HistoryStoreApi) | - | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L26) |
+| &lt;a id="pagesstore"&gt;&lt;/a&gt; `pagesStore` | `readonly` | [`PagesStoreApi`](../../internal/type-aliases/PagesStoreApi) | - | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L27) |
+| &lt;a id="patheditstore"&gt;&lt;/a&gt; `pathEditStore` | `readonly` | [`PathEditStoreApi`](../../internal/type-aliases/PathEditStoreApi) | - | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L34) |
+| &lt;a id="penstore"&gt;&lt;/a&gt; `penStore` | `readonly` | [`PenStoreApi`](../../internal/type-aliases/PenStoreApi) | - | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L33) |
+| &lt;a id="scenestore"&gt;&lt;/a&gt; `sceneStore` | `readonly` | [`SceneStoreApi`](#) | - | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L25) |
+| &lt;a id="selectionstore"&gt;&lt;/a&gt; `selectionStore` | `readonly` | [`SelectionStoreApi`](../../internal/type-aliases/SelectionStoreApi) | - | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L28) |
+| &lt;a id="uploadstore"&gt;&lt;/a&gt; `uploadStore?` | `readonly` | `UploadStoreApi` | Optional for the same compatibility reason (FR-091): when present, a document replacement aborts every in-flight upload and clears the task list, so an upload started against the OLD document can never insert nodes into the new one. | [packages/capabilities/canvas/editor/src/stores/replace-document.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/replace-document.ts#L45) |

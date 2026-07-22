@@ -10,13 +10,18 @@ function applyCommands(
    options?): TransactionApplyResult;
 ```
 
-Defined in: [commands/transaction.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L45)
+Defined in: [commands/transaction.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L50)
 
-Apply many commands as one reversible transaction. Wraps them in a `batch`
-command (so application is all-or-nothing and the inverse is a single
-composite) and additionally derives the granular change records. The caller's
-`ir` is never mutated; a throw from any sub-command propagates without partial
-application.
+Apply many commands as one reversible transaction — all-or-nothing, in
+order, in a single fold over a local `working` IR. The caller's `ir` is
+never mutated; a throw from any sub-command propagates before `working`/the
+inverses/records are used, so nothing partial escapes.
+
+Each command's change record is derived from `working` as it stood
+immediately BEFORE that command applied (not the transaction's original
+`ir`) — required for commands whose record resolution depends on IR state a
+prior command in the same transaction just created (e.g. `node.move`
+following the `node.create` that made the node exist).
 
 ## Parameters
 

@@ -1,0 +1,22 @@
+---
+title: "CanvasRecoverySnapshot"
+description: "@anvilkit/canvas-editor · CanvasRecoverySnapshot"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/recovery.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/recovery.ts#L12)
+
+## File
+
+FR-164 local recovery (C-10). The editor owns WHEN snapshots are
+written (debounced after each commit) and cleared (successful save /
+discard); the adapter owns WHERE they live. A ready-made IndexedDB
+adapter is provided for the common host.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="documentid"&gt;&lt;/a&gt; `documentId` | `string` | - | [packages/capabilities/canvas/editor/src/persistence/recovery.ts:13](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/recovery.ts#L13) |
+| &lt;a id="ir"&gt;&lt;/a&gt; `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) | - | [packages/capabilities/canvas/editor/src/persistence/recovery.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/recovery.ts#L14) |
+| &lt;a id="revision"&gt;&lt;/a&gt; `revision` | `number` | History state id at snapshot time. | [packages/capabilities/canvas/editor/src/persistence/recovery.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/recovery.ts#L16) |
+| &lt;a id="savedat"&gt;&lt;/a&gt; `savedAt` | `string` | ISO timestamp of the write. | [packages/capabilities/canvas/editor/src/persistence/recovery.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/recovery.ts#L18) |

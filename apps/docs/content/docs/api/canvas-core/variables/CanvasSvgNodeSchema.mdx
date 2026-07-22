@@ -5,6 +5,7 @@ description: "@anvilkit/canvas-core · CanvasSvgNodeSchema"
 
 ```ts
 const CanvasSvgNodeSchema: ZodObject<{
+  alt: ZodOptional<ZodString>;
   assetId: ZodString;
   blendMode: ZodOptional<ZodString>;
   bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
@@ -16,11 +17,11 @@ const CanvasSvgNodeSchema: ZodObject<{
   transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
   type: ZodLiteral<"svg">;
   visible: ZodOptional<ZodBoolean>;
-  zIndex: ZodNumber;
+  zIndex: ZodOptional<ZodNumber>;
 }, $loose>;
 ```
 
-Defined in: [ir/validators.ts:385](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L385)
+Defined in: [ir/validators.ts:491](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L491)
 
 FR-016: deliberately holds ONLY `assetId` — there is no `markup`/`content`
 field for inline SVG text to occupy, so raw markup has nowhere to go even

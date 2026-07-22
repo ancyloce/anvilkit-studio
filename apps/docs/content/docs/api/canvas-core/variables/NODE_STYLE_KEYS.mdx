@@ -1,0 +1,15 @@
+---
+title: "NODE_STYLE_KEYS"
+description: "@anvilkit/canvas-core · NODE_STYLE_KEYS"
+---
+
+```ts
+const NODE_STYLE_KEYS: Record<CanvasNodeKind, readonly CanvasNodeStyleKey[]>;
+```
+
+Defined in: [commands/apply-style.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L69)
+
+The FR-121 compatible-property matrix: which style keys each node kind can
+receive. Kinds absent from a key's list IGNORE that key on paste (reported,
+never blocking). Rich text is deliberately base-only — its typography and
+fills live on spans, out of scope for node-level style transfer.

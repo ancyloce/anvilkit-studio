@@ -1,0 +1,28 @@
+---
+title: "CanvasShortcutCombo"
+description: "@anvilkit/canvas-editor · CanvasShortcutCombo"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L18)
+
+## File
+
+Workspace shortcut registry (A-04, PRD 0012 FR-040/§7.5).
+
+OWNERSHIP DECISION (PRD 0012 v2): keyboard shortcuts belong to
+`CanvasWorkspace` — installed by default with the shell, disabled wholesale
+via `shortcuts={false}`, extended via host bindings. Headless
+`<CanvasStudio>` embeds keep their existing contract: no global keymap,
+only the stage-scoped editing keys. The registry listener sits on the
+WORKSPACE ROOT element (never `window`) and ignores events a lower layer
+(e.g. the stage-scoped keyboard) already handled via `preventDefault`.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="alt"&gt;&lt;/a&gt; `alt?` | `boolean` | - | [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L30) |
+| &lt;a id="code"&gt;&lt;/a&gt; `code?` | `string` | When set, match `KeyboardEvent.code` instead of `key` — required for Shift+digit combos, whose `key` is layout-dependent ("!" on US for Shift+1) while `code` stays "Digit1". | [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L26) |
+| &lt;a id="ctrlormeta"&gt;&lt;/a&gt; `ctrlOrMeta?` | `boolean` | Requires Ctrl (Windows/Linux) or Cmd (macOS). | [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L28) |
+| &lt;a id="key"&gt;&lt;/a&gt; `key` | `string` | `KeyboardEvent.key`, compared case-insensitively for letters. | [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L20) |
+| &lt;a id="shift"&gt;&lt;/a&gt; `shift?` | `boolean` | - | [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L29) |

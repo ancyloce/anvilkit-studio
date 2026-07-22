@@ -1,0 +1,20 @@
+---
+title: "CANVAS_CLIPBOARD_VERSION"
+description: "@anvilkit/canvas-core · CANVAS_CLIPBOARD_VERSION"
+---
+
+```ts
+const CANVAS_CLIPBOARD_VERSION: 1 = 1;
+```
+
+Defined in: [clipboard/payload.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L21)
+
+## File
+
+Clipboard payload schema + validation (A-03, PRD 0012 §9.2).
+
+Core owns the DATA contract for copy/paste — the payload shape, its
+validation (schema, version, depth, node-count, byte-size caps), and the
+paste-side materialization (fresh ids via `regenerateNodeIds`, asset-ref
+collision resolution). Clipboard BEHAVIOR (system clipboard access,
+fallback store, selection updates) stays in the editor per §20.

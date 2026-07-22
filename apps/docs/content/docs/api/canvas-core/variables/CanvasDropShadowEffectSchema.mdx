@@ -1,0 +1,18 @@
+---
+title: "CanvasDropShadowEffectSchema"
+description: "@anvilkit/canvas-core · CanvasDropShadowEffectSchema"
+---
+
+```ts
+const CanvasDropShadowEffectSchema: ZodObject<{
+  blur: ZodNumber;
+  color: ZodString;
+  offsetX: ZodNumber;
+  offsetY: ZodNumber;
+  opacity: ZodOptional<ZodNumber>;
+  spread: ZodOptional<ZodNumber>;
+  type: ZodLiteral<"drop-shadow">;
+}, $loose>;
+```
+
+Defined in: [ir/validators.ts:290](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L290)

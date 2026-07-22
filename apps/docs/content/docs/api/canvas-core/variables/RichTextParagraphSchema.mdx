@@ -18,6 +18,7 @@ const RichTextParagraphSchema: ZodObject<{
      fontWeight: ZodOptional<ZodString>;
      italic: ZodOptional<ZodBoolean>;
      letterSpacing: ZodOptional<ZodNumber>;
+     strikethrough: ZodOptional<ZodBoolean>;
      text: ZodString;
      textTransform: ZodOptional<ZodEnum<{
         capitalize: "capitalize";
@@ -30,4 +31,4 @@ const RichTextParagraphSchema: ZodObject<{
 }, $loose>;
 ```
 
-Defined in: [ir/validators.ts:351](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L351)
+Defined in: [ir/validators.ts:452](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L452)

@@ -1,0 +1,25 @@
+---
+title: "applyColorMatrixToPixels"
+description: "@anvilkit/canvas-core · applyColorMatrixToPixels"
+---
+
+```ts
+function applyColorMatrixToPixels(data, matrix): void;
+```
+
+Defined in: [ir/image-adjustments.ts:207](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/image-adjustments.ts#L207)
+
+Apply a 3x4 color matrix (0..1 space) to interleaved RGBA pixel bytes in
+place — the editor's Konva filter delegates here so the canvas applies the
+exact matrix the SVG export embeds. Alpha is untouched.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `data` | `Uint8ClampedArray` |
+| `matrix` | readonly `number`[] |
+
+## Returns
+
+`void`

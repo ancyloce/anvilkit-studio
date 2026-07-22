@@ -1,0 +1,36 @@
+---
+title: "CanvasShortcutBinding"
+description: "@anvilkit/canvas-editor · CanvasShortcutBinding"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L38)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="category"&gt;&lt;/a&gt; `category` | \| `string` & \{ \} \| `"view"` \| `"tools"` \| `"edit"` | Grouping bucket for the shortcut-help dialog (FR-042). | [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L46) |
+| &lt;a id="combos"&gt;&lt;/a&gt; `combos` | readonly [`CanvasShortcutCombo`](CanvasShortcutCombo.md)[] | - | [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L41) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | Stable action id (also the dedupe key when hosts override). | [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L40) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label` | `string` | - | [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L44) |
+| &lt;a id="labelkey"&gt;&lt;/a&gt; `labelKey` | `string` | `canvas.shortcut.*` message key + inline English fallback (FR-042). | [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L43) |
+
+## Methods
+
+### run()
+
+```ts
+run(ctx): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/workspace/shortcuts/shortcut-registry.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/shortcuts/shortcut-registry.ts#L47)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`CanvasShortcutRunContext`](CanvasShortcutRunContext.md) |
+
+#### Returns
+
+`void`

@@ -14,8 +14,11 @@ description: "@anvilkit/canvas-editor · index"
 | [AiJobState](interfaces/AiJobState.md) | - |
 | [CanvasNodeRendererProps](interfaces/CanvasNodeRendererProps.md) | - |
 | [CanvasStageProps](interfaces/CanvasStageProps.md) | - |
+| [CanvasToaster](interfaces/CanvasToaster.md) | Minimal toast seam the ACTION LAYER can depend on (A-09). Lives in `context/` (interaction-core) with no UI-primitive dependency so `actions/` can fire feedback without importing workspace chrome. The workspace shell provides a real implementation (`CanvasToastHost`, backed by `@anvilkit/ui/toast`); headless `<CanvasStudio>` embeds have none and fall back to a silent no-op — feedback is a shell concern. |
+| [CanvasToastInput](interfaces/CanvasToastInput.md) | - |
 | [CreateHistoryStoreOptions](interfaces/CreateHistoryStoreOptions.md) | - |
 | [CreatePagesStoreOptions](interfaces/CreatePagesStoreOptions.md) | - |
+| [CreateRulerGuideStoreOptions](interfaces/CreateRulerGuideStoreOptions.md) | - |
 | [CreateToolStoreOptions](interfaces/CreateToolStoreOptions.md) | - |
 | [CreateViewportStoreOptions](interfaces/CreateViewportStoreOptions.md) | - |
 | [CropRect](interfaces/CropRect.md) | Crop rectangle in the source image's natural-pixel space. |
@@ -31,9 +34,12 @@ description: "@anvilkit/canvas-editor · index"
 | [PenAnchor](interfaces/PenAnchor.md) | One pen-tool anchor in world coordinates. `(hx, hy)` is the *outgoing* bezier control handle (absolute world point); the incoming handle is its mirror about `(x, y)`. When the handle equals the anchor the adjoining segments are straight lines. |
 | [PenBounds](interfaces/PenBounds.md) | - |
 | [PenCommitContext](interfaces/PenCommitContext.md) | Minimal context shape shared by `ToolContext` (pen tool) and `CanvasStudioContextValue` (keyboard overlay). `penStore` is optional so the structurally-wider studio context (where it is optional) also fits. |
+| [PendingGuide](interfaces/PendingGuide.md) | A drag-from-ruler guide preview, in page coordinates of the active page. |
 | [PenState](interfaces/PenState.md) | Multi-click state for the in-progress pen path (I3-2). Unlike `DraftStore` this persists across pointerup (anchors accumulate click-by-click); it is reset on commit, cancel, and tool change. The single `node.create` fires only when the path is closed/finalized (MVP-7). |
 | [Pt](interfaces/Pt.md) | - |
+| [RegistryToolDescriptor](interfaces/RegistryToolDescriptor.md) | A [ToolDescriptor](interfaces/ToolDescriptor.md) derived from the EFFECTIVE tool registry (FR-010): built-ins keep their rail metadata; extension-registered tools carry the presentation metadata declared on their `Tool` (or fallbacks). `labelKey` is optional here — an extension tool may register a plain `label` only. |
 | [RenderLayerProps](interfaces/RenderLayerProps.md) | - |
+| [RulerGuideState](interfaces/RulerGuideState.md) | Workspace-chrome state for rulers and guides (C-02, FR-110/111/113). Persistent guide POSITIONS live in the document (`page.layoutAids.guides`, committed via the action layer); everything here is UI-only — visibility toggles, the lock switch, and the transient drag-from-ruler preview — and must never enter Canvas IR. |
 | [SelectionState](interfaces/SelectionState.md) | - |
 | [SmartGuide](interfaces/SmartGuide.md) | - |
 | [SnapInput](interfaces/SnapInput.md) | - |
@@ -54,7 +60,11 @@ description: "@anvilkit/canvas-editor · index"
 | ------ | ------ |
 | [AiJobStoreApi](type-aliases/AiJobStoreApi.md) | - |
 | [AiToolIntent](type-aliases/AiToolIntent.md) | - |
+| [AnyCanvasCommand](type-aliases/AnyCanvasCommand.md) | A command dispatched through the commit pipeline (P0-7): a built-in `CanvasCommand`, or a custom command type a host-injected `CanvasRuntime` knows how to apply. Widened from the closed `CanvasCommand` union so a host with a runtime can call `commit`/`commitBatch`/`commitCoalesced` with a custom command and no cast; dispatch itself is delegated to `CreateHistoryStoreOptions.apply` (defaults to core's `applyCommand`, which only recognizes the built-in union — an unrecognized custom command falls through its switch exactly as before this option existed). |
+| [CanvasGuideAxis](type-aliases/CanvasGuideAxis.md) | Guide orientation, matching `CanvasPageGuides` in core (§9.3): a `horizontal` guide is a horizontal LINE at a y-position; a `vertical` guide is a vertical line at an x-position. |
+| [CanvasToastType](type-aliases/CanvasToastType.md) | - |
 | [ChromeIcon](type-aliases/ChromeIcon.md) | A lucide icon component (props-compatible with `<svg>`). |
+| [CommandApplyFn](type-aliases/CommandApplyFn.md) | The shape both core's `applyCommand` and a `CanvasRuntime.apply` satisfy. |
 | [CropDragMode](type-aliases/CropDragMode.md) | Which crop handle is being dragged. `move` translates the whole rect. |
 | [CropStoreApi](type-aliases/CropStoreApi.md) | - |
 | [DraftStoreApi](type-aliases/DraftStoreApi.md) | - |
@@ -67,9 +77,11 @@ description: "@anvilkit/canvas-editor · index"
 | [PathEditStoreApi](type-aliases/PathEditStoreApi.md) | - |
 | [PathSeg](type-aliases/PathSeg.md) | - |
 | [PenStoreApi](type-aliases/PenStoreApi.md) | - |
-| [RenderLayerName](type-aliases/RenderLayerName.md) | - |
+| [RenderLayerName](type-aliases/RenderLayerName.md) | `background`/`objects` are only used by the detached rasterize/export stages (2 physical layers there, well under Konva's recommended max). The live `<CanvasStudio>` stage uses `content` (background + objects), `drag`, `overlay` (guides + selection chrome), and `presence` — 4 physical layers grouped via named `<Group>`s so the stage stays inside Konva's recommended 3-5 layer range instead of the 6 separate layers this used to mount. |
+| [RulerGuideStoreApi](type-aliases/RulerGuideStoreApi.md) | - |
 | [SelectionStoreApi](type-aliases/SelectionStoreApi.md) | - |
 | [SnapAxis](type-aliases/SnapAxis.md) | - |
+| [ToolIcon](type-aliases/ToolIcon.md) | Icon component for a tool's chrome presentation (FR-010). Structurally identical to `chrome/icons.ts`'s `ChromeIcon` — re-declared here because `tools/` sits BELOW `chrome/` in `check-layering.mjs` and may not import from it. Any lucide icon (or props-compatible `<svg>` component) fits. |
 | [ToolRegistry](type-aliases/ToolRegistry.md) | - |
 | [ToolStoreApi](type-aliases/ToolStoreApi.md) | - |
 | [ViewportStoreApi](type-aliases/ViewportStoreApi.md) | - |
@@ -81,6 +93,7 @@ description: "@anvilkit/canvas-editor · index"
 | [aiBrushTool](variables/aiBrushTool.md) | I1-7 `ai-brush` tool (PRD FR-009: "Hover-select → contextual AI action menu"). Click-selects the image node under the pointer and hands it to the host as an `ai-brush-select` intent so the host can surface contextual AI actions (variation / inpaint / bg-remove) for it. Only image nodes are valid AI-action targets; clicks on other nodes or empty stage are no-ops. Commits nothing to the IR/history — intent is not a command. |
 | [aiImageTool](variables/aiImageTool.md) | I1-7 `ai-image` tool (PRD FR-009: "Drag → marquee + prompt input → text-to-image"). Drags a marquee region and, on pointerup, hands the bounds to the host as an `ai-image-marquee` intent — the host's AI panel supplies the prompt input and runs the generation. The tool itself commits nothing to the IR/history (intent is not a command), mirroring how the selection marquee never touches `historyStore`. Reuses the `"marquee"` draft kind so `<DraftRenderer>` shows the region preview for free. |
 | [CanvasAssetsContext](variables/CanvasAssetsContext.md) | - |
+| [CanvasToastContext](variables/CanvasToastContext.md) | - |
 | [ChromeIcons](variables/ChromeIcons.md) | Action icons shared by the stage bar, floating toolbar, and zoom control. |
 | [DEFAULT\_GRID\_SIZE](variables/DEFAULT_GRID_SIZE.md) | - |
 | [DEFAULT\_HISTORY\_LIMIT](variables/DEFAULT_HISTORY_LIMIT.md) | - |
@@ -90,9 +103,11 @@ description: "@anvilkit/canvas-editor · index"
 | [DRAFT\_DASH](variables/DRAFT_DASH.md) | - |
 | [DRAFT\_STROKE\_COLOR](variables/DRAFT_STROKE_COLOR.md) | - |
 | [ellipseTool](variables/ellipseTool.md) | - |
+| [FALLBACK\_TOOL\_ICON](variables/FALLBACK_TOOL_ICON.md) | Fallback icon for extension tools that register no `icon` of their own (FR-010): a generic "plug-in" glyph, never used by a built-in tool. |
 | [handTool](variables/handTool.md) | MVP-7: hand tool NEVER commits — pan is view state, lives in viewportStore. The MVP-7 single-command assertion test's negative case (active tool = hand) expects history.past.length === 0 after a full down→move*→up sequence. |
-| [imageTool](variables/imageTool.md) | MVP-7: single click → host's pickAsset() resolves → exactly one undo step commits. pointermove/pointerup are not implemented (no drag interaction), so the MVP-7 down→move*→up sequence yields ≤ 1 undoable action. |
+| [imageTool](variables/imageTool.md) | MVP-7: single click → host's pickAsset()/pickAssets() resolves → exactly one undo step commits. pointermove/pointerup are not implemented (no drag interaction), so the MVP-7 down→move*→up sequence yields ≤ 1 undoable action. |
 | [lineTool](variables/lineTool.md) | - |
+| [NOOP\_CANVAS\_TOASTER](variables/NOOP_CANVAS_TOASTER.md) | - |
 | [penTool](variables/penTool.md) | Pen tool (I3-2). Click to place anchors; drag after a click to pull out a symmetric bezier handle. Clicking within [CLOSE\_THRESHOLD](#) of the first anchor (with ≥2 anchors) closes the path and commits. Enter/Escape (handled by the `PenToolOverlay`) finalize/cancel. Per MVP-7 the only history commit is the final `node.create` — clicks/drags mutate the transient pen store. |
 | [rectTool](variables/rectTool.md) | MVP-7 rule: commit fires only on pointerup. pointerdown/pointermove update the transient draftStore — never historyStore. |
 | [selectTool](variables/selectTool.md) | - |
@@ -100,7 +115,7 @@ description: "@anvilkit/canvas-editor · index"
 | [SMART\_GUIDE\_DASH](variables/SMART_GUIDE_DASH.md) | - |
 | [textTool](variables/textTool.md) | MVP-7: single click commits exactly one node.create on pointerdown (no drag, no pointermove side effects). Editor overlay opens on the same event — see `<TextEditorOverlay>`. pointermove/pointerup are no-ops so the MVP-7 single-command assertion holds for the full down→move*→up sequence. |
 | [TOOL\_LABELS](variables/TOOL_LABELS.md) | Human-readable names for the PRD FR-009 tools, used for screen-reader announcements (and reusable by hosts that build a tool palette — the editor itself ships no toolbar; tool selection is host-driven). Keep in sync with [ToolId](../index/type-aliases/ToolId). |
-| [TOOL\_RAIL\_ITEMS](variables/TOOL_RAIL_ITEMS.md) | Default tool-rail order. Drawing tools first, then the AI tools. Hosts can pass a narrower list to `<ToolRail tools=…>` (e.g. to hide pen/AI). |
+| [TOOL\_RAIL\_ITEMS](variables/TOOL_RAIL_ITEMS.md) | Default tool order. Drawing tools first, then the AI tools. Consumed today by the Elements dock panel; the floating tool strip (PRD 0012 FR-010, Phase 1b) will reuse this same list. Hosts can consume a narrower slice (e.g. to hide pen/AI). NOTE: no `<ToolRail>` component exists (M0-08 doc fix — an earlier draft referenced one that was never built). |
 
 ## Functions
 
@@ -116,6 +131,7 @@ description: "@anvilkit/canvas-editor · index"
 | [canUngroupSelection](functions/canUngroupSelection.md) | True when at least one selected node is a non-root group that can be dissolved. |
 | [CanvasNodeRenderer](functions/CanvasNodeRenderer.md) | - |
 | [CanvasStage](functions/CanvasStage.md) | - |
+| [CanvasToastHost](functions/CanvasToastHost.md) | Workspace toast host (A-09): mounts the `@anvilkit/ui/toast` primitive (Base UI manager + viewport) and provides the editor's [CanvasToaster](interfaces/CanvasToaster.md) seam so the action layer and panels can fire feedback. One manager per workspace instance — multiple editors on a page don't share stacks. The full FR-170 surface (queueing policies, loading toasts) lands in B-05. |
 | [CanvasTransformer](functions/CanvasTransformer.md) | - |
 | [commitCrop](functions/commitCrop.md) | Commit the in-progress crop draft as a single `node.update` and close the editor. A zero-area draft is discarded (treated as a cancel) so an empty drag never writes a degenerate crop. |
 | [commitPathD](functions/commitPathD.md) | Commit a new `d` for a path node (one `node.update`). No-op for empty `d`. |
@@ -131,17 +147,18 @@ description: "@anvilkit/canvas-editor · index"
 | [createPagesStore](functions/createPagesStore.md) | - |
 | [createPathEditStore](functions/createPathEditStore.md) | - |
 | [createPenStore](functions/createPenStore.md) | - |
+| [createRulerGuideStore](functions/createRulerGuideStore.md) | - |
 | [createSelectionStore](functions/createSelectionStore.md) | - |
 | [createToolStore](functions/createToolStore.md) | - |
 | [createViewportStore](functions/createViewportStore.md) | - |
 | [CropEditorOverlay](functions/CropEditorOverlay.md) | Interactive crop editor (I3-2). Renders an HTML overlay (like [TextEditorOverlay](functions/TextEditorOverlay.md)) over the cropping image with draggable corner handles + a movable body; Enter / ✓ commits one `node.update`, Escape / ✕ cancels. Crop math runs through the pure [computeCropDrag](functions/computeCropDrag.md); only the commit touches `historyStore` (MVP-7). |
-| [DesignBackground](functions/DesignBackground.md) | - |
+| [DesignBackground](functions/DesignBackground.md) | Page-background fill for the LIVE stage (M0-04). Draws the same page-sized background `<Rect>` the thumbnail rasterizer draws, so the canvas and the page navigator agree — this replaced a null stub that made `page.background` invisible on the live stage while thumbnails showed it. Fill resolution goes through pageBackgroundFill (FR-063): solid values render as-is; reserved gradient/image kinds render the neutral fallback instead of leaking a raw non-color string into Konva. |
 | [DraftRenderer](functions/DraftRenderer.md) | - |
 | [endPathEdit](functions/endPathEdit.md) | Leave path point-editing mode. |
 | [getNodeWorldRect](functions/getNodeWorldRect.md) | World-space rect for a node — the rotation/scale-aware axis-aligned bounding box from `@anvilkit/canvas-core` (`nodeWorldAabb`). For an unrotated, unscaled node this equals `{x, y, width, height}`; rotated/scaled nodes now report their true visual bounds (the earlier approximation ignored rotation/scale). |
 | [getOtherNodeRects](functions/getOtherNodeRects.md) | Bounding rects of every direct child of the active page's root, excluding any ids in `excludeIds`. Used as `others` for the snap engine. |
 | [getStagePointer](functions/getStagePointer.md) | Resolve the current pointer position into both screen and world coordinates. Returns null when Konva has no pointer position (e.g. before the first pointer event), so callers must guard. |
-| [Grid](functions/Grid.md) | - |
+| [Grid](functions/Grid.md) | FR-112 grid overlay for the LIVE stage. Renders page-bounded main lines every `gridSize` px and (when `gridSubdivisions > 1`) sub-lines at `gridSize / gridSubdivisions` spacing, in page coordinates — the stage transform applies zoom/pan, and `strokeWidth = 1 / zoom` keeps the lines one screen pixel like `GuideLayoutOverlay`'s guides. Visibility (`gridEnabled`) is INDEPENDENT of snapping (`snapToGridEnabled`) — hiding the grid does not turn grid snap off (see `viewport-store.ts`). |
 | [groupSelection](functions/groupSelection.md) | Wrap the current multi-selection in a new group on the active page and select the new group. No-op (returns `null`) unless [canGroupSelection](functions/canGroupSelection.md) holds. Returns the new group's id. |
 | [movePathControl](functions/movePathControl.md) | Return a new path with the point at `ref` moved to `(x, y)`. |
 | [parsePathD](functions/parsePathD.md) | Parse the absolute `M`/`L`/`C`/`Z` subset emitted by the pen tool (and most simple hand-authored paths) into an editable structure. Returns null for any unsupported command (relative ops, H/V/S/Q/A, …) so callers can fall back to raw-text editing rather than corrupt the path. |
@@ -150,14 +167,70 @@ description: "@anvilkit/canvas-editor · index"
 | [penBounds](functions/penBounds.md) | Axis-aligned bounds of a pen path, including each anchor's point plus its outgoing and (mirrored) incoming control handles so bezier overshoot is enclosed. Returns a zero box for an empty anchor list. |
 | [PenPreview](functions/PenPreview.md) | Live on-stage preview of the in-progress pen path (I3-2): the open-path curve plus a dot at each placed anchor. Rendered in the selection layer; purely visual (`listening={false}`), so it never intercepts pointer events. |
 | [PenToolOverlay](functions/PenToolOverlay.md) | Keyboard finalizer for the pen tool (I3-2). Renders nothing; while the `path` tool is active it listens globally for Enter (finalize an open path) and Escape (cancel). Commit/cancel run through [commitPenPath](functions/commitPenPath.md)/[cancelPenPath](functions/cancelPenPath.md) — the same path the close-on-first-anchor click uses. |
-| [regenerateIds](functions/regenerateIds.md) | Walk a structurally-cloned (JSON-roundtripped) node tree and rewrite every `id` field with a fresh uuid. Recurses into every container's children (group and frame). Exported separately so tests can verify id regeneration in isolation. |
+| [regenerateIds](functions/regenerateIds.md) | Rewrite every `id` in a node tree with a fresh uuid. Thin wrapper over core's shared `regenerateNodeIds` primitive (M0-05) — kept for the existing `internal.ts` export surface. NOTE: unlike the pre-M0-05 version this does not mutate its input; callers must use the returned copy. |
 | [RemoteCursors](functions/RemoteCursors.md) | - |
 | [RemoteSelections](functions/RemoteSelections.md) | - |
 | [RenderLayer](functions/RenderLayer.md) | - |
 | [serializeParsedPath](functions/serializeParsedPath.md) | - |
 | [SmartGuideOverlay](functions/SmartGuideOverlay.md) | - |
-| [snapPoint](functions/snapPoint.md) | Snap a single point (used by draw tools — width/height = 0 collapses every candidate edge to the same coord). Honors viewportStore's grid + object-snap toggles. Pass `excludeIds` to ignore specific nodes (e.g. the node being dragged in select mode). |
+| [snapPoint](functions/snapPoint.md) | Snap a single point (used by draw tools — width/height = 0 collapses every candidate edge to the same coord). Honors viewportStore's snap-to-grid + object-snap toggles and its snap threshold; grid snap is INDEPENDENT of grid visibility (`gridEnabled`) per FR-112. Pass `excludeIds` to ignore specific nodes (e.g. the node being dragged in select mode). |
 | [TextEditorOverlay](functions/TextEditorOverlay.md) | - |
+| [toolDescriptorsFromRegistry](functions/toolDescriptorsFromRegistry.md) | Merge [TOOL\_RAIL\_ITEMS](variables/TOOL_RAIL_ITEMS.md) (built-ins, in rail order) with the extension-registered tools of the effective registry (registry order) into ONE descriptor list — the single source for the tool strip, its "More tools" overflow, and the Elements panel. `registry` is normally `useCanvasStudio().toolRegistry`; `undefined` (e.g. a partial test context) yields the built-ins alone. A registry override of a BUILT-IN id keeps the rail's own metadata — overriding behavior must not reshuffle the chrome. |
 | [ToolInteractionLayer](functions/ToolInteractionLayer.md) | Bridges Konva.Stage pointer events to the active tool from `toolStore`. Renders no DOM — pure side-effect component. Mounts as a sibling of `<CanvasStage>` inside the CanvasStudioContext so unmount order detaches listeners before `<CanvasStage>` calls `stage.destroy()`. |
 | [ungroupSelection](functions/ungroupSelection.md) | Dissolve every selected (non-root) group, lifting its children into the parent, then select the lifted children. Returns the lifted child ids. Multiple groups dissolve as ONE undo entry (a single `commitBatch`); a lone group stays a plain commit. Commands are collected from the pre-gesture IR — the selected groups are distinct, so each `node.ungroup` resolves its group by id regardless of how earlier ungroups in the batch reshaped the tree. |
 | [useCanvasAsset](functions/useCanvasAsset.md) | - |
+| [useCanvasToaster](functions/useCanvasToaster.md) | Null-tolerant: resolves to the no-op toaster outside a toast host. |
+
+## References
+
+### CanvasDistributeAxis
+
+Re-exports [CanvasDistributeAxis](../index/type-aliases/CanvasDistributeAxis)
+
+***
+
+### CanvasEditorActions
+
+Re-exports [CanvasEditorActions](../index/interfaces/CanvasEditorActions)
+
+***
+
+### CanvasEditorActionsDeps
+
+Re-exports [CanvasEditorActionsDeps](../index/interfaces/CanvasEditorActionsDeps)
+
+***
+
+### createCanvasEditorActions
+
+Re-exports [createCanvasEditorActions](../index/functions/createCanvasEditorActions)
+
+***
+
+### DocumentSnapshotSource
+
+Re-exports [DocumentSnapshotSource](../collab/type-aliases/DocumentSnapshotSource)
+
+***
+
+### DocumentStores
+
+Re-exports [DocumentStores](../collab/interfaces/DocumentStores)
+
+***
+
+### replaceDocumentSnapshot
+
+Re-exports [replaceDocumentSnapshot](../collab/functions/replaceDocumentSnapshot)
+
+***
+
+### ReplaceDocumentSnapshotOptions
+
+Re-exports [ReplaceDocumentSnapshotOptions](../collab/interfaces/ReplaceDocumentSnapshotOptions)
+
+***
+
+### useCanvasActions
+
+Re-exports [useCanvasActions](../index/functions/useCanvasActions)

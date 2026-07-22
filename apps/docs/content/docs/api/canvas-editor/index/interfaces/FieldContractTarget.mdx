@@ -1,0 +1,25 @@
+---
+title: "FieldContractTarget"
+description: "@anvilkit/canvas-editor · FieldContractTarget"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/panels/fields.tsx:100](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L100)
+
+§10 field-input contract target (B-12): the node(s) a field edits and the
+`node.update` patch a given value maps to. Multi-selection passes every
+selected node; `buildPatch` runs per node so patches can spread that node's
+own current sub-objects (transform, bounds, crop, …). Plain data — the field
+component wires preview/commit/revert internally.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` |
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="buildpatch"&gt;&lt;/a&gt; `buildPatch` | (`node`, `value`) =&gt; `Record`\&lt;`string`, `unknown`\&gt; | [packages/capabilities/canvas/editor/src/panels/fields.tsx:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L102) |
+| &lt;a id="nodes"&gt;&lt;/a&gt; `nodes` | readonly `CanvasNode`[] | [packages/capabilities/canvas/editor/src/panels/fields.tsx:101](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L101) |

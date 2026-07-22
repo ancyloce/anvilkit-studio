@@ -1,0 +1,14 @@
+---
+title: "MaterializedClipboard"
+description: "@anvilkit/canvas-core · MaterializedClipboard"
+---
+
+Defined in: [clipboard/payload.ts:190](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L190)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="assetstoadd"&gt;&lt;/a&gt; `assetsToAdd` | `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasAssetRef`](CanvasAssetRef.md)\&gt;\&gt; | Asset entries the paste must ADD to the target document (already re-keyed where a collision required it). Same-document pastes and already-present identical assets contribute nothing here. | [clipboard/payload.ts:200](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L200) |
+| &lt;a id="idmap"&gt;&lt;/a&gt; `idMap` | `ReadonlyMap`\&lt;`string`, `string`\&gt; | old node id → new node id, across every pasted subtree. | [clipboard/payload.ts:194](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L194) |
+| &lt;a id="nodes"&gt;&lt;/a&gt; `nodes` | readonly [`CanvasNode`](../type-aliases/CanvasNode)[] | Deep copies of the payload nodes with brand-new ids. | [clipboard/payload.ts:192](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L192) |
