@@ -53,6 +53,9 @@ export function appendComponentToRoot(
 	};
 	snapshot.dispatch({
 		type: "setData",
+		// Puck's store interceptor excludes `setData` from history unless
+		// this flag is set; without it the insert cannot be undone.
+		recordHistory: true,
 		// Single documented boundary cast: `node` is structurally a
 		// ComponentData but Puck's generic `Data` type cannot be
 		// satisfied without the live Config's component prop map.

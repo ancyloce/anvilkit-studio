@@ -68,6 +68,12 @@ describe("appendComponentToRoot", () => {
 		expect(action.data.root).toEqual({ props: {} });
 	});
 
+	it("records history so the insert is undoable (review 0009 finding)", () => {
+		const { snapshot, dispatch } = makeSnapshot();
+		appendComponentToRoot(snapshot, "ImageBlock", { id: "i1" });
+		expect(dispatch.mock.calls[0]?.[0].recordHistory).toBe(true);
+	});
+
 	it("reads the latest snapshot passed in (not a stale clone)", () => {
 		const { snapshot, dispatch } = makeSnapshot({ content: [] });
 		appendComponentToRoot(snapshot, "ImageBlock", { id: "i9" });
