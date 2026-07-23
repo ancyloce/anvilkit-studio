@@ -89,8 +89,8 @@ importers:
         specifier: ^2.31.0
         version: 2.31.0(@types/node@26.1.1)
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -266,8 +266,8 @@ importers:
         specifier: 3.1.18
         version: 3.1.18
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@tanstack/react-router':
         specifier: ^1.170.0
         version: 1.170.16(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -369,8 +369,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/runtime/ui
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       next:
         specifier: ^16.2.9
         version: 16.2.9(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -511,8 +511,8 @@ importers:
         specifier: ^4.3.0
         version: 4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       better-sqlite3:
         specifier: ^12.11.1
         version: 12.11.1
@@ -884,8 +884,8 @@ importers:
         specifier: ^2.31.0
         version: 2.31.0(@types/node@26.1.1)
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -920,8 +920,8 @@ importers:
   packages/extensions/components/src/bento-grid:
     dependencies:
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       lucide-react:
         specifier: ^1.24.0
         version: 1.24.0(react@19.2.7)
@@ -939,8 +939,8 @@ importers:
   packages/extensions/components/src/blog-list:
     dependencies:
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -955,8 +955,8 @@ importers:
   packages/extensions/components/src/button:
     dependencies:
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -977,8 +977,8 @@ importers:
   packages/extensions/components/src/design-block:
     dependencies:
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -993,8 +993,8 @@ importers:
   packages/extensions/components/src/helps:
     dependencies:
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       lucide-react:
         specifier: ^1.24.0
         version: 1.24.0(react@19.2.7)
@@ -1015,8 +1015,8 @@ importers:
   packages/extensions/components/src/hero:
     dependencies:
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -1034,8 +1034,8 @@ importers:
   packages/extensions/components/src/input:
     dependencies:
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -1053,8 +1053,8 @@ importers:
   packages/extensions/components/src/logo-clouds:
     dependencies:
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -1072,8 +1072,8 @@ importers:
   packages/extensions/components/src/navbar:
     dependencies:
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       lucide-react:
         specifier: ^1.24.0
         version: 1.24.0(react@19.2.7)
@@ -1094,8 +1094,8 @@ importers:
   packages/extensions/components/src/pricing-minimal:
     dependencies:
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       lucide-react:
         specifier: ^1.24.0
         version: 1.24.0(react@19.2.7)
@@ -1116,8 +1116,8 @@ importers:
   packages/extensions/components/src/section:
     dependencies:
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -1135,8 +1135,8 @@ importers:
   packages/extensions/components/src/statistics:
     dependencies:
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -1179,8 +1179,8 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -1249,8 +1249,8 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -1325,8 +1325,8 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -1404,8 +1404,8 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -1486,8 +1486,8 @@ importers:
         specifier: ^4.3.0
         version: 4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -1574,8 +1574,8 @@ importers:
         specifier: ^4.3.0
         version: 4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -1644,8 +1644,8 @@ importers:
         specifier: 2.5.3
         version: 2.5.3
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -1714,8 +1714,8 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -1760,8 +1760,8 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -1815,8 +1815,8 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -1864,8 +1864,8 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -1949,8 +1949,8 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2152,8 +2152,8 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2204,8 +2204,8 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2253,8 +2253,8 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2356,8 +2356,8 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2465,8 +2465,8 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
-        version: 0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+        specifier: ^0.22.2
+        version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -4937,8 +4937,8 @@ packages:
     resolution: {integrity: sha512-edgyN2pP07uXiP4tJs0s8KVmU8M8i60YPbbI0/WDeok1mIJHRXz+CgD8I0nelwDkoCh3EWL/G5kGfbuHjsdbvw==}
     engines: {node: '>=18'}
 
-  '@puckeditor/core@0.22.1':
-    resolution: {integrity: sha512-0Tn9h6q1nyu1//LA8FbDxeqqTn4Cqw9ZpWD64S3A9T+FdZ+cMA8wiTBCkAm5xRnRMkBpEL5Sz+UYy0yIU0P8tA==}
+  '@puckeditor/core@0.22.2':
+    resolution: {integrity: sha512-pFflZGoCGkULZtXo2JGReGxizAmJnPnjm1sUE0yCNQUMBfzPId8Oj2mmy5Mthw4DPFCjjXLeWjEvfgnoYgnjqQ==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       react: 19.2.7
@@ -12455,7 +12455,7 @@ snapshots:
     dependencies:
       tinyexec: 1.2.4
 
-  '@puckeditor/core@0.22.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))':
+  '@puckeditor/core@0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))':
     dependencies:
       '@dnd-kit/abstract': 0.4.0
       '@dnd-kit/dom': 0.4.0
@@ -13989,7 +13989,7 @@ snapshots:
       obug: 2.1.3
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      vitest: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@6.4.3(@types/node@26.1.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.0)(yaml@2.9.0))
 
   '@vitest/expect@4.1.10':
     dependencies:
