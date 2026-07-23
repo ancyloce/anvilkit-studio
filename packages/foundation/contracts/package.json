@@ -16,6 +16,16 @@
 				"types": "./dist/cjs/index.d.cts",
 				"default": "./dist/index.cjs"
 			}
+		},
+		"./editor": {
+			"import": {
+				"types": "./dist/editor/index.d.ts",
+				"default": "./dist/editor/index.js"
+			},
+			"require": {
+				"types": "./dist/cjs/editor/index.d.cts",
+				"default": "./dist/editor/index.cjs"
+			}
 		}
 	},
 	"files": [

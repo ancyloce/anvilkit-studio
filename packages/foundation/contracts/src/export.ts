@@ -30,6 +30,7 @@
  */
 
 import type { IRAssetResolver } from "./assets.js";
+import type { EditorExportCapabilities } from "./editor/export-capabilities.js";
 import type { PageIR } from "./ir.js";
 
 /**
@@ -251,4 +252,15 @@ export interface ExportFormatDefinition<
 		options: ExportOptions<Opts>,
 		ctx?: ExportFormatRunContext,
 	) => Promise<ExportResult>;
+	/**
+	 * Optional editor-capability declaration (DD-0019 §23.2;
+	 * DD-DEC-018). A format that omits this field declares **no**
+	 * editor features: any editor feature used by the document blocks
+	 * production export through that format (development preview may
+	 * degrade only with a persistent warning). Export validation reads
+	 * these declarations from the registered formats — there is no
+	 * separate capability registry. Feature declarations require
+	 * certification fixtures before they may be shipped.
+	 */
+	readonly editorCapabilities?: EditorExportCapabilities;
 }
