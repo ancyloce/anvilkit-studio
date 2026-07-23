@@ -7,6 +7,374 @@
 	"flags": {},
 	"children": [
 		{
+			"id": 15,
+			"name": "editor",
+			"variant": "declaration",
+			"kind": 2,
+			"flags": {},
+			"children": [
+				{
+					"id": 28,
+					"name": "ValidateExportCapabilitiesOptions",
+					"variant": "declaration",
+					"kind": 256,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Options for "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "validateExportCapabilities",
+								"target": 23
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"children": [
+						{
+							"id": 29,
+							"name": "mode",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isOptional": true,
+								"isReadonly": true
+							},
+							"comment": {
+								"summary": [
+									{
+										"kind": "code",
+										"text": "`\"production\"`"
+									},
+									{
+										"kind": "text",
+										"text": " (default): unsupported features **block** export.\n"
+									},
+									{
+										"kind": "code",
+										"text": "`\"development\"`"
+									},
+									{
+										"kind": "text",
+										"text": ": preview may degrade — unsupported features\nproduce a "
+									},
+									{
+										"kind": "code",
+										"text": "`\"warning\"`"
+									},
+									{
+										"kind": "text",
+										"text": " result with the same error entries."
+									}
+								]
+							},
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "literal",
+										"value": "production"
+									},
+									{
+										"type": "literal",
+										"value": "development"
+									}
+								]
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"children": [
+								29
+							]
+						}
+					]
+				},
+				{
+					"id": 20,
+					"name": "listUsedAuthoringFeatures",
+					"variant": "declaration",
+					"kind": 64,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 21,
+							"name": "listUsedAuthoringFeatures",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Scan a parsed sidecar for used editor features (DD-0019 §23.2).\n\nCovers the seven sidecar-visible features. "
+									},
+									{
+										"kind": "code",
+										"text": "`richText`"
+									},
+									{
+										"kind": "text",
+										"text": " usage lives\nin component props (the shared Tiptap contract), not the sidecar —\nits detection ships with inline editing (Phase 1B) and until then\nrich text continues to flow through the pre-editor exporter paths."
+									}
+								]
+							},
+							"parameters": [
+								{
+									"id": 22,
+									"name": "authoring",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/contracts",
+											"packagePath": "src/editor/authoring-state.ts",
+											"qualifiedName": "AuthoringStateV1"
+										},
+										"name": "AuthoringStateV1",
+										"package": "@anvilkit/contracts"
+									}
+								}
+							],
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/contracts",
+											"packagePath": "src/editor/export-capabilities.ts",
+											"qualifiedName": "EditorFeatureId"
+										},
+										"name": "EditorFeatureId",
+										"package": "@anvilkit/contracts"
+									}
+								}
+							}
+						}
+					]
+				},
+				{
+					"id": 16,
+					"name": "projectAuthoringToIR",
+					"variant": "declaration",
+					"kind": 64,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 17,
+							"name": "projectAuthoringToIR",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Project sidecar-owned authoring facts into an already-converted\nPageIR (DD-DEC-020): "
+									},
+									{
+										"kind": "code",
+										"text": "`locked`"
+									},
+									{
+										"kind": "text",
+										"text": " → "
+									},
+									{
+										"kind": "code",
+										"text": "`meta.locked`"
+									},
+									{
+										"kind": "text",
+										"text": ", one-way. Everything\nelse in the sidecar is either materialized upstream (styles,\ncomponents — by core/editor via the export pipeline) or carries no\nIR representation. Pure; documents with no locked records return\nthe input IR **by reference** (legacy byte-identity)."
+									}
+								]
+							},
+							"parameters": [
+								{
+									"id": 18,
+									"name": "ir",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/contracts",
+											"packagePath": "src/ir.ts",
+											"qualifiedName": "PageIR"
+										},
+										"name": "PageIR",
+										"package": "@anvilkit/contracts",
+										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+									}
+								},
+								{
+									"id": 19,
+									"name": "authoring",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/contracts",
+											"packagePath": "src/editor/authoring-state.ts",
+											"qualifiedName": "AuthoringStateV1"
+										},
+										"name": "AuthoringStateV1",
+										"package": "@anvilkit/contracts"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/ir.ts",
+									"qualifiedName": "PageIR"
+								},
+								"name": "PageIR",
+								"package": "@anvilkit/contracts",
+								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+							}
+						}
+					]
+				},
+				{
+					"id": 23,
+					"name": "validateExportCapabilities",
+					"variant": "declaration",
+					"kind": 64,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 24,
+							"name": "validateExportCapabilities",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Compare used features against a format's declared capabilities\n(DD-0019 §23.2; DD-DEC-018). A format without a declaration\ndeclares **no** editor features: any used feature blocks\nproduction export through it."
+									}
+								]
+							},
+							"parameters": [
+								{
+									"id": 25,
+									"name": "usedFeatures",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "typeOperator",
+										"operator": "readonly",
+										"target": {
+											"type": "array",
+											"elementType": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/contracts",
+													"packagePath": "src/editor/export-capabilities.ts",
+													"qualifiedName": "EditorFeatureId"
+												},
+												"name": "EditorFeatureId",
+												"package": "@anvilkit/contracts"
+											}
+										}
+									}
+								},
+								{
+									"id": 26,
+									"name": "capabilities",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/contracts",
+													"packagePath": "src/editor/export-capabilities.ts",
+													"qualifiedName": "EditorExportCapabilities"
+												},
+												"name": "EditorExportCapabilities",
+												"package": "@anvilkit/contracts"
+											},
+											{
+												"type": "intrinsic",
+												"name": "undefined"
+											}
+										]
+									}
+								},
+								{
+									"id": 27,
+									"name": "options",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"target": 28,
+										"name": "ValidateExportCapabilitiesOptions",
+										"package": "@anvilkit/ir"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/export-capabilities.ts",
+									"qualifiedName": "ExportValidationResult"
+								},
+								"name": "ExportValidationResult",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Interfaces",
+					"children": [
+						28
+					]
+				},
+				{
+					"title": "Functions",
+					"children": [
+						20,
+						16,
+						23
+					]
+				}
+			]
+		},
+		{
 			"id": 1,
 			"name": "index",
 			"variant": "declaration",
@@ -14,7 +382,7 @@
 			"flags": {},
 			"children": [
 				{
-					"id": 35,
+					"id": 50,
 					"name": "PuckDataToIROptions",
 					"variant": "declaration",
 					"kind": 256,
@@ -29,7 +397,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "puckDataToIR",
-								"target": 43
+								"target": 58
 							},
 							{
 								"kind": "text",
@@ -39,7 +407,7 @@
 					},
 					"children": [
 						{
-							"id": 36,
+							"id": 51,
 							"name": "now",
 							"variant": "declaration",
 							"kind": 1024,
@@ -73,14 +441,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 37,
+									"id": 52,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 38,
+											"id": 53,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
@@ -101,7 +469,7 @@
 							}
 						},
 						{
-							"id": 39,
+							"id": 54,
 							"name": "onWarning",
 							"variant": "declaration",
 							"kind": 1024,
@@ -119,21 +487,21 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 40,
+									"id": 55,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 41,
+											"id": 56,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 42,
+													"id": 57,
 													"name": "warning",
 													"variant": "param",
 													"kind": 32768,
@@ -164,14 +532,14 @@
 						{
 							"title": "Properties",
 							"children": [
-								36,
-								39
+								51,
+								54
 							]
 						}
 					]
 				},
 				{
-					"id": 26,
+					"id": 41,
 					"name": "RemoteCsvDirective",
 					"variant": "declaration",
 					"kind": 256,
@@ -186,7 +554,7 @@
 					},
 					"children": [
 						{
-							"id": 27,
+							"id": 42,
 							"name": "kind",
 							"variant": "declaration",
 							"kind": 1024,
@@ -199,7 +567,7 @@
 							}
 						},
 						{
-							"id": 28,
+							"id": 43,
 							"name": "url",
 							"variant": "declaration",
 							"kind": 1024,
@@ -216,27 +584,27 @@
 						{
 							"title": "Properties",
 							"children": [
-								27,
-								28
+								42,
+								43
 							]
 						}
 					]
 				},
 				{
-					"id": 22,
+					"id": 37,
 					"name": "DataSourceDirective",
 					"variant": "declaration",
 					"kind": 2097152,
 					"flags": {},
 					"type": {
 						"type": "reference",
-						"target": 26,
+						"target": 41,
 						"name": "RemoteCsvDirective",
 						"package": "@anvilkit/ir"
 					}
 				},
 				{
-					"id": 21,
+					"id": 36,
 					"name": "DATA_SOURCE_PROP",
 					"variant": "declaration",
 					"kind": 32,
@@ -253,7 +621,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "DataSourceDirective",
-								"target": 22
+								"target": 37
 							},
 							{
 								"kind": "text",
@@ -268,7 +636,7 @@
 					"defaultValue": "\"_dataSource\""
 				},
 				{
-					"id": 15,
+					"id": 30,
 					"name": "collectAssets",
 					"variant": "declaration",
 					"kind": 64,
@@ -337,7 +705,7 @@
 					},
 					"signatures": [
 						{
-							"id": 16,
+							"id": 31,
 							"name": "collectAssets",
 							"variant": "signature",
 							"kind": 4096,
@@ -379,7 +747,7 @@
 							},
 							"parameters": [
 								{
-									"id": 17,
+									"id": 32,
 									"name": "node",
 									"variant": "param",
 									"kind": 32768,
@@ -409,14 +777,14 @@
 											{
 												"type": "reflection",
 												"declaration": {
-													"id": 18,
+													"id": 33,
 													"name": "__type",
 													"variant": "declaration",
 													"kind": 65536,
 													"flags": {},
 													"children": [
 														{
-															"id": 19,
+															"id": 34,
 															"name": "props",
 															"variant": "declaration",
 															"kind": 1024,
@@ -447,7 +815,7 @@
 														{
 															"title": "Properties",
 															"children": [
-																19
+																34
 															]
 														}
 													]
@@ -457,7 +825,7 @@
 									}
 								},
 								{
-									"id": 20,
+									"id": 35,
 									"name": "opts",
 									"variant": "param",
 									"kind": 32768,
@@ -513,14 +881,14 @@
 					]
 				},
 				{
-					"id": 23,
+					"id": 38,
 					"name": "getDataSourceDirective",
 					"variant": "declaration",
 					"kind": 64,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 24,
+							"id": 39,
 							"name": "getDataSourceDirective",
 							"variant": "signature",
 							"kind": 4096,
@@ -535,7 +903,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "DataSourceDirective",
-										"target": 22
+										"target": 37
 									},
 									{
 										"kind": "text",
@@ -553,7 +921,7 @@
 							},
 							"parameters": [
 								{
-									"id": 25,
+									"id": 40,
 									"name": "props",
 									"variant": "param",
 									"kind": 32768,
@@ -606,7 +974,7 @@
 								"types": [
 									{
 										"type": "reference",
-										"target": 26,
+										"target": 41,
 										"name": "RemoteCsvDirective",
 										"package": "@anvilkit/ir"
 									},
@@ -620,14 +988,14 @@
 					]
 				},
 				{
-					"id": 29,
+					"id": 44,
 					"name": "identifySlots",
 					"variant": "declaration",
 					"kind": 64,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 30,
+							"id": 45,
 							"name": "identifySlots",
 							"variant": "signature",
 							"kind": 4096,
@@ -717,7 +1085,7 @@
 							},
 							"parameters": [
 								{
-									"id": 31,
+									"id": 46,
 									"name": "config",
 									"variant": "param",
 									"kind": 32768,
@@ -781,14 +1149,14 @@
 					]
 				},
 				{
-					"id": 32,
+					"id": 47,
 					"name": "irToPuckData",
 					"variant": "declaration",
 					"kind": 64,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 33,
+							"id": 48,
 							"name": "irToPuckData",
 							"variant": "signature",
 							"kind": 4096,
@@ -803,7 +1171,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "puckDataToIR",
-										"target": 43
+										"target": 58
 									},
 									{
 										"kind": "text",
@@ -906,7 +1274,7 @@
 							},
 							"parameters": [
 								{
-									"id": 34,
+									"id": 49,
 									"name": "ir",
 									"variant": "param",
 									"kind": 32768,
@@ -946,14 +1314,14 @@
 					]
 				},
 				{
-					"id": 43,
+					"id": 58,
 					"name": "puckDataToIR",
 					"variant": "declaration",
 					"kind": 64,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 44,
+							"id": 59,
 							"name": "puckDataToIR",
 							"variant": "signature",
 							"kind": 4096,
@@ -1021,7 +1389,7 @@
 							},
 							"parameters": [
 								{
-									"id": 45,
+									"id": 60,
 									"name": "data",
 									"variant": "param",
 									"kind": 32768,
@@ -1046,7 +1414,7 @@
 									}
 								},
 								{
-									"id": 46,
+									"id": 61,
 									"name": "config",
 									"variant": "param",
 									"kind": 32768,
@@ -1077,7 +1445,7 @@
 												"kind": "inline-tag",
 												"tag": "@link",
 												"text": "identifySlots",
-												"target": 29
+												"target": 44
 											},
 											{
 												"kind": "text",
@@ -1105,7 +1473,7 @@
 									}
 								},
 								{
-									"id": 47,
+									"id": 62,
 									"name": "opts",
 									"variant": "param",
 									"kind": 32768,
@@ -1122,7 +1490,7 @@
 												"kind": "inline-tag",
 												"tag": "@link",
 												"text": "PuckDataToIROptions",
-												"target": 35
+												"target": 50
 											},
 											{
 												"kind": "text",
@@ -1132,7 +1500,7 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 35,
+										"target": 50,
 										"name": "PuckDataToIROptions",
 										"package": "@anvilkit/ir"
 									}
@@ -1157,30 +1525,30 @@
 				{
 					"title": "Interfaces",
 					"children": [
-						35,
-						26
+						50,
+						41
 					]
 				},
 				{
 					"title": "Type Aliases",
 					"children": [
-						22
+						37
 					]
 				},
 				{
 					"title": "Variables",
 					"children": [
-						21
+						36
 					]
 				},
 				{
 					"title": "Functions",
 					"children": [
-						15,
-						23,
-						29,
-						32,
-						43
+						30,
+						38,
+						44,
+						47,
+						58
 					]
 				}
 			]
@@ -1193,28 +1561,28 @@
 			"flags": {},
 			"children": [
 				{
-					"id": 52,
+					"id": 67,
 					"name": "PageIRNodeMetaError",
 					"variant": "declaration",
 					"kind": 128,
 					"flags": {},
 					"children": [
 						{
-							"id": 53,
+							"id": 68,
 							"name": "constructor",
 							"variant": "declaration",
 							"kind": 512,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 54,
+									"id": 69,
 									"name": "PageIRNodeMetaError",
 									"variant": "signature",
 									"kind": 16384,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 55,
+											"id": 70,
 											"name": "issues",
 											"variant": "param",
 											"kind": 32768,
@@ -1226,7 +1594,7 @@
 													"type": "array",
 													"elementType": {
 														"type": "reference",
-														"target": 48,
+														"target": 63,
 														"name": "NodeMetaValidationIssue",
 														"package": "@anvilkit/ir"
 													}
@@ -1236,7 +1604,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 52,
+										"target": 67,
 										"name": "PageIRNodeMetaError",
 										"package": "@anvilkit/ir"
 									},
@@ -1256,7 +1624,7 @@
 							}
 						},
 						{
-							"id": 56,
+							"id": 71,
 							"name": "issues",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1270,7 +1638,7 @@
 									"type": "array",
 									"elementType": {
 										"type": "reference",
-										"target": 48,
+										"target": 63,
 										"name": "NodeMetaValidationIssue",
 										"package": "@anvilkit/ir"
 									}
@@ -1282,13 +1650,13 @@
 						{
 							"title": "Constructors",
 							"children": [
-								53
+								68
 							]
 						},
 						{
 							"title": "Properties",
 							"children": [
-								56
+								71
 							]
 						}
 					],
@@ -1306,7 +1674,7 @@
 					]
 				},
 				{
-					"id": 48,
+					"id": 63,
 					"name": "NodeMetaValidationIssue",
 					"variant": "declaration",
 					"kind": 256,
@@ -1359,7 +1727,7 @@
 					},
 					"children": [
 						{
-							"id": 49,
+							"id": 64,
 							"name": "code",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1372,7 +1740,7 @@
 							}
 						},
 						{
-							"id": 50,
+							"id": 65,
 							"name": "message",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1385,7 +1753,7 @@
 							}
 						},
 						{
-							"id": 51,
+							"id": 66,
 							"name": "path",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1418,9 +1786,9 @@
 						{
 							"title": "Properties",
 							"children": [
-								49,
-								50,
-								51
+								64,
+								65,
+								66
 							]
 						}
 					]
@@ -1813,7 +2181,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "PageIRNodeMetaError",
-										"target": 52
+										"target": 67
 									},
 									{
 										"kind": "text",
@@ -1937,13 +2305,13 @@
 				{
 					"title": "Classes",
 					"children": [
-						52
+						67
 					]
 				},
 				{
 					"title": "Interfaces",
 					"children": [
-						48,
+						63,
 						12
 					]
 				},
@@ -1973,6 +2341,7 @@
 		{
 			"title": "Modules",
 			"children": [
+				15,
 				1,
 				2
 			]
@@ -2052,210 +2421,285 @@
 		},
 		"15": {
 			"packageName": "@anvilkit/ir",
-			"packagePath": "src/collect-assets.ts",
-			"qualifiedName": "collectAssets"
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": ""
 		},
 		"16": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "projectAuthoringToIR"
+		},
+		"17": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "projectAuthoringToIR"
+		},
+		"18": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "ir"
+		},
+		"19": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "authoring"
+		},
+		"20": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "listUsedAuthoringFeatures"
+		},
+		"21": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "listUsedAuthoringFeatures"
+		},
+		"22": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "authoring"
+		},
+		"23": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "validateExportCapabilities"
+		},
+		"24": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "validateExportCapabilities"
+		},
+		"25": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "usedFeatures"
+		},
+		"26": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "capabilities"
+		},
+		"27": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "options"
+		},
+		"28": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "ValidateExportCapabilitiesOptions"
+		},
+		"29": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "ValidateExportCapabilitiesOptions.mode"
+		},
+		"30": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/collect-assets.ts",
 			"qualifiedName": "collectAssets"
 		},
-		"17": {
+		"31": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/collect-assets.ts",
+			"qualifiedName": "collectAssets"
+		},
+		"32": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/collect-assets.ts",
 			"qualifiedName": "node"
 		},
-		"18": {
+		"33": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/collect-assets.ts",
 			"qualifiedName": "__type"
 		},
-		"19": {
+		"34": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/collect-assets.ts",
 			"qualifiedName": "__type.props"
 		},
-		"20": {
+		"35": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/collect-assets.ts",
 			"qualifiedName": "opts"
 		},
-		"21": {
+		"36": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/data-source.ts",
 			"qualifiedName": "DATA_SOURCE_PROP"
 		},
-		"22": {
+		"37": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/data-source.ts",
 			"qualifiedName": "DataSourceDirective"
 		},
-		"23": {
+		"38": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/data-source.ts",
 			"qualifiedName": "getDataSourceDirective"
 		},
-		"24": {
+		"39": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/data-source.ts",
 			"qualifiedName": "getDataSourceDirective"
 		},
-		"25": {
+		"40": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/data-source.ts",
 			"qualifiedName": "props"
 		},
-		"26": {
+		"41": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/data-source.ts",
 			"qualifiedName": "RemoteCsvDirective"
 		},
-		"27": {
+		"42": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/data-source.ts",
 			"qualifiedName": "RemoteCsvDirective.kind"
 		},
-		"28": {
+		"43": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/data-source.ts",
 			"qualifiedName": "RemoteCsvDirective.url"
 		},
-		"29": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/identify-slots.ts",
-			"qualifiedName": "identifySlots"
-		},
-		"30": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/identify-slots.ts",
-			"qualifiedName": "identifySlots"
-		},
-		"31": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/identify-slots.ts",
-			"qualifiedName": "config"
-		},
-		"32": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/ir-to-puck-data.ts",
-			"qualifiedName": "irToPuckData"
-		},
-		"33": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/ir-to-puck-data.ts",
-			"qualifiedName": "irToPuckData"
-		},
-		"34": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/ir-to-puck-data.ts",
-			"qualifiedName": "ir"
-		},
-		"35": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "PuckDataToIROptions"
-		},
-		"36": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "PuckDataToIROptions.now"
-		},
-		"37": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"38": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"39": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "PuckDataToIROptions.onWarning"
-		},
-		"40": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"41": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"42": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "warning"
-		},
-		"43": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "puckDataToIR"
-		},
 		"44": {
 			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "puckDataToIR"
+			"packagePath": "src/identify-slots.ts",
+			"qualifiedName": "identifySlots"
 		},
 		"45": {
 			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "data"
+			"packagePath": "src/identify-slots.ts",
+			"qualifiedName": "identifySlots"
 		},
 		"46": {
 			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
+			"packagePath": "src/identify-slots.ts",
 			"qualifiedName": "config"
 		},
 		"47": {
 			"packageName": "@anvilkit/ir",
+			"packagePath": "src/ir-to-puck-data.ts",
+			"qualifiedName": "irToPuckData"
+		},
+		"48": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/ir-to-puck-data.ts",
+			"qualifiedName": "irToPuckData"
+		},
+		"49": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/ir-to-puck-data.ts",
+			"qualifiedName": "ir"
+		},
+		"50": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "PuckDataToIROptions"
+		},
+		"51": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "PuckDataToIROptions.now"
+		},
+		"52": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "__type"
+		},
+		"53": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "__type"
+		},
+		"54": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "PuckDataToIROptions.onWarning"
+		},
+		"55": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "__type"
+		},
+		"56": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "__type"
+		},
+		"57": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "warning"
+		},
+		"58": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "puckDataToIR"
+		},
+		"59": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "puckDataToIR"
+		},
+		"60": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "data"
+		},
+		"61": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "config"
+		},
+		"62": {
+			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
 			"qualifiedName": "opts"
 		},
-		"48": {
+		"63": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "NodeMetaValidationIssue"
 		},
-		"49": {
+		"64": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "NodeMetaValidationIssue.code"
 		},
-		"50": {
+		"65": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "NodeMetaValidationIssue.message"
 		},
-		"51": {
+		"66": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "NodeMetaValidationIssue.path"
 		},
-		"52": {
+		"67": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "PageIRNodeMetaError"
 		},
-		"53": {
+		"68": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "PageIRNodeMetaError.__constructor"
 		},
-		"54": {
+		"69": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "PageIRNodeMetaError"
 		},
-		"55": {
+		"70": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "issues"
 		},
-		"56": {
+		"71": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "PageIRNodeMetaError.issues"
@@ -2264,11 +2708,13 @@
 	"files": {
 		"entries": {
 			"1": "src/index.ts",
-			"2": "src/migrations/index.ts"
+			"2": "src/migrations/index.ts",
+			"3": "src/editor/index.ts"
 		},
 		"reflections": {
 			"1": 1,
-			"2": 2
+			"2": 2,
+			"3": 15
 		}
 	}
 }

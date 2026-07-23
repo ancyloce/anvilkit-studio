@@ -17,6 +17,16 @@
 				"default": "./dist/index.cjs"
 			}
 		},
+		"./editor": {
+			"import": {
+				"types": "./dist/editor/index.d.ts",
+				"default": "./dist/editor/index.js"
+			},
+			"require": {
+				"types": "./dist/cjs/editor/index.d.cts",
+				"default": "./dist/editor/index.cjs"
+			}
+		},
 		"./collect-assets": {
 			"import": {
 				"types": "./dist/collect-assets.d.ts",

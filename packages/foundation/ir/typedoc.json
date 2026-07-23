@@ -1,10 +1,18 @@
 {
 	"$schema": "https://typedoc.org/schema.json",
-	"extends": ["../../../typedoc.base.json"],
-	"entryPoints": ["./src/index.ts", "./src/migrations/index.ts"],
+	"extends": [
+		"../../../typedoc.base.json"
+	],
+	"entryPoints": [
+		"./src/index.ts",
+		"./src/migrations/index.ts",
+		"./src/editor/index.ts"
+	],
 	"tsconfig": "./tsconfig.json",
 	"name": "@anvilkit/ir",
-	"intentionallyNotExported": ["CollectAssetsOptions"],
+	"intentionallyNotExported": [
+		"CollectAssetsOptions"
+	],
 	"externalSymbolLinkMappings": {
 		"@anvilkit/contracts": {
 			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts",
