@@ -31,7 +31,11 @@ import type {
 	StyleDefinitionId,
 	StyleDefinitionV1,
 } from "./style-definitions.js";
-import type { DesignToken } from "./tokens.js";
+import type {
+	DesignToken,
+	TokenDeletionDisposition,
+	TokenModeId,
+} from "./tokens.js";
 import type { EditorPatch } from "./values.js";
 
 /**
@@ -174,6 +178,29 @@ export interface UpdateTokenCommand extends EditorCommandBase {
 }
 
 /**
+ * Delete a design token, rewriting every reference to it per
+ * `disposition` in the same atomic commit (ED-TOKEN-003; added
+ * additively by CORE-P2-001 per freeze D-2).
+ *
+ * Carries no confirmation token: the impact preview is a UI flow that
+ * materializes as either cancel or this command. `planTokenDeletion`
+ * (`@anvilkit/core/editor`) computes the preview the UI shows and the
+ * reducer applies the identical rewrite, so what the user approved is
+ * exactly what commits.
+ */
+export interface DeleteTokenCommand extends EditorCommandBase {
+	readonly type: "token.delete";
+	readonly tokenId: string;
+	readonly disposition: TokenDeletionDisposition;
+	/**
+	 * The mode whose resolved literal is written back when
+	 * `disposition.kind === "materialize"`. Required for determinism:
+	 * reducers read no ambient state (freeze D-7).
+	 */
+	readonly tokenMode: TokenModeId;
+}
+
+/**
  * Atomic create-from-selection (DD-0019 §14.3): create the definition,
  * replace the selected nodes with one instance node, and select it —
  * one history-recording dispatch.
@@ -257,7 +284,13 @@ export interface UpdateBindingCommand extends EditorCommandBase {
 	readonly binding: BindingV1;
 }
 
-/** The atomic command union (DD-0019 §10.1; 20 members, frozen). */
+/**
+ * The atomic command union. The Phase 0 freeze published 20 members
+ * (DD-0019 §10.1); freeze D-2 permits later phases to add members
+ * additively through API review + snapshot gates. Added since:
+ * `breakpoints.set` (CORE-P1A-008, EP-06) and `token.delete`
+ * (CORE-P2-001, EP-12).
+ */
 export type AtomicEditorCommand =
 	| SetNodeLayoutCommand
 	| SetNodeStyleCommand
@@ -271,6 +304,7 @@ export type AtomicEditorCommand =
 	| AttachStyleDefinitionCommand
 	| CreateTokenCommand
 	| UpdateTokenCommand
+	| DeleteTokenCommand
 	| CreateComponentDefinitionCommand
 	| DeleteComponentDefinitionCommand
 	| DetachComponentInstanceCommand

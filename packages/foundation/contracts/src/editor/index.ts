@@ -67,6 +67,7 @@ export type {
 	CreateStyleDefinitionCommand,
 	CreateTokenCommand,
 	DeleteComponentDefinitionCommand,
+	DeleteTokenCommand,
 	DetachAllComponentInstancesCommand,
 	DetachComponentInstanceCommand,
 	EditorCommand,
@@ -158,6 +159,7 @@ export type {
 export type {
 	DesignToken,
 	DesignTokenSource,
+	TokenDeletionDisposition,
 	TokenMode,
 	TokenModeId,
 	TokenType,

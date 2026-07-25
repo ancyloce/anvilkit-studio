@@ -57,3 +57,18 @@ export interface DesignToken<T = unknown> {
 	readonly description?: string;
 	readonly source?: DesignTokenSource;
 }
+
+/**
+ * What happens to every reference to a token being deleted
+ * (ED-TOKEN-003; DD-0019 §15.1 "show impact and replacement options
+ * before deletion").
+ *
+ * `"materialize"` rewrites each reference to the token's resolved
+ * literal so the document keeps its current appearance — the default
+ * the deletion UI pre-selects, mirroring the same rule for style
+ * definitions (§15.1). `"replace"` repoints every reference at
+ * another token, which must be of the same {@link TokenType}.
+ */
+export type TokenDeletionDisposition =
+	| { readonly kind: "materialize" }
+	| { readonly kind: "replace"; readonly tokenId: string };
