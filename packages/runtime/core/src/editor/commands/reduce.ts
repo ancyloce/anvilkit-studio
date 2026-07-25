@@ -1,7 +1,7 @@
 /**
- * @file Pure reducers for the Phase 0/1A command subset
- * (PLAN-0020 CORE-P0-008; DD-0019 §24.2; contract freeze
- * CORE-P0-001 D-1/D-8).
+ * @file Pure reducers for the shipped command subset — Phase 0/1A
+ * plus the Phase 2 token store (PLAN-0020 CORE-P0-008, CORE-P2-001;
+ * DD-0019 §24.2; contract freeze CORE-P0-001 D-1/D-8).
  *
  * Reducers never mutate input, never generate ids or timestamps, and
  * preserve object references wherever a write turns out to be a
@@ -19,6 +19,8 @@ import type {
 	ResponsiveValue,
 } from "@anvilkit/contracts/editor";
 import { applyEditorPatch } from "../patch.js";
+import { applyTokenDeletion } from "../tokens/deletion.js";
+import { applyTokenPatch } from "../tokens/patch.js";
 
 type FamilyKey = Exclude<ResponsiveFamily, "hidden" | "styleRefs">;
 
@@ -359,6 +361,33 @@ export function reduceValidatedCommand(
 			}
 			return next;
 		}
+		case "token.create": {
+			// Validation rejects duplicate ids, so this only ever adds.
+			return {
+				...state,
+				tokens: { ...state.tokens, [command.token.id]: command.token },
+			};
+		}
+		case "token.update": {
+			const current = state.tokens[command.tokenId];
+			if (current === undefined) {
+				return state;
+			}
+			const next = applyTokenPatch(current, command.patch);
+			if (next === current) {
+				return state;
+			}
+			return {
+				...state,
+				tokens: { ...state.tokens, [command.tokenId]: next },
+			};
+		}
+		case "token.delete":
+			// Rewrites every reference per the disposition and drops the
+			// token, in one reduction (ED-TOKEN-003).
+			return applyTokenDeletion(state, command.tokenId, command.disposition, {
+				tokenMode: command.tokenMode,
+			});
 		default:
 			// Later-phase commands never reach reduction: validation
 			// rejects them with EDITOR_CAPABILITY_UNSUPPORTED first.

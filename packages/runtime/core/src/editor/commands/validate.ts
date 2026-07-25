@@ -14,21 +14,28 @@
 import type {
 	AtomicEditorCommand,
 	AuthoringStateV1,
+	DesignToken,
 	EditorCommand,
 	EditorError,
+	EditorPatch,
 	ResponsiveLayerRef,
 } from "@anvilkit/contracts/editor";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
 import {
+	DesignTokenSchema,
 	LayoutSpecSchema,
 	TypographySpecSchema,
 	VisualStyleSpecSchema,
 } from "@anvilkit/schema/editor";
 import { makeEditorError } from "../diagnostics.js";
 import { stripPatchNulls } from "../patch.js";
+import { planTokenDeletion } from "../tokens/deletion.js";
+import { checkTokenAliasGraph } from "../tokens/graph.js";
+import { applyTokenPatch } from "../tokens/patch.js";
 
-/** The command types whose reducers ship in Phase 0/1A. */
+/** The command types whose reducers have shipped. */
 const IMPLEMENTED_TYPES = new Set<string>([
+	// Phase 0/1A
 	"node.layout.set",
 	"node.style.set",
 	"node.typography.set",
@@ -38,6 +45,10 @@ const IMPLEMENTED_TYPES = new Set<string>([
 	"node.responsiveOverride.set",
 	"breakpoints.set",
 	"batch",
+	// Phase 2 — tokens (CORE-P2-001)
+	"token.create",
+	"token.update",
+	"token.delete",
 ]);
 
 /** §12.2 invariants for the breakpoint set (CORE-P1A-008). */
@@ -122,6 +133,105 @@ function breakpointSetErrors(
 		widths.add(breakpoint.maxWidth);
 	}
 	return errors;
+}
+
+/**
+ * Shared shape/limit/graph checks for a prospective token write. The
+ * caller supplies the token map the document would have, so cycles and
+ * cross-type aliases are caught before commit (invariant 8).
+ */
+function tokenWriteErrors(
+	state: AuthoringStateV1,
+	tokenId: string,
+	token: DesignToken,
+	nextTokens: Readonly<Record<string, DesignToken>>,
+): readonly EditorError[] {
+	const errors: EditorError[] = [];
+	const parsed = DesignTokenSchema.safeParse(token);
+	if (!parsed.success) {
+		errors.push(
+			makeEditorError(
+				"EDITOR_INVALID_CSS_VALUE",
+				`token "${tokenId}" is not a valid DesignToken`,
+				{
+					details: {
+						kind: "token",
+						tokenId,
+						issueCount: parsed.error?.issues.length ?? 0,
+						firstPath: parsed.error?.issues[0]?.path.map(String) ?? [],
+					},
+				},
+			),
+		);
+	}
+	errors.push(...checkTokenAliasGraph(tokenId, nextTokens, state.tokenModes));
+	return errors;
+}
+
+function tokenCreateErrors(
+	state: AuthoringStateV1,
+	token: DesignToken,
+): readonly EditorError[] {
+	const errors: EditorError[] = [];
+	if (state.tokens[token.id] !== undefined) {
+		errors.push(
+			makeEditorError(
+				"EDITOR_COMMAND_CONFLICT",
+				`token "${token.id}" already exists`,
+				{
+					details: { kind: "token", tokenId: token.id, reason: "duplicate-id" },
+				},
+			),
+		);
+		// A duplicate id makes the prospective graph meaningless; the
+		// remaining checks would report against the wrong token.
+		return errors;
+	}
+	const count = Object.keys(state.tokens).length + 1;
+	if (count > EDITOR_COUNT_LIMITS.tokens) {
+		errors.push(
+			makeEditorError(
+				"EDITOR_LIMIT_EXCEEDED",
+				`documents allow at most ${EDITOR_COUNT_LIMITS.tokens} tokens`,
+				{
+					details: {
+						limitKey: "tokens",
+						limit: EDITOR_COUNT_LIMITS.tokens,
+						actual: count,
+					},
+				},
+			),
+		);
+	}
+	errors.push(
+		...tokenWriteErrors(state, token.id, token, {
+			...state.tokens,
+			[token.id]: token,
+		}),
+	);
+	return errors;
+}
+
+function tokenUpdateErrors(
+	state: AuthoringStateV1,
+	tokenId: string,
+	patch: EditorPatch<Omit<DesignToken, "id">>,
+): readonly EditorError[] {
+	const current = state.tokens[tokenId];
+	if (current === undefined) {
+		return [
+			makeEditorError(
+				"EDITOR_NODE_NOT_FOUND",
+				`token "${tokenId}" is not in this document`,
+				{ details: { kind: "token", tokenId } },
+			),
+		];
+	}
+	const next = applyTokenPatch(current, patch);
+	return tokenWriteErrors(state, tokenId, next, {
+		...state.tokens,
+		[tokenId]: next,
+	});
 }
 
 function layerErrors(
@@ -268,6 +378,16 @@ export function validateAtomicCommand(
 			];
 		case "breakpoints.set":
 			return breakpointSetErrors(command.breakpoints);
+		case "token.create":
+			return tokenCreateErrors(state, command.token);
+		case "token.update":
+			return tokenUpdateErrors(state, command.tokenId, command.patch);
+		case "token.delete":
+			// The preview and the commit run the same planner, so an
+			// approved plan is exactly what validation accepts.
+			return planTokenDeletion(state, command.tokenId, command.disposition, {
+				tokenMode: command.tokenMode,
+			}).errors.filter((error) => error.severity === "error");
 		default:
 			return [];
 	}
