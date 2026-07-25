@@ -42,12 +42,23 @@ yarn-error.log*
 
 #Output
 output
+.playwright-mcp
+.vscode/
 
-
-# Docs — only the top-level engineering-plans dir. An unanchored
-# `docs/` would also swallow `apps/docs/content/docs/`, the
-# Starlight content collection, which has to stay tracked.
-/docs/
+# Docs — working directories (plans, PRDs, tasks, reports, reviews,
+# archive, and other in-progress notes) stay ignored, but the governance
+# subtree is versioned: the canonical architecture contract, ADRs, and
+# policy/migration/security docs must be reviewable on GitHub and present
+# in fresh clones, because tracked entry-point docs (README, CONTRIBUTING,
+# AGENTS) link into them. The leading `/` anchors to the repo-root `docs/`
+# only, so `apps/docs/content/docs/` — the Fumadocs content collection —
+# is unaffected and stays tracked.
+/docs/*
+!/docs/architecture/
+!/docs/adr/
+!/docs/policies/
+!/docs/migration/
+!/docs/security/
 
 .idea/
 .gstack/
