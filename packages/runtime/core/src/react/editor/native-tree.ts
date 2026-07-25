@@ -127,13 +127,17 @@ function transformContainers(
 	data: PuckData,
 	transform: (items: readonly unknown[]) => readonly unknown[],
 ): PuckData {
-	const mapNode = (entry: unknown): unknown => {
-		if (!isComponentNode(entry)) {
-			return entry;
-		}
+	/**
+	 * Transform every slot-shaped prop (an array containing component
+	 * nodes) of a props record. Returns `null` when nothing changed so
+	 * callers can preserve references.
+	 */
+	const mapSlotProps = (
+		source: Readonly<Record<string, unknown>>,
+	): Record<string, unknown> | null => {
 		let changed = false;
-		const props: Record<string, unknown> = { ...entry.props };
-		for (const [key, value] of Object.entries(entry.props)) {
+		const props: Record<string, unknown> = { ...source };
+		for (const [key, value] of Object.entries(source)) {
 			if (Array.isArray(value) && value.some(isComponentNode)) {
 				const next = transform(value).map(mapNode);
 				if (
@@ -145,7 +149,15 @@ function transformContainers(
 				}
 			}
 		}
-		return changed ? { type: entry.type, props } : entry;
+		return changed ? props : null;
+	};
+
+	const mapNode = (entry: unknown): unknown => {
+		if (!isComponentNode(entry)) {
+			return entry;
+		}
+		const props = mapSlotProps(entry.props);
+		return props === null ? entry : { type: entry.type, props };
 	};
 
 	const content = transform((data.content ?? []) as readonly unknown[]).map(
@@ -156,8 +168,21 @@ function transformContainers(
 	for (const [zoneKey, items] of Object.entries(zones)) {
 		nextZones[zoneKey] = transform(items).map(mapNode);
 	}
+	// Root slot fields (Puck 0.22 slot data): top-level children can
+	// live in `root.props.<slotName>` instead of `content`, and a walk
+	// that skipped them made every native-tree op a silent no-op on
+	// slot-based documents.
+	const rootProps = data.root?.props;
+	const nextRootProps =
+		rootProps === undefined || rootProps === null
+			? null
+			: mapSlotProps(rootProps as Readonly<Record<string, unknown>>);
+
 	return {
 		...data,
+		...(nextRootProps === null
+			? {}
+			: { root: { ...data.root, props: nextRootProps } }),
 		content,
 		zones: nextZones,
 	} as PuckData;
