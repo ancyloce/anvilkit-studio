@@ -54,17 +54,32 @@ const SRC_DIR = resolve(PACKAGE_ROOT, "src");
 const ALLOWED = ["@anvilkit/contracts", "@anvilkit/ui", "@anvilkit/utils"];
 
 /**
+ * The React-free editor engine (`src/editor/`, the `./editor`
+ * subpath — DD-0019 §6.4, PLAN-0020 CORE-P0-016) sits one layer
+ * lower than the rest of `src/`: it may consume the foundation
+ * validation/projection packages (`@anvilkit/schema`,
+ * `@anvilkit/ir`) but never `@anvilkit/ui` (React) — the
+ * `check:react-free-runtime` DOM/React scan complements this rule.
+ */
+const EDITOR_ALLOWED = [
+	"@anvilkit/contracts",
+	"@anvilkit/schema",
+	"@anvilkit/ir",
+	"@anvilkit/utils",
+];
+
+/**
  * True iff `spec` is an `@anvilkit/*` package outside the allowlist.
  * Allowlist entries match exactly or by subpath (`@anvilkit/utils`,
  * `@anvilkit/utils/get-strict-context`) — but **not** a different
  * package that merely shares the prefix (`@anvilkit/ui-extras` is NOT
  * allowlisted by `@anvilkit/ui`).
  */
-function isForbiddenSpecifier(spec) {
+function isForbiddenSpecifier(spec, allowed) {
 	if (!spec.startsWith("@anvilkit/")) {
 		return false;
 	}
-	return !ALLOWED.some((pkg) => spec === pkg || spec.startsWith(`${pkg}/`));
+	return !allowed.some((pkg) => spec === pkg || spec.startsWith(`${pkg}/`));
 }
 
 /**
@@ -187,7 +202,7 @@ function readStringLiteral(text, start) {
  * comment, prefix-collision (`@anvilkit/ir-utils`), and
  * `Array.from("…")` cases.
  */
-function scanSource(text) {
+function scanSource(text, allowed) {
 	const hits = [];
 	const isIdentChar = (c) => c !== undefined && /[\w$]/.test(c);
 	// Import-position state.
@@ -217,7 +232,7 @@ function scanSource(text) {
 			const { value, end } = readStringLiteral(text, i);
 			if (
 				(afterFrom || afterImport || afterImportParen || afterRequireParen) &&
-				isForbiddenSpecifier(value)
+				isForbiddenSpecifier(value, allowed)
 			) {
 				const kw = afterFrom
 					? "from"
@@ -293,16 +308,24 @@ function scanSource(text) {
  * Strip comments (layout-preserving) then scan for forbidden imports
  * in specifier position only.
  */
-async function scanFile(filePath) {
+async function scanFile(filePath, allowed) {
 	const raw = await readFile(filePath, "utf8");
 	const text = stripCommentsPreservingLayout(raw);
-	return scanSource(text);
+	return scanSource(text, allowed);
+}
+
+/** Allowlist for one source file, scoped by directory (CORE-P0-016). */
+function allowlistFor(filePath) {
+	const rel = relative(SRC_DIR, filePath);
+	return rel === "editor" || rel.startsWith("editor/") || rel.startsWith("editor\\")
+		? EDITOR_ALLOWED
+		: ALLOWED;
 }
 
 async function main() {
 	const offenders = [];
 	for await (const file of walkSourceFiles(SRC_DIR)) {
-		const hits = await scanFile(file);
+		const hits = await scanFile(file, allowlistFor(file));
 		if (hits.length > 0) {
 			offenders.push({ file, hits });
 		}
@@ -310,7 +333,7 @@ async function main() {
 
 	if (offenders.length === 0) {
 		console.log(
-			`check-no-headless-import: OK — src/ imports no @anvilkit/* package outside the runtime allowlist (${ALLOWED.join(", ")})`,
+			`check-no-headless-import: OK — src/ imports no @anvilkit/* package outside the runtime allowlist (${ALLOWED.join(", ")}); src/editor/ scoped to (${EDITOR_ALLOWED.join(", ")})`,
 		);
 		return;
 	}
