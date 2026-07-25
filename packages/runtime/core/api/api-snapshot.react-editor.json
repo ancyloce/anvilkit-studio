@@ -92,7 +92,7 @@
 			]
 		},
 		{
-			"id": 31,
+			"id": 12,
 			"name": "CanvasDomRegistry",
 			"variant": "declaration",
 			"kind": 256,
@@ -107,14 +107,14 @@
 			},
 			"children": [
 				{
-					"id": 35,
+					"id": 16,
 					"name": "dispose",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 36,
+							"id": 17,
 							"name": "dispose",
 							"variant": "signature",
 							"kind": 4096,
@@ -135,14 +135,14 @@
 					]
 				},
 				{
-					"id": 40,
+					"id": 21,
 					"name": "getElements",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 41,
+							"id": 22,
 							"name": "getElements",
 							"variant": "signature",
 							"kind": 4096,
@@ -157,7 +157,7 @@
 							},
 							"parameters": [
 								{
-									"id": 42,
+									"id": 23,
 									"name": "nodeId",
 									"variant": "param",
 									"kind": 32768,
@@ -189,14 +189,14 @@
 					]
 				},
 				{
-					"id": 43,
+					"id": 24,
 					"name": "getNodeId",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 44,
+							"id": 25,
 							"name": "getNodeId",
 							"variant": "signature",
 							"kind": 4096,
@@ -211,7 +211,7 @@
 							},
 							"parameters": [
 								{
-									"id": 45,
+									"id": 26,
 									"name": "element",
 									"variant": "param",
 									"kind": 32768,
@@ -245,14 +245,14 @@
 					]
 				},
 				{
-					"id": 37,
+					"id": 18,
 					"name": "getPrimaryElement",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 38,
+							"id": 19,
 							"name": "getPrimaryElement",
 							"variant": "signature",
 							"kind": 4096,
@@ -275,7 +275,7 @@
 							},
 							"parameters": [
 								{
-									"id": 39,
+									"id": 20,
 									"name": "nodeId",
 									"variant": "param",
 									"kind": 32768,
@@ -309,14 +309,14 @@
 					]
 				},
 				{
-					"id": 46,
+					"id": 27,
 					"name": "listNodeIds",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 47,
+							"id": 28,
 							"name": "listNodeIds",
 							"variant": "signature",
 							"kind": 4096,
@@ -344,14 +344,14 @@
 					]
 				},
 				{
-					"id": 48,
+					"id": 29,
 					"name": "observe",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 49,
+							"id": 30,
 							"name": "observe",
 							"variant": "signature",
 							"kind": 4096,
@@ -366,7 +366,7 @@
 							},
 							"parameters": [
 								{
-									"id": 50,
+									"id": 31,
 									"name": "listener",
 									"variant": "param",
 									"kind": 32768,
@@ -374,14 +374,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 51,
+											"id": 32,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"signatures": [
 												{
-													"id": 52,
+													"id": 33,
 													"name": "__type",
 													"variant": "signature",
 													"kind": 4096,
@@ -399,14 +399,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 53,
+									"id": 34,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 54,
+											"id": 35,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
@@ -423,14 +423,14 @@
 					]
 				},
 				{
-					"id": 32,
+					"id": 13,
 					"name": "register",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 33,
+							"id": 14,
 							"name": "register",
 							"variant": "signature",
 							"kind": 4096,
@@ -445,7 +445,7 @@
 							},
 							"parameters": [
 								{
-									"id": 34,
+									"id": 15,
 									"name": "doc",
 									"variant": "param",
 									"kind": 32768,
@@ -474,19 +474,226 @@
 				{
 					"title": "Methods",
 					"children": [
-						35,
-						40,
-						43,
-						37,
-						46,
-						48,
-						32
+						16,
+						21,
+						24,
+						18,
+						27,
+						29,
+						13
 					]
 				}
 			]
 		},
 		{
-			"id": 12,
+			"id": 36,
+			"name": "CreateComponentAction",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Create a document-local component from the current selection."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 41,
+					"name": "canCreate",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "True when the live selection could be captured right now."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 37,
+					"name": "create",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 38,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 39,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 40,
+											"name": "name",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Promise"
+										},
+										"typeArguments": [
+											{
+												"type": "reference",
+												"target": 42,
+												"name": "CreateComponentOutcome",
+												"package": "@anvilkit/core"
+											}
+										],
+										"name": "Promise",
+										"package": "typescript"
+									}
+								}
+							]
+						}
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						41,
+						37
+					]
+				}
+			]
+		},
+		{
+			"id": 42,
+			"name": "CreateComponentOutcome",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The outcome of a create-component attempt."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 44,
+					"name": "errors",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/errors.ts",
+									"qualifiedName": "EditorError"
+								},
+								"name": "EditorError",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					}
+				},
+				{
+					"id": 45,
+					"name": "instanceNodeId",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The new instance node id, when one was created."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 43,
+					"name": "status",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "literal",
+								"value": "rejected"
+							},
+							{
+								"type": "literal",
+								"value": "noop"
+							},
+							{
+								"type": "literal",
+								"value": "committed"
+							}
+						]
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						44,
+						45,
+						43
+					]
+				}
+			]
+		},
+		{
+			"id": 48,
 			"name": "DecoratePuckConfigOptions",
 			"variant": "declaration",
 			"kind": 256,
@@ -501,7 +708,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "decoratePuckConfig",
-						"target": 19
+						"target": 55
 					},
 					{
 						"kind": "text",
@@ -511,7 +718,7 @@
 			},
 			"children": [
 				{
-					"id": 13,
+					"id": 49,
 					"name": "enableAuthoring",
 					"variant": "declaration",
 					"kind": 1024,
@@ -524,7 +731,7 @@
 					}
 				},
 				{
-					"id": 14,
+					"id": 50,
 					"name": "onUnsupportedCapability",
 					"variant": "declaration",
 					"kind": 1024,
@@ -535,21 +742,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 15,
+							"id": 51,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 16,
+									"id": 52,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 17,
+											"id": 53,
 											"name": "componentType",
 											"variant": "param",
 											"kind": 32768,
@@ -560,7 +767,7 @@
 											}
 										},
 										{
-											"id": 18,
+											"id": 54,
 											"name": "capability",
 											"variant": "param",
 											"kind": 32768,
@@ -622,14 +829,14 @@
 				{
 					"title": "Properties",
 					"children": [
-						13,
-						14
+						49,
+						50
 					]
 				}
 			]
 		},
 		{
-			"id": 97,
+			"id": 109,
 			"name": "EditorSelectionController",
 			"variant": "declaration",
 			"kind": 256,
@@ -660,14 +867,14 @@
 			},
 			"children": [
 				{
-					"id": 121,
+					"id": 133,
 					"name": "clear",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 122,
+							"id": 134,
 							"name": "clear",
 							"variant": "signature",
 							"kind": 4096,
@@ -688,14 +895,14 @@
 					]
 				},
 				{
-					"id": 98,
+					"id": 110,
 					"name": "getState",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 99,
+							"id": 111,
 							"name": "getState",
 							"variant": "signature",
 							"kind": 4096,
@@ -722,14 +929,14 @@
 					]
 				},
 				{
-					"id": 108,
+					"id": 120,
 					"name": "select",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 109,
+							"id": 121,
 							"name": "select",
 							"variant": "signature",
 							"kind": 4096,
@@ -744,7 +951,7 @@
 							},
 							"parameters": [
 								{
-									"id": 110,
+									"id": 122,
 									"name": "nodeId",
 									"variant": "param",
 									"kind": 32768,
@@ -763,14 +970,14 @@
 					]
 				},
 				{
-					"id": 117,
+					"id": 129,
 					"name": "selectMany",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 118,
+							"id": 130,
 							"name": "selectMany",
 							"variant": "signature",
 							"kind": 4096,
@@ -785,7 +992,7 @@
 							},
 							"parameters": [
 								{
-									"id": 119,
+									"id": 131,
 									"name": "nodeIds",
 									"variant": "param",
 									"kind": 32768,
@@ -803,7 +1010,7 @@
 									}
 								},
 								{
-									"id": 120,
+									"id": 132,
 									"name": "primaryId",
 									"variant": "param",
 									"kind": 32768,
@@ -824,14 +1031,14 @@
 					]
 				},
 				{
-					"id": 114,
+					"id": 126,
 					"name": "selectRange",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 115,
+							"id": 127,
 							"name": "selectRange",
 							"variant": "signature",
 							"kind": 4096,
@@ -854,7 +1061,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "select",
-										"target": 108
+										"target": 120
 									},
 									{
 										"kind": "text",
@@ -864,7 +1071,7 @@
 							},
 							"parameters": [
 								{
-									"id": 116,
+									"id": 128,
 									"name": "nodeId",
 									"variant": "param",
 									"kind": 32768,
@@ -883,14 +1090,14 @@
 					]
 				},
 				{
-					"id": 123,
+					"id": 135,
 					"name": "setScope",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 124,
+							"id": 136,
 							"name": "setScope",
 							"variant": "signature",
 							"kind": 4096,
@@ -905,7 +1112,7 @@
 							},
 							"parameters": [
 								{
-									"id": 125,
+									"id": 137,
 									"name": "scope",
 									"variant": "param",
 									"kind": 32768,
@@ -942,14 +1149,14 @@
 					]
 				},
 				{
-					"id": 100,
+					"id": 112,
 					"name": "subscribe",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 101,
+							"id": 113,
 							"name": "subscribe",
 							"variant": "signature",
 							"kind": 4096,
@@ -964,7 +1171,7 @@
 							},
 							"parameters": [
 								{
-									"id": 102,
+									"id": 114,
 									"name": "listener",
 									"variant": "param",
 									"kind": 32768,
@@ -972,21 +1179,21 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 103,
+											"id": 115,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"signatures": [
 												{
-													"id": 104,
+													"id": 116,
 													"name": "__type",
 													"variant": "signature",
 													"kind": 4096,
 													"flags": {},
 													"parameters": [
 														{
-															"id": 105,
+															"id": 117,
 															"name": "state",
 															"variant": "param",
 															"kind": 32768,
@@ -1016,14 +1223,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 106,
+									"id": 118,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 107,
+											"id": 119,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
@@ -1040,14 +1247,14 @@
 					]
 				},
 				{
-					"id": 111,
+					"id": 123,
 					"name": "toggle",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 112,
+							"id": 124,
 							"name": "toggle",
 							"variant": "signature",
 							"kind": 4096,
@@ -1062,7 +1269,7 @@
 							},
 							"parameters": [
 								{
-									"id": 113,
+									"id": 125,
 									"name": "nodeId",
 									"variant": "param",
 									"kind": 32768,
@@ -1085,20 +1292,20 @@
 				{
 					"title": "Methods",
 					"children": [
-						121,
-						98,
-						108,
-						117,
-						114,
-						123,
-						100,
-						111
+						133,
+						110,
+						120,
+						129,
+						126,
+						135,
+						112,
+						123
 					]
 				}
 			]
 		},
 		{
-			"id": 127,
+			"id": 139,
 			"name": "EditorShortcutBinding",
 			"variant": "declaration",
 			"kind": 256,
@@ -1113,7 +1320,7 @@
 			},
 			"children": [
 				{
-					"id": 128,
+					"id": 140,
 					"name": "command",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1132,7 +1339,7 @@
 					}
 				},
 				{
-					"id": 129,
+					"id": 141,
 					"name": "keys",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1157,7 +1364,7 @@
 					}
 				},
 				{
-					"id": 130,
+					"id": 142,
 					"name": "labelKey",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1186,15 +1393,15 @@
 				{
 					"title": "Properties",
 					"children": [
-						128,
-						129,
-						130
+						140,
+						141,
+						142
 					]
 				}
 			]
 		},
 		{
-			"id": 55,
+			"id": 60,
 			"name": "InlineEditController",
 			"variant": "declaration",
 			"kind": 256,
@@ -1209,14 +1416,14 @@
 			},
 			"children": [
 				{
-					"id": 67,
+					"id": 72,
 					"name": "cancel",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 68,
+							"id": 73,
 							"name": "cancel",
 							"variant": "signature",
 							"kind": 4096,
@@ -1237,14 +1444,14 @@
 					]
 				},
 				{
-					"id": 65,
+					"id": 70,
 					"name": "commit",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 66,
+							"id": 71,
 							"name": "commit",
 							"variant": "signature",
 							"kind": 4096,
@@ -1265,14 +1472,14 @@
 					]
 				},
 				{
-					"id": 56,
+					"id": 61,
 					"name": "getSession",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 57,
+							"id": 62,
 							"name": "getSession",
 							"variant": "signature",
 							"kind": 4096,
@@ -1282,7 +1489,7 @@
 								"types": [
 									{
 										"type": "reference",
-										"target": 69,
+										"target": 74,
 										"name": "InlineEditSession",
 										"package": "@anvilkit/core"
 									},
@@ -1296,21 +1503,21 @@
 					]
 				},
 				{
-					"id": 58,
+					"id": 63,
 					"name": "subscribe",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 59,
+							"id": 64,
 							"name": "subscribe",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
 							"parameters": [
 								{
-									"id": 60,
+									"id": 65,
 									"name": "listener",
 									"variant": "param",
 									"kind": 32768,
@@ -1318,14 +1525,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 61,
+											"id": 66,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"signatures": [
 												{
-													"id": 62,
+													"id": 67,
 													"name": "__type",
 													"variant": "signature",
 													"kind": 4096,
@@ -1343,14 +1550,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 63,
+									"id": 68,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 64,
+											"id": 69,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
@@ -1371,16 +1578,16 @@
 				{
 					"title": "Methods",
 					"children": [
-						67,
-						65,
-						56,
-						58
+						72,
+						70,
+						61,
+						63
 					]
 				}
 			]
 		},
 		{
-			"id": 69,
+			"id": 74,
 			"name": "InlineEditSession",
 			"variant": "declaration",
 			"kind": 256,
@@ -1395,7 +1602,7 @@
 			},
 			"children": [
 				{
-					"id": 70,
+					"id": 75,
 					"name": "nodeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1408,7 +1615,7 @@
 					}
 				},
 				{
-					"id": 71,
+					"id": 76,
 					"name": "target",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1431,14 +1638,14 @@
 				{
 					"title": "Properties",
 					"children": [
-						70,
-						71
+						75,
+						76
 					]
 				}
 			]
 		},
 		{
-			"id": 134,
+			"id": 146,
 			"name": "StudioEditorHandle",
 			"variant": "declaration",
 			"kind": 256,
@@ -1501,7 +1708,7 @@
 			},
 			"children": [
 				{
-					"id": 136,
+					"id": 148,
 					"name": "commands",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1529,7 +1736,7 @@
 					}
 				},
 				{
-					"id": 139,
+					"id": 151,
 					"name": "diagnostics",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1556,7 +1763,7 @@
 					}
 				},
 				{
-					"id": 137,
+					"id": 149,
 					"name": "selection",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1568,7 +1775,7 @@
 						"types": [
 							{
 								"type": "reference",
-								"target": 97,
+								"target": 109,
 								"name": "EditorSelectionController",
 								"package": "@anvilkit/core"
 							},
@@ -1580,7 +1787,7 @@
 					}
 				},
 				{
-					"id": 135,
+					"id": 147,
 					"name": "status",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1602,7 +1809,7 @@
 					}
 				},
 				{
-					"id": 138,
+					"id": 150,
 					"name": "viewport",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1630,7 +1837,7 @@
 						"types": [
 							{
 								"type": "reference",
-								"target": 77,
+								"target": 82,
 								"name": "StudioViewportController",
 								"package": "@anvilkit/core"
 							},
@@ -1646,17 +1853,17 @@
 				{
 					"title": "Properties",
 					"children": [
-						136,
-						139,
-						137,
-						135,
-						138
+						148,
+						151,
+						149,
+						147,
+						150
 					]
 				}
 			]
 		},
 		{
-			"id": 27,
+			"id": 105,
 			"name": "StudioEditorMountProps",
 			"variant": "declaration",
 			"kind": 256,
@@ -1671,7 +1878,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioEditorMount",
-						"target": 24
+						"target": 102
 					},
 					{
 						"kind": "text",
@@ -1681,7 +1888,7 @@
 			},
 			"children": [
 				{
-					"id": 29,
+					"id": 107,
 					"name": "bridge",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1708,7 +1915,7 @@
 					}
 				},
 				{
-					"id": 30,
+					"id": 108,
 					"name": "children",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1744,7 +1951,7 @@
 					}
 				},
 				{
-					"id": 28,
+					"id": 106,
 					"name": "editor",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1776,15 +1983,15 @@
 				{
 					"title": "Properties",
 					"children": [
-						29,
-						30,
-						28
+						107,
+						108,
+						106
 					]
 				}
 			]
 		},
 		{
-			"id": 77,
+			"id": 82,
 			"name": "StudioViewportController",
 			"variant": "declaration",
 			"kind": 256,
@@ -1799,14 +2006,14 @@
 			},
 			"children": [
 				{
-					"id": 78,
+					"id": 83,
 					"name": "getState",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 79,
+							"id": 84,
 							"name": "getState",
 							"variant": "signature",
 							"kind": 4096,
@@ -1833,14 +2040,14 @@
 					]
 				},
 				{
-					"id": 91,
+					"id": 96,
 					"name": "setFollowViewport",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 92,
+							"id": 97,
 							"name": "setFollowViewport",
 							"variant": "signature",
 							"kind": 4096,
@@ -1855,7 +2062,7 @@
 							},
 							"parameters": [
 								{
-									"id": 93,
+									"id": 98,
 									"name": "followViewport",
 									"variant": "param",
 									"kind": 32768,
@@ -1874,14 +2081,14 @@
 					]
 				},
 				{
-					"id": 94,
+					"id": 99,
 					"name": "setShowOnlyOverrides",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 95,
+							"id": 100,
 							"name": "setShowOnlyOverrides",
 							"variant": "signature",
 							"kind": 4096,
@@ -1896,7 +2103,7 @@
 							},
 							"parameters": [
 								{
-									"id": 96,
+									"id": 101,
 									"name": "showOnlyOverrides",
 									"variant": "param",
 									"kind": 32768,
@@ -1915,14 +2122,14 @@
 					]
 				},
 				{
-					"id": 88,
+					"id": 93,
 					"name": "setWriteTarget",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 89,
+							"id": 94,
 							"name": "setWriteTarget",
 							"variant": "signature",
 							"kind": 4096,
@@ -1937,7 +2144,7 @@
 							},
 							"parameters": [
 								{
-									"id": 90,
+									"id": 95,
 									"name": "layer",
 									"variant": "param",
 									"kind": 32768,
@@ -1956,14 +2163,14 @@
 					]
 				},
 				{
-					"id": 80,
+					"id": 85,
 					"name": "subscribe",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 81,
+							"id": 86,
 							"name": "subscribe",
 							"variant": "signature",
 							"kind": 4096,
@@ -1978,7 +2185,7 @@
 							},
 							"parameters": [
 								{
-									"id": 82,
+									"id": 87,
 									"name": "listener",
 									"variant": "param",
 									"kind": 32768,
@@ -1986,21 +2193,21 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 83,
+											"id": 88,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"signatures": [
 												{
-													"id": 84,
+													"id": 89,
 													"name": "__type",
 													"variant": "signature",
 													"kind": 4096,
 													"flags": {},
 													"parameters": [
 														{
-															"id": 85,
+															"id": 90,
 															"name": "state",
 															"variant": "param",
 															"kind": 32768,
@@ -2030,14 +2237,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 86,
+									"id": 91,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 87,
+											"id": 92,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
@@ -2058,11 +2265,11 @@
 				{
 					"title": "Methods",
 					"children": [
-						78,
-						91,
-						94,
-						88,
-						80
+						83,
+						96,
+						99,
+						93,
+						85
 					]
 				}
 			]
@@ -2188,7 +2395,7 @@
 			"defaultValue": "..."
 		},
 		{
-			"id": 126,
+			"id": 138,
 			"name": "EDITOR_SHORTCUT_KEYMAP",
 			"variant": "declaration",
 			"kind": 32,
@@ -2210,7 +2417,7 @@
 					"type": "array",
 					"elementType": {
 						"type": "reference",
-						"target": 127,
+						"target": 139,
 						"name": "EditorShortcutBinding",
 						"package": "@anvilkit/core"
 					}
@@ -2219,7 +2426,7 @@
 			"defaultValue": "..."
 		},
 		{
-			"id": 75,
+			"id": 80,
 			"name": "TIPTAP_ALLOWED_MARKS",
 			"variant": "declaration",
 			"kind": 32,
@@ -2253,7 +2460,7 @@
 			"defaultValue": "..."
 		},
 		{
-			"id": 76,
+			"id": 81,
 			"name": "TIPTAP_ALLOWED_NODES",
 			"variant": "declaration",
 			"kind": 32,
@@ -2415,14 +2622,14 @@
 			]
 		},
 		{
-			"id": 19,
+			"id": 55,
 			"name": "decoratePuckConfig",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 20,
+					"id": 56,
 					"name": "decoratePuckConfig",
 					"variant": "signature",
 					"kind": 4096,
@@ -2437,7 +2644,7 @@
 					},
 					"typeParameters": [
 						{
-							"id": 21,
+							"id": 57,
 							"name": "UserConfig",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -2456,28 +2663,28 @@
 					],
 					"parameters": [
 						{
-							"id": 22,
+							"id": 58,
 							"name": "config",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 21,
+								"target": 57,
 								"name": "UserConfig",
 								"package": "@anvilkit/core",
 								"refersToTypeParameter": true
 							}
 						},
 						{
-							"id": 23,
+							"id": 59,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 12,
+								"target": 48,
 								"name": "DecoratePuckConfigOptions",
 								"package": "@anvilkit/core"
 							}
@@ -2485,7 +2692,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 21,
+						"target": 57,
 						"name": "UserConfig",
 						"package": "@anvilkit/core",
 						"refersToTypeParameter": true
@@ -2494,14 +2701,14 @@
 			]
 		},
 		{
-			"id": 72,
+			"id": 77,
 			"name": "sanitizeTiptapDocument",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 73,
+					"id": 78,
 					"name": "sanitizeTiptapDocument",
 					"variant": "signature",
 					"kind": 4096,
@@ -2530,7 +2737,7 @@
 					},
 					"parameters": [
 						{
-							"id": 74,
+							"id": 79,
 							"name": "input",
 							"variant": "param",
 							"kind": 32768,
@@ -2555,14 +2762,14 @@
 			]
 		},
 		{
-			"id": 24,
+			"id": 102,
 			"name": "StudioEditorMount",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 25,
+					"id": 103,
 					"name": "StudioEditorMount",
 					"variant": "signature",
 					"kind": 4096,
@@ -2577,14 +2784,14 @@
 					},
 					"parameters": [
 						{
-							"id": 26,
+							"id": 104,
 							"name": "__namedParameters",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 27,
+								"target": 105,
 								"name": "StudioEditorMountProps",
 								"package": "@anvilkit/core"
 							}
@@ -2605,14 +2812,61 @@
 			]
 		},
 		{
-			"id": 140,
+			"id": 46,
+			"name": "useCreateComponent",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 47,
+					"name": "useCreateComponent",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The create-component action, or "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " when the editor is off,\nstill loading, read-only, or the collab gate holds writers closed."
+							}
+						]
+					},
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "reference",
+								"target": 36,
+								"name": "CreateComponentAction",
+								"package": "@anvilkit/core"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": 152,
 			"name": "useOptionalStudioEditor",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 141,
+					"id": 153,
 					"name": "useOptionalStudioEditor",
 					"variant": "signature",
 					"kind": 4096,
@@ -2646,7 +2900,7 @@
 						"types": [
 							{
 								"type": "reference",
-								"target": 134,
+								"target": 146,
 								"name": "StudioEditorHandle",
 								"package": "@anvilkit/core"
 							},
@@ -2660,14 +2914,14 @@
 			]
 		},
 		{
-			"id": 131,
+			"id": 143,
 			"name": "useResolvedNodeStyle",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 132,
+					"id": 144,
 					"name": "useResolvedNodeStyle",
 					"variant": "signature",
 					"kind": 4096,
@@ -2682,7 +2936,7 @@
 					},
 					"parameters": [
 						{
-							"id": 133,
+							"id": 145,
 							"name": "nodeId",
 							"variant": "param",
 							"kind": 32768,
@@ -2725,14 +2979,14 @@
 			]
 		},
 		{
-			"id": 142,
+			"id": 154,
 			"name": "useStudioEditor",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 143,
+					"id": 155,
 					"name": "useStudioEditor",
 					"variant": "signature",
 					"kind": 4096,
@@ -2755,7 +3009,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useOptionalStudioEditor",
-								"target": 140
+								"target": 152
 							},
 							{
 								"kind": "text",
@@ -2765,7 +3019,7 @@
 					},
 					"type": {
 						"type": "reference",
-						"target": 134,
+						"target": 146,
 						"name": "StudioEditorHandle",
 						"package": "@anvilkit/core"
 					}
@@ -2778,15 +3032,17 @@
 			"title": "Interfaces",
 			"children": [
 				4,
-				31,
 				12,
-				97,
-				127,
-				55,
-				69,
-				134,
-				27,
-				77
+				36,
+				42,
+				48,
+				109,
+				139,
+				60,
+				74,
+				146,
+				105,
+				82
 			]
 		},
 		{
@@ -2799,21 +3055,22 @@
 			"title": "Variables",
 			"children": [
 				7,
-				126,
-				75,
-				76
+				138,
+				80,
+				81
 			]
 		},
 		{
 			"title": "Functions",
 			"children": [
 				1,
-				19,
-				72,
-				24,
-				140,
-				131,
-				142
+				55,
+				77,
+				102,
+				46,
+				152,
+				143,
+				154
 			]
 		}
 	],
@@ -2881,660 +3138,720 @@
 		},
 		"12": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/decorate-config.ts",
-			"qualifiedName": "DecoratePuckConfigOptions"
-		},
-		"13": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/decorate-config.ts",
-			"qualifiedName": "DecoratePuckConfigOptions.enableAuthoring"
-		},
-		"14": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/decorate-config.ts",
-			"qualifiedName": "DecoratePuckConfigOptions.onUnsupportedCapability"
-		},
-		"15": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/decorate-config.ts",
-			"qualifiedName": "__type"
-		},
-		"16": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/decorate-config.ts",
-			"qualifiedName": "__type"
-		},
-		"17": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/decorate-config.ts",
-			"qualifiedName": "componentType"
-		},
-		"18": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/decorate-config.ts",
-			"qualifiedName": "capability"
-		},
-		"19": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/decorate-config.ts",
-			"qualifiedName": "decoratePuckConfig"
-		},
-		"20": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/decorate-config.ts",
-			"qualifiedName": "decoratePuckConfig"
-		},
-		"21": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/decorate-config.ts",
-			"qualifiedName": "UserConfig"
-		},
-		"22": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/decorate-config.ts",
-			"qualifiedName": "config"
-		},
-		"23": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/decorate-config.ts",
-			"qualifiedName": "options"
-		},
-		"24": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/StudioEditorMount.tsx",
-			"qualifiedName": "StudioEditorMount"
-		},
-		"25": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/StudioEditorMount.tsx",
-			"qualifiedName": "StudioEditorMount"
-		},
-		"26": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/StudioEditorMount.tsx",
-			"qualifiedName": "__0"
-		},
-		"27": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/StudioEditorMount.tsx",
-			"qualifiedName": "StudioEditorMountProps"
-		},
-		"28": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/StudioEditorMount.tsx",
-			"qualifiedName": "StudioEditorMountProps.editor"
-		},
-		"29": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/StudioEditorMount.tsx",
-			"qualifiedName": "StudioEditorMountProps.bridge"
-		},
-		"30": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/StudioEditorMount.tsx",
-			"qualifiedName": "StudioEditorMountProps.children"
-		},
-		"31": {
-			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry"
 		},
-		"32": {
+		"13": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.register"
 		},
-		"33": {
+		"14": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.register"
 		},
-		"34": {
+		"15": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "doc"
 		},
-		"35": {
+		"16": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.dispose"
 		},
-		"36": {
+		"17": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.dispose"
 		},
-		"37": {
+		"18": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.getPrimaryElement"
 		},
-		"38": {
+		"19": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.getPrimaryElement"
 		},
-		"39": {
+		"20": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "nodeId"
 		},
-		"40": {
+		"21": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.getElements"
 		},
-		"41": {
+		"22": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.getElements"
 		},
-		"42": {
+		"23": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "nodeId"
 		},
-		"43": {
+		"24": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.getNodeId"
 		},
-		"44": {
+		"25": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.getNodeId"
 		},
-		"45": {
+		"26": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "element"
 		},
-		"46": {
+		"27": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.listNodeIds"
 		},
-		"47": {
+		"28": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.listNodeIds"
 		},
-		"48": {
+		"29": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.observe"
 		},
-		"49": {
+		"30": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "CanvasDomRegistry.observe"
 		},
-		"50": {
+		"31": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
 			"qualifiedName": "listener"
 		},
-		"51": {
+		"32": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/canvas/dom-registry.ts",
+			"qualifiedName": "__type"
+		},
+		"33": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/canvas/dom-registry.ts",
+			"qualifiedName": "__type"
+		},
+		"34": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/canvas/dom-registry.ts",
+			"qualifiedName": "__type"
+		},
+		"35": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/canvas/dom-registry.ts",
+			"qualifiedName": "__type"
+		},
+		"36": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/components/use-create-component.ts",
+			"qualifiedName": "CreateComponentAction"
+		},
+		"37": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/components/use-create-component.ts",
+			"qualifiedName": "CreateComponentAction.create"
+		},
+		"38": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/components/use-create-component.ts",
+			"qualifiedName": "__type"
+		},
+		"39": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/components/use-create-component.ts",
+			"qualifiedName": "__type"
+		},
+		"40": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/components/use-create-component.ts",
+			"qualifiedName": "name"
+		},
+		"41": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/components/use-create-component.ts",
+			"qualifiedName": "CreateComponentAction.canCreate"
+		},
+		"42": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/components/use-create-component.ts",
+			"qualifiedName": "CreateComponentOutcome"
+		},
+		"43": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/components/use-create-component.ts",
+			"qualifiedName": "CreateComponentOutcome.status"
+		},
+		"44": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/components/use-create-component.ts",
+			"qualifiedName": "CreateComponentOutcome.errors"
+		},
+		"45": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/components/use-create-component.ts",
+			"qualifiedName": "CreateComponentOutcome.instanceNodeId"
+		},
+		"46": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/components/use-create-component.ts",
+			"qualifiedName": "useCreateComponent"
+		},
+		"47": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/components/use-create-component.ts",
+			"qualifiedName": "useCreateComponent"
+		},
+		"48": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/decorate-config.ts",
+			"qualifiedName": "DecoratePuckConfigOptions"
+		},
+		"49": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/decorate-config.ts",
+			"qualifiedName": "DecoratePuckConfigOptions.enableAuthoring"
+		},
+		"50": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/decorate-config.ts",
+			"qualifiedName": "DecoratePuckConfigOptions.onUnsupportedCapability"
+		},
+		"51": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/decorate-config.ts",
 			"qualifiedName": "__type"
 		},
 		"52": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/canvas/dom-registry.ts",
+			"packagePath": "src/react/editor/decorate-config.ts",
 			"qualifiedName": "__type"
 		},
 		"53": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/canvas/dom-registry.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/react/editor/decorate-config.ts",
+			"qualifiedName": "componentType"
 		},
 		"54": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/canvas/dom-registry.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/react/editor/decorate-config.ts",
+			"qualifiedName": "capability"
 		},
 		"55": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "InlineEditController"
+			"packagePath": "src/react/editor/decorate-config.ts",
+			"qualifiedName": "decoratePuckConfig"
 		},
 		"56": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "InlineEditController.getSession"
+			"packagePath": "src/react/editor/decorate-config.ts",
+			"qualifiedName": "decoratePuckConfig"
 		},
 		"57": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "InlineEditController.getSession"
+			"packagePath": "src/react/editor/decorate-config.ts",
+			"qualifiedName": "UserConfig"
 		},
 		"58": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "InlineEditController.subscribe"
+			"packagePath": "src/react/editor/decorate-config.ts",
+			"qualifiedName": "config"
 		},
 		"59": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "InlineEditController.subscribe"
+			"packagePath": "src/react/editor/decorate-config.ts",
+			"qualifiedName": "options"
 		},
 		"60": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "listener"
+			"qualifiedName": "InlineEditController"
 		},
 		"61": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "InlineEditController.getSession"
 		},
 		"62": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "InlineEditController.getSession"
 		},
 		"63": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "InlineEditController.subscribe"
 		},
 		"64": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "InlineEditController.subscribe"
 		},
 		"65": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "InlineEditController.commit"
+			"qualifiedName": "listener"
 		},
 		"66": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "InlineEditController.commit"
+			"qualifiedName": "__type"
 		},
 		"67": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "InlineEditController.cancel"
+			"qualifiedName": "__type"
 		},
 		"68": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "InlineEditController.cancel"
+			"qualifiedName": "__type"
 		},
 		"69": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "InlineEditSession"
+			"qualifiedName": "__type"
 		},
 		"70": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "InlineEditSession.nodeId"
+			"qualifiedName": "InlineEditController.commit"
 		},
 		"71": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/controller-types.ts",
-			"qualifiedName": "InlineEditSession.target"
+			"qualifiedName": "InlineEditController.commit"
 		},
 		"72": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/inline/tiptap-contract.ts",
-			"qualifiedName": "sanitizeTiptapDocument"
+			"packagePath": "src/react/editor/inline/controller-types.ts",
+			"qualifiedName": "InlineEditController.cancel"
 		},
 		"73": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/inline/controller-types.ts",
+			"qualifiedName": "InlineEditController.cancel"
+		},
+		"74": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/inline/controller-types.ts",
+			"qualifiedName": "InlineEditSession"
+		},
+		"75": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/inline/controller-types.ts",
+			"qualifiedName": "InlineEditSession.nodeId"
+		},
+		"76": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/inline/controller-types.ts",
+			"qualifiedName": "InlineEditSession.target"
+		},
+		"77": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/tiptap-contract.ts",
 			"qualifiedName": "sanitizeTiptapDocument"
 		},
-		"74": {
+		"78": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/inline/tiptap-contract.ts",
+			"qualifiedName": "sanitizeTiptapDocument"
+		},
+		"79": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/tiptap-contract.ts",
 			"qualifiedName": "input"
 		},
-		"75": {
+		"80": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/tiptap-contract.ts",
 			"qualifiedName": "TIPTAP_ALLOWED_MARKS"
 		},
-		"76": {
+		"81": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/inline/tiptap-contract.ts",
 			"qualifiedName": "TIPTAP_ALLOWED_NODES"
 		},
-		"77": {
+		"82": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
 			"qualifiedName": "StudioViewportController"
 		},
-		"78": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "StudioViewportController.getState"
-		},
-		"79": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "StudioViewportController.getState"
-		},
-		"80": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "StudioViewportController.subscribe"
-		},
-		"81": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "StudioViewportController.subscribe"
-		},
-		"82": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "listener"
-		},
 		"83": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioViewportController.getState"
 		},
 		"84": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioViewportController.getState"
 		},
 		"85": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "state"
+			"qualifiedName": "StudioViewportController.subscribe"
 		},
 		"86": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioViewportController.subscribe"
 		},
 		"87": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "listener"
 		},
 		"88": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "StudioViewportController.setWriteTarget"
+			"qualifiedName": "__type"
 		},
 		"89": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "StudioViewportController.setWriteTarget"
+			"qualifiedName": "__type"
 		},
 		"90": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "layer"
+			"qualifiedName": "state"
 		},
 		"91": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "StudioViewportController.setFollowViewport"
+			"qualifiedName": "__type"
 		},
 		"92": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "StudioViewportController.setFollowViewport"
+			"qualifiedName": "__type"
 		},
 		"93": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "followViewport"
+			"qualifiedName": "StudioViewportController.setWriteTarget"
 		},
 		"94": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "StudioViewportController.setShowOnlyOverrides"
+			"qualifiedName": "StudioViewportController.setWriteTarget"
 		},
 		"95": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "StudioViewportController.setShowOnlyOverrides"
+			"qualifiedName": "layer"
 		},
 		"96": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
-			"qualifiedName": "showOnlyOverrides"
+			"qualifiedName": "StudioViewportController.setFollowViewport"
 		},
 		"97": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController"
+			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
+			"qualifiedName": "StudioViewportController.setFollowViewport"
 		},
 		"98": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.getState"
+			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
+			"qualifiedName": "followViewport"
 		},
 		"99": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.getState"
+			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
+			"qualifiedName": "StudioViewportController.setShowOnlyOverrides"
 		},
 		"100": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.subscribe"
+			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
+			"qualifiedName": "StudioViewportController.setShowOnlyOverrides"
 		},
 		"101": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.subscribe"
+			"packagePath": "src/react/editor/responsive/viewport-controller.ts",
+			"qualifiedName": "showOnlyOverrides"
 		},
 		"102": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "listener"
+			"packagePath": "src/react/editor/StudioEditorMount.tsx",
+			"qualifiedName": "StudioEditorMount"
 		},
 		"103": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/react/editor/StudioEditorMount.tsx",
+			"qualifiedName": "StudioEditorMount"
 		},
 		"104": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/react/editor/StudioEditorMount.tsx",
+			"qualifiedName": "__0"
 		},
 		"105": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "state"
+			"packagePath": "src/react/editor/StudioEditorMount.tsx",
+			"qualifiedName": "StudioEditorMountProps"
 		},
 		"106": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/react/editor/StudioEditorMount.tsx",
+			"qualifiedName": "StudioEditorMountProps.editor"
 		},
 		"107": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/react/editor/StudioEditorMount.tsx",
+			"qualifiedName": "StudioEditorMountProps.bridge"
 		},
 		"108": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.select"
+			"packagePath": "src/react/editor/StudioEditorMount.tsx",
+			"qualifiedName": "StudioEditorMountProps.children"
 		},
 		"109": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.select"
+			"qualifiedName": "EditorSelectionController"
 		},
 		"110": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "nodeId"
+			"qualifiedName": "EditorSelectionController.getState"
 		},
 		"111": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.toggle"
+			"qualifiedName": "EditorSelectionController.getState"
 		},
 		"112": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.toggle"
+			"qualifiedName": "EditorSelectionController.subscribe"
 		},
 		"113": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "nodeId"
+			"qualifiedName": "EditorSelectionController.subscribe"
 		},
 		"114": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.selectRange"
+			"qualifiedName": "listener"
 		},
 		"115": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.selectRange"
+			"qualifiedName": "__type"
 		},
 		"116": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "nodeId"
+			"qualifiedName": "__type"
 		},
 		"117": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.selectMany"
+			"qualifiedName": "state"
 		},
 		"118": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.selectMany"
+			"qualifiedName": "__type"
 		},
 		"119": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "nodeIds"
+			"qualifiedName": "__type"
 		},
 		"120": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "primaryId"
+			"qualifiedName": "EditorSelectionController.select"
 		},
 		"121": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.clear"
+			"qualifiedName": "EditorSelectionController.select"
 		},
 		"122": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.clear"
+			"qualifiedName": "nodeId"
 		},
 		"123": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.setScope"
+			"qualifiedName": "EditorSelectionController.toggle"
 		},
 		"124": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "EditorSelectionController.setScope"
+			"qualifiedName": "EditorSelectionController.toggle"
 		},
 		"125": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/selection.ts",
-			"qualifiedName": "scope"
+			"qualifiedName": "nodeId"
 		},
 		"126": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/selection.ts",
+			"qualifiedName": "EditorSelectionController.selectRange"
+		},
+		"127": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/selection.ts",
+			"qualifiedName": "EditorSelectionController.selectRange"
+		},
+		"128": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/selection.ts",
+			"qualifiedName": "nodeId"
+		},
+		"129": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/selection.ts",
+			"qualifiedName": "EditorSelectionController.selectMany"
+		},
+		"130": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/selection.ts",
+			"qualifiedName": "EditorSelectionController.selectMany"
+		},
+		"131": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/selection.ts",
+			"qualifiedName": "nodeIds"
+		},
+		"132": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/selection.ts",
+			"qualifiedName": "primaryId"
+		},
+		"133": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/selection.ts",
+			"qualifiedName": "EditorSelectionController.clear"
+		},
+		"134": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/selection.ts",
+			"qualifiedName": "EditorSelectionController.clear"
+		},
+		"135": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/selection.ts",
+			"qualifiedName": "EditorSelectionController.setScope"
+		},
+		"136": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/selection.ts",
+			"qualifiedName": "EditorSelectionController.setScope"
+		},
+		"137": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/selection.ts",
+			"qualifiedName": "scope"
+		},
+		"138": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/shortcuts/registry.ts",
 			"qualifiedName": "EDITOR_SHORTCUT_KEYMAP"
 		},
-		"127": {
+		"139": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/shortcuts/registry.ts",
 			"qualifiedName": "EditorShortcutBinding"
 		},
-		"128": {
+		"140": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/shortcuts/registry.ts",
 			"qualifiedName": "EditorShortcutBinding.command"
 		},
-		"129": {
+		"141": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/shortcuts/registry.ts",
 			"qualifiedName": "EditorShortcutBinding.keys"
 		},
-		"130": {
+		"142": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/shortcuts/registry.ts",
 			"qualifiedName": "EditorShortcutBinding.labelKey"
 		},
-		"131": {
+		"143": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-resolved-node-style.ts",
 			"qualifiedName": "useResolvedNodeStyle"
 		},
-		"132": {
+		"144": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-resolved-node-style.ts",
 			"qualifiedName": "useResolvedNodeStyle"
 		},
-		"133": {
+		"145": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-resolved-node-style.ts",
 			"qualifiedName": "nodeId"
 		},
-		"134": {
+		"146": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-studio-editor.ts",
 			"qualifiedName": "StudioEditorHandle"
 		},
-		"135": {
+		"147": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-studio-editor.ts",
 			"qualifiedName": "StudioEditorHandle.status"
 		},
-		"136": {
+		"148": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-studio-editor.ts",
 			"qualifiedName": "StudioEditorHandle.commands"
 		},
-		"137": {
+		"149": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-studio-editor.ts",
 			"qualifiedName": "StudioEditorHandle.selection"
 		},
-		"138": {
+		"150": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-studio-editor.ts",
 			"qualifiedName": "StudioEditorHandle.viewport"
 		},
-		"139": {
+		"151": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-studio-editor.ts",
 			"qualifiedName": "StudioEditorHandle.diagnostics"
 		},
-		"140": {
+		"152": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-studio-editor.ts",
 			"qualifiedName": "useOptionalStudioEditor"
 		},
-		"141": {
+		"153": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-studio-editor.ts",
 			"qualifiedName": "useOptionalStudioEditor"
 		},
-		"142": {
+		"154": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-studio-editor.ts",
 			"qualifiedName": "useStudioEditor"
 		},
-		"143": {
+		"155": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-studio-editor.ts",
 			"qualifiedName": "useStudioEditor"
