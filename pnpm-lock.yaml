@@ -1249,7 +1249,7 @@ importers:
         specifier: workspace:*
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
-        specifier: ^0.22.1
+        specifier: ^0.22.2
         version: 0.22.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
