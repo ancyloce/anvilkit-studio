@@ -215,6 +215,7 @@ describe("resolveToken (§24.5)", () => {
 	it("resolves literals and alias chains", () => {
 		expect(resolveToken("direct", "light", tokens, modes)).toEqual({
 			status: "resolved",
+			modeId: "light",
 			value: "#111111",
 			type: "color",
 			tokenId: "direct",

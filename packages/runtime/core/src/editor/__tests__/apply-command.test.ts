@@ -159,20 +159,24 @@ describe("validation", () => {
 	});
 
 	it("rejects later-phase commands with EDITOR_CAPABILITY_UNSUPPORTED", () => {
+		// `interaction.create` is Phase 3 scope (EP-14); the token
+		// commands this test originally used shipped in CORE-P2-001.
 		const result = applyEditorCommand(createEmptyAuthoringState(), {
 			...base(0),
-			type: "token.create",
-			token: {
-				id: "t1",
-				path: ["color"],
-				name: "Primary",
-				type: "color",
-				values: {},
+			type: "interaction.create",
+			interaction: {
+				version: "1",
+				id: "i1",
+				name: "Open",
+				sourceNodeId: "n1",
+				enabled: true,
+				trigger: { type: "click" },
+				actions: [],
 			},
 		});
 		expect(result.status).toBe("rejected");
 		expect(result.errors[0]?.code).toBe("EDITOR_CAPABILITY_UNSUPPORTED");
-		expect(result.errors[0]?.details?.commandType).toBe("token.create");
+		expect(result.errors[0]?.details?.commandType).toBe("interaction.create");
 	});
 });
 
