@@ -44,6 +44,7 @@
  *    plugins and `coreVersion` ranges keep working without modification.
  */
 
+import type { StudioPluginCollabCapability } from "@anvilkit/contracts/editor";
 import type {
 	Config as PuckConfig,
 	Data as PuckData,
@@ -65,7 +66,10 @@ export type { StudioPluginContext } from "./plugin-context.js";
 // `StudioLogLevel` now lives in the leaf module `./log.js` (so `sidebar.ts`
 // can reference it without a madge cycle); re-exported here so existing
 // `@anvilkit/core/types` and `@/types/plugin` consumers are unaffected.
-export type { StudioLogLevel };
+// Owned by `@anvilkit/contracts/editor` (foundation layer, CORE-P0-020
+// freeze §1); re-exported from Core's types surface so plugin authors
+// need no extra import root.
+export type { StudioLogLevel, StudioPluginCollabCapability };
 
 /**
  * Identifying metadata every Studio plugin must declare.
@@ -220,7 +224,8 @@ export interface StudioPluginMeta {
 export type StudioPluginPrefetch = "mount" | "idle" | "interaction";
 
 /**
- * Declarative capability hint carried on {@link StudioPluginMeta}.
+ * Declarative **surface** capability hint carried on
+ * {@link StudioPluginMeta}.
  *
  * `sidebar` and `header` are **mutually exclusive** — a plugin
  * self-declares the single primary surface it contributes, or neither.
@@ -234,7 +239,7 @@ export type StudioPluginPrefetch = "mount" | "idle" | "interaction";
  * `boolean` (rather than literal `true`) keeps the JSON-sourced
  * `meta/config.json` spread assignable without a cast.
  */
-export type StudioPluginCapabilities =
+export type StudioPluginSurfaceCapabilities =
 	| {
 			/**
 			 * `true` when the plugin contributes sidebar UI (asset source,
@@ -249,6 +254,32 @@ export type StudioPluginCapabilities =
 			readonly header?: boolean;
 			readonly sidebar?: never;
 	  };
+
+/**
+ * Declarative **runtime** capabilities carried on
+ * {@link StudioPluginMeta} — normative declarations the runtime *does*
+ * read (unlike the advisory surface flags).
+ *
+ * `collaboration` MUST be declared by every collab transport plugin
+ * (DD-0019 §7.4; CORE-P0-020 freeze) — in **TypeScript** meta only:
+ * a JSON-sourced `meta/config.json` value widens the encoding literal
+ * to `string` and is deliberately not assignable (the same precedent
+ * as `StudioPluginMeta.icon`). Undeclared transports are undetectable
+ * — a documented limitation.
+ */
+export interface StudioPluginRuntimeCapabilities {
+	readonly collaboration?: StudioPluginCollabCapability;
+}
+
+/**
+ * Combined plugin capability declaration (restructured by the
+ * CORE-P0-020 freeze): the sidebar-XOR-header surface union
+ * intersected with the runtime capabilities. Intersection distributes
+ * over the union, so the XOR is preserved and every previously valid
+ * assignment stays valid.
+ */
+export type StudioPluginCapabilities = StudioPluginSurfaceCapabilities &
+	StudioPluginRuntimeCapabilities;
 
 export type { AssetResolution, IRAssetResolver } from "./asset-resolver.js";
 

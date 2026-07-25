@@ -27,6 +27,11 @@ export type {
 	StudioExperimentalConfig,
 } from "./config.js";
 export type {
+	EditorCapabilityRegistry,
+	EditorSelectionReader,
+	StudioPluginEditorApi,
+} from "./editor-api.js";
+export type {
 	ExportFormatDefinition,
 	ExportFormatRunContext,
 	ExportOptions,
@@ -61,6 +66,7 @@ export type {
 	StudioOverlayPlacement,
 	StudioPlugin,
 	StudioPluginCapabilities,
+	StudioPluginCollabCapability,
 	StudioPluginContext,
 	StudioPluginContributing,
 	StudioPluginLifecycleHooks,
@@ -69,7 +75,9 @@ export type {
 	StudioPluginPrefetch,
 	StudioPluginProvider,
 	StudioPluginRegistration,
+	StudioPluginRuntimeCapabilities,
 	StudioPluginSlotContribution,
+	StudioPluginSurfaceCapabilities,
 	StudioSlotId,
 } from "./plugin.js";
 export { defineStudioPlugin } from "./plugin.js";

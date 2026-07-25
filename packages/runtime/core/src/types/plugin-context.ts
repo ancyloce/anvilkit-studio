@@ -20,6 +20,7 @@ import type {
 import type { RegistryEntry } from "@/i18n/registry";
 import type { IRAssetResolver } from "./asset-resolver.js";
 import type { StudioConfig } from "./config.js";
+import type { StudioPluginEditorApi } from "./editor-api.js";
 import type { StudioLogLevel } from "./log.js";
 import type {
 	StudioAssetAction,
@@ -339,6 +340,17 @@ export interface StudioPluginContext<
 	readonly registerPageSettingsSeoFields?: (
 		fields: StudioPageSettingsSeoFields,
 	) => StudioSidebarUnregister;
+
+	/**
+	 * The visual-editor API (DD-0019 §21.1; additive, CORE-P1A-003).
+	 * Present exactly when the host enabled the editor
+	 * (`StudioProps.editor.features.enabled === true`); its presence is
+	 * the feature signal for plugins. Commands issued here flow through
+	 * the same single mutation path as the editor UI (one
+	 * history-recording dispatch per intent); reads are snapshots and
+	 * read-only projections — no raw store handles.
+	 */
+	readonly editor?: StudioPluginEditorApi;
 }
 
 /**
