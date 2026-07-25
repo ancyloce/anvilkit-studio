@@ -253,6 +253,25 @@ export interface CreateComponentDefinitionCommand extends EditorCommandBase {
 }
 
 /**
+ * Patch a component definition — the definition-edit surface behind
+ * main-component mode (DD-0019 §14.4): renames, root-tree edits,
+ * exposed-property declarations, and the variant axis/combination
+ * model. Added additively by CORE-P2-009A per freeze D-2.
+ *
+ * `id` and `version` are immutable, and `revision` is **not**
+ * patchable: the reducer bumps it, so propagation is observable and a
+ * caller cannot forge a stale revision (freeze D-7 — reducers derive,
+ * callers do not supply).
+ */
+export interface UpdateComponentDefinitionCommand extends EditorCommandBase {
+	readonly type: "component.definition.update";
+	readonly definitionId: ComponentDefinitionId;
+	readonly patch: EditorPatch<
+		Omit<ComponentDefinitionV1, "id" | "version" | "revision">
+	>;
+}
+
+/**
  * Delete a component definition (freeze §3.1/§4). Carries no
  * confirmation token: confirmation is a UI flow that materializes as
  * either cancel or the detach-all→delete batch.
@@ -374,6 +393,7 @@ export type AtomicEditorCommand =
 	| UpdateTokenCommand
 	| DeleteTokenCommand
 	| CreateComponentDefinitionCommand
+	| UpdateComponentDefinitionCommand
 	| DeleteComponentDefinitionCommand
 	| SetComponentPropOverrideCommand
 	| SetComponentNodeOverrideCommand

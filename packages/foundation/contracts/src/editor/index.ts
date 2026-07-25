@@ -93,6 +93,7 @@ export type {
 	SetNodeVisibilityCommand,
 	SetResponsiveOverrideCommand,
 	UpdateBindingCommand,
+	UpdateComponentDefinitionCommand,
 	UpdateStyleDefinitionCommand,
 	UpdateTokenCommand,
 } from "./commands.js";
