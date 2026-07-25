@@ -35,6 +35,7 @@ export {
 } from "./commands/apply.js";
 export { reduceValidatedCommand } from "./commands/reduce.js";
 export {
+	type ValidateCommandOptions,
 	validateAtomicCommand,
 	validateEditorCommand,
 } from "./commands/validate.js";
@@ -45,6 +46,47 @@ export {
 	type CreateComponentPlan,
 	validateCreateComponentSelection,
 } from "./components/create.js";
+export {
+	buildDetachPlan,
+	type DetachFailure,
+	type DetachPlan,
+	isDetachFailure,
+} from "./components/detach.js";
+export {
+	collectDefinitionNodeIds,
+	collectOrphanOverrides,
+	type OrphanOverride,
+	orphanOverrideDiagnostics,
+	setNodeOverride,
+	setPropOverride,
+} from "./components/instances.js";
+export { applyComponentDefinitionPatch } from "./components/patch.js";
+export {
+	type DroppedOverride,
+	droppedOverrideDiagnostics,
+	switchInstanceVariant,
+	type VariantSwitchResult,
+} from "./components/variant-switch.js";
+export {
+	matchVariant,
+	validateVariantModel,
+	variantCombinationCount,
+	variantCombinationKey,
+} from "./components/variants.js";
+export {
+	promoteComponentOverride,
+	resetAllComponentOverrides,
+	resetComponentOverride,
+} from "./components/overrides.js";
+export {
+	collectUnresolvedInstances,
+	countLiveInstances,
+	type DefinitionUsage,
+	deleteDefinition,
+	type UnresolvedInstance,
+	unresolvedInstanceDiagnostics,
+	validateDefinitionDelete,
+} from "./components/lifecycle.js";
 export {
 	COMPONENT_INSTANCE_PROP,
 	formatComponentPath,

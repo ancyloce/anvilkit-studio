@@ -36,6 +36,7 @@ import type {
 	SerializablePuckNode,
 } from "@anvilkit/contracts/editor";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
+import { matchVariant } from "./variants.js";
 
 /**
  * The prop key that marks a node inside a definition root as a
@@ -204,14 +205,9 @@ function selectVariant(
 	definition: ComponentDefinitionV1,
 	selection: Readonly<Record<string, string>>,
 ): Readonly<Record<string, NodeOverridePatch>> {
-	const axes = definition.variantAxes;
-	if (axes.length === 0) {
-		return {};
-	}
-	const match = definition.variants.find((variant) =>
-		axes.every((axis) => variant.selection[axis.id] === selection[axis.id]),
-	);
-	return match?.patch ?? {};
+	// One matcher, shared with the variant-model validator, so
+	// "which variant is active" cannot mean two different things.
+	return matchVariant(definition, selection)?.patch ?? {};
 }
 
 /** Step 2 — exposed properties, written at their `sourcePath`. */
