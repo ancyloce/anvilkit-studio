@@ -19,16 +19,19 @@ import type {
 	EditorError,
 	EditorPatch,
 	ResponsiveLayerRef,
+	StyleDefinitionV1,
 } from "@anvilkit/contracts/editor";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
 import {
 	DesignTokenSchema,
 	LayoutSpecSchema,
+	StyleDefinitionSchema,
 	TypographySpecSchema,
 	VisualStyleSpecSchema,
 } from "@anvilkit/schema/editor";
 import { makeEditorError } from "../diagnostics.js";
 import { stripPatchNulls } from "../patch.js";
+import { applyStyleDefinitionPatch } from "../styles/patch.js";
 import { planTokenDeletion } from "../tokens/deletion.js";
 import { checkTokenAliasGraph } from "../tokens/graph.js";
 import { applyTokenPatch } from "../tokens/patch.js";
@@ -49,6 +52,12 @@ const IMPLEMENTED_TYPES = new Set<string>([
 	"token.create",
 	"token.update",
 	"token.delete",
+	// Phase 2 — reusable style definitions (CORE-P2-003)
+	"styleDefinition.create",
+	"styleDefinition.attach",
+	"styleDefinition.update",
+	"styleDefinition.detach",
+	"styleDefinition.delete",
 ]);
 
 /** §12.2 invariants for the breakpoint set (CORE-P1A-008). */
@@ -133,6 +142,46 @@ function breakpointSetErrors(
 		widths.add(breakpoint.maxWidth);
 	}
 	return errors;
+}
+
+function missingStyleDefinitionErrors(
+	state: AuthoringStateV1,
+	styleDefinitionId: string,
+): readonly EditorError[] {
+	if (state.styleDefinitions[styleDefinitionId] !== undefined) {
+		return [];
+	}
+	return [
+		makeEditorError(
+			"EDITOR_NODE_NOT_FOUND",
+			`style definition "${styleDefinitionId}" is not in this document`,
+			{ details: { kind: "styleDefinition", id: styleDefinitionId } },
+		),
+	];
+}
+
+function styleDefinitionShapeErrors(
+	styleDefinitionId: string,
+	definition: StyleDefinitionV1,
+): readonly EditorError[] {
+	const parsed = StyleDefinitionSchema.safeParse(definition);
+	if (parsed.success) {
+		return [];
+	}
+	return [
+		makeEditorError(
+			"EDITOR_INVALID_CSS_VALUE",
+			`style definition "${styleDefinitionId}" is not valid`,
+			{
+				details: {
+					kind: "styleDefinition",
+					id: styleDefinitionId,
+					issueCount: parsed.error?.issues.length ?? 0,
+					firstPath: parsed.error?.issues[0]?.path.map(String) ?? [],
+				},
+			},
+		),
+	];
 }
 
 /**
@@ -378,6 +427,73 @@ export function validateAtomicCommand(
 			];
 		case "breakpoints.set":
 			return breakpointSetErrors(command.breakpoints);
+		case "styleDefinition.create": {
+			const errors: EditorError[] = [];
+			if (state.styleDefinitions[command.definition.id] !== undefined) {
+				errors.push(
+					makeEditorError(
+						"EDITOR_COMMAND_CONFLICT",
+						`style definition "${command.definition.id}" already exists`,
+						{
+							details: {
+								kind: "styleDefinition",
+								id: command.definition.id,
+								reason: "duplicate-id",
+							},
+						},
+					),
+				);
+				return errors;
+			}
+			const count = Object.keys(state.styleDefinitions).length + 1;
+			if (count > EDITOR_COUNT_LIMITS.styleDefinitions) {
+				errors.push(
+					makeEditorError(
+						"EDITOR_LIMIT_EXCEEDED",
+						`documents allow at most ${EDITOR_COUNT_LIMITS.styleDefinitions} style definitions`,
+						{
+							details: {
+								limitKey: "styleDefinitions",
+								limit: EDITOR_COUNT_LIMITS.styleDefinitions,
+								actual: count,
+							},
+						},
+					),
+				);
+			}
+			errors.push(
+				...styleDefinitionShapeErrors(
+					command.definition.id,
+					command.definition,
+				),
+			);
+			return errors;
+		}
+		case "styleDefinition.attach":
+			return [
+				...nodeIdsErrors(command.nodeIds),
+				...lockedErrors(state, command.nodeIds),
+				...layerErrors(state, command.layer, true),
+				...missingStyleDefinitionErrors(state, command.styleDefinitionId),
+			];
+		case "styleDefinition.detach":
+			return [
+				...nodeIdsErrors(command.nodeIds),
+				...lockedErrors(state, command.nodeIds),
+				...layerErrors(state, command.layer, true),
+			];
+		case "styleDefinition.update": {
+			const current = state.styleDefinitions[command.styleDefinitionId];
+			if (current === undefined) {
+				return missingStyleDefinitionErrors(state, command.styleDefinitionId);
+			}
+			return styleDefinitionShapeErrors(
+				command.styleDefinitionId,
+				applyStyleDefinitionPatch(current, command.patch),
+			);
+		}
+		case "styleDefinition.delete":
+			return missingStyleDefinitionErrors(state, command.styleDefinitionId);
 		case "token.create":
 			return tokenCreateErrors(state, command.token);
 		case "token.update":

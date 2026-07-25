@@ -18,50 +18,18 @@ import type {
 	ResponsiveLayerRef,
 	ResponsiveValue,
 } from "@anvilkit/contracts/editor";
+import { getRecord, withRecord } from "../node-records.js";
 import { applyEditorPatch } from "../patch.js";
+import { applyStyleDefinitionPatch } from "../styles/patch.js";
+import {
+	attachStyleDefinition,
+	deleteStyleDefinition,
+	detachStyleDefinition,
+} from "../styles/style-definitions.js";
 import { applyTokenDeletion } from "../tokens/deletion.js";
 import { applyTokenPatch } from "../tokens/patch.js";
 
 type FamilyKey = Exclude<ResponsiveFamily, "hidden" | "styleRefs">;
-
-const EMPTY_RECORD: NodeAuthoringStateV1 = { version: "1" };
-
-function getRecord(
-	state: AuthoringStateV1,
-	nodeId: string,
-): NodeAuthoringStateV1 {
-	return state.nodes[nodeId] ?? EMPTY_RECORD;
-}
-
-/** True when a record carries nothing beyond its version marker. */
-function isDefaultRecord(record: NodeAuthoringStateV1): boolean {
-	return Object.keys(record).every(
-		(key) =>
-			key === "version" ||
-			(record as unknown as Record<string, unknown>)[key] === undefined,
-	);
-}
-
-function withRecord(
-	state: AuthoringStateV1,
-	nodeId: string,
-	record: NodeAuthoringStateV1,
-): AuthoringStateV1 {
-	const existing = state.nodes[nodeId];
-	if (existing === record) {
-		return state;
-	}
-	const nodes = { ...state.nodes };
-	if (isDefaultRecord(record)) {
-		if (existing === undefined) {
-			return state;
-		}
-		delete nodes[nodeId];
-	} else {
-		nodes[nodeId] = record;
-	}
-	return { ...state, nodes };
-}
 
 function setResponsiveEntry<T>(
 	value: ResponsiveValue<T> | undefined,
@@ -361,6 +329,55 @@ export function reduceValidatedCommand(
 			}
 			return next;
 		}
+		case "styleDefinition.create":
+			// Validation rejects duplicate ids, so this only ever adds.
+			return {
+				...state,
+				styleDefinitions: {
+					...state.styleDefinitions,
+					[command.definition.id]: command.definition,
+				},
+			};
+		case "styleDefinition.update": {
+			const current = state.styleDefinitions[command.styleDefinitionId];
+			if (current === undefined) {
+				return state;
+			}
+			const next = applyStyleDefinitionPatch(current, command.patch);
+			if (next === current) {
+				return state;
+			}
+			// Referencing nodes hold ids, not copies, so the change
+			// propagates by resolution alone (ED-STYLEDEF-002).
+			return {
+				...state,
+				styleDefinitions: {
+					...state.styleDefinitions,
+					[command.styleDefinitionId]: next,
+				},
+			};
+		}
+		case "styleDefinition.attach":
+			return attachStyleDefinition(
+				state,
+				command.nodeIds,
+				command.styleDefinitionId,
+				command.layer,
+				command.position,
+			);
+		case "styleDefinition.detach":
+			return detachStyleDefinition(
+				state,
+				command.nodeIds,
+				command.styleDefinitionId,
+				command.layer,
+			);
+		case "styleDefinition.delete":
+			return deleteStyleDefinition(
+				state,
+				command.styleDefinitionId,
+				command.disposition.kind === "materialize",
+			);
 		case "token.create": {
 			// Validation rejects duplicate ids, so this only ever adds.
 			return {
