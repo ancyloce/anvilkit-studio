@@ -49,6 +49,8 @@ import {
 } from "@/state/slices/editor-ui-selectors";
 import { FULL_WIDTH_VIEWPORTS } from "@/studio/ui/index";
 import { CanvasHomeButton } from "./CanvasHomeButton";
+import { ResponsiveToolbarMount } from "../../react/editor/responsive/ResponsiveToolbarMount.js";
+import { useEditorViewportSync } from "../../react/editor/responsive/use-editor-viewport-sync.js";
 import { CanvasViewportSelector } from "./CanvasViewportSelector";
 import { CanvasZoomControls } from "./CanvasZoomControls";
 import { useCanvasFrameSize } from "./use-canvas-frame-size";
@@ -107,6 +109,11 @@ function StudioViewportPreviewImpl({
 	const stageWidth = naturalWidth > 0 ? naturalWidth * zoom : undefined;
 	const stageHeight = naturalHeight > 0 ? naturalHeight * zoom : undefined;
 
+	// Editor responsive state feed (CORE-P1A-008): mirrors the live
+	// preview width so follow mode / provenance track the viewport. A
+	// no-op unless the editor feature is enabled.
+	useEditorViewportSync(naturalWidth);
+
 	return (
 		// `relative` so the floating controls below anchor to this stable
 		// box, not to the scrollable workspace — they must stay put while
@@ -151,6 +158,9 @@ function StudioViewportPreviewImpl({
 			<div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
 				<CanvasHomeButton />
 				<CanvasViewportSelector />
+				{/* Responsive write-target toolbar (CORE-P1A-008): renders
+				    nothing unless the editor feature is enabled. */}
+				<ResponsiveToolbarMount />
 			</div>
 			<CanvasZoomControls
 				naturalWidth={naturalWidth}

@@ -52,6 +52,7 @@ function fakeRuntime(overrides: Partial<StudioRuntime> = {}): StudioRuntime {
 		puckPlugins: [],
 		sidebar: {} as StudioRuntime["sidebar"],
 		i18n: { entries: [] },
+		collabCapabilities: [],
 		...overrides,
 	};
 }

@@ -33,13 +33,24 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useGetPuck } from "@puckeditor/core";
-import { memo, type ReactNode, useCallback, useMemo, useState } from "react";
+import {
+	memo,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import { toast } from "sonner";
 import { Windowed } from "@/primitives/windowed";
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
 import { useEditorUiStore } from "@/state/slices/editor-ui-selectors";
 import type { EditorUiState } from "@/state/slices/editor-ui-store";
+import type { InternalEditorSelectionController } from "../../../../../../react/editor/selection";
+import { collectLockedSubtree, filterLayerTree } from "../hooks/layer-search";
+import { useEditorLayers } from "../hooks/use-editor-layers";
 import {
 	buildNodeIndex,
 	collectSubtreeZones,
@@ -91,12 +102,15 @@ interface LayerZoneProps {
 	readonly zoneKey: string;
 	readonly nodes: readonly LayerNode[];
 	readonly selectedId: string | null;
+	/** Locked-subtree fence (editor on only; CORE-P1A-010). */
+	readonly lockedSet?: ReadonlySet<string>;
 }
 
 function LayerZoneImpl({
 	zoneKey,
 	nodes,
 	selectedId,
+	lockedSet,
 }: LayerZoneProps): ReactNode {
 	const outlineExpanded = useEditorUiStore(selectOutlineExpanded);
 	const setOutlineExpanded = useEditorUiStore(selectSetOutlineExpanded);
@@ -137,6 +151,7 @@ function LayerZoneImpl({
 								hasChildren={hasChildren}
 								siblingCount={nodes.length}
 								onToggleExpand={handleToggle}
+								effectiveLocked={lockedSet?.has(node.id) ?? false}
 							/>
 							{hasChildren && expanded
 								? node.childZones.map((childZone) => (
@@ -145,6 +160,7 @@ function LayerZoneImpl({
 											zoneKey={childZone.zoneKey}
 											nodes={childZone.items}
 											selectedId={selectedId}
+											lockedSet={lockedSet}
 										/>
 									))
 								: null}
@@ -195,11 +211,34 @@ function LayerZoneDropTarget({
 	);
 }
 
-export function LayerTree(): ReactNode {
+/** Props for {@link LayerTree}. */
+export interface LayerTreeProps {
+	/** §18 search query (editor on only); blank renders the full tree. */
+	readonly searchQuery?: string;
+}
+
+export function LayerTree({ searchQuery }: LayerTreeProps = {}): ReactNode {
 	const msg = useMsg();
 	const getPuck = useGetPuck();
-	const { roots, selectedId } = useLayerTree();
+	const { roots: fullRoots, selectedId } = useLayerTree();
 	const [activeId, setActiveId] = useState<string | null>(null);
+	const editor = useEditorLayers();
+
+	// §18 search: prune to matches + ancestors (name/type/id). The
+	// full tree passes through by reference for a blank query.
+	const roots = useMemo(
+		() => filterLayerTree(fullRoots, searchQuery ?? "", editor?.nameOf),
+		[fullRoots, searchQuery, editor],
+	);
+	// Locked-ancestor fence over the FULL tree (a filtered-out locked
+	// ancestor still fences its visible descendants).
+	const lockedSet = useMemo(
+		() =>
+			editor === null
+				? undefined
+				: collectLockedSubtree(fullRoots, editor.isLocked),
+		[fullRoots, editor],
+	);
 
 	// `id → node` index for O(1) lookups in the drag handlers and a11y
 	// announcements (review finding P-2) — replaces repeated
@@ -250,11 +289,28 @@ export function LayerTree(): ReactNode {
 					hasChildren={row.hasChildren}
 					siblingCount={row.siblingCount}
 					onToggleExpand={handleToggle}
+					effectiveLocked={lockedSet?.has(row.node.id) ?? false}
 				/>
 			);
 		},
-		[selectedId, outlineExpanded, handleToggle],
+		[selectedId, outlineExpanded, handleToggle, lockedSet],
 	);
+
+	// Range-select visible order (CORE-P1A-011): the selection
+	// controller's shift-range spans by the tree's visible row order.
+	// A ref keeps the provider stable while its output tracks renders.
+	const visibleOrderRef = useRef<readonly string[]>([]);
+	visibleOrderRef.current = flatNodeIds;
+	useEffect(() => {
+		const selection = editor?.selection as
+			| InternalEditorSelectionController
+			| undefined;
+		if (selection?.setVisibleOrderProvider === undefined) {
+			return;
+		}
+		selection.setVisibleOrderProvider(() => visibleOrderRef.current);
+		return () => selection.setVisibleOrderProvider(null);
+	}, [editor]);
 
 	const sensors = useSensors(
 		useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -401,6 +457,7 @@ export function LayerTree(): ReactNode {
 						zoneKey={ROOT_ZONE}
 						nodes={roots}
 						selectedId={selectedId}
+						lockedSet={lockedSet}
 					/>
 				)}
 			</div>

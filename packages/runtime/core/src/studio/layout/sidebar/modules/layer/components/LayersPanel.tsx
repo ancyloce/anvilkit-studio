@@ -27,7 +27,7 @@ import {
 	Rows,
 	Type,
 } from "lucide-react";
-import { type ReactNode, useMemo } from "react";
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { useStudioPagesSourceOrDefault } from "@/context/pages-source";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
@@ -46,6 +46,11 @@ import type {
 	StudioLayerQuickAdd,
 	StudioLayerQuickAddInserter,
 } from "@/types/sidebar";
+import { Input } from "@/primitives/input";
+import { AccessibilityIssuesMount } from "../../../../../../react/editor/a11y/AccessibilityIssuesMount.js";
+import { StudioEditorBridgeContext } from "../../../../../../react/editor/use-studio-editor.js";
+import { use } from "react";
+import { useEditorLayers } from "../hooks/use-editor-layers";
 import { useSourceList } from "../hooks/use-source-list";
 import { LayerTree } from "./LayerTree";
 
@@ -92,6 +97,21 @@ interface ResolvedQuickAdd {
 
 export function LayersPanel(): ReactNode {
 	const msg = useMsg();
+	// §18 layer search (CORE-P1A-010): editor-gated; transient input.
+	const editorLayers = useEditorLayers();
+	const [searchQuery, setSearchQuery] = useState("");
+	const searchRef = useRef<HTMLInputElement | null>(null);
+	// find-layer (CORE-P1A-017): the shortcut focuses this input.
+	const editorBridge = use(StudioEditorBridgeContext);
+	useEffect(() => {
+		if (editorBridge === null) {
+			return;
+		}
+		editorBridge.focusLayerSearch = () => searchRef.current?.focus();
+		return () => {
+			editorBridge.focusLayerSearch = null;
+		};
+	}, [editorBridge]);
 	// Falls back to a synthetic active "Home" page when the host passes
 	// no `pages` prop, so the outline renders by default instead of the
 	// "Select a page to see its layers." empty state. A real source with
@@ -173,6 +193,18 @@ export function LayersPanel(): ReactNode {
 			    already conveys which mode is active (task Phase 6: avoid
 			    duplicating that title inside the panel body). */}
 			<div className="flex h-8 shrink-0 items-center justify-end gap-1 px-2 border-b border-[var(--ak-studio-border)]">
+				{editorLayers !== null ? (
+					<Input
+						ref={searchRef}
+						type="search"
+						value={searchQuery}
+						placeholder={msg("studio.editor.layers.search")}
+						aria-label={msg("studio.editor.layers.search")}
+						className="h-6 min-w-0 flex-1 text-xs"
+						data-testid="ak-layer-search"
+						onChange={(event) => setSearchQuery(event.target.value)}
+					/>
+				) : null}
 				<DropdownMenu>
 					<Tooltip>
 						<TooltipTrigger
@@ -237,8 +269,11 @@ export function LayersPanel(): ReactNode {
 					/>
 				) : (
 					<ScrollArea>
+						{/* Contract a11y diagnostics (CORE-P1A-012): renders
+						    nothing when the editor is off or the doc is clean. */}
+						<AccessibilityIssuesMount />
 						<div data-ak-layer-outline className="px-2 py-1">
-							<LayerTree />
+							<LayerTree searchQuery={searchQuery} />
 						</div>
 					</ScrollArea>
 				)}
