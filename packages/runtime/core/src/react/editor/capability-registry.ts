@@ -46,20 +46,34 @@ export function createEditorCapabilityRegistry(
 	const forComponent = (
 		componentType: string,
 	): EditorCapabilityMetadata | undefined => {
-		const components = api()?.config.components as
-			| Record<string, unknown>
-			| undefined;
-		const component = components?.[componentType];
-		return component === undefined ? undefined : readEditorMetadata(component);
+		try {
+			const components = api()?.config.components as
+				| Record<string, unknown>
+				| undefined;
+			const component = components?.[componentType];
+			return component === undefined ? undefined : readEditorMetadata(component);
+		} catch {
+			return undefined;
+		}
 	};
 
 	return {
 		forComponent,
 		forNode(nodeId: string): EditorCapabilityMetadata | undefined {
-			const item = api()?.getItemById(nodeId);
-			return item === undefined || item === null
-				? undefined
-				: forComponent(item.type);
+			// Puck's own id index throws while its app state is mid-
+			// transition — notably on the render right after an undo of a
+			// tree mutation. A capability lookup is advisory, so a
+			// transient failure must degrade to "no metadata" (the legacy
+			// path) and never take the chrome down with it: this call
+			// happens during render, where a throw crashes the Studio.
+			try {
+				const item = api()?.getItemById(nodeId);
+				return item === undefined || item === null
+					? undefined
+					: forComponent(item.type);
+			} catch {
+				return undefined;
+			}
 		},
 		listUsedFeatures(): readonly EditorFeatureId[] {
 			return listUsedAuthoringFeatures(deps.readAuthoring());

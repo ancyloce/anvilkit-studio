@@ -85,6 +85,40 @@ describe("createEditorCapabilityRegistry (CORE-P1A-003)", () => {
 		expect(registry.listUsedFeatures()).toEqual(["responsive", "tokens"]);
 	});
 
+	it("survives a throwing Puck id index (undo-crash regression)", () => {
+		// Puck's `getItemById` throws while its app state is mid-
+		// transition — observed in the browser on the render right
+		// after undoing a tree mutation, where the throw propagated out
+		// of a render path and took the whole Studio chrome down.
+		const registry = createEditorCapabilityRegistry({
+			getPuckApi: () =>
+				({
+					config: { components: { Hero: {} } },
+					getItemById: () => {
+						throw new TypeError("Cannot read properties of undefined");
+					},
+				}) as unknown as PuckApi,
+			readAuthoring: () => createEmptyAuthoringState(),
+		});
+		expect(() => registry.forNode("node-hero")).not.toThrow();
+		expect(registry.forNode("node-hero")).toBeUndefined();
+	});
+
+	it("survives a throwing Puck config accessor", () => {
+		const registry = createEditorCapabilityRegistry({
+			getPuckApi: () =>
+				({
+					get config(): never {
+						throw new TypeError("config unavailable mid-transition");
+					},
+					getItemById: () => undefined,
+				}) as unknown as PuckApi,
+			readAuthoring: () => createEmptyAuthoringState(),
+		});
+		expect(() => registry.forComponent("Hero")).not.toThrow();
+		expect(registry.forComponent("Hero")).toBeUndefined();
+	});
+
 	it("degrades to undefined/empty before <Puck> binds", () => {
 		const registry = createEditorCapabilityRegistry({
 			getPuckApi: () => {
