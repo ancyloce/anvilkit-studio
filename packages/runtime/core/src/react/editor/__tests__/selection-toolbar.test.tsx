@@ -159,6 +159,25 @@ describe("canvas selection toolbar (CORE-P1B-013)", () => {
 		expect(bridge.selection?.getState().selectedIds).toEqual([]);
 	});
 
+	it("runs the §18 bulk duplicate through one commitNative dispatch", async () => {
+		const { bridge, doc, port, recordedCount } = setup();
+		act(() => bridge.selection?.selectMany(["legacy-1", "legacy-2"]));
+		const button = await waitFor(() => {
+			const el = doc.querySelector('[data-ak-toolbar-action="duplicate"]');
+			expect(el).not.toBeNull();
+			return el as HTMLElement;
+		});
+		act(() => {
+			button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+		});
+		// The duplicate path is async (dynamic imports) before its single
+		// `commitNative` dispatch.
+		await waitFor(() => expect(port.getSnapshot().revision).toBe(1), {
+			timeout: 3000,
+		});
+		expect(recordedCount()).toBe(1);
+	});
+
 	it("hides while an inline session is active", async () => {
 		const { bridge, doc } = setup();
 		bridge.inline = {

@@ -17,6 +17,16 @@
 				"default": "./dist/index.cjs"
 			}
 		},
+		"./editor": {
+			"import": {
+				"types": "./dist/editor/index.d.ts",
+				"default": "./dist/editor/index.js"
+			},
+			"require": {
+				"types": "./dist/cjs/editor/index.d.cts",
+				"default": "./dist/editor/index.cjs"
+			}
+		},
 		"./types": {
 			"import": {
 				"types": "./dist/types/index.d.ts",
@@ -77,6 +87,16 @@
 				"default": "./dist/react/index.cjs"
 			}
 		},
+		"./react/editor": {
+			"import": {
+				"types": "./dist/react/editor/index.d.ts",
+				"default": "./dist/react/editor/index.js"
+			},
+			"require": {
+				"types": "./dist/cjs/react/editor/index.d.cts",
+				"default": "./dist/react/editor/index.cjs"
+			}
+		},
 		"./compat": {
 			"import": {
 				"types": "./dist/compat/index.d.ts",
@@ -95,6 +115,16 @@
 			"require": {
 				"types": "./dist/cjs/testing/index.d.cts",
 				"default": "./dist/testing/index.cjs"
+			}
+		},
+		"./testing/editor": {
+			"import": {
+				"types": "./dist/testing/editor/index.d.ts",
+				"default": "./dist/testing/editor/index.js"
+			},
+			"require": {
+				"types": "./dist/cjs/testing/editor/index.d.cts",
+				"default": "./dist/testing/editor/index.cjs"
 			}
 		},
 		"./templates": {
@@ -147,6 +177,8 @@
 	},
 	"dependencies": {
 		"@anvilkit/contracts": "workspace:*",
+		"@anvilkit/ir": "workspace:*",
+		"@anvilkit/schema": "workspace:*",
 		"@anvilkit/ui": "workspace:*",
 		"@anvilkit/utils": "workspace:*",
 		"@base-ui/react": "^1.6.0",
@@ -217,8 +249,11 @@
 		"check:api-snapshot-icu": "typedoc --json ./api/api-snapshot.icu.json --entryPoints ./src/i18n/icu/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
 		"check:api-snapshot-react": "typedoc --json ./api/api-snapshot.react.json --entryPoints ./src/react/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
 		"check:api-snapshot-templates": "typedoc --options ./typedoc.templates.json --json ./api/api-snapshot.templates.json",
+		"check:api-snapshot-editor": "typedoc --json ./api/api-snapshot.editor.json --entryPoints ./src/editor/index.ts --tsconfig ./tsconfig.json --logLevel Warn --disableSources",
+		"check:api-snapshot-react-editor": "typedoc --json ./api/api-snapshot.react-editor.json --entryPoints ./src/react/editor/index.ts --tsconfig ./tsconfig.json --logLevel Warn --disableSources",
+		"check:api-snapshot-testing-editor": "typedoc --json ./api/api-snapshot.testing-editor.json --entryPoints ./src/testing/editor/index.ts --tsconfig ./tsconfig.json --logLevel Warn --disableSources",
 		"check:api-snapshot-verify": "git diff --exit-code -- ./api",
-		"check:api-snapshot-all": "pnpm check:api-snapshot && pnpm check:api-snapshot-runtime && pnpm check:api-snapshot-config && pnpm check:api-snapshot-i18n && pnpm check:api-snapshot-icu && pnpm check:api-snapshot-react && pnpm check:api-snapshot-templates",
+		"check:api-snapshot-all": "pnpm check:api-snapshot && pnpm check:api-snapshot-runtime && pnpm check:api-snapshot-config && pnpm check:api-snapshot-i18n && pnpm check:api-snapshot-icu && pnpm check:api-snapshot-react && pnpm check:api-snapshot-templates && pnpm check:api-snapshot-editor && pnpm check:api-snapshot-react-editor && pnpm check:api-snapshot-testing-editor",
 		"check:all": "pnpm check:publint && pnpm check:circular && pnpm check:react-free-runtime && pnpm check:no-headless-import && pnpm check:peer-deps && pnpm check:bundle-budget && pnpm check:api-snapshot-all && pnpm check:api-snapshot-verify",
 		"migrate:shadcn-paths": "node ./scripts/migrate-shadcn-paths.mjs",
 		"size": "size-limit"

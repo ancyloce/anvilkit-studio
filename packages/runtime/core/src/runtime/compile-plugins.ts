@@ -30,6 +30,7 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-008-runtime-plugin-engine.md | core-008}
  */
 
+import type { StudioPluginCollabCapability } from "@anvilkit/contracts/editor";
 import type {
 	Overrides as PuckOverrides,
 	Plugin as PuckPlugin,
@@ -187,6 +188,16 @@ export interface StudioRuntime {
 	readonly i18n: {
 		readonly entries: readonly RegistryEntry[];
 	};
+	/**
+	 * Every registered plugin's declared collaboration capability
+	 * (CORE-P0-020 freeze §2): a pure, additive projection of METAs —
+	 * identical inputs produce a deep-equal list; no gating happens at
+	 * compile time. Consumed by the Phase 1A authoring gate.
+	 */
+	readonly collabCapabilities: ReadonlyArray<{
+		readonly pluginName: string;
+		readonly capability: StudioPluginCollabCapability;
+	}>;
 }
 
 /**
@@ -768,6 +779,21 @@ export async function compilePlugins(
 		.sort(sortByOrderThenIndex)
 		.map((entry) => entry.item);
 
+	// Collaboration capability projection (CORE-P0-020 freeze §2):
+	// compilation performs NO gating itself — this is a pure,
+	// deterministic projection of declared METAs, built fresh per
+	// compile. The Phase 1A editor gate (CORE-P1A-013) is the consumer.
+	const collabCapabilities = pluginMeta.flatMap((meta) =>
+		meta.capabilities?.collaboration !== undefined
+			? [
+					{
+						pluginName: meta.id,
+						capability: meta.capabilities.collaboration,
+					},
+				]
+			: [],
+	);
+
 	return {
 		pluginMeta,
 		registrations,
@@ -782,5 +808,6 @@ export async function compilePlugins(
 		puckPlugins,
 		sidebar: sidebar.snapshot(),
 		i18n: { entries: messageEntries },
+		collabCapabilities,
 	};
 }
