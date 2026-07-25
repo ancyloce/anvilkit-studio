@@ -17,176 +17,30 @@
  */
 
 import type { Data as PuckData } from "@puckeditor/core";
+import {
+	cloneSubtree,
+	collectSubtreeIds,
+	isComponentNode,
+	nodeId,
+	type PuckTreeNode,
+	type PuckZones,
+	transformContainers,
+	zonesOf,
+} from "../../editor/tree/nodes.js";
 import { generateNodeId } from "../../studio/layout/sidebar/commands/insert-component-node.js";
 
-interface ComponentNode {
-	readonly type: string;
-	readonly props: Record<string, unknown>;
-}
+/** Local alias kept so the existing call sites read unchanged. */
+type ComponentNode = PuckTreeNode;
+type Zones = PuckZones;
 
-function isComponentNode(value: unknown): value is ComponentNode {
-	return (
-		typeof value === "object" &&
-		value !== null &&
-		!Array.isArray(value) &&
-		typeof (value as { type?: unknown }).type === "string" &&
-		typeof (value as { props?: unknown }).props === "object"
-	);
-}
-
-function nodeId(node: ComponentNode): string | undefined {
-	const id = node.props.id;
-	return typeof id === "string" && id.length > 0 ? id : undefined;
-}
-
-type Zones = Record<string, readonly unknown[]>;
-
-function zonesOf(data: PuckData): Zones {
-	return ((data as { zones?: Zones }).zones ?? {}) as Zones;
-}
-
-/** Collect a node's subtree ids (self + slots + zones, recursively). */
-function collectSubtreeIds(
-	node: ComponentNode,
-	zones: Zones,
-	into: Set<string>,
-): void {
-	const id = nodeId(node);
-	if (id !== undefined) {
-		into.add(id);
-	}
-	for (const value of Object.values(node.props)) {
-		if (Array.isArray(value)) {
-			for (const entry of value) {
-				if (isComponentNode(entry)) {
-					collectSubtreeIds(entry, zones, into);
-				}
-			}
-		}
-	}
-	if (id !== undefined) {
-		for (const [zoneKey, items] of Object.entries(zones)) {
-			if (zoneKey.startsWith(`${id}:`)) {
-				for (const entry of items) {
-					if (isComponentNode(entry)) {
-						collectSubtreeIds(entry, zones, into);
-					}
-				}
-			}
-		}
-	}
-}
-
-/**
- * Deep-copy a node with fresh ids: slot-prop children recurse; the
- * subtree's `zones` entries are cloned under the copied ids into
- * `zoneAccum`; every old→new pair lands in `idMap`.
- */
-function cloneNode(
+/** Bind the id generator this module has always used. */
+const cloneNode = (
 	node: ComponentNode,
 	zones: Zones,
 	idMap: Record<string, string>,
 	zoneAccum: Record<string, unknown[]>,
-): ComponentNode {
-	const oldId = nodeId(node);
-	const newId = generateNodeId(node.type);
-	const props: Record<string, unknown> = {};
-	for (const [key, value] of Object.entries(node.props)) {
-		if (Array.isArray(value) && value.some(isComponentNode)) {
-			props[key] = value.map((entry) =>
-				isComponentNode(entry)
-					? cloneNode(entry, zones, idMap, zoneAccum)
-					: entry,
-			);
-		} else {
-			props[key] = value;
-		}
-	}
-	props.id = newId;
-	if (oldId !== undefined) {
-		idMap[oldId] = newId;
-		for (const [zoneKey, items] of Object.entries(zones)) {
-			if (zoneKey.startsWith(`${oldId}:`)) {
-				const slot = zoneKey.slice(oldId.length + 1);
-				zoneAccum[`${newId}:${slot}`] = items.map((entry) =>
-					isComponentNode(entry)
-						? cloneNode(entry, zones, idMap, zoneAccum)
-						: entry,
-				);
-			}
-		}
-	}
-	return { type: node.type, props };
-}
+): ComponentNode => cloneSubtree(node, zones, generateNodeId, idMap, zoneAccum);
 
-/**
- * Map every containment array (root content, zone lists, slot props)
- * through `transform`, sharing untouched structure by reference.
- */
-function transformContainers(
-	data: PuckData,
-	transform: (items: readonly unknown[]) => readonly unknown[],
-): PuckData {
-	/**
-	 * Transform every slot-shaped prop (an array containing component
-	 * nodes) of a props record. Returns `null` when nothing changed so
-	 * callers can preserve references.
-	 */
-	const mapSlotProps = (
-		source: Readonly<Record<string, unknown>>,
-	): Record<string, unknown> | null => {
-		let changed = false;
-		const props: Record<string, unknown> = { ...source };
-		for (const [key, value] of Object.entries(source)) {
-			if (Array.isArray(value) && value.some(isComponentNode)) {
-				const next = transform(value).map(mapNode);
-				if (
-					next.length !== value.length ||
-					next.some((item, index) => item !== value[index])
-				) {
-					props[key] = next;
-					changed = true;
-				}
-			}
-		}
-		return changed ? props : null;
-	};
-
-	const mapNode = (entry: unknown): unknown => {
-		if (!isComponentNode(entry)) {
-			return entry;
-		}
-		const props = mapSlotProps(entry.props);
-		return props === null ? entry : { type: entry.type, props };
-	};
-
-	const content = transform((data.content ?? []) as readonly unknown[]).map(
-		mapNode,
-	);
-	const zones = zonesOf(data);
-	const nextZones: Record<string, readonly unknown[]> = {};
-	for (const [zoneKey, items] of Object.entries(zones)) {
-		nextZones[zoneKey] = transform(items).map(mapNode);
-	}
-	// Root slot fields (Puck 0.22 slot data): top-level children can
-	// live in `root.props.<slotName>` instead of `content`, and a walk
-	// that skipped them made every native-tree op a silent no-op on
-	// slot-based documents.
-	const rootProps = data.root?.props;
-	const nextRootProps =
-		rootProps === undefined || rootProps === null
-			? null
-			: mapSlotProps(rootProps as Readonly<Record<string, unknown>>);
-
-	return {
-		...data,
-		...(nextRootProps === null
-			? {}
-			: { root: { ...data.root, props: nextRootProps } }),
-		content,
-		zones: nextZones,
-	} as PuckData;
-}
 
 /** The result of a one-dispatch duplication. */
 export interface DuplicateNodeResult {
