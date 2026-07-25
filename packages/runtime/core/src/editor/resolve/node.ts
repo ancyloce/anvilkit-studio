@@ -22,9 +22,10 @@ import type {
 	VisualStyleSpec,
 } from "@anvilkit/contracts/editor";
 import { makeEditorError } from "../diagnostics.js";
+import { isTokenRef } from "../tokens/walk.js";
 import { mergePropertyWise } from "./merge.js";
 import { getMatchingBreakpoints } from "./responsive.js";
-import { resolveToken } from "./token.js";
+import { materializeTokenLiteral, resolveToken } from "./token.js";
 
 /** Per-node component defaults supplied by the capability layer. */
 export interface NodeComponentDefaults {
@@ -39,6 +40,12 @@ export interface ResolveContext {
 	readonly breakpoints: readonly BreakpointDefinition[];
 	readonly viewportWidth: number;
 	readonly tokenMode: string;
+	/**
+	 * Mode consulted when a token carries no value in `tokenMode`
+	 * (§15.1 mode fallback); typically
+	 * `StudioEditorConfig.defaultTokenMode`.
+	 */
+	readonly defaultTokenMode?: string;
 	readonly componentDefaults?: Readonly<Record<string, NodeComponentDefaults>>;
 }
 
@@ -146,17 +153,6 @@ function resolveFamily(
 	);
 }
 
-function isTokenRef(
-	value: unknown,
-): value is { kind: "token"; tokenId: string } {
-	return (
-		typeof value === "object" &&
-		value !== null &&
-		(value as { kind?: unknown }).kind === "token" &&
-		typeof (value as { tokenId?: unknown }).tokenId === "string"
-	);
-}
-
 /**
  * Substitute token references with resolved literals across a
  * resolved spec tree. Unresolvable references keep the reference in
@@ -179,16 +175,37 @@ function substituteTokens(
 			context.tokenMode,
 			context.authoring.tokens,
 			context.authoring.tokenModes,
+			{ defaultModeId: context.defaultTokenMode },
 		);
 		if (resolution.status === "resolved") {
-			return { kind: "literal", value: resolution.value };
+			return materializeTokenLiteral(resolution.type, resolution.value);
+		}
+		if (resolution.status === "cycle") {
+			diagnostics.push(
+				makeEditorError(
+					"EDITOR_TOKEN_CYCLE",
+					`token alias cycle at "${value.tokenId}"`,
+					{ details: { path: resolution.path }, severity: "warning" },
+				),
+			);
+			return value;
 		}
 		diagnostics.push(
-			resolution.status === "cycle"
+			resolution.status === "type-mismatch"
 				? makeEditorError(
-						"EDITOR_TOKEN_CYCLE",
-						`token alias cycle at "${value.tokenId}"`,
-						{ details: { path: resolution.path }, severity: "warning" },
+						"EDITOR_INVALID_CSS_VALUE",
+						`token "${resolution.tokenId}" aliases "${resolution.aliasTokenId}" of incompatible type "${resolution.actual}" (expected "${resolution.expected}")`,
+						{
+							details: {
+								kind: "token",
+								reason: "token-type-mismatch",
+								tokenId: resolution.tokenId,
+								aliasTokenId: resolution.aliasTokenId,
+								expected: resolution.expected,
+								actual: resolution.actual,
+							},
+							severity: "warning",
+						},
 					)
 				: makeEditorError(
 						"EDITOR_NODE_NOT_FOUND",
