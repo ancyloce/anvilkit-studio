@@ -9,6 +9,13 @@
 import { describe, expect, it } from "vitest";
 import { duplicateNode, removeNode } from "../native-tree.js";
 
+/** The root slot's children, whatever the document shape. */
+function rootChildren(data: unknown): readonly { props: { id: string } }[] {
+	const props = (data as { root?: { props?: Record<string, unknown> } }).root
+		?.props;
+	return (props?.["children"] ?? []) as readonly { props: { id: string } }[];
+}
+
 function rootSlotData() {
 	return {
 		root: {
@@ -27,21 +34,21 @@ function rootSlotData() {
 describe("native tree ops over root slot props", () => {
 	it("duplicates a node held in a root slot", () => {
 		const result = duplicateNode(rootSlotData(), "hero-1");
-		expect(result).not.toBeNull();
-		const children = (
-			result?.data.root?.props as { children: readonly { props: { id: string } }[] }
-		).children;
+		if (result === null) {
+			throw new Error("expected a duplicate result");
+		}
+		const children = rootChildren(result.data);
 		expect(children).toHaveLength(3);
-		expect(children[2]?.props.id).toBe(result?.newRootId);
+		expect(children[2]?.props.id).toBe(result.newRootId);
 		expect(children[1]?.props.id).toBe("hero-1");
 	});
 
 	it("removes a node held in a root slot", () => {
 		const next = removeNode(rootSlotData(), "navbar-1");
-		expect(next).not.toBeNull();
-		const children = (
-			next?.root?.props as { children: readonly { props: { id: string } }[] }
-		).children;
+		if (next === null) {
+			throw new Error("expected a removal result");
+		}
+		const children = rootChildren(next);
 		expect(children).toHaveLength(1);
 		expect(children[0]?.props.id).toBe("hero-1");
 	});
@@ -52,7 +59,9 @@ describe("native tree ops over root slot props", () => {
 			content: [{ type: "Hero", props: { id: "hero-1" } }],
 		} as never;
 		const result = duplicateNode(data, "hero-1");
-		expect(result).not.toBeNull();
-		expect(result?.data.root).toBe((data as { root: unknown }).root);
+		if (result === null) {
+			throw new Error("expected a duplicate result");
+		}
+		expect(result.data.root).toBe((data as { root: unknown }).root);
 	});
 });

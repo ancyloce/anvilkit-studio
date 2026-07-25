@@ -5817,7 +5817,8 @@
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
 							"line": 31,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L31"
 						}
 					],
 					"signatures": [
@@ -5863,7 +5864,8 @@
 								{
 									"fileName": "runtime/core/src/types/editor-api.ts",
 									"line": 31,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L31"
 								}
 							],
 							"parameters": [
@@ -5911,7 +5913,8 @@
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
 							"line": 33,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L33"
 						}
 					],
 					"signatures": [
@@ -5939,7 +5942,8 @@
 								{
 									"fileName": "runtime/core/src/types/editor-api.ts",
 									"line": 33,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L33"
 								}
 							],
 							"parameters": [
@@ -5987,7 +5991,8 @@
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
 							"line": 38,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L38"
 						}
 					],
 					"signatures": [
@@ -6009,7 +6014,8 @@
 								{
 									"fileName": "runtime/core/src/types/editor-api.ts",
 									"line": 38,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L38"
 								}
 							],
 							"type": {
@@ -6047,7 +6053,8 @@
 				{
 					"fileName": "runtime/core/src/types/editor-api.ts",
 					"line": 26,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L26"
 				}
 			]
 		},
@@ -6076,7 +6083,8 @@
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
 							"line": 44,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L44"
 						}
 					],
 					"signatures": [
@@ -6098,7 +6106,8 @@
 								{
 									"fileName": "runtime/core/src/types/editor-api.ts",
 									"line": 44,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L44"
 								}
 							],
 							"type": {
@@ -6124,7 +6133,8 @@
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
 							"line": 46,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L46"
 						}
 					],
 					"signatures": [
@@ -6146,7 +6156,8 @@
 								{
 									"fileName": "runtime/core/src/types/editor-api.ts",
 									"line": 46,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L46"
 								}
 							],
 							"parameters": [
@@ -6240,7 +6251,8 @@
 				{
 					"fileName": "runtime/core/src/types/editor-api.ts",
 					"line": 42,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L42"
 				}
 			]
 		},
@@ -25116,7 +25128,8 @@
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
 							"line": 65,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L65"
 						}
 					],
 					"type": {
@@ -25146,7 +25159,8 @@
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
 							"line": 61,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L61"
 						}
 					],
 					"type": {
@@ -25180,7 +25194,8 @@
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
 							"line": 67,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L67"
 						}
 					],
 					"type": {
@@ -25214,7 +25229,8 @@
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
 							"line": 63,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L63"
 						}
 					],
 					"type": {
@@ -25236,7 +25252,8 @@
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
 							"line": 59,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L59"
 						}
 					],
 					"type": {
@@ -25261,7 +25278,8 @@
 				{
 					"fileName": "runtime/core/src/types/editor-api.ts",
 					"line": 58,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L58"
 				}
 			]
 		},
