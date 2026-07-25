@@ -55,6 +55,14 @@ async function openLayersPanel(page: Page): Promise<void> {
 }
 
 test.describe("visual editor mount (CORE-P1B-012)", () => {
+	// The `/puck/editor` route's first compile under `next dev
+	// --turbopack` takes 60–90 s on this box (documented in
+	// playwright.config.ts), and the default 30 s per-test timeout is
+	// consumed by `page.goto` alone on a cold cache. The editor route
+	// is the heaviest in the app (Puck + the lazy editor chunk), so
+	// this suite budgets for it explicitly.
+	test.describe.configure({ timeout: 180_000 });
+
 	test("mounts the editor runtime with toolbar, layers search, and clean console", async ({
 		page,
 	}) => {
