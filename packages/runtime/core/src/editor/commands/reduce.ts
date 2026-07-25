@@ -24,6 +24,7 @@ import {
 } from "../components/instances.js";
 import { deleteDefinition } from "../components/lifecycle.js";
 import { applyComponentDefinitionPatch } from "../components/patch.js";
+import { switchInstanceVariant } from "../components/variant-switch.js";
 import {
 	promoteComponentOverride,
 	resetAllComponentOverrides,
@@ -405,6 +406,14 @@ export function reduceValidatedCommand(
 				command.target,
 				command.layer,
 			);
+		case "component.instance.variant.set":
+			// Incompatible overrides are dropped here; the React layer
+			// surfaces the diagnostics (ED-VARIANT-002).
+			return switchInstanceVariant(
+				state,
+				command.instanceNodeIds,
+				command.selection,
+			).state;
 		case "component.definition.update": {
 			const definition = state.componentDefinitions[command.definitionId];
 			if (definition === undefined) {

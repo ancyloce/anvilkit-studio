@@ -73,6 +73,8 @@ const IMPLEMENTED_TYPES = new Set<string>([
 	"component.override.promote",
 	// Phase 2 — variant model (CORE-P2-009A)
 	"component.definition.update",
+	// Phase 2 — variant switching (CORE-P2-009C)
+	"component.instance.variant.set",
 ]);
 
 /** §12.2 invariants for the breakpoint set (CORE-P1A-008). */
@@ -619,6 +621,81 @@ export function validateAtomicCommand(
 				...nodeIdsErrors(command.instanceNodeIds),
 				...lockedErrors(state, command.instanceNodeIds),
 			];
+		case "component.instance.variant.set": {
+			const errors: EditorError[] = [
+				...nodeIdsErrors(command.instanceNodeIds),
+				...lockedErrors(state, command.instanceNodeIds),
+			];
+			for (const instanceNodeId of command.instanceNodeIds) {
+				const instance =
+					state.nodes[instanceNodeId]?.componentInstance;
+				if (instance === undefined) {
+					errors.push(
+						makeEditorError(
+							"EDITOR_NODE_NOT_FOUND",
+							`node "${instanceNodeId}" is not a component instance`,
+							{
+								nodeIds: [instanceNodeId],
+								details: { kind: "componentInstance" },
+							},
+						),
+					);
+					continue;
+				}
+				const definition =
+					state.componentDefinitions[instance.definitionId];
+				if (definition === undefined) {
+					errors.push(
+						makeEditorError(
+							"EDITOR_DEFINITION_UNAVAILABLE",
+							`definition "${instance.definitionId}" is not in this document`,
+							{
+								nodeIds: [instanceNodeId],
+								details: { kind: "componentDefinition" },
+							},
+						),
+					);
+					continue;
+				}
+				// The selection must name declared axes and options; an
+				// unknown pair would silently render the base forever.
+				for (const [axisId, optionId] of Object.entries(command.selection)) {
+					const axis = definition.variantAxes.find(
+						(entry) => entry.id === axisId,
+					);
+					if (axis === undefined) {
+						errors.push(
+							makeEditorError(
+								"EDITOR_NODE_NOT_FOUND",
+								`variant axis "${axisId}" is not declared by "${definition.id}"`,
+								{
+									nodeIds: [instanceNodeId],
+									details: { kind: "variantAxis", axisId },
+								},
+							),
+						);
+						continue;
+					}
+					if (!axis.options.some((option) => option.id === optionId)) {
+						errors.push(
+							makeEditorError(
+								"EDITOR_NODE_NOT_FOUND",
+								`option "${optionId}" is not declared on axis "${axisId}"`,
+								{
+									nodeIds: [instanceNodeId],
+									details: {
+										kind: "variantAxisOption",
+										axisId,
+										optionId,
+									},
+								},
+							),
+						);
+					}
+				}
+			}
+			return errors;
+		}
 		case "component.definition.update": {
 			const definition = state.componentDefinitions[command.definitionId];
 			if (definition === undefined) {
