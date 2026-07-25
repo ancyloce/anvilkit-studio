@@ -18,6 +18,7 @@ import type {
 	EditorCommand,
 	EditorError,
 	EditorPatch,
+	EditorPolicies,
 	ResponsiveLayerRef,
 	StyleDefinitionV1,
 } from "@anvilkit/contracts/editor";
@@ -31,6 +32,9 @@ import {
 } from "@anvilkit/schema/editor";
 import { makeEditorError } from "../diagnostics.js";
 import { stripPatchNulls } from "../patch.js";
+import { validateDefinitionDelete } from "../components/lifecycle.js";
+import { applyComponentDefinitionPatch } from "../components/patch.js";
+import { validateVariantModel } from "../components/variants.js";
 import { applyStyleDefinitionPatch } from "../styles/patch.js";
 import { planTokenDeletion } from "../tokens/deletion.js";
 import { checkTokenAliasGraph } from "../tokens/graph.js";
@@ -58,6 +62,17 @@ const IMPLEMENTED_TYPES = new Set<string>([
 	"styleDefinition.update",
 	"styleDefinition.detach",
 	"styleDefinition.delete",
+	// Phase 2 — instance editing (CORE-P2-006)
+	"component.instance.propOverride.set",
+	"component.instance.nodeOverride.set",
+	// Phase 2 — definition lifecycle (CORE-P2-007)
+	"component.definition.delete",
+	// Phase 2 — override reset granularity (CORE-P2-008)
+	"component.override.reset",
+	"component.override.resetAll",
+	"component.override.promote",
+	// Phase 2 — variant model (CORE-P2-009A)
+	"component.definition.update",
 ]);
 
 /** §12.2 invariants for the breakpoint set (CORE-P1A-008). */
@@ -368,6 +383,19 @@ function patchErrors(
 }
 
 /**
+ * Options a caller threads into validation.
+ *
+ * `entryState` is the state the *transaction* began at. It matters
+ * only for `"block-when-referenced"` definition deletes, whose policy
+ * check must not be fooled by a batch that detaches first (contract
+ * freeze CORE-P0-001 §4).
+ */
+export interface ValidateCommandOptions {
+	readonly policies?: EditorPolicies;
+	readonly entryState?: AuthoringStateV1;
+}
+
+/**
  * Validate one atomic command against a state snapshot. Returns all
  * errors found (info/warning entries never block; the reducer
  * pipeline rejects on any `severity: "error"`).
@@ -375,6 +403,7 @@ function patchErrors(
 export function validateAtomicCommand(
 	state: AuthoringStateV1,
 	command: AtomicEditorCommand,
+	options: ValidateCommandOptions = {},
 ): readonly EditorError[] {
 	if (!IMPLEMENTED_TYPES.has(command.type)) {
 		return [
@@ -494,6 +523,131 @@ export function validateAtomicCommand(
 		}
 		case "styleDefinition.delete":
 			return missingStyleDefinitionErrors(state, command.styleDefinitionId);
+		case "component.instance.propOverride.set":
+		case "component.instance.nodeOverride.set": {
+			const record = state.nodes[command.instanceNodeId];
+			const instance = record?.componentInstance;
+			if (instance === undefined) {
+				return [
+					makeEditorError(
+						"EDITOR_NODE_NOT_FOUND",
+						`node "${command.instanceNodeId}" is not a component instance`,
+						{
+							nodeIds: [command.instanceNodeId],
+							details: { kind: "componentInstance" },
+						},
+					),
+				];
+			}
+			const errors: EditorError[] = [
+				...lockedErrors(state, [command.instanceNodeId]),
+			];
+			if (state.componentDefinitions[instance.definitionId] === undefined) {
+				errors.push(
+					makeEditorError(
+						"EDITOR_DEFINITION_UNAVAILABLE",
+						`definition "${instance.definitionId}" is not in this document`,
+						{
+							nodeIds: [command.instanceNodeId],
+							details: { kind: "componentDefinition" },
+						},
+					),
+				);
+				return errors;
+			}
+			if (command.type === "component.instance.nodeOverride.set") {
+				// Override keys are bare definition node ids — never the
+				// runtime composite form (§14.2).
+				if (command.definitionNodeId.includes("::")) {
+					errors.push(
+						makeEditorError(
+							"EDITOR_CAPABILITY_UNSUPPORTED",
+							"node overrides address bare definition node ids, not runtime ids",
+							{ details: { reason: "runtime-id-as-override-key" } },
+						),
+					);
+				}
+			}
+			return errors;
+		}
+		case "component.override.reset":
+		case "component.override.promote": {
+			const instance = state.nodes[command.instanceNodeId]?.componentInstance;
+			if (instance === undefined) {
+				return [
+					makeEditorError(
+						"EDITOR_NODE_NOT_FOUND",
+						`node "${command.instanceNodeId}" is not a component instance`,
+						{
+							nodeIds: [command.instanceNodeId],
+							details: { kind: "componentInstance" },
+						},
+					),
+				];
+			}
+			if (command.target.propertyPath.length === 0) {
+				return [
+					makeEditorError(
+						"EDITOR_CAPABILITY_UNSUPPORTED",
+						"override addresses require at least one path segment",
+						{ details: { reason: "empty-property-path" } },
+					),
+				];
+			}
+			if (command.type === "component.override.promote") {
+				// Promote is a definition edit; an unresolvable definition
+				// has nothing to write into (freeze §8).
+				if (
+					state.componentDefinitions[instance.definitionId] === undefined
+				) {
+					return [
+						makeEditorError(
+							"EDITOR_DEFINITION_UNAVAILABLE",
+							`definition "${instance.definitionId}" is not in this document`,
+							{
+								nodeIds: [command.instanceNodeId],
+								details: { kind: "componentDefinition" },
+							},
+						),
+					];
+				}
+			}
+			return lockedErrors(state, [command.instanceNodeId]);
+		}
+		case "component.override.resetAll":
+			return [
+				...nodeIdsErrors(command.instanceNodeIds),
+				...lockedErrors(state, command.instanceNodeIds),
+			];
+		case "component.definition.update": {
+			const definition = state.componentDefinitions[command.definitionId];
+			if (definition === undefined) {
+				return [
+					makeEditorError(
+						"EDITOR_DEFINITION_UNAVAILABLE",
+						`component definition "${command.definitionId}" is not in this document`,
+						{
+							details: {
+								kind: "componentDefinition",
+								definitionId: command.definitionId,
+							},
+						},
+					),
+				];
+			}
+			// Validate the definition the document *would* have, so an
+			// ambiguous variant model can never be committed.
+			return validateVariantModel(
+				applyComponentDefinitionPatch(definition, command.patch),
+			);
+		}
+		case "component.definition.delete":
+			return validateDefinitionDelete(
+				state,
+				command.definitionId,
+				options.policies?.componentDefinitionDelete ?? "confirm-detach-all",
+				options.entryState ?? state,
+			);
 		case "token.create":
 			return tokenCreateErrors(state, command.token);
 		case "token.update":
@@ -517,6 +671,7 @@ export function validateAtomicCommand(
 export function validateEditorCommand(
 	state: AuthoringStateV1,
 	command: EditorCommand,
+	options: ValidateCommandOptions = {},
 ): readonly EditorError[] {
 	if (command.type === "batch") {
 		const errors: EditorError[] = [];
@@ -553,5 +708,5 @@ export function validateEditorCommand(
 		}
 		return errors;
 	}
-	return validateAtomicCommand(state, command);
+	return validateAtomicCommand(state, command, options);
 }

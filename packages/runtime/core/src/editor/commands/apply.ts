@@ -18,7 +18,11 @@ import type {
 import { makeEditorError } from "../diagnostics.js";
 import { deepEqualJson } from "../patch.js";
 import { reduceValidatedCommand } from "./reduce.js";
-import { validateAtomicCommand, validateEditorCommand } from "./validate.js";
+import {
+	validateAtomicCommand,
+	type ValidateCommandOptions,
+	validateEditorCommand,
+} from "./validate.js";
 
 /** Which parts of the document a committed transaction touched. */
 export interface AuthoringChangeSet {
@@ -127,7 +131,14 @@ function isNoopReduction(
 export function applyEditorCommand(
 	state: AuthoringStateV1,
 	command: EditorCommand,
+	options: ValidateCommandOptions = {},
 ): EditorReduceResult {
+	// The transaction's entry state, for policy checks that must not be
+	// judged against a batch's intermediate state (freeze §4).
+	const validateOptions: ValidateCommandOptions = {
+		...options,
+		entryState: options.entryState ?? state,
+	};
 	if (command.expectedRevision !== state.revision) {
 		return reject(state, [
 			makeEditorError(
@@ -143,7 +154,11 @@ export function applyEditorCommand(
 		]);
 	}
 
-	const envelopeErrors = validateEditorCommand(state, command);
+	const envelopeErrors = validateEditorCommand(
+		state,
+		command,
+		validateOptions,
+	);
 	if (envelopeErrors.some((error) => error.severity === "error")) {
 		return reject(state, envelopeErrors);
 	}
@@ -156,7 +171,11 @@ export function applyEditorCommand(
 		// (contract freeze CORE-P0-001 §5). Member expectedRevision
 		// fields are deliberately ignored.
 		for (const [index, member] of command.commands.entries()) {
-			const memberErrors = validateAtomicCommand(next, member);
+			const memberErrors = validateAtomicCommand(
+				next,
+				member,
+				validateOptions,
+			);
 			if (memberErrors.some((error) => error.severity === "error")) {
 				return reject(state, [
 					...memberErrors.map((error) => ({

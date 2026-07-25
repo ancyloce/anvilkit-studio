@@ -18,6 +18,17 @@ import type {
 	ResponsiveLayerRef,
 	ResponsiveValue,
 } from "@anvilkit/contracts/editor";
+import {
+	setNodeOverride,
+	setPropOverride,
+} from "../components/instances.js";
+import { deleteDefinition } from "../components/lifecycle.js";
+import { applyComponentDefinitionPatch } from "../components/patch.js";
+import {
+	promoteComponentOverride,
+	resetAllComponentOverrides,
+	resetComponentOverride,
+} from "../components/overrides.js";
 import { getRecord, withRecord } from "../node-records.js";
 import { applyEditorPatch } from "../patch.js";
 import { applyStyleDefinitionPatch } from "../styles/patch.js";
@@ -377,6 +388,63 @@ export function reduceValidatedCommand(
 				state,
 				command.styleDefinitionId,
 				command.disposition.kind === "materialize",
+			);
+		case "component.override.reset":
+			return resetComponentOverride(
+				state,
+				command.instanceNodeId,
+				command.target,
+				command.layer,
+			);
+		case "component.override.resetAll":
+			return resetAllComponentOverrides(state, command.instanceNodeIds);
+		case "component.override.promote":
+			return promoteComponentOverride(
+				state,
+				command.instanceNodeId,
+				command.target,
+				command.layer,
+			);
+		case "component.definition.update": {
+			const definition = state.componentDefinitions[command.definitionId];
+			if (definition === undefined) {
+				return state;
+			}
+			const next = applyComponentDefinitionPatch(definition, command.patch);
+			if (next === definition) {
+				return state;
+			}
+			// The revision bump is what makes propagation observable to
+			// instances holding `definitionRevision` (ED-COMP-002).
+			return {
+				...state,
+				componentDefinitions: {
+					...state.componentDefinitions,
+					[command.definitionId]: {
+						...next,
+						revision: definition.revision + 1,
+						updatedAt: new Date(command.timestamp).toISOString(),
+					},
+				},
+			};
+		}
+		case "component.definition.delete":
+			// Instance records are deliberately left alone: dropping them
+			// would destroy the ED-COMP-007 retention guarantee.
+			return deleteDefinition(state, command.definitionId);
+		case "component.instance.propOverride.set":
+			return setPropOverride(
+				state,
+				command.instanceNodeId,
+				command.propId,
+				command.value,
+			);
+		case "component.instance.nodeOverride.set":
+			return setNodeOverride(
+				state,
+				command.instanceNodeId,
+				command.definitionNodeId,
+				command.patch,
 			);
 		case "token.create": {
 			// Validation rejects duplicate ids, so this only ever adds.
