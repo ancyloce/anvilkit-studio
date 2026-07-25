@@ -21,10 +21,10 @@ import "./rich-text-editor.css";
 
 import type { Editor } from "@tiptap/react";
 import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import { Bold, Heading2, Italic, List, ListOrdered } from "lucide-react";
 import { type ReactNode, useEffect } from "react";
 import { useMsg } from "@/state/editor-i18n-context";
+import { createTiptapExtensions } from "../../../editor/inline/tiptap-contract.js";
 
 export interface RichTextEditorProps {
 	/** Current value — an HTML string (the field's serialized content). */
@@ -109,7 +109,9 @@ export default function RichTextEditor({
 	id,
 }: RichTextEditorProps): ReactNode {
 	const editor = useEditor({
-		extensions: [StarterKit],
+		// Shared schema source (CORE-P1B-009D): the SAME extension set as
+		// the canvas inline surface — the two can never drift.
+		extensions: createTiptapExtensions() as never,
 		content: value,
 		editable: !readOnly,
 		// `false` so the editor mounts in an effect (no SSR/first-paint markup),

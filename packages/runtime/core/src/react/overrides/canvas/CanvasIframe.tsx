@@ -69,6 +69,8 @@
 import { type ReactNode, useEffect } from "react";
 
 import { CanvasDropMount } from "@/canvas-drop";
+import { AuthoringStylesheetMount } from "../../editor/responsive/AuthoringStylesheetMount.js";
+import { useCanvasDocumentSync } from "../../editor/canvas/use-canvas-document-sync.js";
 import {
 	IFRAME_THEME_CSS,
 	IFRAME_THEME_STYLE_ID,
@@ -111,6 +113,10 @@ export function CanvasIframe({
 	document: iframeDoc,
 }: CanvasIframeOverrideProps): ReactNode {
 	const [, setCanvasRootHeight] = useCanvasRootHeight();
+
+	// Editor canvas registry feed (CORE-P1B-001): a no-op unless the
+	// editor feature is enabled.
+	useCanvasDocumentSync(iframeDoc);
 
 	useEffect(() => {
 		if (iframeDoc === undefined) return;
@@ -186,6 +192,9 @@ export function CanvasIframe({
 	return (
 		<>
 			<CanvasDropMount document={iframeDoc} />
+			{/* Authoring stylesheet channel (CORE-P1A-009): renders nothing
+			    unless the editor feature is enabled. */}
+			<AuthoringStylesheetMount document={iframeDoc} />
 			{children}
 		</>
 	);

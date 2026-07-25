@@ -54,6 +54,8 @@ import {
 } from "@/primitives/dropdown-menu";
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
+import { EditorInspectorMount } from "../../editor/inspector/EditorInspectorMount.js";
+import { useEditorNativeActions } from "../../editor/native-actions.js";
 
 interface ItemSelector {
 	readonly index: number;
@@ -148,7 +150,13 @@ export function groupFieldChildren(
 	};
 }
 
-/** Header overflow menu — duplicate / delete via Puck's own reducer. */
+/**
+ * Header overflow menu — duplicate / delete. With the visual editor
+ * on (and writers open), both route through the one-dispatch
+ * reconciliation path (CORE-P1A-016 tier (a)) so the copy carries its
+ * authoring and a delete strips its records atomically; otherwise
+ * Puck's own reducer actions run unchanged.
+ */
 function ComponentActionsMenu({
 	itemSelector,
 }: {
@@ -158,6 +166,10 @@ function ComponentActionsMenu({
 	// `dispatch` is a stable function on the Puck store — selecting it
 	// never re-renders this component on unrelated state changes.
 	const dispatch = useReactivePuck((s) => s.dispatch);
+	const selectedId = useReactivePuck(
+		(s) => (s.selectedItem?.props as { id?: string } | undefined)?.id ?? null,
+	);
+	const nativeActions = useEditorNativeActions();
 	const zone = itemSelector.zone ?? "root:default-zone";
 
 	return (
@@ -176,22 +188,30 @@ function ComponentActionsMenu({
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end" sideOffset={4}>
 				<DropdownMenuItem
-					onClick={() =>
+					onClick={() => {
+						if (nativeActions !== null && selectedId !== null) {
+							void nativeActions.duplicate(selectedId);
+							return;
+						}
 						dispatch({
 							type: "duplicate",
 							sourceIndex: itemSelector.index,
 							sourceZone: zone,
-						})
-					}
+						});
+					}}
 				>
 					<Copy aria-hidden="true" />
 					<span>{msg("studio.fields.actions.duplicate")}</span>
 				</DropdownMenuItem>
 				<DropdownMenuItem
 					variant="destructive"
-					onClick={() =>
-						dispatch({ type: "remove", index: itemSelector.index, zone })
-					}
+					onClick={() => {
+						if (nativeActions !== null && selectedId !== null) {
+							void nativeActions.remove(selectedId);
+							return;
+						}
+						dispatch({ type: "remove", index: itemSelector.index, zone });
+					}}
 				>
 					<Trash2 aria-hidden="true" />
 					<span>{msg("studio.fields.actions.delete")}</span>
@@ -349,6 +369,11 @@ export function FieldsPanel({
 							))}
 						</>
 					)}
+					{/* Universal editor sections (CORE-P1A-005, ED-INSPECT-002):
+					    composed strictly AFTER the native Puck fields — never
+					    replacing or reordering them. Renders null (and fetches
+					    nothing) unless the editor feature is enabled. */}
+					<EditorInspectorMount />
 				</div>
 			</div>
 		</div>
