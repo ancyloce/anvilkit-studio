@@ -46,6 +46,13 @@ export {
 	validateCreateComponentSelection,
 } from "./components/create.js";
 export {
+	COMPONENT_INSTANCE_PROP,
+	formatComponentPath,
+	type MaterializeResult,
+	materializeInstance,
+	runtimeNodeId,
+} from "./components/materialize.js";
+export {
 	checkInvariant,
 	EditorInvariantError,
 	makeEditorError,
