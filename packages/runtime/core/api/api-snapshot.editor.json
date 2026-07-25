@@ -1,0 +1,6101 @@
+{
+	"schemaVersion": "2.0",
+	"id": 0,
+	"name": "@anvilkit/core",
+	"variant": "project",
+	"kind": 1,
+	"flags": {},
+	"children": [
+		{
+			"id": 36,
+			"name": "EditorInvariantError",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Thrown for invariant violations in development builds only."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 37,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 38,
+							"name": "EditorInvariantError",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"parameters": [
+								{
+									"id": 39,
+									"name": "message",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 36,
+								"name": "EditorInvariantError",
+								"package": "@anvilkit/core"
+							},
+							"overwrites": {
+								"type": "reference",
+								"target": -1,
+								"name": "Error.constructor",
+								"package": "typescript"
+							}
+						}
+					],
+					"overwrites": {
+						"type": "reference",
+						"target": -1,
+						"name": "Error.constructor",
+						"package": "typescript"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						37
+					]
+				}
+			],
+			"extendedTypes": [
+				{
+					"type": "reference",
+					"target": {
+						"packageName": "typescript",
+						"packagePath": "lib/lib.es5.d.ts",
+						"qualifiedName": "Error"
+					},
+					"name": "Error",
+					"package": "typescript"
+				}
+			]
+		},
+		{
+			"id": 1,
+			"name": "AuthoringChangeSet",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Which parts of the document a committed transaction touched."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 3,
+					"name": "changedCollections",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				},
+				{
+					"id": 2,
+					"name": "changedNodeIds",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						3,
+						2
+					]
+				}
+			]
+		},
+		{
+			"id": 70,
+			"name": "AuthoringReadResult",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The result of reading the authoring sidecar from Puck data."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 74,
+					"name": "errors",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/errors.ts",
+									"qualifiedName": "EditorError"
+								},
+								"name": "EditorError",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					}
+				},
+				{
+					"id": 75,
+					"name": "migrated",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Reserved for the §26.3 migration path; always false in v1."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 73,
+					"name": "raw",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The original sidecar value, preserved verbatim, whenever it could\nnot be parsed as v1 state. Absent for clean reads."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "unknown"
+					}
+				},
+				{
+					"id": 72,
+					"name": "readOnly",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "True when writers must stay disabled: the sidecar failed schema\nvalidation or carries an unsupported major version (invariant 9:\nsuch data is never overwritten)."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 71,
+					"name": "state",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The usable state (empty when the sidecar is absent or unreadable)."
+							}
+						]
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/editor/authoring-state.ts",
+							"qualifiedName": "AuthoringStateV1"
+						},
+						"name": "AuthoringStateV1",
+						"package": "@anvilkit/contracts"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						74,
+						75,
+						73,
+						72,
+						71
+					]
+				}
+			]
+		},
+		{
+			"id": 88,
+			"name": "DuplicateRemapResult",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "How "
+					},
+					{
+						"kind": "code",
+						"text": "`remapForDuplicate`"
+					},
+					{
+						"kind": "text",
+						"text": " treats each reference family (freeze list)."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 90,
+					"name": "copiedNodeIds",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				},
+				{
+					"id": 89,
+					"name": "state",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/editor/authoring-state.ts",
+							"qualifiedName": "AuthoringStateV1"
+						},
+						"name": "AuthoringStateV1",
+						"package": "@anvilkit/contracts"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						90,
+						89
+					]
+				}
+			]
+		},
+		{
+			"id": 12,
+			"name": "EditorReduceResult",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The result of applying a command to authoring state."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 16,
+					"name": "changes",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": 1,
+						"name": "AuthoringChangeSet",
+						"package": "@anvilkit/core"
+					}
+				},
+				{
+					"id": 15,
+					"name": "errors",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/errors.ts",
+									"qualifiedName": "EditorError"
+								},
+								"name": "EditorError",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					}
+				},
+				{
+					"id": 14,
+					"name": "state",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/editor/authoring-state.ts",
+							"qualifiedName": "AuthoringStateV1"
+						},
+						"name": "AuthoringStateV1",
+						"package": "@anvilkit/contracts"
+					}
+				},
+				{
+					"id": 13,
+					"name": "status",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "literal",
+								"value": "changed"
+							},
+							{
+								"type": "literal",
+								"value": "rejected"
+							},
+							{
+								"type": "literal",
+								"value": "noop"
+							}
+						]
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						16,
+						15,
+						14,
+						13
+					]
+				}
+			]
+		},
+		{
+			"id": 117,
+			"name": "NodeComponentDefaults",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Per-node component defaults supplied by the capability layer."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 118,
+					"name": "layout",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Partial"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/specs.ts",
+									"qualifiedName": "LayoutSpec"
+								},
+								"name": "LayoutSpec",
+								"package": "@anvilkit/contracts"
+							}
+						],
+						"name": "Partial",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 119,
+					"name": "style",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Partial"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/specs.ts",
+									"qualifiedName": "VisualStyleSpec"
+								},
+								"name": "VisualStyleSpec",
+								"package": "@anvilkit/contracts"
+							}
+						],
+						"name": "Partial",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 120,
+					"name": "typography",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Partial"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/specs.ts",
+									"qualifiedName": "TypographySpec"
+								},
+								"name": "TypographySpec",
+								"package": "@anvilkit/contracts"
+							}
+						],
+						"name": "Partial",
+						"package": "typescript"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						118,
+						119,
+						120
+					]
+				}
+			]
+		},
+		{
+			"id": 91,
+			"name": "ReconcileChangeSet",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "What one reconciliation pass changed (diagnostics payload)."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 97,
+					"name": "removedBindings",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				},
+				{
+					"id": 96,
+					"name": "removedInteractions",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				},
+				{
+					"id": 92,
+					"name": "removedNodeRecords",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				},
+				{
+					"id": 95,
+					"name": "strippedBindingRefs",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 94,
+					"name": "strippedInteractionRefs",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 93,
+					"name": "strippedStyleRefs",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						97,
+						96,
+						92,
+						95,
+						94,
+						93
+					]
+				}
+			]
+		},
+		{
+			"id": 98,
+			"name": "ReconcileResult",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The result of a reconciliation pass."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 101,
+					"name": "changed",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 100,
+					"name": "changes",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": 91,
+						"name": "ReconcileChangeSet",
+						"package": "@anvilkit/core"
+					}
+				},
+				{
+					"id": 99,
+					"name": "state",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/editor/authoring-state.ts",
+							"qualifiedName": "AuthoringStateV1"
+						},
+						"name": "AuthoringStateV1",
+						"package": "@anvilkit/contracts"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						101,
+						100,
+						99
+					]
+				}
+			]
+		},
+		{
+			"id": 121,
+			"name": "ResolveContext",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Everything node resolution needs, supplied by the caller."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 122,
+					"name": "authoring",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/editor/authoring-state.ts",
+							"qualifiedName": "AuthoringStateV1"
+						},
+						"name": "AuthoringStateV1",
+						"package": "@anvilkit/contracts"
+					}
+				},
+				{
+					"id": 123,
+					"name": "breakpoints",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/responsive.ts",
+									"qualifiedName": "BreakpointDefinition"
+								},
+								"name": "BreakpointDefinition",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					}
+				},
+				{
+					"id": 126,
+					"name": "componentDefaults",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Readonly"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Record"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "reference",
+										"target": 117,
+										"name": "NodeComponentDefaults",
+										"package": "@anvilkit/core"
+									}
+								],
+								"name": "Record",
+								"package": "typescript"
+							}
+						],
+						"name": "Readonly",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 125,
+					"name": "tokenMode",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 124,
+					"name": "viewportWidth",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						122,
+						123,
+						126,
+						125,
+						124
+					]
+				}
+			]
+		},
+		{
+			"id": 207,
+			"name": "ResolvedAuthoringStyle",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The DOM application payload (DD-0019 §11.4, verbatim shape)."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 208,
+					"name": "classNames",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				},
+				{
+					"id": 210,
+					"name": "dataAttributes",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Readonly"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Record"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "intrinsic",
+										"name": "string"
+									}
+								],
+								"name": "Record",
+								"package": "typescript"
+							}
+						],
+						"name": "Readonly",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 211,
+					"name": "diagnostics",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/errors.ts",
+									"qualifiedName": "EditorError"
+								},
+								"name": "EditorError",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					}
+				},
+				{
+					"id": 209,
+					"name": "inlineStyle",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Readonly"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Record"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "number"
+											}
+										]
+									}
+								],
+								"name": "Record",
+								"package": "typescript"
+							}
+						],
+						"name": "Readonly",
+						"package": "typescript"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						208,
+						210,
+						211,
+						209
+					]
+				}
+			]
+		},
+		{
+			"id": 52,
+			"name": "ResolvedByteLimits",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The result of resolving host byte-limit overrides."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 54,
+					"name": "errors",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/errors.ts",
+									"qualifiedName": "EditorError"
+								},
+								"name": "EditorError",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					}
+				},
+				{
+					"id": 53,
+					"name": "limits",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/editor/limits.ts",
+							"qualifiedName": "EditorByteLimits"
+						},
+						"name": "EditorByteLimits",
+						"package": "@anvilkit/contracts"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						54,
+						53
+					]
+				}
+			]
+		},
+		{
+			"id": 127,
+			"name": "ResolvedNodeAuthoring",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The resolved (post-token) authoring values for one node."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 132,
+					"name": "diagnostics",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/errors.ts",
+									"qualifiedName": "EditorError"
+								},
+								"name": "EditorError",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					}
+				},
+				{
+					"id": 131,
+					"name": "hidden",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 128,
+					"name": "layout",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Partial"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/specs.ts",
+									"qualifiedName": "LayoutSpec"
+								},
+								"name": "LayoutSpec",
+								"package": "@anvilkit/contracts"
+							}
+						],
+						"name": "Partial",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 129,
+					"name": "style",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Partial"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/specs.ts",
+									"qualifiedName": "VisualStyleSpec"
+								},
+								"name": "VisualStyleSpec",
+								"package": "@anvilkit/contracts"
+							}
+						],
+						"name": "Partial",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 130,
+					"name": "typography",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Partial"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/specs.ts",
+									"qualifiedName": "TypographySpec"
+								},
+								"name": "TypographySpec",
+								"package": "@anvilkit/contracts"
+							}
+						],
+						"name": "Partial",
+						"package": "typescript"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						132,
+						131,
+						128,
+						129,
+						130
+					]
+				}
+			]
+		},
+		{
+			"id": 212,
+			"name": "ResolvedNodeStyleInput",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The resolved (post-token) node families to materialize."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 217,
+					"name": "hidden",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 214,
+					"name": "layout",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Partial"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/specs.ts",
+									"qualifiedName": "LayoutSpec"
+								},
+								"name": "LayoutSpec",
+								"package": "@anvilkit/contracts"
+							}
+						],
+						"name": "Partial",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 213,
+					"name": "nodeId",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 215,
+					"name": "style",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Partial"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/specs.ts",
+									"qualifiedName": "VisualStyleSpec"
+								},
+								"name": "VisualStyleSpec",
+								"package": "@anvilkit/contracts"
+							}
+						],
+						"name": "Partial",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 216,
+					"name": "typography",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Partial"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/specs.ts",
+									"qualifiedName": "TypographySpec"
+								},
+								"name": "TypographySpec",
+								"package": "@anvilkit/contracts"
+							}
+						],
+						"name": "Partial",
+						"package": "typescript"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						217,
+						214,
+						213,
+						215,
+						216
+					]
+				}
+			]
+		},
+		{
+			"id": 159,
+			"name": "TokenResolution",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The outcome of resolving one token in one mode."
+					}
+				]
+			},
+			"type": {
+				"type": "union",
+				"types": [
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 160,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 161,
+									"name": "status",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"type": {
+										"type": "literal",
+										"value": "resolved"
+									}
+								},
+								{
+									"id": 164,
+									"name": "tokenId",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "The literal-bearing token at the end of the alias chain."
+											}
+										]
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 163,
+									"name": "type",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/contracts",
+											"packagePath": "src/editor/tokens.ts",
+											"qualifiedName": "TokenType"
+										},
+										"name": "TokenType",
+										"package": "@anvilkit/contracts"
+									}
+								},
+								{
+									"id": 162,
+									"name": "value",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "unknown"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										161,
+										164,
+										163,
+										162
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 165,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 167,
+									"name": "path",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"type": {
+										"type": "typeOperator",
+										"operator": "readonly",
+										"target": {
+											"type": "array",
+											"elementType": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									}
+								},
+								{
+									"id": 166,
+									"name": "status",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"type": {
+										"type": "literal",
+										"value": "cycle"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										167,
+										166
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 168,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 169,
+									"name": "status",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"type": {
+										"type": "literal",
+										"value": "missing-token"
+									}
+								},
+								{
+									"id": 170,
+									"name": "tokenId",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										169,
+										170
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 171,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 174,
+									"name": "modeId",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 172,
+									"name": "status",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"type": {
+										"type": "literal",
+										"value": "missing-value"
+									}
+								},
+								{
+									"id": 173,
+									"name": "tokenId",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										174,
+										172,
+										173
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"id": 51,
+			"name": "EDITOR_BYTE_LIMIT_DEFAULTS",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The frozen byte-limit defaults (measured 2026-07-23; see @file)."
+					}
+				]
+			},
+			"type": {
+				"type": "reference",
+				"target": {
+					"packageName": "@anvilkit/contracts",
+					"packagePath": "src/editor/limits.ts",
+					"qualifiedName": "EditorByteLimits"
+				},
+				"name": "EditorByteLimits",
+				"package": "@anvilkit/contracts"
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 17,
+			"name": "EMPTY_CHANGE_SET",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The empty change set (rejected and noop results)."
+					}
+				]
+			},
+			"type": {
+				"type": "reference",
+				"target": 1,
+				"name": "AuthoringChangeSet",
+				"package": "@anvilkit/core"
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 4,
+			"name": "applyEditorCommand",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"comment": {
+				"summary": [],
+				"blockTags": [
+					{
+						"tag": "@file",
+						"content": [
+							{
+								"kind": "text",
+								"text": "Barrel for "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/core/editor`"
+							},
+							{
+								"kind": "text",
+								"text": " — the **React-free,\nPuck-runtime-free** editor engine (DD-0019 §22.2; PLAN-0020\nCORE-P0-007/-008/-010/-018/-019).\n\n### What lives here\n\nSidecar read/write over "
+							},
+							{
+								"kind": "code",
+								"text": "`root.props.__anvilkit`"
+							},
+							{
+								"kind": "text",
+								"text": ", the pure command\npipeline ("
+							},
+							{
+								"kind": "code",
+								"text": "`applyEditorCommand`"
+							},
+							{
+								"kind": "text",
+								"text": ": revision gate → validate → reduce →\nnoop detection), the resolvers (responsive, property-wise merge,\ntokens, node authoring), the single style-materialization\nimplementation ("
+							},
+							{
+								"kind": "code",
+								"text": "`resolveAuthoringStyle`"
+							},
+							{
+								"kind": "text",
+								"text": " + allowlisted serializer),\nthe reconciliation engine, and the shared dev-invariant helper.\n\n### Import rules (enforced by "
+							},
+							{
+								"kind": "code",
+								"text": "`check:no-headless-import`"
+							},
+							{
+								"kind": "text",
+								"text": " +\n"
+							},
+							{
+								"kind": "code",
+								"text": "`check:react-free-runtime`"
+							},
+							{
+								"kind": "text",
+								"text": ")\n\nOnly "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/contracts`"
+							},
+							{
+								"kind": "text",
+								"text": ", "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/schema`"
+							},
+							{
+								"kind": "text",
+								"text": ", "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/ir`"
+							},
+							{
+								"kind": "text",
+								"text": ",\nand "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/utils`"
+							},
+							{
+								"kind": "text",
+								"text": " may be imported. Puck imports are type-only\n("
+							},
+							{
+								"kind": "code",
+								"text": "`import type { Data }`"
+							},
+							{
+								"kind": "text",
+								"text": "); React never appears. React and Puck\nintegration lives in "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/core/react/editor`"
+							},
+							{
+								"kind": "text",
+								"text": " (Phase 1A)."
+							}
+						]
+					}
+				]
+			},
+			"signatures": [
+				{
+					"id": 5,
+					"name": "applyEditorCommand",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Apply a command (DD-0019 §24.2, verbatim pipeline): strict\n"
+							},
+							{
+								"kind": "code",
+								"text": "`expectedRevision`"
+							},
+							{
+								"kind": "text",
+								"text": " compare → validate → reduce → deep-equal noop\ndetection → "
+							},
+							{
+								"kind": "code",
+								"text": "`revision + 1`"
+							},
+							{
+								"kind": "text",
+								"text": " plus change set."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 6,
+							"name": "state",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/authoring-state.ts",
+									"qualifiedName": "AuthoringStateV1"
+								},
+								"name": "AuthoringStateV1",
+								"package": "@anvilkit/contracts"
+							}
+						},
+						{
+							"id": 7,
+							"name": "command",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/commands.ts",
+									"qualifiedName": "EditorCommand"
+								},
+								"name": "EditorCommand",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 12,
+						"name": "EditorReduceResult",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 58,
+			"name": "applyEditorPatch",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 59,
+					"name": "applyEditorPatch",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Apply an "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "EditorPatch",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/values.ts",
+									"qualifiedName": "EditorPatch"
+								}
+							},
+							{
+								"kind": "text",
+								"text": " to a spec object. Pure; returns the\ninput object unchanged (same reference) when the patch is a no-op."
+							}
+						]
+					},
+					"typeParameters": [
+						{
+							"id": 60,
+							"name": "T",
+							"variant": "typeParam",
+							"kind": 131072,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "object"
+							}
+						}
+					],
+					"parameters": [
+						{
+							"id": 61,
+							"name": "target",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"target": 60,
+										"name": "T",
+										"package": "@anvilkit/core",
+										"refersToTypeParameter": true
+									},
+									{
+										"type": "intrinsic",
+										"name": "undefined"
+									}
+								]
+							}
+						},
+						{
+							"id": 62,
+							"name": "patch",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/values.ts",
+									"qualifiedName": "EditorPatch"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": 60,
+										"name": "T",
+										"package": "@anvilkit/core",
+										"refersToTypeParameter": true
+									}
+								],
+								"name": "EditorPatch",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "reference",
+								"target": 60,
+								"name": "T",
+								"package": "@anvilkit/core",
+								"refersToTypeParameter": true
+							},
+							{
+								"type": "intrinsic",
+								"name": "undefined"
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": 30,
+			"name": "checkInvariant",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 31,
+					"name": "checkInvariant",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Check an internal invariant. Returns "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " when it holds. On\nviolation: throws "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "EditorInvariantError",
+								"target": 36
+							},
+							{
+								"kind": "text",
+								"text": " in development,\nreturns the caller-supplied typed diagnostic in production\n(DD-0019 §25)."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 32,
+							"name": "condition",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						},
+						{
+							"id": 33,
+							"name": "error",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 34,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"signatures": [
+										{
+											"id": 35,
+											"name": "__type",
+											"variant": "signature",
+											"kind": 4096,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/contracts",
+													"packagePath": "src/editor/errors.ts",
+													"qualifiedName": "EditorError"
+												},
+												"name": "EditorError",
+												"package": "@anvilkit/contracts"
+											}
+										}
+									]
+								}
+							}
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/errors.ts",
+									"qualifiedName": "EditorError"
+								},
+								"name": "EditorError",
+								"package": "@anvilkit/contracts"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": 85,
+			"name": "collectLiveNodeIds",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 86,
+					"name": "collectLiveNodeIds",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Collect every live node id from Puck data (content, zones, slots)."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 87,
+							"name": "data",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@puckeditor/core",
+									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"qualifiedName": "Data"
+								},
+								"name": "Data",
+								"package": "@puckeditor/core"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es2015.collection.d.ts",
+							"qualifiedName": "ReadonlySet"
+						},
+						"typeArguments": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							}
+						],
+						"name": "ReadonlySet",
+						"package": "typescript"
+					}
+				}
+			]
+		},
+		{
+			"id": 76,
+			"name": "createEmptyAuthoringState",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 77,
+					"name": "createEmptyAuthoringState",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "An empty, canonical v1 authoring state."
+							}
+						]
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/editor/authoring-state.ts",
+							"qualifiedName": "AuthoringStateV1"
+						},
+						"name": "AuthoringStateV1",
+						"package": "@anvilkit/contracts"
+					}
+				}
+			]
+		},
+		{
+			"id": 63,
+			"name": "deepEqualJson",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 64,
+					"name": "deepEqualJson",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Structural equality over JSON-safe values (order-insensitive keys)."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 65,
+							"name": "a",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						},
+						{
+							"id": 66,
+							"name": "b",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				}
+			]
+		},
+		{
+			"id": 8,
+			"name": "diffAuthoringState",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"comment": {
+				"summary": [],
+				"blockTags": [
+					{
+						"tag": "@file",
+						"content": [
+							{
+								"kind": "text",
+								"text": "Barrel for "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/core/editor`"
+							},
+							{
+								"kind": "text",
+								"text": " — the **React-free,\nPuck-runtime-free** editor engine (DD-0019 §22.2; PLAN-0020\nCORE-P0-007/-008/-010/-018/-019).\n\n### What lives here\n\nSidecar read/write over "
+							},
+							{
+								"kind": "code",
+								"text": "`root.props.__anvilkit`"
+							},
+							{
+								"kind": "text",
+								"text": ", the pure command\npipeline ("
+							},
+							{
+								"kind": "code",
+								"text": "`applyEditorCommand`"
+							},
+							{
+								"kind": "text",
+								"text": ": revision gate → validate → reduce →\nnoop detection), the resolvers (responsive, property-wise merge,\ntokens, node authoring), the single style-materialization\nimplementation ("
+							},
+							{
+								"kind": "code",
+								"text": "`resolveAuthoringStyle`"
+							},
+							{
+								"kind": "text",
+								"text": " + allowlisted serializer),\nthe reconciliation engine, and the shared dev-invariant helper.\n\n### Import rules (enforced by "
+							},
+							{
+								"kind": "code",
+								"text": "`check:no-headless-import`"
+							},
+							{
+								"kind": "text",
+								"text": " +\n"
+							},
+							{
+								"kind": "code",
+								"text": "`check:react-free-runtime`"
+							},
+							{
+								"kind": "text",
+								"text": ")\n\nOnly "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/contracts`"
+							},
+							{
+								"kind": "text",
+								"text": ", "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/schema`"
+							},
+							{
+								"kind": "text",
+								"text": ", "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/ir`"
+							},
+							{
+								"kind": "text",
+								"text": ",\nand "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/utils`"
+							},
+							{
+								"kind": "text",
+								"text": " may be imported. Puck imports are type-only\n("
+							},
+							{
+								"kind": "code",
+								"text": "`import type { Data }`"
+							},
+							{
+								"kind": "text",
+								"text": "); React never appears. React and Puck\nintegration lives in "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/core/react/editor`"
+							},
+							{
+								"kind": "text",
+								"text": " (Phase 1A)."
+							}
+						]
+					}
+				]
+			},
+			"signatures": [
+				{
+					"id": 9,
+					"name": "diffAuthoringState",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Diff two states into a change set. Reference equality is the fast\npath (reducers preserve references on no-op writes); canonical\nserialization settles the rest."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 10,
+							"name": "prev",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/authoring-state.ts",
+									"qualifiedName": "AuthoringStateV1"
+								},
+								"name": "AuthoringStateV1",
+								"package": "@anvilkit/contracts"
+							}
+						},
+						{
+							"id": 11,
+							"name": "next",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/authoring-state.ts",
+									"qualifiedName": "AuthoringStateV1"
+								},
+								"name": "AuthoringStateV1",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 1,
+						"name": "AuthoringChangeSet",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 137,
+			"name": "getMatchingBreakpoints",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 138,
+					"name": "getMatchingBreakpoints",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The enabled breakpoints matching a viewport width, ordered widest\nto narrowest (the §12.3 merge order)."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 139,
+							"name": "breakpoints",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/contracts",
+											"packagePath": "src/editor/responsive.ts",
+											"qualifiedName": "BreakpointDefinition"
+										},
+										"name": "BreakpointDefinition",
+										"package": "@anvilkit/contracts"
+									}
+								}
+							}
+						},
+						{
+							"id": 140,
+							"name": "viewportWidth",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "number"
+							}
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/responsive.ts",
+									"qualifiedName": "BreakpointDefinition"
+								},
+								"name": "BreakpointDefinition",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					}
+				}
+			]
+		},
+		{
+			"id": 110,
+			"name": "listUsedAuthoringFeatures",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 111,
+					"name": "listUsedAuthoringFeatures",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Scan a parsed sidecar for used editor features (DD-0019 §23.2).\n\nCovers the seven sidecar-visible features. "
+							},
+							{
+								"kind": "code",
+								"text": "`richText`"
+							},
+							{
+								"kind": "text",
+								"text": " usage lives\nin component props (the shared Tiptap contract), not the sidecar —\nits detection ships with inline editing (Phase 1B) and until then\nrich text continues to flow through the pre-editor exporter paths."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 112,
+							"name": "authoring",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/authoring-state.ts",
+									"qualifiedName": "AuthoringStateV1"
+								},
+								"name": "AuthoringStateV1",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/export-capabilities.ts",
+									"qualifiedName": "EditorFeatureId"
+								},
+								"name": "EditorFeatureId",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					}
+				}
+			]
+		},
+		{
+			"id": 40,
+			"name": "makeEditorError",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 41,
+					"name": "makeEditorError",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Shorthand builder for a typed editor error."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 42,
+							"name": "code",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/errors.ts",
+									"qualifiedName": "EditorErrorCode"
+								},
+								"name": "EditorErrorCode",
+								"package": "@anvilkit/contracts"
+							}
+						},
+						{
+							"id": 43,
+							"name": "message",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 44,
+							"name": "options",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {
+								"isOptional": true
+							},
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 45,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 50,
+											"name": "details",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true,
+												"isReadonly": true
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "typescript",
+													"packagePath": "lib/lib.es5.d.ts",
+													"qualifiedName": "Readonly"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "typescript",
+															"packagePath": "lib/lib.es5.d.ts",
+															"qualifiedName": "Record"
+														},
+														"typeArguments": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "intrinsic",
+																"name": "unknown"
+															}
+														],
+														"name": "Record",
+														"package": "typescript"
+													}
+												],
+												"name": "Readonly",
+												"package": "typescript"
+											}
+										},
+										{
+											"id": 49,
+											"name": "nodeIds",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true,
+												"isReadonly": true
+											},
+											"type": {
+												"type": "typeOperator",
+												"operator": "readonly",
+												"target": {
+													"type": "array",
+													"elementType": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												}
+											}
+										},
+										{
+											"id": 48,
+											"name": "path",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true,
+												"isReadonly": true
+											},
+											"type": {
+												"type": "typeOperator",
+												"operator": "readonly",
+												"target": {
+													"type": "array",
+													"elementType": {
+														"type": "union",
+														"types": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															}
+														]
+													}
+												}
+											}
+										},
+										{
+											"id": 47,
+											"name": "recoverable",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true,
+												"isReadonly": true
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
+											}
+										},
+										{
+											"id": 46,
+											"name": "severity",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true,
+												"isReadonly": true
+											},
+											"type": {
+												"type": "union",
+												"types": [
+													{
+														"type": "literal",
+														"value": "error"
+													},
+													{
+														"type": "literal",
+														"value": "info"
+													},
+													{
+														"type": "literal",
+														"value": "warning"
+													}
+												]
+											}
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												50,
+												49,
+												48,
+												47,
+												46
+											]
+										}
+									]
+								}
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/editor/errors.ts",
+							"qualifiedName": "EditorError"
+						},
+						"name": "EditorError",
+						"package": "@anvilkit/contracts"
+					}
+				}
+			]
+		},
+		{
+			"id": 113,
+			"name": "mergePropertyWise",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 114,
+					"name": "mergePropertyWise",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Merge partial spec layers, lowest precedence first (DD-0019 §24.3:\ncomponent default → style definitions in order → node values).\n"
+							},
+							{
+								"kind": "code",
+								"text": "`undefined`"
+							},
+							{
+								"kind": "text",
+								"text": " and "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " layers are skipped. Pure."
+							}
+						]
+					},
+					"typeParameters": [
+						{
+							"id": 115,
+							"name": "T",
+							"variant": "typeParam",
+							"kind": 131072,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "object"
+							}
+						}
+					],
+					"parameters": [
+						{
+							"id": 116,
+							"name": "layers",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {
+								"isRest": true
+							},
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "typescript",
+													"packagePath": "lib/lib.es5.d.ts",
+													"qualifiedName": "Partial"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": 115,
+														"name": "T",
+														"package": "@anvilkit/core",
+														"refersToTypeParameter": true
+													}
+												],
+												"name": "Partial",
+												"package": "typescript"
+											},
+											{
+												"type": "literal",
+												"value": null
+											},
+											{
+												"type": "intrinsic",
+												"name": "undefined"
+											}
+										]
+									}
+								}
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Partial"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": 115,
+								"name": "T",
+								"package": "@anvilkit/core",
+								"refersToTypeParameter": true
+							}
+						],
+						"name": "Partial",
+						"package": "typescript"
+					}
+				}
+			]
+		},
+		{
+			"id": 78,
+			"name": "readAuthoringState",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 79,
+					"name": "readAuthoringState",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Read and classify the authoring sidecar (DD-0019 §24.1 semantics):\nmissing → empty state; parse failure → read-only failure\npreserving the raw value; unsupported major →\n"
+							},
+							{
+								"kind": "code",
+								"text": "`EDITOR_CONTRACT_UNSUPPORTED_VERSION`"
+							},
+							{
+								"kind": "text",
+								"text": " read-only safe mode; valid →\nnormalized state."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 80,
+							"name": "data",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@puckeditor/core",
+									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"qualifiedName": "Data"
+								},
+								"name": "Data",
+								"package": "@puckeditor/core"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 70,
+						"name": "AuthoringReadResult",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 102,
+			"name": "reconcileAuthoringState",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 103,
+					"name": "reconcileAuthoringState",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "One pure reconciliation pass over "
+							},
+							{
+								"kind": "code",
+								"text": "`(state, puckData)`"
+							},
+							{
+								"kind": "text",
+								"text": ". From any\ndivergence, one pass restores invariants 3–5; no committed state\ncan retain a reference to a missing node once this runs inside the\ncommit path (CORE-P1A-016)."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 104,
+							"name": "state",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/authoring-state.ts",
+									"qualifiedName": "AuthoringStateV1"
+								},
+								"name": "AuthoringStateV1",
+								"package": "@anvilkit/contracts"
+							}
+						},
+						{
+							"id": 105,
+							"name": "data",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@puckeditor/core",
+									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"qualifiedName": "Data"
+								},
+								"name": "Data",
+								"package": "@puckeditor/core"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 98,
+						"name": "ReconcileResult",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 18,
+			"name": "reduceValidatedCommand",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 19,
+					"name": "reduceValidatedCommand",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Reduce one validated atomic command (DD-0019 §24.2's\n"
+							},
+							{
+								"kind": "code",
+								"text": "`reduceValidatedCommand`"
+							},
+							{
+								"kind": "text",
+								"text": "). Returns the input state unchanged (same\nreference) for no-op writes."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 20,
+							"name": "state",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/authoring-state.ts",
+									"qualifiedName": "AuthoringStateV1"
+								},
+								"name": "AuthoringStateV1",
+								"package": "@anvilkit/contracts"
+							}
+						},
+						{
+							"id": 21,
+							"name": "command",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/commands.ts",
+									"qualifiedName": "AtomicEditorCommand"
+								},
+								"name": "AtomicEditorCommand",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/editor/authoring-state.ts",
+							"qualifiedName": "AuthoringStateV1"
+						},
+						"name": "AuthoringStateV1",
+						"package": "@anvilkit/contracts"
+					}
+				}
+			]
+		},
+		{
+			"id": 106,
+			"name": "remapForDuplicate",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 107,
+					"name": "remapForDuplicate",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Generate authoring records for duplicated nodes (invariant 5):\nlayout/style/typography/hidden/styleRefs/name/locked/accessibility\ncopy verbatim; "
+							},
+							{
+								"kind": "code",
+								"text": "`componentInstance`"
+							},
+							{
+								"kind": "text",
+								"text": " copies; interaction and binding\nrefs are **not** copied — interactions and bindings are anchored\nentities that must be re-created with fresh ids by the caller,\nnever shared between original and duplicate."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 108,
+							"name": "state",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/authoring-state.ts",
+									"qualifiedName": "AuthoringStateV1"
+								},
+								"name": "AuthoringStateV1",
+								"package": "@anvilkit/contracts"
+							}
+						},
+						{
+							"id": 109,
+							"name": "idMap",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Readonly"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Record"
+										},
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										],
+										"name": "Record",
+										"package": "typescript"
+									}
+								],
+								"name": "Readonly",
+								"package": "typescript"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 88,
+						"name": "DuplicateRemapResult",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 218,
+			"name": "resolveAuthoringStyle",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 219,
+					"name": "resolveAuthoringStyle",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Materialize resolved node authoring into DOM application form\n(DD-0019 §11.4). Deterministic: identical input produces an\nidentical "
+							},
+							{
+								"kind": "code",
+								"text": "`ResolvedAuthoringStyle`"
+							},
+							{
+								"kind": "text",
+								"text": "; property emission order is\nfixed by construction. Output never contains "
+							},
+							{
+								"kind": "code",
+								"text": "`!important`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 220,
+							"name": "input",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": 212,
+								"name": "ResolvedNodeStyleInput",
+								"package": "@anvilkit/core"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 207,
+						"name": "ResolvedAuthoringStyle",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 55,
+			"name": "resolveByteLimits",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 56,
+					"name": "resolveByteLimits",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Resolve "
+							},
+							{
+								"kind": "code",
+								"text": "`EditorPolicies.byteLimits`"
+							},
+							{
+								"kind": "text",
+								"text": " against the frozen defaults.\nOverrides MAY only tighten (§7.3): a value above the frozen cap is\n**rejected with a diagnostic** and the default is kept — never\nsilently clamped, never applied (decision item 8, frozen here).\nNon-positive values are rejected the same way."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 57,
+							"name": "overrides",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {
+								"isOptional": true
+							},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Partial"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/contracts",
+											"packagePath": "src/editor/limits.ts",
+											"qualifiedName": "EditorByteLimits"
+										},
+										"name": "EditorByteLimits",
+										"package": "@anvilkit/contracts"
+									}
+								],
+								"name": "Partial",
+								"package": "typescript"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 52,
+						"name": "ResolvedByteLimits",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 133,
+			"name": "resolveNodeAuthoring",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 134,
+					"name": "resolveNodeAuthoring",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Resolve everything the preview and export pipelines need for one\nnode (DD-0019 §24.3, verbatim structure)."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 135,
+							"name": "nodeId",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 136,
+							"name": "context",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": 121,
+								"name": "ResolveContext",
+								"package": "@anvilkit/core"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 127,
+						"name": "ResolvedNodeAuthoring",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 141,
+			"name": "resolveResponsiveValue",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 142,
+					"name": "resolveResponsiveValue",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Resolve a "
+							},
+							{
+								"kind": "code",
+								"text": "`ResponsiveValue`"
+							},
+							{
+								"kind": "text",
+								"text": " at a viewport width (DD-0019 §12.3,\nverbatim signature). "
+							},
+							{
+								"kind": "code",
+								"text": "`merge`"
+							},
+							{
+								"kind": "text",
+								"text": " folds each matching override onto the\naccumulated value — property-wise for spec objects, replacement\nfor scalars.\n\n"
+							},
+							{
+								"kind": "code",
+								"text": "`source`"
+							},
+							{
+								"kind": "text",
+								"text": " is the narrowest matching layer that contributed a value;\n"
+							},
+							{
+								"kind": "code",
+								"text": "`inherited`"
+							},
+							{
+								"kind": "text",
+								"text": " is true when the narrowest matching breakpoint itself\ncontributed nothing (the value flows down from a wider layer or\nbase)."
+							}
+						]
+					},
+					"typeParameters": [
+						{
+							"id": 143,
+							"name": "T",
+							"variant": "typeParam",
+							"kind": 131072,
+							"flags": {}
+						}
+					],
+					"parameters": [
+						{
+							"id": 144,
+							"name": "input",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/contracts",
+											"packagePath": "src/editor/responsive.ts",
+											"qualifiedName": "ResponsiveValue"
+										},
+										"typeArguments": [
+											{
+												"type": "reference",
+												"target": 143,
+												"name": "T",
+												"package": "@anvilkit/core",
+												"refersToTypeParameter": true
+											}
+										],
+										"name": "ResponsiveValue",
+										"package": "@anvilkit/contracts"
+									},
+									{
+										"type": "intrinsic",
+										"name": "undefined"
+									}
+								]
+							}
+						},
+						{
+							"id": 145,
+							"name": "breakpoints",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/contracts",
+											"packagePath": "src/editor/responsive.ts",
+											"qualifiedName": "BreakpointDefinition"
+										},
+										"name": "BreakpointDefinition",
+										"package": "@anvilkit/contracts"
+									}
+								}
+							}
+						},
+						{
+							"id": 146,
+							"name": "viewportWidth",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "number"
+							}
+						},
+						{
+							"id": 147,
+							"name": "merge",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 148,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"signatures": [
+										{
+											"id": 149,
+											"name": "__type",
+											"variant": "signature",
+											"kind": 4096,
+											"flags": {},
+											"parameters": [
+												{
+													"id": 150,
+													"name": "base",
+													"variant": "param",
+													"kind": 32768,
+													"flags": {},
+													"type": {
+														"type": "union",
+														"types": [
+															{
+																"type": "reference",
+																"target": 143,
+																"name": "T",
+																"package": "@anvilkit/core",
+																"refersToTypeParameter": true
+															},
+															{
+																"type": "intrinsic",
+																"name": "undefined"
+															}
+														]
+													}
+												},
+												{
+													"id": 151,
+													"name": "override",
+													"variant": "param",
+													"kind": 32768,
+													"flags": {},
+													"type": {
+														"type": "reference",
+														"target": 143,
+														"name": "T",
+														"package": "@anvilkit/core",
+														"refersToTypeParameter": true
+													}
+												}
+											],
+											"type": {
+												"type": "reference",
+												"target": 143,
+												"name": "T",
+												"package": "@anvilkit/core",
+												"refersToTypeParameter": true
+											}
+										}
+									]
+								}
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/editor/responsive.ts",
+							"qualifiedName": "ResolvedValue"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": 143,
+								"name": "T",
+								"package": "@anvilkit/core",
+								"refersToTypeParameter": true
+							}
+						],
+						"name": "ResolvedValue",
+						"package": "@anvilkit/contracts"
+					}
+				}
+			]
+		},
+		{
+			"id": 152,
+			"name": "resolveToken",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 153,
+					"name": "resolveToken",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Resolve a token to its literal value for a mode (DD-0019 §24.5).\nPure and total: every failure mode is a typed result."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 154,
+							"name": "tokenId",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 155,
+							"name": "modeId",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 156,
+							"name": "tokens",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Readonly"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Record"
+										},
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/contracts",
+													"packagePath": "src/editor/tokens.ts",
+													"qualifiedName": "DesignToken"
+												},
+												"name": "DesignToken",
+												"package": "@anvilkit/contracts"
+											}
+										],
+										"name": "Record",
+										"package": "typescript"
+									}
+								],
+								"name": "Readonly",
+								"package": "typescript"
+							}
+						},
+						{
+							"id": 157,
+							"name": "modes",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Readonly"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Record"
+										},
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/contracts",
+													"packagePath": "src/editor/tokens.ts",
+													"qualifiedName": "TokenMode"
+												},
+												"name": "TokenMode",
+												"package": "@anvilkit/contracts"
+											}
+										],
+										"name": "Record",
+										"package": "typescript"
+									}
+								],
+								"name": "Readonly",
+								"package": "typescript"
+							}
+						},
+						{
+							"id": 158,
+							"name": "visited",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es2015.collection.d.ts",
+									"qualifiedName": "ReadonlySet"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									}
+								],
+								"name": "ReadonlySet",
+								"package": "typescript"
+							},
+							"defaultValue": "..."
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 159,
+						"name": "TokenResolution",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 175,
+			"name": "serializeBorderEdge",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 176,
+					"name": "serializeBorderEdge",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Serialize one border edge into "
+							},
+							{
+								"kind": "code",
+								"text": "`border-<edge>`"
+							},
+							{
+								"kind": "text",
+								"text": " shorthand text."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 177,
+							"name": "edge",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/values.ts",
+									"qualifiedName": "BorderEdge"
+								},
+								"name": "BorderEdge",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": 178,
+			"name": "serializeCssColor",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 179,
+					"name": "serializeCssColor",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Serialize a typed color."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 180,
+							"name": "value",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/values.ts",
+									"qualifiedName": "CssColor"
+								},
+								"name": "CssColor",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			]
+		},
+		{
+			"id": 181,
+			"name": "serializeCssLength",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 182,
+					"name": "serializeCssLength",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Serialize a typed length. Token refs return "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " (unresolved)."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 183,
+							"name": "value",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/values.ts",
+									"qualifiedName": "CssLength"
+								},
+								"name": "CssLength",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": 184,
+			"name": "serializeCssMath",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 185,
+					"name": "serializeCssMath",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Serialize a math expression; "
+							},
+							{
+								"kind": "code",
+								"text": "`op`"
+							},
+							{
+								"kind": "text",
+								"text": " roots wrap in "
+							},
+							{
+								"kind": "code",
+								"text": "`calc()`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 186,
+							"name": "expression",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/values.ts",
+									"qualifiedName": "CssMathExpression"
+								},
+								"name": "CssMathExpression",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": 187,
+			"name": "serializeFilter",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 188,
+					"name": "serializeFilter",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Serialize a filter spec into "
+							},
+							{
+								"kind": "code",
+								"text": "`filter`"
+							},
+							{
+								"kind": "text",
+								"text": " function list text."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 189,
+							"name": "filter",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/values.ts",
+									"qualifiedName": "FilterSpec"
+								},
+								"name": "FilterSpec",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": 190,
+			"name": "serializeGridTracks",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 191,
+					"name": "serializeGridTracks",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Serialize a grid track list for "
+							},
+							{
+								"kind": "code",
+								"text": "`grid-template-*`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 192,
+							"name": "tracks",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/values.ts",
+									"qualifiedName": "GridTrackList"
+								},
+								"name": "GridTrackList",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": 193,
+			"name": "serializePaint",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 194,
+					"name": "serializePaint",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Serialize a paint into "
+							},
+							{
+								"kind": "code",
+								"text": "`background`"
+							},
+							{
+								"kind": "text",
+								"text": " shorthand text."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 195,
+							"name": "paint",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/values.ts",
+									"qualifiedName": "Paint"
+								},
+								"name": "Paint",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": 196,
+			"name": "serializeShadow",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 197,
+					"name": "serializeShadow",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Serialize one shadow layer for "
+							},
+							{
+								"kind": "code",
+								"text": "`box-shadow`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 198,
+							"name": "shadow",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/values.ts",
+									"qualifiedName": "ShadowSpec"
+								},
+								"name": "ShadowSpec",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": 199,
+			"name": "serializeTokenOrLiteral",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 200,
+					"name": "serializeTokenOrLiteral",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Unwrap a resolved "
+							},
+							{
+								"kind": "code",
+								"text": "`TokenOrLiteral`"
+							},
+							{
+								"kind": "text",
+								"text": "; token refs return "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"typeParameters": [
+						{
+							"id": 201,
+							"name": "T",
+							"variant": "typeParam",
+							"kind": 131072,
+							"flags": {}
+						}
+					],
+					"parameters": [
+						{
+							"id": 202,
+							"name": "value",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/values.ts",
+									"qualifiedName": "TokenOrLiteral"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": 201,
+										"name": "T",
+										"package": "@anvilkit/core",
+										"refersToTypeParameter": true
+									}
+								],
+								"name": "TokenOrLiteral",
+								"package": "@anvilkit/contracts"
+							}
+						},
+						{
+							"id": 203,
+							"name": "serialize",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 204,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"signatures": [
+										{
+											"id": 205,
+											"name": "__type",
+											"variant": "signature",
+											"kind": 4096,
+											"flags": {},
+											"parameters": [
+												{
+													"id": 206,
+													"name": "literal",
+													"variant": "param",
+													"kind": 32768,
+													"flags": {},
+													"type": {
+														"type": "reference",
+														"target": 201,
+														"name": "T",
+														"package": "@anvilkit/core",
+														"refersToTypeParameter": true
+													}
+												}
+											],
+											"type": {
+												"type": "union",
+												"types": [
+													{
+														"type": "intrinsic",
+														"name": "string"
+													},
+													{
+														"type": "literal",
+														"value": null
+													}
+												]
+											}
+										}
+									]
+								}
+							}
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": 67,
+			"name": "stripPatchNulls",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 68,
+					"name": "stripPatchNulls",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Remove "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " leaves from a patch, producing a plain partial that\nthe domain schemas can validate ("
+							},
+							{
+								"kind": "code",
+								"text": "`EDITOR_INVALID_CSS_VALUE`"
+							},
+							{
+								"kind": "text",
+								"text": "\nmapping happens on the validation side)."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 69,
+							"name": "value",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "unknown"
+					}
+				}
+			]
+		},
+		{
+			"id": 22,
+			"name": "validateAtomicCommand",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 23,
+					"name": "validateAtomicCommand",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Validate one atomic command against a state snapshot. Returns all\nerrors found (info/warning entries never block; the reducer\npipeline rejects on any "
+							},
+							{
+								"kind": "code",
+								"text": "`severity: \"error\"`"
+							},
+							{
+								"kind": "text",
+								"text": ")."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 24,
+							"name": "state",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/authoring-state.ts",
+									"qualifiedName": "AuthoringStateV1"
+								},
+								"name": "AuthoringStateV1",
+								"package": "@anvilkit/contracts"
+							}
+						},
+						{
+							"id": 25,
+							"name": "command",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/commands.ts",
+									"qualifiedName": "AtomicEditorCommand"
+								},
+								"name": "AtomicEditorCommand",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/errors.ts",
+									"qualifiedName": "EditorError"
+								},
+								"name": "EditorError",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					}
+				}
+			]
+		},
+		{
+			"id": 26,
+			"name": "validateEditorCommand",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 27,
+					"name": "validateEditorCommand",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Validate a command (atomic or batch shell). Batch members are\nvalidated sequentially against intermediate state by the apply\npipeline, not here — this validates only the batch envelope."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 28,
+							"name": "state",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/authoring-state.ts",
+									"qualifiedName": "AuthoringStateV1"
+								},
+								"name": "AuthoringStateV1",
+								"package": "@anvilkit/contracts"
+							}
+						},
+						{
+							"id": 29,
+							"name": "command",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/commands.ts",
+									"qualifiedName": "EditorCommand"
+								},
+								"name": "EditorCommand",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/errors.ts",
+									"qualifiedName": "EditorError"
+								},
+								"name": "EditorError",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					}
+				}
+			]
+		},
+		{
+			"id": 81,
+			"name": "writeAuthoringState",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 82,
+					"name": "writeAuthoringState",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Write the sidecar into Puck data (DD-0019 §24.1, verbatim\nsemantics): pure spread write of the **compacted** state to\n"
+							},
+							{
+								"kind": "code",
+								"text": "`root.props.__anvilkit`"
+							},
+							{
+								"kind": "text",
+								"text": ", never mutating the input. Read-only\nguarding (invariant 9) is the command port's responsibility — this\nfunction is a pure projection."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 83,
+							"name": "data",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@puckeditor/core",
+									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"qualifiedName": "Data"
+								},
+								"name": "Data",
+								"package": "@puckeditor/core"
+							}
+						},
+						{
+							"id": 84,
+							"name": "next",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/authoring-state.ts",
+									"qualifiedName": "AuthoringStateV1"
+								},
+								"name": "AuthoringStateV1",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@puckeditor/core",
+							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"qualifiedName": "Data"
+						},
+						"name": "Data",
+						"package": "@puckeditor/core"
+					}
+				}
+			]
+		}
+	],
+	"groups": [
+		{
+			"title": "Classes",
+			"children": [
+				36
+			]
+		},
+		{
+			"title": "Interfaces",
+			"children": [
+				1,
+				70,
+				88,
+				12,
+				117,
+				91,
+				98,
+				121,
+				207,
+				52,
+				127,
+				212
+			]
+		},
+		{
+			"title": "Type Aliases",
+			"children": [
+				159
+			]
+		},
+		{
+			"title": "Variables",
+			"children": [
+				51,
+				17
+			]
+		},
+		{
+			"title": "Functions",
+			"children": [
+				4,
+				58,
+				30,
+				85,
+				76,
+				63,
+				8,
+				137,
+				110,
+				40,
+				113,
+				78,
+				102,
+				18,
+				106,
+				218,
+				55,
+				133,
+				141,
+				152,
+				175,
+				178,
+				181,
+				184,
+				187,
+				190,
+				193,
+				196,
+				199,
+				67,
+				22,
+				26,
+				81
+			]
+		}
+	],
+	"packageName": "@anvilkit/core",
+	"symbolIdMap": {
+		"0": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": ""
+		},
+		"1": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "AuthoringChangeSet"
+		},
+		"2": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "AuthoringChangeSet.changedNodeIds"
+		},
+		"3": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "AuthoringChangeSet.changedCollections"
+		},
+		"4": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "applyEditorCommand"
+		},
+		"5": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "applyEditorCommand"
+		},
+		"6": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "state"
+		},
+		"7": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "command"
+		},
+		"8": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "diffAuthoringState"
+		},
+		"9": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "diffAuthoringState"
+		},
+		"10": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "prev"
+		},
+		"11": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "next"
+		},
+		"12": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "EditorReduceResult"
+		},
+		"13": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "EditorReduceResult.status"
+		},
+		"14": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "EditorReduceResult.state"
+		},
+		"15": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "EditorReduceResult.errors"
+		},
+		"16": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "EditorReduceResult.changes"
+		},
+		"17": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/apply.ts",
+			"qualifiedName": "EMPTY_CHANGE_SET"
+		},
+		"18": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/reduce.ts",
+			"qualifiedName": "reduceValidatedCommand"
+		},
+		"19": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/reduce.ts",
+			"qualifiedName": "reduceValidatedCommand"
+		},
+		"20": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/reduce.ts",
+			"qualifiedName": "state"
+		},
+		"21": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/reduce.ts",
+			"qualifiedName": "command"
+		},
+		"22": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/validate.ts",
+			"qualifiedName": "validateAtomicCommand"
+		},
+		"23": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/validate.ts",
+			"qualifiedName": "validateAtomicCommand"
+		},
+		"24": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/validate.ts",
+			"qualifiedName": "state"
+		},
+		"25": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/validate.ts",
+			"qualifiedName": "command"
+		},
+		"26": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/validate.ts",
+			"qualifiedName": "validateEditorCommand"
+		},
+		"27": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/validate.ts",
+			"qualifiedName": "validateEditorCommand"
+		},
+		"28": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/validate.ts",
+			"qualifiedName": "state"
+		},
+		"29": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/commands/validate.ts",
+			"qualifiedName": "command"
+		},
+		"30": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "checkInvariant"
+		},
+		"31": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "checkInvariant"
+		},
+		"32": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "condition"
+		},
+		"33": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "error"
+		},
+		"34": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type"
+		},
+		"35": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type"
+		},
+		"36": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "EditorInvariantError"
+		},
+		"37": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "EditorInvariantError.__constructor"
+		},
+		"38": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "EditorInvariantError"
+		},
+		"39": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "message"
+		},
+		"40": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "makeEditorError"
+		},
+		"41": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "makeEditorError"
+		},
+		"42": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "code"
+		},
+		"43": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "message"
+		},
+		"44": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "options"
+		},
+		"45": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type"
+		},
+		"46": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type.severity"
+		},
+		"47": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type.recoverable"
+		},
+		"48": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type.path"
+		},
+		"49": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type.nodeIds"
+		},
+		"50": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type.details"
+		},
+		"51": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/limits.ts",
+			"qualifiedName": "EDITOR_BYTE_LIMIT_DEFAULTS"
+		},
+		"52": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/limits.ts",
+			"qualifiedName": "ResolvedByteLimits"
+		},
+		"53": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/limits.ts",
+			"qualifiedName": "ResolvedByteLimits.limits"
+		},
+		"54": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/limits.ts",
+			"qualifiedName": "ResolvedByteLimits.errors"
+		},
+		"55": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/limits.ts",
+			"qualifiedName": "resolveByteLimits"
+		},
+		"56": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/limits.ts",
+			"qualifiedName": "resolveByteLimits"
+		},
+		"57": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/limits.ts",
+			"qualifiedName": "overrides"
+		},
+		"58": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/patch.ts",
+			"qualifiedName": "applyEditorPatch"
+		},
+		"59": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/patch.ts",
+			"qualifiedName": "applyEditorPatch"
+		},
+		"60": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/patch.ts",
+			"qualifiedName": "T"
+		},
+		"61": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/patch.ts",
+			"qualifiedName": "target"
+		},
+		"62": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/patch.ts",
+			"qualifiedName": "patch"
+		},
+		"63": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/patch.ts",
+			"qualifiedName": "deepEqualJson"
+		},
+		"64": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/patch.ts",
+			"qualifiedName": "deepEqualJson"
+		},
+		"65": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/patch.ts",
+			"qualifiedName": "a"
+		},
+		"66": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/patch.ts",
+			"qualifiedName": "b"
+		},
+		"67": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/patch.ts",
+			"qualifiedName": "stripPatchNulls"
+		},
+		"68": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/patch.ts",
+			"qualifiedName": "stripPatchNulls"
+		},
+		"69": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/patch.ts",
+			"qualifiedName": "value"
+		},
+		"70": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "AuthoringReadResult"
+		},
+		"71": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "AuthoringReadResult.state"
+		},
+		"72": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "AuthoringReadResult.readOnly"
+		},
+		"73": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "AuthoringReadResult.raw"
+		},
+		"74": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "AuthoringReadResult.errors"
+		},
+		"75": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "AuthoringReadResult.migrated"
+		},
+		"76": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/editor/authoring-state.ts",
+			"qualifiedName": "createEmptyAuthoringState"
+		},
+		"77": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/editor/authoring-state.ts",
+			"qualifiedName": "createEmptyAuthoringState"
+		},
+		"78": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "readAuthoringState"
+		},
+		"79": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "readAuthoringState"
+		},
+		"80": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "data"
+		},
+		"81": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "writeAuthoringState"
+		},
+		"82": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "writeAuthoringState"
+		},
+		"83": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "data"
+		},
+		"84": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/read-write.ts",
+			"qualifiedName": "next"
+		},
+		"85": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "collectLiveNodeIds"
+		},
+		"86": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "collectLiveNodeIds"
+		},
+		"87": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "data"
+		},
+		"88": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "DuplicateRemapResult"
+		},
+		"89": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "DuplicateRemapResult.state"
+		},
+		"90": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "DuplicateRemapResult.copiedNodeIds"
+		},
+		"91": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet"
+		},
+		"92": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet.removedNodeRecords"
+		},
+		"93": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet.strippedStyleRefs"
+		},
+		"94": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet.strippedInteractionRefs"
+		},
+		"95": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet.strippedBindingRefs"
+		},
+		"96": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet.removedInteractions"
+		},
+		"97": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet.removedBindings"
+		},
+		"98": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileResult"
+		},
+		"99": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileResult.state"
+		},
+		"100": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileResult.changes"
+		},
+		"101": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileResult.changed"
+		},
+		"102": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "reconcileAuthoringState"
+		},
+		"103": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "reconcileAuthoringState"
+		},
+		"104": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "state"
+		},
+		"105": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "data"
+		},
+		"106": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "remapForDuplicate"
+		},
+		"107": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "remapForDuplicate"
+		},
+		"108": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "state"
+		},
+		"109": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "idMap"
+		},
+		"110": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "listUsedAuthoringFeatures"
+		},
+		"111": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "listUsedAuthoringFeatures"
+		},
+		"112": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/editor/index.ts",
+			"qualifiedName": "authoring"
+		},
+		"113": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/merge.ts",
+			"qualifiedName": "mergePropertyWise"
+		},
+		"114": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/merge.ts",
+			"qualifiedName": "mergePropertyWise"
+		},
+		"115": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/merge.ts",
+			"qualifiedName": "T"
+		},
+		"116": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/merge.ts",
+			"qualifiedName": "layers"
+		},
+		"117": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "NodeComponentDefaults"
+		},
+		"118": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "NodeComponentDefaults.layout"
+		},
+		"119": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "NodeComponentDefaults.style"
+		},
+		"120": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "NodeComponentDefaults.typography"
+		},
+		"121": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "ResolveContext"
+		},
+		"122": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "ResolveContext.authoring"
+		},
+		"123": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "ResolveContext.breakpoints"
+		},
+		"124": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "ResolveContext.viewportWidth"
+		},
+		"125": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "ResolveContext.tokenMode"
+		},
+		"126": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "ResolveContext.componentDefaults"
+		},
+		"127": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "ResolvedNodeAuthoring"
+		},
+		"128": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "ResolvedNodeAuthoring.layout"
+		},
+		"129": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "ResolvedNodeAuthoring.style"
+		},
+		"130": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "ResolvedNodeAuthoring.typography"
+		},
+		"131": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "ResolvedNodeAuthoring.hidden"
+		},
+		"132": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "ResolvedNodeAuthoring.diagnostics"
+		},
+		"133": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "resolveNodeAuthoring"
+		},
+		"134": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "resolveNodeAuthoring"
+		},
+		"135": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "nodeId"
+		},
+		"136": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/node.ts",
+			"qualifiedName": "context"
+		},
+		"137": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "getMatchingBreakpoints"
+		},
+		"138": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "getMatchingBreakpoints"
+		},
+		"139": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "breakpoints"
+		},
+		"140": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "viewportWidth"
+		},
+		"141": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "resolveResponsiveValue"
+		},
+		"142": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "resolveResponsiveValue"
+		},
+		"143": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "T"
+		},
+		"144": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "input"
+		},
+		"145": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "breakpoints"
+		},
+		"146": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "viewportWidth"
+		},
+		"147": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "merge"
+		},
+		"148": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "__type"
+		},
+		"149": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "__type"
+		},
+		"150": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "base"
+		},
+		"151": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/responsive.ts",
+			"qualifiedName": "override"
+		},
+		"152": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "resolveToken"
+		},
+		"153": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "resolveToken"
+		},
+		"154": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "tokenId"
+		},
+		"155": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "modeId"
+		},
+		"156": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "tokens"
+		},
+		"157": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "modes"
+		},
+		"158": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "visited"
+		},
+		"159": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "TokenResolution"
+		},
+		"160": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type"
+		},
+		"161": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.status"
+		},
+		"162": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.value"
+		},
+		"163": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.type"
+		},
+		"164": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.tokenId"
+		},
+		"165": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type"
+		},
+		"166": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.status"
+		},
+		"167": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.path"
+		},
+		"168": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type"
+		},
+		"169": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.status"
+		},
+		"170": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.tokenId"
+		},
+		"171": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type"
+		},
+		"172": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.status"
+		},
+		"173": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.tokenId"
+		},
+		"174": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.modeId"
+		},
+		"175": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeBorderEdge"
+		},
+		"176": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeBorderEdge"
+		},
+		"177": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "edge"
+		},
+		"178": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeCssColor"
+		},
+		"179": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeCssColor"
+		},
+		"180": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "value"
+		},
+		"181": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeCssLength"
+		},
+		"182": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeCssLength"
+		},
+		"183": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "value"
+		},
+		"184": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeCssMath"
+		},
+		"185": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeCssMath"
+		},
+		"186": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "expression"
+		},
+		"187": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeFilter"
+		},
+		"188": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeFilter"
+		},
+		"189": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "filter"
+		},
+		"190": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeGridTracks"
+		},
+		"191": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeGridTracks"
+		},
+		"192": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "tracks"
+		},
+		"193": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializePaint"
+		},
+		"194": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializePaint"
+		},
+		"195": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "paint"
+		},
+		"196": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeShadow"
+		},
+		"197": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeShadow"
+		},
+		"198": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "shadow"
+		},
+		"199": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeTokenOrLiteral"
+		},
+		"200": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeTokenOrLiteral"
+		},
+		"201": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "T"
+		},
+		"202": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "value"
+		},
+		"203": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serialize"
+		},
+		"204": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "__type"
+		},
+		"205": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "__type"
+		},
+		"206": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "literal"
+		},
+		"207": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "ResolvedAuthoringStyle"
+		},
+		"208": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "ResolvedAuthoringStyle.classNames"
+		},
+		"209": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "ResolvedAuthoringStyle.inlineStyle"
+		},
+		"210": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "ResolvedAuthoringStyle.dataAttributes"
+		},
+		"211": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "ResolvedAuthoringStyle.diagnostics"
+		},
+		"212": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "ResolvedNodeStyleInput"
+		},
+		"213": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "ResolvedNodeStyleInput.nodeId"
+		},
+		"214": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "ResolvedNodeStyleInput.layout"
+		},
+		"215": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "ResolvedNodeStyleInput.style"
+		},
+		"216": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "ResolvedNodeStyleInput.typography"
+		},
+		"217": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "ResolvedNodeStyleInput.hidden"
+		},
+		"218": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "resolveAuthoringStyle"
+		},
+		"219": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "resolveAuthoringStyle"
+		},
+		"220": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/resolve-authoring-style.ts",
+			"qualifiedName": "input"
+		}
+	},
+	"files": {
+		"entries": {
+			"1": "src/editor/index.ts"
+		},
+		"reflections": {
+			"1": 0
+		}
+	}
+}
