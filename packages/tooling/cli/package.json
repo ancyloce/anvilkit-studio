@@ -58,7 +58,7 @@
 		"@rslib/core": "^0.23.2",
 		"@types/node": "^26.1.1",
 		"madge": "^8.0.0",
-		"publint": "^0.3.21",
+		"publint": "^0.3.22",
 		"typescript": "7.0.2",
 		"vitest": "^4.1.10"
 	}

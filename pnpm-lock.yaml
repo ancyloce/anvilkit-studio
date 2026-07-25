@@ -131,8 +131,8 @@ importers:
         specifier: ^8.0.0
         version: 8.0.0(typescript@7.0.2)
       playwright:
-        specifier: ^1.61.1
-        version: 1.61.1
+        specifier: ^1.62.0
+        version: 1.62.0
       prettier:
         specifier: ^3.8.4
         version: 3.8.4
@@ -541,7 +541,7 @@ importers:
         specifier: 19.2.8
         version: 19.2.8(react@19.2.8)
       react-konva:
-        specifier: ^19.2.4
+        specifier: ^19.2.5
         version: 19.2.5(@types/react@19.2.17)(konva@10.3.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       replicate:
         specifier: ^1.4.0
@@ -573,7 +573,7 @@ importers:
         version: link:../../packages/tooling/configs/vitest
       '@axe-core/playwright':
         specifier: ^4.11.3
-        version: 4.11.3(playwright-core@1.61.1)
+        version: 4.11.3(playwright-core@1.62.0)
       '@hocuspocus/server':
         specifier: ^4.3.0
         version: 4.3.0(srvx@0.11.17)(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
@@ -833,7 +833,7 @@ importers:
         specifier: 19.2.8
         version: 19.2.8(react@19.2.8)
       react-konva:
-        specifier: ^19.2.4
+        specifier: ^19.2.5
         version: 19.2.5(@types/react@19.2.17)(konva@10.3.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       tailwindcss:
         specifier: 4.3.2
@@ -1288,7 +1288,7 @@ importers:
         specifier: 19.2.8
         version: 19.2.8(react@19.2.8)
       react-konva:
-        specifier: ^19.2.4
+        specifier: ^19.2.5
         version: 19.2.5(@types/react@19.2.17)(konva@10.3.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       typescript:
         specifier: 7.0.2
@@ -9169,9 +9169,9 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright-core@1.61.1:
-    resolution: {integrity: sha512-h7Qlt6m4REp25qvIdvbDtVmD4LqVXfpRxhORv9L0jzETM05p4fuPJ3dKyuSXQxDSbXnmS79HAgi9589lGSpLkg==}
-    engines: {node: '>=18'}
+  playwright-core@1.62.0:
+    resolution: {integrity: sha512-nsNRyq0r2zsG8AcRHWknc9QRA5XCueC7gWMrs+Gx2tlZn9hcl8zudfh00lhJPY1DE7NmZ6bDsT9g2yey8mXljA==}
+    engines: {node: '>=20'}
     hasBin: true
 
   playwright@1.61.0:
@@ -9179,9 +9179,9 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.61.1:
-    resolution: {integrity: sha512-DWnY5o3YbLWK4GovuAVwpqL+1VwGNdUGrRr++8j8PtQQzvAVZUIMjKQ90fY689sEJZJBbZVw1rXaOKSTitkzPQ==}
-    engines: {node: '>=18'}
+  playwright@1.62.0:
+    resolution: {integrity: sha512-Z14dG305dgaLu6foB1TXQagFiW8JfSUIUaUuPaKQ6NtBPKF1P/qXcqfh6c6K/icPqdy37JmjbiBXf6JNg6Sylw==}
+    engines: {node: '>=20'}
     hasBin: true
 
   pluralize@8.0.0:
@@ -10753,10 +10753,10 @@ snapshots:
       '@ast-grep/napi-win32-ia32-msvc': 0.37.0
       '@ast-grep/napi-win32-x64-msvc': 0.37.0
 
-  '@axe-core/playwright@4.11.3(playwright-core@1.61.1)':
+  '@axe-core/playwright@4.11.3(playwright-core@1.62.0)':
     dependencies:
       axe-core: 4.11.4
-      playwright-core: 1.61.1
+      playwright-core: 1.62.0
 
   '@babel/code-frame@7.27.1':
     dependencies:
@@ -16927,7 +16927,7 @@ snapshots:
 
   playwright-core@1.61.0: {}
 
-  playwright-core@1.61.1: {}
+  playwright-core@1.62.0: {}
 
   playwright@1.61.0:
     dependencies:
@@ -16935,9 +16935,9 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  playwright@1.61.1:
+  playwright@1.62.0:
     dependencies:
-      playwright-core: 1.61.1
+      playwright-core: 1.62.0
     optionalDependencies:
       fsevents: 2.3.2
 

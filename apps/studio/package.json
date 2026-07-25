@@ -66,7 +66,7 @@
 		"next": "^16.2.9",
 		"react": "^19.2.8",
 		"react-dom": "^19.2.8",
-		"react-konva": "^19.2.4",
+		"react-konva": "^19.2.5",
 		"replicate": "^1.4.0",
 		"undici": "^8.5.0",
 		"y-protocols": "^1.0.7",
