@@ -1,7 +1,12 @@
 {
 	"$schema": "https://typedoc.org/schema.json",
-	"extends": ["../../../typedoc.base.json"],
-	"entryPoints": ["./src/index.ts"],
+	"extends": [
+		"../../../typedoc.base.json"
+	],
+	"entryPoints": [
+		"./src/index.ts",
+		"./src/editor.ts"
+	],
 	"tsconfig": "./tsconfig.json",
 	"name": "@anvilkit/schema"
 }
