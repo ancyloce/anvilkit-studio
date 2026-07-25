@@ -11,7 +11,7 @@
 import type { EditorDataSourceAdapter } from "./bindings.js";
 import type { EditorPolicies } from "./policies.js";
 import type { BreakpointDefinition } from "./responsive.js";
-import type { TokenModeId } from "./tokens.js";
+import type { ImportableTokenValue, TokenModeId } from "./tokens.js";
 
 /** Per-capability feature flags (DD-0019 §22.1, verbatim). */
 export interface StudioEditorFeatures {
@@ -54,6 +54,15 @@ export interface StudioEditorConfig {
 	readonly features?: StudioEditorFeatures;
 	readonly breakpoints?: readonly BreakpointDefinition[];
 	readonly defaultTokenMode?: TokenModeId;
+	/**
+	 * Theme/brand values the token picker offers for import-as-copy
+	 * (ADR 0005 Part 2 §3/§4). Static data — hosts that surface
+	 * `@anvilkit/plugin-design-system` theme tokens pass them here
+	 * rather than Core importing an extension package, which the
+	 * layering rule forbids. Absent = the picker shows document tokens
+	 * only.
+	 */
+	readonly importableTokens?: readonly ImportableTokenValue[];
 	readonly pageAdapter?: EditorPageAdapter;
 	readonly dataSourceAdapter?: EditorDataSourceAdapter;
 	readonly policies?: EditorPolicies;

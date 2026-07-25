@@ -28,6 +28,7 @@ import type {
 } from "./responsive.js";
 import type { LayoutSpec, TypographySpec, VisualStyleSpec } from "./specs.js";
 import type {
+	StyleDefinitionDeletionDisposition,
 	StyleDefinitionId,
 	StyleDefinitionV1,
 } from "./style-definitions.js";
@@ -162,6 +163,42 @@ export interface AttachStyleDefinitionCommand extends EditorCommandBase {
 	readonly layer: ResponsiveLayerRef;
 	/** Insertion index into the ordered ref list; append when absent. */
 	readonly position?: number;
+}
+
+/**
+ * Patch an existing style definition (id immutable). The change
+ * propagates to every referencing node by resolution — no per-node
+ * copies exist to update (ED-STYLEDEF-002). Added additively by
+ * CORE-P2-003 per freeze D-2.
+ */
+export interface UpdateStyleDefinitionCommand extends EditorCommandBase {
+	readonly type: "styleDefinition.update";
+	readonly styleDefinitionId: StyleDefinitionId;
+	readonly patch: EditorPatch<Omit<StyleDefinitionV1, "id" | "version">>;
+}
+
+/**
+ * Remove a style definition reference from nodes at a layer — the
+ * detach half of the ordered multi-attach surface named by freeze D-2
+ * ("style-definition detach in EP-12").
+ */
+export interface DetachStyleDefinitionCommand extends EditorCommandBase {
+	readonly type: "styleDefinition.detach";
+	readonly nodeIds: readonly string[];
+	readonly styleDefinitionId: StyleDefinitionId;
+	readonly layer: ResponsiveLayerRef;
+}
+
+/**
+ * Delete a style definition, dropping every reference to it and —
+ * under the default `"materialize"` disposition — writing its
+ * effective contribution into each referencing node so the document
+ * keeps its appearance (§15.1).
+ */
+export interface DeleteStyleDefinitionCommand extends EditorCommandBase {
+	readonly type: "styleDefinition.delete";
+	readonly styleDefinitionId: StyleDefinitionId;
+	readonly disposition: StyleDefinitionDeletionDisposition;
 }
 
 /** Create a design token (caller-supplied id). */
@@ -302,6 +339,9 @@ export type AtomicEditorCommand =
 	| SetBreakpointsCommand
 	| CreateStyleDefinitionCommand
 	| AttachStyleDefinitionCommand
+	| UpdateStyleDefinitionCommand
+	| DetachStyleDefinitionCommand
+	| DeleteStyleDefinitionCommand
 	| CreateTokenCommand
 	| UpdateTokenCommand
 	| DeleteTokenCommand

@@ -2,6 +2,8 @@
  * @file Design tokens and token modes (DD-0019 §9.4, §15).
  */
 
+import type { JsonValue } from "./values.js";
+
 /** Token mode identifier (e.g. a `"light"` / `"dark"` mode pair). */
 export type TokenModeId = string;
 
@@ -56,6 +58,29 @@ export interface DesignToken<T = unknown> {
 	readonly values: Readonly<Record<TokenModeId, TokenValue<T>>>;
 	readonly description?: string;
 	readonly source?: DesignTokenSource;
+}
+
+/**
+ * A value from another token system that the picker offers for
+ * **import-as-copy** (ADR 0005 Part 2 §3).
+ *
+ * Deliberately static host-supplied data, not a live adapter:
+ * importing creates an ordinary document token whose value is the
+ * copied literal plus a {@link DesignTokenSource} provenance record.
+ * Resolution never consults this list again, so a document renders and
+ * exports identically under any host — the property that ruled out
+ * live cross-system aliases in v1. Active re-sync and drift detection
+ * need the token-source adapter deferred to a future design.
+ */
+export interface ImportableTokenValue {
+	readonly system: DesignTokenSource["system"];
+	/** Stable reference recorded as `DesignTokenSource.ref`. */
+	readonly ref: string;
+	/** Human-readable name shown in the picker. */
+	readonly label: string;
+	readonly type: TokenType;
+	/** The resolved literal copied into the created document token. */
+	readonly value: JsonValue;
 }
 
 /**

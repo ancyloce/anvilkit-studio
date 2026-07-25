@@ -12,6 +12,19 @@ import type { LayoutSpec, TypographySpec, VisualStyleSpec } from "./specs.js";
 /** Style definition identifier. */
 export type StyleDefinitionId = string;
 
+/**
+ * What happens to a definition's contribution when it is deleted
+ * (ED-STYLEDEF-001; DD-0019 §15.1 "deletion materializes resolved
+ * values by default to preserve appearance").
+ *
+ * `"materialize"` writes the definition's effective contribution into
+ * each referencing node's own layer, so nothing changes visually;
+ * `"discard"` drops it and lets the node fall back.
+ */
+export type StyleDefinitionDeletionDisposition =
+	| { readonly kind: "materialize" }
+	| { readonly kind: "discard" };
+
 /** A reusable, document-local style definition (DD-0019 §9.4). */
 export interface StyleDefinitionV1 {
 	readonly version: "1";

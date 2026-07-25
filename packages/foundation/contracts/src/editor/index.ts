@@ -67,9 +67,11 @@ export type {
 	CreateStyleDefinitionCommand,
 	CreateTokenCommand,
 	DeleteComponentDefinitionCommand,
+	DeleteStyleDefinitionCommand,
 	DeleteTokenCommand,
 	DetachAllComponentInstancesCommand,
 	DetachComponentInstanceCommand,
+	DetachStyleDefinitionCommand,
 	EditorCommand,
 	EditorCommandBase,
 	EditorCommandPort,
@@ -89,6 +91,7 @@ export type {
 	SetNodeVisibilityCommand,
 	SetResponsiveOverrideCommand,
 	UpdateBindingCommand,
+	UpdateStyleDefinitionCommand,
 	UpdateTokenCommand,
 } from "./commands.js";
 export type {
@@ -153,12 +156,14 @@ export type {
 	StudioEditorFeatures,
 } from "./studio-config.js";
 export type {
+	StyleDefinitionDeletionDisposition,
 	StyleDefinitionId,
 	StyleDefinitionV1,
 } from "./style-definitions.js";
 export type {
 	DesignToken,
 	DesignTokenSource,
+	ImportableTokenValue,
 	TokenDeletionDisposition,
 	TokenMode,
 	TokenModeId,
