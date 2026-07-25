@@ -257,6 +257,10 @@ export default function PuckEditorPage() {
 	// default full-screen editor deliberately omits. The export-html /
 	// export-react / pages-management specs opt into this mode.
 	const [demoToolsMode, setDemoToolsMode] = useState(false);
+	// `?editor=1` enables the PLAN-0020 visual editor (CORE-P1B-012
+	// E2E workstream; off by default until the reference-app adoption
+	// pass makes it a product decision).
+	const [visualEditorMode, setVisualEditorMode] = useState(false);
 	// Phase 4 Puck-drag E2E mirrors `publishedData` and intercepts
 	// exports onto `window.__puckData` / `window.__puckExports` so the
 	// spec can assert without parsing iframe contents or downloads.
@@ -318,6 +322,66 @@ export default function PuckEditorPage() {
 				: createEditorDemoConfig(studioLocale),
 		[studioLocale],
 	);
+
+	// E2E capability metadata (CORE-P1B-012): with `?editor=1`, every
+	// demo component declares the universal families so the inspector,
+	// handles, and a11y rules have targets to operate on. Host-side
+	// config decoration is a legitimate host responsibility; the
+	// per-component metadata adoption in the component packages is the
+	// product rollout, tracked separately.
+	const e2eEditorConfig = useMemo(() => {
+		if (!visualEditorMode) {
+			return localizedEditorConfig;
+		}
+		const components = Object.fromEntries(
+			Object.entries(
+				(localizedEditorConfig as { components?: Record<string, unknown> })
+					.components ?? {},
+			).map(([type, component]) => [
+				type,
+				{
+					...(component as object),
+					metadata: {
+						...((component as { metadata?: object }).metadata ?? {}),
+						editor: {
+							// "wrapper" (not "root"): the demo component packages
+							// do not consume the `editorDataAttributes` render
+							// props yet, so root-target stamping has nothing to
+							// spread them. The wrapper target is the §8 path
+							// where CORE owns the stamped element — consent is
+							// this host config declaration (OQ-001 semantics).
+							version: "1",
+							styleTarget: "wrapper",
+							capabilities: {
+								layoutItem: true,
+								layoutContainer: true,
+								visualStyle: true,
+								typography: true,
+								responsive: true,
+								// Inline-editing browser certification target
+								// (CORE-P1B-009/-012): the spec stamps
+								// `data-ak-text-target="headline"` on Hero's
+								// own `<h1>` at runtime, standing in for a
+								// component that adopted the metadata.
+								...(type === "Hero"
+									? {
+											inlineText: [
+												{
+													id: "headline",
+													propPath: "headline",
+													format: "plain",
+												},
+											],
+										}
+									: {}),
+							},
+						},
+					},
+				},
+			]),
+		);
+		return { ...(localizedEditorConfig as object), components } as never;
+	}, [localizedEditorConfig, visualEditorMode]);
 
 	const handleStudioLocaleChange = useCallback((locale: string) => {
 		handleLocaleChange(locale);
@@ -650,6 +714,7 @@ export default function PuckEditorPage() {
 		setAssetManagerTestMode(params.get("e2e") === "asset-manager");
 		setDemoToolsMode(params.get("e2e") === "demo-tools");
 		setPuckDragE2eMode(params.get("e2e") === "puck-drag");
+		setVisualEditorMode(params.get("editor") === "1");
 		const rogueUrlParam = params.get("rogueUrl");
 		if (rogueUrlParam !== null && rogueUrlParam.length > 0) {
 			assetManagerE2E.setAssetManagerRogueUrl(rogueUrlParam);
@@ -1013,9 +1078,13 @@ export default function PuckEditorPage() {
 					// persisted editor UI slice (active rail tab, viewport)
 					// keyed consistently so it rehydrates across the remount
 					// instead of resetting to defaults.
-					key={activePageId}
+					// The visual-editor flag is a MOUNT-level decision (core
+					// convention: hosts re-target by key-remounting <Studio>,
+					// never by toggling `editor` in place) — `?editor=1` is
+					// read post-mount from the URL, so the flag joins the key.
+					key={visualEditorMode ? `${activePageId}::editor` : activePageId}
 					storeId="demo-editor"
-					puckConfig={localizedEditorConfig as unknown as Config}
+					puckConfig={e2eEditorConfig as unknown as Config}
 					data={publishedData}
 					plugins={plugins}
 					loading={<StudioLoadingScreen />}
@@ -1031,6 +1100,9 @@ export default function PuckEditorPage() {
 					pages={pagesSource}
 					config={demoStudioConfig}
 					onLocaleChange={handleStudioLocaleChange}
+					editor={
+						visualEditorMode ? { features: { enabled: true } } : undefined
+					}
 				/>
 			</section>
 

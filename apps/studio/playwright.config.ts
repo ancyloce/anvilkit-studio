@@ -53,6 +53,30 @@ export default defineConfig({
 			name: "chromium",
 			use: { ...devices["Desktop Chrome"] },
 		},
+		// §27.5 DPR axis for the visual-editor suite (CORE-P1B-012):
+		// geometry assertions repeated at a high-density factor.
+		{
+			name: "chromium-hidpi",
+			use: { ...devices["Desktop Chrome"], deviceScaleFactor: 2 },
+			testMatch: /editor\/.*\.spec\.ts/,
+		},
+		// Browser matrix (CORE-P1B-012): env-gated so local runs stay
+		// chromium-only (WebKit/Firefox system deps are CI-provisioned;
+		// `ANVILKIT_E2E_MATRIX=1 pnpm e2e` opts in).
+		...(process.env.ANVILKIT_E2E_MATRIX === "1"
+			? [
+					{
+						name: "firefox",
+						use: { ...devices["Desktop Firefox"] },
+						testMatch: /editor\/.*\.spec\.ts/,
+					},
+					{
+						name: "webkit",
+						use: { ...devices["Desktop Safari"] },
+						testMatch: /editor\/.*\.spec\.ts/,
+					},
+				]
+			: []),
 	],
 	webServer: [
 		{
