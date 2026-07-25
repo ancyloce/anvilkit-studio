@@ -97,8 +97,14 @@ export const StudioConfigSchema = z
 				 * packages a host wires in; this is a reserved config seam those
 				 * packages (or host code) may consult to gate the presence layer.
 				 * Defaulted to `false` and kept stable so turning collaboration
-				 * on later is not a breaking config change. No core behavior
-				 * keys off it today.
+				 * on later is not a breaking config change.
+				 *
+				 * Not to be confused with the **visual-editor collab gate**
+				 * (DD-0019 §7.4, CORE-P1A-013): that gate is driven by each
+				 * collab plugin's declared
+				 * `meta.capabilities.collaboration.encoding` — never by this
+				 * flag — and disables authoring writers when a non-granular
+				 * transport registers while `StudioProps.editor` is enabled.
 				 */
 				enableCollaboration: z.boolean().default(false),
 			})
