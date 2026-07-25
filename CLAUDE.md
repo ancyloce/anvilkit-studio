@@ -67,16 +67,9 @@ The authoritative current map, target map, classifications, dependency direction
 - `apps/docs`: Fumadocs on TanStack Start/Vite plus marketplace.
 - Current `apps/collab`: standalone production-capable service targeted for extraction to `anvilkit-platform`; do not move it silently.
 
-- Package manager: `pnpm 11.13.0`; orchestration: Turbo; publishable package build: Rslib.
-- TypeScript: workspace and studio use 7.0.2; docs declares `^7.0.2`.
-
 ## Commands
 
-- Root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm madge`, `pnpm publint`, `pnpm size`, `pnpm check:all`, `pnpm check:push`, `pnpm check:submodules`, `pnpm docs:dev`, `pnpm docs:build`.
-- `packages/extensions/components/`: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm gen:component`.
-- `apps/studio/`: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm e2e`.
-- `apps/playground/`: `pnpm dev` (port 3100), `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm e2e`.
-- `apps/docs/`: `pnpm docs:dev`, `pnpm docs:build`, `pnpm typecheck`, `pnpm test`, `pnpm e2e`.
+- Scripts live in each package's manifest; non-obvious ones: `pnpm gen:component` (in `packages/extensions/components/`), `apps/playground` dev serves on port 3100, root `pnpm check:all` / `pnpm check:push` are the aggregate release gates.
 
 ## Architecture Contracts
 
@@ -137,13 +130,7 @@ The authoritative current map, target map, classifications, dependency direction
 
 ## Adding a New Component
 
-1. Run `pnpm gen:component` in `packages/extensions/components/`.
-2. Implement render, config, exports, default props, fields, and metadata.
-3. Validate with `pnpm lint && pnpm typecheck && pnpm build`.
-4. Wire the component into the studio app and `transpilePackages`.
-5. Changesets and publishing are user-owned steps.
-
-See `packages/extensions/components/AGENTS.md` for full component rules.
+Use the `add-component` skill; full component rules live in `packages/extensions/components/AGENTS.md`.
 
 ## Working Rules
 
