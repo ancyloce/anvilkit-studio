@@ -20,7 +20,7 @@
  *   the caller allows them.
  */
 
-import type { CssLength, CssUnit } from "@anvilkit/contracts/editor";
+import type { CssLength, CssUnit, TokenType } from "@anvilkit/contracts/editor";
 import { type KeyboardEvent, type ReactNode, useEffect, useState } from "react";
 import { Input } from "@/primitives/input";
 import {
@@ -32,8 +32,13 @@ import {
 } from "@/primitives/select";
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
+import { TokenPicker } from "../../tokens/TokenPicker.js";
+import { resolveTokenLiteral } from "../../tokens/use-token-picker.js";
 import { InspectorFieldShell } from "../InspectorFieldShell.js";
-import type { InspectorFieldHandle } from "../use-inspector.js";
+import {
+	type InspectorFieldHandle,
+	useEditorInspector,
+} from "../use-inspector.js";
 
 const DEFAULT_UNITS: readonly CssUnit[] = ["px", "rem", "em", "%", "vw", "vh"];
 const KEYWORDS = ["auto", "min-content", "max-content", "fit-content"] as const;
@@ -45,6 +50,12 @@ export interface LengthControlProps {
 	readonly units?: readonly CssUnit[];
 	/** Allow the sizing keywords in the unit dropdown. */
 	readonly allowKeywords?: boolean;
+	/**
+	 * Token type the picker filters by (§15.1 compatible type).
+	 * Corner-radius fields pass `"radius"`; everything else is a
+	 * `"length"`.
+	 */
+	readonly tokenType?: TokenType;
 	readonly testId?: string;
 }
 
@@ -54,9 +65,11 @@ export function LengthControl({
 	field,
 	units = DEFAULT_UNITS,
 	allowKeywords = false,
+	tokenType = "length",
 	testId,
 }: LengthControlProps): ReactNode {
 	const msg = useMsg();
+	const context = useEditorInspector();
 	const value = field.state.kind === "value" ? field.state.value : undefined;
 	const numeric = value?.kind === "unit" ? value : undefined;
 	const keyword = value?.kind === "keyword" ? value.keyword : undefined;
@@ -116,6 +129,35 @@ export function LengthControl({
 
 	const unitValue = keyword ?? numeric?.unit ?? units[0] ?? "px";
 
+	const picker =
+		context === null ? null : (
+			<TokenPicker
+				context={context}
+				type={tokenType}
+				attachedTokenId={value?.kind === "token" ? value.tokenId : undefined}
+				onAttach={(tokenId) => void field.commit({ kind: "token", tokenId })}
+				onDetach={() => {
+					// A `length`/`radius` token resolves to a `CssLength`, which
+					// is written back in place — there is no literal wrapper in
+					// this union (see `materializeTokenLiteral`).
+					const literal =
+						value?.kind === "token"
+							? resolveTokenLiteral(context, value.tokenId)
+							: undefined;
+					if (literal !== undefined) {
+						void field.commit(literal as CssLength);
+					}
+				}}
+				currentLiteral={
+					value !== undefined && value.kind !== "token"
+						? (value as unknown as Parameters<
+								typeof TokenPicker
+							>[0]["currentLiteral"])
+						: undefined
+				}
+			/>
+		);
+
 	return (
 		<InspectorFieldShell
 			label={label}
@@ -123,12 +165,15 @@ export function LengthControl({
 			onReset={() => void field.reset()}
 		>
 			{isToken ? (
-				<span
-					className="rounded border border-[var(--ak-studio-border)] px-2 py-1 text-[11px] text-[var(--ak-studio-muted-fg)]"
-					data-testid="ak-length-token"
-				>
-					{msg("studio.editor.inspector.tokenValue")}
-				</span>
+				<div className="flex items-center gap-1">
+					<span
+						className="flex-1 truncate rounded border border-[var(--ak-studio-border)] px-2 py-1 text-[11px] text-[var(--ak-studio-muted-fg)]"
+						data-testid="ak-length-token"
+					>
+						{msg("studio.editor.inspector.tokenValue")}
+					</span>
+					{picker}
+				</div>
 			) : (
 				<div className="flex items-center gap-1">
 					<Input
@@ -187,6 +232,7 @@ export function LengthControl({
 								: null}
 						</SelectContent>
 					</Select>
+					{picker}
 				</div>
 			)}
 		</InspectorFieldShell>
