@@ -1,0 +1,367 @@
+/**
+ * @file Pure reducers for the Phase 0/1A command subset
+ * (PLAN-0020 CORE-P0-008; DD-0019 §24.2; contract freeze
+ * CORE-P0-001 D-1/D-8).
+ *
+ * Reducers never mutate input, never generate ids or timestamps, and
+ * preserve object references wherever a write turns out to be a
+ * no-op — reference preservation is the fast path for the deep-equal
+ * noop check in `applyEditorCommand`.
+ */
+
+import type {
+	AtomicEditorCommand,
+	AuthoringStateV1,
+	EditorPatch,
+	NodeAuthoringStateV1,
+	ResponsiveFamily,
+	ResponsiveLayerRef,
+	ResponsiveValue,
+} from "@anvilkit/contracts/editor";
+import { applyEditorPatch } from "../patch.js";
+
+type FamilyKey = Exclude<ResponsiveFamily, "hidden" | "styleRefs">;
+
+const EMPTY_RECORD: NodeAuthoringStateV1 = { version: "1" };
+
+function getRecord(
+	state: AuthoringStateV1,
+	nodeId: string,
+): NodeAuthoringStateV1 {
+	return state.nodes[nodeId] ?? EMPTY_RECORD;
+}
+
+/** True when a record carries nothing beyond its version marker. */
+function isDefaultRecord(record: NodeAuthoringStateV1): boolean {
+	return Object.keys(record).every(
+		(key) =>
+			key === "version" ||
+			(record as unknown as Record<string, unknown>)[key] === undefined,
+	);
+}
+
+function withRecord(
+	state: AuthoringStateV1,
+	nodeId: string,
+	record: NodeAuthoringStateV1,
+): AuthoringStateV1 {
+	const existing = state.nodes[nodeId];
+	if (existing === record) {
+		return state;
+	}
+	const nodes = { ...state.nodes };
+	if (isDefaultRecord(record)) {
+		if (existing === undefined) {
+			return state;
+		}
+		delete nodes[nodeId];
+	} else {
+		nodes[nodeId] = record;
+	}
+	return { ...state, nodes };
+}
+
+function setResponsiveEntry<T>(
+	value: ResponsiveValue<T> | undefined,
+	layer: ResponsiveLayerRef,
+	update: (current: T | undefined) => T | undefined,
+): ResponsiveValue<T> | undefined {
+	const current = value ?? {};
+	if (layer === "base") {
+		const nextBase = update(current.base);
+		if (nextBase === current.base) {
+			return value;
+		}
+		const next: ResponsiveValue<T> = { ...current };
+		if (nextBase === undefined) {
+			delete (next as { base?: T }).base;
+		} else {
+			(next as { base?: T }).base = nextBase;
+		}
+		return collapseResponsive(next);
+	}
+	const overrides = current.overrides ?? {};
+	const existing = overrides[layer];
+	const nextEntry = update(existing === null ? undefined : existing);
+	if (nextEntry === (existing === null ? undefined : existing)) {
+		return value;
+	}
+	const nextOverrides: Record<string, T | null> = { ...overrides };
+	if (nextEntry === undefined) {
+		delete nextOverrides[layer];
+	} else {
+		nextOverrides[layer] = nextEntry;
+	}
+	const next: ResponsiveValue<T> = { ...current };
+	if (Object.keys(nextOverrides).length === 0) {
+		delete (next as { overrides?: unknown }).overrides;
+	} else {
+		(next as { overrides?: Record<string, T | null> }).overrides =
+			nextOverrides;
+	}
+	return collapseResponsive(next);
+}
+
+function collapseResponsive<T>(
+	value: ResponsiveValue<T>,
+): ResponsiveValue<T> | undefined {
+	return value.base === undefined && value.overrides === undefined
+		? undefined
+		: value;
+}
+
+function reduceFamilyPatch(
+	state: AuthoringStateV1,
+	nodeIds: readonly string[],
+	family: FamilyKey,
+	layer: ResponsiveLayerRef,
+	patch: EditorPatch<object>,
+): AuthoringStateV1 {
+	let next = state;
+	for (const nodeId of nodeIds) {
+		const record = getRecord(next, nodeId);
+		const currentFamily = record[family] as ResponsiveValue<object> | undefined;
+		const nextFamily = setResponsiveEntry(currentFamily, layer, (current) =>
+			applyEditorPatch(current, patch),
+		);
+		if (nextFamily === currentFamily) {
+			continue;
+		}
+		const nextRecord: NodeAuthoringStateV1 = { ...record };
+		if (nextFamily === undefined) {
+			delete (nextRecord as unknown as Record<string, unknown>)[family];
+		} else {
+			(nextRecord as unknown as Record<string, unknown>)[family] = nextFamily;
+		}
+		next = withRecord(next, nodeId, nextRecord);
+	}
+	return next;
+}
+
+/**
+ * Reduce one validated atomic command (DD-0019 §24.2's
+ * `reduceValidatedCommand`). Returns the input state unchanged (same
+ * reference) for no-op writes.
+ */
+export function reduceValidatedCommand(
+	state: AuthoringStateV1,
+	command: AtomicEditorCommand,
+): AuthoringStateV1 {
+	switch (command.type) {
+		case "node.layout.set":
+			return reduceFamilyPatch(
+				state,
+				command.nodeIds,
+				"layout",
+				command.breakpointId,
+				command.patch as EditorPatch<object>,
+			);
+		case "node.style.set":
+			return reduceFamilyPatch(
+				state,
+				command.nodeIds,
+				"style",
+				command.breakpointId,
+				command.patch as EditorPatch<object>,
+			);
+		case "node.typography.set":
+			return reduceFamilyPatch(
+				state,
+				command.nodeIds,
+				"typography",
+				command.breakpointId,
+				command.patch as EditorPatch<object>,
+			);
+		case "node.visibility.set": {
+			let next = state;
+			for (const nodeId of command.nodeIds) {
+				const record = getRecord(next, nodeId);
+				const nextHidden = setResponsiveEntry(
+					record.hidden,
+					command.breakpointId,
+					() => (command.hidden === null ? undefined : command.hidden),
+				);
+				if (nextHidden === record.hidden) {
+					continue;
+				}
+				const nextRecord: NodeAuthoringStateV1 = { ...record };
+				if (nextHidden === undefined) {
+					delete (nextRecord as { hidden?: unknown }).hidden;
+				} else {
+					(nextRecord as { hidden?: ResponsiveValue<boolean> }).hidden =
+						nextHidden;
+				}
+				next = withRecord(next, nodeId, nextRecord);
+			}
+			return next;
+		}
+		case "node.lock.set": {
+			let next = state;
+			for (const nodeId of command.nodeIds) {
+				const record = getRecord(next, nodeId);
+				const current = record.locked === true;
+				if (current === command.locked) {
+					continue;
+				}
+				const nextRecord: NodeAuthoringStateV1 = { ...record };
+				if (command.locked) {
+					(nextRecord as { locked?: boolean }).locked = true;
+				} else {
+					delete (nextRecord as { locked?: boolean }).locked;
+				}
+				next = withRecord(next, nodeId, nextRecord);
+			}
+			return next;
+		}
+		case "node.rename": {
+			const record = getRecord(state, command.nodeId);
+			const nextName =
+				command.name === null || command.name === "" ? undefined : command.name;
+			if (record.name === nextName) {
+				return state;
+			}
+			const nextRecord: NodeAuthoringStateV1 = { ...record };
+			if (nextName === undefined) {
+				delete (nextRecord as { name?: string }).name;
+			} else {
+				(nextRecord as { name?: string }).name = nextName;
+			}
+			return withRecord(state, command.nodeId, nextRecord);
+		}
+		case "breakpoints.set": {
+			// Normalize order from widths (§12.2): widest first, matching
+			// the desktop-first merge order.
+			const sorted = [...command.breakpoints]
+				.sort((a, b) => b.maxWidth - a.maxWidth)
+				.map((breakpoint, index) =>
+					breakpoint.order === index
+						? breakpoint
+						: { ...breakpoint, order: index },
+				);
+			const nextIds = new Set(sorted.map((breakpoint) => breakpoint.id));
+			const removedIds = state.breakpoints
+				.map((breakpoint) => breakpoint.id)
+				.filter((id) => !nextIds.has(id));
+
+			const sameList =
+				sorted.length === state.breakpoints.length &&
+				sorted.every((entry, index) => {
+					const current = state.breakpoints[index];
+					return (
+						current !== undefined &&
+						current.id === entry.id &&
+						current.label === entry.label &&
+						current.maxWidth === entry.maxWidth &&
+						current.order === entry.order &&
+						current.enabled === entry.enabled
+					);
+				});
+
+			let next: AuthoringStateV1 = sameList
+				? state
+				: { ...state, breakpoints: sorted };
+			if (removedIds.length === 0) {
+				return next;
+			}
+			// Fold or drop overrides written at removed breakpoints.
+			for (const [nodeId, record] of Object.entries(state.nodes)) {
+				let nextRecord: NodeAuthoringStateV1 = record;
+				for (const family of [
+					"layout",
+					"style",
+					"typography",
+					"hidden",
+					"styleRefs",
+				] as const) {
+					const value = nextRecord[family] as
+						| ResponsiveValue<unknown>
+						| undefined;
+					if (value?.overrides === undefined) {
+						continue;
+					}
+					let familyValue = value;
+					for (const removedId of removedIds) {
+						const override = familyValue.overrides?.[removedId];
+						if (override === undefined || override === null) {
+							continue;
+						}
+						const mode = command.removedOverrides?.[removedId] ?? "discard";
+						let base = familyValue.base;
+						if (mode === "merge-to-base") {
+							// Property-wise fold for spec objects; wholesale
+							// replacement for scalars (`hidden`) — the removed
+							// layer's value wins over base, matching what the
+							// user saw at that breakpoint.
+							base =
+								typeof base === "object" &&
+								base !== null &&
+								typeof override === "object" &&
+								!Array.isArray(override)
+									? { ...base, ...override }
+									: override;
+						}
+						const nextOverrides: Record<string, unknown> = {
+							...familyValue.overrides,
+						};
+						delete nextOverrides[removedId];
+						const rebuilt: Record<string, unknown> = {};
+						if (base !== undefined) {
+							rebuilt.base = base;
+						}
+						if (Object.keys(nextOverrides).length > 0) {
+							rebuilt.overrides = nextOverrides;
+						}
+						familyValue = rebuilt as ResponsiveValue<unknown>;
+					}
+					if (familyValue !== value) {
+						const collapsed = collapseResponsive(
+							familyValue as ResponsiveValue<object>,
+						);
+						nextRecord = { ...nextRecord };
+						if (collapsed === undefined) {
+							delete (nextRecord as unknown as Record<string, unknown>)[family];
+						} else {
+							(nextRecord as unknown as Record<string, unknown>)[family] =
+								collapsed;
+						}
+					}
+				}
+				if (nextRecord !== record) {
+					next = withRecord(next, nodeId, nextRecord);
+				}
+			}
+			return next;
+		}
+		case "node.responsiveOverride.set": {
+			let next = state;
+			for (const nodeId of command.nodeIds) {
+				const record = getRecord(next, nodeId);
+				const family = command.family;
+				const currentFamily = record[family] as
+					| ResponsiveValue<unknown>
+					| undefined;
+				if (currentFamily?.overrides?.[command.breakpointId] === undefined) {
+					continue;
+				}
+				const nextFamily = setResponsiveEntry(
+					currentFamily,
+					command.breakpointId,
+					() => undefined,
+				);
+				const nextRecord: NodeAuthoringStateV1 = { ...record };
+				if (nextFamily === undefined) {
+					delete (nextRecord as unknown as Record<string, unknown>)[family];
+				} else {
+					(nextRecord as unknown as Record<string, unknown>)[family] =
+						nextFamily;
+				}
+				next = withRecord(next, nodeId, nextRecord);
+			}
+			return next;
+		}
+		default:
+			// Later-phase commands never reach reduction: validation
+			// rejects them with EDITOR_CAPABILITY_UNSUPPORTED first.
+			return state;
+	}
+}
