@@ -35,6 +35,7 @@ import {
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useMsg } from "@/state/editor-i18n-context";
+import { readEditorMetadata } from "../../react/editor/decorate-config.js";
 import {
 	type CanvasDropKind,
 	hasCanvasDropPayload,
@@ -303,6 +304,52 @@ export function useCanvasDropController(doc: Document | undefined): void {
 
 			const targetItem = target.item;
 			const value = payload.kind === "text" ? payload.body : payload.url;
+
+			// 0. Explicit-metadata precedence (§26.1, CORE-P1B-009A/-010): a
+			//    component that DECLARES editor targets routes the drop to
+			//    the declared prop path — heuristics never run for it.
+			//    Undeclared components keep the heuristic fallback below,
+			//    which is never removed.
+			const toDeclaredPath = (raw: string): PropPath =>
+				raw
+					.split(".")
+					.map((segment) =>
+						/^\d+$/.test(segment) ? Number(segment) : segment,
+					);
+			const declaredMeta = readEditorMetadata(
+				(snapshot.config.components as Record<string, unknown> | undefined)?.[
+					targetItem.type
+				],
+			);
+			const declaredTarget =
+				payload.kind === "text"
+					? (declaredMeta?.capabilities.inlineText?.[0]?.propPath ?? null)
+					: (declaredMeta?.capabilities.imageAdjust?.[0]?.srcPropPath ?? null);
+			if (declaredTarget !== null) {
+				let declaredProps = setPropAtPath(
+					targetItem.props,
+					toDeclaredPath(declaredTarget),
+					value,
+				);
+				if (payload.kind === "image" && payload.alt !== "") {
+					const altPath =
+						declaredMeta?.capabilities.imageAdjust?.[0]?.altPropPath;
+					if (altPath !== undefined) {
+						declaredProps = setPropAtPath(
+							declaredProps,
+							toDeclaredPath(altPath),
+							payload.alt,
+						);
+					}
+				}
+				snapshot.dispatch({
+					type: "replace",
+					destinationIndex: selector.index,
+					destinationZone: selector.zone,
+					data: { ...targetItem, props: declaredProps },
+				});
+				return;
+			}
 
 			// 1. Position heuristic — replace the prop whose value renders
 			//    under the cursor (the *corresponding* text/image).

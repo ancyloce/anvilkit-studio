@@ -396,6 +396,87 @@ describe("useCanvasDropController", () => {
 		expect(props.gallery[0]?.alt).toBe("New alt");
 	});
 
+	it("declared InlineTextTarget wins over the heuristic (§26.1 precedence)", () => {
+		const components = snapshot.config.components as Record<string, unknown>;
+		const original = components["Text"];
+		components["Text"] = {
+			fields: { text: { type: "text" }, subtitle: { type: "text" } },
+			metadata: {
+				editor: {
+					version: "1",
+					styleTarget: "root",
+					capabilities: {
+						inlineText: [
+							{ id: "subtitle", propPath: "subtitle", format: "plain" },
+						],
+					},
+				},
+			},
+		};
+		try {
+			getItemById.mockReturnValue({
+				type: "Text",
+				props: { id: "t-1", text: "old", subtitle: "old-sub" },
+			});
+			getSelectorForId.mockReturnValue({ index: 0, zone: "default-zone" });
+
+			renderHook(() => useCanvasDropController(document), { wrapper });
+			dropText("Declared body");
+
+			const action = dispatch.mock.calls[0]?.[0] as {
+				data: { props: Record<string, unknown> };
+			};
+			// The declared propPath received the drop; the heuristic's
+			// pick (`text`) was left alone — it stays the fallback for
+			// undeclared components only.
+			expect(action.data.props["subtitle"]).toBe("Declared body");
+			expect(action.data.props["text"]).toBe("old");
+		} finally {
+			components["Text"] = original;
+		}
+	});
+
+	it("declared ImageTarget routes src AND alt over the heuristic", () => {
+		const components = snapshot.config.components as Record<string, unknown>;
+		const original = components["Text"];
+		components["Text"] = {
+			fields: { text: { type: "text" } },
+			metadata: {
+				editor: {
+					version: "1",
+					styleTarget: "root",
+					capabilities: {
+						imageAdjust: [
+							{ id: "cover", srcPropPath: "cover", altPropPath: "coverAlt" },
+						],
+					},
+				},
+			},
+		};
+		try {
+			getItemById.mockReturnValue({
+				type: "Text",
+				props: { id: "t-1", text: "old", cover: "/a.png", coverAlt: "A" },
+			});
+			getSelectorForId.mockReturnValue({ index: 0, zone: "default-zone" });
+
+			renderHook(() => useCanvasDropController(document), { wrapper });
+			dropAt(
+				{ kind: "image", url: "/declared.png", alt: "Declared alt" },
+				5,
+				5,
+			);
+
+			const action = dispatch.mock.calls[0]?.[0] as {
+				data: { props: Record<string, unknown> };
+			};
+			expect(action.data.props["cover"]).toBe("/declared.png");
+			expect(action.data.props["coverAlt"]).toBe("Declared alt");
+		} finally {
+			components["Text"] = original;
+		}
+	});
+
 	it("falls back to the candidate prop when the rendered text matches no prop", () => {
 		appendText("p", rectAt(0, 0, 100, 100), "Rendered, not stored");
 		getItemById.mockReturnValue({
