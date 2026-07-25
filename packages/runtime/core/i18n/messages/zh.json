@@ -334,5 +334,18 @@
 	"studio.editor.a11y.touchTargetSmall": "触控目标小于 24px",
 	"studio.editor.a11y.autoplayMedia": "媒体自动播放且有声音",
 	"studio.editor.a11y.focusIndicatorNone": "焦点指示被移除",
-	"studio.editor.a11y.lowContrast": "文本对比度低于 4.5:1"
+	"studio.editor.a11y.lowContrast": "文本对比度低于 4.5:1",
+	"studio.editor.tokens.open": "设计令牌",
+	"studio.editor.tokens.attach": "令牌",
+	"studio.editor.tokens.detach": "分离为字面值",
+	"studio.editor.tokens.search": "搜索令牌",
+	"studio.editor.tokens.recent": "最近使用",
+	"studio.editor.tokens.empty": "没有兼容的令牌",
+	"studio.editor.tokens.create": "创建",
+	"studio.editor.tokens.newName": "新令牌名称",
+	"studio.editor.tokens.import": "导入为副本",
+	"studio.editor.tokens.unresolved": "无法解析",
+	"studio.editor.tokens.origin.document": "文档",
+	"studio.editor.tokens.origin.theme": "主题",
+	"studio.editor.tokens.origin.brand": "品牌"
 }

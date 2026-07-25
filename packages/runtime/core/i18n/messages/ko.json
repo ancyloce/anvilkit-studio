@@ -334,5 +334,18 @@
 	"studio.editor.a11y.touchTargetSmall": "터치 대상이 24px보다 작습니다",
 	"studio.editor.a11y.autoplayMedia": "미디어가 소리와 함께 자동 재생됩니다",
 	"studio.editor.a11y.focusIndicatorNone": "포커스 표시가 제거되었습니다",
-	"studio.editor.a11y.lowContrast": "텍스트 대비가 4.5:1 미만입니다"
+	"studio.editor.a11y.lowContrast": "텍스트 대비가 4.5:1 미만입니다",
+	"studio.editor.tokens.open": "디자인 토큰",
+	"studio.editor.tokens.attach": "토큰",
+	"studio.editor.tokens.detach": "리터럴 값으로 분리",
+	"studio.editor.tokens.search": "토큰 검색",
+	"studio.editor.tokens.recent": "최근",
+	"studio.editor.tokens.empty": "호환되는 토큰이 없습니다",
+	"studio.editor.tokens.create": "생성",
+	"studio.editor.tokens.newName": "새 토큰 이름",
+	"studio.editor.tokens.import": "복사본으로 가져오기",
+	"studio.editor.tokens.unresolved": "확인되지 않음",
+	"studio.editor.tokens.origin.document": "문서",
+	"studio.editor.tokens.origin.theme": "테마",
+	"studio.editor.tokens.origin.brand": "브랜드"
 }

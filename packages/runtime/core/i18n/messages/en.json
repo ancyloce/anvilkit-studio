@@ -352,5 +352,18 @@
 	"studio.editor.a11y.touchTargetSmall": "Touch target is smaller than 24px",
 	"studio.editor.a11y.autoplayMedia": "Media autoplays with sound",
 	"studio.editor.a11y.focusIndicatorNone": "Focus indicator removed",
-	"studio.editor.a11y.lowContrast": "Text contrast is below 4.5:1"
+	"studio.editor.a11y.lowContrast": "Text contrast is below 4.5:1",
+	"studio.editor.tokens.open": "Design tokens",
+	"studio.editor.tokens.attach": "Token",
+	"studio.editor.tokens.detach": "Detach to literal value",
+	"studio.editor.tokens.search": "Search tokens",
+	"studio.editor.tokens.recent": "Recent",
+	"studio.editor.tokens.empty": "No compatible tokens",
+	"studio.editor.tokens.create": "Create",
+	"studio.editor.tokens.newName": "New token name",
+	"studio.editor.tokens.import": "Import as copy",
+	"studio.editor.tokens.unresolved": "Unresolved",
+	"studio.editor.tokens.origin.document": "Document",
+	"studio.editor.tokens.origin.theme": "Theme",
+	"studio.editor.tokens.origin.brand": "Brand"
 }

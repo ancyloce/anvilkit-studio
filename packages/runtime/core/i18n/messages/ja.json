@@ -334,5 +334,18 @@
 	"studio.editor.a11y.touchTargetSmall": "タッチターゲットが 24px 未満",
 	"studio.editor.a11y.autoplayMedia": "メディアが音声付きで自動再生",
 	"studio.editor.a11y.focusIndicatorNone": "フォーカス表示が削除されています",
-	"studio.editor.a11y.lowContrast": "テキストのコントラストが 4.5:1 未満"
+	"studio.editor.a11y.lowContrast": "テキストのコントラストが 4.5:1 未満",
+	"studio.editor.tokens.open": "デザイントークン",
+	"studio.editor.tokens.attach": "トークン",
+	"studio.editor.tokens.detach": "リテラル値に分離",
+	"studio.editor.tokens.search": "トークンを検索",
+	"studio.editor.tokens.recent": "最近",
+	"studio.editor.tokens.empty": "互換性のあるトークンがありません",
+	"studio.editor.tokens.create": "作成",
+	"studio.editor.tokens.newName": "新しいトークン名",
+	"studio.editor.tokens.import": "コピーとしてインポート",
+	"studio.editor.tokens.unresolved": "未解決",
+	"studio.editor.tokens.origin.document": "ドキュメント",
+	"studio.editor.tokens.origin.theme": "テーマ",
+	"studio.editor.tokens.origin.brand": "ブランド"
 }
