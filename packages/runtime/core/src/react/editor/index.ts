@@ -24,15 +24,16 @@ export {
 	AuthoringStyleContext,
 	type AuthoringStyleLookup,
 } from "./authoring-style-context.js";
+export type { CanvasDomRegistry } from "./canvas/dom-registry.js";
+export {
+	type CreateComponentAction,
+	type CreateComponentOutcome,
+	useCreateComponent,
+} from "./components/use-create-component.js";
 export {
 	type DecoratePuckConfigOptions,
 	decoratePuckConfig,
 } from "./decorate-config.js";
-export {
-	StudioEditorMount,
-	type StudioEditorMountProps,
-} from "./StudioEditorMount.js";
-export type { CanvasDomRegistry } from "./canvas/dom-registry.js";
 export type {
 	InlineEditController,
 	InlineEditSession,
@@ -43,6 +44,10 @@ export {
 	TIPTAP_ALLOWED_NODES,
 } from "./inline/tiptap-contract.js";
 export type { StudioViewportController } from "./responsive/viewport-controller.js";
+export {
+	StudioEditorMount,
+	type StudioEditorMountProps,
+} from "./StudioEditorMount.js";
 export type { EditorSelectionController } from "./selection.js";
 export {
 	EDITOR_SHORTCUT_KEYMAP,

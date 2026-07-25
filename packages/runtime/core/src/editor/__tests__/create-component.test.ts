@@ -135,7 +135,10 @@ describe("validateCreateComponentSelection (§14.3)", () => {
 	});
 
 	it("enforces the definition count limit", () => {
-		const definitions: AuthoringStateV1["componentDefinitions"] = {};
+		const definitions: Record<
+			string,
+			AuthoringStateV1["componentDefinitions"][string]
+		> = {};
 		for (let index = 0; index < 500; index += 1) {
 			definitions[`d${index}`] = {
 				version: "1",
@@ -215,10 +218,14 @@ describe("buildCreateComponentPlan (§14.3)", () => {
 			nodeIds: ["b"],
 		});
 		expect(plan).not.toBeNull();
-		const slot = (
-			plan?.data.root?.props as { main: { props: { id: string } }[] }
-		).main;
-		expect(slot.map((entry) => entry.props.id)).toEqual(["a", "inst-1", "c"]);
+		const rootProps = plan?.data.root?.props as
+			| { main: { props: { id: string } }[] }
+			| undefined;
+		expect(rootProps?.main.map((entry) => entry.props.id)).toEqual([
+			"a",
+			"inst-1",
+			"c",
+		]);
 	});
 
 	it("drops the captured nodes' authoring records", () => {
