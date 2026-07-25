@@ -1,0 +1,223 @@
+"use client";
+
+/**
+ * @file Inspector hooks (PLAN-0020 CORE-P1A-005): the shared
+ * read/commit surface every universal section control builds on.
+ *
+ * `useEditorInspector()` snapshots the live editor state (authoring,
+ * selection, breakpoints, active write layer) and partitions the
+ * selection by capability per family. `useInspectorField()` computes
+ * one property's {@link InspectorFieldState} and returns commit/reset
+ * callbacks that write **through the command port only** — one
+ * history-recording dispatch per intent, `source: "inspector"`,
+ * `null` patches for reset-at-layer (freeze D-8). Invalid drafts stay
+ * in the controls (§11.3) and never reach these commit paths.
+ */
+
+import type {
+	AuthoringStateV1,
+	BreakpointDefinition,
+	EditorCommandPort,
+	EditorCommandResult,
+	EditorPatch,
+	EditorSelectionState,
+	ResponsiveLayerRef,
+} from "@anvilkit/contracts/editor";
+import { use, useCallback, useMemo, useSyncExternalStore } from "react";
+import type { StudioEditorBridge } from "../bridge.js";
+import { withBreakpointMaterialization } from "../responsive/materialize.js";
+import { StudioEditorBridgeContext } from "../use-studio-editor.js";
+import {
+	type InspectorFamily,
+	type InspectorFieldState,
+	readFieldState,
+} from "./field-state.js";
+
+/** Fallback viewport width while the responsive store is absent. */
+const DEFAULT_VIEWPORT_WIDTH = 1280;
+
+const FAMILY_COMMAND_TYPE = {
+	layout: "node.layout.set",
+	style: "node.style.set",
+	typography: "node.typography.set",
+} as const;
+
+/** What a section control needs from the live editor. */
+export interface EditorInspectorContext {
+	readonly bridge: StudioEditorBridge;
+	readonly commands: EditorCommandPort;
+	readonly authoring: AuthoringStateV1;
+	readonly revision: number;
+	readonly selection: EditorSelectionState;
+	readonly breakpoints: readonly BreakpointDefinition[];
+	/** The active write layer (base until CORE-P1A-008 installs). */
+	readonly layer: ResponsiveLayerRef;
+	readonly viewportWidth: number;
+	/** Selected node ids whose components support `family`. */
+	readonly capableNodeIds: (family: InspectorFamily) => readonly string[];
+}
+
+/**
+ * Live inspector context, or `null` while the editor runtime is
+ * loading or nothing is selected. Subscribes to the bridge, so
+ * consumers re-render on commits, undo/redo, and selection changes.
+ */
+export function useEditorInspector(): EditorInspectorContext | null {
+	const bridge = use(StudioEditorBridgeContext);
+	const version = useSyncExternalStore(
+		bridge === null ? noopSubscribe : bridge.subscribe,
+		bridge === null ? zero : bridge.getVersion,
+		bridge === null ? zero : bridge.getVersion,
+	);
+	return useMemo(() => {
+		void version;
+		const port = bridge?.port;
+		if (bridge == null || port == null) {
+			return null;
+		}
+		const snapshot = port.getSnapshot();
+		if (snapshot.selection.selectedIds.length === 0) {
+			return null;
+		}
+		const capabilityCache = new Map<InspectorFamily, readonly string[]>();
+		const capableNodeIds = (family: InspectorFamily): readonly string[] => {
+			const cached = capabilityCache.get(family);
+			if (cached !== undefined) {
+				return cached;
+			}
+			const registry = bridge.capabilities;
+			const ids = snapshot.selection.selectedIds.filter((nodeId) => {
+				const metadata = registry?.forNode(nodeId);
+				if (metadata === undefined) {
+					return false;
+				}
+				const capabilities = metadata.capabilities;
+				switch (family) {
+					case "layout":
+						return (
+							capabilities.layoutItem === true ||
+							capabilities.layoutContainer === true
+						);
+					case "style":
+						return capabilities.visualStyle === true;
+					case "typography":
+						return capabilities.typography === true;
+				}
+			});
+			capabilityCache.set(family, ids);
+			return ids;
+		};
+		return {
+			bridge,
+			commands: port,
+			authoring: snapshot.authoring,
+			revision: snapshot.revision,
+			selection: snapshot.selection,
+			breakpoints: snapshot.breakpoints,
+			layer: bridge.responsive?.getActiveLayer() ?? "base",
+			viewportWidth:
+				bridge.responsive?.getViewportWidth() ?? DEFAULT_VIEWPORT_WIDTH,
+			capableNodeIds,
+		};
+	}, [bridge, version]);
+}
+
+/** The per-field surface a control renders and commits through. */
+export interface InspectorFieldHandle<T> {
+	readonly state: InspectorFieldState<T>;
+	/** Write `value` at the active layer across the capable selection. */
+	readonly commit: (value: T) => Promise<EditorCommandResult>;
+	/** Remove the property at the active layer (reset — freeze D-8). */
+	readonly reset: () => Promise<EditorCommandResult>;
+	readonly layer: ResponsiveLayerRef;
+}
+
+/**
+ * Compute and operate one top-level property of one family across the
+ * current selection. `context` comes from {@link useEditorInspector}.
+ */
+export function useInspectorField<T>(
+	context: EditorInspectorContext,
+	family: InspectorFamily,
+	property: string,
+): InspectorFieldHandle<T> {
+	const {
+		authoring,
+		breakpoints,
+		layer,
+		viewportWidth,
+		commands,
+		revision,
+		capableNodeIds,
+	} = context;
+	const nodeIds = capableNodeIds(family);
+
+	const state = useMemo(
+		() =>
+			readFieldState<T>({
+				authoring,
+				nodeIds,
+				family,
+				property,
+				layer,
+				breakpoints,
+				viewportWidth,
+			}),
+		[authoring, nodeIds, family, property, layer, breakpoints, viewportWidth],
+	);
+
+	const write = useCallback(
+		(value: T | null): Promise<EditorCommandResult> => {
+			const command = {
+				id: crypto.randomUUID(),
+				expectedRevision: revision,
+				source: "inspector",
+				timestamp: Date.now(),
+				type: FAMILY_COMMAND_TYPE[family],
+				nodeIds,
+				breakpointId: layer,
+				patch: { [property]: value } as EditorPatch<never>,
+			} as const;
+			// First write at a preset-backed breakpoint materializes the
+			// effective set in the same intent (CORE-P1A-008) — switching
+			// layers alone never entered history.
+			return commands.execute(
+				withBreakpointMaterialization(
+					command as Parameters<typeof withBreakpointMaterialization>[0],
+					authoring,
+					breakpoints,
+				),
+			);
+		},
+		[
+			commands,
+			revision,
+			family,
+			nodeIds,
+			layer,
+			property,
+			authoring,
+			breakpoints,
+		],
+	);
+
+	return useMemo(
+		() => ({
+			state,
+			commit: (value: T) => write(value),
+			reset: () => write(null),
+			layer,
+		}),
+		[state, write, layer],
+	);
+}
+
+function noopSubscribe(): () => void {
+	return noop;
+}
+function noop(): void {
+	// The no-bridge store never changes.
+}
+function zero(): number {
+	return 0;
+}
