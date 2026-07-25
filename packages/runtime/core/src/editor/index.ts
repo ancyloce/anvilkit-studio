@@ -21,6 +21,11 @@
  * integration lives in `@anvilkit/core/react/editor` (Phase 1A).
  */
 
+// Shared used-features projection (CORE-P1A-003): re-exported from
+// the engine so React-layer consumers reach it without importing
+// `@anvilkit/ir` directly — `src/editor/` is the one directory the
+// `check:no-headless-import` gate allowlists for ir imports.
+export { listUsedAuthoringFeatures } from "@anvilkit/ir/editor";
 export {
 	type AuthoringChangeSet,
 	applyEditorCommand,
@@ -62,11 +67,6 @@ export {
 	reconcileAuthoringState,
 	remapForDuplicate,
 } from "./reconcile.js";
-// Shared used-features projection (CORE-P1A-003): re-exported from
-// the engine so React-layer consumers reach it without importing
-// `@anvilkit/ir` directly — `src/editor/` is the one directory the
-// `check:no-headless-import` gate allowlists for ir imports.
-export { listUsedAuthoringFeatures } from "@anvilkit/ir/editor";
 export { mergePropertyWise } from "./resolve/merge.js";
 export {
 	type NodeComponentDefaults,
@@ -78,7 +78,12 @@ export {
 	getMatchingBreakpoints,
 	resolveResponsiveValue,
 } from "./resolve/responsive.js";
-export { resolveToken, type TokenResolution } from "./resolve/token.js";
+export {
+	materializeTokenLiteral,
+	type ResolveTokenOptions,
+	resolveToken,
+	type TokenResolution,
+} from "./resolve/token.js";
 export {
 	serializeBorderEdge,
 	serializeCssColor,
@@ -95,3 +100,24 @@ export {
 	type ResolvedNodeStyleInput,
 	resolveAuthoringStyle,
 } from "./style/resolve-authoring-style.js";
+export {
+	applyTokenDeletion,
+	planTokenDeletion,
+	type TokenDeletionContext,
+	type TokenDeletionPlan,
+} from "./tokens/deletion.js";
+export { checkTokenAliasGraph } from "./tokens/graph.js";
+export { applyTokenPatch } from "./tokens/patch.js";
+export {
+	aliasDependents,
+	collectTokenUsage,
+	type TokenUsageIndex,
+	tokenUsageSites,
+} from "./tokens/usage.js";
+export {
+	isTokenRef,
+	mapAuthoringTokens,
+	type TokenReferenceFamily,
+	type TokenRefVisitor,
+	type TokenUsageSite,
+} from "./tokens/walk.js";
