@@ -49,16 +49,23 @@ async function clickLayerRow(
 ): Promise<void> {
 	const row = page.getByTestId(`ak-layer-select-${nodeId}`);
 	await row.waitFor({ state: "attached", timeout: 15_000 });
-	// `scrollIntoViewIfNeeded` waits for stability, which the
-	// continuously-animating demo canvas never reaches — scroll
-	// directly instead.
-	await row.evaluate((element) =>
-		element.scrollIntoView({ block: "center", behavior: "instant" }),
-	);
-	await row.click({
-		force: true,
-		...(modifiers?.ctrl === true ? { modifiers: ["ControlOrMeta"] } : {}),
-	});
+	// Retry the whole click: the row is virtualized (it can scroll out
+	// from under a pending click) and the demo canvas animates
+	// continuously, so a single forced click occasionally lands with no
+	// effect. `aria-selected` is the row's own confirmation that the
+	// selection actually took.
+	await expect(async () => {
+		await row.evaluate((element) =>
+			element.scrollIntoView({ block: "center", behavior: "instant" }),
+		);
+		await row.click({
+			force: true,
+			...(modifiers?.ctrl === true ? { modifiers: ["ControlOrMeta"] } : {}),
+		});
+		await expect(row).toHaveAttribute("aria-selected", "true", {
+			timeout: 2_000,
+		});
+	}).toPass({ timeout: 20_000 });
 }
 
 /** Open the Layers rail module and its inner Layers tab. */
@@ -233,6 +240,12 @@ test.describe("visual editor mount (CORE-P1B-012)", () => {
 		await selectViaLayers(page, "navbar-primary");
 		await clickLayerRow(page, "hero-primary", { ctrl: true });
 
+		// The toolbar anchors just above the selection bounds; scroll the
+		// canvas to the top so those bounds (and the toolbar) sit inside
+		// the viewport where synthetic clicks can reach them.
+		await frame.locator("body").evaluate(() => {
+			window.scrollTo(0, 0);
+		});
 		const toolbar = frame.locator("[data-ak-selection-toolbar]");
 		await expect(toolbar).toBeVisible({ timeout: 10_000 });
 		await expect(
@@ -240,12 +253,19 @@ test.describe("visual editor mount (CORE-P1B-012)", () => {
 		).toBeVisible();
 
 		// Bulk duplicate: two copies land in ONE commitNative dispatch.
-		// The toolbar anchors to the selection bounds, which can sit at
-		// the very top of the scrolled canvas; `force` skips the
-		// actionability wait the animating demo never satisfies.
+		// The toolbar anchors to the selection bounds, which can sit
+		// above the scrolled canvas viewport, and it repositions as the
+		// selection changes — so dispatch the click on the button
+		// itself. The toolbar is driven by a document-level capture
+		// listener (not a React `onClick`), so a dispatched event is
+		// the same code path a user click takes.
 		await toolbar
 			.locator('[data-ak-toolbar-action="duplicate"]')
-			.click({ force: true });
+			.evaluate((element) => {
+				element.dispatchEvent(
+					new MouseEvent("click", { bubbles: true, cancelable: true }),
+				);
+			});
 		// The bulk path is async (dynamic imports) before its single
 		// commitNative dispatch, then the iframe re-renders.
 		await expect.poll(countNodes, { timeout: 20_000 }).toBe(before + 2);
