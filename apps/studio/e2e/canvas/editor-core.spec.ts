@@ -10,7 +10,7 @@ import { expect, type Page, test } from "@playwright/test";
  *
  * UNBLOCKED 2026-07-12 (was `test.fixme` since 2026-05-23). These three
  * scenarios were skipped on the belief that react-konva's reconciler never built
- * the Konva content under React 19.2.7 / Next 16 ("no `.konvajs-content`, no
+ * the Konva content under React 19.2.8 / Next 16 ("no `.konvajs-content`, no
  * `<canvas>`, headed OR headless"). That no longer reproduces: the Stage renders,
  * the canvas has a real bounding box, and `page.mouse` drags create nodes.
  *

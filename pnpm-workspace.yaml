@@ -51,22 +51,16 @@ minimumReleaseAgeExclude:
   - '@vitest/spy@4.1.7'
   - '@vitest/utils@4.1.7'
   - vitest@4.1.7
-  - '@turbo/darwin-64@2.9.15 || 2.10.5'
-  - '@turbo/darwin-arm64@2.9.15 || 2.10.5'
-  - '@turbo/linux-64@2.9.15 || 2.10.5'
-  - '@turbo/linux-arm64@2.9.15 || 2.10.5'
-  - '@turbo/windows-64@2.9.15 || 2.10.5'
-  - '@turbo/windows-arm64@2.9.15 || 2.10.5'
-  - turbo@2.9.15 || 2.10.5
-  - deslop-js@0.5.8
-  # pnpm's minimumReleaseAgeExclude check returns at the FIRST entry whose
-  # package name matches, then asks "is this version in that one entry?". So a
-  # package needing several versions excluded must combine them into one `||`
-  # union — separate `pkg@A` / `pkg@B` lines leave the second line dead. This
-  # previously let react-doctor@0.5.8 / oxlint-plugin-react-doctor@0.5.8 slip
-  # through, shadowed by the older @0.2.14 lines above them.
-  - oxlint-plugin-react-doctor@0.2.14 || 0.5.8
-  - react-doctor@0.2.14 || 0.5.8
+  - '@turbo/darwin-64@2.9.15 || 2.10.7'
+  - '@turbo/darwin-arm64@2.9.15 || 2.10.7'
+  - '@turbo/linux-64@2.9.15 || 2.10.7'
+  - '@turbo/linux-arm64@2.9.15 || 2.10.7'
+  - '@turbo/windows-64@2.9.15 || 2.10.7'
+  - '@turbo/windows-arm64@2.9.15 || 2.10.7'
+  - turbo@2.9.15 || 2.10.7
+  - deslop-js@0.5.8 || 0.9.1
+  - oxlint-plugin-react-doctor@0.2.14 || 0.5.8 || 0.9.1
+  - react-doctor@0.2.14 || 0.5.8 || 0.9.1
   # Transitive deps newly resolved by the fresh lockfile (the @base-ui/react
   # 1.6.0 bump re-resolved the tree), each published inside pnpm's 24h
   # minimumReleaseAge embargo window. Mainstream packages; whitelist the exact
@@ -108,12 +102,36 @@ minimumReleaseAgeExclude:
   - '@tiptap/pm@3.27.4'
   - '@tiptap/react@3.27.4'
   - '@tiptap/starter-kit@3.27.4'
+  - '@oxc-parser/binding-android-arm-eabi@0.141.0'
+  - '@oxc-parser/binding-android-arm64@0.141.0'
+  - '@oxc-parser/binding-darwin-arm64@0.141.0'
+  - '@oxc-parser/binding-darwin-x64@0.141.0'
+  - '@oxc-parser/binding-freebsd-x64@0.141.0'
+  - '@oxc-parser/binding-linux-arm-gnueabihf@0.141.0'
+  - '@oxc-parser/binding-linux-arm-musleabihf@0.141.0'
+  - '@oxc-parser/binding-linux-arm64-gnu@0.141.0'
+  - '@oxc-parser/binding-linux-arm64-musl@0.141.0'
+  - '@oxc-parser/binding-linux-ppc64-gnu@0.141.0'
+  - '@oxc-parser/binding-linux-riscv64-gnu@0.141.0'
+  - '@oxc-parser/binding-linux-riscv64-musl@0.141.0'
+  - '@oxc-parser/binding-linux-s390x-gnu@0.141.0'
+  - '@oxc-parser/binding-linux-x64-gnu@0.141.0'
+  - '@oxc-parser/binding-linux-x64-musl@0.141.0'
+  - '@oxc-parser/binding-openharmony-arm64@0.141.0'
+  - '@oxc-parser/binding-wasm32-wasi@0.141.0'
+  - '@oxc-parser/binding-win32-arm64-msvc@0.141.0'
+  - '@oxc-parser/binding-win32-ia32-msvc@0.141.0'
+  - '@oxc-parser/binding-win32-x64-msvc@0.141.0'
+  - '@oxc-project/types@0.141.0'
+  - oxc-parser@0.141.0
+  - react-dom@19.2.8
+  - react@19.2.8
 patchedDependencies:
   "@base-ui/react@1.6.0": packages/extensions/components/patches/@base-ui__react@1.6.0.patch
 
 overrides:
-  react: 19.2.7
-  react-dom: 19.2.7
+  react: 19.2.8
+  react-dom: 19.2.8
   # Pin @base-ui/react to the version the patch is keyed to. The consumers
   # (core, ui) depend on `^1.4.1`, and newer releases (1.6.0+) exist, so a
   # fresh resolve without a lockfile floats past 1.5.0 and leaves
