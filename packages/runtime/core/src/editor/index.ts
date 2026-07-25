@@ -39,6 +39,13 @@ export {
 	validateEditorCommand,
 } from "./commands/validate.js";
 export {
+	buildCreateComponentPlan,
+	COMPONENT_FRAME_TYPE,
+	type CreateComponentInput,
+	type CreateComponentPlan,
+	validateCreateComponentSelection,
+} from "./components/create.js";
+export {
 	checkInvariant,
 	EditorInvariantError,
 	makeEditorError,
@@ -101,6 +108,17 @@ export {
 	resolveAuthoringStyle,
 } from "./style/resolve-authoring-style.js";
 export {
+	stableIdHash,
+	styleDefinitionCssVariableName,
+	tokenCssVariableName,
+} from "./styles/css-variables.js";
+export { applyStyleDefinitionPatch } from "./styles/patch.js";
+export {
+	attachStyleDefinition,
+	deleteStyleDefinition,
+	detachStyleDefinition,
+} from "./styles/style-definitions.js";
+export {
 	applyTokenDeletion,
 	planTokenDeletion,
 	type TokenDeletionContext,
@@ -121,3 +139,16 @@ export {
 	type TokenRefVisitor,
 	type TokenUsageSite,
 } from "./tokens/walk.js";
+export {
+	cloneSubtree,
+	collectSubtreeIds,
+	findNode,
+	indexNodeLocations,
+	isComponentNode,
+	type NodeLocation,
+	nodeId,
+	type PuckTreeNode,
+	type PuckZones,
+	transformContainers,
+	zonesOf,
+} from "./tree/nodes.js";
