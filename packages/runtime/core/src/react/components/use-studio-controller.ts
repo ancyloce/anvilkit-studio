@@ -78,6 +78,9 @@ import {
 import type { StudioConfig } from "@/types/config";
 import type { StudioPagesSource } from "@/types/pages";
 import type { StudioPlugin } from "@/types/plugin";
+import { createStudioEditorBridge } from "../editor/bridge.js";
+import { createPluginEditorApi } from "../editor/plugin-editor-api.js";
+import { EditorSelectionBinder } from "../editor/selection-binder.js";
 import {
 	trackComponentDropped,
 	trackDraftSaved,
@@ -364,6 +367,22 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 
 	const puckApiRef = useRef<GetPuckSnapshot | null>(null);
 
+	// Per-instance editor bridge (CORE-P1A-001): the rendezvous between
+	// the entry chunk and the lazily-loaded editor runtime. Created
+	// unconditionally (a tiny inert object when the editor flag is off)
+	// so hook order never depends on `props.editor`.
+	const [editorBridge] = useState(createStudioEditorBridge);
+	const editorEnabled = isAnvilkit && props.editor?.features?.enabled === true;
+	// The `ctx.editor` facade (CORE-P1A-003). Frozen at mount like
+	// `storeId`: the editor feature is a mount-level decision — hosts
+	// re-target by key-remounting `<Studio>`, never by toggling the
+	// flag in place (verified convention).
+	const [pluginEditorApi] = useState(() =>
+		isAnvilkit && props.editor?.features?.enabled === true
+			? createPluginEditorApi(editorBridge, props.editor)
+			: undefined,
+	);
+
 	// Compile-generation guard (A1 unified the refs; A2 moved the
 	// onInit/onReady bookkeeping into the engine phase machine).
 	const identityRef = useRef<RuntimeIdentity>({ generation: 0 });
@@ -638,6 +657,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 				localeStore,
 				liveI18nRef,
 				eventBus,
+				editorApi: pluginEditorApi,
 			});
 
 			try {
@@ -711,7 +731,9 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			// the bus is sealed with the runtime; no plugin relies on that.)
 			eventBus.close();
 		};
-	}, [compileKey, localeStore, sidebarRegistryStore]);
+		// `pluginEditorApi` is a mount-frozen useState value — listed for
+		// the exhaustive-deps contract, it can never retrigger a compile.
+	}, [compileKey, localeStore, sidebarRegistryStore, pluginEditorApi]);
 
 	// A stored runtime whose `compileKey` no longer matches the current
 	// render is a superseded compile still settling. Masking it here gives
@@ -839,6 +861,16 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 
 	useRuntimeInit(activeCompiled);
 
+	// Sync the compiled collab-capability projection into the editor
+	// bridge (CORE-P1A-013). The gate itself is derived lazily by the
+	// editor runtime; an empty list (no compile yet, or no declaring
+	// plugins) means writers may run.
+	useEffect(() => {
+		editorBridge.collabCapabilities =
+			activeCompiled?.runtime.collabCapabilities ?? [];
+		editorBridge.notify();
+	}, [activeCompiled, editorBridge]);
+
 	useEffect(() => {
 		if (activeCompiled === null) {
 			return;
@@ -896,11 +928,27 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 				createElement(
 					PuckApiBinder,
 					{ apiRef: puckApiRef, compiled: activeCompiled },
+					// Puck→Core selection feed (CORE-P1A-002): must subscribe
+					// inside Puck's subtree; forwards into the editor bridge.
+					// Only mounted when the editor feature is on.
+					editorEnabled
+						? createElement(EditorSelectionBinder, {
+								bridge: editorBridge,
+								key: "editor-selection-binder",
+							})
+						: null,
 					children,
 				),
 		});
 		return mergeOverrides(base);
-	}, [activeCompiled, consumerOverrides, isAnvilkit, activeChromeAssets]);
+	}, [
+		activeCompiled,
+		consumerOverrides,
+		isAnvilkit,
+		activeChromeAssets,
+		editorEnabled,
+		editorBridge,
+	]);
 
 	// generic→default boundary: the public callbacks are typed against
 	// `PuckDataFor<UserConfig>`; internally Puck hands us the broad
@@ -961,6 +1009,11 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			// the emitter forwards only the changed field names.
 			trackSeoUpdated(analyticsRef.current, dataRef.current, nextData);
 			dataRef.current = nextData;
+			// Editor cache invalidation (CORE-P1A-001): a no-op until the
+			// lazy editor impl installs its handler; then classifies this
+			// change as self-originated (sidecar reference unchanged) or
+			// foreign (undo/redo, plugin write) and invalidates lazily.
+			editorBridge.notifyDataChange(nextData);
 			if (activeCompiled !== null) {
 				void activeCompiled.runtime.lifecycle.emit(
 					"onDataChange",
@@ -970,7 +1023,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			}
 			onChangeRef.current?.(nextData);
 		},
-		[activeCompiled],
+		[activeCompiled, editorBridge],
 	);
 
 	// Shared single-flight publish runner. Both the native Puck `onPublish`
@@ -1099,6 +1152,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		exportStore,
 		aiStore,
 		editorStore,
+		editorBridge,
 		sidebarRegistryStore,
 		resolvedStoreId,
 		rootRef,

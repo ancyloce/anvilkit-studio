@@ -9,6 +9,7 @@
  * view↔controller import graph are byte-identical.
  */
 
+import type { StudioEditorConfig } from "@anvilkit/contracts/editor";
 import type { DeepPartial } from "@anvilkit/utils";
 import type {
 	Config as PuckConfig,
@@ -22,7 +23,6 @@ import type {
 	useGetPuck,
 } from "@puckeditor/core";
 import type { ReactNode, RefObject } from "react";
-
 import type { StudioChromeMode } from "@/overrides/types";
 import type { StudioRuntime } from "@/runtime/compile-plugins";
 import type { StudioAnalyticsPort } from "@/shared/analytics-port";
@@ -36,6 +36,7 @@ import type {
 import type { StudioConfig } from "@/types/config";
 import type { StudioPagesSource } from "@/types/pages";
 import type { StudioPlugin, StudioPluginContext } from "@/types/plugin";
+import type { StudioEditorBridge } from "../editor/bridge.js";
 import type { StudioLogger } from "./studio-log.js";
 
 /**
@@ -320,6 +321,17 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 * clears the error and mounts the editor.
 	 */
 	readonly errorFallback?: ReactNode | ((error: unknown) => ReactNode);
+	/**
+	 * Visual-editor configuration (DD-0019 §22.1; additive). When absent
+	 * or `features.enabled !== true`, current UI, data behavior, lazy
+	 * boundaries, and Puck integration remain unchanged — no editor
+	 * module is even imported (the editor runtime loads through a
+	 * dynamic `import()` behind this flag), and `chrome="puck"`
+	 * short-circuits regardless of the flag. Phase 0 ships the mount
+	 * seam and config decoration only; editing surfaces arrive with
+	 * later phases.
+	 */
+	readonly editor?: StudioEditorConfig;
 }
 
 /** What the thin `<Studio>` view needs back from the controller. */
@@ -379,6 +391,13 @@ export interface StudioControllerState {
 	 * the legacy puck trio and imperative driving.
 	 */
 	readonly editorStore: EditorStoreBundle;
+	/**
+	 * Per-instance visual-editor bridge (CORE-P1A-001): the rendezvous
+	 * between the entry chunk and the lazily-loaded editor runtime.
+	 * Inert (all slots `null`) unless `StudioProps.editor` enables the
+	 * feature and the editor chunk has mounted.
+	 */
+	readonly editorBridge: StudioEditorBridge;
 	readonly sidebarRegistryStore: SidebarRegistryStoreApi;
 	readonly resolvedStoreId: string;
 	readonly rootRef: RefObject<HTMLDivElement | null>;

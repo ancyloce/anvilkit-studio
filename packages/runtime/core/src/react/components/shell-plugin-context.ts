@@ -66,6 +66,13 @@ interface ShellPluginContextDeps {
 	 * within one `<Studio>` instance.
 	 */
 	readonly eventBus: EventBus;
+	/**
+	 * The `ctx.editor` facade (CORE-P1A-003), or `undefined` when the
+	 * host did not enable the visual editor. Built by the controller
+	 * over the per-instance editor bridge; presence is the feature
+	 * signal for plugins.
+	 */
+	readonly editorApi?: StudioPluginContext["editor"];
 }
 
 /**
@@ -84,6 +91,7 @@ export function createShellPluginContext({
 	localeStore,
 	liveI18nRef,
 	eventBus,
+	editorApi,
 }: ShellPluginContextDeps): StudioPluginContext {
 	const ctx: StudioPluginContext = {
 		getData: () => dataRef.current,
@@ -148,6 +156,10 @@ export function createShellPluginContext({
 			sidebarRegistryStore.getState().registerSeoPanel(panel),
 		registerPageSettingsSeoFields: (fields) =>
 			sidebarRegistryStore.getState().registerPageSettingsSeoFields(fields),
+		// Additive and presence-gated (DD-0019 §21.1): spread-omitted when
+		// the host did not enable the editor, so existing plugins see a
+		// byte-identical context shape.
+		...(editorApi !== undefined ? { editor: editorApi } : {}),
 	};
 
 	return ctx;

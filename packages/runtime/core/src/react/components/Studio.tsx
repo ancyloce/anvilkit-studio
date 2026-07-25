@@ -61,6 +61,8 @@ import {
 	resolveStudioViewports,
 } from "@/studio/ui/merge-studio-ui";
 import { useThemeSync } from "@/theme/use-theme-sync";
+import { decoratePuckConfig } from "../editor/decorate-config.js";
+import { StudioEditorMount } from "../editor/StudioEditorMount.js";
 import {
 	composePluginProviders,
 	splitOverlaysByPlacement,
@@ -166,6 +168,7 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 		exportStore,
 		aiStore,
 		editorStore,
+		editorBridge,
 		sidebarRegistryStore,
 		resolvedStoreId,
 		rootRef,
@@ -331,9 +334,18 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 	// generic→default boundary (mirrors use-studio-controller.ts).
 	// `EMPTY_DATA` is a structurally-valid empty `Data` for any config.
 	type PuckDataFor = UserGenerics<UserConfig>["UserData"];
+	// Authoring config decoration (DD-0019 §8, CORE-P0-011). Identity
+	// passthrough when the editor flag is off (or on `chrome="puck"`,
+	// where `isAnvilkit` is false), so legacy paths see the exact same
+	// config object as before. Internally memoized by config identity +
+	// fingerprint — identity-stable results keep Puck's app store from
+	// resetting across renders.
+	const authoringPuckConfig = decoratePuckConfig(puckConfig, {
+		enableAuthoring: isAnvilkit && props.editor?.features?.enabled === true,
+	});
 	const puckElement = (
 		<Puck<UserConfig>
-			config={puckConfig}
+			config={authoringPuckConfig}
 			data={data ?? (EMPTY_DATA as PuckDataFor)}
 			overrides={mergedOverrides as Partial<PuckOverrides<UserConfig>>}
 			onChange={handleChange as (data: PuckDataFor) => void}
@@ -343,6 +355,19 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 			onAction={handleAction}
 			viewports={viewports}
 		/>
+	);
+	// Flag-gated lazy editor runtime (CORE-P0-012/CORE-P1A-001): the
+	// mount WRAPS `<Puck>` so the editor contexts (`useStudioEditor()`,
+	// `AuthoringStyleContext`) reach chrome and decorated canvas
+	// renders inside Puck's subtree. Children pass through untouched —
+	// and nothing is imported — unless `editor.features.enabled`.
+	const editorWrappedPuck = (
+		<StudioEditorMount
+			editor={isAnvilkit ? props.editor : undefined}
+			bridge={editorBridge}
+		>
+			{puckElement}
+		</StudioEditorMount>
 	);
 
 	if (!isAnvilkit) {
@@ -402,7 +427,7 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 					const OverlayComponent = overlay.component;
 					return <OverlayComponent key={overlay.id} />;
 				})}
-				{puckElement}
+				{editorWrappedPuck}
 				{canvasOverlays.map((overlay) => {
 					const OverlayComponent = overlay.component;
 					return <OverlayComponent key={overlay.id} />;
