@@ -167,6 +167,31 @@ export function runShortcutCommand(
 	const selectedIds = selection?.selectedIds ?? [];
 	const writable = !port.isReadOnly() && !port.writersDisabled();
 
+	/**
+	 * Fire-and-forget guard for the async tree commands: a rejected
+	 * import or transform used to vanish into an unhandled rejection
+	 * with no trace, leaving the command a silent no-op (the exact
+	 * failure mode that hid the root-slot walk gap). The frozen
+	 * `EditorErrorCode` union (CORE-P0-001) has no generic
+	 * command-failure code, so rather than widen a frozen contract the
+	 * rejection is rethrown asynchronously — visible to the host's
+	 * error reporting and the console instead of swallowed.
+	 */
+	const run = (
+		commandId: EditorShortcutCommandId,
+		operation: Promise<void>,
+	): void => {
+		void operation.catch((error: unknown) => {
+			queueMicrotask(() => {
+				throw error instanceof Error
+					? new Error(`editor ${commandId} command failed: ${error.message}`, {
+							cause: error,
+						})
+					: new Error(`editor ${commandId} command failed: ${String(error)}`);
+			});
+		});
+	};
+
 	const execute = (payload: Record<string, unknown>): void => {
 		void port.execute({
 			id: crypto.randomUUID(),
@@ -180,19 +205,19 @@ export function runShortcutCommand(
 	switch (commandId) {
 		case "duplicate":
 			if (selectedIds.length === 0 || !writable) return false;
-			void context.duplicateNodes(selectedIds);
+			run("duplicate", context.duplicateNodes(selectedIds));
 			return true;
 		case "delete":
 			if (selectedIds.length === 0 || !writable) return false;
-			void context.removeNodes(selectedIds);
+			run("delete", context.removeNodes(selectedIds));
 			return true;
 		case "wrap":
 			if (selectedIds.length === 0 || !writable) return false;
-			void context.wrapNodes(selectedIds);
+			run("wrap", context.wrapNodes(selectedIds));
 			return true;
 		case "unwrap":
 			if (selectedIds.length === 0 || !writable) return false;
-			void context.unwrapNodes(selectedIds);
+			run("unwrap", context.unwrapNodes(selectedIds));
 			return true;
 		case "lock": {
 			if (selectedIds.length === 0 || !writable) return false;

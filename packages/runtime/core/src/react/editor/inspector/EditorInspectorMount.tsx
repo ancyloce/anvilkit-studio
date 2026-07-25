@@ -21,7 +21,12 @@ const EditorInspectorPanel = lazy(() => import("./EditorInspectorPanel.js"));
 export function EditorInspectorMount(): ReactNode {
 	const handle = useOptionalStudioEditor();
 	if (handle === null || handle.status !== "ready") {
-		return null;
+		return (
+			<span
+				data-ak-inspector-gate={handle === null ? "no-bridge" : handle.status}
+				hidden
+			/>
+		);
 	}
 	return (
 		<Suspense fallback={null}>
