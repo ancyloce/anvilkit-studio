@@ -308,6 +308,26 @@ export interface SetComponentNodeOverrideCommand extends EditorCommandBase {
 	readonly patch: NodeOverridePatch | null;
 }
 
+/**
+ * Switch an instance's variant selection (ED-VARIANT-001). Added
+ * additively by CORE-P2-009C per freeze D-2.
+ *
+ * The selection replaces the instance's current one wholesale — a
+ * partial selection is a legal *intermediate* authoring state (the
+ * instance simply renders the definition base until every axis is
+ * chosen), so this is not a patch.
+ *
+ * Overrides whose target survives the switch are preserved;
+ * incompatible ones are dropped **with a diagnostic**, never silently
+ * (ED-VARIANT-002).
+ */
+export interface SetInstanceVariantCommand extends EditorCommandBase {
+	readonly type: "component.instance.variant.set";
+	readonly instanceNodeIds: readonly string[];
+	/** Variant axis id → option id. */
+	readonly selection: Readonly<Record<string, string>>;
+}
+
 /** Detach instances into ordinary page nodes (freeze §2). */
 export interface DetachComponentInstanceCommand extends EditorCommandBase {
 	readonly type: "component.instance.detach";
@@ -395,6 +415,7 @@ export type AtomicEditorCommand =
 	| CreateComponentDefinitionCommand
 	| UpdateComponentDefinitionCommand
 	| DeleteComponentDefinitionCommand
+	| SetInstanceVariantCommand
 	| SetComponentPropOverrideCommand
 	| SetComponentNodeOverrideCommand
 	| DetachComponentInstanceCommand
