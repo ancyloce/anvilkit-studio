@@ -45,6 +45,11 @@ test("selection + inspector latency baselines (20-run medians)", async ({
 	const selectionSamples: number[] = [];
 	for (let run = 0; run < RUNS; run += 1) {
 		const row = page.getByTestId(`ak-layer-select-${targets[run % 2]}`);
+		// Virtualized rows can sit outside the viewport; scroll before
+		// timing so the measurement covers selection, not scrolling.
+		await row.evaluate((element) =>
+			element.scrollIntoView({ block: "center", behavior: "instant" }),
+		);
 		const startedAt = Date.now();
 		await row.click({ force: true });
 		await page.getByTestId("ak-editor-inspector").waitFor({ state: "visible" });

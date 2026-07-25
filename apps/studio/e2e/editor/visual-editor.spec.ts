@@ -32,7 +32,33 @@ async function openEditor(page: Page): Promise<void> {
  */
 async function selectViaLayers(page: Page, nodeId: string): Promise<void> {
 	await openLayersPanel(page);
-	await page.getByTestId(`ak-layer-select-${nodeId}`).click({ force: true });
+	await clickLayerRow(page, nodeId);
+}
+
+/**
+ * Click a layer row. The tree is virtualized, so a row can sit
+ * outside the viewport (a forced click then has no click point to
+ * resolve) — scroll it in first, then click for real. The demo canvas
+ * animates continuously, so `force` still skips the never-settling
+ * stability wait (layer-scroll.spec.ts precedent).
+ */
+async function clickLayerRow(
+	page: Page,
+	nodeId: string,
+	modifiers?: { readonly ctrl: boolean },
+): Promise<void> {
+	const row = page.getByTestId(`ak-layer-select-${nodeId}`);
+	await row.waitFor({ state: "attached", timeout: 15_000 });
+	// `scrollIntoViewIfNeeded` waits for stability, which the
+	// continuously-animating demo canvas never reaches — scroll
+	// directly instead.
+	await row.evaluate((element) =>
+		element.scrollIntoView({ block: "center", behavior: "instant" }),
+	);
+	await row.click({
+		force: true,
+		...(modifiers?.ctrl === true ? { modifiers: ["ControlOrMeta"] } : {}),
+	});
 }
 
 /** Open the Layers rail module and its inner Layers tab. */
@@ -110,14 +136,19 @@ test.describe("visual editor mount (CORE-P1B-012)", () => {
 	}) => {
 		await openEditor(page);
 		const frame = page.frameLocator("iframe").first();
-		const node = frame.locator('[data-ak-node="hero-primary"]');
+		// The navbar is the short node at the top of the demo document:
+		// its south handle lands inside the 1280×720 viewport, where
+		// synthetic input can reach it. (The hero is full-width and
+		// ~714 px tall, so BOTH its east and south handles sit outside
+		// the viewport — a harness constraint, not an editor one.)
+		const node = frame.locator('[data-ak-node="navbar-primary"]');
 		await expect(node).toBeVisible({ timeout: 30_000 });
-		await selectViaLayers(page, "hero-primary");
-		const handle = frame.locator('[data-ak-handle="resize-e"]');
+		await selectViaLayers(page, "navbar-primary");
+		const handle = frame.locator('[data-ak-handle="resize-s"]');
 		await expect(handle).toBeVisible({ timeout: 15_000 });
 
 		const before = await node.evaluate(
-			(el) => el.getBoundingClientRect().width,
+			(el) => el.getBoundingClientRect().height,
 		);
 		const box = await handle.boundingBox();
 		if (box === null) {
@@ -125,21 +156,29 @@ test.describe("visual editor mount (CORE-P1B-012)", () => {
 		}
 		await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
 		await page.mouse.down();
-		await page.mouse.move(box.x + box.width / 2 - 60, box.y + box.height / 2, {
+		// Drag up: the ephemeral preview paints during the move…
+		await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 - 40, {
 			steps: 5,
 		});
+		expect(await node.evaluate((el) => el.style.height)).not.toBe("");
+		// …and pointerup commits exactly one command, after which the
+		// durable value arrives through the authoring stylesheet.
 		await page.mouse.up();
-
-		// The committed width sticks (authoring stylesheet applies it).
 		await expect
-			.poll(async () => node.evaluate((el) => el.getBoundingClientRect().width))
-			.toBeLessThan(before - 30);
+			.poll(
+				async () => node.evaluate((el) => el.getBoundingClientRect().height),
+				{ timeout: 15_000 },
+			)
+			.toBeLessThan(before - 20);
 
-		// ONE undo restores the pre-gesture width — the whole gesture was
-		// a single history entry.
+		// ONE undo restores the pre-gesture height — the whole gesture
+		// was a single history entry.
 		await page.getByRole("button", { name: /undo/i }).click();
 		await expect
-			.poll(async () => node.evaluate((el) => el.getBoundingClientRect().width))
+			.poll(
+				async () => node.evaluate((el) => el.getBoundingClientRect().height),
+				{ timeout: 15_000 },
+			)
 			.toBeGreaterThan(before - 5);
 	});
 
@@ -192,9 +231,7 @@ test.describe("visual editor mount (CORE-P1B-012)", () => {
 		expect(before).toBeGreaterThan(1);
 
 		await selectViaLayers(page, "navbar-primary");
-		await page
-			.getByTestId("ak-layer-select-hero-primary")
-			.click({ force: true, modifiers: ["ControlOrMeta"] });
+		await clickLayerRow(page, "hero-primary", { ctrl: true });
 
 		const toolbar = frame.locator("[data-ak-selection-toolbar]");
 		await expect(toolbar).toBeVisible({ timeout: 10_000 });
@@ -203,10 +240,17 @@ test.describe("visual editor mount (CORE-P1B-012)", () => {
 		).toBeVisible();
 
 		// Bulk duplicate: two copies land in ONE commitNative dispatch.
-		await toolbar.locator('[data-ak-toolbar-action="duplicate"]').click();
-		await expect.poll(countNodes).toBe(before + 2);
+		// The toolbar anchors to the selection bounds, which can sit at
+		// the very top of the scrolled canvas; `force` skips the
+		// actionability wait the animating demo never satisfies.
+		await toolbar
+			.locator('[data-ak-toolbar-action="duplicate"]')
+			.click({ force: true });
+		// The bulk path is async (dynamic imports) before its single
+		// commitNative dispatch, then the iframe re-renders.
+		await expect.poll(countNodes, { timeout: 20_000 }).toBe(before + 2);
 		await page.getByRole("button", { name: /undo/i }).click();
-		await expect.poll(countNodes).toBe(before);
+		await expect.poll(countNodes, { timeout: 20_000 }).toBe(before);
 	});
 
 	test("zoom controls change scale without breaking the toolbar (50/100/200%)", async ({
