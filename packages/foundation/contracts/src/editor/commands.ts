@@ -17,6 +17,7 @@ import type {
 	ComponentDefinitionId,
 	ComponentDefinitionV1,
 	ComponentOverrideTarget,
+	NodeOverridePatch,
 } from "./components.js";
 import type { EditorError } from "./errors.js";
 import type { InteractionV1 } from "./interactions.js";
@@ -37,7 +38,7 @@ import type {
 	TokenDeletionDisposition,
 	TokenModeId,
 } from "./tokens.js";
-import type { EditorPatch } from "./values.js";
+import type { EditorPatch, JsonValue } from "./values.js";
 
 /**
  * Fields shared by every command (DD-0019 §10.1, verbatim).
@@ -261,6 +262,33 @@ export interface DeleteComponentDefinitionCommand extends EditorCommandBase {
 	readonly definitionId: ComponentDefinitionId;
 }
 
+/**
+ * Set (or clear, with `null`) one exposed-property override on an
+ * instance — instance-mode editing, DD-0019 §14.4. Added additively
+ * by CORE-P2-006 per freeze D-2: the Phase 0 union froze the
+ * *lifecycle* commands, not the per-property instance edits.
+ */
+export interface SetComponentPropOverrideCommand extends EditorCommandBase {
+	readonly type: "component.instance.propOverride.set";
+	readonly instanceNodeId: string;
+	/** A `ComponentPropDefinition.id` declared by the definition. */
+	readonly propId: string;
+	/** `null` clears the override, restoring the definition default. */
+	readonly value: JsonValue | null;
+}
+
+/**
+ * Set (or clear, with `null`) one instance node override, addressed
+ * by **definition** node id (never the runtime composite form) and
+ * applied at one layer.
+ */
+export interface SetComponentNodeOverrideCommand extends EditorCommandBase {
+	readonly type: "component.instance.nodeOverride.set";
+	readonly instanceNodeId: string;
+	readonly definitionNodeId: string;
+	readonly patch: NodeOverridePatch | null;
+}
+
 /** Detach instances into ordinary page nodes (freeze §2). */
 export interface DetachComponentInstanceCommand extends EditorCommandBase {
 	readonly type: "component.instance.detach";
@@ -347,6 +375,8 @@ export type AtomicEditorCommand =
 	| DeleteTokenCommand
 	| CreateComponentDefinitionCommand
 	| DeleteComponentDefinitionCommand
+	| SetComponentPropOverrideCommand
+	| SetComponentNodeOverrideCommand
 	| DetachComponentInstanceCommand
 	| DetachAllComponentInstancesCommand
 	| ResetComponentOverrideCommand

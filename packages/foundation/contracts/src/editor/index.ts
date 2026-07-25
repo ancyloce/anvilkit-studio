@@ -84,6 +84,8 @@ export type {
 	ResetAllComponentOverridesCommand,
 	ResetComponentOverrideCommand,
 	SetBreakpointsCommand,
+	SetComponentNodeOverrideCommand,
+	SetComponentPropOverrideCommand,
 	SetNodeLayoutCommand,
 	SetNodeLockCommand,
 	SetNodeStyleCommand,
