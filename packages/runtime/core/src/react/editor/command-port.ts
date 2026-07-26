@@ -56,6 +56,7 @@ import {
 	validateEditorCommand,
 	writeAuthoringState,
 } from "../../editor/index.js";
+import { scopeGuardError } from "./components/scope.js";
 import { effectiveBreakpoints } from "./responsive/preset.js";
 
 /** The empty page-scope selection (replaced by CORE-P1A-002). */
@@ -212,6 +213,26 @@ export function createEditorCommandPort(
 		return null;
 	};
 
+	/**
+	 * Definition edits require the matching main-component scope
+	 * (freeze §6). Enforced here rather than trusting the affordance
+	 * not to render, so plugin/AI-originated commands are covered too.
+	 */
+	const scopeError = (command: EditorCommand): EditorError | null => {
+		const selection = deps.getSelection?.();
+		if (selection === undefined) {
+			return null;
+		}
+		return scopeGuardError(selection.scope, command, (member) =>
+			member.type === "component.definition.update"
+				? member.definitionId
+				: member.type === "component.override.promote"
+					? readCurrent().state.nodes[member.instanceNodeId]?.componentInstance
+							?.definitionId
+					: undefined,
+		);
+	};
+
 	const rejected = (
 		revision: number,
 		errors: readonly EditorError[],
@@ -252,7 +273,10 @@ export function createEditorCommandPort(
 					),
 				];
 			}
-			return validateEditorCommand(read.state, command);
+			const outOfScope = scopeError(command);
+			return outOfScope === null
+				? validateEditorCommand(read.state, command)
+				: [outOfScope, ...validateEditorCommand(read.state, command)];
 		},
 
 		preview(command: EditorCommand): EditorPreviewResult {
@@ -286,7 +310,7 @@ export function createEditorCommandPort(
 				deps.onRejected?.(command, result);
 				return result;
 			}
-			const policyViolation = policyError(command);
+			const policyViolation = policyError(command) ?? scopeError(command);
 			if (policyViolation !== null) {
 				const result = rejected(read.state.revision, [policyViolation]);
 				deps.onRejected?.(command, result);

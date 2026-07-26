@@ -25,6 +25,19 @@ export {
 	type AuthoringStyleLookup,
 } from "./authoring-style-context.js";
 export type { CanvasDomRegistry } from "./canvas/dom-registry.js";
+export { ComponentCanvasPanel } from "./components/ComponentCanvasPanel.js";
+export {
+	type ComponentCanvas,
+	type ComponentCombination,
+	useComponentCanvas,
+} from "./components/use-component-canvas.js";
+export {
+	componentScope,
+	createEditorScopeController,
+	type EditorScopeController,
+	scopedDefinitionId,
+	scopeGuardError,
+} from "./components/scope.js";
 export {
 	type CreateComponentAction,
 	type CreateComponentOutcome,

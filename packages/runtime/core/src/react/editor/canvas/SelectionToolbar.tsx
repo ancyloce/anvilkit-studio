@@ -60,6 +60,63 @@ const ALIGN_EDGES: readonly AlignEdge[] = [
 
 const BULK_COMMANDS = ["duplicate", "delete", "lock", "hide", "wrap"] as const;
 
+/**
+ * Create-component-from-multi-select — the canvas entry point
+ * CORE-P1B-013 deliberately deferred to Phase 2 (CORE-P2-004),
+ * because it is ADR-0005-gated component work rather than
+ * align/distribute.
+ */
+const CREATE_COMPONENT_ACTION = "create-component";
+
+/**
+ * Capture the current selection as a document-local component
+ * (CORE-P2-004): validate, then commit definition + tree replacement
+ * + selection in ONE history-recording dispatch.
+ */
+async function createComponentFromSelection(
+	bridge: StudioEditorBridge,
+	port: InternalEditorCommandPort,
+): Promise<void> {
+	const selectedIds = bridge.selection?.getState().selectedIds ?? [];
+	if (selectedIds.length === 0) {
+		return;
+	}
+	const { buildCreateComponentPlan, validateCreateComponentSelection } =
+		await import("../../../editor/index.js");
+	const snapshot = port.getSnapshot();
+	const data = port.readData();
+	const errors = validateCreateComponentSelection(
+		data,
+		snapshot.authoring,
+		selectedIds,
+	);
+	if (errors.some((error) => error.severity === "error")) {
+		// Surfaced through the shared diagnostic center rather than
+		// swallowed — a refused capture must tell the user why.
+		bridge.diagnostics.setDiagnostics("editor.component.create", errors);
+		return;
+	}
+	bridge.diagnostics.setDiagnostics("editor.component.create", []);
+	const definitionId = crypto.randomUUID();
+	const instanceNodeId = crypto.randomUUID();
+	const timestamp = new Date().toISOString();
+	const committed = port.commitNative((currentData, currentAuthoring) => {
+		const plan = buildCreateComponentPlan(currentData, currentAuthoring, {
+			nodeIds: selectedIds,
+			name: "Component",
+			definitionId,
+			instanceNodeId,
+			timestamp,
+		});
+		return plan === null
+			? null
+			: { data: plan.data, authoring: plan.authoring };
+	});
+	if (committed === "committed") {
+		bridge.selection?.select(instanceNodeId);
+	}
+}
+
 /** Build the §13.6 align input over the live selection. */
 export function alignInputOf(
 	bridge: StudioEditorBridge,
@@ -202,6 +259,10 @@ export function SelectionToolbar({ bridge }: SelectionToolbarProps): ReactNode {
 				}
 				return;
 			}
+			if (action === CREATE_COMPONENT_ACTION) {
+				void createComponentFromSelection(bridge, port);
+				return;
+			}
 			if ((BULK_COMMANDS as readonly string[]).includes(action)) {
 				runShortcutCommand(
 					action as (typeof BULK_COMMANDS)[number],
@@ -321,6 +382,10 @@ export function SelectionToolbar({ bridge }: SelectionToolbarProps): ReactNode {
 			/>
 			{BULK_COMMANDS.map((command) =>
 				button(command, msg(`studio.editor.shortcuts.${command}`)),
+			)}
+			{button(
+				CREATE_COMPONENT_ACTION,
+				msg("studio.editor.component.createFromSelection"),
 			)}
 		</div>
 	);

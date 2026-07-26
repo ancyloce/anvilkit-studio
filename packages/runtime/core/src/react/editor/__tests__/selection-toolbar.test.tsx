@@ -178,6 +178,31 @@ describe("canvas selection toolbar (CORE-P1B-013)", () => {
 		expect(recordedCount()).toBe(1);
 	});
 
+	it("captures a multi-selection as a component in ONE dispatch (CORE-P2-004)", async () => {
+		// The canvas entry point CORE-P1B-013 deferred to Phase 2.
+		const { bridge, doc, port, recordedCount } = setup();
+		act(() => bridge.selection?.selectMany(["legacy-1", "legacy-2"]));
+		const button = await waitFor(() => {
+			const el = doc.querySelector(
+				'[data-ak-toolbar-action="create-component"]',
+			);
+			expect(el).not.toBeNull();
+			return el as HTMLElement;
+		});
+		act(() => {
+			button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+		});
+		// Async (dynamic engine import) before its single commitNative.
+		await waitFor(() => expect(port.getSnapshot().revision).toBe(1), {
+			timeout: 3000,
+		});
+		expect(recordedCount()).toBe(1);
+		const definitions = port.getSnapshot().authoring.componentDefinitions;
+		expect(Object.keys(definitions)).toHaveLength(1);
+		// The new instance is selected (freeze §7 mapping rule).
+		expect(bridge.selection?.getState().selectedIds).toHaveLength(1);
+	});
+
 	it("hides while an inline session is active", async () => {
 		const { bridge, doc } = setup();
 		bridge.inline = {
