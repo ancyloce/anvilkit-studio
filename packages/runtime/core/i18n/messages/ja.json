@@ -347,5 +347,10 @@
 	"studio.editor.tokens.unresolved": "未解決",
 	"studio.editor.tokens.origin.document": "ドキュメント",
 	"studio.editor.tokens.origin.theme": "テーマ",
-	"studio.editor.tokens.origin.brand": "ブランド"
+	"studio.editor.tokens.origin.brand": "ブランド",
+	"studio.editor.component.canvas": "コンポーネントキャンバス",
+	"studio.editor.component.breadcrumb": "コンポーネントナビゲーション",
+	"studio.editor.component.backToPage": "ページ",
+	"studio.editor.component.variants": "バリアント",
+	"studio.editor.component.createFromSelection": "コンポーネントを作成"
 }

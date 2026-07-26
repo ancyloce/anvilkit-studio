@@ -347,5 +347,10 @@
 	"studio.editor.tokens.unresolved": "无法解析",
 	"studio.editor.tokens.origin.document": "文档",
 	"studio.editor.tokens.origin.theme": "主题",
-	"studio.editor.tokens.origin.brand": "品牌"
+	"studio.editor.tokens.origin.brand": "品牌",
+	"studio.editor.component.canvas": "组件画布",
+	"studio.editor.component.breadcrumb": "组件导航",
+	"studio.editor.component.backToPage": "页面",
+	"studio.editor.component.variants": "变体",
+	"studio.editor.component.createFromSelection": "创建组件"
 }

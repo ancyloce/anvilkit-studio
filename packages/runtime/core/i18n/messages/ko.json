@@ -347,5 +347,10 @@
 	"studio.editor.tokens.unresolved": "확인되지 않음",
 	"studio.editor.tokens.origin.document": "문서",
 	"studio.editor.tokens.origin.theme": "테마",
-	"studio.editor.tokens.origin.brand": "브랜드"
+	"studio.editor.tokens.origin.brand": "브랜드",
+	"studio.editor.component.canvas": "컴포넌트 캔버스",
+	"studio.editor.component.breadcrumb": "컴포넌트 탐색",
+	"studio.editor.component.backToPage": "페이지",
+	"studio.editor.component.variants": "변형",
+	"studio.editor.component.createFromSelection": "컴포넌트 만들기"
 }

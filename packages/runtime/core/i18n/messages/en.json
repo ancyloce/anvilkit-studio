@@ -365,5 +365,10 @@
 	"studio.editor.tokens.unresolved": "Unresolved",
 	"studio.editor.tokens.origin.document": "Document",
 	"studio.editor.tokens.origin.theme": "Theme",
-	"studio.editor.tokens.origin.brand": "Brand"
+	"studio.editor.tokens.origin.brand": "Brand",
+	"studio.editor.component.canvas": "Component canvas",
+	"studio.editor.component.breadcrumb": "Component navigation",
+	"studio.editor.component.backToPage": "Page",
+	"studio.editor.component.variants": "Variants",
+	"studio.editor.component.createFromSelection": "Create component"
 }
