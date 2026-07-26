@@ -60,6 +60,12 @@ export {
 	setNodeOverride,
 	setPropOverride,
 } from "./components/instances.js";
+export {
+	type ComponentEditSink,
+	componentDocument,
+	foldComponentDocument,
+	variantCombinations,
+} from "./components/component-document.js";
 export { applyComponentDefinitionPatch } from "./components/patch.js";
 export {
 	type DroppedOverride,

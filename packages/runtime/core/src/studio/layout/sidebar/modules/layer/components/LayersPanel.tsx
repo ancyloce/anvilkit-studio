@@ -48,6 +48,7 @@ import type {
 } from "@/types/sidebar";
 import { Input } from "@/primitives/input";
 import { AccessibilityIssuesMount } from "../../../../../../react/editor/a11y/AccessibilityIssuesMount.js";
+import { ComponentCanvasPanel } from "../../../../../../react/editor/components/ComponentCanvasPanel.js";
 import { StudioEditorBridgeContext } from "../../../../../../react/editor/use-studio-editor.js";
 import { use } from "react";
 import { useEditorLayers } from "../hooks/use-editor-layers";
@@ -272,6 +273,11 @@ export function LayersPanel(): ReactNode {
 						{/* Contract a11y diagnostics (CORE-P1A-012): renders
 						    nothing when the editor is off or the doc is clean. */}
 						<AccessibilityIssuesMount />
+						{/* Isolated component editing (CORE-P2-009F/G): renders
+						    nothing in page scope, and replaces the page layer
+						    tree while a component scope is active — selections
+						    can never span scopes (§10.6). */}
+						<ComponentCanvasPanel />
 						<div data-ak-layer-outline className="px-2 py-1">
 							<LayerTree searchQuery={searchQuery} />
 						</div>
