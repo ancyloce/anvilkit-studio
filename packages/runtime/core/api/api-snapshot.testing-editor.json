@@ -7,7 +7,185 @@
 	"flags": {},
 	"children": [
 		{
-			"id": 6,
+			"id": 8,
+			"name": "CfxFixture",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "What a fixture certifies, transcribed from ADR 0005 Appendix A."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 9,
+					"name": "id",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "literal",
+								"value": "CFX-C01"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C02"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C03"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C04"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C05"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C06"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C07"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C08"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C09"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C10"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C11"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C12"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C13"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C14"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-C15"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-T01"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-T02"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-T03"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-T04"
+							},
+							{
+								"type": "literal",
+								"value": "CFX-T05"
+							}
+						]
+					}
+				},
+				{
+					"id": 12,
+					"name": "pageOnlyLayer",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "True when the fixture exercises a layer only the page model has\n(breakpoint overrides). The canvas suite implements the same id\nwithout that layer — ADR 0005: \"domain-specific layers are noted\nwhere the editors legitimately differ\"."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 11,
+					"name": "passCriterion",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 10,
+					"name": "row",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The Part 1 checklist row / Part 2 decision it derives from."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						9,
+						12,
+						11,
+						10
+					]
+				}
+			]
+		},
+		{
+			"id": 26,
 			"name": "HistoryRecordingProbe",
 			"variant": "declaration",
 			"kind": 256,
@@ -22,14 +200,14 @@
 			},
 			"children": [
 				{
-					"id": 23,
+					"id": 43,
 					"name": "assertSingleIntent",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 24,
+							"id": 44,
 							"name": "assertSingleIntent",
 							"variant": "signature",
 							"kind": 4096,
@@ -50,14 +228,14 @@
 					]
 				},
 				{
-					"id": 19,
+					"id": 39,
 					"name": "count",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 20,
+							"id": 40,
 							"name": "count",
 							"variant": "signature",
 							"kind": 4096,
@@ -78,14 +256,14 @@
 					]
 				},
 				{
-					"id": 21,
+					"id": 41,
 					"name": "reset",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 22,
+							"id": 42,
 							"name": "reset",
 							"variant": "signature",
 							"kind": 4096,
@@ -106,14 +284,14 @@
 					]
 				},
 				{
-					"id": 7,
+					"id": 27,
 					"name": "wrap",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 8,
+							"id": 28,
 							"name": "wrap",
 							"variant": "signature",
 							"kind": 4096,
@@ -128,7 +306,7 @@
 							},
 							"typeParameters": [
 								{
-									"id": 9,
+									"id": 29,
 									"name": "A",
 									"variant": "typeParam",
 									"kind": 131072,
@@ -136,14 +314,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 10,
+											"id": 30,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 11,
+													"id": 31,
 													"name": "recordHistory",
 													"variant": "declaration",
 													"kind": 1024,
@@ -161,7 +339,7 @@
 												{
 													"title": "Properties",
 													"children": [
-														11
+														31
 													]
 												}
 											]
@@ -171,7 +349,7 @@
 							],
 							"parameters": [
 								{
-									"id": 12,
+									"id": 32,
 									"name": "dispatch",
 									"variant": "param",
 									"kind": 32768,
@@ -179,28 +357,28 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 13,
+											"id": 33,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"signatures": [
 												{
-													"id": 14,
+													"id": 34,
 													"name": "__type",
 													"variant": "signature",
 													"kind": 4096,
 													"flags": {},
 													"parameters": [
 														{
-															"id": 15,
+															"id": 35,
 															"name": "action",
 															"variant": "param",
 															"kind": 32768,
 															"flags": {},
 															"type": {
 																"type": "reference",
-																"target": 9,
+																"target": 29,
 																"name": "A",
 																"package": "@anvilkit/core",
 																"refersToTypeParameter": true
@@ -220,28 +398,28 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 16,
+									"id": 36,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 17,
+											"id": 37,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 18,
+													"id": 38,
 													"name": "action",
 													"variant": "param",
 													"kind": 32768,
 													"flags": {},
 													"type": {
 														"type": "reference",
-														"target": 9,
+														"target": 29,
 														"name": "A",
 														"package": "@anvilkit/core",
 														"refersToTypeParameter": true
@@ -264,16 +442,16 @@
 				{
 					"title": "Methods",
 					"children": [
-						23,
-						19,
-						21,
-						7
+						43,
+						39,
+						41,
+						27
 					]
 				}
 			]
 		},
 		{
-			"id": 43,
+			"id": 63,
 			"name": "LimitFixtureOptions",
 			"variant": "declaration",
 			"kind": 256,
@@ -288,7 +466,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "buildAuthoringStateAtLimits",
-						"target": 25
+						"target": 45
 					},
 					{
 						"kind": "text",
@@ -298,7 +476,7 @@
 			},
 			"children": [
 				{
-					"id": 49,
+					"id": 69,
 					"name": "breakpoints",
 					"variant": "declaration",
 					"kind": 1024,
@@ -312,7 +490,7 @@
 					}
 				},
 				{
-					"id": 47,
+					"id": 67,
 					"name": "componentDefinitions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -326,7 +504,7 @@
 					}
 				},
 				{
-					"id": 48,
+					"id": 68,
 					"name": "interactions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -340,7 +518,7 @@
 					}
 				},
 				{
-					"id": 44,
+					"id": 64,
 					"name": "nodeRecords",
 					"variant": "declaration",
 					"kind": 1024,
@@ -354,7 +532,7 @@
 					}
 				},
 				{
-					"id": 46,
+					"id": 66,
 					"name": "styleDefinitions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -368,7 +546,7 @@
 					}
 				},
 				{
-					"id": 45,
+					"id": 65,
 					"name": "tokens",
 					"variant": "declaration",
 					"kind": 1024,
@@ -386,18 +564,337 @@
 				{
 					"title": "Properties",
 					"children": [
-						49,
-						47,
-						48,
-						44,
-						46,
-						45
+						69,
+						67,
+						68,
+						64,
+						66,
+						65
 					]
 				}
 			]
 		},
 		{
-			"id": 42,
+			"id": 16,
+			"name": "CfxId",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "One shared certification fixture."
+					}
+				]
+			},
+			"type": {
+				"type": "indexedAccess",
+				"indexType": {
+					"type": "intrinsic",
+					"name": "number"
+				},
+				"objectType": {
+					"type": "query",
+					"queryType": {
+						"type": "reference",
+						"target": 6,
+						"name": "CFX_IDS",
+						"package": "@anvilkit/core"
+					}
+				}
+			}
+		},
+		{
+			"id": 4,
+			"name": "CFX_COMPONENT_IDS",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The component-model fixtures (ADR 0005 Appendix A, "
+					},
+					{
+						"kind": "code",
+						"text": "`CFX-C*`"
+					},
+					{
+						"kind": "text",
+						"text": ")."
+					}
+				]
+			},
+			"type": {
+				"type": "typeOperator",
+				"operator": "readonly",
+				"target": {
+					"type": "tuple",
+					"elements": [
+						{
+							"type": "literal",
+							"value": "CFX-C01"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C02"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C03"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C04"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C05"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C06"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C07"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C08"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C09"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C10"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C11"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C12"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C13"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C14"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C15"
+						}
+					]
+				}
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 5,
+			"name": "CFX_FIXTURES",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The manifest, in Appendix A order."
+					}
+				]
+			},
+			"type": {
+				"type": "typeOperator",
+				"operator": "readonly",
+				"target": {
+					"type": "array",
+					"elementType": {
+						"type": "reference",
+						"target": 8,
+						"name": "CfxFixture",
+						"package": "@anvilkit/core"
+					}
+				}
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 6,
+			"name": "CFX_IDS",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Every shared certification-fixture id."
+					}
+				]
+			},
+			"type": {
+				"type": "typeOperator",
+				"operator": "readonly",
+				"target": {
+					"type": "tuple",
+					"elements": [
+						{
+							"type": "literal",
+							"value": "CFX-C01"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C02"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C03"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C04"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C05"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C06"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C07"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C08"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C09"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C10"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C11"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C12"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C13"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C14"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-C15"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-T01"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-T02"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-T03"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-T04"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-T05"
+						}
+					]
+				}
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 7,
+			"name": "CFX_TOKEN_IDS",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The token fixtures (ADR 0005 Appendix A, "
+					},
+					{
+						"kind": "code",
+						"text": "`CFX-T*`"
+					},
+					{
+						"kind": "text",
+						"text": ")."
+					}
+				]
+			},
+			"type": {
+				"type": "typeOperator",
+				"operator": "readonly",
+				"target": {
+					"type": "tuple",
+					"elements": [
+						{
+							"type": "literal",
+							"value": "CFX-T01"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-T02"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-T03"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-T04"
+						},
+						{
+							"type": "literal",
+							"value": "CFX-T05"
+						}
+					]
+				}
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 62,
 			"name": "LIMIT_FIXTURE_DEFAULTS",
 			"variant": "declaration",
 			"kind": 32,
@@ -422,7 +919,7 @@
 				"typeArguments": [
 					{
 						"type": "reference",
-						"target": 43,
+						"target": 63,
 						"name": "LimitFixtureOptions",
 						"package": "@anvilkit/core"
 					}
@@ -433,40 +930,14 @@
 			"defaultValue": "..."
 		},
 		{
-			"id": 1,
+			"id": 21,
 			"name": "assertContentFreeEvent",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"comment": {
-				"summary": [],
-				"blockTags": [
-					{
-						"tag": "@file",
-						"content": [
-							{
-								"kind": "code",
-								"text": "`@anvilkit/core/testing/editor`"
-							},
-							{
-								"kind": "text",
-								"text": " — fixture builders and\ncontract assertion helpers for the visual editor (DD-0019 §22.2;\nPLAN-0020 CORE-P0-017).\n\nThe builders generate documents at the frozen §7.3 count limits,\nlegacy documents without a sidecar, unknown-version sidecars, and\na root config with slot fields (the invariant-11 fixture). The\nassertion helpers encode the single-intent history rule and the\ncontent-free event privacy contract so every suite checks them the\nsame way. The compatibility suite in "
-							},
-							{
-								"kind": "code",
-								"text": "`__tests__/`"
-							},
-							{
-								"kind": "text",
-								"text": " is the\nregression net for the \"reader only\" rollout stage (§30.7)."
-							}
-						]
-					}
-				]
-			},
 			"signatures": [
 				{
-					"id": 2,
+					"id": 22,
 					"name": "assertContentFreeEvent",
 					"variant": "signature",
 					"kind": 4096,
@@ -481,7 +952,7 @@
 					},
 					"parameters": [
 						{
-							"id": 3,
+							"id": 23,
 							"name": "event",
 							"variant": "param",
 							"kind": 32768,
@@ -506,14 +977,14 @@
 			]
 		},
 		{
-			"id": 25,
+			"id": 45,
 			"name": "buildAuthoringStateAtLimits",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 26,
+					"id": 46,
 					"name": "buildAuthoringStateAtLimits",
 					"variant": "signature",
 					"kind": 4096,
@@ -528,7 +999,7 @@
 					},
 					"parameters": [
 						{
-							"id": 27,
+							"id": 47,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
@@ -537,7 +1008,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 43,
+								"target": 63,
 								"name": "LimitFixtureOptions",
 								"package": "@anvilkit/core"
 							}
@@ -557,14 +1028,14 @@
 			]
 		},
 		{
-			"id": 28,
+			"id": 48,
 			"name": "buildLegacyPuckData",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 29,
+					"id": 49,
 					"name": "buildLegacyPuckData",
 					"variant": "signature",
 					"kind": 4096,
@@ -579,7 +1050,7 @@
 					},
 					"parameters": [
 						{
-							"id": 30,
+							"id": 50,
 							"name": "nodeCount",
 							"variant": "param",
 							"kind": 32768,
@@ -605,14 +1076,14 @@
 			]
 		},
 		{
-			"id": 31,
+			"id": 51,
 			"name": "buildPuckDataWithSidecar",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 32,
+					"id": 52,
 					"name": "buildPuckDataWithSidecar",
 					"variant": "signature",
 					"kind": 4096,
@@ -627,7 +1098,7 @@
 					},
 					"parameters": [
 						{
-							"id": 33,
+							"id": 53,
 							"name": "sidecar",
 							"variant": "param",
 							"kind": 32768,
@@ -638,7 +1109,7 @@
 							}
 						},
 						{
-							"id": 34,
+							"id": 54,
 							"name": "nodeCount",
 							"variant": "param",
 							"kind": 32768,
@@ -664,14 +1135,14 @@
 			]
 		},
 		{
-			"id": 35,
+			"id": 55,
 			"name": "buildRootConfigWithSlotFields",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 36,
+					"id": 56,
 					"name": "buildRootConfigWithSlotFields",
 					"variant": "signature",
 					"kind": 4096,
@@ -694,7 +1165,7 @@
 					},
 					"parameters": [
 						{
-							"id": 37,
+							"id": 57,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
@@ -704,14 +1175,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 38,
+									"id": 58,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 39,
+											"id": 59,
 											"name": "collideWithSidecarKey",
 											"variant": "declaration",
 											"kind": 1024,
@@ -729,7 +1200,7 @@
 										{
 											"title": "Properties",
 											"children": [
-												39
+												59
 											]
 										}
 									]
@@ -751,14 +1222,14 @@
 			]
 		},
 		{
-			"id": 40,
+			"id": 60,
 			"name": "buildUnknownVersionSidecar",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 41,
+					"id": 61,
 					"name": "buildUnknownVersionSidecar",
 					"variant": "signature",
 					"kind": 4096,
@@ -795,8 +1266,8 @@
 			]
 		},
 		{
-			"id": 4,
-			"name": "createHistoryRecordingProbe",
+			"id": 1,
+			"name": "certify",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
@@ -828,7 +1299,279 @@
 			},
 			"signatures": [
 				{
-					"id": 5,
+					"id": 2,
+					"name": "certify",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Record that a fixture actually executed."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 3,
+							"name": "id",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "literal",
+										"value": "CFX-C01"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C02"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C03"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C04"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C05"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C06"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C07"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C08"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C09"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C10"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C11"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C12"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C13"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C14"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C15"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T01"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T02"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T03"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T04"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T05"
+									}
+								]
+							}
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "void"
+					}
+				}
+			]
+		},
+		{
+			"id": 13,
+			"name": "cfxFixture",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"comment": {
+				"summary": [],
+				"blockTags": [
+					{
+						"tag": "@file",
+						"content": [
+							{
+								"kind": "code",
+								"text": "`@anvilkit/core/testing/editor`"
+							},
+							{
+								"kind": "text",
+								"text": " — fixture builders and\ncontract assertion helpers for the visual editor (DD-0019 §22.2;\nPLAN-0020 CORE-P0-017).\n\nThe builders generate documents at the frozen §7.3 count limits,\nlegacy documents without a sidecar, unknown-version sidecars, and\na root config with slot fields (the invariant-11 fixture). The\nassertion helpers encode the single-intent history rule and the\ncontent-free event privacy contract so every suite checks them the\nsame way. The compatibility suite in "
+							},
+							{
+								"kind": "code",
+								"text": "`__tests__/`"
+							},
+							{
+								"kind": "text",
+								"text": " is the\nregression net for the \"reader only\" rollout stage (§30.7)."
+							}
+						]
+					}
+				]
+			},
+			"signatures": [
+				{
+					"id": 14,
+					"name": "cfxFixture",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Look up one fixture's manifest entry."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 15,
+							"name": "id",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "literal",
+										"value": "CFX-C01"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C02"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C03"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C04"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C05"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C06"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C07"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C08"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C09"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C10"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C11"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C12"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C13"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C14"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C15"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T01"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T02"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T03"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T04"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T05"
+									}
+								]
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 8,
+						"name": "CfxFixture",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 24,
+			"name": "createHistoryRecordingProbe",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 25,
 					"name": "createHistoryRecordingProbe",
 					"variant": "signature",
 					"kind": 4096,
@@ -843,7 +1586,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "HistoryRecordingProbe",
-								"target": 6
+								"target": 26
 							},
 							{
 								"kind": "text",
@@ -853,9 +1596,205 @@
 					},
 					"type": {
 						"type": "reference",
-						"target": 6,
+						"target": 26,
 						"name": "HistoryRecordingProbe",
 						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 17,
+			"name": "resetCfxCoverage",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"comment": {
+				"summary": [],
+				"blockTags": [
+					{
+						"tag": "@file",
+						"content": [
+							{
+								"kind": "code",
+								"text": "`@anvilkit/core/testing/editor`"
+							},
+							{
+								"kind": "text",
+								"text": " — fixture builders and\ncontract assertion helpers for the visual editor (DD-0019 §22.2;\nPLAN-0020 CORE-P0-017).\n\nThe builders generate documents at the frozen §7.3 count limits,\nlegacy documents without a sidecar, unknown-version sidecars, and\na root config with slot fields (the invariant-11 fixture). The\nassertion helpers encode the single-intent history rule and the\ncontent-free event privacy contract so every suite checks them the\nsame way. The compatibility suite in "
+							},
+							{
+								"kind": "code",
+								"text": "`__tests__/`"
+							},
+							{
+								"kind": "text",
+								"text": " is the\nregression net for the \"reader only\" rollout stage (§30.7)."
+							}
+						]
+					}
+				]
+			},
+			"signatures": [
+				{
+					"id": 18,
+					"name": "resetCfxCoverage",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Reset coverage (per-file isolation in watch mode)."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "void"
+					}
+				}
+			]
+		},
+		{
+			"id": 19,
+			"name": "uncertifiedFixtures",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"comment": {
+				"summary": [],
+				"blockTags": [
+					{
+						"tag": "@file",
+						"content": [
+							{
+								"kind": "code",
+								"text": "`@anvilkit/core/testing/editor`"
+							},
+							{
+								"kind": "text",
+								"text": " — fixture builders and\ncontract assertion helpers for the visual editor (DD-0019 §22.2;\nPLAN-0020 CORE-P0-017).\n\nThe builders generate documents at the frozen §7.3 count limits,\nlegacy documents without a sidecar, unknown-version sidecars, and\na root config with slot fields (the invariant-11 fixture). The\nassertion helpers encode the single-intent history rule and the\ncontent-free event privacy contract so every suite checks them the\nsame way. The compatibility suite in "
+							},
+							{
+								"kind": "code",
+								"text": "`__tests__/`"
+							},
+							{
+								"kind": "text",
+								"text": " is the\nregression net for the \"reader only\" rollout stage (§30.7)."
+							}
+						]
+					}
+				]
+			},
+			"signatures": [
+				{
+					"id": 20,
+					"name": "uncertifiedFixtures",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Fixture ids the current run never exercised."
+							}
+						]
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "union",
+								"types": [
+									{
+										"type": "literal",
+										"value": "CFX-C01"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C02"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C03"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C04"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C05"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C06"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C07"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C08"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C09"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C10"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C11"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C12"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C13"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C14"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-C15"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T01"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T02"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T03"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T04"
+									},
+									{
+										"type": "literal",
+										"value": "CFX-T05"
+									}
+								]
+							}
+						}
 					}
 				}
 			]
@@ -865,26 +1804,41 @@
 		{
 			"title": "Interfaces",
 			"children": [
-				6,
-				43
+				8,
+				26,
+				63
+			]
+		},
+		{
+			"title": "Type Aliases",
+			"children": [
+				16
 			]
 		},
 		{
 			"title": "Variables",
 			"children": [
-				42
+				4,
+				5,
+				6,
+				7,
+				62
 			]
 		},
 		{
 			"title": "Functions",
 			"children": [
+				21,
+				45,
+				48,
+				51,
+				55,
+				60,
 				1,
-				25,
-				28,
-				31,
-				35,
-				40,
-				4
+				13,
+				24,
+				17,
+				19
 			]
 		}
 	],
@@ -897,245 +1851,345 @@
 		},
 		"1": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "assertContentFreeEvent"
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "certify"
 		},
 		"2": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "assertContentFreeEvent"
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "certify"
 		},
 		"3": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "event"
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "id"
 		},
 		"4": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "createHistoryRecordingProbe"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CFX_COMPONENT_IDS"
 		},
 		"5": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "createHistoryRecordingProbe"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CFX_FIXTURES"
 		},
 		"6": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CFX_IDS"
 		},
 		"7": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.wrap"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CFX_TOKEN_IDS"
 		},
 		"8": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.wrap"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CfxFixture"
 		},
 		"9": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "A"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CfxFixture.id"
 		},
 		"10": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CfxFixture.row"
 		},
 		"11": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "__type.recordHistory"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CfxFixture.passCriterion"
 		},
 		"12": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "dispatch"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CfxFixture.pageOnlyLayer"
 		},
 		"13": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "cfxFixture"
 		},
 		"14": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "cfxFixture"
 		},
 		"15": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "action"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "id"
 		},
 		"16": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CfxId"
 		},
 		"17": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "resetCfxCoverage"
 		},
 		"18": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "action"
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "resetCfxCoverage"
 		},
 		"19": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.count"
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "uncertifiedFixtures"
 		},
 		"20": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.count"
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "uncertifiedFixtures"
 		},
 		"21": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.reset"
+			"qualifiedName": "assertContentFreeEvent"
 		},
 		"22": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.reset"
+			"qualifiedName": "assertContentFreeEvent"
 		},
 		"23": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.assertSingleIntent"
+			"qualifiedName": "event"
 		},
 		"24": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.assertSingleIntent"
+			"qualifiedName": "createHistoryRecordingProbe"
 		},
 		"25": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "buildAuthoringStateAtLimits"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "createHistoryRecordingProbe"
 		},
 		"26": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "buildAuthoringStateAtLimits"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe"
 		},
 		"27": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "options"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.wrap"
 		},
 		"28": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "buildLegacyPuckData"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.wrap"
 		},
 		"29": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "buildLegacyPuckData"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "A"
 		},
 		"30": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "nodeCount"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "__type"
 		},
 		"31": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "buildPuckDataWithSidecar"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "__type.recordHistory"
 		},
 		"32": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "buildPuckDataWithSidecar"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "dispatch"
 		},
 		"33": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "sidecar"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "__type"
 		},
 		"34": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "nodeCount"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "__type"
 		},
 		"35": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "buildRootConfigWithSlotFields"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "action"
 		},
 		"36": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "buildRootConfigWithSlotFields"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "__type"
 		},
 		"37": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "options"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "__type"
 		},
 		"38": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "action"
 		},
 		"39": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "__type.collideWithSidecarKey"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.count"
 		},
 		"40": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "buildUnknownVersionSidecar"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.count"
 		},
 		"41": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "buildUnknownVersionSidecar"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.reset"
 		},
 		"42": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "LIMIT_FIXTURE_DEFAULTS"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.reset"
 		},
 		"43": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "LimitFixtureOptions"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.assertSingleIntent"
 		},
 		"44": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "LimitFixtureOptions.nodeRecords"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.assertSingleIntent"
 		},
 		"45": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "LimitFixtureOptions.tokens"
+			"qualifiedName": "buildAuthoringStateAtLimits"
 		},
 		"46": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "LimitFixtureOptions.styleDefinitions"
+			"qualifiedName": "buildAuthoringStateAtLimits"
 		},
 		"47": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "LimitFixtureOptions.componentDefinitions"
+			"qualifiedName": "options"
 		},
 		"48": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "LimitFixtureOptions.interactions"
+			"qualifiedName": "buildLegacyPuckData"
 		},
 		"49": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "buildLegacyPuckData"
+		},
+		"50": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "nodeCount"
+		},
+		"51": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "buildPuckDataWithSidecar"
+		},
+		"52": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "buildPuckDataWithSidecar"
+		},
+		"53": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "sidecar"
+		},
+		"54": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "nodeCount"
+		},
+		"55": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "buildRootConfigWithSlotFields"
+		},
+		"56": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "buildRootConfigWithSlotFields"
+		},
+		"57": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "options"
+		},
+		"58": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "__type"
+		},
+		"59": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "__type.collideWithSidecarKey"
+		},
+		"60": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "buildUnknownVersionSidecar"
+		},
+		"61": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "buildUnknownVersionSidecar"
+		},
+		"62": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "LIMIT_FIXTURE_DEFAULTS"
+		},
+		"63": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "LimitFixtureOptions"
+		},
+		"64": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "LimitFixtureOptions.nodeRecords"
+		},
+		"65": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "LimitFixtureOptions.tokens"
+		},
+		"66": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "LimitFixtureOptions.styleDefinitions"
+		},
+		"67": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "LimitFixtureOptions.componentDefinitions"
+		},
+		"68": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "LimitFixtureOptions.interactions"
+		},
+		"69": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "LimitFixtureOptions.breakpoints"
