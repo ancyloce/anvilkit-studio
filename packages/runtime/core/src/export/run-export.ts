@@ -26,6 +26,7 @@
 
 import type { Data as PuckData } from "@puckeditor/core";
 
+import type { ExportPreflightResult } from "../editor/export-preflight.js";
 import { StudioExportError } from "@/runtime/errors";
 import type { ExportStoreApi } from "@/state/index";
 import type { IRAssetResolver } from "@/types/asset-resolver";
@@ -81,6 +82,21 @@ export interface RunExportOptions<
 	 * misattributed as an export failure.
 	 */
 	readonly onWarning?: (warning: ExportWarning) => void;
+	/**
+	 * Editor-feature preflight verdict (DD-0019 §23.2; PLAN-0020
+	 * CORE-P3-009). Computed by the editor layer — see
+	 * `react/editor/export-preflight.ts` — and merely *enforced* here.
+	 *
+	 * The split is a layering requirement, not a preference: the verdict
+	 * needs `@anvilkit/ir`'s `listUsedAuthoringFeatures`, which
+	 * `src/export/` may not import (`check:no-headless-import`). Passing
+	 * the result in keeps this module free of that dependency; the
+	 * import above is type-only and erases at build.
+	 *
+	 * Omitted = no editor features in play (the pre-editor path), which
+	 * must keep exporting through any format.
+	 */
+	readonly preflight?: ExportPreflightResult;
 }
 
 /**
@@ -101,6 +117,24 @@ export async function runExport<
 	const { format, data, toIR, assetResolvers, exportStore, onWarning } =
 		options;
 	const store = exportStore?.getState();
+
+	// Preflight first: a blocked export must not run the format at all,
+	// because a format that emitted output would leave the author with a
+	// file that silently dropped the features they authored (§23.2).
+	// Recorded as a failed export so the store reflects the attempt.
+	if (options.preflight?.status === "blocked") {
+		store?.recordExport(format.id, false);
+		const features = options.preflight.errors
+			.map((error): unknown => error.details?.feature)
+			.filter((feature): feature is string => typeof feature === "string");
+		throw new StudioExportError(
+			format.id,
+			`Export blocked: format "${format.id}" does not support ${
+				features.length > 0 ? features.join(", ") : "features used by this document"
+			}`,
+			{ cause: options.preflight },
+		);
+	}
 	store?.setIsExporting(true);
 	let result: ExportResult;
 	try {
@@ -128,8 +162,23 @@ export async function runExport<
 	// Fan warnings out AFTER the run is recorded successful and outside the
 	// try/catch — so a throwing host `onWarning` surfaces as itself, never
 	// wrapped as (or recorded as) an export failure.
-	if (onWarning !== undefined && result.warnings !== undefined) {
-		for (const warning of result.warnings) {
+	if (onWarning !== undefined) {
+		// A degraded development preview reports through the same
+		// ExportWarning channel a format uses, so a host that already
+		// renders warnings shows preflight problems with no new wiring.
+		for (const error of options.preflight?.status === "warning"
+			? options.preflight.errors
+			: []) {
+			onWarning({
+				// Preflight problems are advisory here by construction: a
+				// blocked verdict threw above, so anything reaching this
+				// point is a development-mode degradation.
+				level: "warn",
+				code: error.code,
+				message: error.message,
+			});
+		}
+		for (const warning of result.warnings ?? []) {
 			onWarning(warning);
 		}
 	}
