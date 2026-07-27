@@ -7,6 +7,149 @@
 	"flags": {},
 	"children": [
 		{
+			"id": 215,
+			"name": "AiProposalReviewMountProps",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Props for "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "AiProposalReviewMount",
+						"target": 212
+					},
+					{
+						"kind": "text",
+						"text": "."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 220,
+					"name": "includeRationale",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Render the model's rationale. Off by default: §21.2 forbids\nexposing preview-data values, and rationale is model-authored\nprose that can quote whatever the model was shown."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 217,
+					"name": "onClose",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Called after a confirm commits, or when the author dismisses."
+							}
+						]
+					},
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 218,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 219,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 216,
+					"name": "proposal",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The proposal awaiting review, or "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " for \"nothing pending\"."
+							}
+						]
+					},
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/editor/ai/proposal.ts",
+									"qualifiedName": "EditorCommandProposal"
+								},
+								"name": "EditorCommandProposal",
+								"package": "@anvilkit/core"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						220,
+						217,
+						216
+					]
+				}
+			]
+		},
+		{
 			"id": 4,
 			"name": "AuthoringBoundaryProps",
 			"variant": "declaration",
@@ -1250,6 +1393,81 @@
 					"children": [
 						105,
 						106
+					]
+				}
+			]
+		},
+		{
+			"id": 221,
+			"name": "EditorProposalInputs",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The minimum a proposal author needs from the live editor."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 223,
+					"name": "revision",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The revision a proposal must be stamped with to be applicable."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 222,
+					"name": "selectedIds",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Nodes currently selected, in selection order."
+							}
+						]
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						223,
+						222
 					]
 				}
 			]
@@ -3141,6 +3359,56 @@
 			"defaultValue": "..."
 		},
 		{
+			"id": 212,
+			"name": "AiProposalReviewMount",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 213,
+					"name": "AiProposalReviewMount",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Mount the §21.2 review dialog against the live editor."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 214,
+							"name": "__namedParameters",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": 215,
+								"name": "AiProposalReviewMountProps",
+								"package": "@anvilkit/core"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@types/react",
+							"packagePath": "index.d.ts",
+							"qualifiedName": "React.ReactNode"
+						},
+						"name": "ReactNode",
+						"package": "@types/react",
+						"qualifiedName": "React.ReactNode"
+					}
+				}
+			]
+		},
+		{
 			"id": 1,
 			"name": "AuthoringBoundary",
 			"variant": "declaration",
@@ -3924,6 +4192,75 @@
 			]
 		},
 		{
+			"id": 224,
+			"name": "useEditorProposalInputs",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 225,
+					"name": "useEditorProposalInputs",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Read the inputs needed to author an "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "EditorCommandProposal",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/editor/ai/proposal.ts",
+									"qualifiedName": "EditorCommandProposal"
+								}
+							},
+							{
+								"kind": "text",
+								"text": ".\n\nDeliberately narrow: an AI plugin or host needs the selection and the\nrevision, not the whole inspector context. Returns "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " when the\neditor is not mounted.\n\nCallers must build the proposal **once**, when the model produces it,\nand hold it. Rebuilding on every render would re-stamp\n"
+							},
+							{
+								"kind": "code",
+								"text": "`expectedRevision`"
+							},
+							{
+								"kind": "text",
+								"text": " continuously and defeat §21.2's staleness\ninvalidation — the proposal would silently follow the document\ninstead of being refused when it moved on."
+							}
+						]
+					},
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "reference",
+								"target": 221,
+								"name": "EditorProposalInputs",
+								"package": "@anvilkit/core"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				}
+			]
+		},
+		{
 			"id": 208,
 			"name": "useOptionalStudioEditor",
 			"variant": "declaration",
@@ -4096,6 +4433,7 @@
 		{
 			"title": "Interfaces",
 			"children": [
+				215,
 				4,
 				12,
 				38,
@@ -4103,6 +4441,7 @@
 				92,
 				98,
 				104,
+				221,
 				67,
 				165,
 				195,
@@ -4131,6 +4470,7 @@
 		{
 			"title": "Functions",
 			"children": [
+				212,
 				1,
 				36,
 				61,
@@ -4142,6 +4482,7 @@
 				158,
 				59,
 				102,
+				224,
 				208,
 				199,
 				210
@@ -5209,6 +5550,76 @@
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/editor/use-studio-editor.ts",
 			"qualifiedName": "useStudioEditor"
+		},
+		"212": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "AiProposalReviewMount"
+		},
+		"213": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "AiProposalReviewMount"
+		},
+		"214": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "__0"
+		},
+		"215": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "AiProposalReviewMountProps"
+		},
+		"216": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "AiProposalReviewMountProps.proposal"
+		},
+		"217": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "AiProposalReviewMountProps.onClose"
+		},
+		"218": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "__type"
+		},
+		"219": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "__type"
+		},
+		"220": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "AiProposalReviewMountProps.includeRationale"
+		},
+		"221": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "EditorProposalInputs"
+		},
+		"222": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "EditorProposalInputs.selectedIds"
+		},
+		"223": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "EditorProposalInputs.revision"
+		},
+		"224": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "useEditorProposalInputs"
+		},
+		"225": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/editor/ai/AiProposalReviewMount.tsx",
+			"qualifiedName": "useEditorProposalInputs"
 		}
 	},
 	"files": {
