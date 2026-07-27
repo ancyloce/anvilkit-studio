@@ -744,48 +744,52 @@ export function ArrayField({
 			el="div"
 			readOnly={readOnly}
 		>
-			{/* `role="list"` only once there is something to list: ARIA
-			    requires a `list` to own `listitem` children, so an EMPTY
-			    array field declaring the role is a critical
-			    `aria-required-children` violation (PLAN-0020 CORE-P4-003).
-			    An empty array is the common case for a fresh component, so
-			    this fired on nearly every inspector open. */}
-			<div
-				className="flex flex-col gap-3"
-				role={items.length > 0 ? "list" : undefined}
-			>
-				{items.map((item, index) => (
-					<ArrayRow
-						// biome-ignore lint/suspicious/noArrayIndexKey: array fields are reordered by index, not by item id; the index IS the identity here.
-						key={index}
-						field={field}
-						fieldName={fieldName}
-						id={id}
-						readOnly={readOnly}
-						index={index}
-						item={item}
-						isOpen={effectiveOpenIndex === index}
-						dragState={
-							draggedIndex === index
-								? "dragged"
-								: dropIndex === index
-									? "drop-target"
-									: "idle"
-						}
-						itemCount={items.length}
-						min={min}
-						max={max}
-						onOpenChange={handleOpenChange}
-						onDragStart={handleDragStart}
-						onDragOver={handleDragOver}
-						onDrop={handleDrop}
-						onDragEnd={handleDragEnd}
-						onHandleKeyDown={handleHandleKeyDown}
-						onDuplicate={duplicate}
-						onRemove={remove}
-						onItemChange={updateItem}
-					/>
-				))}
+			{/* Two `aria-required-children` rules govern this container
+		    (PLAN-0020 CORE-P4-003): a `list` must OWN `listitem`
+		    children, and it may own nothing else. So the role is
+		    declared only when there is something to list — an empty
+		    array field is the common case for a fresh component — and
+		    the "add item" Button lives OUTSIDE the list, which is also
+		    what it is semantically: an affordance beside the list, not
+		    a member of it. */}
+			<div className="flex flex-col gap-3">
+				<div
+					className="flex flex-col gap-3"
+					role={items.length > 0 ? "list" : undefined}
+				>
+					{items.map((item, index) => (
+						<ArrayRow
+							// biome-ignore lint/suspicious/noArrayIndexKey: array fields are reordered by index, not by item id; the index IS the identity here.
+							key={index}
+							field={field}
+							fieldName={fieldName}
+							id={id}
+							readOnly={readOnly}
+							index={index}
+							item={item}
+							isOpen={effectiveOpenIndex === index}
+							dragState={
+								draggedIndex === index
+									? "dragged"
+									: dropIndex === index
+										? "drop-target"
+										: "idle"
+							}
+							itemCount={items.length}
+							min={min}
+							max={max}
+							onOpenChange={handleOpenChange}
+							onDragStart={handleDragStart}
+							onDragOver={handleDragOver}
+							onDrop={handleDrop}
+							onDragEnd={handleDragEnd}
+							onHandleKeyDown={handleHandleKeyDown}
+							onDuplicate={duplicate}
+							onRemove={remove}
+							onItemChange={updateItem}
+						/>
+					))}
+				</div>
 				{readOnly !== true ? (
 					<Button
 						variant="outline"
