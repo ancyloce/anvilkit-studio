@@ -4,9 +4,9 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@anvilkit/ui/lib/utils"
-import { Button } from "@ui-src/button"
-import { Input } from "@ui-src/input"
-import { Textarea } from "@ui-src/textarea"
+import { Button } from "./button"
+import { Input } from "./input"
+import { Textarea } from "./textarea"
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (

@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { cn } from "@anvilkit/ui/lib/utils"
-import { Button } from "@ui-src/button"
+import { Button } from "./button"
 import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {

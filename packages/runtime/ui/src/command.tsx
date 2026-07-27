@@ -8,11 +8,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@ui-src/dialog"
+} from "./dialog"
 import {
   InputGroup,
   InputGroupAddon,
-} from "@ui-src/input-group"
+} from "./input-group"
 import { SearchIcon, CheckIcon } from "lucide-react"
 
 function Command({
