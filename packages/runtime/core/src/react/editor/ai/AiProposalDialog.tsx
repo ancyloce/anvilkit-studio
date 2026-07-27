@@ -38,6 +38,7 @@ import {
 	type EditorCommandProposal,
 	sanitizeProposalForDisplay,
 } from "../../../editor/index.js";
+import { editorErrorMessageKey } from "../error-messages.js";
 import type { EditorInspectorContext } from "../inspector/use-inspector.js";
 import { useProposalReview } from "./use-proposal.js";
 
@@ -125,7 +126,18 @@ export function AiProposalDialog({
 						data-testid="ak-ai-proposal-errors"
 					>
 						{review.errors.map((error) => (
-							<li key={`${error.code}:${error.message}`}>{error.message}</li>
+							// Localized author-facing text keyed off the frozen error
+							// code; the engine's English `message` is the fallback and
+							// the developer-facing detail (EP-23: no unlocalized
+							// strings in shipped editor surfaces). `title` keeps the
+							// raw message reachable without rendering it as the label.
+							<li
+								key={`${error.code}:${error.message}`}
+								title={error.message}
+								data-error-code={error.code}
+							>
+								{msg(editorErrorMessageKey(error.code), error.message)}
+							</li>
 						))}
 					</ul>
 				) : null}

@@ -18,7 +18,10 @@ import {
 	waitFor,
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { EditorI18nProvider } from "@/state/editor-i18n-context";
+import {
+	DEFAULT_MESSAGES,
+	EditorI18nProvider,
+} from "@/state/editor-i18n-context";
 import type { EditorCommandProposal } from "../../../editor/index.js";
 import { AiProposalDialog } from "../ai/AiProposalDialog.js";
 import type { EditorInspectorContext } from "../inspector/use-inspector.js";
@@ -175,6 +178,56 @@ describe("AiProposalDialog", () => {
 		fireEvent.click(confirm);
 		expect(execute).not.toHaveBeenCalled();
 		expect(screen.getByTestId("ak-ai-proposal-errors")).toBeTruthy();
+	});
+
+	// REVIEW-0019 §2 P2: this surface used to render `error.message` — an
+	// English literal minted by the React-free engine — so a zh/ja/ko
+	// author read English rejection reasons (EP-23 AC breach).
+	it("renders rejection errors from the catalog, not engine English", () => {
+		const { context } = contextWith(undefined, 9);
+		render(
+			<EditorI18nProvider>
+				<AiProposalDialog
+					context={context}
+					proposal={proposal()}
+					onClose={vi.fn()}
+				/>
+			</EditorI18nProvider>,
+		);
+		const list = screen.getByTestId("ak-ai-proposal-errors");
+		const item = list.querySelector("li");
+		expect(item?.getAttribute("data-error-code")).toBe(
+			"EDITOR_COMMAND_CONFLICT",
+		);
+		expect(item?.textContent).toBe(
+			DEFAULT_MESSAGES["studio.editor.error.commandConflict"],
+		);
+		// The engine's raw message stays reachable for developers, but is
+		// not the rendered label.
+		expect(item?.getAttribute("title")).toContain("revision");
+		expect(item?.textContent).not.toContain("revision");
+	});
+
+	it("localizes rejection errors — a zh author sees no English", () => {
+		const { context } = contextWith(undefined, 9);
+		const zhError = "此为中文错误文本";
+		render(
+			// `messages` is the per-instance override channel, which is what
+			// a non-`en` resolved catalog looks like to this component.
+			<EditorI18nProvider
+				messages={{ "studio.editor.error.commandConflict": zhError }}
+			>
+				<AiProposalDialog
+					context={context}
+					proposal={proposal()}
+					onClose={vi.fn()}
+				/>
+			</EditorI18nProvider>,
+		);
+		expect(
+			screen.getByTestId("ak-ai-proposal-errors").querySelector("li")
+				?.textContent,
+		).toBe(zhError);
 	});
 
 	it("dismisses without executing anything", () => {

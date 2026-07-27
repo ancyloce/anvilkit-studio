@@ -20,6 +20,17 @@ export {
 	AuthoringBoundary,
 	type AuthoringBoundaryProps,
 } from "./AuthoringBoundary.js";
+export type { AccessibilityIssue } from "./a11y/contract-rules.js";
+export {
+	type AccessibilityIssuesApi,
+	useAccessibilityIssues,
+} from "./a11y/use-accessibility-issues.js";
+export {
+	AiProposalReviewMount,
+	type AiProposalReviewMountProps,
+	type EditorProposalInputs,
+	useEditorProposalInputs,
+} from "./ai/AiProposalReviewMount.js";
 export {
 	AuthoringStyleContext,
 	type AuthoringStyleLookup,
@@ -27,17 +38,17 @@ export {
 export type { CanvasDomRegistry } from "./canvas/dom-registry.js";
 export { ComponentCanvasPanel } from "./components/ComponentCanvasPanel.js";
 export {
-	type ComponentCanvas,
-	type ComponentCombination,
-	useComponentCanvas,
-} from "./components/use-component-canvas.js";
-export {
 	componentScope,
 	createEditorScopeController,
 	type EditorScopeController,
 	scopedDefinitionId,
 	scopeGuardError,
 } from "./components/scope.js";
+export {
+	type ComponentCanvas,
+	type ComponentCombination,
+	useComponentCanvas,
+} from "./components/use-component-canvas.js";
 export {
 	type CreateComponentAction,
 	type CreateComponentOutcome,
@@ -47,19 +58,21 @@ export {
 	type DecoratePuckConfigOptions,
 	decoratePuckConfig,
 } from "./decorate-config.js";
+// Hosts render `EditorError`s themselves (Core ships no diagnostics UI),
+// so the code → catalog-key mapping is part of the public surface, not
+// an internal detail of Core's own dialogs.
+export {
+	EDITOR_ERROR_MESSAGE_KEYS,
+	editorErrorMessageKey,
+} from "./error-messages.js";
 // Export preflight (CORE-P3-009) + the §23.2 accessibility export policy
 // (CORE-P4-008). Previously unexported, which made
 // `EditorPolicies.exportBlockingSeverity` unreachable for every host.
 export {
 	toPreflightA11yIssues,
-	useExportPreflight,
 	type UseExportPreflightInput,
+	useExportPreflight,
 } from "./export-preflight.js";
-export type { AccessibilityIssue } from "./a11y/contract-rules.js";
-export {
-	type AccessibilityIssuesApi,
-	useAccessibilityIssues,
-} from "./a11y/use-accessibility-issues.js";
 export type {
 	InlineEditController,
 	InlineEditSession,
@@ -85,9 +98,3 @@ export {
 	useOptionalStudioEditor,
 	useStudioEditor,
 } from "./use-studio-editor.js";
-export {
-	AiProposalReviewMount,
-	type AiProposalReviewMountProps,
-	type EditorProposalInputs,
-	useEditorProposalInputs,
-} from "./ai/AiProposalReviewMount.js";

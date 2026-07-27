@@ -9,6 +9,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { EDITOR_ERROR_MESSAGE_KEYS } from "../error-messages.js";
 
 // Vitest may run from the package or the workspace root; resolve the
 // package root by probing for the catalog directory.
@@ -62,6 +63,46 @@ describe("studio.editor.* catalog parity (CORE-P1A-018)", () => {
 			expect(missing, `missing in ${locale}`).toEqual([]);
 		}
 		expect(union.size).toBeGreaterThan(80);
+	});
+
+	// REVIEW-0019 §2 P2: scoping the gate to `studio.editor.*` let 18
+	// sibling `studio.module.*` keys sit in en.json only and still pass.
+	// The catalog is shipped as one artifact per locale, so parity is a
+	// property of the whole file, not of one namespace inside it.
+	it("every key in the shipped catalog exists in all four locales", () => {
+		const union = new Set(
+			LOCALES.flatMap((locale) => Object.keys(catalogs[locale] ?? {})),
+		);
+		for (const locale of LOCALES) {
+			const keys = new Set(Object.keys(catalogs[locale] ?? {}));
+			const missing = [...union].filter((key) => !keys.has(key));
+			expect(missing, `missing in ${locale}`).toEqual([]);
+		}
+		// Guards against the gate passing because a catalog failed to load
+		// and every locale is equally (and wrongly) empty.
+		expect(union.size).toBeGreaterThan(400);
+	});
+
+	// The frozen 14-code union is the translation surface for every
+	// `EditorError` a host or Core dialog renders — a code with no key
+	// renders raw engine English (EP-23 AC: zero unlocalized strings).
+	it("every frozen EditorError code has a message in all four locales", () => {
+		const keys = Object.values(EDITOR_ERROR_MESSAGE_KEYS);
+		expect(keys).toHaveLength(14);
+		expect(new Set(keys).size).toBe(14);
+		for (const locale of LOCALES) {
+			const catalogKeys = catalogs[locale] ?? {};
+			const unresolved = keys.filter((key) => catalogKeys[key] === undefined);
+			expect(unresolved, `unresolved in ${locale}`).toEqual([]);
+			// A key present but copied verbatim from English in zh/ja/ko is
+			// the failure mode a pure existence check misses.
+			if (locale !== "en") {
+				const untranslated = keys.filter(
+					(key) => catalogKeys[key] === (catalogs.en ?? {})[key],
+				);
+				expect(untranslated, `identical to en in ${locale}`).toEqual([]);
+			}
+		}
 	});
 
 	it("every studio.editor.* key referenced in sources resolves in every locale", () => {
