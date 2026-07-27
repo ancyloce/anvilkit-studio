@@ -2,6 +2,7 @@
 	"title": "ガイド",
 	"pages": [
 		"component-authoring",
+		"editor-adoption",
 		"generator-usage",
 		"plugin-authoring",
 		"export-pipeline",

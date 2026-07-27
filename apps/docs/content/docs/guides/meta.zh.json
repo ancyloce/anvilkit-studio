@@ -2,6 +2,7 @@
 	"title": "指南",
 	"pages": [
 		"component-authoring",
+		"editor-adoption",
 		"generator-usage",
 		"plugin-authoring",
 		"export-pipeline",

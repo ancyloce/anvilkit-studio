@@ -2,6 +2,7 @@
 	"title": "가이드",
 	"pages": [
 		"component-authoring",
+		"editor-adoption",
 		"generator-usage",
 		"plugin-authoring",
 		"export-pipeline",

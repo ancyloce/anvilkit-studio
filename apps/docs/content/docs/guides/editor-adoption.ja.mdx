@@ -1,0 +1,201 @@
+---
+title: "ビジュアルエディターの導入"
+description: "コンポーネントを AnvilKit ビジュアルエディターへ段階的に対応させます——選択可能、スタイル可能、インライン編集可能、コンポーザブル——そして inspectEditorCapabilities で現在のレベルを確認できます。"
+---
+
+The visual editor never guesses at your component's structure. **Core
+does not change a component's DOM automatically**, so everything the
+editor can do for your component comes from what you *declare* in
+`metadata.editor`.
+
+That has one consequence worth stating up front: a component that
+declares nothing is not broken — it is at **Level 0**, and it keeps
+working exactly as it always has. Adoption is opt-in, incremental, and
+reversible.
+
+## 5 つのレベル
+
+| レベル | 名称 | 作者が得られるもの |
+|---|---|---|
+| 0 | Legacy | Native Puck fields only. Nothing changes. |
+| 1 | Selectable | The node can be selected and appears in Layers with a stable identity. |
+| 2 | Styleable | The layout / visual / typography inspector sections apply to it. |
+| 3 | Inline editable | Text and images are editable directly on the canvas. |
+| 4 | Composable | Slots, interactions, and component composition. |
+
+You do not have to reach Level 4. Most content components are useful at
+Level 2, and many should stop there.
+
+## 現在のレベルは？
+
+```ts
+import { inspectEditorCapabilities, formatEditorCapabilityReport } from "@anvilkit/core/editor";
+import { componentConfig } from "./config";
+
+const report = inspectEditorCapabilities({ components: { MyCard: componentConfig } });
+console.log(formatEditorCapabilityReport(report));
+```
+
+```text
+Editor capability adoption (DD-0019 §26.2)
+
+  MyCard — Level 1 (Selectable)
+    declared: responsive
+    to reach Level 2: at least one of capabilities.layoutContainer / layoutItem / visualStyle / typography
+    warning: capabilities.responsive is declared but no layout/style/typography capability is — there is nothing for a breakpoint override to change
+
+  L0 Legacy: 0 · L1 Selectable: 1 · L2 Styleable: 0 · L3 Inline editable: 0 · L4 Composable: 0
+```
+
+The function is pure and React-free, so it runs in a unit test or a
+plain Node script — no `<Studio>` mount required. Use it as an assertion
+to stop a package from regressing:
+
+```ts
+it("stays at least Level 2", () => {
+	const report = inspectEditorCapabilities({ components: { MyCard: componentConfig } });
+	expect(report.components[0]?.level).toBeGreaterThanOrEqual(2);
+});
+```
+
+## レベル 1 — 選択可能
+
+Declare the metadata block and give the editor a **stable root target**:
+one element that is always rendered and always the same element.
+
+```ts
+export const componentConfig = {
+	label: "Card",
+	fields,
+	defaultProps,
+	render: MyCard,
+	metadata: {
+		editor: {
+			version: "1",
+			styleTarget: "root",
+			capabilities: {},
+		},
+	},
+};
+```
+
+`styleTarget` picks who owns the stamped element:
+
+- `"root"` — **your** root element carries the editor's attributes. You
+  must spread the props Core passes into it (see below).
+- `"wrapper"` — Core wraps your component in an element it owns. Nothing
+  to change in your render, at the cost of one extra DOM node.
+- `"none"` — an explicit opt-out. Reads as Level 0.
+
+For `styleTarget: "root"`, spread the editor attributes onto your root:
+
+```tsx
+function MyCard({ editorDataAttributes, ...props }) {
+	return (
+		<article {...editorDataAttributes} className="card">
+			{props.children}
+		</article>
+	);
+}
+```
+
+<Callout type="warn" title="One root, always">
+	A component that renders a fragment, or a different root element
+	depending on props, has no stable target. Selection, handles, and the
+	accessibility rules all key off that element — if it moves, they
+	follow the wrong node. Use `styleTarget: "wrapper"` instead.
+</Callout>
+
+## レベル 2 — スタイル可能
+
+Declare what the inspector may edit. Each flag turns on one section.
+
+```ts
+capabilities: {
+	layoutItem: true,      // margin, alignment, flex/grid child placement
+	layoutContainer: true, // display, gap, padding, direction — for components with children
+	visualStyle: true,     // fill, radius, border, shadow, opacity
+	typography: true,      // font, size, weight, line height, alignment
+	responsive: true,      // per-breakpoint overrides for the above
+}
+```
+
+Declare only what your component actually honours. `typography: true` on
+a component that hard-codes its own font produces an inspector control
+that appears to do nothing — worse than an absent control.
+
+`responsive: true` alone does nothing; it needs at least one of the
+other four to have something to override. The inspector reports that as
+a warning.
+
+## レベル 3 — インライン編集可能
+
+Point at the props that hold editable content. These are **explicit
+targets**, and they take precedence over the editor's drop heuristics.
+
+```ts
+capabilities: {
+	visualStyle: true,
+	inlineText: [
+		{ id: "headline", propPath: "headline", format: "plain" },
+		{ id: "body", propPath: "body", format: "tiptap" },
+	],
+	imageAdjust: [
+		{ id: "media", srcPropPath: "image.src", altPropPath: "image.alt", cropPropPath: "image.crop" },
+	],
+}
+```
+
+- `propPath` is dot-notated, so nested props work (`image.src`).
+- `format: "plain"` edits a string; `"tiptap"` edits a rich-text
+  document.
+- **Always declare `altPropPath`.** Without it the accessibility rules
+  cannot detect *or* fix missing alt text on your component, which is a
+  silent hole in the author's accessibility panel.
+
+For inline text to work on the canvas, the element rendering that prop
+needs `data-ak-text-target="<id>"`:
+
+```tsx
+<h1 data-ak-text-target="headline">{props.headline}</h1>
+```
+
+## レベル 4 — コンポーザブル
+
+For components that contain other components.
+
+```ts
+capabilities: {
+	layoutContainer: true,
+	visualStyle: true,
+	interactions: true,
+	inlineText: [{ id: "title", propPath: "title", format: "plain" }],
+},
+slotMap: {
+	content: { allowedTypes: ["Card", "Text"], reorder: true },
+},
+```
+
+- `slotMap` is keyed by your **slot field name**, and constrains what
+  can be dropped into it. Omit `allowedTypes` to accept anything.
+- `interactions: true` lets authors attach triggers and actions to the
+  component.
+
+A `slotMap` without `layoutContainer: true` is reported as a warning:
+children can be placed, but the container holding them cannot be laid
+out, which is rarely what the author wanted.
+
+## 変わらないこと
+
+- **Legacy components keep working.** A config with no `metadata.editor`
+  is returned by identity when authoring is off, and gets no decorated
+  render when it is on.
+- **Your own `metadata` is untouched.** Component packages already set
+  `metadata` for their own purposes (`componentName`, `packageName`,
+  `schemaVersion`…). The editor reads only `metadata.editor` and ignores
+  the rest.
+- **A malformed declaration is ignored, not fatal.** If `version` is not
+  `"1"` or `styleTarget` is not one of the three allowed values, the
+  whole block reads as absent. `inspectEditorCapabilities` calls that out
+  specifically, because "declared but thrown away" and "never declared"
+  look identical from the outside and need opposite fixes.
