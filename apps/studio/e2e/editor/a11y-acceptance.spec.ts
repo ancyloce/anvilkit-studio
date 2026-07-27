@@ -207,7 +207,10 @@ test.describe("editor accessibility acceptance (§27.6)", () => {
 		// live inside the canvas iframe, so a parent-document query is
 		// always false regardless of whether the commit landed.)
 		await expect(
-			page.getByTestId("ak-editor-inspector").getByTestId("ak-inspector-reset").first(),
+			page
+				.getByTestId("ak-editor-inspector")
+				.getByTestId("ak-inspector-reset")
+				.first(),
 		).toBeVisible({ timeout: 15_000 });
 
 		// UNDO — reachable and operable from the keyboard.
@@ -279,7 +282,22 @@ test.describe("editor accessibility acceptance (§27.6)", () => {
 		}
 		// A pointer-only handle is unusable without a mouse; §27.6 requires
 		// each one to be reachable and labelled.
-		await expect(handle).toHaveAttribute("tabindex", /-?\d+/);
+		//
+		// Assert **real focusability**, not the presence of a `tabindex`
+		// attribute. Handles are native `<button>`s, so they are already in
+		// the tab order and carry no `tabindex` — the attribute check this
+		// replaces failed against a compliant implementation. It was also
+		// the weaker assertion: its `/-?\d+/` pattern accepts
+		// `tabindex="-1"`, which removes an element from the tab order
+		// entirely. Focusing the handle and confirming it took focus tests
+		// the requirement instead of an implementation detail.
+		await handle.focus();
+		await expect(handle).toBeFocused();
+		const tabindex = await handle.getAttribute("tabindex");
+		expect(
+			tabindex === null || Number(tabindex) >= 0,
+			`handle is removed from the tab order by tabindex="${tabindex}"`,
+		).toBe(true);
 		const label = await handle.getAttribute("aria-label");
 		expect(label, "resize handle carries no accessible name").toBeTruthy();
 	});
