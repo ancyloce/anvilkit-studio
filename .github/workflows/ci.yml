@@ -28,6 +28,29 @@ name: CI
 on:
   pull_request:
   workflow_dispatch:
+    inputs:
+      capture_perf_baseline:
+        description: >-
+          Capture a §28 performance baseline on this runner instead of
+          gating against the committed one. Download the
+          `editor-perf-baseline` artifact and commit it to
+          packages/runtime/core/bench/baselines/editor-perf.json.
+        type: boolean
+        default: false
+      e2e_matrix:
+        description: >-
+          Run the full §27.5 browser matrix (Chromium + Chromium HiDPI +
+          Firefox + WebKit) in the studio E2E job. Always on for
+          workflow_dispatch and scheduled runs; off for pull requests so
+          PR feedback stays fast.
+        type: boolean
+        default: true
+
+  # §27.5 requires the editor specs to certify on three engines, which is
+  # too slow for every PR. Nightly gives Firefox/WebKit a scheduled home
+  # with visible results, while PRs keep the Chromium fast path.
+  schedule:
+    - cron: "0 3 * * *"
 
 permissions:
   contents: read
@@ -210,11 +233,23 @@ jobs:
   # the harness would otherwise record as a regression.
   #
   # `ANVILKIT_BENCH_HW` pins the reference class. Regression comparison
-  # only runs when the committed baseline carries the SAME class (plan
-  # §14) — so changing the runner image silently downgrades the gate to
-  # budgets-only rather than emitting a wall of false regressions. Refresh
-  # the baseline by re-running this job with
-  # `ANVILKIT_BENCH_UPDATE_BASELINE=1` and committing the result.
+  # only gates when the committed baseline carries the SAME class (plan
+  # §14) — comparing this runner against a WSL2 laptop capture would
+  # produce noise, not signal.
+  #
+  # `ANVILKIT_BENCH_REQUIRE_BASELINE: "1"` makes "could not compare" a
+  # FAILURE rather than a console note (REVIEW-0019 §2 P1: the gate
+  # reported green while its regression half never ran). Consequence, by
+  # design: this job fails until a `ci-ubuntu-latest-x64` baseline is
+  # committed.
+  #
+  # To capture that baseline: run this workflow via **workflow_dispatch**
+  # with `capture_perf_baseline: true`, download the
+  # `editor-perf-baseline` artifact, and commit it to
+  # `packages/runtime/core/bench/baselines/editor-perf.json`. The
+  # baselines directory is tracked; only `bench/results/` is gitignored.
+  # Never commit a baseline captured anywhere else — a laptop capture
+  # carries `local-*` and would be ignored by the class check anyway.
   editor-perf:
     name: Editor performance budgets (§28)
     runs-on: ubuntu-latest
@@ -225,6 +260,8 @@ jobs:
         shell: bash
     env:
       ANVILKIT_BENCH_HW: ci-ubuntu-latest-x64
+      ANVILKIT_BENCH_REQUIRE_BASELINE: "1"
+      ANVILKIT_BENCH_UPDATE_BASELINE: ${{ inputs.capture_perf_baseline && '1' || '0' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -248,12 +285,30 @@ jobs:
           path: packages/runtime/core/bench/results/editor-perf.json
           if-no-files-found: warn
 
+      # Only produced in capture mode. `if-no-files-found: error` so a
+      # capture run that silently wrote nothing fails instead of handing
+      # back an empty artifact.
+      - name: Upload captured performance baseline
+        if: always() && inputs.capture_perf_baseline
+        uses: actions/upload-artifact@v4
+        with:
+          name: editor-perf-baseline
+          path: packages/runtime/core/bench/baselines/editor-perf.json
+          if-no-files-found: error
+
   # Phase 3 M0 (`phase3-001`): Playwright + studio E2E harness. The smoke
   # spec loads `/puck/editor`, waits for `<Studio>` to hydrate, and asserts
   # `smokeTestPlugin.onInit` logs to the browser console. The studio
   # Playwright config boots its own `pnpm dev` server; `turbo run e2e`
   # builds the studio's workspace dependencies first (`e2e` dependsOn
   # `^build`).
+  #
+  # §27.5 browser matrix (CORE-P1B-012): `ANVILKIT_E2E_MATRIX=1` adds the
+  # `firefox` and `webkit` Playwright projects (editor specs only). It is
+  # ON for scheduled and dispatched runs and OFF for pull requests — the
+  # split the plan asks for: fast Chromium feedback per PR, three-engine
+  # certification nightly. Before this, the variable was set nowhere in
+  # `.github/`, so Firefox and WebKit had never executed in CI at all.
   studio-e2e:
     name: Studio E2E
     runs-on: ubuntu-latest
@@ -262,6 +317,8 @@ jobs:
     defaults:
       run:
         shell: bash
+    env:
+      ANVILKIT_E2E_MATRIX: ${{ (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.e2e_matrix)) && '1' || '0' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -275,7 +332,16 @@ jobs:
       # libraries Playwright needs on Ubuntu runners. Locally, developers
       # run `pnpm --filter studio e2e:install` once.
       - name: Install Playwright browsers
+        if: env.ANVILKIT_E2E_MATRIX != '1'
         run: pnpm --filter studio e2e:install
+
+      # Matrix runs need the Firefox and WebKit builds plus their system
+      # libraries (WebKit's gstreamer/libwoff set is not part of the
+      # Chromium dependency list), so the full `--with-deps` install
+      # replaces the Chromium-only one rather than adding to it.
+      - name: Install Playwright browsers (full §27.5 matrix)
+        if: env.ANVILKIT_E2E_MATRIX == '1'
+        run: pnpm --filter studio e2e:install:matrix
 
       - name: Run studio E2E tests
         run: pnpm exec turbo run e2e --filter=studio
