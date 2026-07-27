@@ -514,9 +514,18 @@ function HighlightItem<T extends React.ElementType>({
 
 	if (!React.isValidElement(children)) return children;
 
+	// NOTE (PLAN-0020 CORE-P4-003, upstream deviation): the upstream
+	// animate-ui source also sets `aria-selected: isActive` here. It is
+	// removed deliberately — this element is a **decorative wrapper**
+	// with no ARIA role, and `aria-selected` on a role-less container is
+	// invalid ARIA that axe reports as a *critical* `aria-allowed-attr`
+	// violation. The real selected state already lives on the wrapped
+	// control (base-ui's `role="tab"` sets its own `aria-selected`), so
+	// nothing is lost: `aria-selected:` Tailwind variants in consumers
+	// target that inner element, and this wrapper's own styling keys off
+	// `data-active`.
 	const dataAttributes = {
 		"data-active": isActive ? "true" : "false",
-		"aria-selected": isActive,
 		"data-disabled": isDisabled,
 		"data-value": childValue,
 		"data-highlight": true,
