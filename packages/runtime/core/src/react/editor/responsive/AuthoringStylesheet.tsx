@@ -51,7 +51,13 @@ export default function AuthoringStylesheet({
 		const snapshot = port.getSnapshot();
 		applyAuthoringStylesheet(
 			iframeDoc,
-			buildAuthoringStylesheet(snapshot.authoring, snapshot.breakpoints, cache),
+			buildAuthoringStylesheet(
+				snapshot.authoring,
+				snapshot.breakpoints,
+				cache,
+				// Dev-only counters (CORE-P4-002); `undefined` in production.
+				bridge?.perf?.resolverCache,
+			),
 		);
 	}, [bridge, iframeDoc, cache, version]);
 

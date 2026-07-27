@@ -112,6 +112,17 @@ export function createStylesheetCache(): AuthoringStylesheetCache {
 }
 
 /**
+ * Mutable hit/miss counters for the fragment cache. Optional and
+ * dev-only (CORE-P4-002): the §28 overlay reports the resolver cache
+ * hit rate, and the cheapest honest way to know it is to count at the
+ * lookup rather than infer it from timings.
+ */
+export interface AuthoringStylesheetCacheStats {
+	hits: number;
+	misses: number;
+}
+
+/**
  * Build the deterministic stylesheet text for a document, reusing
  * cached per-node fragments for records whose reference is unchanged.
  */
@@ -119,6 +130,7 @@ export function buildAuthoringStylesheet(
 	authoring: AuthoringStateV1,
 	breakpoints: readonly BreakpointDefinition[],
 	cache?: AuthoringStylesheetCache,
+	stats?: AuthoringStylesheetCacheStats,
 ): string {
 	const enabled = [...breakpoints]
 		.filter((breakpoint) => breakpoint.enabled)
@@ -133,7 +145,13 @@ export function buildAuthoringStylesheet(
 		const record = authoring.nodes[nodeId] as NodeAuthoringStateV1;
 		const cached = cache?.get(nodeId);
 		if (cached !== undefined && cached.record === record) {
+			if (stats !== undefined) {
+				stats.hits += 1;
+			}
 			return cached;
+		}
+		if (stats !== undefined) {
+			stats.misses += 1;
 		}
 		const byLayer = new Map<string, string>();
 		for (const layer of layers) {
