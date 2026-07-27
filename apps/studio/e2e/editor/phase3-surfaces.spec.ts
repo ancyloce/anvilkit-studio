@@ -13,11 +13,16 @@
  * only — the same split `visual-editor.spec.ts` and `variants.spec.ts`
  * use.
  *
- * **What is deliberately not covered.** The AI proposal dialog renders
- * from a proposal, but nothing in the demo produces one yet — that is
- * the `ai-host-adapter` migration to propose-confirm, listed as adapter
- * work in CORE-P3-008. Asserting on a surface no user can reach would
- * be a spec that passes while the feature is unreachable.
+ * **The AI review flow is deliberately absent.** Core owns §21.2 steps
+ * 3-6 (preview, review, confirm, undo) and they are RTL-certified in
+ * `react/editor/__tests__/ai-proposal-dialog.test.tsx`, but the demo has
+ * nowhere to mount a trigger: `StudioProps.headerEnd` lands inside a
+ * `<Popover>` whose content unmounts on close, which would destroy the
+ * dialog mid-flow, and Puck `overrides` do not render because the
+ * AnvilKit chrome replaces Puck's header. That is a host-extensibility
+ * gap (no slot for persistent editor-aware chrome UI), not an AI one.
+ * See `apps/studio/components/demo-ai-proposal.tsx` for the reference
+ * implementation that is waiting on such a slot.
  */
 
 import { expect, type Page, test } from "@playwright/test";
@@ -79,6 +84,13 @@ async function selectFirstNode(page: Page): Promise<string> {
 }
 
 test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
+	// Every test here loads the editor, whose documented cold start is
+	// 60-90 s under `next dev --turbopack`. Playwright's default 30 s
+	// *test* budget expires before `openEditor`'s 90 s locator wait can,
+	// so the describe-level override is required — the same 180 s the
+	// `visual-editor` and `variants` suites use.
+	test.describe.configure({ timeout: 180_000 });
+
 	test("preview mode round-trips with a visible way back (§16)", async ({
 		page,
 	}) => {
@@ -222,7 +234,6 @@ test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 		// The demo's `slow` source never answers on its own; Core's 5 s
 		// budget is what ends the request, and the author is told *why*
 		// rather than shown an empty result.
-		test.setTimeout(60_000);
 		await openEditor(page);
 		await openLayersPanel(page);
 		await selectFirstNode(page);
