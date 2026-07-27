@@ -69,8 +69,21 @@ function idOf(element: Element): string | null {
 	);
 }
 
+/** Optional wiring for {@link createCanvasDomRegistry}. */
+export interface CanvasDomRegistryOptions {
+	/**
+	 * Dev-only observer instrumentation (CORE-P4-002): called with the
+	 * number of MutationRecords in each callback, so the §28 overlay can
+	 * report observer batch size. Absent in production — the registry
+	 * pays one `undefined` check per callback.
+	 */
+	readonly onObserverBatch?: (recordCount: number) => void;
+}
+
 /** Create a per-`<Studio>` canvas DOM registry. */
-export function createCanvasDomRegistry(): CanvasDomRegistry {
+export function createCanvasDomRegistry(
+	options?: CanvasDomRegistryOptions,
+): CanvasDomRegistry {
 	let doc: Document | null = null;
 	let observer: MutationObserver | null = null;
 	let dirty = true;
@@ -129,7 +142,8 @@ export function createCanvasDomRegistry(): CanvasDomRegistry {
 					? MutationObserver
 					: undefined);
 			if (Mo !== undefined) {
-				observer = new Mo(() => {
+				observer = new Mo((records) => {
+					options?.onObserverBatch?.(records.length);
 					dirty = true;
 					notify();
 				});
