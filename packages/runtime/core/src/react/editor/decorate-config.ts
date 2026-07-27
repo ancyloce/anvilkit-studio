@@ -50,30 +50,15 @@ export interface DecoratePuckConfigOptions {
  * decoration and the capability registry so both apply the same
  * legacy rules: malformed or absent metadata reads as `undefined`
  * (≡ `styleTarget: "none"`).
+ *
+ * The implementation moved to the React-free engine
+ * (`editor/capability-metadata.ts`) in CORE-P4-006 so
+ * `inspectEditorCapabilities` can use it without pulling React; this
+ * re-export keeps every existing importer working.
  */
-export function readEditorMetadata(
-	component: unknown,
-): EditorCapabilityMetadata | undefined {
-	const metadata = (
-		component as { metadata?: { editor?: unknown } } | undefined
-	)?.metadata?.editor;
-	if (
-		typeof metadata !== "object" ||
-		metadata === null ||
-		(metadata as { version?: unknown }).version !== "1"
-	) {
-		return undefined;
-	}
-	const styleTarget = (metadata as { styleTarget?: unknown }).styleTarget;
-	if (
-		styleTarget !== "root" &&
-		styleTarget !== "wrapper" &&
-		styleTarget !== "none"
-	) {
-		return undefined;
-	}
-	return metadata as EditorCapabilityMetadata;
-}
+export { readEditorMetadata } from "../../editor/capability-metadata.js";
+
+import { readEditorMetadata } from "../../editor/capability-metadata.js";
 
 type AnyRender = (props: Record<string, unknown>) => ReactNode;
 

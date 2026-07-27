@@ -117,7 +117,12 @@ describe("buildAuthoringStylesheet (§12.4)", () => {
 describe("applyAuthoringStylesheet", () => {
 	it("creates the scoped style element once and updates only on change", () => {
 		const doc = document.implementation.createHTMLDocument();
+		// Non-null on the default path: `applyAuthoringStylesheet` only
+		// returns null when a host style adapter takes over injection
+		// (CORE-P4-004), which this test does not supply.
 		const element = applyAuthoringStylesheet(doc, "a { color: red }");
+		expect(element).not.toBeNull();
+		if (element === null) return;
 		expect(element.id).toBe("ak-authoring-styles");
 		expect(doc.getElementById("ak-authoring-styles")).toBe(element);
 
