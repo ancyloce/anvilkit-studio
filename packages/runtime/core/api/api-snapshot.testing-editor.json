@@ -7,7 +7,780 @@
 	"flags": {},
 	"children": [
 		{
-			"id": 8,
+			"id": 27,
+			"name": "BenchCompareOptions",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Tuning for "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "compareBenchRun",
+						"target": 61
+					},
+					{
+						"kind": "text",
+						"text": "."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 29,
+					"name": "noiseFloorMs",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Floor below which a relative regression is ignored, in ms.\nSub-millisecond metrics swing by >10% from scheduler noise\nalone; without a floor the gate reports drift, not regressions.\nDefaults to "
+							},
+							{
+								"kind": "code",
+								"text": "`1`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 28,
+					"name": "regressionTolerance",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Fractional slowdown tolerated before a regression fails\n(§28: \"more than 10%\"). Defaults to "
+							},
+							{
+								"kind": "code",
+								"text": "`0.1`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 30,
+					"name": "skipBudgets",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Skip absolute-budget enforcement (local exploration only)."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						29,
+						28,
+						30
+					]
+				}
+			]
+		},
+		{
+			"id": 31,
+			"name": "BenchComparison",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The gate verdict."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 34,
+					"name": "notes",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 44,
+								"name": "BenchNote",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 32,
+					"name": "ok",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 35,
+					"name": "regressionChecked",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "True when regression comparison actually ran."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 33,
+					"name": "violations",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 56,
+								"name": "BenchViolation",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						34,
+						32,
+						35,
+						33
+					]
+				}
+			]
+		},
+		{
+			"id": 36,
+			"name": "BenchMetric",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "One measured scenario in one profile."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 39,
+					"name": "budgetLabel",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The §28 row this metric implements."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 40,
+					"name": "budgetMs",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Absolute §28 ceiling in ms; "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " = trend-only metric."
+							}
+						]
+					},
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "number"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				},
+				{
+					"id": 37,
+					"name": "id",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Stable metric id, e.g. "
+							},
+							{
+								"kind": "code",
+								"text": "`sidecar.parse`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 41,
+					"name": "median",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true,
+						"isInherited": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"target": 53,
+						"name": "BenchSample.median"
+					}
+				},
+				{
+					"id": 42,
+					"name": "p95",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true,
+						"isInherited": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"target": 54,
+						"name": "BenchSample.p95"
+					}
+				},
+				{
+					"id": 38,
+					"name": "profile",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Profile id the metric was measured on ("
+							},
+							{
+								"kind": "code",
+								"text": "`1k`"
+							},
+							{
+								"kind": "text",
+								"text": " / "
+							},
+							{
+								"kind": "code",
+								"text": "`10k`"
+							},
+							{
+								"kind": "text",
+								"text": ")."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 43,
+					"name": "runs",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true,
+						"isInherited": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"target": 55,
+						"name": "BenchSample.runs"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						39,
+						40,
+						37,
+						41,
+						42,
+						38,
+						43
+					]
+				}
+			],
+			"extendedTypes": [
+				{
+					"type": "reference",
+					"target": 52,
+					"name": "BenchSample",
+					"package": "@anvilkit/core"
+				}
+			]
+		},
+		{
+			"id": 44,
+			"name": "BenchNote",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Informational note that did not fail the run."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 47,
+					"name": "message",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 45,
+					"name": "metricId",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 46,
+					"name": "profile",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						47,
+						45,
+						46
+					]
+				}
+			]
+		},
+		{
+			"id": 48,
+			"name": "BenchRun",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "A complete harness run, the shape written to disk."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 50,
+					"name": "capturedAt",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "ISO timestamp; informational only, never compared."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 49,
+					"name": "hardwareClass",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Reference-class identifier, e.g. "
+							},
+							{
+								"kind": "code",
+								"text": "`github-ubuntu-latest`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 51,
+					"name": "metrics",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 36,
+								"name": "BenchMetric",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						50,
+						49,
+						51
+					]
+				}
+			]
+		},
+		{
+			"id": 52,
+			"name": "BenchSample",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Milliseconds, median and p95, over a fixed run count."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 53,
+					"name": "median",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 54,
+					"name": "p95",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 55,
+					"name": "runs",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						53,
+						54,
+						55
+					]
+				}
+			],
+			"extendedBy": [
+				{
+					"type": "reference",
+					"target": 36,
+					"name": "BenchMetric"
+				}
+			]
+		},
+		{
+			"id": 56,
+			"name": "BenchViolation",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Why a run failed the gate."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 57,
+					"name": "kind",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "literal",
+								"value": "budget"
+							},
+							{
+								"type": "literal",
+								"value": "regression"
+							}
+						]
+					}
+				},
+				{
+					"id": 60,
+					"name": "message",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 58,
+					"name": "metricId",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 59,
+					"name": "profile",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						57,
+						60,
+						58,
+						59
+					]
+				}
+			]
+		},
+		{
+			"id": 76,
 			"name": "CfxFixture",
 			"variant": "declaration",
 			"kind": 256,
@@ -22,7 +795,7 @@
 			},
 			"children": [
 				{
-					"id": 9,
+					"id": 77,
 					"name": "id",
 					"variant": "declaration",
 					"kind": 1024,
@@ -116,7 +889,7 @@
 					}
 				},
 				{
-					"id": 12,
+					"id": 80,
 					"name": "pageOnlyLayer",
 					"variant": "declaration",
 					"kind": 1024,
@@ -138,7 +911,7 @@
 					}
 				},
 				{
-					"id": 11,
+					"id": 79,
 					"name": "passCriterion",
 					"variant": "declaration",
 					"kind": 1024,
@@ -151,7 +924,7 @@
 					}
 				},
 				{
-					"id": 10,
+					"id": 78,
 					"name": "row",
 					"variant": "declaration",
 					"kind": 1024,
@@ -176,16 +949,16 @@
 				{
 					"title": "Properties",
 					"children": [
-						9,
-						12,
-						11,
-						10
+						77,
+						80,
+						79,
+						78
 					]
 				}
 			]
 		},
 		{
-			"id": 26,
+			"id": 6,
 			"name": "HistoryRecordingProbe",
 			"variant": "declaration",
 			"kind": 256,
@@ -200,14 +973,14 @@
 			},
 			"children": [
 				{
-					"id": 43,
+					"id": 23,
 					"name": "assertSingleIntent",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 44,
+							"id": 24,
 							"name": "assertSingleIntent",
 							"variant": "signature",
 							"kind": 4096,
@@ -228,14 +1001,14 @@
 					]
 				},
 				{
-					"id": 39,
+					"id": 19,
 					"name": "count",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 40,
+							"id": 20,
 							"name": "count",
 							"variant": "signature",
 							"kind": 4096,
@@ -256,14 +1029,14 @@
 					]
 				},
 				{
-					"id": 41,
+					"id": 21,
 					"name": "reset",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 42,
+							"id": 22,
 							"name": "reset",
 							"variant": "signature",
 							"kind": 4096,
@@ -284,14 +1057,14 @@
 					]
 				},
 				{
-					"id": 27,
+					"id": 7,
 					"name": "wrap",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 28,
+							"id": 8,
 							"name": "wrap",
 							"variant": "signature",
 							"kind": 4096,
@@ -306,7 +1079,7 @@
 							},
 							"typeParameters": [
 								{
-									"id": 29,
+									"id": 9,
 									"name": "A",
 									"variant": "typeParam",
 									"kind": 131072,
@@ -314,14 +1087,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 30,
+											"id": 10,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 31,
+													"id": 11,
 													"name": "recordHistory",
 													"variant": "declaration",
 													"kind": 1024,
@@ -339,7 +1112,7 @@
 												{
 													"title": "Properties",
 													"children": [
-														31
+														11
 													]
 												}
 											]
@@ -349,7 +1122,7 @@
 							],
 							"parameters": [
 								{
-									"id": 32,
+									"id": 12,
 									"name": "dispatch",
 									"variant": "param",
 									"kind": 32768,
@@ -357,28 +1130,28 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 33,
+											"id": 13,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"signatures": [
 												{
-													"id": 34,
+													"id": 14,
 													"name": "__type",
 													"variant": "signature",
 													"kind": 4096,
 													"flags": {},
 													"parameters": [
 														{
-															"id": 35,
+															"id": 15,
 															"name": "action",
 															"variant": "param",
 															"kind": 32768,
 															"flags": {},
 															"type": {
 																"type": "reference",
-																"target": 29,
+																"target": 9,
 																"name": "A",
 																"package": "@anvilkit/core",
 																"refersToTypeParameter": true
@@ -398,28 +1171,28 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 36,
+									"id": 16,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 37,
+											"id": 17,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 38,
+													"id": 18,
 													"name": "action",
 													"variant": "param",
 													"kind": 32768,
 													"flags": {},
 													"type": {
 														"type": "reference",
-														"target": 29,
+														"target": 9,
 														"name": "A",
 														"package": "@anvilkit/core",
 														"refersToTypeParameter": true
@@ -442,16 +1215,16 @@
 				{
 					"title": "Methods",
 					"children": [
-						43,
-						39,
-						41,
-						27
+						23,
+						19,
+						21,
+						7
 					]
 				}
 			]
 		},
 		{
-			"id": 63,
+			"id": 110,
 			"name": "LimitFixtureOptions",
 			"variant": "declaration",
 			"kind": 256,
@@ -466,7 +1239,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "buildAuthoringStateAtLimits",
-						"target": 45
+						"target": 92
 					},
 					{
 						"kind": "text",
@@ -476,7 +1249,7 @@
 			},
 			"children": [
 				{
-					"id": 69,
+					"id": 116,
 					"name": "breakpoints",
 					"variant": "declaration",
 					"kind": 1024,
@@ -490,7 +1263,7 @@
 					}
 				},
 				{
-					"id": 67,
+					"id": 114,
 					"name": "componentDefinitions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -504,7 +1277,7 @@
 					}
 				},
 				{
-					"id": 68,
+					"id": 115,
 					"name": "interactions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -518,7 +1291,7 @@
 					}
 				},
 				{
-					"id": 64,
+					"id": 111,
 					"name": "nodeRecords",
 					"variant": "declaration",
 					"kind": 1024,
@@ -532,7 +1305,7 @@
 					}
 				},
 				{
-					"id": 66,
+					"id": 113,
 					"name": "styleDefinitions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -546,7 +1319,7 @@
 					}
 				},
 				{
-					"id": 65,
+					"id": 112,
 					"name": "tokens",
 					"variant": "declaration",
 					"kind": 1024,
@@ -564,18 +1337,663 @@
 				{
 					"title": "Properties",
 					"children": [
-						69,
-						67,
-						68,
-						64,
-						66,
-						65
+						116,
+						114,
+						115,
+						111,
+						113,
+						112
 					]
 				}
 			]
 		},
 		{
-			"id": 16,
+			"id": 138,
+			"name": "PerfLayerChildZone",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "One child slot of a "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "PerfLayerNode",
+						"target": 142
+					},
+					{
+						"kind": "text",
+						"text": "."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 141,
+					"name": "items",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 142,
+								"name": "PerfLayerNode",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 140,
+					"name": "slotName",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 139,
+					"name": "zoneKey",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						141,
+						140,
+						139
+					]
+				}
+			]
+		},
+		{
+			"id": 142,
+			"name": "PerfLayerNode",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "A layer row. Structurally identical to the Layers module's\n"
+					},
+					{
+						"kind": "code",
+						"text": "`LayerNode`"
+					},
+					{
+						"kind": "text",
+						"text": "/"
+					},
+					{
+						"kind": "code",
+						"text": "`LayerChildZone`"
+					},
+					{
+						"kind": "text",
+						"text": " (deliberately re-declared rather than\nimported: the testing entry must not pull the Studio chrome graph\ninto its type surface). The shape is pinned by a compile-time\nassignability check in the harness."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 149,
+					"name": "childZones",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 138,
+								"name": "PerfLayerChildZone",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 148,
+					"name": "depth",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 143,
+					"name": "id",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 147,
+					"name": "index",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 145,
+					"name": "label",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 144,
+					"name": "type",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 146,
+					"name": "zone",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						149,
+						148,
+						143,
+						147,
+						145,
+						144,
+						146
+					]
+				}
+			]
+		},
+		{
+			"id": 150,
+			"name": "PerfProfile",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "A complete, self-consistent benchmark input."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 159,
+					"name": "authoredNodeId",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "A node id guaranteed to carry an authoring record."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 155,
+					"name": "authoring",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/editor/authoring-state.ts",
+							"qualifiedName": "AuthoringStateV1"
+						},
+						"name": "AuthoringStateV1",
+						"package": "@anvilkit/contracts"
+					}
+				},
+				{
+					"id": 154,
+					"name": "bareData",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The same document **without** a sidecar (write-path target)."
+							}
+						]
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@puckeditor/core",
+							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"qualifiedName": "Data"
+						},
+						"name": "Data",
+						"package": "@puckeditor/core"
+					}
+				},
+				{
+					"id": 156,
+					"name": "breakpoints",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/responsive.ts",
+									"qualifiedName": "BreakpointDefinition"
+								},
+								"name": "BreakpointDefinition",
+								"package": "@anvilkit/contracts"
+							}
+						}
+					}
+				},
+				{
+					"id": 157,
+					"name": "capabilities",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Capability registry covering "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "PERF_COMPONENT_TYPES",
+								"target": 121
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/types/editor-api.ts",
+							"qualifiedName": "EditorCapabilityRegistry"
+						},
+						"name": "EditorCapabilityRegistry",
+						"package": "@anvilkit/core"
+					}
+				},
+				{
+					"id": 153,
+					"name": "data",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Puck document **with** the sidecar attached to "
+							},
+							{
+								"kind": "code",
+								"text": "`root.props`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@puckeditor/core",
+							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"qualifiedName": "Data"
+						},
+						"name": "Data",
+						"package": "@puckeditor/core"
+					}
+				},
+				{
+					"id": 151,
+					"name": "id",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 158,
+					"name": "layerRoots",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Layer rows for the search scenario (one row per tree node)."
+							}
+						]
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 142,
+								"name": "PerfLayerNode",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 152,
+					"name": "options",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Required"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": 161,
+								"name": "PerfProfileOptions",
+								"package": "@anvilkit/core"
+							}
+						],
+						"name": "Required",
+						"package": "typescript"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						159,
+						155,
+						154,
+						156,
+						157,
+						153,
+						151,
+						158,
+						152
+					]
+				}
+			]
+		},
+		{
+			"id": 161,
+			"name": "PerfProfileOptions",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Sizing knobs for "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "buildPerfProfile",
+						"target": 117
+					},
+					{
+						"kind": "text",
+						"text": "."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 163,
+					"name": "authoringRecords",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Sidecar node records (§7.3 caps this at 5,000)."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 164,
+					"name": "breakpoints",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Enabled breakpoints (§14 uses 3)."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 166,
+					"name": "childrenPerContainer",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Direct children per container in the generated layer tree."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 165,
+					"name": "tokens",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Design tokens in the sidecar."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 162,
+					"name": "treeNodes",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Puck tree nodes (the §28 \"1,000 / 10,000 nodes\" column)."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						163,
+						164,
+						166,
+						165,
+						162
+					]
+				}
+			]
+		},
+		{
+			"id": 81,
 			"name": "CfxId",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -598,7 +2016,7 @@
 					"type": "query",
 					"queryType": {
 						"type": "reference",
-						"target": 6,
+						"target": 74,
 						"name": "CFX_IDS",
 						"package": "@anvilkit/core"
 					}
@@ -606,7 +2024,97 @@
 			}
 		},
 		{
-			"id": 4,
+			"id": 160,
+			"name": "PerfProfileId",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Preset key type ("
+					},
+					{
+						"kind": "code",
+						"text": "`\"1k\" | \"10k\"`"
+					},
+					{
+						"kind": "text",
+						"text": ")."
+					}
+				]
+			},
+			"type": {
+				"type": "typeOperator",
+				"operator": "keyof",
+				"target": {
+					"type": "query",
+					"queryType": {
+						"type": "reference",
+						"target": 122,
+						"name": "PERF_PROFILE_PRESETS",
+						"package": "@anvilkit/core"
+					}
+				}
+			}
+		},
+		{
+			"id": 25,
+			"name": "BENCH_NOISE_FLOOR_MS",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Sub-ms metrics are noise-dominated; see "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "BenchCompareOptions",
+						"target": 27
+					},
+					{
+						"kind": "text",
+						"text": "."
+					}
+				]
+			},
+			"type": {
+				"type": "literal",
+				"value": 1
+			},
+			"defaultValue": "1"
+		},
+		{
+			"id": 26,
+			"name": "BENCH_REGRESSION_TOLERANCE",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "§28: fail on **more than** 10% regression."
+					}
+				]
+			},
+			"type": {
+				"type": "literal",
+				"value": 0.1
+			},
+			"defaultValue": "0.1"
+		},
+		{
+			"id": 72,
 			"name": "CFX_COMPONENT_IDS",
 			"variant": "declaration",
 			"kind": 32,
@@ -701,7 +2209,7 @@
 			"defaultValue": "..."
 		},
 		{
-			"id": 5,
+			"id": 73,
 			"name": "CFX_FIXTURES",
 			"variant": "declaration",
 			"kind": 32,
@@ -723,7 +2231,7 @@
 					"type": "array",
 					"elementType": {
 						"type": "reference",
-						"target": 8,
+						"target": 76,
 						"name": "CfxFixture",
 						"package": "@anvilkit/core"
 					}
@@ -732,7 +2240,7 @@
 			"defaultValue": "..."
 		},
 		{
-			"id": 6,
+			"id": 74,
 			"name": "CFX_IDS",
 			"variant": "declaration",
 			"kind": 32,
@@ -839,7 +2347,7 @@
 			"defaultValue": "..."
 		},
 		{
-			"id": 7,
+			"id": 75,
 			"name": "CFX_TOKEN_IDS",
 			"variant": "declaration",
 			"kind": 32,
@@ -894,7 +2402,7 @@
 			"defaultValue": "..."
 		},
 		{
-			"id": 62,
+			"id": 109,
 			"name": "LIMIT_FIXTURE_DEFAULTS",
 			"variant": "declaration",
 			"kind": 32,
@@ -919,7 +2427,7 @@
 				"typeArguments": [
 					{
 						"type": "reference",
-						"target": 63,
+						"target": 110,
 						"name": "LimitFixtureOptions",
 						"package": "@anvilkit/core"
 					}
@@ -930,14 +2438,330 @@
 			"defaultValue": "..."
 		},
 		{
-			"id": 21,
+			"id": 121,
+			"name": "PERF_COMPONENT_TYPES",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Component types the profiles cycle through (mixed capabilities)."
+					}
+				]
+			},
+			"type": {
+				"type": "typeOperator",
+				"operator": "readonly",
+				"target": {
+					"type": "tuple",
+					"elements": [
+						{
+							"type": "literal",
+							"value": "Box"
+						},
+						{
+							"type": "literal",
+							"value": "Heading"
+						},
+						{
+							"type": "literal",
+							"value": "Image"
+						},
+						{
+							"type": "literal",
+							"value": "Button"
+						}
+					]
+				}
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 122,
+			"name": "PERF_PROFILE_PRESETS",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The two §14 load profiles, frozen."
+					}
+				]
+			},
+			"type": {
+				"type": "reflection",
+				"declaration": {
+					"id": 123,
+					"name": "__type",
+					"variant": "declaration",
+					"kind": 65536,
+					"flags": {},
+					"children": [
+						{
+							"id": 131,
+							"name": "10k",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isReadonly": true
+							},
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 132,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 134,
+											"name": "authoringRecords",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "literal",
+												"value": 2000
+											},
+											"defaultValue": "2_000"
+										},
+										{
+											"id": 135,
+											"name": "breakpoints",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "literal",
+												"value": 3
+											},
+											"defaultValue": "3"
+										},
+										{
+											"id": 137,
+											"name": "childrenPerContainer",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "literal",
+												"value": 10
+											},
+											"defaultValue": "10"
+										},
+										{
+											"id": 136,
+											"name": "tokens",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "literal",
+												"value": 200
+											},
+											"defaultValue": "200"
+										},
+										{
+											"id": 133,
+											"name": "treeNodes",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "literal",
+												"value": 10000
+											},
+											"defaultValue": "10_000"
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												134,
+												135,
+												137,
+												136,
+												133
+											]
+										}
+									]
+								}
+							},
+							"defaultValue": "..."
+						},
+						{
+							"id": 124,
+							"name": "1k",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isReadonly": true
+							},
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 125,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 127,
+											"name": "authoringRecords",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "literal",
+												"value": 200
+											},
+											"defaultValue": "200"
+										},
+										{
+											"id": 128,
+											"name": "breakpoints",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "literal",
+												"value": 3
+											},
+											"defaultValue": "3"
+										},
+										{
+											"id": 130,
+											"name": "childrenPerContainer",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "literal",
+												"value": 10
+											},
+											"defaultValue": "10"
+										},
+										{
+											"id": 129,
+											"name": "tokens",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "literal",
+												"value": 200
+											},
+											"defaultValue": "200"
+										},
+										{
+											"id": 126,
+											"name": "treeNodes",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "literal",
+												"value": 1000
+											},
+											"defaultValue": "1_000"
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												127,
+												128,
+												130,
+												129,
+												126
+											]
+										}
+									]
+								}
+							},
+							"defaultValue": "..."
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"children": [
+								131,
+								124
+							]
+						}
+					]
+				}
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 1,
 			"name": "assertContentFreeEvent",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
+			"comment": {
+				"summary": [],
+				"blockTags": [
+					{
+						"tag": "@file",
+						"content": [
+							{
+								"kind": "code",
+								"text": "`@anvilkit/core/testing/editor`"
+							},
+							{
+								"kind": "text",
+								"text": " — fixture builders and\ncontract assertion helpers for the visual editor (DD-0019 §22.2;\nPLAN-0020 CORE-P0-017).\n\nThe builders generate documents at the frozen §7.3 count limits,\nlegacy documents without a sidecar, unknown-version sidecars, and\na root config with slot fields (the invariant-11 fixture). The\nassertion helpers encode the single-intent history rule and the\ncontent-free event privacy contract so every suite checks them the\nsame way. The compatibility suite in "
+							},
+							{
+								"kind": "code",
+								"text": "`__tests__/`"
+							},
+							{
+								"kind": "text",
+								"text": " is the\nregression net for the \"reader only\" rollout stage (§30.7).\n\nThe performance profiles and the §28 gate (CORE-P4-001) live here\ntoo: they are test infrastructure, and hosts benchmarking their own\neditor integration need the same fixed inputs Core gates on."
+							}
+						]
+					}
+				]
+			},
 			"signatures": [
 				{
-					"id": 22,
+					"id": 2,
 					"name": "assertContentFreeEvent",
 					"variant": "signature",
 					"kind": 4096,
@@ -952,7 +2776,7 @@
 					},
 					"parameters": [
 						{
-							"id": 23,
+							"id": 3,
 							"name": "event",
 							"variant": "param",
 							"kind": 32768,
@@ -977,14 +2801,14 @@
 			]
 		},
 		{
-			"id": 45,
+			"id": 92,
 			"name": "buildAuthoringStateAtLimits",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 46,
+					"id": 93,
 					"name": "buildAuthoringStateAtLimits",
 					"variant": "signature",
 					"kind": 4096,
@@ -999,7 +2823,7 @@
 					},
 					"parameters": [
 						{
-							"id": 47,
+							"id": 94,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
@@ -1008,7 +2832,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 63,
+								"target": 110,
 								"name": "LimitFixtureOptions",
 								"package": "@anvilkit/core"
 							}
@@ -1028,14 +2852,14 @@
 			]
 		},
 		{
-			"id": 48,
+			"id": 95,
 			"name": "buildLegacyPuckData",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 49,
+					"id": 96,
 					"name": "buildLegacyPuckData",
 					"variant": "signature",
 					"kind": 4096,
@@ -1050,7 +2874,7 @@
 					},
 					"parameters": [
 						{
-							"id": 50,
+							"id": 97,
 							"name": "nodeCount",
 							"variant": "param",
 							"kind": 32768,
@@ -1076,14 +2900,97 @@
 			]
 		},
 		{
-			"id": 51,
+			"id": 117,
+			"name": "buildPerfProfile",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 118,
+					"name": "buildPerfProfile",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Build one fixed benchmark profile. Pass a preset key for the frozen\n§14 shapes; pass explicit options only for harness self-tests."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 119,
+							"name": "profile",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Required"
+										},
+										"typeArguments": [
+											{
+												"type": "reference",
+												"target": 161,
+												"name": "PerfProfileOptions",
+												"package": "@anvilkit/core"
+											}
+										],
+										"name": "Required",
+										"package": "typescript"
+									},
+									{
+										"type": "literal",
+										"value": "1k"
+									},
+									{
+										"type": "literal",
+										"value": "10k"
+									}
+								]
+							}
+						},
+						{
+							"id": 120,
+							"name": "id",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {
+								"isOptional": true
+							},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 150,
+						"name": "PerfProfile",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 98,
 			"name": "buildPuckDataWithSidecar",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 52,
+					"id": 99,
 					"name": "buildPuckDataWithSidecar",
 					"variant": "signature",
 					"kind": 4096,
@@ -1098,7 +3005,7 @@
 					},
 					"parameters": [
 						{
-							"id": 53,
+							"id": 100,
 							"name": "sidecar",
 							"variant": "param",
 							"kind": 32768,
@@ -1109,7 +3016,7 @@
 							}
 						},
 						{
-							"id": 54,
+							"id": 101,
 							"name": "nodeCount",
 							"variant": "param",
 							"kind": 32768,
@@ -1135,14 +3042,14 @@
 			]
 		},
 		{
-			"id": 55,
+			"id": 102,
 			"name": "buildRootConfigWithSlotFields",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 56,
+					"id": 103,
 					"name": "buildRootConfigWithSlotFields",
 					"variant": "signature",
 					"kind": 4096,
@@ -1165,7 +3072,7 @@
 					},
 					"parameters": [
 						{
-							"id": 57,
+							"id": 104,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
@@ -1175,14 +3082,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 58,
+									"id": 105,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 59,
+											"id": 106,
 											"name": "collideWithSidecarKey",
 											"variant": "declaration",
 											"kind": 1024,
@@ -1200,7 +3107,7 @@
 										{
 											"title": "Properties",
 											"children": [
-												59
+												106
 											]
 										}
 									]
@@ -1222,14 +3129,14 @@
 			]
 		},
 		{
-			"id": 60,
+			"id": 107,
 			"name": "buildUnknownVersionSidecar",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 61,
+					"id": 108,
 					"name": "buildUnknownVersionSidecar",
 					"variant": "signature",
 					"kind": 4096,
@@ -1266,40 +3173,14 @@
 			]
 		},
 		{
-			"id": 1,
+			"id": 82,
 			"name": "certify",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"comment": {
-				"summary": [],
-				"blockTags": [
-					{
-						"tag": "@file",
-						"content": [
-							{
-								"kind": "code",
-								"text": "`@anvilkit/core/testing/editor`"
-							},
-							{
-								"kind": "text",
-								"text": " — fixture builders and\ncontract assertion helpers for the visual editor (DD-0019 §22.2;\nPLAN-0020 CORE-P0-017).\n\nThe builders generate documents at the frozen §7.3 count limits,\nlegacy documents without a sidecar, unknown-version sidecars, and\na root config with slot fields (the invariant-11 fixture). The\nassertion helpers encode the single-intent history rule and the\ncontent-free event privacy contract so every suite checks them the\nsame way. The compatibility suite in "
-							},
-							{
-								"kind": "code",
-								"text": "`__tests__/`"
-							},
-							{
-								"kind": "text",
-								"text": " is the\nregression net for the \"reader only\" rollout stage (§30.7)."
-							}
-						]
-					}
-				]
-			},
 			"signatures": [
 				{
-					"id": 2,
+					"id": 83,
 					"name": "certify",
 					"variant": "signature",
 					"kind": 4096,
@@ -1314,7 +3195,7 @@
 					},
 					"parameters": [
 						{
-							"id": 3,
+							"id": 84,
 							"name": "id",
 							"variant": "param",
 							"kind": 32768,
@@ -1414,40 +3295,14 @@
 			]
 		},
 		{
-			"id": 13,
+			"id": 85,
 			"name": "cfxFixture",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"comment": {
-				"summary": [],
-				"blockTags": [
-					{
-						"tag": "@file",
-						"content": [
-							{
-								"kind": "code",
-								"text": "`@anvilkit/core/testing/editor`"
-							},
-							{
-								"kind": "text",
-								"text": " — fixture builders and\ncontract assertion helpers for the visual editor (DD-0019 §22.2;\nPLAN-0020 CORE-P0-017).\n\nThe builders generate documents at the frozen §7.3 count limits,\nlegacy documents without a sidecar, unknown-version sidecars, and\na root config with slot fields (the invariant-11 fixture). The\nassertion helpers encode the single-intent history rule and the\ncontent-free event privacy contract so every suite checks them the\nsame way. The compatibility suite in "
-							},
-							{
-								"kind": "code",
-								"text": "`__tests__/`"
-							},
-							{
-								"kind": "text",
-								"text": " is the\nregression net for the \"reader only\" rollout stage (§30.7)."
-							}
-						]
-					}
-				]
-			},
 			"signatures": [
 				{
-					"id": 14,
+					"id": 86,
 					"name": "cfxFixture",
 					"variant": "signature",
 					"kind": 4096,
@@ -1462,7 +3317,7 @@
 					},
 					"parameters": [
 						{
-							"id": 15,
+							"id": 87,
 							"name": "id",
 							"variant": "param",
 							"kind": 32768,
@@ -1556,7 +3411,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 8,
+						"target": 76,
 						"name": "CfxFixture",
 						"package": "@anvilkit/core"
 					}
@@ -1564,15 +3419,15 @@
 			]
 		},
 		{
-			"id": 24,
-			"name": "createHistoryRecordingProbe",
+			"id": 61,
+			"name": "compareBenchRun",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 25,
-					"name": "createHistoryRecordingProbe",
+					"id": 62,
+					"name": "compareBenchRun",
 					"variant": "signature",
 					"kind": 4096,
 					"flags": {},
@@ -1580,32 +3435,74 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Create a "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "HistoryRecordingProbe",
-								"target": 26
-							},
-							{
-								"kind": "text",
-								"text": "."
+								"text": "Judge a run against the §28 budgets and, when the hardware classes\nmatch, against a stored baseline."
 							}
 						]
 					},
+					"parameters": [
+						{
+							"id": 63,
+							"name": "current",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": 48,
+								"name": "BenchRun",
+								"package": "@anvilkit/core"
+							}
+						},
+						{
+							"id": 64,
+							"name": "baseline",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"target": 48,
+										"name": "BenchRun",
+										"package": "@anvilkit/core"
+									},
+									{
+										"type": "literal",
+										"value": null
+									}
+								]
+							}
+						},
+						{
+							"id": 65,
+							"name": "options",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {
+								"isOptional": true
+							},
+							"type": {
+								"type": "reference",
+								"target": 27,
+								"name": "BenchCompareOptions",
+								"package": "@anvilkit/core"
+							}
+						}
+					],
 					"type": {
 						"type": "reference",
-						"target": 26,
-						"name": "HistoryRecordingProbe",
+						"target": 31,
+						"name": "BenchComparison",
 						"package": "@anvilkit/core"
 					}
 				}
 			]
 		},
 		{
-			"id": 17,
-			"name": "resetCfxCoverage",
+			"id": 4,
+			"name": "createHistoryRecordingProbe",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
@@ -1629,7 +3526,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " is the\nregression net for the \"reader only\" rollout stage (§30.7)."
+								"text": " is the\nregression net for the \"reader only\" rollout stage (§30.7).\n\nThe performance profiles and the §28 gate (CORE-P4-001) live here\ntoo: they are test infrastructure, and hosts benchmarking their own\neditor integration need the same fixed inputs Core gates on."
 							}
 						]
 					}
@@ -1637,7 +3534,90 @@
 			},
 			"signatures": [
 				{
-					"id": 18,
+					"id": 5,
+					"name": "createHistoryRecordingProbe",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Create a "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "HistoryRecordingProbe",
+								"target": 6
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"type": {
+						"type": "reference",
+						"target": 6,
+						"name": "HistoryRecordingProbe",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 66,
+			"name": "formatBenchRun",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 67,
+					"name": "formatBenchRun",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Human-readable one-line-per-metric table for CI logs."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 68,
+							"name": "run",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": 48,
+								"name": "BenchRun",
+								"package": "@anvilkit/core"
+							}
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			]
+		},
+		{
+			"id": 88,
+			"name": "resetCfxCoverage",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 89,
 					"name": "resetCfxCoverage",
 					"variant": "signature",
 					"kind": 4096,
@@ -1658,40 +3638,64 @@
 			]
 		},
 		{
-			"id": 19,
+			"id": 69,
+			"name": "summarizeSamples",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 70,
+					"name": "summarizeSamples",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Median and p95 over raw samples. p95 uses the nearest-rank method\n(no interpolation) so a 20-run set reports an actually-observed\nsample rather than a synthesized one."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 71,
+							"name": "samples",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 52,
+						"name": "BenchSample",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 90,
 			"name": "uncertifiedFixtures",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"comment": {
-				"summary": [],
-				"blockTags": [
-					{
-						"tag": "@file",
-						"content": [
-							{
-								"kind": "code",
-								"text": "`@anvilkit/core/testing/editor`"
-							},
-							{
-								"kind": "text",
-								"text": " — fixture builders and\ncontract assertion helpers for the visual editor (DD-0019 §22.2;\nPLAN-0020 CORE-P0-017).\n\nThe builders generate documents at the frozen §7.3 count limits,\nlegacy documents without a sidecar, unknown-version sidecars, and\na root config with slot fields (the invariant-11 fixture). The\nassertion helpers encode the single-intent history rule and the\ncontent-free event privacy contract so every suite checks them the\nsame way. The compatibility suite in "
-							},
-							{
-								"kind": "code",
-								"text": "`__tests__/`"
-							},
-							{
-								"kind": "text",
-								"text": " is the\nregression net for the \"reader only\" rollout stage (§30.7)."
-							}
-						]
-					}
-				]
-			},
 			"signatures": [
 				{
-					"id": 20,
+					"id": 91,
 					"name": "uncertifiedFixtures",
 					"variant": "signature",
 					"kind": 4096,
@@ -1804,41 +3808,61 @@
 		{
 			"title": "Interfaces",
 			"children": [
-				8,
-				26,
-				63
+				27,
+				31,
+				36,
+				44,
+				48,
+				52,
+				56,
+				76,
+				6,
+				110,
+				138,
+				142,
+				150,
+				161
 			]
 		},
 		{
 			"title": "Type Aliases",
 			"children": [
-				16
+				81,
+				160
 			]
 		},
 		{
 			"title": "Variables",
 			"children": [
-				4,
-				5,
-				6,
-				7,
-				62
+				25,
+				26,
+				72,
+				73,
+				74,
+				75,
+				109,
+				121,
+				122
 			]
 		},
 		{
 			"title": "Functions",
 			"children": [
-				21,
-				45,
-				48,
-				51,
-				55,
-				60,
 				1,
-				13,
-				24,
-				17,
-				19
+				92,
+				95,
+				117,
+				98,
+				102,
+				107,
+				82,
+				85,
+				61,
+				4,
+				66,
+				88,
+				69,
+				90
 			]
 		}
 	],
@@ -1851,348 +3875,833 @@
 		},
 		"1": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/coverage.ts",
-			"qualifiedName": "certify"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "assertContentFreeEvent"
 		},
 		"2": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/coverage.ts",
-			"qualifiedName": "certify"
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "assertContentFreeEvent"
 		},
 		"3": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/coverage.ts",
-			"qualifiedName": "id"
-		},
-		"4": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "CFX_COMPONENT_IDS"
-		},
-		"5": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "CFX_FIXTURES"
-		},
-		"6": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "CFX_IDS"
-		},
-		"7": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "CFX_TOKEN_IDS"
-		},
-		"8": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "CfxFixture"
-		},
-		"9": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "CfxFixture.id"
-		},
-		"10": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "CfxFixture.row"
-		},
-		"11": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "CfxFixture.passCriterion"
-		},
-		"12": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "CfxFixture.pageOnlyLayer"
-		},
-		"13": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "cfxFixture"
-		},
-		"14": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "cfxFixture"
-		},
-		"15": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "id"
-		},
-		"16": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/manifest.ts",
-			"qualifiedName": "CfxId"
-		},
-		"17": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/coverage.ts",
-			"qualifiedName": "resetCfxCoverage"
-		},
-		"18": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/coverage.ts",
-			"qualifiedName": "resetCfxCoverage"
-		},
-		"19": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/coverage.ts",
-			"qualifiedName": "uncertifiedFixtures"
-		},
-		"20": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/cfx/coverage.ts",
-			"qualifiedName": "uncertifiedFixtures"
-		},
-		"21": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "assertContentFreeEvent"
-		},
-		"22": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "assertContentFreeEvent"
-		},
-		"23": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
 			"qualifiedName": "event"
 		},
-		"24": {
+		"4": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
 			"qualifiedName": "createHistoryRecordingProbe"
 		},
-		"25": {
+		"5": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
 			"qualifiedName": "createHistoryRecordingProbe"
 		},
-		"26": {
+		"6": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
 			"qualifiedName": "HistoryRecordingProbe"
 		},
-		"27": {
+		"7": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
 			"qualifiedName": "HistoryRecordingProbe.wrap"
 		},
-		"28": {
+		"8": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
 			"qualifiedName": "HistoryRecordingProbe.wrap"
 		},
-		"29": {
+		"9": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
 			"qualifiedName": "A"
 		},
-		"30": {
+		"10": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
 			"qualifiedName": "__type"
 		},
-		"31": {
+		"11": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
 			"qualifiedName": "__type.recordHistory"
 		},
-		"32": {
+		"12": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
 			"qualifiedName": "dispatch"
 		},
-		"33": {
+		"13": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/assertions.ts",
 			"qualifiedName": "__type"
+		},
+		"14": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "__type"
+		},
+		"15": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "action"
+		},
+		"16": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "__type"
+		},
+		"17": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "__type"
+		},
+		"18": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "action"
+		},
+		"19": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.count"
+		},
+		"20": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.count"
+		},
+		"21": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.reset"
+		},
+		"22": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.reset"
+		},
+		"23": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.assertSingleIntent"
+		},
+		"24": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/assertions.ts",
+			"qualifiedName": "HistoryRecordingProbe.assertSingleIntent"
+		},
+		"25": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BENCH_NOISE_FLOOR_MS"
+		},
+		"26": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BENCH_REGRESSION_TOLERANCE"
+		},
+		"27": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchCompareOptions"
+		},
+		"28": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchCompareOptions.regressionTolerance"
+		},
+		"29": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchCompareOptions.noiseFloorMs"
+		},
+		"30": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchCompareOptions.skipBudgets"
+		},
+		"31": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchComparison"
+		},
+		"32": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchComparison.ok"
+		},
+		"33": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchComparison.violations"
 		},
 		"34": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchComparison.notes"
 		},
 		"35": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "action"
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchComparison.regressionChecked"
 		},
 		"36": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchMetric"
 		},
 		"37": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchMetric.id"
 		},
 		"38": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "action"
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchMetric.profile"
 		},
 		"39": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.count"
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchMetric.budgetLabel"
 		},
 		"40": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.count"
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchMetric.budgetMs"
 		},
 		"41": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.reset"
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchSample.median"
 		},
 		"42": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.reset"
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchSample.p95"
 		},
 		"43": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.assertSingleIntent"
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchSample.runs"
 		},
 		"44": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/assertions.ts",
-			"qualifiedName": "HistoryRecordingProbe.assertSingleIntent"
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchNote"
 		},
 		"45": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/testing/editor/fixtures.ts",
-			"qualifiedName": "buildAuthoringStateAtLimits"
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchNote.metricId"
 		},
 		"46": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchNote.profile"
+		},
+		"47": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchNote.message"
+		},
+		"48": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchRun"
+		},
+		"49": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchRun.hardwareClass"
+		},
+		"50": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchRun.capturedAt"
+		},
+		"51": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchRun.metrics"
+		},
+		"52": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchSample"
+		},
+		"53": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchSample.median"
+		},
+		"54": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchSample.p95"
+		},
+		"55": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchSample.runs"
+		},
+		"56": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchViolation"
+		},
+		"57": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchViolation.kind"
+		},
+		"58": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchViolation.metricId"
+		},
+		"59": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchViolation.profile"
+		},
+		"60": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "BenchViolation.message"
+		},
+		"61": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "compareBenchRun"
+		},
+		"62": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "compareBenchRun"
+		},
+		"63": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "current"
+		},
+		"64": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "baseline"
+		},
+		"65": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "options"
+		},
+		"66": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "formatBenchRun"
+		},
+		"67": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "formatBenchRun"
+		},
+		"68": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "run"
+		},
+		"69": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "summarizeSamples"
+		},
+		"70": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "summarizeSamples"
+		},
+		"71": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/bench-compare.ts",
+			"qualifiedName": "samples"
+		},
+		"72": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CFX_COMPONENT_IDS"
+		},
+		"73": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CFX_FIXTURES"
+		},
+		"74": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CFX_IDS"
+		},
+		"75": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CFX_TOKEN_IDS"
+		},
+		"76": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CfxFixture"
+		},
+		"77": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CfxFixture.id"
+		},
+		"78": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CfxFixture.row"
+		},
+		"79": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CfxFixture.passCriterion"
+		},
+		"80": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CfxFixture.pageOnlyLayer"
+		},
+		"81": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "CfxId"
+		},
+		"82": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "certify"
+		},
+		"83": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "certify"
+		},
+		"84": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "id"
+		},
+		"85": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "cfxFixture"
+		},
+		"86": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "cfxFixture"
+		},
+		"87": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/manifest.ts",
+			"qualifiedName": "id"
+		},
+		"88": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "resetCfxCoverage"
+		},
+		"89": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "resetCfxCoverage"
+		},
+		"90": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "uncertifiedFixtures"
+		},
+		"91": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/cfx/coverage.ts",
+			"qualifiedName": "uncertifiedFixtures"
+		},
+		"92": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "buildAuthoringStateAtLimits"
 		},
-		"47": {
+		"93": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/fixtures.ts",
+			"qualifiedName": "buildAuthoringStateAtLimits"
+		},
+		"94": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "options"
 		},
-		"48": {
+		"95": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "buildLegacyPuckData"
 		},
-		"49": {
+		"96": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "buildLegacyPuckData"
 		},
-		"50": {
+		"97": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "nodeCount"
 		},
-		"51": {
+		"98": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "buildPuckDataWithSidecar"
 		},
-		"52": {
+		"99": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "buildPuckDataWithSidecar"
 		},
-		"53": {
+		"100": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "sidecar"
 		},
-		"54": {
+		"101": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "nodeCount"
 		},
-		"55": {
+		"102": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "buildRootConfigWithSlotFields"
 		},
-		"56": {
+		"103": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "buildRootConfigWithSlotFields"
 		},
-		"57": {
+		"104": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "options"
 		},
-		"58": {
+		"105": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "__type"
 		},
-		"59": {
+		"106": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "__type.collideWithSidecarKey"
 		},
-		"60": {
+		"107": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "buildUnknownVersionSidecar"
 		},
-		"61": {
+		"108": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "buildUnknownVersionSidecar"
 		},
-		"62": {
+		"109": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "LIMIT_FIXTURE_DEFAULTS"
 		},
-		"63": {
+		"110": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "LimitFixtureOptions"
 		},
-		"64": {
+		"111": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "LimitFixtureOptions.nodeRecords"
 		},
-		"65": {
+		"112": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "LimitFixtureOptions.tokens"
 		},
-		"66": {
+		"113": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "LimitFixtureOptions.styleDefinitions"
 		},
-		"67": {
+		"114": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "LimitFixtureOptions.componentDefinitions"
 		},
-		"68": {
+		"115": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "LimitFixtureOptions.interactions"
 		},
-		"69": {
+		"116": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/testing/editor/fixtures.ts",
 			"qualifiedName": "LimitFixtureOptions.breakpoints"
+		},
+		"117": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "buildPerfProfile"
+		},
+		"118": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "buildPerfProfile"
+		},
+		"119": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "profile"
+		},
+		"120": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "id"
+		},
+		"121": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PERF_COMPONENT_TYPES"
+		},
+		"122": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PERF_PROFILE_PRESETS"
+		},
+		"123": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object"
+		},
+		"124": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object.1k"
+		},
+		"125": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object"
+		},
+		"126": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object.treeNodes"
+		},
+		"127": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object.authoringRecords"
+		},
+		"128": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object.breakpoints"
+		},
+		"129": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object.tokens"
+		},
+		"130": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object.childrenPerContainer"
+		},
+		"131": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object.10k"
+		},
+		"132": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object"
+		},
+		"133": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object.treeNodes"
+		},
+		"134": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object.authoringRecords"
+		},
+		"135": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object.breakpoints"
+		},
+		"136": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object.tokens"
+		},
+		"137": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "__object.childrenPerContainer"
+		},
+		"138": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfLayerChildZone"
+		},
+		"139": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfLayerChildZone.zoneKey"
+		},
+		"140": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfLayerChildZone.slotName"
+		},
+		"141": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfLayerChildZone.items"
+		},
+		"142": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfLayerNode"
+		},
+		"143": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfLayerNode.id"
+		},
+		"144": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfLayerNode.type"
+		},
+		"145": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfLayerNode.label"
+		},
+		"146": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfLayerNode.zone"
+		},
+		"147": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfLayerNode.index"
+		},
+		"148": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfLayerNode.depth"
+		},
+		"149": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfLayerNode.childZones"
+		},
+		"150": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfile"
+		},
+		"151": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfile.id"
+		},
+		"152": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfile.options"
+		},
+		"153": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfile.data"
+		},
+		"154": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfile.bareData"
+		},
+		"155": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfile.authoring"
+		},
+		"156": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfile.breakpoints"
+		},
+		"157": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfile.capabilities"
+		},
+		"158": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfile.layerRoots"
+		},
+		"159": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfile.authoredNodeId"
+		},
+		"160": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfileId"
+		},
+		"161": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfileOptions"
+		},
+		"162": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfileOptions.treeNodes"
+		},
+		"163": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfileOptions.authoringRecords"
+		},
+		"164": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfileOptions.breakpoints"
+		},
+		"165": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfileOptions.tokens"
+		},
+		"166": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/testing/editor/perf-profiles.ts",
+			"qualifiedName": "PerfProfileOptions.childrenPerContainer"
 		}
 	},
 	"files": {
