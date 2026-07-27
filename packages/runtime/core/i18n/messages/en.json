@@ -450,5 +450,16 @@
 	"studio.editor.interaction.empty": "No interactions on this element.",
 	"studio.editor.interaction.missingTarget": "target missing",
 	"studio.editor.interaction.urlLabel": "Link URL",
-	"studio.editor.interaction.urlPlaceholder": "https://example.com"
+	"studio.editor.interaction.urlPlaceholder": "https://example.com",
+	"studio.editor.perf.title": "Editor performance",
+	"studio.editor.perf.collapse": "Hide",
+	"studio.editor.perf.expand": "Show",
+	"studio.editor.perf.nodes": "Nodes",
+	"studio.editor.perf.registry": "Registry",
+	"studio.editor.perf.command": "Command",
+	"studio.editor.perf.resolverCache": "Resolver cache",
+	"studio.editor.perf.observerBatch": "Observer batch",
+	"studio.editor.perf.iframeDocuments": "Canvas documents",
+	"studio.editor.perf.longTasks": "Long tasks (>50 ms)",
+	"studio.editor.perf.unsupported": "unsupported"
 }

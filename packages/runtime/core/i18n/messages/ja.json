@@ -432,5 +432,16 @@
 	"studio.editor.interaction.empty": "この要素にインタラクションはありません。",
 	"studio.editor.interaction.missingTarget": "ターゲットがありません",
 	"studio.editor.interaction.urlLabel": "リンク URL",
-	"studio.editor.interaction.urlPlaceholder": "https://example.com"
+	"studio.editor.interaction.urlPlaceholder": "https://example.com",
+	"studio.editor.perf.title": "エディターパフォーマンス",
+	"studio.editor.perf.collapse": "非表示",
+	"studio.editor.perf.expand": "表示",
+	"studio.editor.perf.nodes": "ノード",
+	"studio.editor.perf.registry": "レジストリ",
+	"studio.editor.perf.command": "コマンド",
+	"studio.editor.perf.resolverCache": "リゾルバーキャッシュ",
+	"studio.editor.perf.observerBatch": "オブザーバーバッチ",
+	"studio.editor.perf.iframeDocuments": "キャンバスドキュメント",
+	"studio.editor.perf.longTasks": "ロングタスク（50 ms 超）",
+	"studio.editor.perf.unsupported": "未対応"
 }

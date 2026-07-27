@@ -432,5 +432,16 @@
 	"studio.editor.interaction.empty": "이 요소에 인터랙션이 없습니다.",
 	"studio.editor.interaction.missingTarget": "대상 없음",
 	"studio.editor.interaction.urlLabel": "링크 URL",
-	"studio.editor.interaction.urlPlaceholder": "https://example.com"
+	"studio.editor.interaction.urlPlaceholder": "https://example.com",
+	"studio.editor.perf.title": "에디터 성능",
+	"studio.editor.perf.collapse": "숨기기",
+	"studio.editor.perf.expand": "표시",
+	"studio.editor.perf.nodes": "노드",
+	"studio.editor.perf.registry": "레지스트리",
+	"studio.editor.perf.command": "명령",
+	"studio.editor.perf.resolverCache": "리졸버 캐시",
+	"studio.editor.perf.observerBatch": "옵저버 배치",
+	"studio.editor.perf.iframeDocuments": "캔버스 문서",
+	"studio.editor.perf.longTasks": "긴 작업(50ms 초과)",
+	"studio.editor.perf.unsupported": "지원되지 않음"
 }

@@ -432,5 +432,16 @@
 	"studio.editor.interaction.empty": "此元素没有交互。",
 	"studio.editor.interaction.missingTarget": "目标缺失",
 	"studio.editor.interaction.urlLabel": "链接地址",
-	"studio.editor.interaction.urlPlaceholder": "https://example.com"
+	"studio.editor.interaction.urlPlaceholder": "https://example.com",
+	"studio.editor.perf.title": "编辑器性能",
+	"studio.editor.perf.collapse": "隐藏",
+	"studio.editor.perf.expand": "显示",
+	"studio.editor.perf.nodes": "节点",
+	"studio.editor.perf.registry": "注册表",
+	"studio.editor.perf.command": "命令",
+	"studio.editor.perf.resolverCache": "解析器缓存",
+	"studio.editor.perf.observerBatch": "观察器批次",
+	"studio.editor.perf.iframeDocuments": "画布文档",
+	"studio.editor.perf.longTasks": "长任务（>50 毫秒）",
+	"studio.editor.perf.unsupported": "不支持"
 }
