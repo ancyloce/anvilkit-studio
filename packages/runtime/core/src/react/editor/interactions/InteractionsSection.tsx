@@ -30,6 +30,14 @@ import {
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
 import type { InspectorSectionProps } from "../inspector/sections-registry.js";
+import {
+	ActionEditor,
+	type ActionDraft,
+	buildAction,
+	EMPTY_ACTION_DRAFT,
+} from "./ActionEditor.js";
+import { usePageAdapter } from "../pages/use-page-adapter.js";
+import { TimelinePanel } from "./timeline/TimelinePanel.js";
 import { useNodeInteractions } from "./use-interactions.js";
 
 /**
@@ -84,26 +92,31 @@ export function InteractionsSection({
 }: InspectorSectionProps): ReactNode {
 	const msg = useMsg();
 	const state = useNodeInteractions(context);
-	const [url, setUrl] = useState("");
+	const pageNav = usePageAdapter();
+	const [draft, setDraft] = useState<ActionDraft>(EMPTY_ACTION_DRAFT);
 	const [triggerId, setTriggerId] = useState("click");
 	const [busy, setBusy] = useState(false);
+	const [openTimeline, setOpenTimeline] = useState<string | null>(null);
+
+	const action = buildAction(draft);
 
 	async function onAdd(): Promise<void> {
-		const trimmed = url.trim();
-		if (trimmed === "" || busy) return;
+		if (action === null || busy) return;
 		setBusy(true);
 		try {
 			const choice =
-			TRIGGER_CHOICES.find((entry) => entry.id === triggerId) ??
-			TRIGGER_CHOICES[0];
-		const result = await state.createUrlInteraction(
-			trimmed,
-			trimmed,
-			choice?.trigger,
-		);
-			// Clear only on success, so a rejected URL stays visible for
+				TRIGGER_CHOICES.find((entry) => entry.id === triggerId) ??
+				TRIGGER_CHOICES[0];
+			const result = await state.createInteraction(
+				describeAction(draft),
+				choice?.trigger ?? { type: "click" },
+				action,
+			);
+			// Reset only on success, so a rejected action stays visible for
 			// the author to correct rather than vanishing silently.
-			if (result !== null && result.status !== "rejected") setUrl("");
+			if (result !== null && result.status !== "rejected") {
+				setDraft(EMPTY_ACTION_DRAFT);
+			}
 		} finally {
 			setBusy(false);
 		}
@@ -143,6 +156,65 @@ export function InteractionsSection({
 									{msg("studio.editor.interaction.missingTarget")}
 								</span>
 							) : null}
+							<Button
+								type="button"
+								variant="ghost"
+								size="sm"
+								className="ml-1 h-5 px-1 text-[10px]"
+								aria-expanded={openTimeline === row.interaction.id}
+								onClick={() =>
+									setOpenTimeline((current) =>
+										current === row.interaction.id ? null : row.interaction.id,
+									)
+								}
+								data-testid="ak-interaction-timeline-toggle"
+							>
+								{msg("studio.editor.timeline.title")}
+							</Button>
+							<Button
+								type="button"
+								variant="ghost"
+								size="sm"
+								className="ml-1 h-5 px-1 text-[10px]"
+								aria-label={msg("studio.editor.interaction.remove")}
+								onClick={() => {
+									void state.deleteInteraction(row.interaction.id);
+								}}
+								data-testid="ak-interaction-remove"
+							>
+								{msg("studio.editor.interaction.remove")}
+							</Button>
+							{openTimeline === row.interaction.id ? (
+								<Button
+									type="button"
+									variant="ghost"
+									size="sm"
+									className="ml-1 h-5 px-1 text-[10px]"
+									// Appends whatever the draft below currently
+									// describes. Without this an interaction could
+									// never gain a second action, which would leave
+									// the timeline's reordering unreachable.
+									disabled={action === null || busy}
+									onClick={() => {
+										if (action === null) return;
+										void state.updateInteraction({
+											...row.interaction,
+											actions: [...row.interaction.actions, action],
+										});
+									}}
+									data-testid="ak-interaction-add-action"
+								>
+									{msg("studio.editor.interaction.addAction")}
+								</Button>
+							) : null}
+							{openTimeline === row.interaction.id ? (
+								<TimelinePanel
+									interaction={row.interaction}
+									onReorder={(next) => {
+										void state.updateInteraction(next);
+									}}
+								/>
+							) : null}
 						</li>
 					))}
 				</ul>
@@ -171,21 +243,19 @@ export function InteractionsSection({
 						))}
 					</SelectContent>
 				</Select>
-				<input
-					type="url"
-					value={url}
-					onChange={(event) => setUrl(event.target.value)}
-					placeholder={msg("studio.editor.interaction.urlPlaceholder")}
-					aria-label={msg("studio.editor.interaction.urlLabel")}
-					className="min-w-0 flex-1 rounded border border-[var(--ak-studio-border)] bg-transparent px-2 py-1 text-[11px]"
-					data-testid="ak-interaction-url"
+				<ActionEditor
+					draft={draft}
+					onChange={setDraft}
+					targets={state.targets}
+					pages={pageNav?.pages ?? []}
+					variantAxes={state.variantAxesFor(draft.targetNodeId)}
 				/>
 				<Button
 					type="button"
 					variant="ghost"
 					size="sm"
 					className="h-6 px-2 text-[11px]"
-					disabled={!state.canCreate || url.trim() === "" || busy}
+					disabled={!state.canCreate || action === null || busy}
 					onClick={() => {
 						void onAdd();
 					}}
@@ -207,4 +277,28 @@ export function InteractionsSection({
 			) : null}
 		</div>
 	);
+}
+
+/**
+ * A default interaction name.
+ *
+ * Authors rename interactions later; what matters here is that a list
+ * of six actions is distinguishable at a glance, which the family plus
+ * its subject gives cheaply.
+ */
+function describeAction(draft: ActionDraft): string {
+	switch (draft.kind) {
+		case "url":
+			return draft.url.trim();
+		case "navigate":
+			return `Go to ${draft.pageId.trim()}`;
+		case "scroll":
+			return "Scroll to element";
+		case "visibility":
+			return `${draft.visibility} element`;
+		case "variant":
+			return `Set ${draft.axisId} to ${draft.optionId}`;
+		default:
+			return `Animate ${draft.property}`;
+	}
 }

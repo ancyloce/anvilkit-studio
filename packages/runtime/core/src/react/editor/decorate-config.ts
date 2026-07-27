@@ -125,8 +125,8 @@ function createDecoratedRender(
 							item: context.item,
 							index: context.index,
 						},
-						children: renderNode(original, props, styleTarget, resolved),
 					},
+					renderNode(original, props, styleTarget, resolved),
 				),
 			);
 		}

@@ -18,8 +18,10 @@
 
 import type {
 	EditorCommandResult,
+	InteractionAction,
 	InteractionTrigger,
 	InteractionV1,
+	VariantAxis,
 } from "@anvilkit/contracts/editor";
 import { useCallback, useMemo, useState } from "react";
 import {
@@ -28,6 +30,14 @@ import {
 } from "../../../editor/index.js";
 import type { InternalEditorCommandPort } from "../command-port.js";
 import type { EditorInspectorContext } from "../inspector/use-inspector.js";
+
+/** A node offered by the action target picker. */
+export interface InteractionTargetOption {
+	readonly id: string;
+	/** `"Hero · a1b2c3"` — type plus a short id, which is what an
+	 * author recognises in a list. */
+	readonly label: string;
+}
 
 /** One interaction as the inspector renders it. */
 export interface NodeInteractionRow {
@@ -45,15 +55,33 @@ export interface NodeInteractionRow {
 export interface NodeInteractionsState {
 	readonly rows: readonly NodeInteractionRow[];
 	/**
-	 * Attach a URL interaction on the given trigger. §32.4 exercises
-	 * click, hover and viewport, so the trigger is a parameter rather
-	 * than hard-coded to click.
+	 * Attach an interaction to the selected node.
+	 *
+	 * Takes a fully-formed action rather than URL-specific arguments:
+	 * §16 declares six action families and the editor offers all of
+	 * them, so a per-family signature would not scale.
 	 */
-	readonly createUrlInteraction: (
+	readonly createInteraction: (
 		name: string,
-		url: string,
-		trigger?: InteractionTrigger,
+		trigger: InteractionTrigger,
+		action: InteractionAction,
 	) => Promise<EditorCommandResult | null>;
+	/** Replace an interaction — used by rename and timeline reorder. */
+	readonly updateInteraction: (
+		interaction: InteractionV1,
+	) => Promise<EditorCommandResult | null>;
+	/** Remove an interaction. */
+	readonly deleteInteraction: (
+		interactionId: string,
+	) => Promise<EditorCommandResult | null>;
+	/** Nodes in the document, for the action's target picker. */
+	readonly targets: readonly InteractionTargetOption[];
+	/**
+	 * Variant axes declared by the component instance at `nodeId`, or an
+	 * empty list when it is not an instance — a `variant` action is only
+	 * meaningful against one.
+	 */
+	readonly variantAxesFor: (nodeId: string) => readonly VariantAxis[];
 	readonly canCreate: boolean;
 	/** Errors from the most recent create attempt, for inline display. */
 	readonly lastErrors: readonly string[];
@@ -97,11 +125,45 @@ export function useNodeInteractions(
 			});
 	}, [authoring.interactions, primaryId, bridge]);
 
-	const createUrlInteraction = useCallback(
+	/**
+	 * Every node in the document, labelled for a picker.
+	 *
+	 * Read from the tree rather than the sidecar: authoring records only
+	 * exist for nodes with non-default state, so a freshly added node
+	 * would be missing from a sidecar-derived list (invariant 3).
+	 */
+	const targets = useMemo((): readonly InteractionTargetOption[] => {
+		const port = bridge.port as InternalEditorCommandPort | null | undefined;
+		if (port == null) return [];
+		try {
+			return [...indexNodeLocations(port.readData()).entries()].map(
+				([id, location]) => ({
+					id,
+					label: `${location.node.type} · ${id.slice(0, 6)}`,
+				}),
+			);
+		} catch {
+			return [];
+		}
+	}, [bridge]);
+
+	/** Variant axes for an instance node, or `[]` when it is not one. */
+	const variantAxesFor = useCallback(
+		(nodeId: string): readonly VariantAxis[] => {
+			const instance = authoring.nodes[nodeId]?.componentInstance;
+			if (instance === undefined) return [];
+			return (
+				authoring.componentDefinitions[instance.definitionId]?.variantAxes ?? []
+			);
+		},
+		[authoring.nodes, authoring.componentDefinitions],
+	);
+
+	const createInteraction = useCallback(
 		async (
 			name: string,
-			url: string,
-			trigger: InteractionTrigger = { type: "click" },
+			trigger: InteractionTrigger,
+			action: InteractionAction,
 		): Promise<EditorCommandResult | null> => {
 			if (primaryId === undefined) return null;
 			const interaction: InteractionV1 = {
@@ -111,7 +173,7 @@ export function useNodeInteractions(
 				sourceNodeId: primaryId,
 				enabled: true,
 				trigger,
-				actions: [{ type: "url", url }],
+				actions: [action],
 			};
 			const result = await commands.execute({
 				id: crypto.randomUUID(),
@@ -131,9 +193,53 @@ export function useNodeInteractions(
 		[commands, revision, primaryId],
 	);
 
+	const updateInteraction = useCallback(
+		async (interaction: InteractionV1): Promise<EditorCommandResult | null> => {
+			const result = await commands.execute({
+				id: crypto.randomUUID(),
+				expectedRevision: revision,
+				source: "inspector",
+				timestamp: Date.now(),
+				type: "interaction.update",
+				interaction,
+			});
+			setLastErrors(
+				result.status === "rejected"
+					? result.errors.map((error) => error.message)
+					: [],
+			);
+			return result;
+		},
+		[commands, revision],
+	);
+
+	const deleteInteraction = useCallback(
+		async (interactionId: string): Promise<EditorCommandResult | null> => {
+			const result = await commands.execute({
+				id: crypto.randomUUID(),
+				expectedRevision: revision,
+				source: "inspector",
+				timestamp: Date.now(),
+				type: "interaction.delete",
+				interactionId,
+			});
+			setLastErrors(
+				result.status === "rejected"
+					? result.errors.map((error) => error.message)
+					: [],
+			);
+			return result;
+		},
+		[commands, revision],
+	);
+
 	return {
 		rows,
-		createUrlInteraction,
+		createInteraction,
+		updateInteraction,
+		deleteInteraction,
+		targets,
+		variantAxesFor,
 		canCreate: primaryId !== undefined,
 		lastErrors,
 	};

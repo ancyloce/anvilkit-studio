@@ -93,7 +93,12 @@ export interface BindingRenderProviderProps {
 	readonly scope: BindingScopeRoots;
 	/** Preview mode honours visibility; design mode only marks it. */
 	readonly preview: boolean;
-	readonly children: ReactNode;
+	/**
+	 * Optional so `createElement(BindingRenderProvider, props, child)`
+	 * typechecks — a repeated row passes its subtree positionally, and
+	 * React merges it in. A provider with no children is valid.
+	 */
+	readonly children?: ReactNode;
 }
 
 /**
