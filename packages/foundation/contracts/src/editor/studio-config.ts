@@ -9,6 +9,7 @@
  */
 
 import type { EditorDataSourceAdapter } from "./bindings.js";
+import type { JsonValue } from "./values.js";
 import type { EditorPolicies } from "./policies.js";
 import type { BreakpointDefinition } from "./responsive.js";
 import type { ImportableTokenValue, TokenModeId } from "./tokens.js";
@@ -49,6 +50,17 @@ export interface EditorPageAdapter {
 	rename?(pageId: string, name: string): Promise<void>;
 }
 
+/**
+ * Host-supplied roots for render-time binding evaluation.
+ *
+ * `item` and `index` are absent by design: they are produced by a
+ * repeat binding's own expansion, not supplied by the host.
+ */
+export interface EditorRenderScope {
+	readonly data?: JsonValue;
+	readonly page?: JsonValue;
+}
+
 /** The `StudioProps.editor` configuration (DD-0019 §22.1, verbatim). */
 export interface StudioEditorConfig {
 	readonly features?: StudioEditorFeatures;
@@ -63,6 +75,21 @@ export interface StudioEditorConfig {
 	 * only.
 	 */
 	readonly importableTokens?: readonly ImportableTokenValue[];
+	/**
+	 * The data scope binding expressions read at **render** time
+	 * (ED-BIND-002; ADR 0006).
+	 *
+	 * Deliberately host-supplied rather than fetched by Core. §19 lets
+	 * Core store descriptors and expressions but **never preview
+	 * responses**, so a render-time cache inside Core would break that
+	 * guarantee. ADR 0006 settles the division: the host fills the
+	 * scope — from `_dataSource` injection or anything else — and
+	 * bindings only read it.
+	 *
+	 * Absent = bindings resolve to `missing`, which renders as
+	 * indeterminate rather than hidden.
+	 */
+	readonly renderScope?: EditorRenderScope;
 	readonly pageAdapter?: EditorPageAdapter;
 	readonly dataSourceAdapter?: EditorDataSourceAdapter;
 	readonly policies?: EditorPolicies;

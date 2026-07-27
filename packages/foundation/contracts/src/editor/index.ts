@@ -155,6 +155,7 @@ export type {
 export type { LayoutSpec, TypographySpec, VisualStyleSpec } from "./specs.js";
 export type {
 	EditorPageAdapter,
+	EditorRenderScope,
 	EditorPageDescriptor,
 	StudioEditorConfig,
 	StudioEditorFeatures,
