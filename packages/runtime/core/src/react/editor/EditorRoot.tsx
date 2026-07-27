@@ -16,7 +16,7 @@
  */
 
 import type { StudioEditorConfig } from "@anvilkit/contracts/editor";
-import { type ReactNode, useEffect } from "react";
+import { lazy, type ReactNode, Suspense, useEffect, useState } from "react";
 import { useStudioPluginContext } from "../../studio/context/plugin-context.js";
 import { createDomAccessibilityScanner } from "./a11y/dom-rules/index.js";
 import type { StudioEditorBridge } from "./bridge.js";
@@ -25,15 +25,28 @@ import { CanvasHandles } from "./canvas/handles/CanvasHandles.js";
 import { CanvasMarquee } from "./canvas/marquee.js";
 import { AuthoringOverlayRoot } from "./canvas/overlay-root.js";
 import { SelectionToolbar } from "./canvas/SelectionToolbar.js";
-import { InteractionRuntimeMount } from "./interactions/InteractionRuntimeMount.js";
 import { createEditorCapabilityRegistry } from "./capability-registry.js";
 import { computeCollabGateError } from "./collab-gate.js";
 import { createEditorCommandPort } from "./command-port.js";
+import {
+	createEditorPerfMetrics,
+	type EditorPerfMetrics,
+	perfOverlayEnabled,
+} from "./diagnostics/perf-metrics.js";
 import { createInlineEditController } from "./inline/controller.js";
 import { RichTextSurfaceMount } from "./inline/RichTextSurfaceMount.js";
+import { InteractionRuntimeMount } from "./interactions/InteractionRuntimeMount.js";
 import { createStudioViewportController } from "./responsive/viewport-controller.js";
 import { createEditorSelectionController } from "./selection.js";
 import EditorShortcuts from "./shortcuts/EditorShortcuts.js";
+
+/**
+ * The §28 development overlay (CORE-P4-002). A separate lazy chunk so
+ * it never reaches the entry or chrome path, and only requested when
+ * {@link perfOverlayEnabled} says so — which requires a non-production
+ * `NODE_ENV` plus an explicit opt-in.
+ */
+const PerfOverlay = lazy(async () => import("./diagnostics/PerfOverlay.js"));
 
 /** Props for the editor root. */
 export interface EditorRootProps {
@@ -53,6 +66,25 @@ export default function EditorRoot({
 	bridge,
 }: EditorRootProps): ReactNode {
 	const ctx = useStudioPluginContext();
+	// Decided once per mount: the opt-in reads a URL param / global that
+	// must not be re-evaluated on every render (and the overlay
+	// appearing mid-session would itself perturb the measurements).
+	const [perf] = useState<EditorPerfMetrics | null>(() =>
+		perfOverlayEnabled() ? createEditorPerfMetrics(bridge.diagnostics) : null,
+	);
+
+	useEffect(() => {
+		if (perf === null) {
+			return;
+		}
+		bridge.perf = perf;
+		return () => {
+			if (bridge.perf === perf) {
+				bridge.perf = null;
+			}
+			perf.dispose();
+		};
+	}, [bridge, perf]);
 
 	useEffect(() => {
 		const diagnostics = bridge.diagnostics;
@@ -191,7 +223,14 @@ export default function EditorRoot({
 		// Canvas DOM registry (CORE-P1B-001): binds to whatever iframe
 		// document the chrome last reported, and re-binds on document
 		// replacement (the feed fires again with the new doc).
-		const canvasRegistry = createCanvasDomRegistry();
+		const canvasRegistry = createCanvasDomRegistry(
+			perf === null
+				? undefined
+				: {
+						onObserverBatch: (recordCount) =>
+							perf.recordObserverBatch(recordCount),
+					},
+		);
 		bridge.canvasRegistry = canvasRegistry;
 		// Inline editing (CORE-P1B-009B): single-session controller;
 		// foreign commits and document replacement interrupt it.
@@ -207,12 +246,14 @@ export default function EditorRoot({
 			if (doc !== null) {
 				canvasRegistry.register(doc);
 				domScanner = createDomAccessibilityScanner(bridge, doc);
+				perf?.recordIframeDocument();
 			}
 			bridge.notify();
 		};
 		if (bridge.canvasDocument !== null) {
 			canvasRegistry.register(bridge.canvasDocument);
 			domScanner = createDomAccessibilityScanner(bridge, bridge.canvasDocument);
+			perf?.recordIframeDocument();
 		}
 		bridge.responsive = {
 			getActiveLayer: () => viewport.getState().activeBreakpoint,
@@ -257,7 +298,7 @@ export default function EditorRoot({
 				bridge.notifyStyles();
 			}
 		};
-	}, [ctx, bridge, editor]);
+	}, [ctx, bridge, editor, perf]);
 
 	// §18 keymap (CORE-P1A-017) + the in-iframe overlay layer
 	// (CORE-P1B-003) — both live only while the editor is mounted.
@@ -274,6 +315,14 @@ export default function EditorRoot({
 				<SelectionToolbar bridge={bridge} />
 				<RichTextSurfaceMount bridge={bridge} />
 			</AuthoringOverlayRoot>
+			{/* §28 dev overlay (CORE-P4-002): never requested in production
+			    — `perf` is null unless NODE_ENV is explicitly
+			    non-production AND the host opted in. */}
+			{perf === null ? null : (
+				<Suspense fallback={null}>
+					<PerfOverlay bridge={bridge} metrics={perf} />
+				</Suspense>
+			)}
 		</>
 	);
 }

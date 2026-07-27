@@ -38,6 +38,7 @@ import {
 	createEditorDiagnosticCenter,
 	type EditorDiagnosticCenter,
 } from "./diagnostics/center.js";
+import type { EditorPerfMetrics } from "./diagnostics/perf-metrics.js";
 import type { InternalInlineEditController } from "./inline/controller-types.js";
 import type { InternalStudioViewportController } from "./responsive/viewport-controller.js";
 import type { EditorSelectionController } from "./selection.js";
@@ -152,6 +153,13 @@ export interface StudioEditorBridge {
 	editorConfig: StudioEditorConfig | null;
 	/** DOM-rule scan results (CORE-P1B-011); empty until scanned. */
 	domIssues: readonly unknown[];
+	/**
+	 * Dev-only §28 performance counters (CORE-P4-002). `null` in every
+	 * production mount and in development until the overlay is
+	 * explicitly opted into — producers guard on it, so the counters
+	 * cost one `undefined` check when absent.
+	 */
+	perf: EditorPerfMetrics | null;
 }
 
 /** Create a fresh, inert bridge (one per `<Studio>` instance). */
@@ -214,6 +222,7 @@ export function createStudioEditorBridge(): StudioEditorBridge {
 		inline: null,
 		editorConfig: null,
 		domIssues: [],
+		perf: null,
 	};
 	return bridge;
 }
