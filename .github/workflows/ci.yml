@@ -78,6 +78,7 @@ jobs:
       studio: ${{ steps.filter.outputs.studio }}
       playground: ${{ steps.filter.outputs.playground }}
       docs: ${{ steps.filter.outputs.docs }}
+      canvas: ${{ steps.filter.outputs.canvas }}
     steps:
       # pull_request events are classified via the GitHub API — no checkout
       # needed. On workflow_dispatch this step is skipped and every output
@@ -105,6 +106,13 @@ jobs:
               - "apps/playground/**"
             docs:
               - "apps/docs/**"
+            # Plan 0022 T-M0-01: the two Auto Layout packages. Both are git
+            # submodules, so a change here also shows up as a gitlink bump
+            # under `packages/**` (and therefore in `non_app`) — this filter
+            # exists to scope the per-package `verify` job, not to replace
+            # the workspace-wide gates.
+            canvas:
+              - "packages/capabilities/canvas/**"
 
   validate:
     name: Lint, Typecheck, and Build
@@ -230,6 +238,40 @@ jobs:
             --filter @anvilkit/section \
             --filter @anvilkit/statistics \
             size
+
+  canvas-verify:
+    name: Canvas packages — verify
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: github.event_name != 'pull_request' || needs.changes.outputs.canvas == 'true'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Set up workspace
+        uses: ./.github/actions/setup-workspace
+
+      # Plan 0022 T-M0-01: one entry point per canvas package, composing
+      # lint → typecheck → test-with-coverage → build → check:all in
+      # dependency order (`check:all` inspects `dist/`, so `build` precedes
+      # it). The workspace-wide `validate` and `package-gates` jobs still
+      # run every one of those gates for every package; what `verify` adds
+      # is the COVERAGE thresholds, which the workspace `pnpm test` does not
+      # enforce — `canvas-core` has had them since PRD 0012 and
+      # `canvas-editor` gained a baseline in T-M0-08.
+      #
+      # Split per package so a failure names which one, and so canvas-core
+      # still reports when canvas-editor fails.
+      - name: Verify @anvilkit/canvas-core
+        run: pnpm --filter @anvilkit/canvas-core verify
+
+      - name: Verify @anvilkit/canvas-editor
+        run: pnpm --filter @anvilkit/canvas-editor verify
 
   # PLAN-0020 CORE-P4-001: the DD-0019 §28 performance gate. Runs the
   # editor harness (fixed 1k/10k fixtures, 20-run median + p95) and fails
