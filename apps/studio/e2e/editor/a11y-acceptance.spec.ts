@@ -169,9 +169,12 @@ test.describe("editor accessibility acceptance (§27.6)", () => {
 		});
 		await expect(row).toBeFocused();
 		await page.keyboard.press("Enter");
-		await expect(row).toHaveAttribute("aria-selected", "true", {
-			timeout: 10_000,
-		});
+		// Selection is announced on the `treeitem` row, not the button.
+		await expect(page.getByTestId(`ak-layer-node-${nodeId}`)).toHaveAttribute(
+			"aria-selected",
+			"true",
+			{ timeout: 10_000 },
+		);
 
 		// NAVIGATION — Tab must move focus onward and land on a real
 		// focusable control, never be swallowed by a focus trap.

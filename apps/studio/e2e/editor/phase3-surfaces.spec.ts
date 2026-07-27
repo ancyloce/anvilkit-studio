@@ -76,9 +76,12 @@ async function selectFirstNode(page: Page): Promise<string> {
 			element.scrollIntoView({ block: "center", behavior: "instant" }),
 		);
 		await row.click({ force: true });
-		await expect(row).toHaveAttribute("aria-selected", "true", {
-			timeout: 2_000,
-		});
+		// Selection is announced on the `treeitem` ROW, not on the name
+		// button: `aria-selected` is invalid on `button` (axe
+		// `aria-allowed-attr`) and moved to the row in CORE-P4-003.
+		await expect(
+			page.getByTestId(`ak-layer-node-${nodeId}`),
+		).toHaveAttribute("aria-selected", "true", { timeout: 2_000 });
 	}).toPass({ timeout: 20_000 });
 	return nodeId as string;
 }

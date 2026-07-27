@@ -62,9 +62,12 @@ async function clickLayerRow(
 			force: true,
 			...(modifiers?.ctrl === true ? { modifiers: ["ControlOrMeta"] } : {}),
 		});
-		await expect(row).toHaveAttribute("aria-selected", "true", {
-			timeout: 2_000,
-		});
+		// Selection is announced on the `treeitem` ROW, not on the name
+		// button: `aria-selected` is invalid on `button` (axe
+		// `aria-allowed-attr`) and moved to the row in CORE-P4-003.
+		await expect(
+			page.getByTestId(`ak-layer-node-${nodeId}`),
+		).toHaveAttribute("aria-selected", "true", { timeout: 2_000 });
 	}).toPass({ timeout: 20_000 });
 }
 
