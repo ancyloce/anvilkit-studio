@@ -6,9 +6,15 @@
  *
  * Matrix axes covered here: zoom (50/100/200% via the chrome zoom
  * controls), DPR (per-project `deviceScaleFactor`), scroll (wheel
- * before interaction). Firefox/WebKit run via the env-gated matrix
- * projects (`ANVILKIT_E2E_MATRIX=1`, CI); locally chromium-only, per
- * the harness default.
+ * before interaction).
+ *
+ * Browser axis: Firefox and WebKit run only when
+ * `ANVILKIT_E2E_MATRIX=1` adds those Playwright projects. In CI that
+ * is the **scheduled (nightly) and workflow_dispatch** `studio-e2e`
+ * runs — pull requests stay Chromium + Chromium-HiDPI so PR feedback
+ * stays fast (`.github/workflows/ci.yml`, `studio-e2e` job env).
+ * Locally: `pnpm --filter studio e2e:install:matrix` once, then
+ * `pnpm --filter studio e2e:matrix`.
  */
 
 import { expect, type Page, test } from "@playwright/test";
@@ -65,9 +71,11 @@ async function clickLayerRow(
 		// Selection is announced on the `treeitem` ROW, not on the name
 		// button: `aria-selected` is invalid on `button` (axe
 		// `aria-allowed-attr`) and moved to the row in CORE-P4-003.
-		await expect(
-			page.getByTestId(`ak-layer-node-${nodeId}`),
-		).toHaveAttribute("aria-selected", "true", { timeout: 2_000 });
+		await expect(page.getByTestId(`ak-layer-node-${nodeId}`)).toHaveAttribute(
+			"aria-selected",
+			"true",
+			{ timeout: 2_000 },
+		);
 	}).toPass({ timeout: 20_000 });
 }
 

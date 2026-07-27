@@ -18,7 +18,9 @@
 		"test:watch": "vitest",
 		"drizzle:generate": "drizzle-kit generate",
 		"e2e": "playwright test",
-		"e2e:install": "playwright install --with-deps chromium"
+		"e2e:install": "playwright install --with-deps chromium",
+		"e2e:install:matrix": "playwright install --with-deps chromium firefox webkit",
+		"e2e:matrix": "ANVILKIT_E2E_MATRIX=1 playwright test"
 	},
 	"dependencies": {
 		"@anvilkit/analytics-core": "workspace:*",
