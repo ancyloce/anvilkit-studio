@@ -45,6 +45,14 @@ on:
           PR feedback stays fast.
         type: boolean
         default: true
+      capture_visual_baselines:
+        description: >-
+          Regenerate the editor visual-regression baselines on this
+          runner instead of asserting against the committed ones.
+          Download the `editor-visual-baselines` artifact and commit it
+          to apps/studio/e2e/editor/visual-regression.spec.ts-snapshots/.
+        type: boolean
+        default: false
 
   # §27.5 requires the editor specs to certify on three engines, which is
   # too slow for every PR. Nightly gives Firefox/WebKit a scheduled home
@@ -351,6 +359,70 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report-studio
+          path: apps/studio/playwright-report/
+          retention-days: 7
+
+  # Editor visual regression certification (PLAN-0020 CORE-P1A-007,
+  # CORE-P2-009H). Its own job because its baselines are platform-bound:
+  # the committed PNGs are produced by THIS runner image, and mixing them
+  # into the general E2E job would tie every PR's result to font
+  # rasterization.
+  #
+  # Not run on pull requests — nightly + dispatch only, matching the
+  # browser matrix. On a missing baseline the job FAILS (Playwright's own
+  # "snapshot doesn't exist" error); it never silently passes.
+  #
+  # To (re)generate baselines: dispatch this workflow with
+  # `capture_visual_baselines: true`, download the
+  # `editor-visual-baselines` artifact, and commit its contents to
+  # `apps/studio/e2e/editor/visual-regression.spec.ts-snapshots/`.
+  # Baselines from any other platform are not valid here.
+  studio-e2e-visual:
+    name: Editor visual regression
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    defaults:
+      run:
+        shell: bash
+    env:
+      ANVILKIT_E2E_VISUAL: "1"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Set up workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Install Playwright browsers
+        run: pnpm --filter studio e2e:install
+
+      # `turbo run e2e` first, so the app's workspace dependencies are
+      # built (`e2e` dependsOn `^build`); the project filter keeps this to
+      # the visual suite.
+      - name: Assert against committed baselines
+        if: ${{ !inputs.capture_visual_baselines }}
+        run: pnpm exec turbo run e2e --filter=studio -- --project=editor-visual
+
+      - name: Capture new baselines
+        if: ${{ inputs.capture_visual_baselines }}
+        run: pnpm exec turbo run e2e --filter=studio -- --project=editor-visual --update-snapshots
+
+      - name: Upload captured baselines
+        if: always() && inputs.capture_visual_baselines
+        uses: actions/upload-artifact@v4
+        with:
+          name: editor-visual-baselines
+          path: apps/studio/e2e/editor/visual-regression.spec.ts-snapshots/
+          if-no-files-found: error
+
+      - name: Upload visual diff report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-studio-visual
           path: apps/studio/playwright-report/
           retention-days: 7
 
