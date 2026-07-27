@@ -47,6 +47,19 @@ export {
 	type DecoratePuckConfigOptions,
 	decoratePuckConfig,
 } from "./decorate-config.js";
+// Export preflight (CORE-P3-009) + the §23.2 accessibility export policy
+// (CORE-P4-008). Previously unexported, which made
+// `EditorPolicies.exportBlockingSeverity` unreachable for every host.
+export {
+	toPreflightA11yIssues,
+	useExportPreflight,
+	type UseExportPreflightInput,
+} from "./export-preflight.js";
+export type { AccessibilityIssue } from "./a11y/contract-rules.js";
+export {
+	type AccessibilityIssuesApi,
+	useAccessibilityIssues,
+} from "./a11y/use-accessibility-issues.js";
 export type {
 	InlineEditController,
 	InlineEditSession,

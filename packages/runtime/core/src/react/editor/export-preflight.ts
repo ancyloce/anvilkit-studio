@@ -17,6 +17,18 @@
  *
  * Passing the verdict into `runExport` is what makes the block real:
  * a preflight nothing consumes is documentation, not a gate.
+ *
+ * ### Why `a11yIssues` defaults to the live issue set (CORE-P4-008)
+ *
+ * `EditorPolicies.exportBlockingSeverity` decides whether accessibility
+ * findings block an export. That policy was unreachable in practice:
+ * the editor produces `AccessibilityIssue` (with a `rule` field) while
+ * the preflight consumes `PreflightA11yIssue` (with `ruleId`), and
+ * neither type was exported to a host — so "critical issues block" could
+ * never actually happen. This hook now reads the live issues itself and
+ * maps them, which is what a *policy* should mean: the host sets it and
+ * it works. An explicit `a11yIssues` argument still wins, for hosts that
+ * source findings from their own audit.
  */
 
 import type {
@@ -30,13 +42,19 @@ import {
 	type PreflightA11yIssue,
 	runExportPreflight,
 } from "../../editor/index.js";
+import type { AccessibilityIssue } from "./a11y/contract-rules.js";
+import { useAccessibilityIssues } from "./a11y/use-accessibility-issues.js";
 import { StudioEditorBridgeContext } from "./use-studio-editor.js";
 
 /** Inputs the caller supplies per export attempt. */
 export interface UseExportPreflightInput {
 	/** The format the user chose, or `undefined` before they choose. */
 	readonly capabilities: EditorExportCapabilities | undefined;
-	/** Outstanding accessibility findings, if the host surfaces them. */
+	/**
+	 * Outstanding accessibility findings. Defaults to the editor's own
+	 * live issue set; pass an explicit array to override (or an empty
+	 * array to opt this document out of the a11y gate entirely).
+	 */
 	readonly a11yIssues?: readonly PreflightA11yIssue[];
 	/** `"production"` (default) blocks; `"development"` degrades. */
 	readonly mode?: "production" | "development";
@@ -57,6 +75,17 @@ export function useExportPreflight(
 	const port = bridge?.port;
 	const policies = bridge?.editorConfig?.policies;
 	const { capabilities, a11yIssues, mode } = input;
+	const live = useAccessibilityIssues();
+	const liveIssues = live?.issues;
+
+	const effectiveIssues = useMemo(
+		() =>
+			a11yIssues ??
+			(liveIssues === undefined
+				? undefined
+				: toPreflightA11yIssues(liveIssues)),
+		[a11yIssues, liveIssues],
+	);
 
 	return useMemo(() => {
 		if (port == null) return null;
@@ -66,9 +95,27 @@ export function useExportPreflight(
 		return runExportPreflight({
 			usedFeatures,
 			capabilities,
-			...(a11yIssues === undefined ? {} : { a11yIssues }),
+			...(effectiveIssues === undefined ? {} : { a11yIssues: effectiveIssues }),
 			...(policies === undefined ? {} : { policies }),
 			...(mode === undefined ? {} : { mode }),
 		});
-	}, [port, capabilities, a11yIssues, policies, mode]);
+	}, [port, capabilities, effectiveIssues, policies, mode]);
+}
+
+/**
+ * Map the editor's own findings onto the preflight's input shape.
+ *
+ * The two types differ by exactly one field name (`rule` vs `ruleId`),
+ * which is enough to make them structurally incompatible — so this
+ * conversion is exported rather than left as an exercise for every
+ * host that wants the a11y export policy to work.
+ */
+export function toPreflightA11yIssues(
+	issues: readonly AccessibilityIssue[],
+): readonly PreflightA11yIssue[] {
+	return issues.map((issue) => ({
+		severity: issue.severity,
+		ruleId: issue.rule,
+		nodeId: issue.nodeId,
+	}));
 }
