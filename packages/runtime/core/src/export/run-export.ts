@@ -26,7 +26,10 @@
 
 import type { Data as PuckData } from "@puckeditor/core";
 
-import type { ExportPreflightResult } from "../editor/export-preflight.js";
+import type {
+	ExportPreflightResult,
+	ExportValidationEvent,
+} from "../editor/export-preflight.js";
 import { StudioExportError } from "@/runtime/errors";
 import type { ExportStoreApi } from "@/state/index";
 import type { IRAssetResolver } from "@/types/asset-resolver";
@@ -97,6 +100,21 @@ export interface RunExportOptions<
 	 * must keep exporting through any format.
 	 */
 	readonly preflight?: ExportPreflightResult;
+	/**
+	 * Content-free `export.validation` sink (DD-0019 §22.4, §32.1;
+	 * PLAN-0020 CORE-P3-009 Val, wired in CORE-P4-004).
+	 *
+	 * `runExportPreflight` already *builds* this event, but Core ships
+	 * no export UI of its own, so without a sink the payload was
+	 * constructed and dropped — an operational event nobody could
+	 * observe. Hosts pass `bridge.diagnostics.emit`.
+	 *
+	 * Fires exactly once per export attempt, **before** the blocked
+	 * throw, so a blocked export is still reported. A throwing sink is
+	 * a host reporting bug and must not be mistaken for an export
+	 * failure, so it is caught and ignored here.
+	 */
+	readonly onValidation?: (event: ExportValidationEvent) => void;
 }
 
 /**
@@ -117,6 +135,16 @@ export async function runExport<
 	const { format, data, toIR, assetResolvers, exportStore, onWarning } =
 		options;
 	const store = exportStore?.getState();
+
+	// Emit before the blocked branch below: "this export was validated
+	// and rejected" is exactly the event an operator needs.
+	if (options.preflight !== undefined && options.onValidation !== undefined) {
+		try {
+			options.onValidation(options.preflight.event);
+		} catch {
+			// A broken host sink must not fail the export.
+		}
+	}
 
 	// Preflight first: a blocked export must not run the format at all,
 	// because a format that emitted output would leave the author with a

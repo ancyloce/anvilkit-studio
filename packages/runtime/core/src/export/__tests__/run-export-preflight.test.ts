@@ -13,6 +13,7 @@ import { StudioExportError } from "@/runtime/errors";
 import type { ExportFormatDefinition, ExportResult } from "@/types/export";
 import type { PageIR } from "@/types/ir";
 import { runExportPreflight } from "../../editor/export-preflight.js";
+import { assertContentFreeEvent } from "../../testing/editor/assertions.js";
 import { runExport } from "../run-export.js";
 
 const IR = { root: {}, content: [] } as unknown as PageIR;
@@ -138,5 +139,97 @@ describe("runExport — preflight enforcement", () => {
 		const { format, run } = formatWith();
 		await runExport({ format, data: {} as never, toIR: () => IR });
 		expect(run).toHaveBeenCalledOnce();
+	});
+});
+
+describe("export.validation event emission (CORE-P4-004)", () => {
+	// `runExportPreflight` always BUILT this payload, but until
+	// CORE-P4-004 nothing emitted it — an operational event no operator
+	// could observe. §32.1 requires every commit/rejection to emit one.
+	it("emits a content-free passed event for an allowed export", async () => {
+		const { format } = formatWith();
+		const onValidation = vi.fn();
+		await runExport({
+			format,
+			data: {} as never,
+			toIR: () => IR,
+			preflight: passed,
+			onValidation,
+		});
+		expect(onValidation).toHaveBeenCalledTimes(1);
+		expect(onValidation).toHaveBeenCalledWith({
+			type: "export.validation",
+			status: "passed",
+			featureIds: ["bindings"],
+		});
+	});
+
+	it("emits BEFORE the blocked throw, so a rejection is reported too", async () => {
+		const { format } = formatWith();
+		const onValidation = vi.fn();
+		await expect(
+			runExport({
+				format,
+				data: {} as never,
+				toIR: () => IR,
+				preflight: blocked,
+				onValidation,
+			}),
+		).rejects.toBeInstanceOf(StudioExportError);
+		expect(onValidation).toHaveBeenCalledWith(
+			expect.objectContaining({ status: "failed" }),
+		);
+	});
+
+	it("reports a degraded dev preview as failed validation", async () => {
+		const { format } = formatWith();
+		const onValidation = vi.fn();
+		await runExport({
+			format,
+			data: {} as never,
+			toIR: () => IR,
+			preflight: degraded,
+			onValidation,
+		});
+		expect(onValidation).toHaveBeenCalledWith(
+			expect.objectContaining({ status: "failed" }),
+		);
+	});
+
+	it("carries no content — only feature ids and a binary status", () => {
+		assertContentFreeEvent(blocked.event);
+		assertContentFreeEvent(passed.event);
+	});
+
+	it("survives a throwing host sink without failing the export", async () => {
+		// A broken reporting hook is a host bug; misattributing it as an
+		// export failure would send people debugging the wrong system.
+		const { format, run } = formatWith();
+		await expect(
+			runExport({
+				format,
+				data: {} as never,
+				toIR: () => IR,
+				preflight: passed,
+				onValidation: () => {
+					throw new Error("host sink exploded");
+				},
+			}),
+		).resolves.toMatchObject({ filename: "out.html" });
+		expect(run).toHaveBeenCalledTimes(1);
+	});
+
+	it("emits nothing when no preflight verdict was supplied", async () => {
+		// The pre-editor path: no editor features in play, nothing to
+		// validate, so no event.
+		const { format } = formatWith();
+		const onValidation = vi.fn();
+		await runExport({
+			format,
+			data: {} as never,
+			toIR: () => IR,
+			onValidation,
+		});
+		expect(onValidation).not.toHaveBeenCalled();
 	});
 });
