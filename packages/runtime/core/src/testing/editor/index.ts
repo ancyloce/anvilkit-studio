@@ -13,6 +13,18 @@
  */
 
 export {
+	certify,
+	CFX_COMPONENT_IDS,
+	CFX_FIXTURES,
+	CFX_IDS,
+	CFX_TOKEN_IDS,
+	type CfxFixture,
+	cfxFixture,
+	type CfxId,
+	resetCfxCoverage,
+	uncertifiedFixtures,
+} from "./cfx/index.js";
+export {
 	assertContentFreeEvent,
 	createHistoryRecordingProbe,
 	type HistoryRecordingProbe,
