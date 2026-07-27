@@ -25,6 +25,7 @@ import {
 	useMemo,
 	useState,
 } from "react";
+import { PageNavigator } from "../../../../../../react/editor/pages/PageNavigator.js";
 import { useStudioPagesSourceOrDefault } from "@/context/pages-source";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
@@ -196,6 +197,10 @@ function usePagesPanelElement(): ReactNode {
 			className="ak-pages-panel flex min-h-0 flex-1 flex-col"
 			data-testid="ak-layer-pages"
 		>
+			{/* §18 host page navigation (CORE-P3-010). Renders nothing
+			    unless the host configured an `editor.pageAdapter`, so this
+			    is inert for every existing setup. */}
+			<PageNavigator />
 			{/* No title row here — the Pages/Layers <TabsTab> in `LayerModule`
 			    already conveys which mode is active (task Phase 6: avoid
 			    duplicating that title inside the panel body). */}
