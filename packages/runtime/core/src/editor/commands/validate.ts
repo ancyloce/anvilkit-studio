@@ -36,7 +36,11 @@ import { validateDefinitionDelete } from "../components/lifecycle.js";
 import { applyComponentDefinitionPatch } from "../components/patch.js";
 import { validateVariantModel } from "../components/variants.js";
 import { bindingUpdateErrors } from "../bindings/validate.js";
-import { interactionCreateErrors } from "../interactions/validate.js";
+import {
+	interactionCreateErrors,
+	interactionDeleteErrors,
+	interactionUpdateErrors,
+} from "../interactions/validate.js";
 import { applyStyleDefinitionPatch } from "../styles/patch.js";
 import { planTokenDeletion } from "../tokens/deletion.js";
 import { checkTokenAliasGraph } from "../tokens/graph.js";
@@ -79,6 +83,8 @@ const IMPLEMENTED_TYPES = new Set<string>([
 	"component.instance.variant.set",
 	// Phase 3 — interactions (CORE-P3-001)
 	"interaction.create",
+	"interaction.update",
+	"interaction.delete",
 	// Phase 3 — bindings (CORE-P3-006)
 	"binding.update",
 ]);
@@ -733,6 +739,14 @@ export function validateAtomicCommand(
 			);
 		case "binding.update":
 			return bindingUpdateErrors(state, command.binding);
+		case "interaction.update":
+			return interactionUpdateErrors(
+				state,
+				command.interaction,
+				options.policies ?? {},
+			);
+		case "interaction.delete":
+			return interactionDeleteErrors();
 		case "interaction.create":
 			return interactionCreateErrors(
 				state,

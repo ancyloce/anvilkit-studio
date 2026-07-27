@@ -466,6 +466,26 @@ export function reduceValidatedCommand(
 				},
 			};
 		}
+		case "interaction.update": {
+			// Validation rejects an unknown id, so this only ever replaces.
+			return {
+				...state,
+				interactions: {
+					...state.interactions,
+					[command.interaction.id]: command.interaction,
+				},
+			};
+		}
+		case "interaction.delete": {
+			if (!Object.hasOwn(state.interactions, command.interactionId)) {
+				// Already absent: return the same object so the pipeline's
+				// noop detection skips the history entry.
+				return state;
+			}
+			const { [command.interactionId]: _removed, ...rest } =
+				state.interactions;
+			return { ...state, interactions: rest };
+		}
 		case "interaction.create": {
 			// Validation rejects duplicate ids, so this only ever adds.
 			// A dangling node reference is deliberately NOT rejected —
