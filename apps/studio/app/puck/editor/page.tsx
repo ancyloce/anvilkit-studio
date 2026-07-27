@@ -30,6 +30,7 @@ import {
 	useSyncExternalStore,
 } from "react";
 import { demoDataSourceAdapter } from "@/lib/demo-data-source";
+import { demoPageAdapter } from "@/lib/demo-page-adapter";
 import { useDemoIdentity } from "@/lib/collab-identity";
 import { resolveCollabRelayUrl } from "@/lib/collab-relay-url";
 import { createCopilotSidebarPlugin } from "@/lib/copilot-sidebar-plugin";
@@ -1112,6 +1113,7 @@ export default function PuckEditorPage() {
 							? {
 									features: { enabled: true },
 									dataSourceAdapter: demoDataSourceAdapter,
+									pageAdapter: demoPageAdapter,
 								}
 							: undefined
 					}

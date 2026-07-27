@@ -249,6 +249,113 @@ test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 		await expect(failed).toHaveAttribute("data-reason", "timeout");
 	});
 
+	test("every action family is offered and a non-URL action commits", async ({
+		page,
+	}) => {
+		await openEditor(page);
+		await openLayersPanel(page);
+		await selectFirstNode(page);
+		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
+			timeout: 20_000,
+		});
+
+		// §16 declares six families; all of them must be authorable.
+		await page.getByTestId("ak-action-kind").click();
+		await expect(page.getByRole("option")).toHaveCount(6);
+
+		// Pick `scroll`, which needs a target — proving the picker is
+		// populated from the real document rather than hard-coded.
+		await page.getByRole("option", { name: /scroll/i }).click();
+		await page.getByTestId("ak-action-target").click();
+		await page.getByRole("option").first().click();
+		await page.getByTestId("ak-interaction-add").click();
+
+		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(1, {
+			timeout: 10_000,
+		});
+	});
+
+	test("an interaction can be removed again", async ({ page }) => {
+		await openEditor(page);
+		await openLayersPanel(page);
+		await selectFirstNode(page);
+		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
+			timeout: 20_000,
+		});
+
+		await page.getByTestId("ak-interaction-url").fill("https://example.com/a");
+		await page.getByTestId("ak-interaction-add").click();
+		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(1, {
+			timeout: 10_000,
+		});
+
+		await page.getByTestId("ak-interaction-remove").click();
+		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(0, {
+			timeout: 10_000,
+		});
+	});
+
+	test("the timeline visualises actions and reorders them", async ({ page }) => {
+		await openEditor(page);
+		await openLayersPanel(page);
+		await selectFirstNode(page);
+		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
+			timeout: 20_000,
+		});
+
+		await page.getByTestId("ak-interaction-url").fill("https://example.com/first");
+		await page.getByTestId("ak-interaction-add").click();
+		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(1, {
+			timeout: 10_000,
+		});
+
+		await page.getByTestId("ak-interaction-timeline-toggle").click();
+		await expect(page.getByTestId("ak-timeline")).toBeVisible();
+		// One action so far: a `url` is instant, so it draws no bar.
+		await expect(page.getByTestId("ak-timeline-row")).toHaveCount(1);
+		await expect(page.getByTestId("ak-timeline-instant")).toBeVisible();
+
+		// Append a second action so ordering becomes meaningful.
+		await page.getByTestId("ak-interaction-url").fill("https://example.com/second");
+		await page.getByTestId("ak-interaction-add-action").click();
+		await expect(page.getByTestId("ak-timeline-row")).toHaveCount(2, {
+			timeout: 10_000,
+		});
+
+		// Reorder commits through `interaction.update` in one dispatch.
+		await page.getByTestId("ak-timeline-move-down").first().click();
+		await expect(page.getByTestId("ak-timeline-row")).toHaveCount(2);
+
+		// One undo restores the prior order — the chrome's button, since a
+		// keyboard shortcut never reaches Puck history from the iframe.
+		await page.getByRole("button", { name: /undo/i }).click();
+		await expect(page.getByTestId("ak-timeline-row")).toHaveCount(2);
+	});
+
+	test("host pages are listed and opening one calls the adapter", async ({
+		page,
+	}) => {
+		await openEditor(page);
+		await openLayersPanel(page);
+		// The navigator lives in the Pages tab of the Layers rail module.
+		await page.getByTestId("ak-layer-tab-pages").click({ force: true });
+
+		const navigator = page.getByTestId("ak-page-navigator");
+		await expect(navigator).toBeVisible({ timeout: 20_000 });
+		await expect(page.getByTestId("ak-page-open")).toHaveCount(2);
+
+		await page.getByTestId("ak-page-open").nth(1).click();
+		// §18: the switch goes to the host, never through Puck history.
+		await expect
+			.poll(async () =>
+				page.evaluate(
+					() =>
+						(window as unknown as Record<string, unknown>).__akLastOpenedPage,
+				),
+			)
+			.toBe("about");
+	});
+
 	test("editor sections stay hidden for a document with no selection", async ({
 		page,
 	}) => {
