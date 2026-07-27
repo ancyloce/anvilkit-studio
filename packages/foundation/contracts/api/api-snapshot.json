@@ -790,7 +790,7 @@
 											},
 											{
 												"type": "reference",
-												"target": 970,
+												"target": 977,
 												"name": "StyleDefinitionV1",
 												"package": "@anvilkit/contracts"
 											}
@@ -833,7 +833,7 @@
 											},
 											{
 												"type": "reference",
-												"target": 1004,
+												"target": 1011,
 												"name": "TokenMode",
 												"package": "@anvilkit/contracts"
 											}
@@ -876,7 +876,7 @@
 											},
 											{
 												"type": "reference",
-												"target": 980,
+												"target": 987,
 												"name": "DesignToken",
 												"package": "@anvilkit/contracts"
 											}
@@ -1158,7 +1158,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1116,
+								"target": 1123,
 								"name": "JsonValue",
 								"package": "@anvilkit/contracts"
 							}
@@ -1233,7 +1233,7 @@
 					]
 				},
 				{
-					"id": 1017,
+					"id": 1024,
 					"name": "BorderEdge",
 					"variant": "declaration",
 					"kind": 256,
@@ -1248,7 +1248,7 @@
 					},
 					"children": [
 						{
-							"id": 1020,
+							"id": 1027,
 							"name": "color",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1258,11 +1258,11 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1147,
+								"target": 1154,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 1033,
+										"target": 1040,
 										"name": "CssColor",
 										"package": "@anvilkit/contracts"
 									}
@@ -1272,7 +1272,7 @@
 							}
 						},
 						{
-							"id": 1018,
+							"id": 1025,
 							"name": "style",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1303,7 +1303,7 @@
 							}
 						},
 						{
-							"id": 1019,
+							"id": 1026,
 							"name": "width",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1313,7 +1313,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -1323,15 +1323,15 @@
 						{
 							"title": "Properties",
 							"children": [
-								1020,
-								1018,
-								1019
+								1027,
+								1025,
+								1026
 							]
 						}
 					]
 				},
 				{
-					"id": 1021,
+					"id": 1028,
 					"name": "BorderSpec",
 					"variant": "declaration",
 					"kind": 256,
@@ -1346,7 +1346,7 @@
 					},
 					"children": [
 						{
-							"id": 1024,
+							"id": 1031,
 							"name": "bottom",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1356,13 +1356,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1017,
+								"target": 1024,
 								"name": "BorderEdge",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1025,
+							"id": 1032,
 							"name": "left",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1372,13 +1372,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1017,
+								"target": 1024,
 								"name": "BorderEdge",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1023,
+							"id": 1030,
 							"name": "right",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1388,13 +1388,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1017,
+								"target": 1024,
 								"name": "BorderEdge",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1022,
+							"id": 1029,
 							"name": "top",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1404,7 +1404,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1017,
+								"target": 1024,
 								"name": "BorderEdge",
 								"package": "@anvilkit/contracts"
 							}
@@ -1414,10 +1414,10 @@
 						{
 							"title": "Properties",
 							"children": [
-								1024,
-								1025,
-								1023,
-								1022
+								1031,
+								1032,
+								1030,
+								1029
 							]
 						}
 					]
@@ -1863,7 +1863,7 @@
 											},
 											{
 												"type": "reference",
-												"target": 1116,
+												"target": 1123,
 												"name": "JsonValue",
 												"package": "@anvilkit/contracts"
 											}
@@ -1985,7 +1985,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1138,
+								"target": 1145,
 								"name": "PropertyPath",
 								"package": "@anvilkit/contracts"
 							}
@@ -2027,7 +2027,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1116,
+								"target": 1123,
 								"name": "JsonValue",
 								"package": "@anvilkit/contracts"
 							}
@@ -2704,7 +2704,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 970,
+								"target": 977,
 								"name": "StyleDefinitionV1",
 								"package": "@anvilkit/contracts"
 							}
@@ -2972,7 +2972,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 980,
+								"target": 987,
 								"name": "DesignToken",
 								"package": "@anvilkit/contracts"
 							}
@@ -3014,7 +3014,7 @@
 					]
 				},
 				{
-					"id": 1028,
+					"id": 1035,
 					"name": "CssBoxEdges",
 					"variant": "declaration",
 					"kind": 256,
@@ -3029,7 +3029,7 @@
 					},
 					"children": [
 						{
-							"id": 1031,
+							"id": 1038,
 							"name": "bottom",
 							"variant": "declaration",
 							"kind": 1024,
@@ -3039,13 +3039,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1032,
+							"id": 1039,
 							"name": "left",
 							"variant": "declaration",
 							"kind": 1024,
@@ -3055,13 +3055,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1030,
+							"id": 1037,
 							"name": "right",
 							"variant": "declaration",
 							"kind": 1024,
@@ -3071,13 +3071,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1029,
+							"id": 1036,
 							"name": "top",
 							"variant": "declaration",
 							"kind": 1024,
@@ -3087,7 +3087,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -3097,16 +3097,16 @@
 						{
 							"title": "Properties",
 							"children": [
-								1031,
-								1032,
-								1030,
-								1029
+								1038,
+								1039,
+								1037,
+								1036
 							]
 						}
 					]
 				},
 				{
-					"id": 1052,
+					"id": 1059,
 					"name": "CssCorners",
 					"variant": "declaration",
 					"kind": 256,
@@ -3121,7 +3121,7 @@
 					},
 					"children": [
 						{
-							"id": 1056,
+							"id": 1063,
 							"name": "bottomLeft",
 							"variant": "declaration",
 							"kind": 1024,
@@ -3131,13 +3131,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1055,
+							"id": 1062,
 							"name": "bottomRight",
 							"variant": "declaration",
 							"kind": 1024,
@@ -3147,13 +3147,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1053,
+							"id": 1060,
 							"name": "topLeft",
 							"variant": "declaration",
 							"kind": 1024,
@@ -3163,13 +3163,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1054,
+							"id": 1061,
 							"name": "topRight",
 							"variant": "declaration",
 							"kind": 1024,
@@ -3179,7 +3179,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -3189,10 +3189,10 @@
 						{
 							"title": "Properties",
 							"children": [
-								1056,
-								1055,
-								1053,
-								1054
+								1063,
+								1062,
+								1060,
+								1061
 							]
 						}
 					]
@@ -3795,7 +3795,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 964,
+								"target": 971,
 								"name": "StyleDefinitionDeletionDisposition",
 								"package": "@anvilkit/contracts"
 							}
@@ -4000,7 +4000,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 998,
+								"target": 1005,
 								"name": "TokenDeletionDisposition",
 								"package": "@anvilkit/contracts"
 							}
@@ -4187,7 +4187,7 @@
 					]
 				},
 				{
-					"id": 980,
+					"id": 987,
 					"name": "DesignToken",
 					"variant": "declaration",
 					"kind": 256,
@@ -4202,7 +4202,7 @@
 					},
 					"children": [
 						{
-							"id": 987,
+							"id": 994,
 							"name": "description",
 							"variant": "declaration",
 							"kind": 1024,
@@ -4216,7 +4216,7 @@
 							}
 						},
 						{
-							"id": 982,
+							"id": 989,
 							"name": "id",
 							"variant": "declaration",
 							"kind": 1024,
@@ -4229,7 +4229,7 @@
 							}
 						},
 						{
-							"id": 984,
+							"id": 991,
 							"name": "name",
 							"variant": "declaration",
 							"kind": 1024,
@@ -4242,7 +4242,7 @@
 							}
 						},
 						{
-							"id": 983,
+							"id": 990,
 							"name": "path",
 							"variant": "declaration",
 							"kind": 1024,
@@ -4262,7 +4262,7 @@
 							}
 						},
 						{
-							"id": 988,
+							"id": 995,
 							"name": "source",
 							"variant": "declaration",
 							"kind": 1024,
@@ -4272,13 +4272,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 989,
+								"target": 996,
 								"name": "DesignTokenSource",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 985,
+							"id": 992,
 							"name": "type",
 							"variant": "declaration",
 							"kind": 1024,
@@ -4287,13 +4287,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1008,
+								"target": 1015,
 								"name": "TokenType",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 986,
+							"id": 993,
 							"name": "values",
 							"variant": "declaration",
 							"kind": 1024,
@@ -4318,17 +4318,17 @@
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 1007,
+												"target": 1014,
 												"name": "TokenModeId",
 												"package": "@anvilkit/contracts"
 											},
 											{
 												"type": "reference",
-												"target": 1009,
+												"target": 1016,
 												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 981,
+														"target": 988,
 														"name": "T",
 														"package": "@anvilkit/contracts",
 														"qualifiedName": "DesignToken.T",
@@ -4352,19 +4352,19 @@
 						{
 							"title": "Properties",
 							"children": [
-								987,
-								982,
-								984,
-								983,
-								988,
-								985,
-								986
+								994,
+								989,
+								991,
+								990,
+								995,
+								992,
+								993
 							]
 						}
 					],
 					"typeParameters": [
 						{
-							"id": 981,
+							"id": 988,
 							"name": "T",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -4377,7 +4377,7 @@
 					]
 				},
 				{
-					"id": 989,
+					"id": 996,
 					"name": "DesignTokenSource",
 					"variant": "declaration",
 					"kind": 256,
@@ -4392,7 +4392,7 @@
 					},
 					"children": [
 						{
-							"id": 991,
+							"id": 998,
 							"name": "ref",
 							"variant": "declaration",
 							"kind": 1024,
@@ -4405,7 +4405,7 @@
 							}
 						},
 						{
-							"id": 990,
+							"id": 997,
 							"name": "system",
 							"variant": "declaration",
 							"kind": 1024,
@@ -4431,8 +4431,8 @@
 						{
 							"title": "Properties",
 							"children": [
-								991,
-								990
+								998,
+								997
 							]
 						}
 					]
@@ -6135,7 +6135,7 @@
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 1116,
+												"target": 1123,
 												"name": "JsonValue",
 												"package": "@anvilkit/contracts"
 											}
@@ -7385,7 +7385,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1116,
+								"target": 1123,
 								"name": "JsonValue",
 								"package": "@anvilkit/contracts"
 							}
@@ -7401,7 +7401,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1116,
+								"target": 1123,
 								"name": "JsonValue",
 								"package": "@anvilkit/contracts"
 							}
@@ -7525,6 +7525,211 @@
 					]
 				},
 				{
+					"id": 941,
+					"name": "EditorStyleAdapter",
+					"variant": "declaration",
+					"kind": 256,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Strict-CSP injection adapter for the authoring stylesheet\n(DD-0019 §29: \"Hosts with strict CSP may provide a nonce or\nconstructable-stylesheet adapter for authoring styles\").\n\nCore writes authoring CSS into the canvas iframe through a single\nchannel, so a host under "
+							},
+							{
+								"kind": "code",
+								"text": "`style-src 'nonce-…'`"
+							},
+							{
+								"kind": "text",
+								"text": " (or one that forbids\ninline "
+							},
+							{
+								"kind": "code",
+								"text": "`<style>`"
+							},
+							{
+								"kind": "text",
+								"text": " entirely) has exactly one seam to override. Absent,\nCore keeps its default "
+							},
+							{
+								"kind": "code",
+								"text": "`<style>`"
+							},
+							{
+								"kind": "text",
+								"text": " element — unchanged behaviour for\nevery host that does not need this.\n\nThe two members are alternatives, not layers: when "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "adopt",
+								"target": 943
+							},
+							{
+								"kind": "text",
+								"text": " is\nsupplied Core does not create a "
+							},
+							{
+								"kind": "code",
+								"text": "`<style>`"
+							},
+							{
+								"kind": "text",
+								"text": " element at all, so\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "nonce",
+								"target": 942
+							},
+							{
+								"kind": "text",
+								"text": " would have nothing to apply to."
+							}
+						]
+					},
+					"children": [
+						{
+							"id": 942,
+							"name": "nonce",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isOptional": true,
+								"isReadonly": true
+							},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "CSP nonce stamped on the "
+									},
+									{
+										"kind": "code",
+										"text": "`<style>`"
+									},
+									{
+										"kind": "text",
+										"text": " element Core creates. Applied\nto both the "
+									},
+									{
+										"kind": "code",
+										"text": "`nonce`"
+									},
+									{
+										"kind": "text",
+										"text": " property and the attribute: the property is\nwhat the browser actually checks, the attribute keeps the element\ninspectable."
+									}
+								]
+							},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 943,
+							"name": "adopt",
+							"variant": "declaration",
+							"kind": 2048,
+							"flags": {
+								"isOptional": true
+							},
+							"signatures": [
+								{
+									"id": 944,
+									"name": "adopt",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "Takes over injection entirely — typically via a constructable\n"
+											},
+											{
+												"kind": "code",
+												"text": "`CSSStyleSheet`"
+											},
+											{
+												"kind": "text",
+												"text": " pushed onto "
+											},
+											{
+												"kind": "code",
+												"text": "`document.adoptedStyleSheets`"
+											},
+											{
+												"kind": "text",
+												"text": ", which\nneeds no "
+											},
+											{
+												"kind": "code",
+												"text": "`style-src`"
+											},
+											{
+												"kind": "text",
+												"text": " allowance at all. Called on every authoring\nchange with the full stylesheet text; the host owns idempotency\nand teardown for the document it was handed."
+											}
+										]
+									},
+									"parameters": [
+										{
+											"id": 945,
+											"name": "doc",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "typescript",
+													"packagePath": "lib/lib.dom.d.ts",
+													"qualifiedName": "Document"
+												},
+												"name": "Document",
+												"package": "typescript"
+											}
+										},
+										{
+											"id": 946,
+											"name": "cssText",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							]
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"children": [
+								942
+							]
+						},
+						{
+							"title": "Methods",
+							"children": [
+								943
+							]
+						}
+					]
+				},
+				{
 					"id": 695,
 					"name": "ExportValidationResult",
 					"variant": "declaration",
@@ -7622,7 +7827,7 @@
 					]
 				},
 				{
-					"id": 1097,
+					"id": 1104,
 					"name": "FilterSpec",
 					"variant": "declaration",
 					"kind": 256,
@@ -7653,7 +7858,7 @@
 					},
 					"children": [
 						{
-							"id": 1098,
+							"id": 1105,
 							"name": "blur",
 							"variant": "declaration",
 							"kind": 1024,
@@ -7663,13 +7868,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1099,
+							"id": 1106,
 							"name": "brightness",
 							"variant": "declaration",
 							"kind": 1024,
@@ -7683,7 +7888,7 @@
 							}
 						},
 						{
-							"id": 1100,
+							"id": 1107,
 							"name": "contrast",
 							"variant": "declaration",
 							"kind": 1024,
@@ -7697,7 +7902,7 @@
 							}
 						},
 						{
-							"id": 1102,
+							"id": 1109,
 							"name": "grayscale",
 							"variant": "declaration",
 							"kind": 1024,
@@ -7711,7 +7916,7 @@
 							}
 						},
 						{
-							"id": 1101,
+							"id": 1108,
 							"name": "saturate",
 							"variant": "declaration",
 							"kind": 1024,
@@ -7729,17 +7934,17 @@
 						{
 							"title": "Properties",
 							"children": [
-								1098,
-								1099,
-								1100,
-								1102,
-								1101
+								1105,
+								1106,
+								1107,
+								1109,
+								1108
 							]
 						}
 					]
 				},
 				{
-					"id": 1103,
+					"id": 1110,
 					"name": "GradientStop",
 					"variant": "declaration",
 					"kind": 256,
@@ -7762,7 +7967,7 @@
 					},
 					"children": [
 						{
-							"id": 1104,
+							"id": 1111,
 							"name": "color",
 							"variant": "declaration",
 							"kind": 1024,
@@ -7771,11 +7976,11 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1147,
+								"target": 1154,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 1033,
+										"target": 1040,
 										"name": "CssColor",
 										"package": "@anvilkit/contracts"
 									}
@@ -7785,7 +7990,7 @@
 							}
 						},
 						{
-							"id": 1105,
+							"id": 1112,
 							"name": "offset",
 							"variant": "declaration",
 							"kind": 1024,
@@ -7802,8 +8007,8 @@
 						{
 							"title": "Properties",
 							"children": [
-								1104,
-								1105
+								1111,
+								1112
 							]
 						}
 					]
@@ -8133,7 +8338,7 @@
 					]
 				},
 				{
-					"id": 992,
+					"id": 999,
 					"name": "ImportableTokenValue",
 					"variant": "declaration",
 					"kind": 256,
@@ -8148,7 +8353,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "DesignTokenSource",
-								"target": 989
+								"target": 996
 							},
 							{
 								"kind": "text",
@@ -8158,7 +8363,7 @@
 					},
 					"children": [
 						{
-							"id": 995,
+							"id": 1002,
 							"name": "label",
 							"variant": "declaration",
 							"kind": 1024,
@@ -8179,7 +8384,7 @@
 							}
 						},
 						{
-							"id": 994,
+							"id": 1001,
 							"name": "ref",
 							"variant": "declaration",
 							"kind": 1024,
@@ -8208,7 +8413,7 @@
 							}
 						},
 						{
-							"id": 993,
+							"id": 1000,
 							"name": "system",
 							"variant": "declaration",
 							"kind": 1024,
@@ -8230,7 +8435,7 @@
 							}
 						},
 						{
-							"id": 996,
+							"id": 1003,
 							"name": "type",
 							"variant": "declaration",
 							"kind": 1024,
@@ -8239,13 +8444,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1008,
+								"target": 1015,
 								"name": "TokenType",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 997,
+							"id": 1004,
 							"name": "value",
 							"variant": "declaration",
 							"kind": 1024,
@@ -8262,7 +8467,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1116,
+								"target": 1123,
 								"name": "JsonValue",
 								"package": "@anvilkit/contracts"
 							}
@@ -8272,11 +8477,11 @@
 						{
 							"title": "Properties",
 							"children": [
-								995,
-								994,
-								993,
-								996,
-								997
+								1002,
+								1001,
+								1000,
+								1003,
+								1004
 							]
 						}
 					]
@@ -8539,7 +8744,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1026,
+								"target": 1033,
 								"name": "CssAlignment",
 								"package": "@anvilkit/contracts"
 							}
@@ -8555,7 +8760,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -8571,7 +8776,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1115,
+								"target": 1122,
 								"name": "GridTrackList",
 								"package": "@anvilkit/contracts"
 							}
@@ -8641,7 +8846,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -8657,7 +8862,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -8673,7 +8878,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1028,
+								"target": 1035,
 								"name": "CssBoxEdges",
 								"package": "@anvilkit/contracts"
 							}
@@ -8689,7 +8894,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1058,
+								"target": 1065,
 								"name": "CssJustification",
 								"package": "@anvilkit/contracts"
 							}
@@ -8705,7 +8910,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1028,
+								"target": 1035,
 								"name": "CssBoxEdges",
 								"package": "@anvilkit/contracts"
 							}
@@ -8721,7 +8926,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -8737,7 +8942,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -8753,7 +8958,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -8769,7 +8974,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -8816,7 +9021,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1028,
+								"target": 1035,
 								"name": "CssBoxEdges",
 								"package": "@anvilkit/contracts"
 							}
@@ -8863,7 +9068,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -8879,7 +9084,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1115,
+								"target": 1122,
 								"name": "GridTrackList",
 								"package": "@anvilkit/contracts"
 							}
@@ -8895,7 +9100,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -9358,7 +9563,7 @@
 											},
 											{
 												"type": "reference",
-												"target": 1116,
+												"target": 1123,
 												"name": "JsonValue",
 												"package": "@anvilkit/contracts"
 											}
@@ -10682,7 +10887,7 @@
 											},
 											{
 												"type": "reference",
-												"target": 1116,
+												"target": 1123,
 												"name": "JsonValue",
 												"package": "@anvilkit/contracts"
 											}
@@ -11406,7 +11611,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1116,
+								"target": 1123,
 								"name": "JsonValue",
 								"package": "@anvilkit/contracts"
 							}
@@ -11754,7 +11959,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1095,
+								"target": 1102,
 								"typeArguments": [
 									{
 										"type": "reference",
@@ -12150,7 +12355,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1095,
+								"target": 1102,
 								"typeArguments": [
 									{
 										"type": "reference",
@@ -12360,7 +12565,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1095,
+								"target": 1102,
 								"typeArguments": [
 									{
 										"type": "reference",
@@ -12934,7 +13139,7 @@
 					]
 				},
 				{
-					"id": 1139,
+					"id": 1146,
 					"name": "ShadowSpec",
 					"variant": "declaration",
 					"kind": 256,
@@ -12949,7 +13154,7 @@
 					},
 					"children": [
 						{
-							"id": 1143,
+							"id": 1150,
 							"name": "blur",
 							"variant": "declaration",
 							"kind": 1024,
@@ -12958,13 +13163,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1145,
+							"id": 1152,
 							"name": "color",
 							"variant": "declaration",
 							"kind": 1024,
@@ -12973,11 +13178,11 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1147,
+								"target": 1154,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 1033,
+										"target": 1040,
 										"name": "CssColor",
 										"package": "@anvilkit/contracts"
 									}
@@ -12987,7 +13192,7 @@
 							}
 						},
 						{
-							"id": 1140,
+							"id": 1147,
 							"name": "kind",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13009,7 +13214,7 @@
 							}
 						},
 						{
-							"id": 1141,
+							"id": 1148,
 							"name": "offsetX",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13018,13 +13223,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1142,
+							"id": 1149,
 							"name": "offsetY",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13033,13 +13238,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 1144,
+							"id": 1151,
 							"name": "spread",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13049,7 +13254,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1059,
+								"target": 1066,
 								"name": "CssLength",
 								"package": "@anvilkit/contracts"
 							}
@@ -13059,12 +13264,12 @@
 						{
 							"title": "Properties",
 							"children": [
-								1143,
-								1145,
-								1140,
-								1141,
-								1142,
-								1144
+								1150,
+								1152,
+								1147,
+								1148,
+								1149,
+								1151
 							]
 						}
 					]
@@ -13170,7 +13375,7 @@
 					]
 				},
 				{
-					"id": 941,
+					"id": 947,
 					"name": "StudioEditorConfig",
 					"variant": "declaration",
 					"kind": 256,
@@ -13193,7 +13398,7 @@
 					},
 					"children": [
 						{
-							"id": 943,
+							"id": 949,
 							"name": "breakpoints",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13216,7 +13421,7 @@
 							}
 						},
 						{
-							"id": 948,
+							"id": 954,
 							"name": "dataSourceAdapter",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13232,7 +13437,7 @@
 							}
 						},
 						{
-							"id": 944,
+							"id": 950,
 							"name": "defaultTokenMode",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13246,7 +13451,7 @@
 							}
 						},
 						{
-							"id": 942,
+							"id": 948,
 							"name": "features",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13256,13 +13461,13 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 950,
+								"target": 957,
 								"name": "StudioEditorFeatures",
 								"package": "@anvilkit/contracts"
 							}
 						},
 						{
-							"id": 945,
+							"id": 951,
 							"name": "importableTokens",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13293,7 +13498,7 @@
 									"type": "array",
 									"elementType": {
 										"type": "reference",
-										"target": 992,
+										"target": 999,
 										"name": "ImportableTokenValue",
 										"package": "@anvilkit/contracts"
 									}
@@ -13301,7 +13506,7 @@
 							}
 						},
 						{
-							"id": 947,
+							"id": 953,
 							"name": "pageAdapter",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13317,7 +13522,7 @@
 							}
 						},
 						{
-							"id": 949,
+							"id": 956,
 							"name": "policies",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13333,7 +13538,7 @@
 							}
 						},
 						{
-							"id": 946,
+							"id": 952,
 							"name": "renderScope",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13371,26 +13576,59 @@
 								"name": "EditorRenderScope",
 								"package": "@anvilkit/contracts"
 							}
+						},
+						{
+							"id": 955,
+							"name": "styleAdapter",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isOptional": true,
+								"isReadonly": true
+							},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Strict-CSP authoring-style injection (§29). Absent = Core's\ndefault "
+									},
+									{
+										"kind": "code",
+										"text": "`<style>`"
+									},
+									{
+										"kind": "text",
+										"text": " element."
+									}
+								]
+							},
+							"type": {
+								"type": "reference",
+								"target": 941,
+								"name": "EditorStyleAdapter",
+								"package": "@anvilkit/contracts"
+							}
 						}
 					],
 					"groups": [
 						{
 							"title": "Properties",
 							"children": [
-								943,
-								948,
-								944,
-								942,
-								945,
-								947,
 								949,
-								946
+								954,
+								950,
+								948,
+								951,
+								953,
+								956,
+								952,
+								955
 							]
 						}
 					]
 				},
 				{
-					"id": 950,
+					"id": 957,
 					"name": "StudioEditorFeatures",
 					"variant": "declaration",
 					"kind": 256,
@@ -13405,7 +13643,7 @@
 					},
 					"children": [
 						{
-							"id": 963,
+							"id": 970,
 							"name": "accessibility",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13419,7 +13657,7 @@
 							}
 						},
 						{
-							"id": 956,
+							"id": 963,
 							"name": "components",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13433,7 +13671,7 @@
 							}
 						},
 						{
-							"id": 962,
+							"id": 969,
 							"name": "dataBinding",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13447,7 +13685,7 @@
 							}
 						},
 						{
-							"id": 954,
+							"id": 961,
 							"name": "directManipulation",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13461,7 +13699,7 @@
 							}
 						},
 						{
-							"id": 951,
+							"id": 958,
 							"name": "enabled",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13475,7 +13713,7 @@
 							}
 						},
 						{
-							"id": 961,
+							"id": 968,
 							"name": "inlineEditing",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13489,7 +13727,7 @@
 							}
 						},
 						{
-							"id": 960,
+							"id": 967,
 							"name": "interactions",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13503,7 +13741,7 @@
 							}
 						},
 						{
-							"id": 952,
+							"id": 959,
 							"name": "layout",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13517,7 +13755,7 @@
 							}
 						},
 						{
-							"id": 955,
+							"id": 962,
 							"name": "multiSelect",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13531,7 +13769,7 @@
 							}
 						},
 						{
-							"id": 953,
+							"id": 960,
 							"name": "responsive",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13545,7 +13783,7 @@
 							}
 						},
 						{
-							"id": 959,
+							"id": 966,
 							"name": "styleDefinitions",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13559,7 +13797,7 @@
 							}
 						},
 						{
-							"id": 958,
+							"id": 965,
 							"name": "tokens",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13573,7 +13811,7 @@
 							}
 						},
 						{
-							"id": 957,
+							"id": 964,
 							"name": "variants",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13591,19 +13829,19 @@
 						{
 							"title": "Properties",
 							"children": [
+								970,
 								963,
-								956,
-								962,
-								954,
-								951,
+								969,
 								961,
-								960,
-								952,
-								955,
-								953,
-								959,
 								958,
-								957
+								968,
+								967,
+								959,
+								962,
+								960,
+								966,
+								965,
+								964
 							]
 						}
 					]
@@ -13660,7 +13898,7 @@
 					]
 				},
 				{
-					"id": 970,
+					"id": 977,
 					"name": "StyleDefinitionV1",
 					"variant": "declaration",
 					"kind": 256,
@@ -13675,7 +13913,7 @@
 					},
 					"children": [
 						{
-							"id": 974,
+							"id": 981,
 							"name": "appliesTo",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13705,7 +13943,7 @@
 							}
 						},
 						{
-							"id": 978,
+							"id": 985,
 							"name": "createdAt",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13718,7 +13956,7 @@
 							}
 						},
 						{
-							"id": 972,
+							"id": 979,
 							"name": "id",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13731,7 +13969,7 @@
 							}
 						},
 						{
-							"id": 975,
+							"id": 982,
 							"name": "layout",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13755,7 +13993,7 @@
 							}
 						},
 						{
-							"id": 973,
+							"id": 980,
 							"name": "name",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13768,7 +14006,7 @@
 							}
 						},
 						{
-							"id": 976,
+							"id": 983,
 							"name": "style",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13792,7 +14030,7 @@
 							}
 						},
 						{
-							"id": 977,
+							"id": 984,
 							"name": "typography",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13816,7 +14054,7 @@
 							}
 						},
 						{
-							"id": 979,
+							"id": 986,
 							"name": "updatedAt",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13829,7 +14067,7 @@
 							}
 						},
 						{
-							"id": 971,
+							"id": 978,
 							"name": "version",
 							"variant": "declaration",
 							"kind": 1024,
@@ -13846,15 +14084,15 @@
 						{
 							"title": "Properties",
 							"children": [
-								974,
-								978,
-								972,
-								975,
-								973,
-								976,
-								977,
+								981,
+								985,
 								979,
-								971
+								982,
+								980,
+								983,
+								984,
+								986,
+								978
 							]
 						}
 					]
@@ -14191,7 +14429,7 @@
 					]
 				},
 				{
-					"id": 1004,
+					"id": 1011,
 					"name": "TokenMode",
 					"variant": "declaration",
 					"kind": 256,
@@ -14214,7 +14452,7 @@
 					},
 					"children": [
 						{
-							"id": 1005,
+							"id": 1012,
 							"name": "id",
 							"variant": "declaration",
 							"kind": 1024,
@@ -14227,7 +14465,7 @@
 							}
 						},
 						{
-							"id": 1006,
+							"id": 1013,
 							"name": "name",
 							"variant": "declaration",
 							"kind": 1024,
@@ -14244,8 +14482,8 @@
 						{
 							"title": "Properties",
 							"children": [
-								1005,
-								1006
+								1012,
+								1013
 							]
 						}
 					]
@@ -14276,11 +14514,11 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1147,
+								"target": 1154,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 1033,
+										"target": 1040,
 										"name": "CssColor",
 										"package": "@anvilkit/contracts"
 									}
@@ -14300,7 +14538,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1147,
+								"target": 1154,
 								"typeArguments": [
 									{
 										"type": "intrinsic",
@@ -14322,11 +14560,11 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1147,
+								"target": 1154,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 1059,
+										"target": 1066,
 										"name": "CssLength",
 										"package": "@anvilkit/contracts"
 									}
@@ -14346,7 +14584,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1147,
+								"target": 1154,
 								"typeArguments": [
 									{
 										"type": "intrinsic",
@@ -14368,11 +14606,11 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1147,
+								"target": 1154,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 1059,
+										"target": 1066,
 										"name": "CssLength",
 										"package": "@anvilkit/contracts"
 									}
@@ -14392,7 +14630,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1147,
+								"target": 1154,
 								"typeArguments": [
 									{
 										"type": "unknown",
@@ -14809,7 +15047,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1095,
+								"target": 1102,
 								"typeArguments": [
 									{
 										"type": "reference",
@@ -15213,7 +15451,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1095,
+								"target": 1102,
 								"typeArguments": [
 									{
 										"type": "reference",
@@ -15225,7 +15463,7 @@
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 970,
+												"target": 977,
 												"name": "StyleDefinitionV1",
 												"package": "@anvilkit/contracts"
 											},
@@ -15427,7 +15665,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1095,
+								"target": 1102,
 								"typeArguments": [
 									{
 										"type": "reference",
@@ -15439,7 +15677,7 @@
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 980,
+												"target": 987,
 												"name": "DesignToken",
 												"package": "@anvilkit/contracts"
 											},
@@ -15722,7 +15960,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1120,
+								"target": 1127,
 								"name": "Paint",
 								"package": "@anvilkit/contracts"
 							}
@@ -15738,7 +15976,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1027,
+								"target": 1034,
 								"name": "CssBlendMode",
 								"package": "@anvilkit/contracts"
 							}
@@ -15754,7 +15992,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1021,
+								"target": 1028,
 								"name": "BorderSpec",
 								"package": "@anvilkit/contracts"
 							}
@@ -15770,7 +16008,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1057,
+								"target": 1064,
 								"name": "CssCursor",
 								"package": "@anvilkit/contracts"
 							}
@@ -15786,7 +16024,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1097,
+								"target": 1104,
 								"name": "FilterSpec",
 								"package": "@anvilkit/contracts"
 							}
@@ -15816,7 +16054,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 1052,
+								"target": 1059,
 								"name": "CssCorners",
 								"package": "@anvilkit/contracts"
 							}
@@ -15837,7 +16075,7 @@
 									"type": "array",
 									"elementType": {
 										"type": "reference",
-										"target": 1139,
+										"target": 1146,
 										"name": "ShadowSpec",
 										"package": "@anvilkit/contracts"
 									}
@@ -16467,7 +16705,7 @@
 					}
 				},
 				{
-					"id": 1026,
+					"id": 1033,
 					"name": "CssAlignment",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -16507,7 +16745,7 @@
 					}
 				},
 				{
-					"id": 1027,
+					"id": 1034,
 					"name": "CssBlendMode",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -16591,7 +16829,7 @@
 					}
 				},
 				{
-					"id": 1033,
+					"id": 1040,
 					"name": "CssColor",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -16606,7 +16844,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "TokenOrLiteral",
-								"target": 1147
+								"target": 1154
 							},
 							{
 								"kind": "text",
@@ -16620,14 +16858,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1034,
+									"id": 1041,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1035,
+											"id": 1042,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16640,7 +16878,7 @@
 											}
 										},
 										{
-											"id": 1036,
+											"id": 1043,
 											"name": "value",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16657,8 +16895,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1035,
-												1036
+												1042,
+												1043
 											]
 										}
 									]
@@ -16667,14 +16905,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1037,
+									"id": 1044,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1042,
+											"id": 1049,
 											"name": "a",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16687,7 +16925,7 @@
 											}
 										},
 										{
-											"id": 1041,
+											"id": 1048,
 											"name": "b",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16700,7 +16938,7 @@
 											}
 										},
 										{
-											"id": 1040,
+											"id": 1047,
 											"name": "g",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16713,7 +16951,7 @@
 											}
 										},
 										{
-											"id": 1038,
+											"id": 1045,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16726,7 +16964,7 @@
 											}
 										},
 										{
-											"id": 1039,
+											"id": 1046,
 											"name": "r",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16743,11 +16981,11 @@
 										{
 											"title": "Properties",
 											"children": [
-												1042,
-												1041,
-												1040,
-												1038,
-												1039
+												1049,
+												1048,
+												1047,
+												1045,
+												1046
 											]
 										}
 									]
@@ -16756,14 +16994,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1043,
+									"id": 1050,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1048,
+											"id": 1055,
 											"name": "a",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16776,7 +17014,7 @@
 											}
 										},
 										{
-											"id": 1045,
+											"id": 1052,
 											"name": "h",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16789,7 +17027,7 @@
 											}
 										},
 										{
-											"id": 1044,
+											"id": 1051,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16802,7 +17040,7 @@
 											}
 										},
 										{
-											"id": 1047,
+											"id": 1054,
 											"name": "l",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16815,7 +17053,7 @@
 											}
 										},
 										{
-											"id": 1046,
+											"id": 1053,
 											"name": "s",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16832,11 +17070,11 @@
 										{
 											"title": "Properties",
 											"children": [
-												1048,
-												1045,
-												1044,
-												1047,
-												1046
+												1055,
+												1052,
+												1051,
+												1054,
+												1053
 											]
 										}
 									]
@@ -16845,14 +17083,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1049,
+									"id": 1056,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1051,
+											"id": 1058,
 											"name": "keyword",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16874,7 +17112,7 @@
 											}
 										},
 										{
-											"id": 1050,
+											"id": 1057,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -16891,8 +17129,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1051,
-												1050
+												1058,
+												1057
 											]
 										}
 									]
@@ -16902,7 +17140,7 @@
 					}
 				},
 				{
-					"id": 1057,
+					"id": 1064,
 					"name": "CssCursor",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -16954,7 +17192,7 @@
 					}
 				},
 				{
-					"id": 1058,
+					"id": 1065,
 					"name": "CssJustification",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -17002,7 +17240,7 @@
 					}
 				},
 				{
-					"id": 1059,
+					"id": 1066,
 					"name": "CssLength",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -17021,14 +17259,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1060,
+									"id": 1067,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1061,
+											"id": 1068,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17041,7 +17279,7 @@
 											}
 										},
 										{
-											"id": 1063,
+											"id": 1070,
 											"name": "unit",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17050,13 +17288,13 @@
 											},
 											"type": {
 												"type": "reference",
-												"target": 1093,
+												"target": 1100,
 												"name": "CssUnit",
 												"package": "@anvilkit/contracts"
 											}
 										},
 										{
-											"id": 1062,
+											"id": 1069,
 											"name": "value",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17073,9 +17311,9 @@
 										{
 											"title": "Properties",
 											"children": [
-												1061,
-												1063,
-												1062
+												1068,
+												1070,
+												1069
 											]
 										}
 									]
@@ -17084,14 +17322,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1064,
+									"id": 1071,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1066,
+											"id": 1073,
 											"name": "keyword",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17121,7 +17359,7 @@
 											}
 										},
 										{
-											"id": 1065,
+											"id": 1072,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17138,8 +17376,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1066,
-												1065
+												1073,
+												1072
 											]
 										}
 									]
@@ -17148,14 +17386,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1067,
+									"id": 1074,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1068,
+											"id": 1075,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17168,7 +17406,7 @@
 											}
 										},
 										{
-											"id": 1069,
+											"id": 1076,
 											"name": "tokenId",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17185,8 +17423,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1068,
-												1069
+												1075,
+												1076
 											]
 										}
 									]
@@ -17195,14 +17433,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1070,
+									"id": 1077,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1072,
+											"id": 1079,
 											"name": "expression",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17211,13 +17449,13 @@
 											},
 											"type": {
 												"type": "reference",
-												"target": 1073,
+												"target": 1080,
 												"name": "CssMathExpression",
 												"package": "@anvilkit/contracts"
 											}
 										},
 										{
-											"id": 1071,
+											"id": 1078,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17234,8 +17472,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1072,
-												1071
+												1079,
+												1078
 											]
 										}
 									]
@@ -17245,7 +17483,7 @@
 					}
 				},
 				{
-					"id": 1073,
+					"id": 1080,
 					"name": "CssMathExpression",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -17296,116 +17534,6 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1074,
-									"name": "__type",
-									"variant": "declaration",
-									"kind": 65536,
-									"flags": {},
-									"children": [
-										{
-											"id": 1075,
-											"name": "kind",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {
-												"isReadonly": true
-											},
-											"type": {
-												"type": "literal",
-												"value": "unit"
-											}
-										},
-										{
-											"id": 1077,
-											"name": "unit",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {
-												"isReadonly": true
-											},
-											"type": {
-												"type": "reference",
-												"target": 1093,
-												"name": "CssUnit",
-												"package": "@anvilkit/contracts"
-											}
-										},
-										{
-											"id": 1076,
-											"name": "value",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {
-												"isReadonly": true
-											},
-											"type": {
-												"type": "intrinsic",
-												"name": "number"
-											}
-										}
-									],
-									"groups": [
-										{
-											"title": "Properties",
-											"children": [
-												1075,
-												1077,
-												1076
-											]
-										}
-									]
-								}
-							},
-							{
-								"type": "reflection",
-								"declaration": {
-									"id": 1078,
-									"name": "__type",
-									"variant": "declaration",
-									"kind": 65536,
-									"flags": {},
-									"children": [
-										{
-											"id": 1079,
-											"name": "kind",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {
-												"isReadonly": true
-											},
-											"type": {
-												"type": "literal",
-												"value": "number"
-											}
-										},
-										{
-											"id": 1080,
-											"name": "value",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {
-												"isReadonly": true
-											},
-											"type": {
-												"type": "intrinsic",
-												"name": "number"
-											}
-										}
-									],
-									"groups": [
-										{
-											"title": "Properties",
-											"children": [
-												1079,
-												1080
-											]
-										}
-									]
-								}
-							},
-							{
-								"type": "reflection",
-								"declaration": {
 									"id": 1081,
 									"name": "__type",
 									"variant": "declaration",
@@ -17422,11 +17550,121 @@
 											},
 											"type": {
 												"type": "literal",
-												"value": "token"
+												"value": "unit"
+											}
+										},
+										{
+											"id": 1084,
+											"name": "unit",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "reference",
+												"target": 1100,
+												"name": "CssUnit",
+												"package": "@anvilkit/contracts"
 											}
 										},
 										{
 											"id": 1083,
+											"name": "value",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "number"
+											}
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												1082,
+												1084,
+												1083
+											]
+										}
+									]
+								}
+							},
+							{
+								"type": "reflection",
+								"declaration": {
+									"id": 1085,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 1086,
+											"name": "kind",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "literal",
+												"value": "number"
+											}
+										},
+										{
+											"id": 1087,
+											"name": "value",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "number"
+											}
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												1086,
+												1087
+											]
+										}
+									]
+								}
+							},
+							{
+								"type": "reflection",
+								"declaration": {
+									"id": 1088,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 1089,
+											"name": "kind",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"type": {
+												"type": "literal",
+												"value": "token"
+											}
+										},
+										{
+											"id": 1090,
 											"name": "tokenId",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17443,8 +17681,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1082,
-												1083
+												1089,
+												1090
 											]
 										}
 									]
@@ -17453,14 +17691,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1084,
+									"id": 1091,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1085,
+											"id": 1092,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17473,7 +17711,7 @@
 											}
 										},
 										{
-											"id": 1087,
+											"id": 1094,
 											"name": "left",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17482,13 +17720,13 @@
 											},
 											"type": {
 												"type": "reference",
-												"target": 1073,
+												"target": 1080,
 												"name": "CssMathExpression",
 												"package": "@anvilkit/contracts"
 											}
 										},
 										{
-											"id": 1086,
+											"id": 1093,
 											"name": "operator",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17518,7 +17756,7 @@
 											}
 										},
 										{
-											"id": 1088,
+											"id": 1095,
 											"name": "right",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17527,7 +17765,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"target": 1073,
+												"target": 1080,
 												"name": "CssMathExpression",
 												"package": "@anvilkit/contracts"
 											}
@@ -17537,10 +17775,10 @@
 										{
 											"title": "Properties",
 											"children": [
-												1085,
-												1087,
-												1086,
-												1088
+												1092,
+												1094,
+												1093,
+												1095
 											]
 										}
 									]
@@ -17549,14 +17787,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1089,
+									"id": 1096,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1092,
+											"id": 1099,
 											"name": "args",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17570,7 +17808,7 @@
 													"type": "array",
 													"elementType": {
 														"type": "reference",
-														"target": 1073,
+														"target": 1080,
 														"name": "CssMathExpression",
 														"package": "@anvilkit/contracts"
 													}
@@ -17578,7 +17816,7 @@
 											}
 										},
 										{
-											"id": 1091,
+											"id": 1098,
 											"name": "fn",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17604,7 +17842,7 @@
 											}
 										},
 										{
-											"id": 1090,
+											"id": 1097,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -17621,9 +17859,9 @@
 										{
 											"title": "Properties",
 											"children": [
-												1092,
-												1091,
-												1090
+												1099,
+												1098,
+												1097
 											]
 										}
 									]
@@ -17633,7 +17871,7 @@
 					}
 				},
 				{
-					"id": 1093,
+					"id": 1100,
 					"name": "CssUnit",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -17689,7 +17927,7 @@
 					}
 				},
 				{
-					"id": 1094,
+					"id": 1101,
 					"name": "CubicBezier",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -18299,7 +18537,7 @@
 					}
 				},
 				{
-					"id": 1095,
+					"id": 1102,
 					"name": "EditorPatch",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -18338,7 +18576,7 @@
 					},
 					"typeParameters": [
 						{
-							"id": 1096,
+							"id": 1103,
 							"name": "T",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -18353,7 +18591,7 @@
 							"operator": "keyof",
 							"target": {
 								"type": "reference",
-								"target": 1096,
+								"target": 1103,
 								"name": "T",
 								"package": "@anvilkit/contracts",
 								"refersToTypeParameter": true
@@ -18376,7 +18614,7 @@
 								},
 								"objectType": {
 									"type": "reference",
-									"target": 1096,
+									"target": 1103,
 									"name": "T",
 									"package": "@anvilkit/contracts",
 									"refersToTypeParameter": true
@@ -18391,7 +18629,7 @@
 								"types": [
 									{
 										"type": "reference",
-										"target": 1095,
+										"target": 1102,
 										"typeArguments": [
 											{
 												"type": "indexedAccess",
@@ -18408,7 +18646,7 @@
 												},
 												"objectType": {
 													"type": "reference",
-													"target": 1096,
+													"target": 1103,
 													"name": "T",
 													"package": "@anvilkit/contracts",
 													"refersToTypeParameter": true
@@ -18433,7 +18671,7 @@
 										},
 										"objectType": {
 											"type": "reference",
-											"target": 1096,
+											"target": 1103,
 											"name": "T",
 											"package": "@anvilkit/contracts",
 											"refersToTypeParameter": true
@@ -18463,7 +18701,7 @@
 										},
 										"objectType": {
 											"type": "reference",
-											"target": 1096,
+											"target": 1103,
 											"name": "T",
 											"package": "@anvilkit/contracts",
 											"refersToTypeParameter": true
@@ -18481,7 +18719,7 @@
 					}
 				},
 				{
-					"id": 1106,
+					"id": 1113,
 					"name": "GridTrack",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -18500,14 +18738,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1107,
+									"id": 1114,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1108,
+											"id": 1115,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -18520,7 +18758,7 @@
 											}
 										},
 										{
-											"id": 1109,
+											"id": 1116,
 											"name": "length",
 											"variant": "declaration",
 											"kind": 1024,
@@ -18529,7 +18767,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"target": 1059,
+												"target": 1066,
 												"name": "CssLength",
 												"package": "@anvilkit/contracts"
 											}
@@ -18539,8 +18777,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1108,
-												1109
+												1115,
+												1116
 											]
 										}
 									]
@@ -18549,14 +18787,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1110,
+									"id": 1117,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1111,
+											"id": 1118,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -18569,7 +18807,7 @@
 											}
 										},
 										{
-											"id": 1112,
+											"id": 1119,
 											"name": "value",
 											"variant": "declaration",
 											"kind": 1024,
@@ -18586,8 +18824,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1111,
-												1112
+												1118,
+												1119
 											]
 										}
 									]
@@ -18596,14 +18834,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1113,
+									"id": 1120,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1114,
+											"id": 1121,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -18620,7 +18858,7 @@
 										{
 											"title": "Properties",
 											"children": [
-												1114
+												1121
 											]
 										}
 									]
@@ -18630,7 +18868,7 @@
 					}
 				},
 				{
-					"id": 1115,
+					"id": 1122,
 					"name": "GridTrackList",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -18666,7 +18904,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 1106,
+								"target": 1113,
 								"name": "GridTrack",
 								"package": "@anvilkit/contracts"
 							}
@@ -19603,7 +19841,7 @@
 					}
 				},
 				{
-					"id": 1116,
+					"id": 1123,
 					"name": "JsonValue",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -19642,7 +19880,7 @@
 									"type": "array",
 									"elementType": {
 										"type": "reference",
-										"target": 1116,
+										"target": 1123,
 										"name": "JsonValue",
 										"package": "@anvilkit/contracts"
 									}
@@ -19651,14 +19889,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1117,
+									"id": 1124,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"indexSignatures": [
 										{
-											"id": 1118,
+											"id": 1125,
 											"name": "__index",
 											"variant": "signature",
 											"kind": 8192,
@@ -19667,7 +19905,7 @@
 											},
 											"parameters": [
 												{
-													"id": 1119,
+													"id": 1126,
 													"name": "key",
 													"variant": "param",
 													"kind": 32768,
@@ -19680,7 +19918,7 @@
 											],
 											"type": {
 												"type": "reference",
-												"target": 1116,
+												"target": 1123,
 												"name": "JsonValue",
 												"package": "@anvilkit/contracts"
 											}
@@ -19754,7 +19992,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"target": 1094,
+												"target": 1101,
 												"name": "CubicBezier",
 												"package": "@anvilkit/contracts"
 											}
@@ -19880,7 +20118,7 @@
 					}
 				},
 				{
-					"id": 1120,
+					"id": 1127,
 					"name": "Paint",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -19915,14 +20153,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1121,
+									"id": 1128,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1122,
+											"id": 1129,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -19939,7 +20177,7 @@
 										{
 											"title": "Properties",
 											"children": [
-												1122
+												1129
 											]
 										}
 									]
@@ -19948,14 +20186,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1123,
+									"id": 1130,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1125,
+											"id": 1132,
 											"name": "color",
 											"variant": "declaration",
 											"kind": 1024,
@@ -19964,11 +20202,11 @@
 											},
 											"type": {
 												"type": "reference",
-												"target": 1147,
+												"target": 1154,
 												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 1033,
+														"target": 1040,
 														"name": "CssColor",
 														"package": "@anvilkit/contracts"
 													}
@@ -19978,7 +20216,7 @@
 											}
 										},
 										{
-											"id": 1124,
+											"id": 1131,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -19995,8 +20233,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1125,
-												1124
+												1132,
+												1131
 											]
 										}
 									]
@@ -20005,14 +20243,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1126,
+									"id": 1133,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1128,
+											"id": 1135,
 											"name": "angle",
 											"variant": "declaration",
 											"kind": 1024,
@@ -20033,7 +20271,7 @@
 											}
 										},
 										{
-											"id": 1127,
+											"id": 1134,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -20046,7 +20284,7 @@
 											}
 										},
 										{
-											"id": 1129,
+											"id": 1136,
 											"name": "stops",
 											"variant": "declaration",
 											"kind": 1024,
@@ -20060,7 +20298,7 @@
 													"type": "array",
 													"elementType": {
 														"type": "reference",
-														"target": 1103,
+														"target": 1110,
 														"name": "GradientStop",
 														"package": "@anvilkit/contracts"
 													}
@@ -20072,9 +20310,9 @@
 										{
 											"title": "Properties",
 											"children": [
-												1128,
-												1127,
-												1129
+												1135,
+												1134,
+												1136
 											]
 										}
 									]
@@ -20083,14 +20321,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1130,
+									"id": 1137,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1133,
+											"id": 1140,
 											"name": "fit",
 											"variant": "declaration",
 											"kind": 1024,
@@ -20125,7 +20363,7 @@
 											}
 										},
 										{
-											"id": 1131,
+											"id": 1138,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -20138,7 +20376,7 @@
 											}
 										},
 										{
-											"id": 1134,
+											"id": 1141,
 											"name": "position",
 											"variant": "declaration",
 											"kind": 1024,
@@ -20157,14 +20395,14 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 1135,
+													"id": 1142,
 													"name": "__type",
 													"variant": "declaration",
 													"kind": 65536,
 													"flags": {},
 													"children": [
 														{
-															"id": 1136,
+															"id": 1143,
 															"name": "x",
 															"variant": "declaration",
 															"kind": 1024,
@@ -20177,7 +20415,7 @@
 															}
 														},
 														{
-															"id": 1137,
+															"id": 1144,
 															"name": "y",
 															"variant": "declaration",
 															"kind": 1024,
@@ -20194,8 +20432,8 @@
 														{
 															"title": "Properties",
 															"children": [
-																1136,
-																1137
+																1143,
+																1144
 															]
 														}
 													]
@@ -20203,7 +20441,7 @@
 											}
 										},
 										{
-											"id": 1132,
+											"id": 1139,
 											"name": "src",
 											"variant": "declaration",
 											"kind": 1024,
@@ -20220,10 +20458,10 @@
 										{
 											"title": "Properties",
 											"children": [
-												1133,
-												1131,
-												1134,
-												1132
+												1140,
+												1138,
+												1141,
+												1139
 											]
 										}
 									]
@@ -20233,7 +20471,7 @@
 					}
 				},
 				{
-					"id": 1138,
+					"id": 1145,
 					"name": "PropertyPath",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -20441,7 +20679,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"target": 1116,
+												"target": 1123,
 												"name": "JsonValue",
 												"package": "@anvilkit/contracts"
 											}
@@ -20835,7 +21073,7 @@
 					}
 				},
 				{
-					"id": 1146,
+					"id": 1153,
 					"name": "SizeValue",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -20850,7 +21088,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "CssLength",
-								"target": 1059
+								"target": 1066
 							},
 							{
 								"kind": "text",
@@ -20876,13 +21114,13 @@
 					},
 					"type": {
 						"type": "reference",
-						"target": 1059,
+						"target": 1066,
 						"name": "CssLength",
 						"package": "@anvilkit/contracts"
 					}
 				},
 				{
-					"id": 964,
+					"id": 971,
 					"name": "StyleDefinitionDeletionDisposition",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -20917,14 +21155,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 965,
+									"id": 972,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 966,
+											"id": 973,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -20941,7 +21179,7 @@
 										{
 											"title": "Properties",
 											"children": [
-												966
+												973
 											]
 										}
 									]
@@ -20950,14 +21188,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 967,
+									"id": 974,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 968,
+											"id": 975,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -20974,7 +21212,7 @@
 										{
 											"title": "Properties",
 											"children": [
-												968
+												975
 											]
 										}
 									]
@@ -20984,7 +21222,7 @@
 					}
 				},
 				{
-					"id": 969,
+					"id": 976,
 					"name": "StyleDefinitionId",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -21003,7 +21241,7 @@
 					}
 				},
 				{
-					"id": 998,
+					"id": 1005,
 					"name": "TokenDeletionDisposition",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -21034,7 +21272,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "TokenType",
-								"target": 1008
+								"target": 1015
 							},
 							{
 								"kind": "text",
@@ -21048,14 +21286,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 999,
+									"id": 1006,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1000,
+											"id": 1007,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -21072,7 +21310,7 @@
 										{
 											"title": "Properties",
 											"children": [
-												1000
+												1007
 											]
 										}
 									]
@@ -21081,14 +21319,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1001,
+									"id": 1008,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1002,
+											"id": 1009,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -21101,7 +21339,7 @@
 											}
 										},
 										{
-											"id": 1003,
+											"id": 1010,
 											"name": "tokenId",
 											"variant": "declaration",
 											"kind": 1024,
@@ -21118,8 +21356,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1002,
-												1003
+												1009,
+												1010
 											]
 										}
 									]
@@ -21129,7 +21367,7 @@
 					}
 				},
 				{
-					"id": 1007,
+					"id": 1014,
 					"name": "TokenModeId",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -21164,7 +21402,7 @@
 					}
 				},
 				{
-					"id": 1147,
+					"id": 1154,
 					"name": "TokenOrLiteral",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -21195,7 +21433,7 @@
 					},
 					"typeParameters": [
 						{
-							"id": 1154,
+							"id": 1161,
 							"name": "T",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -21208,14 +21446,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1148,
+									"id": 1155,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1149,
+											"id": 1156,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -21228,7 +21466,7 @@
 											}
 										},
 										{
-											"id": 1150,
+											"id": 1157,
 											"name": "value",
 											"variant": "declaration",
 											"kind": 1024,
@@ -21237,7 +21475,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"target": 1154,
+												"target": 1161,
 												"name": "T",
 												"package": "@anvilkit/contracts",
 												"refersToTypeParameter": true
@@ -21248,8 +21486,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1149,
-												1150
+												1156,
+												1157
 											]
 										}
 									]
@@ -21258,14 +21496,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1151,
+									"id": 1158,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1152,
+											"id": 1159,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -21278,7 +21516,7 @@
 											}
 										},
 										{
-											"id": 1153,
+											"id": 1160,
 											"name": "tokenId",
 											"variant": "declaration",
 											"kind": 1024,
@@ -21295,8 +21533,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1152,
-												1153
+												1159,
+												1160
 											]
 										}
 									]
@@ -21306,7 +21544,7 @@
 					}
 				},
 				{
-					"id": 1008,
+					"id": 1015,
 					"name": "TokenType",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -21354,7 +21592,7 @@
 					}
 				},
 				{
-					"id": 1009,
+					"id": 1016,
 					"name": "TokenValue",
 					"variant": "declaration",
 					"kind": 2097152,
@@ -21377,7 +21615,7 @@
 					},
 					"typeParameters": [
 						{
-							"id": 1016,
+							"id": 1023,
 							"name": "T",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -21390,14 +21628,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1010,
+									"id": 1017,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1011,
+											"id": 1018,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -21410,7 +21648,7 @@
 											}
 										},
 										{
-											"id": 1012,
+											"id": 1019,
 											"name": "value",
 											"variant": "declaration",
 											"kind": 1024,
@@ -21419,7 +21657,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"target": 1016,
+												"target": 1023,
 												"name": "T",
 												"package": "@anvilkit/contracts",
 												"refersToTypeParameter": true
@@ -21430,8 +21668,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1011,
-												1012
+												1018,
+												1019
 											]
 										}
 									]
@@ -21440,14 +21678,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 1013,
+									"id": 1020,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 1014,
+											"id": 1021,
 											"name": "kind",
 											"variant": "declaration",
 											"kind": 1024,
@@ -21460,7 +21698,7 @@
 											}
 										},
 										{
-											"id": 1015,
+											"id": 1022,
 											"name": "tokenId",
 											"variant": "declaration",
 											"kind": 1024,
@@ -21477,8 +21715,8 @@
 										{
 											"title": "Properties",
 											"children": [
-												1014,
-												1015
+												1021,
+												1022
 											]
 										}
 									]
@@ -21888,8 +22126,8 @@
 						191,
 						310,
 						213,
-						1017,
-						1021,
+						1024,
+						1028,
 						851,
 						598,
 						609,
@@ -21900,16 +22138,16 @@
 						327,
 						334,
 						341,
-						1028,
-						1052,
+						1035,
+						1059,
 						220,
 						225,
 						348,
 						355,
 						362,
 						370,
-						980,
-						989,
+						987,
+						996,
 						379,
 						386,
 						393,
@@ -21929,12 +22167,13 @@
 						430,
 						938,
 						434,
+						941,
 						695,
-						1097,
-						1103,
+						1104,
+						1110,
 						796,
 						284,
-						992,
+						999,
 						289,
 						747,
 						875,
@@ -21959,15 +22198,15 @@
 						532,
 						541,
 						550,
-						1139,
+						1146,
 						293,
-						941,
-						950,
+						947,
+						957,
 						297,
-						970,
+						977,
 						829,
 						838,
-						1004,
+						1011,
 						898,
 						559,
 						566,
@@ -21989,43 +22228,43 @@
 						857,
 						842,
 						597,
-						1026,
-						1027,
 						1033,
-						1057,
-						1058,
-						1059,
-						1073,
-						1093,
-						1094,
+						1034,
+						1040,
+						1064,
+						1065,
+						1066,
+						1080,
+						1100,
+						1101,
 						402,
 						790,
 						653,
 						665,
 						694,
-						1095,
-						1106,
-						1115,
+						1102,
+						1113,
+						1122,
 						809,
 						703,
 						730,
 						731,
-						1116,
+						1123,
 						756,
-						1120,
-						1138,
+						1127,
+						1145,
 						869,
 						870,
 						245,
 						246,
-						1146,
-						964,
-						969,
-						998,
-						1007,
-						1147,
-						1008,
-						1009
+						1153,
+						971,
+						976,
+						1005,
+						1014,
+						1154,
+						1015,
+						1016
 					]
 				},
 				{
@@ -34091,632 +34330,632 @@
 		"941": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorConfig"
+			"qualifiedName": "EditorStyleAdapter"
 		},
 		"942": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorConfig.features"
+			"qualifiedName": "EditorStyleAdapter.nonce"
 		},
 		"943": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorConfig.breakpoints"
+			"qualifiedName": "EditorStyleAdapter.adopt"
 		},
 		"944": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorConfig.defaultTokenMode"
+			"qualifiedName": "EditorStyleAdapter.adopt"
 		},
 		"945": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorConfig.importableTokens"
+			"qualifiedName": "doc"
 		},
 		"946": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorConfig.renderScope"
+			"qualifiedName": "cssText"
 		},
 		"947": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorConfig.pageAdapter"
+			"qualifiedName": "StudioEditorConfig"
 		},
 		"948": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorConfig.dataSourceAdapter"
+			"qualifiedName": "StudioEditorConfig.features"
 		},
 		"949": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorConfig.policies"
+			"qualifiedName": "StudioEditorConfig.breakpoints"
 		},
 		"950": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures"
+			"qualifiedName": "StudioEditorConfig.defaultTokenMode"
 		},
 		"951": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.enabled"
+			"qualifiedName": "StudioEditorConfig.importableTokens"
 		},
 		"952": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.layout"
+			"qualifiedName": "StudioEditorConfig.renderScope"
 		},
 		"953": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.responsive"
+			"qualifiedName": "StudioEditorConfig.pageAdapter"
 		},
 		"954": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.directManipulation"
+			"qualifiedName": "StudioEditorConfig.dataSourceAdapter"
 		},
 		"955": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.multiSelect"
+			"qualifiedName": "StudioEditorConfig.styleAdapter"
 		},
 		"956": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.components"
+			"qualifiedName": "StudioEditorConfig.policies"
 		},
 		"957": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.variants"
+			"qualifiedName": "StudioEditorFeatures"
 		},
 		"958": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.tokens"
+			"qualifiedName": "StudioEditorFeatures.enabled"
 		},
 		"959": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.styleDefinitions"
+			"qualifiedName": "StudioEditorFeatures.layout"
 		},
 		"960": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.interactions"
+			"qualifiedName": "StudioEditorFeatures.responsive"
 		},
 		"961": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.inlineEditing"
+			"qualifiedName": "StudioEditorFeatures.directManipulation"
 		},
 		"962": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.dataBinding"
+			"qualifiedName": "StudioEditorFeatures.multiSelect"
 		},
 		"963": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/studio-config.ts",
-			"qualifiedName": "StudioEditorFeatures.accessibility"
+			"qualifiedName": "StudioEditorFeatures.components"
 		},
 		"964": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "StyleDefinitionDeletionDisposition"
+			"packagePath": "src/editor/studio-config.ts",
+			"qualifiedName": "StudioEditorFeatures.variants"
 		},
 		"965": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/editor/studio-config.ts",
+			"qualifiedName": "StudioEditorFeatures.tokens"
 		},
 		"966": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "__type.kind"
+			"packagePath": "src/editor/studio-config.ts",
+			"qualifiedName": "StudioEditorFeatures.styleDefinitions"
 		},
 		"967": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/editor/studio-config.ts",
+			"qualifiedName": "StudioEditorFeatures.interactions"
 		},
 		"968": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "__type.kind"
+			"packagePath": "src/editor/studio-config.ts",
+			"qualifiedName": "StudioEditorFeatures.inlineEditing"
 		},
 		"969": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "StyleDefinitionId"
+			"packagePath": "src/editor/studio-config.ts",
+			"qualifiedName": "StudioEditorFeatures.dataBinding"
 		},
 		"970": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "StyleDefinitionV1"
+			"packagePath": "src/editor/studio-config.ts",
+			"qualifiedName": "StudioEditorFeatures.accessibility"
 		},
 		"971": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "StyleDefinitionV1.version"
+			"qualifiedName": "StyleDefinitionDeletionDisposition"
 		},
 		"972": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "StyleDefinitionV1.id"
+			"qualifiedName": "__type"
 		},
 		"973": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "StyleDefinitionV1.name"
+			"qualifiedName": "__type.kind"
 		},
 		"974": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "StyleDefinitionV1.appliesTo"
+			"qualifiedName": "__type"
 		},
 		"975": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "StyleDefinitionV1.layout"
+			"qualifiedName": "__type.kind"
 		},
 		"976": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "StyleDefinitionV1.style"
+			"qualifiedName": "StyleDefinitionId"
 		},
 		"977": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "StyleDefinitionV1.typography"
+			"qualifiedName": "StyleDefinitionV1"
 		},
 		"978": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "StyleDefinitionV1.createdAt"
+			"qualifiedName": "StyleDefinitionV1.version"
 		},
 		"979": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/style-definitions.ts",
-			"qualifiedName": "StyleDefinitionV1.updatedAt"
+			"qualifiedName": "StyleDefinitionV1.id"
 		},
 		"980": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "DesignToken"
+			"packagePath": "src/editor/style-definitions.ts",
+			"qualifiedName": "StyleDefinitionV1.name"
 		},
 		"981": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "DesignToken.T"
+			"packagePath": "src/editor/style-definitions.ts",
+			"qualifiedName": "StyleDefinitionV1.appliesTo"
 		},
 		"982": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "DesignToken.id"
+			"packagePath": "src/editor/style-definitions.ts",
+			"qualifiedName": "StyleDefinitionV1.layout"
 		},
 		"983": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "DesignToken.path"
+			"packagePath": "src/editor/style-definitions.ts",
+			"qualifiedName": "StyleDefinitionV1.style"
 		},
 		"984": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "DesignToken.name"
+			"packagePath": "src/editor/style-definitions.ts",
+			"qualifiedName": "StyleDefinitionV1.typography"
 		},
 		"985": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "DesignToken.type"
+			"packagePath": "src/editor/style-definitions.ts",
+			"qualifiedName": "StyleDefinitionV1.createdAt"
 		},
 		"986": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "DesignToken.values"
+			"packagePath": "src/editor/style-definitions.ts",
+			"qualifiedName": "StyleDefinitionV1.updatedAt"
 		},
 		"987": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "DesignToken.description"
+			"qualifiedName": "DesignToken"
 		},
 		"988": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "DesignToken.source"
+			"qualifiedName": "DesignToken.T"
 		},
 		"989": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "DesignTokenSource"
+			"qualifiedName": "DesignToken.id"
 		},
 		"990": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "DesignTokenSource.system"
+			"qualifiedName": "DesignToken.path"
 		},
 		"991": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "DesignTokenSource.ref"
+			"qualifiedName": "DesignToken.name"
 		},
 		"992": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "ImportableTokenValue"
+			"qualifiedName": "DesignToken.type"
 		},
 		"993": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "ImportableTokenValue.system"
+			"qualifiedName": "DesignToken.values"
 		},
 		"994": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "ImportableTokenValue.ref"
+			"qualifiedName": "DesignToken.description"
 		},
 		"995": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "ImportableTokenValue.label"
+			"qualifiedName": "DesignToken.source"
 		},
 		"996": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "ImportableTokenValue.type"
+			"qualifiedName": "DesignTokenSource"
 		},
 		"997": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "ImportableTokenValue.value"
+			"qualifiedName": "DesignTokenSource.system"
 		},
 		"998": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "TokenDeletionDisposition"
+			"qualifiedName": "DesignTokenSource.ref"
 		},
 		"999": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "ImportableTokenValue"
 		},
 		"1000": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "ImportableTokenValue.system"
 		},
 		"1001": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "ImportableTokenValue.ref"
 		},
 		"1002": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "ImportableTokenValue.label"
 		},
 		"1003": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "__type.tokenId"
+			"qualifiedName": "ImportableTokenValue.type"
 		},
 		"1004": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "TokenMode"
+			"qualifiedName": "ImportableTokenValue.value"
 		},
 		"1005": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "TokenMode.id"
+			"qualifiedName": "TokenDeletionDisposition"
 		},
 		"1006": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "TokenMode.name"
+			"qualifiedName": "__type"
 		},
 		"1007": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "TokenModeId"
+			"qualifiedName": "__type.kind"
 		},
 		"1008": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "TokenType"
+			"qualifiedName": "__type"
 		},
 		"1009": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "TokenValue"
+			"qualifiedName": "__type.kind"
 		},
 		"1010": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "__type.tokenId"
 		},
 		"1011": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "TokenMode"
 		},
 		"1012": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "__type.value"
+			"qualifiedName": "TokenMode.id"
 		},
 		"1013": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "TokenMode.name"
 		},
 		"1014": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "TokenModeId"
 		},
 		"1015": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "__type.tokenId"
+			"qualifiedName": "TokenType"
 		},
 		"1016": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/tokens.ts",
-			"qualifiedName": "T"
+			"qualifiedName": "TokenValue"
 		},
 		"1017": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "BorderEdge"
+			"packagePath": "src/editor/tokens.ts",
+			"qualifiedName": "__type"
 		},
 		"1018": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "BorderEdge.style"
+			"packagePath": "src/editor/tokens.ts",
+			"qualifiedName": "__type.kind"
 		},
 		"1019": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "BorderEdge.width"
+			"packagePath": "src/editor/tokens.ts",
+			"qualifiedName": "__type.value"
 		},
 		"1020": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "BorderEdge.color"
+			"packagePath": "src/editor/tokens.ts",
+			"qualifiedName": "__type"
 		},
 		"1021": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "BorderSpec"
+			"packagePath": "src/editor/tokens.ts",
+			"qualifiedName": "__type.kind"
 		},
 		"1022": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "BorderSpec.top"
+			"packagePath": "src/editor/tokens.ts",
+			"qualifiedName": "__type.tokenId"
 		},
 		"1023": {
 			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "BorderSpec.right"
+			"packagePath": "src/editor/tokens.ts",
+			"qualifiedName": "T"
 		},
 		"1024": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "BorderSpec.bottom"
+			"qualifiedName": "BorderEdge"
 		},
 		"1025": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "BorderSpec.left"
+			"qualifiedName": "BorderEdge.style"
 		},
 		"1026": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssAlignment"
+			"qualifiedName": "BorderEdge.width"
 		},
 		"1027": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssBlendMode"
+			"qualifiedName": "BorderEdge.color"
 		},
 		"1028": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssBoxEdges"
+			"qualifiedName": "BorderSpec"
 		},
 		"1029": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssBoxEdges.top"
+			"qualifiedName": "BorderSpec.top"
 		},
 		"1030": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssBoxEdges.right"
+			"qualifiedName": "BorderSpec.right"
 		},
 		"1031": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssBoxEdges.bottom"
+			"qualifiedName": "BorderSpec.bottom"
 		},
 		"1032": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssBoxEdges.left"
+			"qualifiedName": "BorderSpec.left"
 		},
 		"1033": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssColor"
+			"qualifiedName": "CssAlignment"
 		},
 		"1034": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "CssBlendMode"
 		},
 		"1035": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "CssBoxEdges"
 		},
 		"1036": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.value"
+			"qualifiedName": "CssBoxEdges.top"
 		},
 		"1037": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "CssBoxEdges.right"
 		},
 		"1038": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "CssBoxEdges.bottom"
 		},
 		"1039": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.r"
+			"qualifiedName": "CssBoxEdges.left"
 		},
 		"1040": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.g"
+			"qualifiedName": "CssColor"
 		},
 		"1041": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.b"
+			"qualifiedName": "__type"
 		},
 		"1042": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.a"
+			"qualifiedName": "__type.kind"
 		},
 		"1043": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "__type.value"
 		},
 		"1044": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "__type"
 		},
 		"1045": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.h"
+			"qualifiedName": "__type.kind"
 		},
 		"1046": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.s"
+			"qualifiedName": "__type.r"
 		},
 		"1047": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.l"
+			"qualifiedName": "__type.g"
 		},
 		"1048": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.a"
+			"qualifiedName": "__type.b"
 		},
 		"1049": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "__type.a"
 		},
 		"1050": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "__type"
 		},
 		"1051": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.keyword"
+			"qualifiedName": "__type.kind"
 		},
 		"1052": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssCorners"
+			"qualifiedName": "__type.h"
 		},
 		"1053": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssCorners.topLeft"
+			"qualifiedName": "__type.s"
 		},
 		"1054": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssCorners.topRight"
+			"qualifiedName": "__type.l"
 		},
 		"1055": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssCorners.bottomRight"
+			"qualifiedName": "__type.a"
 		},
 		"1056": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssCorners.bottomLeft"
+			"qualifiedName": "__type"
 		},
 		"1057": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssCursor"
+			"qualifiedName": "__type.kind"
 		},
 		"1058": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssJustification"
+			"qualifiedName": "__type.keyword"
 		},
 		"1059": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssLength"
+			"qualifiedName": "CssCorners"
 		},
 		"1060": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "CssCorners.topLeft"
 		},
 		"1061": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "CssCorners.topRight"
 		},
 		"1062": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.value"
+			"qualifiedName": "CssCorners.bottomRight"
 		},
 		"1063": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.unit"
+			"qualifiedName": "CssCorners.bottomLeft"
 		},
 		"1064": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "CssCursor"
 		},
 		"1065": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "CssJustification"
 		},
 		"1066": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.keyword"
+			"qualifiedName": "CssLength"
 		},
 		"1067": {
 			"packageName": "@anvilkit/contracts",
@@ -34731,27 +34970,27 @@
 		"1069": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.tokenId"
+			"qualifiedName": "__type.value"
 		},
 		"1070": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "__type.unit"
 		},
 		"1071": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "__type"
 		},
 		"1072": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.expression"
+			"qualifiedName": "__type.kind"
 		},
 		"1073": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssMathExpression"
+			"qualifiedName": "__type.keyword"
 		},
 		"1074": {
 			"packageName": "@anvilkit/contracts",
@@ -34766,27 +35005,27 @@
 		"1076": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.value"
+			"qualifiedName": "__type.tokenId"
 		},
 		"1077": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.unit"
+			"qualifiedName": "__type"
 		},
 		"1078": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "__type.kind"
 		},
 		"1079": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "__type.expression"
 		},
 		"1080": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.value"
+			"qualifiedName": "CssMathExpression"
 		},
 		"1081": {
 			"packageName": "@anvilkit/contracts",
@@ -34801,172 +35040,172 @@
 		"1083": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.tokenId"
+			"qualifiedName": "__type.value"
 		},
 		"1084": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "__type.unit"
 		},
 		"1085": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "__type"
 		},
 		"1086": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.operator"
+			"qualifiedName": "__type.kind"
 		},
 		"1087": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.left"
+			"qualifiedName": "__type.value"
 		},
 		"1088": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.right"
+			"qualifiedName": "__type"
 		},
 		"1089": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "__type.kind"
 		},
 		"1090": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "__type.tokenId"
 		},
 		"1091": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.fn"
+			"qualifiedName": "__type"
 		},
 		"1092": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.args"
+			"qualifiedName": "__type.kind"
 		},
 		"1093": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CssUnit"
+			"qualifiedName": "__type.operator"
 		},
 		"1094": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "CubicBezier"
+			"qualifiedName": "__type.left"
 		},
 		"1095": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "EditorPatch"
+			"qualifiedName": "__type.right"
 		},
 		"1096": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "T"
+			"qualifiedName": "__type"
 		},
 		"1097": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "FilterSpec"
+			"qualifiedName": "__type.kind"
 		},
 		"1098": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "FilterSpec.blur"
+			"qualifiedName": "__type.fn"
 		},
 		"1099": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "FilterSpec.brightness"
+			"qualifiedName": "__type.args"
 		},
 		"1100": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "FilterSpec.contrast"
+			"qualifiedName": "CssUnit"
 		},
 		"1101": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "FilterSpec.saturate"
+			"qualifiedName": "CubicBezier"
 		},
 		"1102": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "FilterSpec.grayscale"
+			"qualifiedName": "EditorPatch"
 		},
 		"1103": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "GradientStop"
+			"qualifiedName": "T"
 		},
 		"1104": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "GradientStop.color"
+			"qualifiedName": "FilterSpec"
 		},
 		"1105": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "GradientStop.offset"
+			"qualifiedName": "FilterSpec.blur"
 		},
 		"1106": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "GridTrack"
+			"qualifiedName": "FilterSpec.brightness"
 		},
 		"1107": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "FilterSpec.contrast"
 		},
 		"1108": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "FilterSpec.saturate"
 		},
 		"1109": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.length"
+			"qualifiedName": "FilterSpec.grayscale"
 		},
 		"1110": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "GradientStop"
 		},
 		"1111": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "GradientStop.color"
 		},
 		"1112": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.value"
+			"qualifiedName": "GradientStop.offset"
 		},
 		"1113": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "GridTrack"
 		},
 		"1114": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "__type"
 		},
 		"1115": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "GridTrackList"
+			"qualifiedName": "__type.kind"
 		},
 		"1116": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "JsonValue"
+			"qualifiedName": "__type.length"
 		},
 		"1117": {
 			"packageName": "@anvilkit/contracts",
@@ -34976,57 +35215,57 @@
 		"1118": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.__index"
+			"qualifiedName": "__type.kind"
+		},
+		"1119": {
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/editor/values.ts",
+			"qualifiedName": "__type.value"
 		},
 		"1120": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "Paint"
+			"qualifiedName": "__type"
 		},
 		"1121": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "__type.kind"
 		},
 		"1122": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "GridTrackList"
 		},
 		"1123": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "JsonValue"
 		},
 		"1124": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "__type"
 		},
 		"1125": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.color"
-		},
-		"1126": {
-			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "__type.__index"
 		},
 		"1127": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "Paint"
 		},
 		"1128": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.angle"
+			"qualifiedName": "__type"
 		},
 		"1129": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.stops"
+			"qualifiedName": "__type.kind"
 		},
 		"1130": {
 			"packageName": "@anvilkit/contracts",
@@ -35041,114 +35280,149 @@
 		"1132": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.src"
+			"qualifiedName": "__type.color"
 		},
 		"1133": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.fit"
+			"qualifiedName": "__type"
 		},
 		"1134": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.position"
+			"qualifiedName": "__type.kind"
 		},
 		"1135": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "__type.angle"
 		},
 		"1136": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.x"
+			"qualifiedName": "__type.stops"
 		},
 		"1137": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.y"
+			"qualifiedName": "__type"
 		},
 		"1138": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "PropertyPath"
+			"qualifiedName": "__type.kind"
 		},
 		"1139": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "ShadowSpec"
+			"qualifiedName": "__type.src"
 		},
 		"1140": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "ShadowSpec.kind"
+			"qualifiedName": "__type.fit"
 		},
 		"1141": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "ShadowSpec.offsetX"
+			"qualifiedName": "__type.position"
 		},
 		"1142": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "ShadowSpec.offsetY"
+			"qualifiedName": "__type"
 		},
 		"1143": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "ShadowSpec.blur"
+			"qualifiedName": "__type.x"
 		},
 		"1144": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "ShadowSpec.spread"
+			"qualifiedName": "__type.y"
 		},
 		"1145": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "ShadowSpec.color"
+			"qualifiedName": "PropertyPath"
 		},
 		"1146": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "SizeValue"
+			"qualifiedName": "ShadowSpec"
 		},
 		"1147": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "TokenOrLiteral"
+			"qualifiedName": "ShadowSpec.kind"
 		},
 		"1148": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "ShadowSpec.offsetX"
 		},
 		"1149": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "ShadowSpec.offsetY"
 		},
 		"1150": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.value"
+			"qualifiedName": "ShadowSpec.blur"
 		},
 		"1151": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "ShadowSpec.spread"
 		},
 		"1152": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "ShadowSpec.color"
 		},
 		"1153": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
-			"qualifiedName": "__type.tokenId"
+			"qualifiedName": "SizeValue"
 		},
 		"1154": {
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/editor/values.ts",
+			"qualifiedName": "TokenOrLiteral"
+		},
+		"1155": {
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/editor/values.ts",
+			"qualifiedName": "__type"
+		},
+		"1156": {
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/editor/values.ts",
+			"qualifiedName": "__type.kind"
+		},
+		"1157": {
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/editor/values.ts",
+			"qualifiedName": "__type.value"
+		},
+		"1158": {
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/editor/values.ts",
+			"qualifiedName": "__type"
+		},
+		"1159": {
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/editor/values.ts",
+			"qualifiedName": "__type.kind"
+		},
+		"1160": {
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/editor/values.ts",
+			"qualifiedName": "__type.tokenId"
+		},
+		"1161": {
 			"packageName": "@anvilkit/contracts",
 			"packagePath": "src/editor/values.ts",
 			"qualifiedName": "T"
