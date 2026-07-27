@@ -191,7 +191,7 @@ test.describe("editor accessibility acceptance (§27.6)", () => {
 		});
 		const field = page
 			.getByTestId("ak-editor-inspector")
-			.locator("input[type='text'], input[type='number']")
+			.getByRole("textbox", { name: /width/i })
 			.first();
 		await expect(field).toBeVisible({ timeout: 10_000 });
 		await field.focus();
@@ -199,18 +199,16 @@ test.describe("editor accessibility acceptance (§27.6)", () => {
 		await page.keyboard.press("ControlOrMeta+a");
 		await page.keyboard.type("24");
 		await page.keyboard.press("Enter");
-		await expect
-			.poll(
-				async () =>
-					page.evaluate(
-						(id) =>
-							document.querySelector(`[data-ak-node="${id}"]`) !== null ||
-							document.querySelectorAll("[data-ak-node]").length > 0,
-						nodeId,
-					),
-				{ timeout: 15_000 },
-			)
-			.toBe(true);
+		await expect(field).toHaveValue("24");
+		// The reset affordance renders ONLY when the property is written
+		// at the active layer, so its appearance is proof the keystroke
+		// became a committed authoring value — not merely local input
+		// state. (Do not look for `[data-ak-node]` here: those elements
+		// live inside the canvas iframe, so a parent-document query is
+		// always false regardless of whether the commit landed.)
+		await expect(
+			page.getByTestId("ak-editor-inspector").getByTestId("ak-inspector-reset").first(),
+		).toBeVisible({ timeout: 15_000 });
 
 		// UNDO — reachable and operable from the keyboard.
 		const undo = page.getByRole("button", { name: /undo/i }).first();
