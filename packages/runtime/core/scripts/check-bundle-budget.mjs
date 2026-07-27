@@ -38,8 +38,18 @@
  *
  * ### How the check works
  *
- * The script builds the package (`rslib build`) so `dist/` is fresh,
+ * The script builds the package (`pnpm build`) so `dist/` is fresh,
  * then writes a tiny throwaway entry file that re-exports `Studio`:
+ *
+ * It must invoke the package's **full** `build` script, never a bare
+ * `rslib build`. `rslib` cleans `dist/` on entry, and the CSS export
+ * (`./styles.css` → `dist/react/overrides/styles.css`) is emitted by
+ * the separate `build:css` step that a bare `rslib build` skips. A
+ * partial rebuild here therefore *deletes a published export*, and
+ * every app that does `import "@anvilkit/core/styles.css"`
+ * (`apps/playground`, `apps/studio`, `apps/docs`) then fails to
+ * compile with "Module not found" — a check task must not leave the
+ * build output in a state the real build would never produce.
  *
  * ```js
  * export { Studio } from "../dist/index.js";
@@ -177,8 +187,8 @@ async function ensureDistExists() {
 	try {
 		distStat = await stat(DIST_ENTRY);
 	} catch {
-		console.log("check-bundle-budget: dist/ missing — running `rslib build`…");
-		execSync("pnpm exec rslib build", {
+		console.log("check-bundle-budget: dist/ missing — running `pnpm build`…");
+		execSync("pnpm run build", {
 			cwd: PACKAGE_ROOT,
 			stdio: "inherit",
 		});
@@ -192,9 +202,9 @@ async function ensureDistExists() {
 		const srcMtime = await latestSrcMtime(SRC_DIR);
 		if (srcMtime > distStat.mtimeMs) {
 			console.log(
-				"check-bundle-budget: dist/ is older than src/ — running `rslib build`…",
+				"check-bundle-budget: dist/ is older than src/ — running `pnpm build`…",
 			);
-			execSync("pnpm exec rslib build", {
+			execSync("pnpm run build", {
 				cwd: PACKAGE_ROOT,
 				stdio: "inherit",
 			});
@@ -207,7 +217,7 @@ async function ensureDistExists() {
 			"check-bundle-budget: staleness check failed — rebuilding defensively",
 			err,
 		);
-		execSync("pnpm exec rslib build", {
+		execSync("pnpm run build", {
 			cwd: PACKAGE_ROOT,
 			stdio: "inherit",
 		});

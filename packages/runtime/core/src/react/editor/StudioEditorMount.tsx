@@ -27,6 +27,7 @@ import {
 	useMemo,
 	useSyncExternalStore,
 } from "react";
+import { BindingRenderMount } from "./bindings/BindingRenderMount.js";
 import {
 	AuthoringStyleContext,
 	type AuthoringStyleLookup,
@@ -81,7 +82,9 @@ export function StudioEditorMount({
 	return (
 		<StudioEditorBridgeContext value={bridge}>
 			<AuthoringStyleContext value={styleLookup}>
-				{children}
+				{/* Render-time binding resolution (CORE-P3-006): visibility
+				    and repeat reach the canvas through this. */}
+				<BindingRenderMount bridge={bridge}>{children}</BindingRenderMount>
 				<Suspense fallback={null}>
 					<EditorRoot editor={editor} bridge={bridge} />
 				</Suspense>

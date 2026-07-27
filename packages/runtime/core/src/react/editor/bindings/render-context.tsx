@@ -55,12 +55,34 @@ export interface NodeBindingRender {
 /** Resolve one node's binding-driven render state. */
 export type BindingRenderLookup = (nodeId: string) => NodeBindingRender | null;
 
+/** The context value: per-node lookup plus the scope it resolved against. */
+export interface BindingRenderValue {
+	readonly lookup: BindingRenderLookup;
+	/** The document's bindings, so a repeated row can re-provide them. */
+	readonly bindings: Readonly<Record<string, BindingV1>>;
+	/**
+	 * The scope in force here. A repeated subtree re-provides this with
+	 * `item`/`index` added, so bindings *inside* a row read their own
+	 * record rather than the collection.
+	 */
+	readonly scope: BindingScopeRoots;
+	readonly preview: boolean;
+}
+
+/** Roots a binding expression may read at render time. */
+export interface BindingScopeRoots {
+	readonly data?: JsonValue;
+	readonly page?: JsonValue;
+	readonly item?: JsonValue;
+	readonly index?: number;
+}
+
 /**
  * Per-node binding render state. `null` when the editor is off or the
  * document has no bindings — decorated renders then behave exactly as
  * they did before Phase 3.
  */
-export const BindingRenderContext = createContext<BindingRenderLookup | null>(
+export const BindingRenderContext = createContext<BindingRenderValue | null>(
 	null,
 );
 
@@ -68,7 +90,7 @@ export const BindingRenderContext = createContext<BindingRenderLookup | null>(
 export interface BindingRenderProviderProps {
 	readonly bindings: Readonly<Record<string, BindingV1>>;
 	/** Host-supplied roots (`data`, `page`). */
-	readonly scope: { readonly data?: JsonValue; readonly page?: JsonValue };
+	readonly scope: BindingScopeRoots;
 	/** Preview mode honours visibility; design mode only marks it. */
 	readonly preview: boolean;
 	readonly children: ReactNode;
@@ -135,7 +157,12 @@ export function BindingRenderProvider({
 		return (nodeId: string) => resolvedByNode.get(nodeId) ?? null;
 	}, [bindings, scope, preview]);
 
-	return <BindingRenderContext value={lookup}>{children}</BindingRenderContext>;
+	const value = useMemo<BindingRenderValue | null>(
+		() => (lookup === null ? null : { lookup, bindings, scope, preview }),
+		[lookup, bindings, scope, preview],
+	);
+
+	return <BindingRenderContext value={value}>{children}</BindingRenderContext>;
 }
 
 /** §19's default record cap, mirrored for render-time expansion. */
@@ -150,7 +177,7 @@ const DEFAULT_REPEAT_LIMIT = 50;
  */
 function resolveRepeatSource(
 	binding: BindingV1,
-	scope: { readonly data?: JsonValue; readonly page?: JsonValue },
+	scope: BindingScopeRoots,
 ): JsonValue {
 	const result = evaluateExpression(binding.expression, scope);
 	return result.status === "value" ? result.value : [];
@@ -160,7 +187,12 @@ function resolveRepeatSource(
 export function useNodeBindingRender(
 	nodeId: string | undefined,
 ): NodeBindingRender | null {
-	const lookup = use(BindingRenderContext);
-	if (lookup === null || nodeId === undefined) return null;
-	return lookup(nodeId);
+	const value = use(BindingRenderContext);
+	if (value === null || nodeId === undefined) return null;
+	return value.lookup(nodeId);
+}
+
+/** The binding context value, for callers that need the scope too. */
+export function useBindingRenderValue(): BindingRenderValue | null {
+	return use(BindingRenderContext);
 }

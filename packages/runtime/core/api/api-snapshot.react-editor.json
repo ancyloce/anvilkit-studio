@@ -1351,6 +1351,10 @@
 													},
 													{
 														"type": "literal",
+														"value": "typography"
+													},
+													{
+														"type": "literal",
 														"value": "layoutItem"
 													},
 													{
@@ -1360,10 +1364,6 @@
 													{
 														"type": "literal",
 														"value": "visualStyle"
-													},
-													{
-														"type": "literal",
-														"value": "typography"
 													},
 													{
 														"type": "literal",

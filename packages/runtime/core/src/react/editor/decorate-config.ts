@@ -28,8 +28,12 @@ import { createElement, type ReactNode, useContext } from "react";
 import { EditorInvariantError } from "../../editor/diagnostics.js";
 import { createConfigFingerprinter } from "../components/plugin-fingerprint.js";
 import { AuthoringBoundary } from "./AuthoringBoundary.js";
+import type { ResolvedAuthoringStyle } from "../../editor/style/resolve-authoring-style.js";
 import { AuthoringStyleContext } from "./authoring-style-context.js";
-import { BindingRenderContext } from "./bindings/render-context.js";
+import {
+	BindingRenderContext,
+	BindingRenderProvider,
+} from "./bindings/render-context.js";
 
 /** Options for {@link decoratePuckConfig} (DD-0019 §8, verbatim). */
 export interface DecoratePuckConfigOptions {
@@ -90,7 +94,7 @@ function createDecoratedRender(
 			lookup !== null && nodeId !== undefined ? lookup(nodeId) : undefined;
 		const binding =
 			bindingLookup !== null && nodeId !== undefined
-				? bindingLookup(nodeId)
+				? bindingLookup.lookup(nodeId)
 				: null;
 
 		// A visibility binding removes the node only where the author is
@@ -99,24 +103,64 @@ function createDecoratedRender(
 		if (binding !== null && binding.hiddenInPreview && binding.previewMode) {
 			return null;
 		}
-		if (styleTarget === "wrapper") {
-			return createElement(AuthoringBoundary, { resolved }, original(props));
+
+		// A repeat binding renders the node once per record. Each row gets
+		// its own scope carrying `item`/`index`, so bindings *inside* the
+		// row read their own record rather than the whole collection.
+		// Render contexts only — no durable Puck nodes are created (§19).
+		if (
+			binding?.repeat != null &&
+			bindingLookup !== null &&
+			nodeId !== undefined
+		) {
+			return binding.repeat.map((context) =>
+				createElement(
+					BindingRenderProvider,
+					{
+						key: context.key,
+						bindings: bindingLookup.bindings,
+						preview: bindingLookup.preview,
+						scope: {
+							...bindingLookup.scope,
+							item: context.item,
+							index: context.index,
+						},
+						children: renderNode(original, props, styleTarget, resolved),
+					},
+				),
+			);
 		}
-		if (resolved === undefined) {
-			// No editor mounted (or nothing authored): identical render.
-			return original(props);
-		}
-		return original({
-			...props,
-			editorStyle: resolved.inlineStyle,
-			editorClassName:
-				resolved.classNames.length > 0
-					? resolved.classNames.join(" ")
-					: undefined,
-			editorDataAttributes: resolved.dataAttributes,
-		});
+		return renderNode(original, props, styleTarget, resolved);
 	}
 	return EditorDecoratedRender as AnyRender;
+}
+
+/**
+ * The unconditional render for one node — shared by the plain path and
+ * by each repeated row, so a repeat cannot drift from normal rendering.
+ */
+function renderNode(
+	original: AnyRender,
+	props: Record<string, unknown>,
+	styleTarget: "root" | "wrapper",
+	resolved: ResolvedAuthoringStyle | undefined,
+): ReactNode {
+	if (styleTarget === "wrapper") {
+		return createElement(AuthoringBoundary, { resolved }, original(props));
+	}
+	if (resolved === undefined) {
+		// No editor mounted (or nothing authored): identical render.
+		return original(props);
+	}
+	return original({
+		...props,
+		editorStyle: resolved.inlineStyle,
+		editorClassName:
+			resolved.classNames.length > 0
+				? resolved.classNames.join(" ")
+				: undefined,
+		editorDataAttributes: resolved.dataAttributes,
+	});
 }
 
 interface DecorationCacheEntry {
