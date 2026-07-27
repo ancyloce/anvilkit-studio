@@ -1,7 +1,15 @@
 #!/usr/bin/env node
 /**
- * @file `check-no-dynamic-eval` — the §19 "no arbitrary JavaScript" gate
- * (PLAN-0020 CORE-P3-004; DD-0019 §19; ED-BIND-001).
+ * @file `check-no-dynamic-eval` — the shipped-bytes gate for the
+ * prohibited primitives in DD-0019 §19 **and §29**
+ * (PLAN-0020 CORE-P3-004, extended by CORE-P4-004; ED-BIND-001).
+ *
+ * The filename predates §29 and is kept so `check:all`, CI, and the
+ * pre-push hook keep working; read it as "no unsafe primitives".
+ * §29's prohibited list names `eval`, `new Function`, arbitrary script
+ * injection, and `postMessage("*")` — the last of which is checked
+ * here for the same reason as the first two: it is a property of the
+ * shipped bytes, not of any code path a unit test happens to call.
  *
  * DD-0019 §19 promises that binding expressions can never execute
  * arbitrary JavaScript. Two things uphold that, and only one of them is
@@ -68,6 +76,23 @@ const FORBIDDEN = [
 		pattern: /(?<![.\w$])Function\s*\(\s*["'`]/g,
 		label: "Function(<string>)",
 		why: "bare Function() call with a source string",
+	},
+	// §29: "unvalidated `postMessage("*")`" is a prohibited behavior.
+	// A wildcard target origin broadcasts the message to whatever
+	// document currently occupies the frame, so anything sent this way
+	// is readable by an attacker who can navigate it. The bound on the
+	// argument scan keeps the match inside one call's parentheses.
+	{
+		pattern: /\bpostMessage\s*\([^)]{0,300}?["'`]\*["'`]/g,
+		label: 'postMessage(…, "*")',
+		why: "wildcard target origin leaks the message to any document in the frame",
+	},
+	// §29: "arbitrary script/style injection". `document.write` can
+	// introduce executable markup into a document Core does not own.
+	{
+		pattern: /\bdocument\s*\.\s*write(?:ln)?\s*\(/g,
+		label: "document.write(",
+		why: "injects arbitrary markup into a document Core does not own",
 	},
 ];
 
@@ -186,7 +211,7 @@ async function main() {
 
 	if (offenders.length === 0) {
 		console.log(
-			`check-no-dynamic-eval: OK — no eval/Function-constructor primitive in ${scanned.join(", ")} (${files} files scanned)`,
+			`check-no-dynamic-eval: OK — no eval / Function-constructor / postMessage("*") / document.write primitive in ${scanned.join(", ")} (${files} files scanned)`,
 		);
 		return;
 	}
@@ -197,9 +222,14 @@ async function main() {
 		"DD-0019 §19 guarantees binding expressions never execute arbitrary",
 	);
 	console.error(
-		"JavaScript. A dynamic-code primitive in shipped output breaks that",
+		"JavaScript, and §29 prohibits dynamic code, arbitrary markup",
 	);
-	console.error("guarantee regardless of who calls it. Offenders:");
+	console.error(
+		'injection, and unvalidated postMessage("*"). A prohibited primitive',
+	);
+	console.error(
+		"in shipped output breaks that regardless of who calls it. Offenders:",
+	);
 	console.error("");
 	for (const { file, hits } of offenders) {
 		const rel = relative(PACKAGE_ROOT, file);
