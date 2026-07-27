@@ -1,10 +1,14 @@
 # ADR 0005: Cross-Editor Component and Token Model Alignment
 
-**Status:** Proposed — blocks Phase 2 of DD-0019 and the E4–E6 technical design of PRD 0013 until accepted
-**Date:** 2026-07-21
+**Status:** **Accepted** (2026-07-25) — no longer blocks Phase 2 of DD-0019 or the E4–E6 technical design of PRD 0013
+**Date:** 2026-07-21 (proposed) · 2026-07-25 (accepted)
 **Resolves:** DD-0019 `OQ-009` (token system relationships) and `OQ-010` (component model alignment)
 **Constrains:** PRD 0013 Open Questions 3, 5, and 9
-**Sign-off:** Runtime, Components, Export, Design (per DD-0019 reviewer list)
+**Sign-off:** Accepted by the repository owner on 2026-07-25. The four named
+role sign-offs from the DD-0019 reviewer list (Runtime, Components, Export,
+Design) are **not** individually recorded — this is an owner acceptance, the
+same basis on which Phase 0 and Phase 1A were authorised. Recorded as-is
+rather than presented as four approvals that did not happen.
 
 ## Context
 
@@ -102,12 +106,53 @@ DD-0019 adopts the three flagged rows from PRD 0013 as Phase 2 requirements. Con
 - Both repos implement the Appendix A certification fixtures when their component phases start; either phase's design review checks against this ADR.
 - UI copy standardizes on Theme / Brand / Document token labels and disambiguates component variants from page-size variants.
 
+## Acceptance Record (2026-07-25)
+
+Accepted by the repository owner. Phase 2 of DD-0019 (PLAN-0020
+`CORE-P2-001..012`) was executed against this ADR's frozen content and is
+complete, so acceptance ratifies decisions that have now been implemented and
+tested rather than only reviewed. Evidence:
+
+- **Part 1 (component model).** The glossary terms are the shipped vocabulary:
+  definition/instance separation, exposed properties, stable-ID overrides,
+  variant axis/value/selection, detach-with-new-IDs, propagation without
+  copies, and orphan overrides as retained diagnosable data.
+- **Part 2 (tokens).** Fixed Theme/Brand/Document labels, the single-resolver
+  idiom (`resolveToken`), no live cross-system aliases, and import-as-copy with
+  `DesignToken.source` provenance — all implemented and asserted.
+- **Enforcement clause (c).** All 20 Appendix A fixtures are implemented on the
+  page-editor side under the shared IDs
+  (`packages/runtime/core/src/testing/editor/cfx/`), with a coverage gate
+  (`check:cfx`, first in `check:all`) that fails the build if a declared
+  fixture ID goes unexercised.
+
+Two page-editor implementation decisions are recorded here because they are
+**not** covered by this ADR and were invented during Phase 2:
+
+1. Nested instances inside a definition root are encoded via a reserved
+   `__anvilkitInstance` prop key on `SerializablePuckNode.props`; DD-0019's
+   contracts define no field for this, yet §14.3 cycle detection and §24.4's
+   depth-10 cap presuppose it.
+2. `materializeInstance` returns a typed result (`materialized` / `cycle` /
+   `depth-exceeded` / `missing-definition`) where DD-0019 §24.4's pseudocode
+   throws, matching `resolveToken` and the rest of the pure engine.
+
+Neither changes this ADR's normative content; both are flagged so the canvas
+repo can decide whether to mirror them.
+
+**Canvas side remains outstanding.** ADR enforcement is symmetric: PRD 0013's
+E4–E6 work must still adopt the glossary, the `CanvasComponentVariant*`
+naming, explicit numeric caps, and its own Appendix A implementations under
+the same IDs. Acceptance unblocks that work; it does not certify it.
+
 ## Follow-up Actions
 
 - DD-0019 cross-references: **done** (2026-07-21) — §33 `OQ-009`/`OQ-010` marked resolved; §14.5 and §15.2 reference this ADR.
 - PRD 0013 pointer: **done** (2026-07-21) — §18 references this ADR for Open Questions 3, 5, and 9 and pulls Appendix A into the E4–E6 test plan.
 - `DesignToken.source` provenance field: **done** (2026-07-21) — added to the DD-0019 §9.4 contract as `DesignTokenSource` ahead of acceptance, well before the Phase 2 schema freeze.
 - Certification fixture list: **done** (2026-07-21) — derived in Appendix A; each repo implements the fixtures when its component phase starts.
+- Page-editor Appendix A implementation: **done** (2026-07-25) — all 20 fixtures under the shared IDs plus a completeness gate (PLAN-0020 `CORE-P2-011`).
+- Canvas Appendix A implementation: **outstanding** — required before PRD 0013's component phase can close.
 - Post-v1: revisit live theme aliasing together with exporter CSS-custom-property certification.
 
 ## Appendix A — Certification fixture list
