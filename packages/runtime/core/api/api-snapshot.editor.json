@@ -7,7 +7,7 @@
 	"flags": {},
 	"children": [
 		{
-			"id": 517,
+			"id": 537,
 			"name": "EditorInvariantError",
 			"variant": "declaration",
 			"kind": 128,
@@ -22,21 +22,21 @@
 			},
 			"children": [
 				{
-					"id": 518,
+					"id": 538,
 					"name": "constructor",
 					"variant": "declaration",
 					"kind": 512,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 519,
+							"id": 539,
 							"name": "EditorInvariantError",
 							"variant": "signature",
 							"kind": 16384,
 							"flags": {},
 							"parameters": [
 								{
-									"id": 520,
+									"id": 540,
 									"name": "message",
 									"variant": "param",
 									"kind": 32768,
@@ -49,7 +49,7 @@
 							],
 							"type": {
 								"type": "reference",
-								"target": 517,
+								"target": 537,
 								"name": "EditorInvariantError",
 								"package": "@anvilkit/core"
 							},
@@ -73,7 +73,7 @@
 				{
 					"title": "Constructors",
 					"children": [
-						518
+						538
 					]
 				}
 			],
@@ -157,7 +157,7 @@
 			]
 		},
 		{
-			"id": 551,
+			"id": 571,
 			"name": "AuthoringReadResult",
 			"variant": "declaration",
 			"kind": 256,
@@ -172,7 +172,7 @@
 			},
 			"children": [
 				{
-					"id": 555,
+					"id": 575,
 					"name": "errors",
 					"variant": "declaration",
 					"kind": 1024,
@@ -198,7 +198,7 @@
 					}
 				},
 				{
-					"id": 556,
+					"id": 576,
 					"name": "migrated",
 					"variant": "declaration",
 					"kind": 1024,
@@ -219,7 +219,7 @@
 					}
 				},
 				{
-					"id": 554,
+					"id": 574,
 					"name": "raw",
 					"variant": "declaration",
 					"kind": 1024,
@@ -241,7 +241,7 @@
 					}
 				},
 				{
-					"id": 553,
+					"id": 573,
 					"name": "readOnly",
 					"variant": "declaration",
 					"kind": 1024,
@@ -262,7 +262,7 @@
 					}
 				},
 				{
-					"id": 552,
+					"id": 572,
 					"name": "state",
 					"variant": "declaration",
 					"kind": 1024,
@@ -293,11 +293,11 @@
 				{
 					"title": "Properties",
 					"children": [
-						555,
-						556,
-						554,
-						553,
-						552
+						575,
+						576,
+						574,
+						573,
+						572
 					]
 				}
 			]
@@ -408,6 +408,155 @@
 						163,
 						162,
 						164
+					]
+				}
+			]
+		},
+		{
+			"id": 514,
+			"name": "ComponentCapabilityReport",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "One component's adoption status."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 515,
+					"name": "componentType",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 517,
+					"name": "declared",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Declared capability names, in a stable order."
+							}
+						]
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				},
+				{
+					"id": 516,
+					"name": "level",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "reference",
+						"target": 521,
+						"name": "EditorAdoptionLevel",
+						"package": "@anvilkit/core"
+					}
+				},
+				{
+					"id": 518,
+					"name": "missingForNextLevel",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "What this component still needs to reach "
+							},
+							{
+								"kind": "code",
+								"text": "`level + 1`"
+							},
+							{
+								"kind": "text",
+								"text": ". Empty at\nLevel 4 — there is nothing above it."
+							}
+						]
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				},
+				{
+					"id": 519,
+					"name": "warnings",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Structural problems worth fixing regardless of level, e.g. a\ndeclaration that parsed but cannot do anything."
+							}
+						]
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						515,
+						517,
+						516,
+						518,
+						519
 					]
 				}
 			]
@@ -987,7 +1136,7 @@
 			]
 		},
 		{
-			"id": 569,
+			"id": 589,
 			"name": "DuplicateRemapResult",
 			"variant": "declaration",
 			"kind": 256,
@@ -1010,7 +1159,7 @@
 			},
 			"children": [
 				{
-					"id": 571,
+					"id": 591,
 					"name": "copiedNodeIds",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1030,7 +1179,7 @@
 					}
 				},
 				{
-					"id": 570,
+					"id": 590,
 					"name": "state",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1053,8 +1202,107 @@
 				{
 					"title": "Properties",
 					"children": [
-						571,
-						570
+						591,
+						590
+					]
+				}
+			]
+		},
+		{
+			"id": 522,
+			"name": "EditorCapabilityInspection",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The whole-config report."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 523,
+					"name": "components",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 514,
+								"name": "ComponentCapabilityReport",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 524,
+					"name": "countsByLevel",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "How many components sit at each level."
+							}
+						]
+					},
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Readonly"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Record"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": 521,
+										"name": "EditorAdoptionLevel",
+										"package": "@anvilkit/core"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								],
+								"name": "Record",
+								"package": "typescript"
+							}
+						],
+						"name": "Readonly",
+						"package": "typescript"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						523,
+						524
 					]
 				}
 			]
@@ -1564,81 +1812,10 @@
 						]
 					},
 					"type": {
-						"type": "reflection",
-						"declaration": {
-							"id": 33,
-							"name": "__type",
-							"variant": "declaration",
-							"kind": 65536,
-							"flags": {},
-							"children": [
-								{
-									"id": 36,
-									"name": "featureIds",
-									"variant": "declaration",
-									"kind": 1024,
-									"flags": {
-										"isReadonly": true
-									},
-									"type": {
-										"type": "typeOperator",
-										"operator": "readonly",
-										"target": {
-											"type": "array",
-											"elementType": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										}
-									}
-								},
-								{
-									"id": 35,
-									"name": "status",
-									"variant": "declaration",
-									"kind": 1024,
-									"flags": {
-										"isReadonly": true
-									},
-									"type": {
-										"type": "union",
-										"types": [
-											{
-												"type": "literal",
-												"value": "passed"
-											},
-											{
-												"type": "literal",
-												"value": "failed"
-											}
-										]
-									}
-								},
-								{
-									"id": 34,
-									"name": "type",
-									"variant": "declaration",
-									"kind": 1024,
-									"flags": {
-										"isReadonly": true
-									},
-									"type": {
-										"type": "literal",
-										"value": "export.validation"
-									}
-								}
-							],
-							"groups": [
-								{
-									"title": "Properties",
-									"children": [
-										36,
-										35,
-										34
-									]
-								}
-							]
-						}
+						"type": "reference",
+						"target": 33,
+						"name": "ExportValidationEvent",
+						"package": "@anvilkit/core"
 					}
 				},
 				{
@@ -1722,6 +1899,104 @@
 						32,
 						29,
 						30
+					]
+				}
+			]
+		},
+		{
+			"id": 33,
+			"name": "ExportValidationEvent",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The content-free "
+					},
+					{
+						"kind": "code",
+						"text": "`export.validation`"
+					},
+					{
+						"kind": "text",
+						"text": " payload (DD-0019 §22.4).\nNamed so "
+					},
+					{
+						"kind": "code",
+						"text": "`runExport`"
+					},
+					{
+						"kind": "text",
+						"text": "'s sink can be typed without re-declaring it\n(PLAN-0020 CORE-P4-004)."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 36,
+					"name": "featureIds",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				},
+				{
+					"id": 35,
+					"name": "status",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "literal",
+								"value": "passed"
+							},
+							{
+								"type": "literal",
+								"value": "failed"
+							}
+						]
+					}
+				},
+				{
+					"id": 34,
+					"name": "type",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"type": {
+						"type": "literal",
+						"value": "export.validation"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						36,
+						35,
+						34
 					]
 				}
 			]
@@ -2204,7 +2479,7 @@
 			]
 		},
 		{
-			"id": 595,
+			"id": 615,
 			"name": "NodeComponentDefaults",
 			"variant": "declaration",
 			"kind": 256,
@@ -2219,7 +2494,7 @@
 			},
 			"children": [
 				{
-					"id": 596,
+					"id": 616,
 					"name": "layout",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2251,7 +2526,7 @@
 					}
 				},
 				{
-					"id": 597,
+					"id": 617,
 					"name": "style",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2283,7 +2558,7 @@
 					}
 				},
 				{
-					"id": 598,
+					"id": 618,
 					"name": "typography",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2319,15 +2594,15 @@
 				{
 					"title": "Properties",
 					"children": [
-						596,
-						597,
-						598
+						616,
+						617,
+						618
 					]
 				}
 			]
 		},
 		{
-			"id": 860,
+			"id": 880,
 			"name": "NodeLocation",
 			"variant": "declaration",
 			"kind": 256,
@@ -2342,7 +2617,7 @@
 			},
 			"children": [
 				{
-					"id": 861,
+					"id": 881,
 					"name": "container",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2387,7 +2662,7 @@
 					}
 				},
 				{
-					"id": 862,
+					"id": 882,
 					"name": "index",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2400,7 +2675,7 @@
 					}
 				},
 				{
-					"id": 863,
+					"id": 883,
 					"name": "node",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2409,7 +2684,7 @@
 					},
 					"type": {
 						"type": "reference",
-						"target": 867,
+						"target": 887,
 						"name": "PuckTreeNode",
 						"package": "@anvilkit/core"
 					}
@@ -2419,9 +2694,9 @@
 				{
 					"title": "Properties",
 					"children": [
-						861,
-						862,
-						863
+						881,
+						882,
+						883
 					]
 				}
 			]
@@ -2964,7 +3239,7 @@
 			]
 		},
 		{
-			"id": 867,
+			"id": 887,
 			"name": "PuckTreeNode",
 			"variant": "declaration",
 			"kind": 256,
@@ -2987,7 +3262,7 @@
 			},
 			"children": [
 				{
-					"id": 869,
+					"id": 889,
 					"name": "props",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3016,7 +3291,7 @@
 					}
 				},
 				{
-					"id": 868,
+					"id": 888,
 					"name": "type",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3033,14 +3308,14 @@
 				{
 					"title": "Properties",
 					"children": [
-						869,
-						868
+						889,
+						888
 					]
 				}
 			]
 		},
 		{
-			"id": 572,
+			"id": 592,
 			"name": "ReconcileChangeSet",
 			"variant": "declaration",
 			"kind": 256,
@@ -3055,7 +3330,7 @@
 			},
 			"children": [
 				{
-					"id": 578,
+					"id": 598,
 					"name": "removedBindings",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3075,7 +3350,7 @@
 					}
 				},
 				{
-					"id": 577,
+					"id": 597,
 					"name": "removedInteractions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3095,7 +3370,7 @@
 					}
 				},
 				{
-					"id": 573,
+					"id": 593,
 					"name": "removedNodeRecords",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3115,7 +3390,7 @@
 					}
 				},
 				{
-					"id": 576,
+					"id": 596,
 					"name": "strippedBindingRefs",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3128,7 +3403,7 @@
 					}
 				},
 				{
-					"id": 575,
+					"id": 595,
 					"name": "strippedInteractionRefs",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3141,7 +3416,7 @@
 					}
 				},
 				{
-					"id": 574,
+					"id": 594,
 					"name": "strippedStyleRefs",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3158,18 +3433,18 @@
 				{
 					"title": "Properties",
 					"children": [
-						578,
-						577,
-						573,
-						576,
-						575,
-						574
+						598,
+						597,
+						593,
+						596,
+						595,
+						594
 					]
 				}
 			]
 		},
 		{
-			"id": 579,
+			"id": 599,
 			"name": "ReconcileResult",
 			"variant": "declaration",
 			"kind": 256,
@@ -3184,7 +3459,7 @@
 			},
 			"children": [
 				{
-					"id": 582,
+					"id": 602,
 					"name": "changed",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3197,7 +3472,7 @@
 					}
 				},
 				{
-					"id": 581,
+					"id": 601,
 					"name": "changes",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3206,13 +3481,13 @@
 					},
 					"type": {
 						"type": "reference",
-						"target": 572,
+						"target": 592,
 						"name": "ReconcileChangeSet",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 580,
+					"id": 600,
 					"name": "state",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3235,9 +3510,9 @@
 				{
 					"title": "Properties",
 					"children": [
-						582,
-						581,
-						580
+						602,
+						601,
+						600
 					]
 				}
 			]
@@ -3433,7 +3708,7 @@
 			]
 		},
 		{
-			"id": 599,
+			"id": 619,
 			"name": "ResolveContext",
 			"variant": "declaration",
 			"kind": 256,
@@ -3448,7 +3723,7 @@
 			},
 			"children": [
 				{
-					"id": 600,
+					"id": 620,
 					"name": "authoring",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3467,7 +3742,7 @@
 					}
 				},
 				{
-					"id": 601,
+					"id": 621,
 					"name": "breakpoints",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3493,7 +3768,7 @@
 					}
 				},
 				{
-					"id": 605,
+					"id": 625,
 					"name": "componentDefaults",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3523,7 +3798,7 @@
 									},
 									{
 										"type": "reference",
-										"target": 595,
+										"target": 615,
 										"name": "NodeComponentDefaults",
 										"package": "@anvilkit/core"
 									}
@@ -3537,7 +3812,7 @@
 					}
 				},
 				{
-					"id": 604,
+					"id": 624,
 					"name": "defaultTokenMode",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3575,7 +3850,7 @@
 					}
 				},
 				{
-					"id": 603,
+					"id": 623,
 					"name": "tokenMode",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3588,7 +3863,7 @@
 					}
 				},
 				{
-					"id": 602,
+					"id": 622,
 					"name": "viewportWidth",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3605,18 +3880,18 @@
 				{
 					"title": "Properties",
 					"children": [
-						600,
-						601,
-						605,
-						604,
-						603,
-						602
+						620,
+						621,
+						625,
+						624,
+						623,
+						622
 					]
 				}
 			]
 		},
 		{
-			"id": 700,
+			"id": 720,
 			"name": "ResolvedAuthoringStyle",
 			"variant": "declaration",
 			"kind": 256,
@@ -3631,7 +3906,7 @@
 			},
 			"children": [
 				{
-					"id": 701,
+					"id": 721,
 					"name": "classNames",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3651,7 +3926,7 @@
 					}
 				},
 				{
-					"id": 703,
+					"id": 723,
 					"name": "dataAttributes",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3692,7 +3967,7 @@
 					}
 				},
 				{
-					"id": 704,
+					"id": 724,
 					"name": "diagnostics",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3718,7 +3993,7 @@
 					}
 				},
 				{
-					"id": 702,
+					"id": 722,
 					"name": "inlineStyle",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3772,16 +4047,16 @@
 				{
 					"title": "Properties",
 					"children": [
-						701,
-						703,
-						704,
-						702
+						721,
+						723,
+						724,
+						722
 					]
 				}
 			]
 		},
 		{
-			"id": 533,
+			"id": 553,
 			"name": "ResolvedByteLimits",
 			"variant": "declaration",
 			"kind": 256,
@@ -3796,7 +4071,7 @@
 			},
 			"children": [
 				{
-					"id": 535,
+					"id": 555,
 					"name": "errors",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3822,7 +4097,7 @@
 					}
 				},
 				{
-					"id": 534,
+					"id": 554,
 					"name": "limits",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3845,8 +4120,8 @@
 				{
 					"title": "Properties",
 					"children": [
-						535,
-						534
+						555,
+						554
 					]
 				}
 			]
@@ -3957,7 +4232,7 @@
 			]
 		},
 		{
-			"id": 606,
+			"id": 626,
 			"name": "ResolvedNodeAuthoring",
 			"variant": "declaration",
 			"kind": 256,
@@ -3972,7 +4247,7 @@
 			},
 			"children": [
 				{
-					"id": 611,
+					"id": 631,
 					"name": "diagnostics",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3998,7 +4273,7 @@
 					}
 				},
 				{
-					"id": 610,
+					"id": 630,
 					"name": "hidden",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4011,7 +4286,7 @@
 					}
 				},
 				{
-					"id": 607,
+					"id": 627,
 					"name": "layout",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4042,7 +4317,7 @@
 					}
 				},
 				{
-					"id": 608,
+					"id": 628,
 					"name": "style",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4073,7 +4348,7 @@
 					}
 				},
 				{
-					"id": 609,
+					"id": 629,
 					"name": "typography",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4108,17 +4383,17 @@
 				{
 					"title": "Properties",
 					"children": [
-						611,
-						610,
-						607,
-						608,
-						609
+						631,
+						630,
+						627,
+						628,
+						629
 					]
 				}
 			]
 		},
 		{
-			"id": 705,
+			"id": 725,
 			"name": "ResolvedNodeStyleInput",
 			"variant": "declaration",
 			"kind": 256,
@@ -4133,7 +4408,7 @@
 			},
 			"children": [
 				{
-					"id": 710,
+					"id": 730,
 					"name": "hidden",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4147,7 +4422,7 @@
 					}
 				},
 				{
-					"id": 707,
+					"id": 727,
 					"name": "layout",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4179,7 +4454,7 @@
 					}
 				},
 				{
-					"id": 706,
+					"id": 726,
 					"name": "nodeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4192,7 +4467,7 @@
 					}
 				},
 				{
-					"id": 708,
+					"id": 728,
 					"name": "style",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4224,7 +4499,7 @@
 					}
 				},
 				{
-					"id": 709,
+					"id": 729,
 					"name": "typography",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4260,17 +4535,17 @@
 				{
 					"title": "Properties",
 					"children": [
-						710,
-						707,
-						706,
-						708,
-						709
+						730,
+						727,
+						726,
+						728,
+						729
 					]
 				}
 			]
 		},
 		{
-			"id": 635,
+			"id": 655,
 			"name": "ResolveTokenOptions",
 			"variant": "declaration",
 			"kind": 256,
@@ -4285,7 +4560,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "resolveToken",
-						"target": 638
+						"target": 658
 					},
 					{
 						"kind": "text",
@@ -4295,7 +4570,7 @@
 			},
 			"children": [
 				{
-					"id": 636,
+					"id": 656,
 					"name": "defaultModeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4333,7 +4608,7 @@
 					}
 				},
 				{
-					"id": 637,
+					"id": 657,
 					"name": "visited",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4371,8 +4646,8 @@
 				{
 					"title": "Properties",
 					"children": [
-						636,
-						637
+						656,
+						657
 					]
 				}
 			]
@@ -4706,7 +4981,7 @@
 			]
 		},
 		{
-			"id": 757,
+			"id": 777,
 			"name": "TokenDeletionContext",
 			"variant": "declaration",
 			"kind": 256,
@@ -4721,7 +4996,7 @@
 			},
 			"children": [
 				{
-					"id": 759,
+					"id": 779,
 					"name": "defaultTokenMode",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4751,7 +5026,7 @@
 					}
 				},
 				{
-					"id": 758,
+					"id": 778,
 					"name": "tokenMode",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4776,14 +5051,14 @@
 				{
 					"title": "Properties",
 					"children": [
-						759,
-						758
+						779,
+						778
 					]
 				}
 			]
 		},
 		{
-			"id": 760,
+			"id": 780,
 			"name": "TokenDeletionPlan",
 			"variant": "declaration",
 			"kind": 256,
@@ -4798,7 +5073,7 @@
 			},
 			"children": [
 				{
-					"id": 763,
+					"id": 783,
 					"name": "aliasDependents",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4826,7 +5101,7 @@
 					}
 				},
 				{
-					"id": 764,
+					"id": 784,
 					"name": "disposition",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4845,7 +5120,7 @@
 					}
 				},
 				{
-					"id": 765,
+					"id": 785,
 					"name": "errors",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4887,7 +5162,7 @@
 					}
 				},
 				{
-					"id": 762,
+					"id": 782,
 					"name": "sites",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4909,7 +5184,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 803,
+								"target": 823,
 								"name": "TokenUsageSite",
 								"package": "@anvilkit/core"
 							}
@@ -4917,7 +5192,7 @@
 					}
 				},
 				{
-					"id": 761,
+					"id": 781,
 					"name": "tokenId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4934,11 +5209,11 @@
 				{
 					"title": "Properties",
 					"children": [
-						763,
-						764,
-						765,
-						762,
-						761
+						783,
+						784,
+						785,
+						782,
+						781
 					]
 				}
 			]
@@ -5308,6 +5583,46 @@
 								}
 							]
 						}
+					}
+				]
+			}
+		},
+		{
+			"id": 521,
+			"name": "EditorAdoptionLevel",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The §26.2 adoption ladder."
+					}
+				]
+			},
+			"type": {
+				"type": "union",
+				"types": [
+					{
+						"type": "literal",
+						"value": 0
+					},
+					{
+						"type": "literal",
+						"value": 1
+					},
+					{
+						"type": "literal",
+						"value": 2
+					},
+					{
+						"type": "literal",
+						"value": 3
+					},
+					{
+						"type": "literal",
+						"value": 4
 					}
 				]
 			}
@@ -6189,7 +6504,7 @@
 			}
 		},
 		{
-			"id": 870,
+			"id": 890,
 			"name": "PuckZones",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -6589,7 +6904,7 @@
 			}
 		},
 		{
-			"id": 797,
+			"id": 817,
 			"name": "TokenReferenceFamily",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -6621,7 +6936,7 @@
 			}
 		},
 		{
-			"id": 798,
+			"id": 818,
 			"name": "TokenRefVisitor",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -6645,21 +6960,21 @@
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 799,
+					"id": 819,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 800,
+							"id": 820,
 							"name": "__type",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
 							"parameters": [
 								{
-									"id": 801,
+									"id": 821,
 									"name": "tokenId",
 									"variant": "param",
 									"kind": 32768,
@@ -6670,14 +6985,14 @@
 									}
 								},
 								{
-									"id": 802,
+									"id": 822,
 									"name": "site",
 									"variant": "param",
 									"kind": 32768,
 									"flags": {},
 									"type": {
 										"type": "reference",
-										"target": 803,
+										"target": 823,
 										"name": "TokenUsageSite",
 										"package": "@anvilkit/core"
 									}
@@ -6693,7 +7008,7 @@
 			}
 		},
 		{
-			"id": 645,
+			"id": 665,
 			"name": "TokenResolution",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -6712,14 +7027,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 646,
+							"id": 666,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 651,
+									"id": 671,
 									"name": "modeId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -6740,7 +7055,7 @@
 									}
 								},
 								{
-									"id": 647,
+									"id": 667,
 									"name": "status",
 									"variant": "declaration",
 									"kind": 1024,
@@ -6753,7 +7068,7 @@
 									}
 								},
 								{
-									"id": 650,
+									"id": 670,
 									"name": "tokenId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -6774,7 +7089,7 @@
 									}
 								},
 								{
-									"id": 649,
+									"id": 669,
 									"name": "type",
 									"variant": "declaration",
 									"kind": 1024,
@@ -6793,7 +7108,7 @@
 									}
 								},
 								{
-									"id": 648,
+									"id": 668,
 									"name": "value",
 									"variant": "declaration",
 									"kind": 1024,
@@ -6810,11 +7125,11 @@
 								{
 									"title": "Properties",
 									"children": [
-										651,
-										647,
-										650,
-										649,
-										648
+										671,
+										667,
+										670,
+										669,
+										668
 									]
 								}
 							]
@@ -6823,14 +7138,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 652,
+							"id": 672,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 654,
+									"id": 674,
 									"name": "path",
 									"variant": "declaration",
 									"kind": 1024,
@@ -6850,7 +7165,7 @@
 									}
 								},
 								{
-									"id": 653,
+									"id": 673,
 									"name": "status",
 									"variant": "declaration",
 									"kind": 1024,
@@ -6867,8 +7182,8 @@
 								{
 									"title": "Properties",
 									"children": [
-										654,
-										653
+										674,
+										673
 									]
 								}
 							]
@@ -6877,14 +7192,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 655,
+							"id": 675,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 656,
+									"id": 676,
 									"name": "status",
 									"variant": "declaration",
 									"kind": 1024,
@@ -6897,7 +7212,7 @@
 									}
 								},
 								{
-									"id": 657,
+									"id": 677,
 									"name": "tokenId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -6914,8 +7229,8 @@
 								{
 									"title": "Properties",
 									"children": [
-										656,
-										657
+										676,
+										677
 									]
 								}
 							]
@@ -6924,14 +7239,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 658,
+							"id": 678,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 661,
+									"id": 681,
 									"name": "modeId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -6944,7 +7259,7 @@
 									}
 								},
 								{
-									"id": 659,
+									"id": 679,
 									"name": "status",
 									"variant": "declaration",
 									"kind": 1024,
@@ -6957,7 +7272,7 @@
 									}
 								},
 								{
-									"id": 660,
+									"id": 680,
 									"name": "tokenId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -6974,9 +7289,9 @@
 								{
 									"title": "Properties",
 									"children": [
-										661,
-										659,
-										660
+										681,
+										679,
+										680
 									]
 								}
 							]
@@ -6985,14 +7300,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 662,
+							"id": 682,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 667,
+									"id": 687,
 									"name": "actual",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7011,7 +7326,7 @@
 									}
 								},
 								{
-									"id": 665,
+									"id": 685,
 									"name": "aliasTokenId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7024,7 +7339,7 @@
 									}
 								},
 								{
-									"id": 666,
+									"id": 686,
 									"name": "expected",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7043,7 +7358,7 @@
 									}
 								},
 								{
-									"id": 663,
+									"id": 683,
 									"name": "status",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7078,7 +7393,7 @@
 									}
 								},
 								{
-									"id": 664,
+									"id": 684,
 									"name": "tokenId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7095,11 +7410,11 @@
 								{
 									"title": "Properties",
 									"children": [
-										667,
-										665,
-										666,
-										663,
-										664
+										687,
+										685,
+										686,
+										683,
+										684
 									]
 								}
 							]
@@ -7109,7 +7424,7 @@
 			}
 		},
 		{
-			"id": 782,
+			"id": 802,
 			"name": "TokenUsageIndex",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -7141,7 +7456,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 803,
+								"target": 823,
 								"name": "TokenUsageSite",
 								"package": "@anvilkit/core"
 							}
@@ -7153,7 +7468,7 @@
 			}
 		},
 		{
-			"id": 803,
+			"id": 823,
 			"name": "TokenUsageSite",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -7172,14 +7487,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 804,
+							"id": 824,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 807,
+									"id": 827,
 									"name": "family",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7188,13 +7503,13 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 797,
+										"target": 817,
 										"name": "TokenReferenceFamily",
 										"package": "@anvilkit/core"
 									}
 								},
 								{
-									"id": 805,
+									"id": 825,
 									"name": "kind",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7207,7 +7522,7 @@
 									}
 								},
 								{
-									"id": 808,
+									"id": 828,
 									"name": "layer",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7226,7 +7541,7 @@
 									}
 								},
 								{
-									"id": 806,
+									"id": 826,
 									"name": "nodeId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7239,7 +7554,7 @@
 									}
 								},
 								{
-									"id": 809,
+									"id": 829,
 									"name": "path",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7262,11 +7577,11 @@
 								{
 									"title": "Properties",
 									"children": [
-										807,
-										805,
-										808,
-										806,
-										809
+										827,
+										825,
+										828,
+										826,
+										829
 									]
 								}
 							]
@@ -7275,14 +7590,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 810,
+							"id": 830,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 813,
+									"id": 833,
 									"name": "family",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7291,13 +7606,13 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 797,
+										"target": 817,
 										"name": "TokenReferenceFamily",
 										"package": "@anvilkit/core"
 									}
 								},
 								{
-									"id": 811,
+									"id": 831,
 									"name": "kind",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7310,7 +7625,7 @@
 									}
 								},
 								{
-									"id": 814,
+									"id": 834,
 									"name": "layer",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7329,7 +7644,7 @@
 									}
 								},
 								{
-									"id": 815,
+									"id": 835,
 									"name": "path",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7348,7 +7663,7 @@
 									}
 								},
 								{
-									"id": 812,
+									"id": 832,
 									"name": "styleDefinitionId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7371,11 +7686,11 @@
 								{
 									"title": "Properties",
 									"children": [
-										813,
-										811,
-										814,
-										815,
-										812
+										833,
+										831,
+										834,
+										835,
+										832
 									]
 								}
 							]
@@ -7384,14 +7699,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 816,
+							"id": 836,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 819,
+									"id": 839,
 									"name": "definitionNodeId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7404,7 +7719,7 @@
 									}
 								},
 								{
-									"id": 820,
+									"id": 840,
 									"name": "family",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7413,13 +7728,13 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 797,
+										"target": 817,
 										"name": "TokenReferenceFamily",
 										"package": "@anvilkit/core"
 									}
 								},
 								{
-									"id": 817,
+									"id": 837,
 									"name": "kind",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7432,7 +7747,7 @@
 									}
 								},
 								{
-									"id": 821,
+									"id": 841,
 									"name": "layer",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7451,7 +7766,7 @@
 									}
 								},
 								{
-									"id": 818,
+									"id": 838,
 									"name": "nodeId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7464,7 +7779,7 @@
 									}
 								},
 								{
-									"id": 822,
+									"id": 842,
 									"name": "path",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7487,12 +7802,12 @@
 								{
 									"title": "Properties",
 									"children": [
-										819,
-										820,
-										817,
-										821,
-										818,
-										822
+										839,
+										840,
+										837,
+										841,
+										838,
+										842
 									]
 								}
 							]
@@ -7501,14 +7816,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 823,
+							"id": 843,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 825,
+									"id": 845,
 									"name": "definitionId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7527,7 +7842,7 @@
 									}
 								},
 								{
-									"id": 827,
+									"id": 847,
 									"name": "definitionNodeId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7540,7 +7855,7 @@
 									}
 								},
 								{
-									"id": 828,
+									"id": 848,
 									"name": "family",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7549,13 +7864,13 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 797,
+										"target": 817,
 										"name": "TokenReferenceFamily",
 										"package": "@anvilkit/core"
 									}
 								},
 								{
-									"id": 824,
+									"id": 844,
 									"name": "kind",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7568,7 +7883,7 @@
 									}
 								},
 								{
-									"id": 829,
+									"id": 849,
 									"name": "layer",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7587,7 +7902,7 @@
 									}
 								},
 								{
-									"id": 830,
+									"id": 850,
 									"name": "path",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7606,7 +7921,7 @@
 									}
 								},
 								{
-									"id": 826,
+									"id": 846,
 									"name": "variantId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7623,13 +7938,13 @@
 								{
 									"title": "Properties",
 									"children": [
-										825,
-										827,
-										828,
-										824,
-										829,
-										830,
-										826
+										845,
+										847,
+										848,
+										844,
+										849,
+										850,
+										846
 									]
 								}
 							]
@@ -7638,14 +7953,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 831,
+							"id": 851,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 832,
+									"id": 852,
 									"name": "kind",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7666,7 +7981,7 @@
 									}
 								},
 								{
-									"id": 834,
+									"id": 854,
 									"name": "modeId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7685,7 +8000,7 @@
 									}
 								},
 								{
-									"id": 833,
+									"id": 853,
 									"name": "tokenId",
 									"variant": "declaration",
 									"kind": 1024,
@@ -7702,9 +8017,9 @@
 								{
 									"title": "Properties",
 									"children": [
-										832,
-										834,
-										833
+										852,
+										854,
+										853
 									]
 								}
 							]
@@ -8050,7 +8365,59 @@
 			"defaultValue": "\"__anvilkitInstance\""
 		},
 		{
-			"id": 532,
+			"id": 520,
+			"name": "EDITOR_ADOPTION_LEVEL_NAMES",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Human-readable name for each level (§26.2, verbatim)."
+					}
+				]
+			},
+			"type": {
+				"type": "reference",
+				"target": {
+					"packageName": "typescript",
+					"packagePath": "lib/lib.es5.d.ts",
+					"qualifiedName": "Readonly"
+				},
+				"typeArguments": [
+					{
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Record"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": 521,
+								"name": "EditorAdoptionLevel",
+								"package": "@anvilkit/core"
+							},
+							{
+								"type": "intrinsic",
+								"name": "string"
+							}
+						],
+						"name": "Record",
+						"package": "typescript"
+					}
+				],
+				"name": "Readonly",
+				"package": "typescript"
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 552,
 			"name": "EDITOR_BYTE_LIMIT_DEFAULTS",
 			"variant": "declaration",
 			"kind": 32,
@@ -8259,14 +8626,14 @@
 			"defaultValue": "150"
 		},
 		{
-			"id": 775,
+			"id": 795,
 			"name": "aliasDependents",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 776,
+					"id": 796,
 					"name": "aliasDependents",
 					"variant": "signature",
 					"kind": 4096,
@@ -8289,20 +8656,20 @@
 					},
 					"parameters": [
 						{
-							"id": 777,
+							"id": 797,
 							"name": "index",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 782,
+								"target": 802,
 								"name": "TokenUsageIndex",
 								"package": "@anvilkit/core"
 							}
 						},
 						{
-							"id": 778,
+							"id": 798,
 							"name": "tokenId",
 							"variant": "param",
 							"kind": 32768,
@@ -8559,14 +8926,14 @@
 			]
 		},
 		{
-			"id": 539,
+			"id": 559,
 			"name": "applyEditorPatch",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 540,
+					"id": 560,
 					"name": "applyEditorPatch",
 					"variant": "signature",
 					"kind": 4096,
@@ -8595,7 +8962,7 @@
 					},
 					"typeParameters": [
 						{
-							"id": 541,
+							"id": 561,
 							"name": "T",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -8608,7 +8975,7 @@
 					],
 					"parameters": [
 						{
-							"id": 542,
+							"id": 562,
 							"name": "target",
 							"variant": "param",
 							"kind": 32768,
@@ -8618,7 +8985,7 @@
 								"types": [
 									{
 										"type": "reference",
-										"target": 541,
+										"target": 561,
 										"name": "T",
 										"package": "@anvilkit/core",
 										"refersToTypeParameter": true
@@ -8631,7 +8998,7 @@
 							}
 						},
 						{
-							"id": 543,
+							"id": 563,
 							"name": "patch",
 							"variant": "param",
 							"kind": 32768,
@@ -8646,7 +9013,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 541,
+										"target": 561,
 										"name": "T",
 										"package": "@anvilkit/core",
 										"refersToTypeParameter": true
@@ -8662,7 +9029,7 @@
 						"types": [
 							{
 								"type": "reference",
-								"target": 541,
+								"target": 561,
 								"name": "T",
 								"package": "@anvilkit/core",
 								"refersToTypeParameter": true
@@ -8677,14 +9044,14 @@
 			]
 		},
 		{
-			"id": 723,
+			"id": 743,
 			"name": "applyStyleDefinitionPatch",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 724,
+					"id": 744,
 					"name": "applyStyleDefinitionPatch",
 					"variant": "signature",
 					"kind": 4096,
@@ -8715,7 +9082,7 @@
 					},
 					"parameters": [
 						{
-							"id": 725,
+							"id": 745,
 							"name": "definition",
 							"variant": "param",
 							"kind": 32768,
@@ -8732,7 +9099,7 @@
 							}
 						},
 						{
-							"id": 726,
+							"id": 746,
 							"name": "patch",
 							"variant": "param",
 							"kind": 32768,
@@ -8800,14 +9167,14 @@
 			]
 		},
 		{
-			"id": 745,
+			"id": 765,
 			"name": "applyTokenDeletion",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 746,
+					"id": 766,
 					"name": "applyTokenDeletion",
 					"variant": "signature",
 					"kind": 4096,
@@ -8854,7 +9221,7 @@
 					},
 					"parameters": [
 						{
-							"id": 747,
+							"id": 767,
 							"name": "state",
 							"variant": "param",
 							"kind": 32768,
@@ -8871,7 +9238,7 @@
 							}
 						},
 						{
-							"id": 748,
+							"id": 768,
 							"name": "tokenId",
 							"variant": "param",
 							"kind": 32768,
@@ -8882,7 +9249,7 @@
 							}
 						},
 						{
-							"id": 749,
+							"id": 769,
 							"name": "disposition",
 							"variant": "param",
 							"kind": 32768,
@@ -8899,14 +9266,14 @@
 							}
 						},
 						{
-							"id": 750,
+							"id": 770,
 							"name": "context",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 757,
+								"target": 777,
 								"name": "TokenDeletionContext",
 								"package": "@anvilkit/core"
 							}
@@ -8926,14 +9293,14 @@
 			]
 		},
 		{
-			"id": 771,
+			"id": 791,
 			"name": "applyTokenPatch",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 772,
+					"id": 792,
 					"name": "applyTokenPatch",
 					"variant": "signature",
 					"kind": 4096,
@@ -8956,7 +9323,7 @@
 					},
 					"parameters": [
 						{
-							"id": 773,
+							"id": 793,
 							"name": "token",
 							"variant": "param",
 							"kind": 32768,
@@ -8973,7 +9340,7 @@
 							}
 						},
 						{
-							"id": 774,
+							"id": 794,
 							"name": "patch",
 							"variant": "param",
 							"kind": 32768,
@@ -9096,14 +9463,14 @@
 			]
 		},
 		{
-			"id": 727,
+			"id": 747,
 			"name": "attachStyleDefinition",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 728,
+					"id": 748,
 					"name": "attachStyleDefinition",
 					"variant": "signature",
 					"kind": 4096,
@@ -9134,7 +9501,7 @@
 					},
 					"parameters": [
 						{
-							"id": 729,
+							"id": 749,
 							"name": "state",
 							"variant": "param",
 							"kind": 32768,
@@ -9151,7 +9518,7 @@
 							}
 						},
 						{
-							"id": 730,
+							"id": 750,
 							"name": "nodeIds",
 							"variant": "param",
 							"kind": 32768,
@@ -9169,7 +9536,7 @@
 							}
 						},
 						{
-							"id": 731,
+							"id": 751,
 							"name": "styleDefinitionId",
 							"variant": "param",
 							"kind": 32768,
@@ -9180,7 +9547,7 @@
 							}
 						},
 						{
-							"id": 732,
+							"id": 752,
 							"name": "layer",
 							"variant": "param",
 							"kind": 32768,
@@ -9191,7 +9558,7 @@
 							}
 						},
 						{
-							"id": 733,
+							"id": 753,
 							"name": "position",
 							"variant": "param",
 							"kind": 32768,
@@ -10009,14 +10376,14 @@
 			]
 		},
 		{
-			"id": 511,
+			"id": 531,
 			"name": "checkInvariant",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 512,
+					"id": 532,
 					"name": "checkInvariant",
 					"variant": "signature",
 					"kind": 4096,
@@ -10039,7 +10406,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "EditorInvariantError",
-								"target": 517
+								"target": 537
 							},
 							{
 								"kind": "text",
@@ -10049,7 +10416,7 @@
 					},
 					"parameters": [
 						{
-							"id": 513,
+							"id": 533,
 							"name": "condition",
 							"variant": "param",
 							"kind": 32768,
@@ -10060,7 +10427,7 @@
 							}
 						},
 						{
-							"id": 514,
+							"id": 534,
 							"name": "error",
 							"variant": "param",
 							"kind": 32768,
@@ -10068,14 +10435,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 515,
+									"id": 535,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 516,
+											"id": 536,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
@@ -10119,14 +10486,14 @@
 			]
 		},
 		{
-			"id": 766,
+			"id": 786,
 			"name": "checkTokenAliasGraph",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 767,
+					"id": 787,
 					"name": "checkTokenAliasGraph",
 					"variant": "signature",
 					"kind": 4096,
@@ -10141,7 +10508,7 @@
 					},
 					"parameters": [
 						{
-							"id": 768,
+							"id": 788,
 							"name": "tokenId",
 							"variant": "param",
 							"kind": 32768,
@@ -10152,7 +10519,7 @@
 							}
 						},
 						{
-							"id": 769,
+							"id": 789,
 							"name": "tokens",
 							"variant": "param",
 							"kind": 32768,
@@ -10197,7 +10564,7 @@
 							}
 						},
 						{
-							"id": 770,
+							"id": 790,
 							"name": "modes",
 							"variant": "param",
 							"kind": 32768,
@@ -10263,14 +10630,14 @@
 			]
 		},
 		{
-			"id": 835,
+			"id": 855,
 			"name": "cloneSubtree",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 836,
+					"id": 856,
 					"name": "cloneSubtree",
 					"variant": "signature",
 					"kind": 4096,
@@ -10317,33 +10684,33 @@
 					},
 					"parameters": [
 						{
-							"id": 837,
+							"id": 857,
 							"name": "node",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 867,
+								"target": 887,
 								"name": "PuckTreeNode",
 								"package": "@anvilkit/core"
 							}
 						},
 						{
-							"id": 838,
+							"id": 858,
 							"name": "zones",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 870,
+								"target": 890,
 								"name": "PuckZones",
 								"package": "@anvilkit/core"
 							}
 						},
 						{
-							"id": 839,
+							"id": 859,
 							"name": "generateId",
 							"variant": "param",
 							"kind": 32768,
@@ -10351,21 +10718,21 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 840,
+									"id": 860,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 841,
+											"id": 861,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 842,
+													"id": 862,
 													"name": "type",
 													"variant": "param",
 													"kind": 32768,
@@ -10386,7 +10753,7 @@
 							}
 						},
 						{
-							"id": 843,
+							"id": 863,
 							"name": "idMap",
 							"variant": "param",
 							"kind": 32768,
@@ -10413,7 +10780,7 @@
 							}
 						},
 						{
-							"id": 844,
+							"id": 864,
 							"name": "zoneAccum",
 							"variant": "param",
 							"kind": 32768,
@@ -10445,7 +10812,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 867,
+						"target": 887,
 						"name": "PuckTreeNode",
 						"package": "@anvilkit/core"
 					}
@@ -10512,14 +10879,14 @@
 			]
 		},
 		{
-			"id": 566,
+			"id": 586,
 			"name": "collectLiveNodeIds",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 567,
+					"id": 587,
 					"name": "collectLiveNodeIds",
 					"variant": "signature",
 					"kind": 4096,
@@ -10534,7 +10901,7 @@
 					},
 					"parameters": [
 						{
-							"id": 568,
+							"id": 588,
 							"name": "data",
 							"variant": "param",
 							"kind": 32768,
@@ -10627,14 +10994,14 @@
 			]
 		},
 		{
-			"id": 845,
+			"id": 865,
 			"name": "collectSubtreeIds",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 846,
+					"id": 866,
 					"name": "collectSubtreeIds",
 					"variant": "signature",
 					"kind": 4096,
@@ -10649,33 +11016,33 @@
 					},
 					"parameters": [
 						{
-							"id": 847,
+							"id": 867,
 							"name": "node",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 867,
+								"target": 887,
 								"name": "PuckTreeNode",
 								"package": "@anvilkit/core"
 							}
 						},
 						{
-							"id": 848,
+							"id": 868,
 							"name": "zones",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 870,
+								"target": 890,
 								"name": "PuckZones",
 								"package": "@anvilkit/core"
 							}
 						},
 						{
-							"id": 849,
+							"id": 869,
 							"name": "into",
 							"variant": "param",
 							"kind": 32768,
@@ -10706,14 +11073,14 @@
 			]
 		},
 		{
-			"id": 779,
+			"id": 799,
 			"name": "collectTokenUsage",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 780,
+					"id": 800,
 					"name": "collectTokenUsage",
 					"variant": "signature",
 					"kind": 4096,
@@ -10728,7 +11095,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "tokenUsageSites",
-								"target": 783
+								"target": 803
 							},
 							{
 								"kind": "text",
@@ -10738,7 +11105,7 @@
 					},
 					"parameters": [
 						{
-							"id": 781,
+							"id": 801,
 							"name": "state",
 							"variant": "param",
 							"kind": 32768,
@@ -10757,7 +11124,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 782,
+						"target": 802,
 						"name": "TokenUsageIndex",
 						"package": "@anvilkit/core"
 					}
@@ -11060,14 +11427,14 @@
 			]
 		},
 		{
-			"id": 557,
+			"id": 577,
 			"name": "createEmptyAuthoringState",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 558,
+					"id": 578,
 					"name": "createEmptyAuthoringState",
 					"variant": "signature",
 					"kind": 4096,
@@ -11155,14 +11522,14 @@
 			]
 		},
 		{
-			"id": 544,
+			"id": 564,
 			"name": "deepEqualJson",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 545,
+					"id": 565,
 					"name": "deepEqualJson",
 					"variant": "signature",
 					"kind": 4096,
@@ -11177,7 +11544,7 @@
 					},
 					"parameters": [
 						{
-							"id": 546,
+							"id": 566,
 							"name": "a",
 							"variant": "param",
 							"kind": 32768,
@@ -11188,7 +11555,7 @@
 							}
 						},
 						{
-							"id": 547,
+							"id": 567,
 							"name": "b",
 							"variant": "param",
 							"kind": 32768,
@@ -11271,14 +11638,14 @@
 			]
 		},
 		{
-			"id": 734,
+			"id": 754,
 			"name": "deleteStyleDefinition",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 735,
+					"id": 755,
 					"name": "deleteStyleDefinition",
 					"variant": "signature",
 					"kind": 4096,
@@ -11301,7 +11668,7 @@
 					},
 					"parameters": [
 						{
-							"id": 736,
+							"id": 756,
 							"name": "state",
 							"variant": "param",
 							"kind": 32768,
@@ -11318,7 +11685,7 @@
 							}
 						},
 						{
-							"id": 737,
+							"id": 757,
 							"name": "styleDefinitionId",
 							"variant": "param",
 							"kind": 32768,
@@ -11329,7 +11696,7 @@
 							}
 						},
 						{
-							"id": 738,
+							"id": 758,
 							"name": "materialize",
 							"variant": "param",
 							"kind": 32768,
@@ -11354,14 +11721,14 @@
 			]
 		},
 		{
-			"id": 739,
+			"id": 759,
 			"name": "detachStyleDefinition",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 740,
+					"id": 760,
 					"name": "detachStyleDefinition",
 					"variant": "signature",
 					"kind": 4096,
@@ -11384,7 +11751,7 @@
 					},
 					"parameters": [
 						{
-							"id": 741,
+							"id": 761,
 							"name": "state",
 							"variant": "param",
 							"kind": 32768,
@@ -11401,7 +11768,7 @@
 							}
 						},
 						{
-							"id": 742,
+							"id": 762,
 							"name": "nodeIds",
 							"variant": "param",
 							"kind": 32768,
@@ -11419,7 +11786,7 @@
 							}
 						},
 						{
-							"id": 743,
+							"id": 763,
 							"name": "styleDefinitionId",
 							"variant": "param",
 							"kind": 32768,
@@ -11430,7 +11797,7 @@
 							}
 						},
 						{
-							"id": 744,
+							"id": 764,
 							"name": "layer",
 							"variant": "param",
 							"kind": 32768,
@@ -11905,14 +12272,14 @@
 			]
 		},
 		{
-			"id": 850,
+			"id": 870,
 			"name": "findNode",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 851,
+					"id": 871,
 					"name": "findNode",
 					"variant": "signature",
 					"kind": 4096,
@@ -11927,7 +12294,7 @@
 					},
 					"parameters": [
 						{
-							"id": 852,
+							"id": 872,
 							"name": "data",
 							"variant": "param",
 							"kind": 32768,
@@ -11944,7 +12311,7 @@
 							}
 						},
 						{
-							"id": 853,
+							"id": 873,
 							"name": "targetId",
 							"variant": "param",
 							"kind": 32768,
@@ -11960,7 +12327,7 @@
 						"types": [
 							{
 								"type": "reference",
-								"target": 867,
+								"target": 887,
 								"name": "PuckTreeNode",
 								"package": "@anvilkit/core"
 							},
@@ -12198,14 +12565,67 @@
 			]
 		},
 		{
-			"id": 616,
+			"id": 525,
+			"name": "formatEditorCapabilityReport",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 526,
+					"name": "formatEditorCapabilityReport",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Format an inspection as a developer-readable report.\n\nKept separate from "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "inspectEditorCapabilities",
+								"target": 528
+							},
+							{
+								"kind": "text",
+								"text": " so the data is\nusable in an assertion (\"every component in this package is at least\nLevel 2\") without parsing prose."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 527,
+							"name": "inspection",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": 522,
+								"name": "EditorCapabilityInspection",
+								"package": "@anvilkit/core"
+							}
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			]
+		},
+		{
+			"id": 636,
 			"name": "getMatchingBreakpoints",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 617,
+					"id": 637,
 					"name": "getMatchingBreakpoints",
 					"variant": "signature",
 					"kind": 4096,
@@ -12220,7 +12640,7 @@
 					},
 					"parameters": [
 						{
-							"id": 618,
+							"id": 638,
 							"name": "breakpoints",
 							"variant": "param",
 							"kind": 32768,
@@ -12244,7 +12664,7 @@
 							}
 						},
 						{
-							"id": 619,
+							"id": 639,
 							"name": "viewportWidth",
 							"variant": "param",
 							"kind": 32768,
@@ -12276,14 +12696,14 @@
 			]
 		},
 		{
-			"id": 854,
+			"id": 874,
 			"name": "indexNodeLocations",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 855,
+					"id": 875,
 					"name": "indexNodeLocations",
 					"variant": "signature",
 					"kind": 4096,
@@ -12298,7 +12718,7 @@
 					},
 					"parameters": [
 						{
-							"id": 856,
+							"id": 876,
 							"name": "data",
 							"variant": "param",
 							"kind": 32768,
@@ -12329,13 +12749,64 @@
 							},
 							{
 								"type": "reference",
-								"target": 860,
+								"target": 880,
 								"name": "NodeLocation",
 								"package": "@anvilkit/core"
 							}
 						],
 						"name": "ReadonlyMap",
 						"package": "typescript"
+					}
+				}
+			]
+		},
+		{
+			"id": 528,
+			"name": "inspectEditorCapabilities",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 529,
+					"name": "inspectEditorCapabilities",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Report each component's §26.2 adoption level and what it would take\nto reach the next one.\n\nAccepts anything shaped like a Puck config ("
+							},
+							{
+								"kind": "code",
+								"text": "`{ components }`"
+							},
+							{
+								"kind": "text",
+								"text": "), so it\ncan be called on a full config or a single-component object during\npackage development."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 530,
+							"name": "config",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 522,
+						"name": "EditorCapabilityInspection",
+						"package": "@anvilkit/core"
 					}
 				}
 			]
@@ -12695,14 +13166,14 @@
 			]
 		},
 		{
-			"id": 857,
+			"id": 877,
 			"name": "isComponentNode",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 858,
+					"id": 878,
 					"name": "isComponentNode",
 					"variant": "signature",
 					"kind": 4096,
@@ -12725,7 +13196,7 @@
 					},
 					"parameters": [
 						{
-							"id": 859,
+							"id": 879,
 							"name": "value",
 							"variant": "param",
 							"kind": 32768,
@@ -12742,7 +13213,7 @@
 						"asserts": false,
 						"targetType": {
 							"type": "reference",
-							"target": 867,
+							"target": 887,
 							"name": "PuckTreeNode",
 							"package": "@anvilkit/core"
 						}
@@ -12826,14 +13297,14 @@
 			]
 		},
 		{
-			"id": 787,
+			"id": 807,
 			"name": "isTokenRef",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 788,
+					"id": 808,
 					"name": "isTokenRef",
 					"variant": "signature",
 					"kind": 4096,
@@ -12856,7 +13327,7 @@
 					},
 					"parameters": [
 						{
-							"id": 789,
+							"id": 809,
 							"name": "value",
 							"variant": "param",
 							"kind": 32768,
@@ -12874,14 +13345,14 @@
 						"targetType": {
 							"type": "reflection",
 							"declaration": {
-								"id": 790,
+								"id": 810,
 								"name": "__type",
 								"variant": "declaration",
 								"kind": 65536,
 								"flags": {},
 								"children": [
 									{
-										"id": 791,
+										"id": 811,
 										"name": "kind",
 										"variant": "declaration",
 										"kind": 1024,
@@ -12892,7 +13363,7 @@
 										}
 									},
 									{
-										"id": 792,
+										"id": 812,
 										"name": "tokenId",
 										"variant": "declaration",
 										"kind": 1024,
@@ -12907,8 +13378,8 @@
 									{
 										"title": "Properties",
 										"children": [
-											791,
-											792
+											811,
+											812
 										]
 									}
 								]
@@ -13248,14 +13719,14 @@
 			]
 		},
 		{
-			"id": 521,
+			"id": 541,
 			"name": "makeEditorError",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 522,
+					"id": 542,
 					"name": "makeEditorError",
 					"variant": "signature",
 					"kind": 4096,
@@ -13270,7 +13741,7 @@
 					},
 					"parameters": [
 						{
-							"id": 523,
+							"id": 543,
 							"name": "code",
 							"variant": "param",
 							"kind": 32768,
@@ -13287,7 +13758,7 @@
 							}
 						},
 						{
-							"id": 524,
+							"id": 544,
 							"name": "message",
 							"variant": "param",
 							"kind": 32768,
@@ -13298,7 +13769,7 @@
 							}
 						},
 						{
-							"id": 525,
+							"id": 545,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
@@ -13308,14 +13779,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 526,
+									"id": 546,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 531,
+											"id": 551,
 											"name": "details",
 											"variant": "declaration",
 											"kind": 1024,
@@ -13357,7 +13828,7 @@
 											}
 										},
 										{
-											"id": 530,
+											"id": 550,
 											"name": "nodeIds",
 											"variant": "declaration",
 											"kind": 1024,
@@ -13378,7 +13849,7 @@
 											}
 										},
 										{
-											"id": 529,
+											"id": 549,
 											"name": "path",
 											"variant": "declaration",
 											"kind": 1024,
@@ -13408,7 +13879,7 @@
 											}
 										},
 										{
-											"id": 528,
+											"id": 548,
 											"name": "recoverable",
 											"variant": "declaration",
 											"kind": 1024,
@@ -13422,7 +13893,7 @@
 											}
 										},
 										{
-											"id": 527,
+											"id": 547,
 											"name": "severity",
 											"variant": "declaration",
 											"kind": 1024,
@@ -13453,11 +13924,11 @@
 										{
 											"title": "Properties",
 											"children": [
-												531,
-												530,
-												529,
-												528,
-												527
+												551,
+												550,
+												549,
+												548,
+												547
 											]
 										}
 									]
@@ -13479,14 +13950,14 @@
 			]
 		},
 		{
-			"id": 793,
+			"id": 813,
 			"name": "mapAuthoringTokens",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 794,
+					"id": 814,
 					"name": "mapAuthoringTokens",
 					"variant": "signature",
 					"kind": 4096,
@@ -13509,7 +13980,7 @@
 					},
 					"parameters": [
 						{
-							"id": 795,
+							"id": 815,
 							"name": "state",
 							"variant": "param",
 							"kind": 32768,
@@ -13526,14 +13997,14 @@
 							}
 						},
 						{
-							"id": 796,
+							"id": 816,
 							"name": "visitor",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 798,
+								"target": 818,
 								"name": "TokenRefVisitor",
 								"package": "@anvilkit/core"
 							}
@@ -13810,14 +14281,14 @@
 			]
 		},
 		{
-			"id": 631,
+			"id": 651,
 			"name": "materializeTokenLiteral",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 632,
+					"id": 652,
 					"name": "materializeTokenLiteral",
 					"variant": "signature",
 					"kind": 4096,
@@ -13912,7 +14383,7 @@
 					},
 					"parameters": [
 						{
-							"id": 633,
+							"id": 653,
 							"name": "type",
 							"variant": "param",
 							"kind": 32768,
@@ -13929,7 +14400,7 @@
 							}
 						},
 						{
-							"id": 634,
+							"id": 654,
 							"name": "value",
 							"variant": "param",
 							"kind": 32768,
@@ -14028,14 +14499,14 @@
 			]
 		},
 		{
-			"id": 591,
+			"id": 611,
 			"name": "mergePropertyWise",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 592,
+					"id": 612,
 					"name": "mergePropertyWise",
 					"variant": "signature",
 					"kind": 4096,
@@ -14066,7 +14537,7 @@
 					},
 					"typeParameters": [
 						{
-							"id": 593,
+							"id": 613,
 							"name": "T",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -14079,7 +14550,7 @@
 					],
 					"parameters": [
 						{
-							"id": 594,
+							"id": 614,
 							"name": "layers",
 							"variant": "param",
 							"kind": 32768,
@@ -14104,7 +14575,7 @@
 												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 593,
+														"target": 613,
 														"name": "T",
 														"package": "@anvilkit/core",
 														"refersToTypeParameter": true
@@ -14137,7 +14608,7 @@
 						"typeArguments": [
 							{
 								"type": "reference",
-								"target": 593,
+								"target": 613,
 								"name": "T",
 								"package": "@anvilkit/core",
 								"refersToTypeParameter": true
@@ -14150,14 +14621,14 @@
 			]
 		},
 		{
-			"id": 864,
+			"id": 884,
 			"name": "nodeId",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 865,
+					"id": 885,
 					"name": "nodeId",
 					"variant": "signature",
 					"kind": 4096,
@@ -14172,14 +14643,14 @@
 					},
 					"parameters": [
 						{
-							"id": 866,
+							"id": 886,
 							"name": "node",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 867,
+								"target": 887,
 								"name": "PuckTreeNode",
 								"package": "@anvilkit/core"
 							}
@@ -14262,14 +14733,14 @@
 			]
 		},
 		{
-			"id": 751,
+			"id": 771,
 			"name": "planTokenDeletion",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 752,
+					"id": 772,
 					"name": "planTokenDeletion",
 					"variant": "signature",
 					"kind": 4096,
@@ -14292,7 +14763,7 @@
 					},
 					"parameters": [
 						{
-							"id": 753,
+							"id": 773,
 							"name": "state",
 							"variant": "param",
 							"kind": 32768,
@@ -14309,7 +14780,7 @@
 							}
 						},
 						{
-							"id": 754,
+							"id": 774,
 							"name": "tokenId",
 							"variant": "param",
 							"kind": 32768,
@@ -14320,7 +14791,7 @@
 							}
 						},
 						{
-							"id": 755,
+							"id": 775,
 							"name": "disposition",
 							"variant": "param",
 							"kind": 32768,
@@ -14337,14 +14808,14 @@
 							}
 						},
 						{
-							"id": 756,
+							"id": 776,
 							"name": "context",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 757,
+								"target": 777,
 								"name": "TokenDeletionContext",
 								"package": "@anvilkit/core"
 							}
@@ -14352,7 +14823,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 760,
+						"target": 780,
 						"name": "TokenDeletionPlan",
 						"package": "@anvilkit/core"
 					}
@@ -14502,14 +14973,14 @@
 			]
 		},
 		{
-			"id": 559,
+			"id": 579,
 			"name": "readAuthoringState",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 560,
+					"id": 580,
 					"name": "readAuthoringState",
 					"variant": "signature",
 					"kind": 4096,
@@ -14532,7 +15003,7 @@
 					},
 					"parameters": [
 						{
-							"id": 561,
+							"id": 581,
 							"name": "data",
 							"variant": "param",
 							"kind": 32768,
@@ -14551,7 +15022,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 551,
+						"target": 571,
 						"name": "AuthoringReadResult",
 						"package": "@anvilkit/core"
 					}
@@ -14559,14 +15030,86 @@
 			]
 		},
 		{
-			"id": 583,
+			"id": 511,
+			"name": "readEditorMetadata",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 512,
+					"name": "readEditorMetadata",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Read and structurally validate a component config's\n"
+							},
+							{
+								"kind": "code",
+								"text": "`metadata.editor`"
+							},
+							{
+								"kind": "text",
+								"text": " declaration. Returns "
+							},
+							{
+								"kind": "code",
+								"text": "`undefined`"
+							},
+							{
+								"kind": "text",
+								"text": " for anything that\nis not a well-formed v1 declaration."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 513,
+							"name": "component",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/editor/capability-metadata.ts",
+									"qualifiedName": "EditorCapabilityMetadata"
+								},
+								"name": "EditorCapabilityMetadata",
+								"package": "@anvilkit/contracts"
+							},
+							{
+								"type": "intrinsic",
+								"name": "undefined"
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"id": 603,
 			"name": "reconcileAuthoringState",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 584,
+					"id": 604,
 					"name": "reconcileAuthoringState",
 					"variant": "signature",
 					"kind": 4096,
@@ -14589,7 +15132,7 @@
 					},
 					"parameters": [
 						{
-							"id": 585,
+							"id": 605,
 							"name": "state",
 							"variant": "param",
 							"kind": 32768,
@@ -14606,7 +15149,7 @@
 							}
 						},
 						{
-							"id": 586,
+							"id": 606,
 							"name": "data",
 							"variant": "param",
 							"kind": 32768,
@@ -14625,7 +15168,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 579,
+						"target": 599,
 						"name": "ReconcileResult",
 						"package": "@anvilkit/core"
 					}
@@ -14711,14 +15254,14 @@
 			]
 		},
 		{
-			"id": 587,
+			"id": 607,
 			"name": "remapForDuplicate",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 588,
+					"id": 608,
 					"name": "remapForDuplicate",
 					"variant": "signature",
 					"kind": 4096,
@@ -14741,7 +15284,7 @@
 					},
 					"parameters": [
 						{
-							"id": 589,
+							"id": 609,
 							"name": "state",
 							"variant": "param",
 							"kind": 32768,
@@ -14758,7 +15301,7 @@
 							}
 						},
 						{
-							"id": 590,
+							"id": 610,
 							"name": "idMap",
 							"variant": "param",
 							"kind": 32768,
@@ -14799,7 +15342,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 569,
+						"target": 589,
 						"name": "DuplicateRemapResult",
 						"package": "@anvilkit/core"
 					}
@@ -15178,14 +15721,14 @@
 			]
 		},
 		{
-			"id": 711,
+			"id": 731,
 			"name": "resolveAuthoringStyle",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 712,
+					"id": 732,
 					"name": "resolveAuthoringStyle",
 					"variant": "signature",
 					"kind": 4096,
@@ -15216,14 +15759,14 @@
 					},
 					"parameters": [
 						{
-							"id": 713,
+							"id": 733,
 							"name": "input",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 705,
+								"target": 725,
 								"name": "ResolvedNodeStyleInput",
 								"package": "@anvilkit/core"
 							}
@@ -15231,7 +15774,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 700,
+						"target": 720,
 						"name": "ResolvedAuthoringStyle",
 						"package": "@anvilkit/core"
 					}
@@ -15239,14 +15782,14 @@
 			]
 		},
 		{
-			"id": 536,
+			"id": 556,
 			"name": "resolveByteLimits",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 537,
+					"id": 557,
 					"name": "resolveByteLimits",
 					"variant": "signature",
 					"kind": 4096,
@@ -15269,7 +15812,7 @@
 					},
 					"parameters": [
 						{
-							"id": 538,
+							"id": 558,
 							"name": "overrides",
 							"variant": "param",
 							"kind": 32768,
@@ -15302,7 +15845,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 533,
+						"target": 553,
 						"name": "ResolvedByteLimits",
 						"package": "@anvilkit/core"
 					}
@@ -15537,14 +16080,14 @@
 			]
 		},
 		{
-			"id": 612,
+			"id": 632,
 			"name": "resolveNodeAuthoring",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 613,
+					"id": 633,
 					"name": "resolveNodeAuthoring",
 					"variant": "signature",
 					"kind": 4096,
@@ -15559,7 +16102,7 @@
 					},
 					"parameters": [
 						{
-							"id": 614,
+							"id": 634,
 							"name": "nodeId",
 							"variant": "param",
 							"kind": 32768,
@@ -15570,14 +16113,14 @@
 							}
 						},
 						{
-							"id": 615,
+							"id": 635,
 							"name": "context",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 599,
+								"target": 619,
 								"name": "ResolveContext",
 								"package": "@anvilkit/core"
 							}
@@ -15585,7 +16128,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 606,
+						"target": 626,
 						"name": "ResolvedNodeAuthoring",
 						"package": "@anvilkit/core"
 					}
@@ -15593,14 +16136,14 @@
 			]
 		},
 		{
-			"id": 620,
+			"id": 640,
 			"name": "resolveResponsiveValue",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 621,
+					"id": 641,
 					"name": "resolveResponsiveValue",
 					"variant": "signature",
 					"kind": 4096,
@@ -15647,7 +16190,7 @@
 					},
 					"typeParameters": [
 						{
-							"id": 622,
+							"id": 642,
 							"name": "T",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -15656,7 +16199,7 @@
 					],
 					"parameters": [
 						{
-							"id": 623,
+							"id": 643,
 							"name": "input",
 							"variant": "param",
 							"kind": 32768,
@@ -15674,7 +16217,7 @@
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 622,
+												"target": 642,
 												"name": "T",
 												"package": "@anvilkit/core",
 												"refersToTypeParameter": true
@@ -15691,7 +16234,7 @@
 							}
 						},
 						{
-							"id": 624,
+							"id": 644,
 							"name": "breakpoints",
 							"variant": "param",
 							"kind": 32768,
@@ -15715,7 +16258,7 @@
 							}
 						},
 						{
-							"id": 625,
+							"id": 645,
 							"name": "viewportWidth",
 							"variant": "param",
 							"kind": 32768,
@@ -15726,7 +16269,7 @@
 							}
 						},
 						{
-							"id": 626,
+							"id": 646,
 							"name": "merge",
 							"variant": "param",
 							"kind": 32768,
@@ -15734,21 +16277,21 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 627,
+									"id": 647,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 628,
+											"id": 648,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 629,
+													"id": 649,
 													"name": "base",
 													"variant": "param",
 													"kind": 32768,
@@ -15758,7 +16301,7 @@
 														"types": [
 															{
 																"type": "reference",
-																"target": 622,
+																"target": 642,
 																"name": "T",
 																"package": "@anvilkit/core",
 																"refersToTypeParameter": true
@@ -15771,14 +16314,14 @@
 													}
 												},
 												{
-													"id": 630,
+													"id": 650,
 													"name": "override",
 													"variant": "param",
 													"kind": 32768,
 													"flags": {},
 													"type": {
 														"type": "reference",
-														"target": 622,
+														"target": 642,
 														"name": "T",
 														"package": "@anvilkit/core",
 														"refersToTypeParameter": true
@@ -15787,7 +16330,7 @@
 											],
 											"type": {
 												"type": "reference",
-												"target": 622,
+												"target": 642,
 												"name": "T",
 												"package": "@anvilkit/core",
 												"refersToTypeParameter": true
@@ -15808,7 +16351,7 @@
 						"typeArguments": [
 							{
 								"type": "reference",
-								"target": 622,
+								"target": 642,
 								"name": "T",
 								"package": "@anvilkit/core",
 								"refersToTypeParameter": true
@@ -15821,14 +16364,14 @@
 			]
 		},
 		{
-			"id": 638,
+			"id": 658,
 			"name": "resolveToken",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 639,
+					"id": 659,
 					"name": "resolveToken",
 					"variant": "signature",
 					"kind": 4096,
@@ -15843,7 +16386,7 @@
 					},
 					"parameters": [
 						{
-							"id": 640,
+							"id": 660,
 							"name": "tokenId",
 							"variant": "param",
 							"kind": 32768,
@@ -15854,7 +16397,7 @@
 							}
 						},
 						{
-							"id": 641,
+							"id": 661,
 							"name": "modeId",
 							"variant": "param",
 							"kind": 32768,
@@ -15865,7 +16408,7 @@
 							}
 						},
 						{
-							"id": 642,
+							"id": 662,
 							"name": "tokens",
 							"variant": "param",
 							"kind": 32768,
@@ -15910,7 +16453,7 @@
 							}
 						},
 						{
-							"id": 643,
+							"id": 663,
 							"name": "modes",
 							"variant": "param",
 							"kind": 32768,
@@ -15955,14 +16498,14 @@
 							}
 						},
 						{
-							"id": 644,
+							"id": 664,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 635,
+								"target": 655,
 								"name": "ResolveTokenOptions",
 								"package": "@anvilkit/core"
 							},
@@ -15971,7 +16514,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 645,
+						"target": 665,
 						"name": "TokenResolution",
 						"package": "@anvilkit/core"
 					}
@@ -16299,14 +16842,14 @@
 			]
 		},
 		{
-			"id": 668,
+			"id": 688,
 			"name": "serializeBorderEdge",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 669,
+					"id": 689,
 					"name": "serializeBorderEdge",
 					"variant": "signature",
 					"kind": 4096,
@@ -16329,7 +16872,7 @@
 					},
 					"parameters": [
 						{
-							"id": 670,
+							"id": 690,
 							"name": "edge",
 							"variant": "param",
 							"kind": 32768,
@@ -16363,14 +16906,14 @@
 			]
 		},
 		{
-			"id": 671,
+			"id": 691,
 			"name": "serializeCssColor",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 672,
+					"id": 692,
 					"name": "serializeCssColor",
 					"variant": "signature",
 					"kind": 4096,
@@ -16385,7 +16928,7 @@
 					},
 					"parameters": [
 						{
-							"id": 673,
+							"id": 693,
 							"name": "value",
 							"variant": "param",
 							"kind": 32768,
@@ -16410,14 +16953,14 @@
 			]
 		},
 		{
-			"id": 674,
+			"id": 694,
 			"name": "serializeCssLength",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 675,
+					"id": 695,
 					"name": "serializeCssLength",
 					"variant": "signature",
 					"kind": 4096,
@@ -16440,7 +16983,7 @@
 					},
 					"parameters": [
 						{
-							"id": 676,
+							"id": 696,
 							"name": "value",
 							"variant": "param",
 							"kind": 32768,
@@ -16474,14 +17017,14 @@
 			]
 		},
 		{
-			"id": 677,
+			"id": 697,
 			"name": "serializeCssMath",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 678,
+					"id": 698,
 					"name": "serializeCssMath",
 					"variant": "signature",
 					"kind": 4096,
@@ -16512,7 +17055,7 @@
 					},
 					"parameters": [
 						{
-							"id": 679,
+							"id": 699,
 							"name": "expression",
 							"variant": "param",
 							"kind": 32768,
@@ -16546,14 +17089,14 @@
 			]
 		},
 		{
-			"id": 680,
+			"id": 700,
 			"name": "serializeFilter",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 681,
+					"id": 701,
 					"name": "serializeFilter",
 					"variant": "signature",
 					"kind": 4096,
@@ -16576,7 +17119,7 @@
 					},
 					"parameters": [
 						{
-							"id": 682,
+							"id": 702,
 							"name": "filter",
 							"variant": "param",
 							"kind": 32768,
@@ -16610,14 +17153,14 @@
 			]
 		},
 		{
-			"id": 683,
+			"id": 703,
 			"name": "serializeGridTracks",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 684,
+					"id": 704,
 					"name": "serializeGridTracks",
 					"variant": "signature",
 					"kind": 4096,
@@ -16640,7 +17183,7 @@
 					},
 					"parameters": [
 						{
-							"id": 685,
+							"id": 705,
 							"name": "tracks",
 							"variant": "param",
 							"kind": 32768,
@@ -16674,14 +17217,14 @@
 			]
 		},
 		{
-			"id": 686,
+			"id": 706,
 			"name": "serializePaint",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 687,
+					"id": 707,
 					"name": "serializePaint",
 					"variant": "signature",
 					"kind": 4096,
@@ -16704,7 +17247,7 @@
 					},
 					"parameters": [
 						{
-							"id": 688,
+							"id": 708,
 							"name": "paint",
 							"variant": "param",
 							"kind": 32768,
@@ -16738,14 +17281,14 @@
 			]
 		},
 		{
-			"id": 689,
+			"id": 709,
 			"name": "serializeShadow",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 690,
+					"id": 710,
 					"name": "serializeShadow",
 					"variant": "signature",
 					"kind": 4096,
@@ -16768,7 +17311,7 @@
 					},
 					"parameters": [
 						{
-							"id": 691,
+							"id": 711,
 							"name": "shadow",
 							"variant": "param",
 							"kind": 32768,
@@ -16802,14 +17345,14 @@
 			]
 		},
 		{
-			"id": 692,
+			"id": 712,
 			"name": "serializeTokenOrLiteral",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 693,
+					"id": 713,
 					"name": "serializeTokenOrLiteral",
 					"variant": "signature",
 					"kind": 4096,
@@ -16840,7 +17383,7 @@
 					},
 					"typeParameters": [
 						{
-							"id": 694,
+							"id": 714,
 							"name": "T",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -16849,7 +17392,7 @@
 					],
 					"parameters": [
 						{
-							"id": 695,
+							"id": 715,
 							"name": "value",
 							"variant": "param",
 							"kind": 32768,
@@ -16864,7 +17407,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 694,
+										"target": 714,
 										"name": "T",
 										"package": "@anvilkit/core",
 										"refersToTypeParameter": true
@@ -16875,7 +17418,7 @@
 							}
 						},
 						{
-							"id": 696,
+							"id": 716,
 							"name": "serialize",
 							"variant": "param",
 							"kind": 32768,
@@ -16883,28 +17426,28 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 697,
+									"id": 717,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 698,
+											"id": 718,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 699,
+													"id": 719,
 													"name": "literal",
 													"variant": "param",
 													"kind": 32768,
 													"flags": {},
 													"type": {
 														"type": "reference",
-														"target": 694,
+														"target": 714,
 														"name": "T",
 														"package": "@anvilkit/core",
 														"refersToTypeParameter": true
@@ -17148,14 +17691,14 @@
 			]
 		},
 		{
-			"id": 714,
+			"id": 734,
 			"name": "stableIdHash",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 715,
+					"id": 735,
 					"name": "stableIdHash",
 					"variant": "signature",
 					"kind": 4096,
@@ -17178,7 +17721,7 @@
 					},
 					"parameters": [
 						{
-							"id": 716,
+							"id": 736,
 							"name": "id",
 							"variant": "param",
 							"kind": 32768,
@@ -17197,14 +17740,14 @@
 			]
 		},
 		{
-			"id": 548,
+			"id": 568,
 			"name": "stripPatchNulls",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 549,
+					"id": 569,
 					"name": "stripPatchNulls",
 					"variant": "signature",
 					"kind": 4096,
@@ -17235,7 +17778,7 @@
 					},
 					"parameters": [
 						{
-							"id": 550,
+							"id": 570,
 							"name": "value",
 							"variant": "param",
 							"kind": 32768,
@@ -17254,14 +17797,14 @@
 			]
 		},
 		{
-			"id": 717,
+			"id": 737,
 			"name": "styleDefinitionCssVariableName",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 718,
+					"id": 738,
 					"name": "styleDefinitionCssVariableName",
 					"variant": "signature",
 					"kind": 4096,
@@ -17284,7 +17827,7 @@
 					},
 					"parameters": [
 						{
-							"id": 719,
+							"id": 739,
 							"name": "definition",
 							"variant": "param",
 							"kind": 32768,
@@ -17415,14 +17958,14 @@
 			]
 		},
 		{
-			"id": 720,
+			"id": 740,
 			"name": "tokenCssVariableName",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 721,
+					"id": 741,
 					"name": "tokenCssVariableName",
 					"variant": "signature",
 					"kind": 4096,
@@ -17445,7 +17988,7 @@
 					},
 					"parameters": [
 						{
-							"id": 722,
+							"id": 742,
 							"name": "token",
 							"variant": "param",
 							"kind": 32768,
@@ -17470,14 +18013,14 @@
 			]
 		},
 		{
-			"id": 783,
+			"id": 803,
 			"name": "tokenUsageSites",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 784,
+					"id": 804,
 					"name": "tokenUsageSites",
 					"variant": "signature",
 					"kind": 4096,
@@ -17492,20 +18035,20 @@
 					},
 					"parameters": [
 						{
-							"id": 785,
+							"id": 805,
 							"name": "index",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 782,
+								"target": 802,
 								"name": "TokenUsageIndex",
 								"package": "@anvilkit/core"
 							}
 						},
 						{
-							"id": 786,
+							"id": 806,
 							"name": "tokenId",
 							"variant": "param",
 							"kind": 32768,
@@ -17523,7 +18066,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 803,
+								"target": 823,
 								"name": "TokenUsageSite",
 								"package": "@anvilkit/core"
 							}
@@ -17533,14 +18076,14 @@
 			]
 		},
 		{
-			"id": 871,
+			"id": 891,
 			"name": "transformContainers",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 872,
+					"id": 892,
 					"name": "transformContainers",
 					"variant": "signature",
 					"kind": 4096,
@@ -17563,7 +18106,7 @@
 					},
 					"parameters": [
 						{
-							"id": 873,
+							"id": 893,
 							"name": "data",
 							"variant": "param",
 							"kind": 32768,
@@ -17580,7 +18123,7 @@
 							}
 						},
 						{
-							"id": 874,
+							"id": 894,
 							"name": "transform",
 							"variant": "param",
 							"kind": 32768,
@@ -17588,21 +18131,21 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 875,
+									"id": 895,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 876,
+											"id": 896,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 877,
+													"id": 897,
 													"name": "items",
 													"variant": "param",
 													"kind": 32768,
@@ -18635,14 +19178,14 @@
 			]
 		},
 		{
-			"id": 562,
+			"id": 582,
 			"name": "writeAuthoringState",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 563,
+					"id": 583,
 					"name": "writeAuthoringState",
 					"variant": "signature",
 					"kind": 4096,
@@ -18665,7 +19208,7 @@
 					},
 					"parameters": [
 						{
-							"id": 564,
+							"id": 584,
 							"name": "data",
 							"variant": "param",
 							"kind": 32768,
@@ -18682,7 +19225,7 @@
 							}
 						},
 						{
-							"id": 565,
+							"id": 585,
 							"name": "next",
 							"variant": "param",
 							"kind": 32768,
@@ -18713,14 +19256,14 @@
 			]
 		},
 		{
-			"id": 878,
+			"id": 898,
 			"name": "zonesOf",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 879,
+					"id": 899,
 					"name": "zonesOf",
 					"variant": "signature",
 					"kind": 4096,
@@ -18735,7 +19278,7 @@
 					},
 					"parameters": [
 						{
-							"id": 880,
+							"id": 900,
 							"name": "data",
 							"variant": "param",
 							"kind": 32768,
@@ -18754,7 +19297,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 870,
+						"target": 890,
 						"name": "PuckZones",
 						"package": "@anvilkit/core"
 					}
@@ -18766,54 +19309,57 @@
 		{
 			"title": "Classes",
 			"children": [
-				517
+				537
 			]
 		},
 		{
 			"title": "Interfaces",
 			"children": [
 				4,
-				551,
+				571,
 				160,
+				514,
 				327,
 				333,
 				463,
 				352,
 				355,
 				411,
-				569,
+				589,
+				522,
 				55,
 				16,
 				22,
 				28,
+				33,
 				130,
 				287,
 				194,
 				257,
 				260,
-				595,
-				860,
+				615,
+				880,
 				368,
 				37,
 				226,
 				242,
-				867,
-				572,
-				579,
+				887,
+				592,
+				599,
 				105,
 				110,
-				599,
-				700,
-				533,
+				619,
+				720,
+				553,
 				304,
-				606,
-				705,
-				635,
+				626,
+				725,
+				655,
 				202,
 				207,
 				213,
-				757,
-				760,
+				777,
+				780,
 				470,
 				308,
 				424
@@ -18823,6 +19369,7 @@
 			"title": "Type Aliases",
 			"children": [
 				387,
+				521,
 				219,
 				487,
 				142,
@@ -18830,14 +19377,14 @@
 				223,
 				62,
 				70,
-				870,
+				890,
 				173,
 				183,
-				797,
-				798,
-				645,
-				782,
-				803,
+				817,
+				818,
+				665,
+				802,
+				823,
 				117
 			]
 		},
@@ -18847,7 +19394,8 @@
 				44,
 				326,
 				482,
-				532,
+				520,
+				552,
 				21,
 				97,
 				137,
@@ -18857,15 +19405,15 @@
 		{
 			"title": "Functions",
 			"children": [
-				775,
+				795,
 				407,
 				7,
-				539,
-				723,
-				745,
-				771,
+				559,
+				743,
+				765,
+				791,
 				48,
-				727,
+				747,
 				84,
 				321,
 				343,
@@ -18873,95 +19421,98 @@
 				188,
 				251,
 				88,
-				511,
-				766,
-				835,
+				531,
+				786,
+				855,
 				362,
-				566,
+				586,
 				365,
-				845,
-				779,
+				865,
+				799,
 				456,
 				52,
 				395,
 				459,
-				557,
+				577,
 				216,
-				544,
+				564,
 				466,
-				734,
-				739,
+				754,
+				759,
 				12,
 				416,
 				165,
 				169,
 				125,
-				850,
+				870,
 				399,
 				483,
-				616,
-				854,
+				525,
+				636,
+				874,
+				528,
 				269,
 				274,
 				284,
 				220,
 				276,
-				857,
+				877,
 				359,
-				787,
+				807,
 				92,
 				94,
 				98,
 				1,
-				521,
-				793,
+				541,
+				813,
 				427,
 				501,
-				631,
+				651,
 				134,
-				591,
-				864,
+				611,
+				884,
 				372,
-				751,
+				771,
 				440,
 				71,
-				559,
-				583,
+				579,
+				511,
+				603,
 				184,
-				587,
+				607,
 				197,
 				101,
 				446,
 				450,
-				711,
-				536,
+				731,
+				556,
 				290,
 				297,
-				612,
-				620,
-				638,
+				632,
+				640,
+				658,
 				113,
 				41,
 				507,
 				74,
-				668,
-				671,
-				674,
-				677,
-				680,
-				683,
-				686,
-				689,
-				692,
+				688,
+				691,
+				694,
+				697,
+				700,
+				703,
+				706,
+				709,
+				712,
 				375,
 				381,
-				714,
-				548,
-				717,
+				734,
+				568,
+				737,
 				419,
-				720,
-				783,
-				871,
+				740,
+				803,
+				891,
 				266,
 				153,
 				473,
@@ -18974,8 +19525,8 @@
 				434,
 				437,
 				404,
-				562,
-				878
+				582,
+				898
 			]
 		}
 	],
@@ -19149,22 +19700,22 @@
 		"33": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/export-preflight.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "ExportValidationEvent"
 		},
 		"34": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/export-preflight.ts",
-			"qualifiedName": "__type.type"
+			"qualifiedName": "ExportValidationEvent.type"
 		},
 		"35": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/export-preflight.ts",
-			"qualifiedName": "__type.status"
+			"qualifiedName": "ExportValidationEvent.status"
 		},
 		"36": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/export-preflight.ts",
-			"qualifiedName": "__type.featureIds"
+			"qualifiedName": "ExportValidationEvent.featureIds"
 		},
 		"37": {
 			"packageName": "@anvilkit/core",
@@ -21538,1498 +22089,1498 @@
 		},
 		"511": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "checkInvariant"
+			"packagePath": "src/editor/capability-metadata.ts",
+			"qualifiedName": "readEditorMetadata"
 		},
 		"512": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "checkInvariant"
+			"packagePath": "src/editor/capability-metadata.ts",
+			"qualifiedName": "readEditorMetadata"
 		},
 		"513": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "condition"
+			"packagePath": "src/editor/capability-metadata.ts",
+			"qualifiedName": "component"
 		},
 		"514": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "error"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "ComponentCapabilityReport"
 		},
 		"515": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "ComponentCapabilityReport.componentType"
 		},
 		"516": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "ComponentCapabilityReport.level"
 		},
 		"517": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "EditorInvariantError"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "ComponentCapabilityReport.declared"
 		},
 		"518": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "EditorInvariantError.__constructor"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "ComponentCapabilityReport.missingForNextLevel"
 		},
 		"519": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "EditorInvariantError"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "ComponentCapabilityReport.warnings"
 		},
 		"520": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "message"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "EDITOR_ADOPTION_LEVEL_NAMES"
 		},
 		"521": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "makeEditorError"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "EditorAdoptionLevel"
 		},
 		"522": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "makeEditorError"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "EditorCapabilityInspection"
 		},
 		"523": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "code"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "EditorCapabilityInspection.components"
 		},
 		"524": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "message"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "EditorCapabilityInspection.countsByLevel"
 		},
 		"525": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "options"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "formatEditorCapabilityReport"
 		},
 		"526": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "formatEditorCapabilityReport"
 		},
 		"527": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "__type.severity"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "inspection"
 		},
 		"528": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "__type.recoverable"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "inspectEditorCapabilities"
 		},
 		"529": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "__type.path"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "inspectEditorCapabilities"
 		},
 		"530": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "__type.nodeIds"
+			"packagePath": "src/editor/inspect-capabilities.ts",
+			"qualifiedName": "config"
 		},
 		"531": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/diagnostics.ts",
-			"qualifiedName": "__type.details"
+			"qualifiedName": "checkInvariant"
 		},
 		"532": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "checkInvariant"
+		},
+		"533": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "condition"
+		},
+		"534": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "error"
+		},
+		"535": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type"
+		},
+		"536": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type"
+		},
+		"537": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "EditorInvariantError"
+		},
+		"538": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "EditorInvariantError.__constructor"
+		},
+		"539": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "EditorInvariantError"
+		},
+		"540": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "message"
+		},
+		"541": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "makeEditorError"
+		},
+		"542": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "makeEditorError"
+		},
+		"543": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "code"
+		},
+		"544": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "message"
+		},
+		"545": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "options"
+		},
+		"546": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type"
+		},
+		"547": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type.severity"
+		},
+		"548": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type.recoverable"
+		},
+		"549": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type.path"
+		},
+		"550": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type.nodeIds"
+		},
+		"551": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/diagnostics.ts",
+			"qualifiedName": "__type.details"
+		},
+		"552": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/limits.ts",
 			"qualifiedName": "EDITOR_BYTE_LIMIT_DEFAULTS"
 		},
-		"533": {
+		"553": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/limits.ts",
 			"qualifiedName": "ResolvedByteLimits"
 		},
-		"534": {
+		"554": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/limits.ts",
 			"qualifiedName": "ResolvedByteLimits.limits"
 		},
-		"535": {
+		"555": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/limits.ts",
 			"qualifiedName": "ResolvedByteLimits.errors"
 		},
-		"536": {
+		"556": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/limits.ts",
 			"qualifiedName": "resolveByteLimits"
 		},
-		"537": {
+		"557": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/limits.ts",
 			"qualifiedName": "resolveByteLimits"
 		},
-		"538": {
+		"558": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/limits.ts",
 			"qualifiedName": "overrides"
 		},
-		"539": {
+		"559": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/patch.ts",
 			"qualifiedName": "applyEditorPatch"
 		},
-		"540": {
+		"560": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/patch.ts",
 			"qualifiedName": "applyEditorPatch"
 		},
-		"541": {
+		"561": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/patch.ts",
 			"qualifiedName": "T"
 		},
-		"542": {
+		"562": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/patch.ts",
 			"qualifiedName": "target"
 		},
-		"543": {
+		"563": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/patch.ts",
 			"qualifiedName": "patch"
 		},
-		"544": {
+		"564": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/patch.ts",
 			"qualifiedName": "deepEqualJson"
 		},
-		"545": {
+		"565": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/patch.ts",
 			"qualifiedName": "deepEqualJson"
 		},
-		"546": {
+		"566": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/patch.ts",
 			"qualifiedName": "a"
 		},
-		"547": {
+		"567": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/patch.ts",
 			"qualifiedName": "b"
 		},
-		"548": {
+		"568": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/patch.ts",
 			"qualifiedName": "stripPatchNulls"
 		},
-		"549": {
+		"569": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/patch.ts",
 			"qualifiedName": "stripPatchNulls"
 		},
-		"550": {
+		"570": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/patch.ts",
 			"qualifiedName": "value"
 		},
-		"551": {
+		"571": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "AuthoringReadResult"
 		},
-		"552": {
+		"572": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "AuthoringReadResult.state"
 		},
-		"553": {
+		"573": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "AuthoringReadResult.readOnly"
 		},
-		"554": {
+		"574": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "AuthoringReadResult.raw"
 		},
-		"555": {
+		"575": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "AuthoringReadResult.errors"
 		},
-		"556": {
+		"576": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "AuthoringReadResult.migrated"
 		},
-		"557": {
+		"577": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/editor/authoring-state.ts",
 			"qualifiedName": "createEmptyAuthoringState"
 		},
-		"558": {
+		"578": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/editor/authoring-state.ts",
 			"qualifiedName": "createEmptyAuthoringState"
 		},
-		"559": {
+		"579": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "readAuthoringState"
 		},
-		"560": {
+		"580": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "readAuthoringState"
 		},
-		"561": {
+		"581": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "data"
 		},
-		"562": {
+		"582": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "writeAuthoringState"
 		},
-		"563": {
+		"583": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "writeAuthoringState"
 		},
-		"564": {
+		"584": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "data"
 		},
-		"565": {
+		"585": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/read-write.ts",
 			"qualifiedName": "next"
 		},
-		"566": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "collectLiveNodeIds"
-		},
-		"567": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "collectLiveNodeIds"
-		},
-		"568": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "data"
-		},
-		"569": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "DuplicateRemapResult"
-		},
-		"570": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "DuplicateRemapResult.state"
-		},
-		"571": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "DuplicateRemapResult.copiedNodeIds"
-		},
-		"572": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "ReconcileChangeSet"
-		},
-		"573": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "ReconcileChangeSet.removedNodeRecords"
-		},
-		"574": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "ReconcileChangeSet.strippedStyleRefs"
-		},
-		"575": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "ReconcileChangeSet.strippedInteractionRefs"
-		},
-		"576": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "ReconcileChangeSet.strippedBindingRefs"
-		},
-		"577": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "ReconcileChangeSet.removedInteractions"
-		},
-		"578": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "ReconcileChangeSet.removedBindings"
-		},
-		"579": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "ReconcileResult"
-		},
-		"580": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "ReconcileResult.state"
-		},
-		"581": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "ReconcileResult.changes"
-		},
-		"582": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "ReconcileResult.changed"
-		},
-		"583": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "reconcileAuthoringState"
-		},
-		"584": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "reconcileAuthoringState"
-		},
-		"585": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "state"
-		},
 		"586": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "collectLiveNodeIds"
 		},
 		"587": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "remapForDuplicate"
+			"qualifiedName": "collectLiveNodeIds"
 		},
 		"588": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "remapForDuplicate"
+			"qualifiedName": "data"
 		},
 		"589": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "state"
+			"qualifiedName": "DuplicateRemapResult"
 		},
 		"590": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/reconcile.ts",
-			"qualifiedName": "idMap"
+			"qualifiedName": "DuplicateRemapResult.state"
 		},
 		"591": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/merge.ts",
-			"qualifiedName": "mergePropertyWise"
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "DuplicateRemapResult.copiedNodeIds"
 		},
 		"592": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet"
+		},
+		"593": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet.removedNodeRecords"
+		},
+		"594": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet.strippedStyleRefs"
+		},
+		"595": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet.strippedInteractionRefs"
+		},
+		"596": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet.strippedBindingRefs"
+		},
+		"597": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet.removedInteractions"
+		},
+		"598": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileChangeSet.removedBindings"
+		},
+		"599": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileResult"
+		},
+		"600": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileResult.state"
+		},
+		"601": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileResult.changes"
+		},
+		"602": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "ReconcileResult.changed"
+		},
+		"603": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "reconcileAuthoringState"
+		},
+		"604": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "reconcileAuthoringState"
+		},
+		"605": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "state"
+		},
+		"606": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "data"
+		},
+		"607": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "remapForDuplicate"
+		},
+		"608": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "remapForDuplicate"
+		},
+		"609": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "state"
+		},
+		"610": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/reconcile.ts",
+			"qualifiedName": "idMap"
+		},
+		"611": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/merge.ts",
 			"qualifiedName": "mergePropertyWise"
 		},
-		"593": {
+		"612": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/resolve/merge.ts",
+			"qualifiedName": "mergePropertyWise"
+		},
+		"613": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/merge.ts",
 			"qualifiedName": "T"
 		},
-		"594": {
+		"614": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/merge.ts",
 			"qualifiedName": "layers"
 		},
-		"595": {
+		"615": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "NodeComponentDefaults"
 		},
-		"596": {
+		"616": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "NodeComponentDefaults.layout"
 		},
-		"597": {
+		"617": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "NodeComponentDefaults.style"
 		},
-		"598": {
+		"618": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "NodeComponentDefaults.typography"
 		},
-		"599": {
+		"619": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolveContext"
 		},
-		"600": {
+		"620": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolveContext.authoring"
 		},
-		"601": {
+		"621": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolveContext.breakpoints"
 		},
-		"602": {
+		"622": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolveContext.viewportWidth"
 		},
-		"603": {
+		"623": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolveContext.tokenMode"
 		},
-		"604": {
+		"624": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolveContext.defaultTokenMode"
 		},
-		"605": {
+		"625": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolveContext.componentDefaults"
 		},
-		"606": {
+		"626": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolvedNodeAuthoring"
 		},
-		"607": {
+		"627": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolvedNodeAuthoring.layout"
 		},
-		"608": {
+		"628": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolvedNodeAuthoring.style"
 		},
-		"609": {
+		"629": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolvedNodeAuthoring.typography"
 		},
-		"610": {
+		"630": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolvedNodeAuthoring.hidden"
 		},
-		"611": {
+		"631": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "ResolvedNodeAuthoring.diagnostics"
 		},
-		"612": {
+		"632": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "resolveNodeAuthoring"
 		},
-		"613": {
+		"633": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "resolveNodeAuthoring"
 		},
-		"614": {
+		"634": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "nodeId"
 		},
-		"615": {
+		"635": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/node.ts",
 			"qualifiedName": "context"
 		},
-		"616": {
+		"636": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "getMatchingBreakpoints"
 		},
-		"617": {
+		"637": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "getMatchingBreakpoints"
 		},
-		"618": {
+		"638": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "breakpoints"
 		},
-		"619": {
+		"639": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "viewportWidth"
 		},
-		"620": {
+		"640": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "resolveResponsiveValue"
 		},
-		"621": {
+		"641": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "resolveResponsiveValue"
 		},
-		"622": {
+		"642": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "T"
 		},
-		"623": {
+		"643": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "input"
 		},
-		"624": {
+		"644": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "breakpoints"
 		},
-		"625": {
+		"645": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "viewportWidth"
 		},
-		"626": {
+		"646": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "merge"
 		},
-		"627": {
+		"647": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "__type"
 		},
-		"628": {
+		"648": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "__type"
 		},
-		"629": {
+		"649": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "base"
 		},
-		"630": {
+		"650": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/responsive.ts",
 			"qualifiedName": "override"
 		},
-		"631": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "materializeTokenLiteral"
-		},
-		"632": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "materializeTokenLiteral"
-		},
-		"633": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "type"
-		},
-		"634": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "value"
-		},
-		"635": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "ResolveTokenOptions"
-		},
-		"636": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "ResolveTokenOptions.defaultModeId"
-		},
-		"637": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "ResolveTokenOptions.visited"
-		},
-		"638": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "resolveToken"
-		},
-		"639": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "resolveToken"
-		},
-		"640": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "tokenId"
-		},
-		"641": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "modeId"
-		},
-		"642": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "tokens"
-		},
-		"643": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "modes"
-		},
-		"644": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "options"
-		},
-		"645": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "TokenResolution"
-		},
-		"646": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type"
-		},
-		"647": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.status"
-		},
-		"648": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.value"
-		},
-		"649": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.type"
-		},
-		"650": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.tokenId"
-		},
 		"651": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.modeId"
+			"qualifiedName": "materializeTokenLiteral"
 		},
 		"652": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "materializeTokenLiteral"
 		},
 		"653": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.status"
+			"qualifiedName": "type"
 		},
 		"654": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.path"
+			"qualifiedName": "value"
 		},
 		"655": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "ResolveTokenOptions"
 		},
 		"656": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.status"
+			"qualifiedName": "ResolveTokenOptions.defaultModeId"
 		},
 		"657": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.tokenId"
+			"qualifiedName": "ResolveTokenOptions.visited"
 		},
 		"658": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "resolveToken"
 		},
 		"659": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.status"
+			"qualifiedName": "resolveToken"
 		},
 		"660": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.tokenId"
+			"qualifiedName": "tokenId"
 		},
 		"661": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.modeId"
+			"qualifiedName": "modeId"
 		},
 		"662": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "tokens"
 		},
 		"663": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.status"
+			"qualifiedName": "modes"
 		},
 		"664": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.tokenId"
+			"qualifiedName": "options"
 		},
 		"665": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.aliasTokenId"
+			"qualifiedName": "TokenResolution"
 		},
 		"666": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.expected"
+			"qualifiedName": "__type"
 		},
 		"667": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/resolve/token.ts",
-			"qualifiedName": "__type.actual"
+			"qualifiedName": "__type.status"
 		},
 		"668": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeBorderEdge"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.value"
 		},
 		"669": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeBorderEdge"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.type"
 		},
 		"670": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "edge"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.tokenId"
 		},
 		"671": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeCssColor"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.modeId"
 		},
 		"672": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeCssColor"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type"
 		},
 		"673": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "value"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.status"
 		},
 		"674": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeCssLength"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.path"
 		},
 		"675": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeCssLength"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type"
 		},
 		"676": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "value"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.status"
 		},
 		"677": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeCssMath"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.tokenId"
 		},
 		"678": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeCssMath"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type"
 		},
 		"679": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "expression"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.status"
 		},
 		"680": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeFilter"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.tokenId"
 		},
 		"681": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeFilter"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.modeId"
 		},
 		"682": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "filter"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type"
 		},
 		"683": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeGridTracks"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.status"
 		},
 		"684": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeGridTracks"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.tokenId"
 		},
 		"685": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "tracks"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.aliasTokenId"
 		},
 		"686": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializePaint"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.expected"
 		},
 		"687": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializePaint"
+			"packagePath": "src/editor/resolve/token.ts",
+			"qualifiedName": "__type.actual"
 		},
 		"688": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "paint"
+			"qualifiedName": "serializeBorderEdge"
 		},
 		"689": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeShadow"
+			"qualifiedName": "serializeBorderEdge"
 		},
 		"690": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeShadow"
+			"qualifiedName": "edge"
 		},
 		"691": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "shadow"
+			"qualifiedName": "serializeCssColor"
 		},
 		"692": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeTokenOrLiteral"
+			"qualifiedName": "serializeCssColor"
 		},
 		"693": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serializeTokenOrLiteral"
+			"qualifiedName": "value"
 		},
 		"694": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "T"
+			"qualifiedName": "serializeCssLength"
 		},
 		"695": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "value"
+			"qualifiedName": "serializeCssLength"
 		},
 		"696": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "serialize"
+			"qualifiedName": "value"
 		},
 		"697": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "serializeCssMath"
 		},
 		"698": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "serializeCssMath"
 		},
 		"699": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/css-serializer.ts",
-			"qualifiedName": "literal"
+			"qualifiedName": "expression"
 		},
 		"700": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeFilter"
+		},
+		"701": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeFilter"
+		},
+		"702": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "filter"
+		},
+		"703": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeGridTracks"
+		},
+		"704": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeGridTracks"
+		},
+		"705": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "tracks"
+		},
+		"706": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializePaint"
+		},
+		"707": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializePaint"
+		},
+		"708": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "paint"
+		},
+		"709": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeShadow"
+		},
+		"710": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeShadow"
+		},
+		"711": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "shadow"
+		},
+		"712": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeTokenOrLiteral"
+		},
+		"713": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serializeTokenOrLiteral"
+		},
+		"714": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "T"
+		},
+		"715": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "value"
+		},
+		"716": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "serialize"
+		},
+		"717": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "__type"
+		},
+		"718": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "__type"
+		},
+		"719": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/style/css-serializer.ts",
+			"qualifiedName": "literal"
+		},
+		"720": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "ResolvedAuthoringStyle"
 		},
-		"701": {
+		"721": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "ResolvedAuthoringStyle.classNames"
 		},
-		"702": {
+		"722": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "ResolvedAuthoringStyle.inlineStyle"
 		},
-		"703": {
+		"723": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "ResolvedAuthoringStyle.dataAttributes"
 		},
-		"704": {
+		"724": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "ResolvedAuthoringStyle.diagnostics"
 		},
-		"705": {
+		"725": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "ResolvedNodeStyleInput"
 		},
-		"706": {
+		"726": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "ResolvedNodeStyleInput.nodeId"
 		},
-		"707": {
+		"727": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "ResolvedNodeStyleInput.layout"
 		},
-		"708": {
+		"728": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "ResolvedNodeStyleInput.style"
 		},
-		"709": {
+		"729": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "ResolvedNodeStyleInput.typography"
 		},
-		"710": {
+		"730": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "ResolvedNodeStyleInput.hidden"
 		},
-		"711": {
+		"731": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "resolveAuthoringStyle"
 		},
-		"712": {
+		"732": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "resolveAuthoringStyle"
 		},
-		"713": {
+		"733": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/style/resolve-authoring-style.ts",
 			"qualifiedName": "input"
 		},
-		"714": {
+		"734": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/css-variables.ts",
 			"qualifiedName": "stableIdHash"
 		},
-		"715": {
+		"735": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/css-variables.ts",
 			"qualifiedName": "stableIdHash"
 		},
-		"716": {
+		"736": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/css-variables.ts",
 			"qualifiedName": "id"
 		},
-		"717": {
+		"737": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/css-variables.ts",
 			"qualifiedName": "styleDefinitionCssVariableName"
 		},
-		"718": {
+		"738": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/css-variables.ts",
 			"qualifiedName": "styleDefinitionCssVariableName"
 		},
-		"719": {
+		"739": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/css-variables.ts",
 			"qualifiedName": "definition"
 		},
-		"720": {
+		"740": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/css-variables.ts",
 			"qualifiedName": "tokenCssVariableName"
 		},
-		"721": {
+		"741": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/css-variables.ts",
 			"qualifiedName": "tokenCssVariableName"
 		},
-		"722": {
+		"742": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/css-variables.ts",
 			"qualifiedName": "token"
 		},
-		"723": {
+		"743": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/patch.ts",
 			"qualifiedName": "applyStyleDefinitionPatch"
 		},
-		"724": {
+		"744": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/patch.ts",
 			"qualifiedName": "applyStyleDefinitionPatch"
 		},
-		"725": {
+		"745": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/patch.ts",
 			"qualifiedName": "definition"
 		},
-		"726": {
+		"746": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/patch.ts",
 			"qualifiedName": "patch"
 		},
-		"727": {
+		"747": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "attachStyleDefinition"
 		},
-		"728": {
+		"748": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "attachStyleDefinition"
 		},
-		"729": {
+		"749": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "state"
 		},
-		"730": {
+		"750": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "nodeIds"
 		},
-		"731": {
+		"751": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "styleDefinitionId"
 		},
-		"732": {
+		"752": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "layer"
 		},
-		"733": {
+		"753": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "position"
 		},
-		"734": {
+		"754": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "deleteStyleDefinition"
 		},
-		"735": {
+		"755": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "deleteStyleDefinition"
 		},
-		"736": {
+		"756": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "state"
 		},
-		"737": {
+		"757": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "styleDefinitionId"
 		},
-		"738": {
+		"758": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "materialize"
 		},
-		"739": {
+		"759": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "detachStyleDefinition"
 		},
-		"740": {
+		"760": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "detachStyleDefinition"
 		},
-		"741": {
+		"761": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "state"
 		},
-		"742": {
+		"762": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "nodeIds"
 		},
-		"743": {
+		"763": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "styleDefinitionId"
 		},
-		"744": {
+		"764": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/styles/style-definitions.ts",
 			"qualifiedName": "layer"
 		},
-		"745": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "applyTokenDeletion"
-		},
-		"746": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "applyTokenDeletion"
-		},
-		"747": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "state"
-		},
-		"748": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "tokenId"
-		},
-		"749": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "disposition"
-		},
-		"750": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "context"
-		},
-		"751": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "planTokenDeletion"
-		},
-		"752": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "planTokenDeletion"
-		},
-		"753": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "state"
-		},
-		"754": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "tokenId"
-		},
-		"755": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "disposition"
-		},
-		"756": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "context"
-		},
-		"757": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "TokenDeletionContext"
-		},
-		"758": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "TokenDeletionContext.tokenMode"
-		},
-		"759": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "TokenDeletionContext.defaultTokenMode"
-		},
-		"760": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "TokenDeletionPlan"
-		},
-		"761": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "TokenDeletionPlan.tokenId"
-		},
-		"762": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "TokenDeletionPlan.sites"
-		},
-		"763": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "TokenDeletionPlan.aliasDependents"
-		},
-		"764": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "TokenDeletionPlan.disposition"
-		},
 		"765": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/deletion.ts",
-			"qualifiedName": "TokenDeletionPlan.errors"
+			"qualifiedName": "applyTokenDeletion"
 		},
 		"766": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/graph.ts",
-			"qualifiedName": "checkTokenAliasGraph"
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "applyTokenDeletion"
 		},
 		"767": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/graph.ts",
-			"qualifiedName": "checkTokenAliasGraph"
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "state"
 		},
 		"768": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/graph.ts",
+			"packagePath": "src/editor/tokens/deletion.ts",
 			"qualifiedName": "tokenId"
 		},
 		"769": {
 			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "disposition"
+		},
+		"770": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "context"
+		},
+		"771": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "planTokenDeletion"
+		},
+		"772": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "planTokenDeletion"
+		},
+		"773": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "state"
+		},
+		"774": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "tokenId"
+		},
+		"775": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "disposition"
+		},
+		"776": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "context"
+		},
+		"777": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "TokenDeletionContext"
+		},
+		"778": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "TokenDeletionContext.tokenMode"
+		},
+		"779": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "TokenDeletionContext.defaultTokenMode"
+		},
+		"780": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "TokenDeletionPlan"
+		},
+		"781": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "TokenDeletionPlan.tokenId"
+		},
+		"782": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "TokenDeletionPlan.sites"
+		},
+		"783": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "TokenDeletionPlan.aliasDependents"
+		},
+		"784": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "TokenDeletionPlan.disposition"
+		},
+		"785": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/deletion.ts",
+			"qualifiedName": "TokenDeletionPlan.errors"
+		},
+		"786": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/graph.ts",
+			"qualifiedName": "checkTokenAliasGraph"
+		},
+		"787": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/graph.ts",
+			"qualifiedName": "checkTokenAliasGraph"
+		},
+		"788": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tokens/graph.ts",
+			"qualifiedName": "tokenId"
+		},
+		"789": {
+			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/graph.ts",
 			"qualifiedName": "tokens"
 		},
-		"770": {
+		"790": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/graph.ts",
 			"qualifiedName": "modes"
 		},
-		"771": {
+		"791": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/patch.ts",
 			"qualifiedName": "applyTokenPatch"
 		},
-		"772": {
+		"792": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/patch.ts",
 			"qualifiedName": "applyTokenPatch"
 		},
-		"773": {
+		"793": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/patch.ts",
 			"qualifiedName": "token"
 		},
-		"774": {
+		"794": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/patch.ts",
 			"qualifiedName": "patch"
 		},
-		"775": {
+		"795": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/usage.ts",
 			"qualifiedName": "aliasDependents"
 		},
-		"776": {
+		"796": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/usage.ts",
 			"qualifiedName": "aliasDependents"
 		},
-		"777": {
+		"797": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/usage.ts",
 			"qualifiedName": "index"
 		},
-		"778": {
+		"798": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/usage.ts",
 			"qualifiedName": "tokenId"
 		},
-		"779": {
+		"799": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/usage.ts",
 			"qualifiedName": "collectTokenUsage"
 		},
-		"780": {
+		"800": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/usage.ts",
 			"qualifiedName": "collectTokenUsage"
 		},
-		"781": {
+		"801": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/usage.ts",
 			"qualifiedName": "state"
 		},
-		"782": {
+		"802": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/usage.ts",
 			"qualifiedName": "TokenUsageIndex"
 		},
-		"783": {
+		"803": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/usage.ts",
 			"qualifiedName": "tokenUsageSites"
 		},
-		"784": {
+		"804": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/usage.ts",
 			"qualifiedName": "tokenUsageSites"
 		},
-		"785": {
+		"805": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/usage.ts",
 			"qualifiedName": "index"
 		},
-		"786": {
+		"806": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/usage.ts",
 			"qualifiedName": "tokenId"
 		},
-		"787": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "isTokenRef"
-		},
-		"788": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "isTokenRef"
-		},
-		"789": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "value"
-		},
-		"790": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type"
-		},
-		"791": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.kind"
-		},
-		"792": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.tokenId"
-		},
-		"793": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "mapAuthoringTokens"
-		},
-		"794": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "mapAuthoringTokens"
-		},
-		"795": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "state"
-		},
-		"796": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "visitor"
-		},
-		"797": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "TokenReferenceFamily"
-		},
-		"798": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "TokenRefVisitor"
-		},
-		"799": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type"
-		},
-		"800": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type"
-		},
-		"801": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "tokenId"
-		},
-		"802": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "site"
-		},
-		"803": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "TokenUsageSite"
-		},
-		"804": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type"
-		},
-		"805": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.kind"
-		},
-		"806": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.nodeId"
-		},
 		"807": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.family"
+			"qualifiedName": "isTokenRef"
 		},
 		"808": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.layer"
+			"qualifiedName": "isTokenRef"
 		},
 		"809": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.path"
+			"qualifiedName": "value"
 		},
 		"810": {
 			"packageName": "@anvilkit/core",
@@ -23044,344 +23595,444 @@
 		"812": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.styleDefinitionId"
+			"qualifiedName": "__type.tokenId"
 		},
 		"813": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.family"
+			"qualifiedName": "mapAuthoringTokens"
 		},
 		"814": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.layer"
+			"qualifiedName": "mapAuthoringTokens"
 		},
 		"815": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.path"
+			"qualifiedName": "state"
 		},
 		"816": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "visitor"
 		},
 		"817": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "TokenReferenceFamily"
 		},
 		"818": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.nodeId"
+			"qualifiedName": "TokenRefVisitor"
 		},
 		"819": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.definitionNodeId"
+			"qualifiedName": "__type"
 		},
 		"820": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.family"
+			"qualifiedName": "__type"
 		},
 		"821": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.layer"
+			"qualifiedName": "tokenId"
 		},
 		"822": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.path"
+			"qualifiedName": "site"
 		},
 		"823": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "TokenUsageSite"
 		},
 		"824": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "__type"
 		},
 		"825": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.definitionId"
+			"qualifiedName": "__type.kind"
 		},
 		"826": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.variantId"
+			"qualifiedName": "__type.nodeId"
 		},
 		"827": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.definitionNodeId"
+			"qualifiedName": "__type.family"
 		},
 		"828": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.family"
+			"qualifiedName": "__type.layer"
 		},
 		"829": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.layer"
+			"qualifiedName": "__type.path"
 		},
 		"830": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.path"
+			"qualifiedName": "__type"
 		},
 		"831": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "__type.kind"
 		},
 		"832": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "__type.styleDefinitionId"
 		},
 		"833": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.tokenId"
+			"qualifiedName": "__type.family"
 		},
 		"834": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tokens/walk.ts",
-			"qualifiedName": "__type.modeId"
+			"qualifiedName": "__type.layer"
 		},
 		"835": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "cloneSubtree"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.path"
 		},
 		"836": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "cloneSubtree"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type"
 		},
 		"837": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "node"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.kind"
 		},
 		"838": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "zones"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.nodeId"
 		},
 		"839": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "generateId"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.definitionNodeId"
 		},
 		"840": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.family"
 		},
 		"841": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.layer"
 		},
 		"842": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "type"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.path"
 		},
 		"843": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "idMap"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type"
 		},
 		"844": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "zoneAccum"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.kind"
 		},
 		"845": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "collectSubtreeIds"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.definitionId"
 		},
 		"846": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "collectSubtreeIds"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.variantId"
 		},
 		"847": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "node"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.definitionNodeId"
 		},
 		"848": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "zones"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.family"
 		},
 		"849": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "into"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.layer"
 		},
 		"850": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "findNode"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.path"
 		},
 		"851": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "findNode"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type"
 		},
 		"852": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "data"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.kind"
 		},
 		"853": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "targetId"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.tokenId"
 		},
 		"854": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "indexNodeLocations"
+			"packagePath": "src/editor/tokens/walk.ts",
+			"qualifiedName": "__type.modeId"
 		},
 		"855": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "indexNodeLocations"
+			"qualifiedName": "cloneSubtree"
 		},
 		"856": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "cloneSubtree"
 		},
 		"857": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "isComponentNode"
+			"qualifiedName": "node"
 		},
 		"858": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "isComponentNode"
+			"qualifiedName": "zones"
 		},
 		"859": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "value"
+			"qualifiedName": "generateId"
 		},
 		"860": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "NodeLocation"
+			"qualifiedName": "__type"
 		},
 		"861": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "NodeLocation.container"
+			"qualifiedName": "__type"
 		},
 		"862": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "NodeLocation.index"
+			"qualifiedName": "type"
 		},
 		"863": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "NodeLocation.node"
+			"qualifiedName": "idMap"
 		},
 		"864": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "nodeId"
+			"qualifiedName": "zoneAccum"
 		},
 		"865": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "nodeId"
+			"qualifiedName": "collectSubtreeIds"
 		},
 		"866": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "node"
+			"qualifiedName": "collectSubtreeIds"
 		},
 		"867": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "PuckTreeNode"
+			"qualifiedName": "node"
 		},
 		"868": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "PuckTreeNode.type"
+			"qualifiedName": "zones"
 		},
 		"869": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "PuckTreeNode.props"
+			"qualifiedName": "into"
 		},
 		"870": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "PuckZones"
+			"qualifiedName": "findNode"
 		},
 		"871": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "transformContainers"
+			"qualifiedName": "findNode"
 		},
 		"872": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "transformContainers"
+			"qualifiedName": "data"
 		},
 		"873": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "targetId"
 		},
 		"874": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "transform"
+			"qualifiedName": "indexNodeLocations"
 		},
 		"875": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "indexNodeLocations"
 		},
 		"876": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "data"
 		},
 		"877": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "items"
+			"qualifiedName": "isComponentNode"
 		},
 		"878": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "zonesOf"
+			"qualifiedName": "isComponentNode"
 		},
 		"879": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
-			"qualifiedName": "zonesOf"
+			"qualifiedName": "value"
 		},
 		"880": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "NodeLocation"
+		},
+		"881": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "NodeLocation.container"
+		},
+		"882": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "NodeLocation.index"
+		},
+		"883": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "NodeLocation.node"
+		},
+		"884": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "nodeId"
+		},
+		"885": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "nodeId"
+		},
+		"886": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "node"
+		},
+		"887": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "PuckTreeNode"
+		},
+		"888": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "PuckTreeNode.type"
+		},
+		"889": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "PuckTreeNode.props"
+		},
+		"890": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "PuckZones"
+		},
+		"891": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "transformContainers"
+		},
+		"892": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "transformContainers"
+		},
+		"893": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "data"
+		},
+		"894": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "transform"
+		},
+		"895": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "__type"
+		},
+		"896": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "__type"
+		},
+		"897": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "items"
+		},
+		"898": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "zonesOf"
+		},
+		"899": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/editor/tree/nodes.ts",
+			"qualifiedName": "zonesOf"
+		},
+		"900": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/editor/tree/nodes.ts",
 			"qualifiedName": "data"
