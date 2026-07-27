@@ -246,3 +246,69 @@ export function interactionCreateErrors(
 	errors.push(...structureErrors(interaction, policies));
 	return errors;
 }
+
+/**
+ * Validate an `interaction.update` command.
+ *
+ * Mirrors create except for identity: the id **must already exist**.
+ * Allowing update to create would make create's duplicate-id rejection
+ * meaningless, and would let a typo silently add an interaction the
+ * author never asked for. The per-document cap is not re-checked —
+ * replacing an existing entry cannot grow the collection.
+ */
+export function interactionUpdateErrors(
+	state: AuthoringStateV1,
+	interaction: InteractionV1,
+	policies: EditorPolicies = {},
+): readonly EditorError[] {
+	const errors: EditorError[] = [];
+
+	if (!Object.hasOwn(state.interactions, interaction.id)) {
+		errors.push(
+			makeEditorError(
+				"EDITOR_COMMAND_CONFLICT",
+				`interaction "${interaction.id}" does not exist`,
+				{
+					details: {
+						kind: "interaction",
+						reason: "unknown-id",
+						interactionId: interaction.id,
+					},
+				},
+			),
+		);
+	}
+
+	if (interaction.actions.length > EDITOR_COUNT_LIMITS.actionsPerInteraction) {
+		errors.push(
+			makeEditorError(
+				"EDITOR_LIMIT_EXCEEDED",
+				`interaction "${interaction.id}" exceeds ${EDITOR_COUNT_LIMITS.actionsPerInteraction} actions`,
+				{
+					details: {
+						kind: "interaction",
+						limit: EDITOR_COUNT_LIMITS.actionsPerInteraction,
+						actual: interaction.actions.length,
+					},
+				},
+			),
+		);
+	}
+
+	errors.push(...forbiddenSchemeErrors(interaction));
+	errors.push(...structureErrors(interaction, policies));
+	return errors;
+}
+
+/**
+ * Validate an `interaction.delete` command.
+ *
+ * Deleting an absent interaction is a **noop, not an error**: the
+ * author's intent ("this should not exist") is already satisfied, and
+ * rejecting would make a double-click or a concurrent delete surface a
+ * failure for a state the user wanted. The reducer's noop detection
+ * then avoids a pointless history entry.
+ */
+export function interactionDeleteErrors(): readonly EditorError[] {
+	return [];
+}

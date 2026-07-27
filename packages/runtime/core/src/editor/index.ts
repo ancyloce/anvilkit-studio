@@ -103,7 +103,12 @@ export {
 	REDUCED_MOTION_MAX_DURATION_MS,
 	transitionSpanMs,
 } from "./interactions/motion.js";
-export { interactionCreateErrors, urlScheme } from "./interactions/validate.js";
+export {
+	interactionCreateErrors,
+	interactionDeleteErrors,
+	interactionUpdateErrors,
+	urlScheme,
+} from "./interactions/validate.js";
 export {
 	interactionReferences,
 	type InteractionReference,
