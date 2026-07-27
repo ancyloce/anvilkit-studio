@@ -47,6 +47,10 @@
 			"cache": false,
 			"dependsOn": ["^build"]
 		},
+		"bench:editor": {
+			"cache": false,
+			"dependsOn": ["^build"]
+		},
 		"publint": {
 			"dependsOn": ["^build"]
 		},
