@@ -1,0 +1,250 @@
+/**
+ * PLAN-0020 Phase 3 — §32.4 product acceptance against `apps/studio`
+ * (CORE-P3-001/-002/-005/-006/-008/-009).
+ *
+ * §20's Definition of Done says milestone acceptance is "executed
+ * against `apps/studio`", not only in component tests. This suite is
+ * that execution: it drives the real chrome, the real inspector, and
+ * the real host adapter wired in `app/puck/editor/page.tsx`.
+ *
+ * **Visual certification stays CI-only.** WSL2 headless screenshot
+ * capture is broken on this dev box (verified in the Phase 1B close and
+ * again on 2026-07-26), so this suite asserts DOM and sidecar state
+ * only — the same split `visual-editor.spec.ts` and `variants.spec.ts`
+ * use.
+ *
+ * **What is deliberately not covered.** The AI proposal dialog renders
+ * from a proposal, but nothing in the demo produces one yet — that is
+ * the `ai-host-adapter` migration to propose-confirm, listed as adapter
+ * work in CORE-P3-008. Asserting on a surface no user can reach would
+ * be a spec that passes while the feature is unreachable.
+ */
+
+import { expect, type Page, test } from "@playwright/test";
+
+const EDITOR_URL = "/puck/editor?editor=1&collab=0";
+
+async function openEditor(page: Page): Promise<void> {
+	await page.goto(EDITOR_URL);
+	await expect(page.getByTestId("ak-write-target")).toBeVisible({
+		timeout: 90_000,
+	});
+}
+
+/** Open the Layers rail module and its inner Layers tab. */
+async function openLayersPanel(page: Page): Promise<void> {
+	const railTab = page.locator("#ak-rail-tab-layer");
+	await railTab.waitFor({ state: "attached", timeout: 30_000 });
+	await railTab.click({ force: true });
+	await expect(page.getByTestId("ak-module-layer")).toBeVisible({
+		timeout: 10_000,
+	});
+	await page.getByTestId("ak-layer-tab-layers").click({ force: true });
+	await expect(page.getByTestId("ak-layer-layers")).toBeVisible({
+		timeout: 10_000,
+	});
+}
+
+/**
+ * Select the first top-level node. The tree is virtualized and the demo
+ * canvas animates, so scroll in and force the click — the
+ * `visual-editor.spec.ts` precedent.
+ */
+async function selectFirstNode(page: Page): Promise<string> {
+	const ids = await page.evaluate(() =>
+		[...document.querySelectorAll("[data-testid^='ak-layer-select-']")]
+			.map((element) =>
+				(element.getAttribute("data-testid") ?? "").replace(
+					"ak-layer-select-",
+					"",
+				),
+			)
+			.filter((id) => id.length > 0),
+	);
+	const nodeId = ids[0];
+	expect(nodeId, "demo document has at least one layer row").toBeTruthy();
+
+	const row = page.getByTestId(`ak-layer-select-${nodeId}`);
+	await row.waitFor({ state: "attached", timeout: 15_000 });
+	await expect(async () => {
+		await row.evaluate((element) =>
+			element.scrollIntoView({ block: "center", behavior: "instant" }),
+		);
+		await row.click({ force: true });
+		await expect(row).toHaveAttribute("aria-selected", "true", {
+			timeout: 2_000,
+		});
+	}).toPass({ timeout: 20_000 });
+	return nodeId as string;
+}
+
+test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
+	test("preview mode round-trips with a visible way back (§16)", async ({
+		page,
+	}) => {
+		await openEditor(page);
+
+		// Design mode is the default: interactions never run here.
+		const enter = page.getByTestId("ak-preview-enter");
+		await expect(enter).toBeVisible({ timeout: 30_000 });
+		await expect(page.getByTestId("ak-preview-active")).toBeHidden();
+
+		await enter.click();
+
+		// §16 requires a *visible* return-to-design control — the author's
+		// handles are gone, so a hidden exit would strand them.
+		const active = page.getByTestId("ak-preview-active");
+		await expect(active).toBeVisible();
+		await expect(active).toHaveAttribute("role", "status");
+		const exit = page.getByTestId("ak-preview-exit");
+		await expect(exit).toBeVisible();
+		expect((await exit.innerText()).trim().length).toBeGreaterThan(0);
+
+		await exit.click();
+		await expect(page.getByTestId("ak-preview-enter")).toBeVisible();
+		await expect(page.getByTestId("ak-preview-active")).toBeHidden();
+	});
+
+	test("preview mode does not survive a reload", async ({ page }) => {
+		// Session-scoped on purpose: reopening the editor stuck in preview,
+		// with no handles, would be a trap.
+		await openEditor(page);
+		await page.getByTestId("ak-preview-enter").click();
+		await expect(page.getByTestId("ak-preview-active")).toBeVisible();
+
+		await page.reload();
+		await expect(page.getByTestId("ak-write-target")).toBeVisible({
+			timeout: 90_000,
+		});
+		await expect(page.getByTestId("ak-preview-enter")).toBeVisible({
+			timeout: 30_000,
+		});
+	});
+
+	test("an interaction can be created on click, hover, and viewport", async ({
+		page,
+	}) => {
+		await openEditor(page);
+		await openLayersPanel(page);
+		await selectFirstNode(page);
+
+		const section = page.getByTestId("ak-interactions-section");
+		await expect(section).toBeVisible({ timeout: 20_000 });
+		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(0);
+
+		// §32.4 names these three triggers specifically.
+		const triggers = ["click", "hover", "viewport"] as const;
+		for (const [index, trigger] of triggers.entries()) {
+			await page.getByTestId("ak-interaction-trigger").click();
+			await page.getByRole("option").nth(index).click();
+			await page
+				.getByTestId("ak-interaction-url")
+				.fill(`https://example.com/${trigger}`);
+			await page.getByTestId("ak-interaction-add").click();
+			await expect(page.getByTestId("ak-interaction-row")).toHaveCount(
+				index + 1,
+				{ timeout: 10_000 },
+			);
+		}
+	});
+
+	test("a javascript: URL is refused at the product boundary", async ({
+		page,
+	}) => {
+		// §16 treats this as absolute — no host policy may admit it, and
+		// the rejection must reach the author rather than failing silently.
+		await openEditor(page);
+		await openLayersPanel(page);
+		await selectFirstNode(page);
+		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
+			timeout: 20_000,
+		});
+
+		await page.getByTestId("ak-interaction-url").fill("javascript:alert(1)");
+		await page.getByTestId("ak-interaction-add").click();
+
+		await expect(page.getByTestId("ak-interaction-errors")).toBeVisible({
+			timeout: 10_000,
+		});
+		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(0);
+	});
+
+	test("a binding resolves against host preview data and commits", async ({
+		page,
+	}) => {
+		await openEditor(page);
+		await openLayersPanel(page);
+		await selectFirstNode(page);
+
+		const section = page.getByTestId("ak-bindings-section");
+		await expect(section).toBeVisible({ timeout: 20_000 });
+
+		await page.getByTestId("ak-binding-source").click();
+		await page.getByRole("option", { name: "Products" }).click();
+
+		await page.getByTestId("ak-binding-path").fill("rows.0.name");
+		// Resolved against real adapter data, so the author sees the value
+		// before committing.
+		await expect(page.getByTestId("ak-binding-preview-value")).toContainText(
+			"Anvil",
+			{ timeout: 15_000 },
+		);
+
+		await page.getByTestId("ak-binding-prop").fill("title");
+		await page.getByTestId("ak-binding-save").click();
+		await expect(page.getByTestId("ak-binding-row")).toHaveCount(1, {
+			timeout: 10_000,
+		});
+	});
+
+	test("a broken path is reported as unresolved, not as empty data", async ({
+		page,
+	}) => {
+		await openEditor(page);
+		await openLayersPanel(page);
+		await selectFirstNode(page);
+		await expect(page.getByTestId("ak-bindings-section")).toBeVisible({
+			timeout: 20_000,
+		});
+
+		await page.getByTestId("ak-binding-source").click();
+		await page.getByRole("option", { name: "Products" }).click();
+		await page.getByTestId("ak-binding-path").fill("rows.0.nope");
+
+		const unresolved = page.getByTestId("ak-binding-preview-unresolved");
+		await expect(unresolved).toBeVisible({ timeout: 15_000 });
+		await expect(unresolved).toHaveAttribute("data-status", "missing");
+	});
+
+	test("a slow data source is contained by the §19 timeout", async ({
+		page,
+	}) => {
+		// The demo's `slow` source never answers on its own; Core's 5 s
+		// budget is what ends the request, and the author is told *why*
+		// rather than shown an empty result.
+		test.setTimeout(60_000);
+		await openEditor(page);
+		await openLayersPanel(page);
+		await selectFirstNode(page);
+		await expect(page.getByTestId("ak-bindings-section")).toBeVisible({
+			timeout: 20_000,
+		});
+
+		await page.getByTestId("ak-binding-source").click();
+		await page.getByRole("option", { name: "Slow source" }).click();
+
+		const failed = page.getByTestId("ak-binding-preview-failed");
+		await expect(failed).toBeVisible({ timeout: 20_000 });
+		await expect(failed).toHaveAttribute("data-reason", "timeout");
+	});
+
+	test("editor sections stay hidden for a document with no selection", async ({
+		page,
+	}) => {
+		// ED-INSPECT-002's coexistence rule at the product level: nothing
+		// from Phase 3 renders until a capable node is selected.
+		await openEditor(page);
+		await expect(page.getByTestId("ak-interactions-section")).toBeHidden();
+		await expect(page.getByTestId("ak-bindings-section")).toBeHidden();
+	});
+});

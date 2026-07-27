@@ -29,6 +29,7 @@ import {
 	useState,
 	useSyncExternalStore,
 } from "react";
+import { demoDataSourceAdapter } from "@/lib/demo-data-source";
 import { useDemoIdentity } from "@/lib/collab-identity";
 import { resolveCollabRelayUrl } from "@/lib/collab-relay-url";
 import { createCopilotSidebarPlugin } from "@/lib/copilot-sidebar-plugin";
@@ -358,6 +359,12 @@ export default function PuckEditorPage() {
 								visualStyle: true,
 								typography: true,
 								responsive: true,
+								// Phase 3 surfaces (CORE-P3-001/-006): the
+								// interactions and data sections are gated on
+								// these flags, so without them the §32.4 E2E
+								// has nothing to drive.
+								interactions: true,
+								bindings: true,
 								// Inline-editing browser certification target
 								// (CORE-P1B-009/-012): the spec stamps
 								// `data-ak-text-target="headline"` on Hero's
@@ -1101,7 +1108,12 @@ export default function PuckEditorPage() {
 					config={demoStudioConfig}
 					onLocaleChange={handleStudioLocaleChange}
 					editor={
-						visualEditorMode ? { features: { enabled: true } } : undefined
+						visualEditorMode
+							? {
+									features: { enabled: true },
+									dataSourceAdapter: demoDataSourceAdapter,
+								}
+							: undefined
 					}
 				/>
 			</section>
