@@ -42,15 +42,16 @@ import { Puck } from "@puckeditor/core";
 import { memo, type ReactNode, useMemo, useRef } from "react";
 import { useChromeProps } from "@/context/chrome-props";
 import { cn } from "@/shared/cn";
+import { useMsg } from "@/state/editor-i18n-context";
 import {
 	useCanvasRootHeight,
 	useCanvasViewport,
 	useCanvasZoom,
 } from "@/state/slices/editor-ui-selectors";
 import { FULL_WIDTH_VIEWPORTS } from "@/studio/ui/index";
-import { CanvasHomeButton } from "./CanvasHomeButton";
 import { ResponsiveToolbarMount } from "../../react/editor/responsive/ResponsiveToolbarMount.js";
 import { useEditorViewportSync } from "../../react/editor/responsive/use-editor-viewport-sync.js";
+import { CanvasHomeButton } from "./CanvasHomeButton";
 import { CanvasViewportSelector } from "./CanvasViewportSelector";
 import { CanvasZoomControls } from "./CanvasZoomControls";
 import { useCanvasFrameSize } from "./use-canvas-frame-size";
@@ -62,6 +63,7 @@ export interface StudioViewportPreviewProps {
 function StudioViewportPreviewImpl({
 	className,
 }: StudioViewportPreviewProps): ReactNode {
+	const msg = useMsg();
 	const [viewportId] = useCanvasViewport();
 	const [zoom] = useCanvasZoom();
 	const [canvasRootHeight] = useCanvasRootHeight();
@@ -120,10 +122,19 @@ function StudioViewportPreviewImpl({
 		// the workspace scrolls (task Phase 3), which `position: absolute`
 		// on a descendant of the SCROLLING element would not do.
 		<div className="relative flex min-h-0 flex-1 flex-col">
+			{/* A scrollable region must be keyboard-reachable, otherwise a
+			    keyboard-only user cannot scroll the canvas at all — Safari
+			    in particular gives no implicit focusability (axe
+			    `scrollable-region-focusable`, serious; PLAN-0020
+			    CORE-P4-003). `tabindex="0"` plus a role and name makes it a
+			    named landmark rather than an anonymous tab stop. */}
 			<div
 				ref={workspaceRef}
+				tabIndex={0}
+				role="region"
+				aria-label={msg("studio.editor.workspace.label")}
 				className={cn(
-					"flex min-h-0 flex-1 items-start justify-center overflow-auto bg-[var(--editor-workspace)] p-6",
+					"flex min-h-0 flex-1 items-start justify-center overflow-auto bg-[var(--editor-workspace)] p-6 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--brand)]",
 					className,
 				)}
 			>
