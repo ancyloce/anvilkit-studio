@@ -105,6 +105,7 @@ function FillControl({
 				>
 					<SelectTrigger
 						size="sm"
+						aria-label={msg("studio.editor.inspector.style.fill")}
 						className="h-7 w-full text-xs"
 						data-testid="ak-style-fill-kind"
 					>
@@ -306,7 +307,11 @@ function BorderControl({
 						writeAll({ style: next as (typeof BORDER_STYLES)[number] })
 					}
 				>
-					<SelectTrigger size="sm" className="h-7 w-24 text-xs">
+					<SelectTrigger
+						size="sm"
+						aria-label={msg("studio.editor.inspector.style.borderStyle")}
+						className="h-7 w-24 text-xs"
+					>
 						<SelectValue />
 					</SelectTrigger>
 					<SelectContent>
@@ -464,7 +469,11 @@ function ShadowsControl({
 								)
 							}
 						>
-							<SelectTrigger size="sm" className="h-7 w-20 text-xs">
+							<SelectTrigger
+								size="sm"
+								aria-label={msg("studio.editor.inspector.style.shadowKind")}
+								className="h-7 w-20 text-xs"
+							>
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
