@@ -59,8 +59,15 @@ export function SelectControl<T extends string>({
 					void field.commit(next as T);
 				}}
 			>
+				{/* The shell's label is a plain `<span>`, not associated with
+				    the control, so without this the trigger has NO accessible
+				    name whenever the value is unset (axe `button-name`,
+				    critical — PLAN-0020 CORE-P4-003). Matches the
+				    `aria-label={label}` convention the other controls already
+				    follow. */}
 				<SelectTrigger
 					size="sm"
+					aria-label={label}
 					className="h-7 w-full text-xs"
 					data-testid={testId}
 				>
