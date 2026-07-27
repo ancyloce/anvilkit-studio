@@ -161,6 +161,22 @@ const EXTERNAL_PEERS = [
 const FORBIDDEN_STRINGS = ["prop is deprecated"];
 
 /**
+ * The development performance overlay (PLAN-0020 CORE-P4-002;
+ * DD-0019 §28) must never reach a production chunk. It is reached only
+ * through the lazy `import()` in `EditorRoot`, itself behind the lazy
+ * editor boundary and an explicit `NODE_ENV !== "production"` opt-in —
+ * three layers that all have to hold.
+ *
+ * The marker is the overlay's `data-testid`, declared as
+ * `PERF_OVERLAY_MARKER` in `PerfOverlay.tsx`. A string literal survives
+ * minification, so its presence in the entry or chrome chunk means the
+ * overlay's code was inlined there, whatever the guard says. Checked in
+ * BOTH chunks: the overlay renders chrome-level UI, so a careless
+ * import from a chrome component is the likeliest regression.
+ */
+const PERF_OVERLAY_MARKER = "ak-editor-perf-overlay";
+
+/**
  * Walk `src/` and return the most recent file-mtime across every
  * source file. Used to detect a stale `dist/` that was built against
  * an earlier revision of the source — running the budget check on
@@ -458,6 +474,33 @@ async function main() {
 	//    guard — review finding M2). React is left non-external on purpose.
 	const runtimeReactFree = await assertRuntimeReactFree();
 	if (!runtimeReactFree) {
+		failed = true;
+	}
+
+	// 4. The dev-only §28 performance overlay must not be inlined into
+	//    any production path (CORE-P4-002 "overlay excluded from
+	//    production chunk (bundle assertion)").
+	console.log(
+		"check-bundle-budget: dev performance overlay exclusion assertion",
+	);
+	const overlayIn = [
+		["<Studio> entry", studio.text],
+		["chrome", chrome.text],
+	].filter(([, text]) => text.includes(PERF_OVERLAY_MARKER));
+	if (overlayIn.length === 0) {
+		console.log(
+			"  OK — the dev perf overlay is absent from the entry and chrome chunks",
+		);
+	} else {
+		console.error("");
+		console.error(
+			`check-bundle-budget: FAIL — the dev-only performance overlay leaked into: ${overlayIn
+				.map(([name]) => name)
+				.join(", ")}.`,
+		);
+		console.error(
+			"PerfOverlay must be reached ONLY through the lazy `import()` in EditorRoot, guarded by `perfOverlayEnabled()`. A static import from any eagerly-reachable module defeats the guard.",
+		);
 		failed = true;
 	}
 
