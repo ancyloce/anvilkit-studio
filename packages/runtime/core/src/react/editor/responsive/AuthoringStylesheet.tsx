@@ -58,6 +58,9 @@ export default function AuthoringStylesheet({
 				// Dev-only counters (CORE-P4-002); `undefined` in production.
 				bridge?.perf?.resolverCache,
 			),
+			// Strict-CSP hosts (§29, CORE-P4-004): nonce or constructable
+			// stylesheet. `undefined` keeps the default `<style>` path.
+			bridge?.editorConfig?.styleAdapter,
 		);
 	}, [bridge, iframeDoc, cache, version]);
 

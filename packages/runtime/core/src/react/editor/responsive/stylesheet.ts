@@ -28,6 +28,7 @@
 import type {
 	AuthoringStateV1,
 	BreakpointDefinition,
+	EditorStyleAdapter,
 	NodeAuthoringStateV1,
 	ResponsiveValue,
 } from "@anvilkit/contracts/editor";
@@ -194,18 +195,40 @@ export function buildAuthoringStylesheet(
 
 /**
  * Write the stylesheet into an iframe document, creating the scoped
- * `<style>` element on first use. Returns the element for tests.
+ * `<style>` element on first use. Returns the element, or `null` when
+ * a host adapter took over injection (CORE-P4-004).
+ *
+ * §29 lets a strict-CSP host supply either a nonce or a
+ * constructable-stylesheet adapter for authoring styles. Both land
+ * here because this is the single channel every authoring style
+ * reaches the canvas through — see `AuthoringStylesheet.tsx`.
  */
 export function applyAuthoringStylesheet(
 	iframeDoc: Document,
 	cssText: string,
-): HTMLStyleElement {
+	adapter?: EditorStyleAdapter,
+): HTMLStyleElement | null {
+	// Full takeover: the host owns injection (typically
+	// `adoptedStyleSheets`, which needs no `style-src` allowance at
+	// all), so Core must NOT also create an element — that would be the
+	// very inline `<style>` the adapter exists to avoid.
+	if (adapter?.adopt !== undefined) {
+		adapter.adopt(iframeDoc, cssText);
+		return null;
+	}
 	let element = iframeDoc.getElementById(
 		AUTHORING_STYLE_ELEMENT_ID,
 	) as HTMLStyleElement | null;
 	if (element === null) {
 		element = iframeDoc.createElement("style");
 		element.id = AUTHORING_STYLE_ELEMENT_ID;
+		if (adapter?.nonce !== undefined) {
+			// Both forms on purpose: `nonce` is the property the browser
+			// actually checks (the attribute is hidden after parse), while
+			// the attribute keeps the element inspectable in devtools.
+			element.nonce = adapter.nonce;
+			element.setAttribute("nonce", adapter.nonce);
+		}
 		iframeDoc.head.appendChild(element);
 	}
 	if (element.textContent !== cssText) {
