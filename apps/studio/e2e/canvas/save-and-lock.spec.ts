@@ -217,7 +217,11 @@ test.describe("Canvas Studio — save and lock enforcement", () => {
 		// with "Test timeout of 420000ms exceeded ... waiting for navigation
 		// until load"). Fire it and let its eventual (never-resolving, until
 		// Playwright's own action-timeout) promise settle in the background.
-		void page.reload().catch(() => {});
+		void page.reload().catch(() => {
+			// Deliberately empty: dismissing the beforeunload dialog cancels
+			// the navigation, so this promise rejects by design. There is
+			// nothing to handle — the assertion below is the real check.
+		});
 
 		await expect.poll(() => dialogFired).toBe(true);
 
