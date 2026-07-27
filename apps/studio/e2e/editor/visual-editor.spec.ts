@@ -223,7 +223,18 @@ test.describe("visual editor mount (CORE-P1B-012)", () => {
 
 		await page.keyboard.type(" EDITED");
 		// Blur commits (750 ms idle would too — blur is deterministic).
-		await frame.locator("body").click({ position: { x: 4, y: 4 } });
+		//
+		// `force: true` for the same reason `clickLayerRow` uses it: the
+		// demo page animates continuously, so Playwright's stability
+		// precondition never settles on this element. Chromium's heuristic
+		// tolerates the motion and Firefox's does not — verified: without
+		// `force` this click spins through ~150 stability retries and times
+		// out on Firefox only. Nothing is weakened; the assertions below
+		// (text committed, `contenteditable` released, one-step undo) are
+		// what certify ED-TEXT-001/003.
+		await frame
+			.locator("body")
+			.click({ position: { x: 4, y: 4 }, force: true });
 		await expect(headline).toContainText("EDITED", { timeout: 10_000 });
 		await expect
 			.poll(async () =>
