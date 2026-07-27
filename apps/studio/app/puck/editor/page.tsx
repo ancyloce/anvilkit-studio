@@ -6,8 +6,15 @@
 import "@anvilkit/canvas-editor/styles.css";
 import { createHttpAdapter } from "@anvilkit/analytics-core";
 import type { StudioPlugin } from "@anvilkit/core";
-import { Studio, StudioLoadingScreen } from "@anvilkit/core";
-import type { StudioPage } from "@anvilkit/core/types";
+import { runExport, Studio, StudioLoadingScreen } from "@anvilkit/core";
+import type { ExportPreflightResult } from "@anvilkit/core/editor";
+// `@anvilkit/core/types` re-exports the contracts surface, so the app
+// takes no undeclared `@anvilkit/contracts` dependency — the same path
+// `plugin-export-html` uses for this type.
+import type {
+	EditorExportCapabilities,
+	StudioPage,
+} from "@anvilkit/core/types";
 import { puckDataToIR } from "@anvilkit/ir";
 import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
 import {
@@ -29,11 +36,11 @@ import {
 	useState,
 	useSyncExternalStore,
 } from "react";
-import { demoDataSourceAdapter } from "@/lib/demo-data-source";
-import { demoPageAdapter } from "@/lib/demo-page-adapter";
 import { useDemoIdentity } from "@/lib/collab-identity";
 import { resolveCollabRelayUrl } from "@/lib/collab-relay-url";
 import { createCopilotSidebarPlugin } from "@/lib/copilot-sidebar-plugin";
+import { demoDataSourceAdapter } from "@/lib/demo-data-source";
+import { demoPageAdapter } from "@/lib/demo-page-adapter";
 import {
 	createLazyDemoVersionHistoryPlugins,
 	getDemoAssetRegistry,
@@ -930,11 +937,66 @@ export default function PuckEditorPage() {
 		return resolveAssets(ir, resolver);
 	}
 
+	/**
+	 * Production export preflight (DD-0019 §23.2, DD-DEC-018; PLAN-0020
+	 * CORE-P3-009).
+	 *
+	 * Core computes the verdict and `runExport` enforces it, but a host
+	 * has to actually *ask* — and this app did not, so every editor
+	 * feature the author used was silently dropped by an exporter that
+	 * declares support for none of them. Fail-closed is the specified
+	 * behaviour: a blocked export throws instead of writing a file that
+	 * lost the author's work.
+	 *
+	 * Returns `undefined` — "no verdict, export normally" — when the
+	 * document uses no editor features at all. That keeps the
+	 * pre-editor path byte-identical, which is the compatibility
+	 * guarantee in plan §15 ("exporter output for documents not using
+	 * new features" unchanged).
+	 *
+	 * Computed per click rather than through `useExportPreflight`
+	 * because the capability declaration belongs to the format the
+	 * author just picked, and formats load lazily.
+	 */
+	async function exportPreflight(
+		capabilities: EditorExportCapabilities | undefined,
+	): Promise<ExportPreflightResult | undefined> {
+		const {
+			listUsedAuthoringFeatures,
+			readAuthoringState,
+			runExportPreflight,
+		} = await import("@anvilkit/core/editor");
+		const usedFeatures = listUsedAuthoringFeatures(
+			readAuthoringState(publishedData).state,
+		);
+		if (usedFeatures.length === 0) return undefined;
+		return runExportPreflight({
+			usedFeatures,
+			capabilities,
+			mode: "production",
+		});
+	}
+
+	/** Log the content-free `export.validation` event (§22.4). */
+	function onExportValidation(event: {
+		status: string;
+		featureIds: readonly string[];
+	}) {
+		console.log("[demo] export.validation", event);
+	}
+
 	async function handleExportHtml() {
 		try {
-			const ir = await buildExportIR();
 			const { htmlFormat } = await loadExportHtml();
-			const result = await htmlFormat.run(ir, { title: "Exported Page" });
+			const result = await runExport({
+				format: htmlFormat,
+				data: publishedData as unknown as Data,
+				toIR: () => buildExportIR(),
+				options: { title: "Exported Page" },
+				preflight: await exportPreflight(htmlFormat.editorCapabilities),
+				onValidation: onExportValidation,
+				onWarning: (warning) => console.warn("[demo] export warning", warning),
+			});
 			downloadExportResult(
 				result.content,
 				result.filename,
@@ -951,9 +1013,16 @@ export default function PuckEditorPage() {
 
 	async function handleExportReact() {
 		try {
-			const ir = await buildExportIR();
 			const { reactFormat } = await loadExportReact();
-			const result = await reactFormat.run(ir, { syntax: "tsx" });
+			const result = await runExport({
+				format: reactFormat,
+				data: publishedData as unknown as Data,
+				toIR: () => buildExportIR(),
+				options: { syntax: "tsx" },
+				preflight: await exportPreflight(reactFormat.editorCapabilities),
+				onValidation: onExportValidation,
+				onWarning: (warning) => console.warn("[demo] export warning", warning),
+			});
 			downloadExportResult(
 				result.content,
 				result.filename,
@@ -975,10 +1044,18 @@ export default function PuckEditorPage() {
 	// the export plugins — neither side needs to know about the other.
 	async function handleExport(formatId: string) {
 		try {
-			const ir = await buildExportIR();
 			if (formatId === "html") {
 				const { htmlFormat } = await loadExportHtml();
-				const result = await htmlFormat.run(ir, { title: "Exported Page" });
+				const result = await runExport({
+					format: htmlFormat,
+					data: publishedData as unknown as Data,
+					toIR: () => buildExportIR(),
+					options: { title: "Exported Page" },
+					preflight: await exportPreflight(htmlFormat.editorCapabilities),
+					onValidation: onExportValidation,
+					onWarning: (warning) =>
+						console.warn("[demo] export warning", warning),
+				});
 				if (puckDragE2eMode) {
 					const w = window as unknown as {
 						__puckExports?: { html?: string; react?: string };
@@ -1001,7 +1078,16 @@ export default function PuckEditorPage() {
 			}
 			if (formatId === "react") {
 				const { reactFormat } = await loadExportReact();
-				const result = await reactFormat.run(ir, { syntax: "tsx" });
+				const result = await runExport({
+					format: reactFormat,
+					data: publishedData as unknown as Data,
+					toIR: () => buildExportIR(),
+					options: { syntax: "tsx" },
+					preflight: await exportPreflight(reactFormat.editorCapabilities),
+					onValidation: onExportValidation,
+					onWarning: (warning) =>
+						console.warn("[demo] export warning", warning),
+				});
 				if (puckDragE2eMode) {
 					const w = window as unknown as {
 						__puckExports?: { html?: string; react?: string };
@@ -1023,8 +1109,12 @@ export default function PuckEditorPage() {
 				return;
 			}
 			if (formatId === "json") {
+				// The JSON format is raw IR with no emitter of its own, so it
+				// has no capability declaration to gate on — but it is also
+				// lossless, so nothing an author writes can be silently
+				// dropped by it.
 				downloadExportResult(
-					JSON.stringify(ir, null, 2),
+					JSON.stringify(await buildExportIR(), null, 2),
 					"page.json",
 					"application/json",
 				);
