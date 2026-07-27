@@ -283,7 +283,20 @@ function LayerRowImpl({
 						type="button"
 						variant="ghost"
 						data-testid={`ak-layer-select-${node.id}`}
-						className="grow truncate text-left justify-start outline-none"
+						/* `focus:` — not only the base recipe's `focus-visible:` —
+						   because `buttonVariants` sets `outline-none`, and
+						   Chromium does not match `:focus-visible` for a button
+						   focused by script after a pointer interaction. A row
+						   receives focus that way on every path that is not a
+						   Tab press: selection sync, rename cancel, and
+						   assistive-technology focus moves. WCAG 2.4.7 wants the
+						   indicator whenever the row HAS focus, not only when
+						   the heuristic guesses "keyboard" — so the ring is
+						   bound to `:focus` and the base recipe keeps painting
+						   its own on top for keyboard users. Regression-gated by
+						   `e2e/editor/a11y-acceptance.spec.ts` ("focus is
+						   visibly indicated on editor controls"). */
+						className="grow truncate text-left justify-start outline-none focus:border-ring focus:ring-3 focus:ring-ring/50"
 						onClick={select}
 						onDoubleClick={
 							editor !== null ? () => setRenameDraft(displayName) : undefined
@@ -347,8 +360,8 @@ function LayerRowImpl({
 					</span>
 				) : null}
 			</div>
-	</div>
-	)
+		</div>
+	);
 }
 
 /**
