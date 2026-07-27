@@ -24,6 +24,8 @@ export type {
 	EditorPageAdapter,
 	EditorPageDescriptor,
 	EditorPolicies,
+	EditorRenderScope,
+	EditorStyleAdapter,
 	JsonValue,
 	PreviewDataRequest,
 	StudioEditorConfig,
