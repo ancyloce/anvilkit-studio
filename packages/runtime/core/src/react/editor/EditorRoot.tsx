@@ -25,6 +25,7 @@ import { CanvasHandles } from "./canvas/handles/CanvasHandles.js";
 import { CanvasMarquee } from "./canvas/marquee.js";
 import { AuthoringOverlayRoot } from "./canvas/overlay-root.js";
 import { SelectionToolbar } from "./canvas/SelectionToolbar.js";
+import { InteractionRuntimeMount } from "./interactions/InteractionRuntimeMount.js";
 import { createEditorCapabilityRegistry } from "./capability-registry.js";
 import { computeCollabGateError } from "./collab-gate.js";
 import { createEditorCommandPort } from "./command-port.js";
@@ -263,6 +264,10 @@ export default function EditorRoot({
 	return (
 		<>
 			<EditorShortcuts bridge={bridge} />
+			{/* §16 preview runtime: binds triggers and drives motion while
+			    previewing, and disposes everything on exit. A no-op in
+			    design mode (CORE-P3-002). */}
+			<InteractionRuntimeMount bridge={bridge} />
 			<AuthoringOverlayRoot bridge={bridge}>
 				<CanvasHandles bridge={bridge} />
 				<CanvasMarquee bridge={bridge} />

@@ -72,3 +72,9 @@ export {
 	useOptionalStudioEditor,
 	useStudioEditor,
 } from "./use-studio-editor.js";
+export {
+	AiProposalReviewMount,
+	type AiProposalReviewMountProps,
+	type EditorProposalInputs,
+	useEditorProposalInputs,
+} from "./ai/AiProposalReviewMount.js";

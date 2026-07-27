@@ -29,6 +29,7 @@ import { EditorInvariantError } from "../../editor/diagnostics.js";
 import { createConfigFingerprinter } from "../components/plugin-fingerprint.js";
 import { AuthoringBoundary } from "./AuthoringBoundary.js";
 import { AuthoringStyleContext } from "./authoring-style-context.js";
+import { BindingRenderContext } from "./bindings/render-context.js";
 
 /** Options for {@link decoratePuckConfig} (DD-0019 §8, verbatim). */
 export interface DecoratePuckConfigOptions {
@@ -83,9 +84,21 @@ function createDecoratedRender(
 ): AnyRender {
 	function EditorDecoratedRender(props: Record<string, unknown>): ReactNode {
 		const lookup = useContext(AuthoringStyleContext);
+		const bindingLookup = useContext(BindingRenderContext);
 		const nodeId = typeof props.id === "string" ? props.id : undefined;
 		const resolved =
 			lookup !== null && nodeId !== undefined ? lookup(nodeId) : undefined;
+		const binding =
+			bindingLookup !== null && nodeId !== undefined
+				? bindingLookup(nodeId)
+				: null;
+
+		// A visibility binding removes the node only where the author is
+		// not editing it (§19). Design mode keeps it selectable and marks
+		// it instead — a node you cannot select is one you cannot repair.
+		if (binding !== null && binding.hiddenInPreview && binding.previewMode) {
+			return null;
+		}
 		if (styleTarget === "wrapper") {
 			return createElement(AuthoringBoundary, { resolved }, original(props));
 		}
