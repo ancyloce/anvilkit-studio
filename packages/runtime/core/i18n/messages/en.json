@@ -468,5 +468,19 @@
 	"studio.editor.inspector.style.shadowKind": "Shadow kind",
 	"studio.editor.workspace.label": "Canvas workspace",
 	"studio.editor.canvas.frameTitle": "Page canvas",
-	"studio.module.layer.layers.tree.label": "Layers"
+	"studio.module.layer.layers.tree.label": "Layers",
+	"studio.editor.error.contractUnsupportedVersion": "This page was created with a newer editor version, so it is open in read-only mode.",
+	"studio.editor.error.nodeNotFound": "That element is no longer on the page.",
+	"studio.editor.error.nodeLocked": "That element is locked. Unlock it to make changes.",
+	"studio.editor.error.capabilityUnsupported": "This component does not support that edit.",
+	"studio.editor.error.invalidCssValue": "That value is not allowed for this property.",
+	"studio.editor.error.tokenCycle": "That change would make a token reference itself.",
+	"studio.editor.error.componentCycle": "That change would make a component contain itself.",
+	"studio.editor.error.breakpointInvalid": "That breakpoint is not valid.",
+	"studio.editor.error.exporterUnsupported": "The selected export format does not support a feature this page uses.",
+	"studio.editor.error.commandConflict": "The page changed after this edit was prepared. Review it again.",
+	"studio.editor.error.definitionReferenced": "That definition is still in use. Detach or replace its instances first.",
+	"studio.editor.error.definitionUnavailable": "That definition could not be loaded. Its instances keep their content.",
+	"studio.editor.error.collabEncodingUnsupported": "Editing is read-only while a collaboration transport syncs this document with an encoding that cannot merge authoring changes.",
+	"studio.editor.error.limitExceeded": "That change would exceed a document limit."
 }
