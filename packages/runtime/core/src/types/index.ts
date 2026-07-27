@@ -32,6 +32,18 @@ export type {
 	StudioPluginEditorApi,
 } from "./editor-api.js";
 export type {
+	DataSchema,
+	DataSourceDescriptor,
+	EditorDataSourceAdapter,
+	EditorPageAdapter,
+	EditorPageDescriptor,
+	EditorPolicies,
+	JsonValue,
+	PreviewDataRequest,
+	StudioEditorConfig,
+} from "./editor-config.js";
+export type {
+	EditorExportCapabilities,
 	ExportFormatDefinition,
 	ExportFormatRunContext,
 	ExportOptions,
