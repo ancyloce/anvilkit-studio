@@ -165,6 +165,19 @@ export function useFocusMode(): readonly [boolean, (v: boolean) => void] {
 	);
 }
 
+/**
+ * The §16 run mode. `true` = preview (interactions run, handles hidden);
+ * `false` = design (interactions never run).
+ */
+export function useInteractionPreview(): readonly [
+	boolean,
+	(v: boolean) => void,
+] {
+	return useEditorUiStore(
+		useShallow((s) => [s.interactionPreview, s.setInteractionPreview] as const),
+	);
+}
+
 export function useCanvasRootHeight(): readonly [
 	number,
 	(height: number) => void,

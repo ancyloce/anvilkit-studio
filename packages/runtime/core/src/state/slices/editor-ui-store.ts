@@ -106,6 +106,13 @@ export interface EditorUiState {
 	readonly inspectorWidth: number;
 	readonly inspectorCollapsed: boolean;
 	readonly focusMode: boolean;
+	/**
+	 * §16 run mode. `true` executes interactions and hides editing
+	 * handles; `false` is design mode, which never runs interactions.
+	 * Session-scoped like `focusMode` — reopening the editor stuck in
+	 * preview, unable to see the handles, would be a trap.
+	 */
+	readonly interactionPreview: boolean;
 	readonly fieldSectionsExpanded: Readonly<Record<string, boolean>>;
 	setActiveTab(tab: EditorTab): void;
 	setDrawerSearch(query: string): void;
@@ -125,6 +132,7 @@ export interface EditorUiState {
 	setInspectorWidth(width: number): void;
 	setInspectorCollapsed(collapsed: boolean): void;
 	setFocusMode(focusMode: boolean): void;
+	setInteractionPreview(value: boolean): void;
 	reset(): void;
 }
 
@@ -160,14 +168,15 @@ const INITIAL_STATE = {
 	inspectorWidth: INSPECTOR_DEFAULT_WIDTH,
 	inspectorCollapsed: false,
 	focusMode: false,
+	interactionPreview: false,
 } as const;
 
 /**
  * Persisted slice — declared explicitly so a field rename fails to
  * compile here instead of silently dropping the persisted value.
- * `drawerSearch`, `canvasRootHeight`, and `focusMode` are dropped on
- * purpose (transient input, measured layout, and session-scoped viewing
- * override, respectively). Sidebar-module preferences are persisted per
+ * `drawerSearch`, `canvasRootHeight`, `focusMode`, and
+ * `interactionPreview` are dropped on purpose (transient input, measured
+ * layout, and two session-scoped viewing overrides). Sidebar-module preferences are persisted per
  * the policy in PRD §9.3.
  */
 interface EditorUiPersistedSlice {
@@ -482,6 +491,9 @@ export function createEditorUiStore(
 				},
 				setFocusMode(focusMode) {
 					set({ focusMode });
+				},
+				setInteractionPreview(value) {
+					set({ interactionPreview: value });
 				},
 				reset() {
 					set({ ...INITIAL_STATE });
