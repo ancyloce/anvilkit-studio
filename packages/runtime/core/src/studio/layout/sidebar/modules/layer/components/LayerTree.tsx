@@ -130,8 +130,12 @@ function LayerZoneImpl({
 
 	return (
 		<SortableContext items={ids} strategy={verticalListSortingStrategy}>
+			{/* Nested zones are `group`s owned by the enclosing `treeitem`;
+			    the root zone's `tree` role lives on the outer
+			    `ak-layer-tree` container (PLAN-0020 CORE-P4-003). */}
 			<div
 				ref={setNodeRef}
+				role={zoneKey === ROOT_ZONE ? undefined : "group"}
 				className={cn(
 					"flex flex-col gap-px rounded",
 					nodes.length === 0 && "min-h-6",
@@ -431,7 +435,11 @@ export function LayerTree({ searchQuery }: LayerTreeProps = {}): ReactNode {
 				},
 			}}
 		>
-			<div data-testid="ak-layer-tree">
+			<div
+				role="tree"
+				aria-label={msg("studio.module.layer.layers.tree.label")}
+				data-testid="ak-layer-tree"
+			>
 				{useFlat ? (
 					// Flat windowed path (large documents): one SortableContext
 					// over every visible node id; each `LayerRow` still carries

@@ -166,8 +166,18 @@ function LayerRowImpl({
 	const showDropLine = isOver && active !== null && active.id !== node.id;
 
 	return (
+		// §27.6 "correct tree/panel roles" (PLAN-0020 CORE-P4-003): the
+		// Layers panel IS the document structure, and without tree
+		// semantics a screen-reader user gets an undifferentiated pile of
+		// buttons with no hierarchy, position, or expanded state. The
+		// whole row is the item (it owns selection and the child zone),
+		// so the role lives here rather than on the name button.
 		<div
 			ref={setNodeRef}
+			role="treeitem"
+			aria-selected={isSelected}
+			aria-level={node.depth + 1}
+			aria-expanded={hasChildren ? expanded : undefined}
 			data-testid={`ak-layer-node-${node.id}`}
 			data-selected={isSelected ? "true" : undefined}
 			data-dragging={isDragging ? "true" : undefined}
@@ -263,10 +273,15 @@ function LayerRowImpl({
 						}}
 					/>
 				) : (
+					/* `aria-selected` deliberately NOT here: `button` does not
+					   support it (axe `aria-allowed-attr`, critical), and the
+					   selected state now lives on the enclosing `treeitem` row
+					   where it IS valid — one source of truth, announced once
+					   (PLAN-0020 CORE-P4-003). `data-selected` on the row
+					   remains the styling/testing hook. */
 					<Button
 						type="button"
 						variant="ghost"
-						aria-selected={isSelected}
 						data-testid={`ak-layer-select-${node.id}`}
 						className="grow truncate text-left justify-start outline-none"
 						onClick={select}
@@ -332,8 +347,8 @@ function LayerRowImpl({
 					</span>
 				) : null}
 			</div>
-		</div>
-	);
+	</div>
+	)
 }
 
 /**
