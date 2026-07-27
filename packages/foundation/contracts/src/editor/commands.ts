@@ -20,7 +20,7 @@ import type {
 	NodeOverridePatch,
 } from "./components.js";
 import type { EditorError } from "./errors.js";
-import type { InteractionV1 } from "./interactions.js";
+import type { InteractionId, InteractionV1 } from "./interactions.js";
 import type {
 	BreakpointDefinition,
 	BreakpointId,
@@ -382,6 +382,30 @@ export interface CreateInteractionCommand extends EditorCommandBase {
 	readonly interaction: InteractionV1;
 }
 
+/**
+ * Replace an existing interaction wholesale (freeze D-2 addition,
+ * CORE-P3-001/-003).
+ *
+ * Replace rather than patch: an interaction is a small, closed record,
+ * and a partial patch over `trigger`/`actions`/`conditions` would need
+ * its own merge semantics for arrays — exactly the ambiguity the
+ * closed action union exists to avoid. Reordering actions is therefore
+ * an update carrying the reordered array.
+ *
+ * The id must already exist; creating through update would make
+ * `interaction.create`'s duplicate-id rejection meaningless.
+ */
+export interface UpdateInteractionCommand extends EditorCommandBase {
+	readonly type: "interaction.update";
+	readonly interaction: InteractionV1;
+}
+
+/** Remove an interaction (freeze D-2 addition, CORE-P3-001). */
+export interface DeleteInteractionCommand extends EditorCommandBase {
+	readonly type: "interaction.delete";
+	readonly interactionId: InteractionId;
+}
+
 /** Write a binding — upsert semantics (freeze §2). */
 export interface UpdateBindingCommand extends EditorCommandBase {
 	readonly type: "binding.update";
@@ -392,8 +416,9 @@ export interface UpdateBindingCommand extends EditorCommandBase {
  * The atomic command union. The Phase 0 freeze published 20 members
  * (DD-0019 §10.1); freeze D-2 permits later phases to add members
  * additively through API review + snapshot gates. Added since:
- * `breakpoints.set` (CORE-P1A-008, EP-06) and `token.delete`
- * (CORE-P2-001, EP-12).
+ * `breakpoints.set` (CORE-P1A-008, EP-06), `token.delete`
+ * (CORE-P2-001, EP-12), and `interaction.update`/`interaction.delete`
+ * (CORE-P3-001, EP-14).
  */
 export type AtomicEditorCommand =
 	| SetNodeLayoutCommand
@@ -424,6 +449,8 @@ export type AtomicEditorCommand =
 	| ResetAllComponentOverridesCommand
 	| PromoteComponentOverrideCommand
 	| CreateInteractionCommand
+	| UpdateInteractionCommand
+	| DeleteInteractionCommand
 	| UpdateBindingCommand;
 
 /**

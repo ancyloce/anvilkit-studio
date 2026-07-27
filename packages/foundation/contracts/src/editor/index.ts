@@ -67,6 +67,7 @@ export type {
 	CreateStyleDefinitionCommand,
 	CreateTokenCommand,
 	DeleteComponentDefinitionCommand,
+	DeleteInteractionCommand,
 	DeleteStyleDefinitionCommand,
 	DeleteTokenCommand,
 	DetachAllComponentInstancesCommand,
@@ -85,8 +86,8 @@ export type {
 	ResetComponentOverrideCommand,
 	SetBreakpointsCommand,
 	SetComponentNodeOverrideCommand,
-	SetInstanceVariantCommand,
 	SetComponentPropOverrideCommand,
+	SetInstanceVariantCommand,
 	SetNodeLayoutCommand,
 	SetNodeLockCommand,
 	SetNodeStyleCommand,
@@ -95,6 +96,7 @@ export type {
 	SetResponsiveOverrideCommand,
 	UpdateBindingCommand,
 	UpdateComponentDefinitionCommand,
+	UpdateInteractionCommand,
 	UpdateStyleDefinitionCommand,
 	UpdateTokenCommand,
 } from "./commands.js";
@@ -155,8 +157,8 @@ export type {
 export type { LayoutSpec, TypographySpec, VisualStyleSpec } from "./specs.js";
 export type {
 	EditorPageAdapter,
-	EditorRenderScope,
 	EditorPageDescriptor,
+	EditorRenderScope,
 	StudioEditorConfig,
 	StudioEditorFeatures,
 } from "./studio-config.js";
