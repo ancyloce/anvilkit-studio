@@ -54,6 +54,22 @@ export default function AccessibilityIssuesPanel(): ReactNode {
 								/>
 								<span className="min-w-0">
 									<span className="block truncate">
+										{/* §27.6 "non-color-only status": severity was
+										    previously carried ONLY by the icon's colour
+										    (red vs amber) on an `aria-hidden` icon, so a
+										    colour-blind or screen-reader user could not
+										    tell an error from a warning — in the
+										    accessibility panel itself. The text prefix is
+										    the status; the colour is now redundant
+										    reinforcement (PLAN-0020 CORE-P4-003). */}
+										<span className="font-medium">
+											{msg(
+												issue.severity === "error"
+													? "studio.editor.a11y.severity.error"
+													: "studio.editor.a11y.severity.warning",
+											)}
+										</span>
+										{" · "}
 										{msg(issue.messageKey)}
 									</span>
 									<span className="block truncate text-[10px] text-[var(--ak-studio-muted-fg)]">
