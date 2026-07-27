@@ -3,4 +3,7 @@ node_modules
 coverage
 *.tsbuildinfo
 .bundle-check
+# Per-run harness OUTPUT only. `bench/baselines/` is deliberately
+# TRACKED: the committed baseline is the §28 regression gate's input,
+# and the gate fails when it is missing (ANVILKIT_BENCH_REQUIRE_BASELINE).
 bench/results
