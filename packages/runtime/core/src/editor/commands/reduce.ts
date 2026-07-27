@@ -455,6 +455,30 @@ export function reduceValidatedCommand(
 				command.definitionNodeId,
 				command.patch,
 			);
+		case "binding.update": {
+			// Upsert per the CORE-P0-001 freeze §2 — a binding editor
+			// saves the same id repeatedly, so replace rather than reject.
+			return {
+				...state,
+				bindings: {
+					...state.bindings,
+					[command.binding.id]: command.binding,
+				},
+			};
+		}
+		case "interaction.create": {
+			// Validation rejects duplicate ids, so this only ever adds.
+			// A dangling node reference is deliberately NOT rejected —
+			// it disables the interaction at resolution time instead
+			// (see interactions/resolve.ts), so the author can repair it.
+			return {
+				...state,
+				interactions: {
+					...state.interactions,
+					[command.interaction.id]: command.interaction,
+				},
+			};
+		}
 		case "token.create": {
 			// Validation rejects duplicate ids, so this only ever adds.
 			return {

@@ -35,6 +35,8 @@ import { stripPatchNulls } from "../patch.js";
 import { validateDefinitionDelete } from "../components/lifecycle.js";
 import { applyComponentDefinitionPatch } from "../components/patch.js";
 import { validateVariantModel } from "../components/variants.js";
+import { bindingUpdateErrors } from "../bindings/validate.js";
+import { interactionCreateErrors } from "../interactions/validate.js";
 import { applyStyleDefinitionPatch } from "../styles/patch.js";
 import { planTokenDeletion } from "../tokens/deletion.js";
 import { checkTokenAliasGraph } from "../tokens/graph.js";
@@ -75,6 +77,10 @@ const IMPLEMENTED_TYPES = new Set<string>([
 	"component.definition.update",
 	// Phase 2 — variant switching (CORE-P2-009C)
 	"component.instance.variant.set",
+	// Phase 3 — interactions (CORE-P3-001)
+	"interaction.create",
+	// Phase 3 — bindings (CORE-P3-006)
+	"binding.update",
 ]);
 
 /** §12.2 invariants for the breakpoint set (CORE-P1A-008). */
@@ -724,6 +730,14 @@ export function validateAtomicCommand(
 				command.definitionId,
 				options.policies?.componentDefinitionDelete ?? "confirm-detach-all",
 				options.entryState ?? state,
+			);
+		case "binding.update":
+			return bindingUpdateErrors(state, command.binding);
+		case "interaction.create":
+			return interactionCreateErrors(
+				state,
+				command.interaction,
+				options.policies ?? {},
 			);
 		case "token.create":
 			return tokenCreateErrors(state, command.token);
