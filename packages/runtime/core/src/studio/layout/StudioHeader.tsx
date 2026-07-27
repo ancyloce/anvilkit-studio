@@ -39,6 +39,7 @@ import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
 import { useFocusMode } from "@/state/slices/editor-ui-selectors";
 import { formatRelativeTimestamp } from "@/utils/format-timestamp";
+import { PreviewModeControl } from "../../react/editor/interactions/PreviewModeControl.js";
 import { HeaderActions } from "./HeaderActions";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { PublishPanel } from "./PublishPanel";
@@ -211,6 +212,9 @@ function StudioHeaderImpl({
 			<div className="flex flex-1 items-center justify-end gap-1.5">
 				<CollaboratorsSlotRegion />
 				<ShareButtonRegion />
+				{/* §16 design/preview switch. Self-hiding when the editor
+				    runtime is absent (CORE-P3-002). */}
+				<PreviewModeControl />
 				<HeaderActionsRegion />
 
 				<Separator
