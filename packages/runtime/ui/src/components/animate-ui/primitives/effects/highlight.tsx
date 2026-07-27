@@ -1,9 +1,8 @@
 "use client";
 
-import * as React from "react";
-import { AnimatePresence, motion, type Transition } from "motion/react";
-
 import { cn } from "@anvilkit/ui/lib/utils";
+import { AnimatePresence, motion, type Transition } from "motion/react";
+import * as React from "react";
 
 type HighlightMode = "children" | "parent";
 
@@ -522,7 +521,11 @@ function HighlightItem<T extends React.ElementType>({
 
 	const dataAttributes = {
 		"data-active": isActive ? "true" : "false",
-		"aria-selected": isActive,
+		// `aria-selected` deliberately NOT set here (PLAN-0020
+		// CORE-P4-003): this is a role-less decorative wrapper, and
+		// `aria-selected` on it is invalid ARIA (axe `aria-allowed-attr`,
+		// critical). The wrapped control owns the real selected state.
+		// Mirrors the same removal in `@anvilkit/core`'s vendored copy.
 		"data-disabled": isDisabled,
 		"data-value": childValue,
 		"data-highlight": true,
@@ -673,7 +676,7 @@ function HighlightItem<T extends React.ElementType>({
 export {
 	Highlight,
 	HighlightItem,
-	useHighlight,
-	type HighlightProps,
 	type HighlightItemProps,
+	type HighlightProps,
+	useHighlight,
 };
