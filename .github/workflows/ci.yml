@@ -200,6 +200,54 @@ jobs:
             --filter @anvilkit/statistics \
             size
 
+  # PLAN-0020 CORE-P4-001: the DD-0019 §28 performance gate. Runs the
+  # editor harness (fixed 1k/10k fixtures, 20-run median + p95) and fails
+  # on an absolute-budget violation or a >10% regression against the
+  # stored baseline.
+  #
+  # Its own job on purpose: latency measurement must not share a runner
+  # with the build/test fan-out, whose CPU contention is exactly the noise
+  # the harness would otherwise record as a regression.
+  #
+  # `ANVILKIT_BENCH_HW` pins the reference class. Regression comparison
+  # only runs when the committed baseline carries the SAME class (plan
+  # §14) — so changing the runner image silently downgrades the gate to
+  # budgets-only rather than emitting a wall of false regressions. Refresh
+  # the baseline by re-running this job with
+  # `ANVILKIT_BENCH_UPDATE_BASELINE=1` and committing the result.
+  editor-perf:
+    name: Editor performance budgets (§28)
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: github.event_name != 'pull_request' || needs.changes.outputs.non_app == 'true'
+    defaults:
+      run:
+        shell: bash
+    env:
+      ANVILKIT_BENCH_HW: ci-ubuntu-latest-x64
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Set up workspace
+        uses: ./.github/actions/setup-workspace
+
+      # Run through turbo so `^build` supplies the workspace dependencies
+      # the harness resolves at runtime (`@anvilkit/contracts` et al.);
+      # Core's own `src/` is imported directly by Vitest, unbuilt.
+      - name: Run editor performance harness
+        run: pnpm turbo run bench:editor --filter @anvilkit/core
+
+      - name: Upload performance results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: editor-perf-results
+          path: packages/runtime/core/bench/results/editor-perf.json
+          if-no-files-found: warn
+
   # Phase 3 M0 (`phase3-001`): Playwright + studio E2E harness. The smoke
   # spec loads `/puck/editor`, waits for `<Studio>` to hydrate, and asserts
   # `smokeTestPlugin.onInit` logs to the browser console. The studio
