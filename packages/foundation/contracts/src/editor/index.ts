@@ -159,6 +159,7 @@ export type {
 	EditorPageAdapter,
 	EditorPageDescriptor,
 	EditorRenderScope,
+	EditorStyleAdapter,
 	StudioEditorConfig,
 	StudioEditorFeatures,
 } from "./studio-config.js";

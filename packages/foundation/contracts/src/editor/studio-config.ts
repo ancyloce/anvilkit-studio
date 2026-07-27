@@ -9,10 +9,10 @@
  */
 
 import type { EditorDataSourceAdapter } from "./bindings.js";
-import type { JsonValue } from "./values.js";
 import type { EditorPolicies } from "./policies.js";
 import type { BreakpointDefinition } from "./responsive.js";
 import type { ImportableTokenValue, TokenModeId } from "./tokens.js";
+import type { JsonValue } from "./values.js";
 
 /** Per-capability feature flags (DD-0019 §22.1, verbatim). */
 export interface StudioEditorFeatures {
@@ -61,6 +61,39 @@ export interface EditorRenderScope {
 	readonly page?: JsonValue;
 }
 
+/**
+ * Strict-CSP injection adapter for the authoring stylesheet
+ * (DD-0019 §29: "Hosts with strict CSP may provide a nonce or
+ * constructable-stylesheet adapter for authoring styles").
+ *
+ * Core writes authoring CSS into the canvas iframe through a single
+ * channel, so a host under `style-src 'nonce-…'` (or one that forbids
+ * inline `<style>` entirely) has exactly one seam to override. Absent,
+ * Core keeps its default `<style>` element — unchanged behaviour for
+ * every host that does not need this.
+ *
+ * The two members are alternatives, not layers: when {@link adopt} is
+ * supplied Core does not create a `<style>` element at all, so
+ * {@link nonce} would have nothing to apply to.
+ */
+export interface EditorStyleAdapter {
+	/**
+	 * CSP nonce stamped on the `<style>` element Core creates. Applied
+	 * to both the `nonce` property and the attribute: the property is
+	 * what the browser actually checks, the attribute keeps the element
+	 * inspectable.
+	 */
+	readonly nonce?: string;
+	/**
+	 * Takes over injection entirely — typically via a constructable
+	 * `CSSStyleSheet` pushed onto `document.adoptedStyleSheets`, which
+	 * needs no `style-src` allowance at all. Called on every authoring
+	 * change with the full stylesheet text; the host owns idempotency
+	 * and teardown for the document it was handed.
+	 */
+	adopt?(doc: Document, cssText: string): void;
+}
+
 /** The `StudioProps.editor` configuration (DD-0019 §22.1, verbatim). */
 export interface StudioEditorConfig {
 	readonly features?: StudioEditorFeatures;
@@ -92,5 +125,10 @@ export interface StudioEditorConfig {
 	readonly renderScope?: EditorRenderScope;
 	readonly pageAdapter?: EditorPageAdapter;
 	readonly dataSourceAdapter?: EditorDataSourceAdapter;
+	/**
+	 * Strict-CSP authoring-style injection (§29). Absent = Core's
+	 * default `<style>` element.
+	 */
+	readonly styleAdapter?: EditorStyleAdapter;
 	readonly policies?: EditorPolicies;
 }
