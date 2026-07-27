@@ -51,9 +51,17 @@ export interface BenchRun {
 	readonly metrics: readonly BenchMetric[];
 }
 
-/** Why a run failed the gate. */
+/**
+ * Why a run failed the gate.
+ *
+ * `"baseline"` exists because the other two kinds cannot express the
+ * failure mode that actually shipped: a gate whose baseline is absent
+ * reported *green* while measuring half of what it claimed. Under
+ * {@link BenchCompareOptions.requireBaseline} a missing or
+ * wrong-hardware-class baseline is a violation, not a note.
+ */
 export interface BenchViolation {
-	readonly kind: "budget" | "regression";
+	readonly kind: "budget" | "regression" | "baseline";
 	readonly metricId: string;
 	readonly profile: string;
 	readonly message: string;
@@ -91,6 +99,18 @@ export interface BenchCompareOptions {
 	readonly noiseFloorMs?: number;
 	/** Skip absolute-budget enforcement (local exploration only). */
 	readonly skipBudgets?: boolean;
+	/**
+	 * Fail the run when regression comparison could not happen — no
+	 * stored baseline, or one recorded against a different hardware
+	 * class. Defaults to `false` so a developer's ad-hoc run still
+	 * reports budgets.
+	 *
+	 * CI sets this. §28's regression half is the *only* thing that
+	 * catches slow drift inside the absolute budgets, so a CI run that
+	 * silently skips it is a gate reporting green while measuring
+	 * nothing — the exact failure this flag makes impossible.
+	 */
+	readonly requireBaseline?: boolean;
 }
 
 /** §28: fail on **more than** 10% regression. */
@@ -159,36 +179,39 @@ export function compareBenchRun(
 		}
 	}
 
-	if (baseline === null) {
-		notes.push({
-			metricId: "*",
-			profile: "*",
-			message:
-				"no stored baseline — regression comparison skipped (budgets still enforced)",
-		});
+	// One helper for both "cannot compare" exits so the required-vs-
+	// advisory decision is made in exactly one place.
+	const unchecked = (message: string): BenchComparison => {
+		if (options?.requireBaseline === true) {
+			violations.push({
+				kind: "baseline",
+				metricId: "*",
+				profile: "*",
+				message: `${message}. A baseline is REQUIRED here: capture it on this runner with \`ANVILKIT_BENCH_UPDATE_BASELINE=1 pnpm --filter @anvilkit/core bench:editor\` and commit \`packages/runtime/core/bench/baselines/editor-perf.json\`.`,
+			});
+		} else {
+			notes.push({ metricId: "*", profile: "*", message });
+		}
 		return {
 			ok: violations.length === 0,
 			violations,
 			notes,
 			regressionChecked: false,
 		};
+	};
+
+	if (baseline === null) {
+		return unchecked(
+			"no stored baseline — regression comparison skipped (budgets still enforced)",
+		);
 	}
 
 	if (baseline.hardwareClass !== current.hardwareClass) {
-		notes.push({
-			metricId: "*",
-			profile: "*",
-			message:
-				`baseline hardware class "${baseline.hardwareClass}" ≠ current ` +
+		return unchecked(
+			`baseline hardware class "${baseline.hardwareClass}" ≠ current ` +
 				`"${current.hardwareClass}" — regression comparison skipped ` +
 				"(plan §14: gating numbers come from a recorded hardware class)",
-		});
-		return {
-			ok: violations.length === 0,
-			violations,
-			notes,
-			regressionChecked: false,
-		};
+		);
 	}
 
 	const baselineByKey = new Map(

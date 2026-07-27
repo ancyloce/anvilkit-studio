@@ -34,6 +34,47 @@ export default mergeConfig(
 				"@anvilkit/vitest-config/setup/jest-dom",
 				"./vitest.setup.ts",
 			],
+			/**
+			 * PLAN-0020 §13 ("new-code coverage floors: reducers/resolvers
+			 * ≥95% branch") and the Phase 0 exit criteria for CORE-P0-008 /
+			 * CORE-P0-010. Before this block existed the floor was written
+			 * down but never measured (REVIEW-0019 §3.3, finding 1).
+			 *
+			 * `enabled: false` keeps the inner `pnpm test` loop fast; the
+			 * gate runs as `pnpm check:coverage`, which `check:all` (and
+			 * therefore the pre-push hook and `package-gates` in CI) calls.
+			 *
+			 * `check:coverage` runs **only `src/editor`'s own tests**, for
+			 * two reasons. Correctness: the floor is a claim about the pure
+			 * engine's test suite, and letting incidental coverage from
+			 * jsdom `<Studio>` mount tests count would let the number drift
+			 * up without a single new engine assertion. Practicality: V8
+			 * instrumentation roughly doubles the full suite's wall clock,
+			 * which pushes the heavy RTL mount tests past their
+			 * `asyncUtilTimeout` (verified: 65 timeout failures, 531 s) —
+			 * a gate that flakes on unrelated tests is not a gate.
+			 *
+			 * Thresholds are **per directory glob**, deliberately not
+			 * global: `commands/` carries ~292 branches and `resolve/` ~85,
+			 * so a single aggregate number lets a regression in the smaller
+			 * directory hide behind the larger one — exactly the
+			 * "high aggregate conceals a failing target" failure mode.
+			 *
+			 * `include` is scoped to the two mandated directories so the
+			 * report is the gate, with nothing else diluting it. Widening
+			 * the floor to more of `src/editor/` is a deliberate future
+			 * decision, not something to inherit by accident.
+			 */
+			coverage: {
+				enabled: false,
+				provider: "v8",
+				reporter: ["text-summary", "json-summary"],
+				include: ["src/editor/commands/**", "src/editor/resolve/**"],
+				thresholds: {
+					"src/editor/commands/**": { branches: 95 },
+					"src/editor/resolve/**": { branches: 95 },
+				},
+			},
 		},
 	}),
 );

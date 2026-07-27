@@ -33,6 +33,12 @@
  * class as the current run (plan §14). Refresh a baseline with
  * `ANVILKIT_BENCH_UPDATE_BASELINE=1 pnpm bench:editor` **on the
  * reference runner** — never from a dev laptop.
+ *
+ * `ANVILKIT_BENCH_REQUIRE_BASELINE=1` (set by the `editor-perf` CI job)
+ * turns "could not compare" from a console note into a hard failure.
+ * The baselines directory is deliberately **tracked** — only
+ * `bench/results/` is ignored — so the committed baseline is the gate's
+ * input and the per-run output never pollutes the diff.
  */
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -86,6 +92,15 @@ const RESULT_PATH = resolve(BENCH_DIR, "results/editor-perf.json");
 
 const RUNS = Number(process.env.ANVILKIT_BENCH_RUNS ?? "20");
 const UPDATE_BASELINE = process.env.ANVILKIT_BENCH_UPDATE_BASELINE === "1";
+/**
+ * Require a same-hardware-class baseline (CI). Without this the
+ * regression half of the §28 gate degrades to a console note, which is
+ * indistinguishable from a passing gate in a CI log — the audited
+ * failure mode (REVIEW-0019 §2, P1). Never required while capturing a
+ * baseline: that run is what *creates* the file.
+ */
+const REQUIRE_BASELINE =
+	process.env.ANVILKIT_BENCH_REQUIRE_BASELINE === "1" && !UPDATE_BASELINE;
 
 /**
  * The reference class the numbers belong to. CI pins it from the
@@ -288,10 +303,19 @@ describe("editor performance harness (§28)", () => {
 		writeJson(RESULT_PATH, run);
 
 		const baseline = readBaseline();
-		const comparison = compareBenchRun(run, baseline);
+		const comparison = compareBenchRun(run, baseline, {
+			requireBaseline: REQUIRE_BASELINE,
+		});
 		for (const note of comparison.notes) {
 			console.log(`  note: ${note.message}`);
 		}
+		console.log(
+			`  regression comparison: ${
+				comparison.regressionChecked
+					? `ran against a ${baseline?.hardwareClass} baseline`
+					: `DID NOT RUN (required: ${REQUIRE_BASELINE})`
+			}`,
+		);
 
 		if (UPDATE_BASELINE) {
 			writeJson(BASELINE_PATH, run);

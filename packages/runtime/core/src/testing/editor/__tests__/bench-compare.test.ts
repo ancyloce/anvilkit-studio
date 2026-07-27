@@ -179,6 +179,70 @@ describe("regression canary", () => {
 	});
 });
 
+// REVIEW-0019 §2 P1: the audited gate reported green while its
+// regression half never executed. These assert the *inverse* of the
+// canary above — not "does a regression fail" but "does a run that
+// could not check for regressions fail when checking was required".
+describe("requireBaseline (CI regression-gate integrity)", () => {
+	it("fails when no baseline is stored", () => {
+		const verdict = compareBenchRun(run([metric()]), null, {
+			requireBaseline: true,
+		});
+		expect(verdict.regressionChecked).toBe(false);
+		expect(verdict.ok).toBe(false);
+		expect(verdict.violations).toHaveLength(1);
+		expect(verdict.violations[0]?.kind).toBe("baseline");
+		// The message must carry the fix, not just the diagnosis: a CI log
+		// reader has no other place to learn how to capture a baseline.
+		expect(verdict.violations[0]?.message).toContain(
+			"ANVILKIT_BENCH_UPDATE_BASELINE=1",
+		);
+		expect(verdict.violations[0]?.message).toContain(
+			"bench/baselines/editor-perf.json",
+		);
+	});
+
+	it("fails when the stored baseline is from another hardware class", () => {
+		const verdict = compareBenchRun(
+			run([metric()], "ci-ubuntu-latest-x64"),
+			run([metric()], "local-linux-x64"),
+			{ requireBaseline: true },
+		);
+		expect(verdict.regressionChecked).toBe(false);
+		expect(verdict.ok).toBe(false);
+		expect(verdict.violations[0]?.kind).toBe("baseline");
+		expect(verdict.violations[0]?.message).toContain("hardware class");
+	});
+
+	it("still reports budget violations alongside the baseline violation", () => {
+		const verdict = compareBenchRun(
+			run([metric({ p95: 999, budgetMs: 30 })]),
+			null,
+			{ requireBaseline: true },
+		);
+		expect(verdict.violations.map((violation) => violation.kind)).toEqual([
+			"budget",
+			"baseline",
+		]);
+	});
+
+	it("passes — and reports regressionChecked — with a matching baseline", () => {
+		const verdict = compareBenchRun(run([metric()]), run([metric()]), {
+			requireBaseline: true,
+		});
+		expect(verdict.regressionChecked).toBe(true);
+		expect(verdict.ok).toBe(true);
+		expect(verdict.violations).toEqual([]);
+	});
+
+	it("stays advisory by default so a dev run still reports budgets", () => {
+		const verdict = compareBenchRun(run([metric()]), null);
+		expect(verdict.ok).toBe(true);
+		expect(verdict.regressionChecked).toBe(false);
+		expect(verdict.notes[0]?.message).toContain("no stored baseline");
+	});
+});
+
 describe("formatBenchRun", () => {
 	it("marks each metric PASS or FAIL against its budget", () => {
 		const text = formatBenchRun(
