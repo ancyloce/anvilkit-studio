@@ -33,7 +33,84 @@ export {
 	type EditorReduceResult,
 	EMPTY_CHANGE_SET,
 } from "./commands/apply.js";
+export {
+	type ExportPreflightInput,
+	type ExportPreflightResult,
+	type PreflightA11yIssue,
+	runExportPreflight,
+} from "./export-preflight.js";
+export {
+	AI_PROPOSAL_LIMITS,
+	assessProposal,
+	commandNodeIds,
+	type EditorCommandProposal,
+	type ProposalAssessment,
+	type ProposalRejection,
+	proposalAffectedNodeIds,
+	sanitizeProposalForDisplay,
+} from "./ai/proposal.js";
+export { bindingUpdateErrors } from "./bindings/validate.js";
+export {
+	buildRepeatContexts,
+	isVisibleInDesign,
+	isVisibleInPreview,
+	ITEM_KEY_FIELDS,
+	itemKeyOf,
+	repeatExportBlockers,
+	type RepeatContext,
+	type RepeatExpansion,
+	resolveVisibility,
+	type VisibilityResolution,
+} from "./bindings/repeat.js";
+export {
+	fetchPreviewData,
+	type FetchPreviewDataOptions,
+	measureJsonBytes,
+	PREVIEW_DATA_LIMITS,
+	type PreviewDataFailure,
+	type PreviewDataResult,
+	truncateRecords,
+} from "./bindings/preview-data.js";
+export {
+	type BindingScope,
+	evaluateCondition,
+	evaluateExpression,
+	type SafeEvaluation,
+	type SafeEvaluationRejection,
+} from "./bindings/evaluate.js";
 export { reduceValidatedCommand } from "./commands/reduce.js";
+export {
+	buildInteractionTimeline,
+	type InteractionTimeline,
+	reorderActions,
+	type TimelineRow,
+	type TimelineSegment,
+	type TimelineTrack,
+} from "./interactions/timeline.js";
+export {
+	createPreviewSession,
+	type EditorRunMode,
+	interactionsEnabled,
+	type PreviewDisposer,
+	type PreviewSession,
+	type PreviewVariantOverride,
+} from "./interactions/preview-runtime.js";
+export {
+	buildInteractionSchedules,
+	buildMotionSchedule,
+	type MotionSchedule,
+	type MotionScheduleEntry,
+	REDUCED_MOTION_MAX_DURATION_MS,
+	transitionSpanMs,
+} from "./interactions/motion.js";
+export { interactionCreateErrors, urlScheme } from "./interactions/validate.js";
+export {
+	interactionReferences,
+	type InteractionReference,
+	resolveInteraction,
+	resolveInteractions,
+	type ResolvedInteraction,
+} from "./interactions/resolve.js";
 export {
 	type ValidateCommandOptions,
 	validateAtomicCommand,

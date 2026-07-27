@@ -158,25 +158,25 @@ describe("validation", () => {
 		expect(result.errors[0]?.code).toBe("EDITOR_INVALID_CSS_VALUE");
 	});
 
-	it("rejects later-phase commands with EDITOR_CAPABILITY_UNSUPPORTED", () => {
-		// `interaction.create` is Phase 3 scope (EP-14); the token
-		// commands this test originally used shipped in CORE-P2-001.
+	it("rejects commands that have no pure reducer", () => {
+		// The three remaining unreduced members —
+		// `component.definition.create`, `component.instance.detach`,
+		// `component.definition.detachAll` — are NOT unshipped features.
+		// They mutate the Puck tree as well as the sidecar, and
+		// `applyEditorCommand` reduces `AuthoringStateV1` only, so
+		// Phase 2 ships them through `commitNative` plans
+		// (`buildCreateComponentPlan` / `buildDetachPlan`) instead. This
+		// test pins the pure pipeline's refusal to fake a tree edit.
 		const result = applyEditorCommand(createEmptyAuthoringState(), {
 			...base(0),
-			type: "interaction.create",
-			interaction: {
-				version: "1",
-				id: "i1",
-				name: "Open",
-				sourceNodeId: "n1",
-				enabled: true,
-				trigger: { type: "click" },
-				actions: [],
-			},
+			type: "component.instance.detach",
+			instanceNodeIds: ["n1"],
 		});
 		expect(result.status).toBe("rejected");
 		expect(result.errors[0]?.code).toBe("EDITOR_CAPABILITY_UNSUPPORTED");
-		expect(result.errors[0]?.details?.commandType).toBe("interaction.create");
+		expect(result.errors[0]?.details?.commandType).toBe(
+			"component.instance.detach",
+		);
 	});
 });
 
