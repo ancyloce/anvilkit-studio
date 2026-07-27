@@ -443,5 +443,12 @@
 	"studio.editor.perf.observerBatch": "观察器批次",
 	"studio.editor.perf.iframeDocuments": "画布文档",
 	"studio.editor.perf.longTasks": "长任务（>50 毫秒）",
-	"studio.editor.perf.unsupported": "不支持"
+	"studio.editor.perf.unsupported": "不支持",
+	"studio.editor.a11y.severity.error": "错误",
+	"studio.editor.a11y.severity.warning": "警告",
+	"studio.editor.inspector.style.borderStyle": "边框样式",
+	"studio.editor.inspector.style.shadowKind": "阴影类型",
+	"studio.editor.workspace.label": "画布工作区",
+	"studio.editor.canvas.frameTitle": "页面画布",
+	"studio.module.layer.layers.tree.label": "图层"
 }

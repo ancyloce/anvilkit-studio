@@ -443,5 +443,12 @@
 	"studio.editor.perf.observerBatch": "옵저버 배치",
 	"studio.editor.perf.iframeDocuments": "캔버스 문서",
 	"studio.editor.perf.longTasks": "긴 작업(50ms 초과)",
-	"studio.editor.perf.unsupported": "지원되지 않음"
+	"studio.editor.perf.unsupported": "지원되지 않음",
+	"studio.editor.a11y.severity.error": "오류",
+	"studio.editor.a11y.severity.warning": "경고",
+	"studio.editor.inspector.style.borderStyle": "테두리 스타일",
+	"studio.editor.inspector.style.shadowKind": "그림자 종류",
+	"studio.editor.workspace.label": "캔버스 작업 영역",
+	"studio.editor.canvas.frameTitle": "페이지 캔버스",
+	"studio.module.layer.layers.tree.label": "레이어"
 }

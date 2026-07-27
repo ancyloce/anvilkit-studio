@@ -461,5 +461,12 @@
 	"studio.editor.perf.observerBatch": "Observer batch",
 	"studio.editor.perf.iframeDocuments": "Canvas documents",
 	"studio.editor.perf.longTasks": "Long tasks (>50 ms)",
-	"studio.editor.perf.unsupported": "unsupported"
+	"studio.editor.perf.unsupported": "unsupported",
+	"studio.editor.a11y.severity.error": "Error",
+	"studio.editor.a11y.severity.warning": "Warning",
+	"studio.editor.inspector.style.borderStyle": "Border style",
+	"studio.editor.inspector.style.shadowKind": "Shadow kind",
+	"studio.editor.workspace.label": "Canvas workspace",
+	"studio.editor.canvas.frameTitle": "Page canvas",
+	"studio.module.layer.layers.tree.label": "Layers"
 }

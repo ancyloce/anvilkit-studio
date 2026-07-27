@@ -443,5 +443,12 @@
 	"studio.editor.perf.observerBatch": "オブザーバーバッチ",
 	"studio.editor.perf.iframeDocuments": "キャンバスドキュメント",
 	"studio.editor.perf.longTasks": "ロングタスク（50 ms 超）",
-	"studio.editor.perf.unsupported": "未対応"
+	"studio.editor.perf.unsupported": "未対応",
+	"studio.editor.a11y.severity.error": "エラー",
+	"studio.editor.a11y.severity.warning": "警告",
+	"studio.editor.inspector.style.borderStyle": "境界線のスタイル",
+	"studio.editor.inspector.style.shadowKind": "影の種類",
+	"studio.editor.workspace.label": "キャンバス作業領域",
+	"studio.editor.canvas.frameTitle": "ページキャンバス",
+	"studio.module.layer.layers.tree.label": "レイヤー"
 }
