@@ -18,6 +18,8 @@
 import type { ReactNode } from "react";
 import { InspectorSection } from "@/overrides/layout/InspectorSection";
 import { useMsg } from "@/state/editor-i18n-context";
+import { BindingsSection } from "../bindings/BindingsSection.js";
+import { InteractionsSection } from "../interactions/InteractionsSection.js";
 import { ImageSection } from "./sections/image/ImageSection.js";
 import { LayoutSection } from "./sections/layout/LayoutSection.js";
 import { StyleSection } from "./sections/style/StyleSection.js";
@@ -63,6 +65,45 @@ const SECTIONS: readonly InspectorSectionDefinition[] = [
 			return (metadata?.capabilities.imageAdjust?.length ?? 0) > 0;
 		},
 		Component: ImageSection,
+	},
+	{
+		id: "interactions",
+		titleKey: "studio.editor.inspector.section.interactions",
+		// Gated on the component's own `interactions` capability, not on
+		// "something is selected". Any node *could* host an interaction,
+		// but ED-INSPECT-002 requires a component that never opted into
+		// the editor to render zero editor UI — and a legacy component
+		// has no metadata at all, so this correctly hides for it.
+		visible: (context) => {
+			const primary = context.selection.primaryId;
+			if (primary === undefined) {
+				return false;
+			}
+			return (
+				context.bridge.capabilities?.forNode(primary)?.capabilities
+					.interactions === true
+			);
+		},
+		Component: InteractionsSection,
+	},
+	{
+		id: "bindings",
+		titleKey: "studio.editor.inspector.section.bindings",
+		// Same rule as interactions: gated on the component's declared
+		// `bindings` capability, so a legacy component renders zero
+		// editor UI (ED-INSPECT-002). The section additionally returns
+		// null when no data-source adapter is configured.
+		visible: (context) => {
+			const primary = context.selection.primaryId;
+			if (primary === undefined) {
+				return false;
+			}
+			return (
+				context.bridge.capabilities?.forNode(primary)?.capabilities.bindings ===
+				true
+			);
+		},
+		Component: BindingsSection,
 	},
 ];
 
