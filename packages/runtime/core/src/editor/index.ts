@@ -36,6 +36,7 @@ export {
 export {
 	type ExportPreflightInput,
 	type ExportPreflightResult,
+	type ExportValidationEvent,
 	type PreflightA11yIssue,
 	runExportPreflight,
 } from "./export-preflight.js";
@@ -182,6 +183,15 @@ export {
 	materializeInstance,
 	runtimeNodeId,
 } from "./components/materialize.js";
+export { readEditorMetadata } from "./capability-metadata.js";
+export {
+	type ComponentCapabilityReport,
+	EDITOR_ADOPTION_LEVEL_NAMES,
+	type EditorAdoptionLevel,
+	type EditorCapabilityInspection,
+	formatEditorCapabilityReport,
+	inspectEditorCapabilities,
+} from "./inspect-capabilities.js";
 export {
 	checkInvariant,
 	EditorInvariantError,

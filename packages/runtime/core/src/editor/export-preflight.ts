@@ -64,11 +64,18 @@ export interface ExportPreflightResult {
 	/** Capability + a11y findings, capability first. */
 	readonly errors: readonly EditorError[];
 	/** Payload for the `export.validation` event — content-free. */
-	readonly event: {
-		readonly type: "export.validation";
-		readonly status: "passed" | "failed";
-		readonly featureIds: readonly string[];
-	};
+	readonly event: ExportValidationEvent;
+}
+
+/**
+ * The content-free `export.validation` payload (DD-0019 §22.4).
+ * Named so `runExport`'s sink can be typed without re-declaring it
+ * (PLAN-0020 CORE-P4-004).
+ */
+export interface ExportValidationEvent {
+	readonly type: "export.validation";
+	readonly status: "passed" | "failed";
+	readonly featureIds: readonly string[];
 }
 
 /**
