@@ -235,11 +235,13 @@
 		"typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
 		"test": "vitest run",
 		"test:watch": "vitest",
+		"check:cfx": "vitest run src/testing/editor/__tests__/cfx.test.ts",
 		"publint": "publint",
 		"check:publint": "publint .",
 		"check:circular": "madge --circular --extensions ts,tsx src/",
 		"check:react-free-runtime": "node ./scripts/check-react-free.mjs",
 		"check:no-headless-import": "node ./scripts/check-no-headless-import.mjs",
+		"check:no-dynamic-eval": "node ./scripts/check-no-dynamic-eval.mjs",
 		"check:peer-deps": "node ./scripts/check-peer-deps.mjs",
 		"check:bundle-budget": "node ./scripts/check-bundle-budget.mjs",
 		"check:api-snapshot": "typedoc --json ./api/api-snapshot.json --entryPoints ./src/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
@@ -254,7 +256,7 @@
 		"check:api-snapshot-testing-editor": "typedoc --json ./api/api-snapshot.testing-editor.json --entryPoints ./src/testing/editor/index.ts --tsconfig ./tsconfig.json --logLevel Warn --disableSources",
 		"check:api-snapshot-verify": "git diff --exit-code -- ./api",
 		"check:api-snapshot-all": "pnpm check:api-snapshot && pnpm check:api-snapshot-runtime && pnpm check:api-snapshot-config && pnpm check:api-snapshot-i18n && pnpm check:api-snapshot-icu && pnpm check:api-snapshot-react && pnpm check:api-snapshot-templates && pnpm check:api-snapshot-editor && pnpm check:api-snapshot-react-editor && pnpm check:api-snapshot-testing-editor",
-		"check:all": "pnpm check:publint && pnpm check:circular && pnpm check:react-free-runtime && pnpm check:no-headless-import && pnpm check:peer-deps && pnpm check:bundle-budget && pnpm check:api-snapshot-all && pnpm check:api-snapshot-verify",
+		"check:all": "pnpm check:cfx && pnpm check:publint && pnpm check:circular && pnpm check:react-free-runtime && pnpm check:no-headless-import && pnpm check:no-dynamic-eval && pnpm check:peer-deps && pnpm check:bundle-budget && pnpm check:api-snapshot-all && pnpm check:api-snapshot-verify",
 		"migrate:shadcn-paths": "node ./scripts/migrate-shadcn-paths.mjs",
 		"size": "size-limit"
 	}
