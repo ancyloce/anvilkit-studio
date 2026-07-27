@@ -744,7 +744,16 @@ export function ArrayField({
 			el="div"
 			readOnly={readOnly}
 		>
-			<div className="flex flex-col gap-3" role="list">
+			{/* `role="list"` only once there is something to list: ARIA
+			    requires a `list` to own `listitem` children, so an EMPTY
+			    array field declaring the role is a critical
+			    `aria-required-children` violation (PLAN-0020 CORE-P4-003).
+			    An empty array is the common case for a fresh component, so
+			    this fired on nearly every inspector open. */}
+			<div
+				className="flex flex-col gap-3"
+				role={items.length > 0 ? "list" : undefined}
+			>
 				{items.map((item, index) => (
 					<ArrayRow
 						// biome-ignore lint/suspicious/noArrayIndexKey: array fields are reordered by index, not by item id; the index IS the identity here.

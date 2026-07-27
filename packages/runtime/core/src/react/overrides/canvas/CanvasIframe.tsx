@@ -75,6 +75,7 @@ import {
 	IFRAME_THEME_CSS,
 	IFRAME_THEME_STYLE_ID,
 } from "@/overrides/theme/iframe-theme";
+import { useMsg } from "@/state/editor-i18n-context";
 import { useCanvasRootHeight } from "@/state/slices/editor-ui-selectors";
 
 export interface CanvasIframeOverrideProps {
@@ -112,11 +113,28 @@ export function CanvasIframe({
 	children,
 	document: iframeDoc,
 }: CanvasIframeOverrideProps): ReactNode {
+	const msg = useMsg();
 	const [, setCanvasRootHeight] = useCanvasRootHeight();
 
 	// Editor canvas registry feed (CORE-P1B-001): a no-op unless the
 	// editor feature is enabled.
 	useCanvasDocumentSync(iframeDoc);
+
+	// Puck renders the canvas `<iframe>` itself and gives it no `title`,
+	// which axe reports as a serious `frame-title` violation: a screen
+	// reader announces the whole page canvas as an unnamed frame
+	// (PLAN-0020 CORE-P4-003). We cannot change Puck's markup, but this
+	// override already owns the iframe's document — reaching one level
+	// out to its own frame element is the same access, and it is the
+	// only place in the app that can name it.
+	useEffect(() => {
+		const frame = iframeDoc?.defaultView?.frameElement;
+		if (frame === null || frame === undefined) return;
+		const title = msg("studio.editor.canvas.frameTitle");
+		if (frame.getAttribute("title") !== title) {
+			frame.setAttribute("title", title);
+		}
+	}, [iframeDoc, msg]);
 
 	useEffect(() => {
 		if (iframeDoc === undefined) return;
