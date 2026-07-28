@@ -179,11 +179,23 @@ overrides:
   # ("reading 'PropertyDeclaration'"). Keyed to 6.0.3 it remains the single
   # typedoc + typescript pair the pin above exists to guarantee.
   "typedoc>typescript": 6.0.3
-  # apps/playground builds with `next build --webpack`, and Next's webpack
-  # path verifies TypeScript by probing typescript/lib/typescript.js — a file
-  # the native tsgo typescript@7 no longer ships (it then tries to
-  # yarn-install typescript and dies on workspace: protocol). Turbopack apps
-  # (studio) are unaffected. Key just the playground importer to the 6.0.3 JS
-  # compiler so Next's verification and in-build type check work.
+  # Every Next app verifies TypeScript by probing typescript/lib/typescript.js
+  # — a file the native tsgo typescript@7 no longer ships (its lib/ holds only
+  # tsc.js, getExePath.js, version.cjs). Next therefore reports `typescript` as
+  # a MISSING dependency even though it is right there in devDependencies, and
+  # what happens next depends on the environment:
+  #   - locally (`isCI` false) Next shells out to `pnpm add -D typescript`,
+  #     which is a ~2 min no-op because the request is already satisfied, so
+  #     the build limps on and the breakage stays invisible;
+  #   - in CI (`isCI` true) Next skips the auto-install by design and throws
+  #     FatalError E552 from `missingDepsError` instead, so `next build` exits
+  #     nonzero right after "Skipping validation of types" — with the message
+  #     swallowed, because it is raised inside the build worker.
+  # That is why this bites BOTH bundlers: playground (`--webpack`) and studio
+  # (`--turbopack`) run the same `verifyAndRunTypeScript` probe. It is also not
+  # fixable via next.config.js — `typescript.ignoreBuildErrors` skips the type
+  # CHECK, not this dependency verification. Key both app importers to the
+  # 6.0.3 JS compiler so Next's verification resolves and `tsc --noEmit` works.
   "playground>typescript": 6.0.3
+  "studio>typescript": 6.0.3
   typescript: 7.0.2
