@@ -273,6 +273,49 @@ jobs:
       - name: Verify @anvilkit/canvas-editor
         run: pnpm --filter @anvilkit/canvas-editor verify
 
+  # Plan 0022 T-M5-04: the Auto Layout resolver benchmark (PRD §13.1 cold
+  # ≤50 ms / warm ≤16 ms). Its own job for the same reason as editor-perf:
+  # latency must not share a runner with the build/test fan-out.
+  #
+  # ENFORCEMENT STATUS (deliberate, documented): the harness gates only on
+  # the recorded reference environment (bench/REFERENCE-ENVIRONMENT.md — an
+  # exact-fingerprint match, where the PRD budgets are falsifiable). On
+  # this runner the fingerprint does not match, so the run REPORTS the
+  # figures and prints "gating: DISABLED" — visible in the log, never a
+  # silent green (the harness asserts a stated reason). To turn this job
+  # into a hard gate: nominate a CI hardware class in
+  # `REFERENCE_ENVIRONMENT` (see REFERENCE-ENVIRONMENT.md "Changing the
+  # reference machine") and set ANVILKIT_CANVAS_BENCH_REQUIRE_GATING=1
+  # below — with the flag, a run that cannot gate FAILS instead of
+  # reporting (the REVIEW-0019 §2 P1 anti-pattern guard).
+  canvas-bench:
+    name: Canvas layout resolver benchmark (PRD §13.1)
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: github.event_name != 'pull_request' || needs.changes.outputs.canvas == 'true'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Set up workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Run layout resolver benchmark
+        run: pnpm --filter @anvilkit/canvas-core bench:layout | tee canvas-bench-report.txt
+
+      - name: Upload benchmark report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canvas-bench-report
+          path: canvas-bench-report.txt
+          if-no-files-found: ignore
+
   # PLAN-0020 CORE-P4-001: the DD-0019 §28 performance gate. Runs the
   # editor harness (fixed 1k/10k fixtures, 20-run median + p95) and fails
   # on an absolute-budget violation or a >10% regression against the
