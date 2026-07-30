@@ -27,20 +27,6 @@
 // `check:no-headless-import` gate allowlists for ir imports.
 export { listUsedAuthoringFeatures } from "@anvilkit/ir/editor";
 export {
-	type AuthoringChangeSet,
-	applyEditorCommand,
-	diffAuthoringState,
-	type EditorReduceResult,
-	EMPTY_CHANGE_SET,
-} from "./commands/apply.js";
-export {
-	type ExportPreflightInput,
-	type ExportPreflightResult,
-	type ExportValidationEvent,
-	type PreflightA11yIssue,
-	runExportPreflight,
-} from "./export-preflight.js";
-export {
 	AI_PROPOSAL_LIMITS,
 	assessProposal,
 	commandNodeIds,
@@ -50,28 +36,6 @@ export {
 	proposalAffectedNodeIds,
 	sanitizeProposalForDisplay,
 } from "./ai/proposal.js";
-export { bindingUpdateErrors } from "./bindings/validate.js";
-export {
-	buildRepeatContexts,
-	isVisibleInDesign,
-	isVisibleInPreview,
-	ITEM_KEY_FIELDS,
-	itemKeyOf,
-	repeatExportBlockers,
-	type RepeatContext,
-	type RepeatExpansion,
-	resolveVisibility,
-	type VisibilityResolution,
-} from "./bindings/repeat.js";
-export {
-	fetchPreviewData,
-	type FetchPreviewDataOptions,
-	measureJsonBytes,
-	PREVIEW_DATA_LIMITS,
-	type PreviewDataFailure,
-	type PreviewDataResult,
-	truncateRecords,
-} from "./bindings/preview-data.js";
 export {
 	type BindingScope,
 	evaluateCondition,
@@ -79,49 +43,48 @@ export {
 	type SafeEvaluation,
 	type SafeEvaluationRejection,
 } from "./bindings/evaluate.js";
+export {
+	type FetchPreviewDataOptions,
+	fetchPreviewData,
+	measureJsonBytes,
+	PREVIEW_DATA_LIMITS,
+	type PreviewDataFailure,
+	type PreviewDataResult,
+	truncateRecords,
+} from "./bindings/preview-data.js";
+export {
+	buildRepeatContexts,
+	ITEM_KEY_FIELDS,
+	isVisibleInDesign,
+	isVisibleInPreview,
+	itemKeyOf,
+	type RepeatContext,
+	type RepeatExpansion,
+	repeatExportBlockers,
+	resolveVisibility,
+	type VisibilityResolution,
+} from "./bindings/repeat.js";
+export { bindingUpdateErrors } from "./bindings/validate.js";
+export { readEditorMetadata } from "./capability-metadata.js";
+export {
+	type AuthoringChangeSet,
+	applyEditorCommand,
+	diffAuthoringState,
+	type EditorReduceResult,
+	EMPTY_CHANGE_SET,
+} from "./commands/apply.js";
 export { reduceValidatedCommand } from "./commands/reduce.js";
-export {
-	buildInteractionTimeline,
-	type InteractionTimeline,
-	reorderActions,
-	type TimelineRow,
-	type TimelineSegment,
-	type TimelineTrack,
-} from "./interactions/timeline.js";
-export {
-	createPreviewSession,
-	type EditorRunMode,
-	interactionsEnabled,
-	type PreviewDisposer,
-	type PreviewSession,
-	type PreviewVariantOverride,
-} from "./interactions/preview-runtime.js";
-export {
-	buildInteractionSchedules,
-	buildMotionSchedule,
-	type MotionSchedule,
-	type MotionScheduleEntry,
-	REDUCED_MOTION_MAX_DURATION_MS,
-	transitionSpanMs,
-} from "./interactions/motion.js";
-export {
-	interactionCreateErrors,
-	interactionDeleteErrors,
-	interactionUpdateErrors,
-	urlScheme,
-} from "./interactions/validate.js";
-export {
-	interactionReferences,
-	type InteractionReference,
-	resolveInteraction,
-	resolveInteractions,
-	type ResolvedInteraction,
-} from "./interactions/resolve.js";
 export {
 	type ValidateCommandOptions,
 	validateAtomicCommand,
 	validateEditorCommand,
 } from "./commands/validate.js";
+export {
+	type ComponentEditSink,
+	componentDocument,
+	foldComponentDocument,
+	variantCombinations,
+} from "./components/component-document.js";
 export {
 	buildCreateComponentPlan,
 	COMPONENT_FRAME_TYPE,
@@ -144,30 +107,6 @@ export {
 	setPropOverride,
 } from "./components/instances.js";
 export {
-	type ComponentEditSink,
-	componentDocument,
-	foldComponentDocument,
-	variantCombinations,
-} from "./components/component-document.js";
-export { applyComponentDefinitionPatch } from "./components/patch.js";
-export {
-	type DroppedOverride,
-	droppedOverrideDiagnostics,
-	switchInstanceVariant,
-	type VariantSwitchResult,
-} from "./components/variant-switch.js";
-export {
-	matchVariant,
-	validateVariantModel,
-	variantCombinationCount,
-	variantCombinationKey,
-} from "./components/variants.js";
-export {
-	promoteComponentOverride,
-	resetAllComponentOverrides,
-	resetComponentOverride,
-} from "./components/overrides.js";
-export {
 	collectUnresolvedInstances,
 	countLiveInstances,
 	type DefinitionUsage,
@@ -183,7 +122,36 @@ export {
 	materializeInstance,
 	runtimeNodeId,
 } from "./components/materialize.js";
-export { readEditorMetadata } from "./capability-metadata.js";
+export {
+	promoteComponentOverride,
+	resetAllComponentOverrides,
+	resetComponentOverride,
+} from "./components/overrides.js";
+export { applyComponentDefinitionPatch } from "./components/patch.js";
+export {
+	type DroppedOverride,
+	droppedOverrideDiagnostics,
+	switchInstanceVariant,
+	type VariantSwitchResult,
+} from "./components/variant-switch.js";
+export {
+	matchVariant,
+	validateVariantModel,
+	variantCombinationCount,
+	variantCombinationKey,
+} from "./components/variants.js";
+export {
+	checkInvariant,
+	EditorInvariantError,
+	makeEditorError,
+} from "./diagnostics.js";
+export {
+	type ExportPreflightInput,
+	type ExportPreflightResult,
+	type ExportValidationEvent,
+	type PreflightA11yIssue,
+	runExportPreflight,
+} from "./export-preflight.js";
 export {
 	type ComponentCapabilityReport,
 	EDITOR_ADOPTION_LEVEL_NAMES,
@@ -193,10 +161,42 @@ export {
 	inspectEditorCapabilities,
 } from "./inspect-capabilities.js";
 export {
-	checkInvariant,
-	EditorInvariantError,
-	makeEditorError,
-} from "./diagnostics.js";
+	buildInteractionSchedules,
+	buildMotionSchedule,
+	type MotionSchedule,
+	type MotionScheduleEntry,
+	REDUCED_MOTION_MAX_DURATION_MS,
+	transitionSpanMs,
+} from "./interactions/motion.js";
+export {
+	createPreviewSession,
+	type EditorRunMode,
+	interactionsEnabled,
+	type PreviewDisposer,
+	type PreviewSession,
+	type PreviewVariantOverride,
+} from "./interactions/preview-runtime.js";
+export {
+	type InteractionReference,
+	interactionReferences,
+	type ResolvedInteraction,
+	resolveInteraction,
+	resolveInteractions,
+} from "./interactions/resolve.js";
+export {
+	buildInteractionTimeline,
+	type InteractionTimeline,
+	reorderActions,
+	type TimelineRow,
+	type TimelineSegment,
+	type TimelineTrack,
+} from "./interactions/timeline.js";
+export {
+	interactionCreateErrors,
+	interactionDeleteErrors,
+	interactionUpdateErrors,
+	urlScheme,
+} from "./interactions/validate.js";
 export {
 	EDITOR_BYTE_LIMIT_DEFAULTS,
 	type ResolvedByteLimits,
@@ -249,6 +249,16 @@ export {
 	serializeShadow,
 	serializeTokenOrLiteral,
 } from "./style/css-serializer.js";
+export {
+	buildExportAuthoring,
+	type ExportAuthoring,
+} from "./style/export-authoring.js";
+export {
+	buildExportStylesheet,
+	type ExportInstanceAuthoring,
+	type ExportStylesheetInput,
+	type ExportStylesheetResult,
+} from "./style/export-stylesheet.js";
 export {
 	type ResolvedAuthoringStyle,
 	type ResolvedNodeStyleInput,
