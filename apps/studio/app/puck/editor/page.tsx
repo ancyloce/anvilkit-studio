@@ -333,67 +333,95 @@ export default function PuckEditorPage() {
 	);
 
 	// E2E capability metadata (CORE-P1B-012): with `?editor=1`, every
-	// demo component declares the universal families so the inspector,
-	// handles, and a11y rules have targets to operate on. Host-side
-	// config decoration is a legitimate host responsibility; the
-	// per-component metadata adoption in the component packages is the
-	// product rollout, tracked separately.
+	// demo component carries editor metadata so the inspector, handles,
+	// and a11y rules have targets to operate on.
+	//
+	// Component-declared metadata wins (REVIEW-0019 P1 adoption):
+	// packages that publish their own `metadata.editor` — currently
+	// `@anvilkit/section`, `@anvilkit/hero`, `@anvilkit/bento-grid`,
+	// all `styleTarget: "root"` — keep their declaration verbatim, so
+	// the root render-prop path runs against real components. The host
+	// adds only the two Phase 3 demo flags (interactions, bindings)
+	// the §32.4 E2E drives, and only where the package left them
+	// undeclared. Non-adopted components keep the legacy full
+	// "wrapper" injection until their packages adopt.
 	const e2eEditorConfig = useMemo(() => {
 		if (!visualEditorMode) {
 			return localizedEditorConfig;
 		}
+		// Structural mirror of core's `readEditorMetadata` acceptance
+		// (version "1" + a known styleTarget). Local on purpose: a static
+		// value import of `@anvilkit/core/editor` here would pull the
+		// whole React-free engine into this page's initial chunk — the
+		// engine import below (export preflight) is dynamic for the same
+		// reason. Core re-validates authoritatively at decorate time.
+		const declaredEditorMetadata = (
+			component: unknown,
+		): Record<string, unknown> | undefined => {
+			const editor = (
+				component as { metadata?: { editor?: unknown } } | undefined
+			)?.metadata?.editor;
+			if (typeof editor !== "object" || editor === null) {
+				return undefined;
+			}
+			const candidate = editor as { version?: unknown; styleTarget?: unknown };
+			return candidate.version === "1" &&
+				(candidate.styleTarget === "root" ||
+					candidate.styleTarget === "wrapper" ||
+					candidate.styleTarget === "none")
+				? (editor as Record<string, unknown>)
+				: undefined;
+		};
 		const components = Object.fromEntries(
 			Object.entries(
 				(localizedEditorConfig as { components?: Record<string, unknown> })
 					.components ?? {},
-			).map(([type, component]) => [
-				type,
-				{
-					...(component as object),
-					metadata: {
-						...((component as { metadata?: object }).metadata ?? {}),
-						editor: {
-							// "wrapper" (not "root"): the demo component packages
-							// do not consume the `editorDataAttributes` render
-							// props yet, so root-target stamping has nothing to
-							// spread them. The wrapper target is the §8 path
-							// where CORE owns the stamped element — consent is
-							// this host config declaration (OQ-001 semantics).
-							version: "1",
-							styleTarget: "wrapper",
-							capabilities: {
-								layoutItem: true,
-								layoutContainer: true,
-								visualStyle: true,
-								typography: true,
-								responsive: true,
-								// Phase 3 surfaces (CORE-P3-001/-006): the
-								// interactions and data sections are gated on
-								// these flags, so without them the §32.4 E2E
-								// has nothing to drive.
-								interactions: true,
-								bindings: true,
-								// Inline-editing browser certification target
-								// (CORE-P1B-009/-012): the spec stamps
-								// `data-ak-text-target="headline"` on Hero's
-								// own `<h1>` at runtime, standing in for a
-								// component that adopted the metadata.
-								...(type === "Hero"
-									? {
-											inlineText: [
-												{
-													id: "headline",
-													propPath: "headline",
-													format: "plain",
-												},
-											],
-										}
-									: {}),
-							},
+			).map(([type, component]) => {
+				const declared = declaredEditorMetadata(component);
+				return [
+					type,
+					{
+						...(component as object),
+						metadata: {
+							...((component as { metadata?: object }).metadata ?? {}),
+							editor: declared
+								? {
+										...declared,
+										capabilities: {
+											// Demo-only Phase 3 surfaces; the package's own
+											// declaration wins on every key it sets.
+											interactions: true,
+											bindings: true,
+											...(declared.capabilities as object | undefined),
+										},
+									}
+								: {
+										// "wrapper" (not "root"): non-adopted packages do
+										// not consume the `editorDataAttributes` render
+										// props, so root-target stamping has nothing to
+										// spread them. The wrapper target is the §8 path
+										// where CORE owns the stamped element — consent is
+										// this host config declaration (OQ-001 semantics).
+										version: "1",
+										styleTarget: "wrapper",
+										capabilities: {
+											layoutItem: true,
+											layoutContainer: true,
+											visualStyle: true,
+											typography: true,
+											responsive: true,
+											// Phase 3 surfaces (CORE-P3-001/-006): the
+											// interactions and data sections are gated on
+											// these flags, so without them the §32.4 E2E
+											// has nothing to drive.
+											interactions: true,
+											bindings: true,
+										},
+									},
 						},
 					},
-				},
-			]),
+				];
+			}),
 		);
 		return { ...(localizedEditorConfig as object), components } as never;
 	}, [localizedEditorConfig, visualEditorMode]);
