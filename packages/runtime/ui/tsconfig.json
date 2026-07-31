@@ -7,10 +7,25 @@
 		"outDir": "dist",
 		"rootDir": "src",
 		"paths": {
-			// Source-only alias for shadcn write targets. Distinct from the
+			// Source-only alias for shadcn WRITE TARGETS. Distinct from the
 			// published `@anvilkit/ui` name so it is NOT shadowed by the
 			// package `exports` self-reference (which resolves into ./dist).
 			// shadcn falls back to these tsconfig paths → files land in src/.
+			//
+			// It is deliberately NOT `components.json`'s `components`/`ui` alias
+			// any more. shadcn uses that one value for two different jobs — where
+			// to write a file, and what specifier to write INTO the generated
+			// imports — and `@ui-src` is only correct for the first. It is not a
+			// real package, so `@ui-src/button` resolves to nothing once the file
+			// ships: typecheck passes (these paths satisfy it) and the bundler
+			// fails. Those aliases now say `@anvilkit/ui`, which the package's own
+			// `exports` map resolves via `./*` → `./dist/*.js`.
+			//
+			// These paths stay because they cost nothing and are the documented
+			// escape hatch if shadcn's resolver ever prefers node resolution over
+			// tsconfig for the write target. If that happens it fails LOUDLY — the
+			// repo blocks writes under any `dist/` — rather than silently emitting
+			// unresolvable imports again.
 			"@ui-src": ["./src"],
 			"@ui-src/*": ["./src/*"],
 			"@anvilkit/ui": ["./src"],
