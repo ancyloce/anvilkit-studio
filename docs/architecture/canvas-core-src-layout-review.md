@@ -7,9 +7,12 @@
 > package, at `packages/capabilities/canvas/core/docs/architecture/src-layer-map.md`,
 > so that gate, code, and record ship together in the submodule. §4 below is
 > retained as the original review and has since drifted — it predates
-> `limits.ts`, `text-contracts.ts`, `clipboard/`, `comment-contracts.ts`, and
-> `layout/`. Read this document for the rationale, migration history, and
-> rejected options; read the in-package map for what the gate actually checks.
+> `limits.ts`, `hash.ts`, `uri.ts`, `text-contracts.ts`, `clipboard/`,
+> `comment-contracts.ts`, `components/`, `component-ops/`, `layout/`,
+> `policy-contracts.ts`, `component-libraries/`, and `brand-governance/`
+> (last reconciled 2026-07-30, PLAN 0021 M0 / T-003). Read this document for the
+> rationale, migration history, and rejected options; read the in-package map for
+> what the gate actually checks.
 
 - **Status:** EXECUTED 2026-07-09 — all four phases landed (ir/ + geometry/ domains, five domain barrels + 8-line root, `scripts/check-layering.mjs` wired into `check:all`, tests co-located per domain). All gates green at every step; 329/329 tests held throughout; zero public API change (api snapshot byte-identical after Phase 3). Originally verified against the real madge graph on a gate-green tree (one known pre-existing lint error in `commands.test.ts:1111`, now at `src/commands/__tests__/`).
 
