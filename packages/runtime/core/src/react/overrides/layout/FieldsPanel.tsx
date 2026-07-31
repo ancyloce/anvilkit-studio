@@ -295,87 +295,87 @@ export function FieldsPanel({
 	const ancestors = crumbs.slice(0, -1);
 
 	return (
-		<div className={cn("flex h-full min-h-0 flex-col", className)}>
-			<header className="sticky top-0 z-10 flex shrink-0 flex-col justify-center gap-0.5 border-b border-[var(--ak-studio-border)] bg-[var(--editor-panel)] px-3 py-2">
-				{ancestors.length > 0 ? (
-					<nav
-						aria-label={msg("studio.fields.breadcrumbs.label")}
-						className="flex min-w-0 items-center gap-0.5 overflow-hidden text-[11px] text-[var(--ak-studio-muted-fg)]"
-					>
-						{ancestors.map((crumb) => (
-							<span
-								key={crumb.id}
-								className="flex min-w-0 items-center gap-0.5"
-							>
-								<span className="max-w-24 truncate">{crumb.label}</span>
-								<ChevronRight
-									className="size-3 shrink-0 opacity-60"
-									aria-hidden="true"
-								/>
-							</span>
-						))}
-					</nav>
-				) : null}
-				<div className="flex min-w-0 items-center gap-1.5">
-					{presentation?.icon !== undefined ? (
-						<span
-							aria-hidden="true"
-							data-testid="ak-fields-panel-icon"
-							className="flex size-4 shrink-0 items-center justify-center text-[var(--ak-studio-muted-fg)] [&>svg]:size-4"
-						>
-							{presentation.icon}
-						</span>
-					) : null}
-					<h2
-						className="min-w-0 flex-1 truncate text-sm font-medium text-[var(--ak-studio-fg)]"
-						data-testid="ak-fields-panel-title"
-					>
-						{current?.label}
-					</h2>
-					{selectedType !== undefined &&
-					itemSelector !== null &&
-					itemSelector !== undefined ? (
-						<ComponentActionsMenu itemSelector={itemSelector} />
-					) : null}
-				</div>
-			</header>
-			<div className="min-h-0 flex-1 overflow-auto px-3 py-2.5">
-				<div
-					className={cn(
-						"flex flex-col gap-3",
-						isLoading ? "animate-pulse opacity-70" : null,
-					)}
-				>
-					{grouped === null ? (
-						children
-					) : (
-						<>
-							{grouped.ungrouped}
-							{grouped.sections.map((section) => (
-								<InspectorSection
-									key={section.id}
-									id={`fields:${selectedType ?? "root"}:${section.id}`}
-									title={
-										isCanonicalFieldSection(section.id)
-											? msg(fieldSectionTitleKey(section.id))
-											: section.id
-									}
-									defaultExpanded={section.id !== "advanced"}
-								>
-									<div className="flex flex-col gap-3 pt-1 pb-2">
-										{section.nodes}
-									</div>
-								</InspectorSection>
-							))}
-						</>
-					)}
-					{/* Universal editor sections (CORE-P1A-005, ED-INSPECT-002):
+    <div className={cn("flex h-full min-h-0 flex-col", className)}>
+      <header className="sticky top-0 z-10 flex shrink-0 flex-col justify-center gap-0.5 border-b border-[var(--ak-studio-border)] bg-[var(--editor-panel)] px-3 py-2">
+        {ancestors.length > 0 ? (
+          <nav
+            aria-label={msg("studio.fields.breadcrumbs.label")}
+            className="flex min-w-0 items-center gap-0.5 overflow-hidden text-[11px] text-[var(--ak-studio-muted-fg)]"
+          >
+            {ancestors.map((crumb) => (
+              <span
+                key={crumb.id}
+                className="flex min-w-0 items-center gap-0.5"
+              >
+                <span className="max-w-24 truncate">{crumb.label}</span>
+                <ChevronRight
+                  className="size-3 shrink-0 opacity-60"
+                  aria-hidden="true"
+                />
+              </span>
+            ))}
+          </nav>
+        ) : null}
+        <div className="flex min-w-0 items-center gap-1.5">
+          {presentation?.icon !== undefined ? (
+            <span
+              aria-hidden="true"
+              data-testid="ak-fields-panel-icon"
+              className="flex size-4 shrink-0 items-center justify-center text-[var(--ak-studio-muted-fg)] [&>svg]:size-4"
+            >
+              {presentation.icon}
+            </span>
+          ) : null}
+          <h2
+            className="min-w-0 flex-1 truncate text-sm font-medium text-[var(--ak-studio-fg)]"
+            data-testid="ak-fields-panel-title"
+          >
+            {current?.label}
+          </h2>
+          {selectedType !== undefined &&
+          itemSelector !== null &&
+          itemSelector !== undefined ? (
+            <ComponentActionsMenu itemSelector={itemSelector} />
+          ) : null}
+        </div>
+      </header>
+      <div className="min-h-0 flex-1 overflow-auto">
+        <div
+          className={cn(
+            "flex flex-col gap-3",
+            isLoading ? "animate-pulse opacity-70" : null,
+          )}
+        >
+          {grouped === null ? (
+            children
+          ) : (
+            <>
+              {grouped.ungrouped}
+              {grouped.sections.map((section) => (
+                <InspectorSection
+                  key={section.id}
+                  id={`fields:${selectedType ?? "root"}:${section.id}`}
+                  title={
+                    isCanonicalFieldSection(section.id)
+                      ? msg(fieldSectionTitleKey(section.id))
+                      : section.id
+                  }
+                  defaultExpanded={section.id !== "advanced"}
+                >
+                  <div className="flex flex-col gap-3 pt-1 pb-2">
+                    {section.nodes}
+                  </div>
+                </InspectorSection>
+              ))}
+            </>
+          )}
+          {/* Universal editor sections (CORE-P1A-005, ED-INSPECT-002):
 					    composed strictly AFTER the native Puck fields — never
 					    replacing or reordering them. Renders null (and fetches
 					    nothing) unless the editor feature is enabled. */}
-					<EditorInspectorMount />
-				</div>
-			</div>
-		</div>
-	);
+          <EditorInspectorMount />
+        </div>
+      </div>
+    </div>
+  );
 }
