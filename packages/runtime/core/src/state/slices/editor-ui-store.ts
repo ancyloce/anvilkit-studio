@@ -442,7 +442,16 @@ export function createEditorUiStore(
 					set({ canvasZoom });
 				},
 				setCanvasRootHeight(canvasRootHeight) {
-					set({ canvasRootHeight });
+					// Measured value fed from a `ResizeObserver`/`MutationObserver`
+					// inside the canvas iframe (`CanvasIframe`), so it re-arrives on
+					// every layout tick — usually unchanged. Returning the SAME state
+					// object makes zustand's `Object.is` check bail out before it
+					// notifies a single listener, so a no-op re-measure costs nothing.
+					set((state) =>
+						state.canvasRootHeight === canvasRootHeight
+							? state
+							: { canvasRootHeight },
+					);
 				},
 				setComponentViewMode(componentViewMode) {
 					set({ componentViewMode });

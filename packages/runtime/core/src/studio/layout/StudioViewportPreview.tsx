@@ -108,7 +108,20 @@ function StudioViewportPreviewImpl({
 			: undefined;
 	const naturalHeight = canvasRootHeight;
 
+	// Percentages only resolve against a DEFINITE `height` (see below), and
+	// `canvasRootHeight` is now the page's true content extent — it no
+	// longer floors itself at the iframe's own viewport height, which is
+	// what used to make the measurement circular and lock the editor into
+	// an update loop (`CanvasIframe`). A short page therefore reports LESS
+	// than the workspace, so the workspace floor is folded into the
+	// definite value here instead of being left to `min-height` alone.
+	const frameHeight = Math.max(naturalHeight, frameMinHeight ?? 0);
+
 	const stageWidth = naturalWidth > 0 ? naturalWidth * zoom : undefined;
+	// Natural (not floored) height on purpose: the stage's own CSS
+	// `minHeight: "100%"` applies the identical workspace floor that
+	// `frameHeight` folds in, so both boxes still resolve to the same used
+	// height — see the frame's `minHeight` below.
 	const stageHeight = naturalHeight > 0 ? naturalHeight * zoom : undefined;
 
 	// Editor responsive state feed (CORE-P1A-008): mirrors the live
@@ -155,7 +168,7 @@ function StudioViewportPreviewImpl({
 							// establishes a percentage basis, so without this
 							// the iframe silently collapses to the browser's
 							// 150px UA default regardless of real content size.
-							height: naturalHeight > 0 ? naturalHeight : undefined,
+							height: frameHeight > 0 ? frameHeight : undefined,
 							minHeight: frameMinHeight,
 							transform: `scale(${zoom})`,
 							transformOrigin: "top left",

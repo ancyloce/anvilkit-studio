@@ -39,13 +39,19 @@ export function useCanvasFrameSize<T extends HTMLElement = HTMLDivElement>(): {
 			const entry = entries[0];
 			if (entry === undefined) return;
 			const box = entry.contentBoxSize?.[0];
-			setSize(
-				box !== undefined
-					? { width: box.inlineSize, height: box.blockSize }
-					: {
-							width: entry.contentRect.width,
-							height: entry.contentRect.height,
-						},
+			const width =
+				box !== undefined ? box.inlineSize : entry.contentRect.width;
+			const height =
+				box !== undefined ? box.blockSize : entry.contentRect.height;
+			// Keep the previous object when nothing actually changed: this
+			// observer re-fires on every layout tick the canvas causes (zoom,
+			// scrollbar appearing, content growing), and a fresh object literal
+			// would re-render the whole preview each time even for an identical
+			// size — noise on top of a path that is already measurement-driven.
+			setSize((prev) =>
+				prev.width === width && prev.height === height
+					? prev
+					: { width, height },
 			);
 		});
 		observer.observe(el);

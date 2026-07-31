@@ -75,13 +75,26 @@ class MockMutationObserver {
 	}
 }
 
-/** `report()` in the component ignores the entry payload and re-reads `scrollHeight` — an empty entry is enough to trigger it. */
+let frameCbs: FrameRequestCallback[] = [];
+
+/** Runs every animation frame the component has queued (observer re-measures are rAF-coalesced). */
+function flushFrames(): void {
+	const cbs = frameCbs;
+	frameCbs = [];
+	act(() => {
+		for (const cb of cbs) cb(0);
+	});
+}
+
+/** `report()` in the component ignores the entry payload and re-measures from the DOM — an empty entry is enough to trigger it. */
 function fireResize(): void {
 	act(() => resizeCb?.([], {} as ResizeObserver));
+	flushFrames();
 }
 
 function fireMutation(): void {
 	act(() => mutationCb?.([], {} as MutationObserver));
+	flushFrames();
 }
 
 /** jsdom has no layout engine, so `scrollHeight` is a stubbed read-only getter — this replaces it on the instance. */
@@ -92,13 +105,47 @@ function stubScrollHeight(el: Element, height: number): void {
 	});
 }
 
+/** jsdom lays nothing out, so every `getBoundingClientRect()` is 0×0 — this fakes one element's geometry. */
+function stubRect(el: Element, bottom: number): void {
+	Object.defineProperty(el, "getBoundingClientRect", {
+		configurable: true,
+		value: (): DOMRect =>
+			({
+				top: 0,
+				bottom,
+				left: 0,
+				right: 0,
+				width: 0,
+				height: bottom,
+			}) as DOMRect,
+	});
+}
+
+/** A document from `createHTMLDocument` has no `defaultView`; tests that need one (e.g. `innerHeight`) install it here. */
+function stubDefaultView(doc: Document, view: Partial<Window>): void {
+	Object.defineProperty(doc, "defaultView", {
+		configurable: true,
+		value: view,
+	});
+}
+
 beforeEach(() => {
 	resizeCb = null;
 	resizeObservedEl = null;
 	mutationCb = null;
 	mutationObservedEl = null;
+	frameCbs = [];
 	vi.stubGlobal("ResizeObserver", MockResizeObserver);
 	vi.stubGlobal("MutationObserver", MockMutationObserver);
+	vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback): number => {
+		frameCbs.push(cb);
+		return frameCbs.length;
+	});
+	vi.stubGlobal("cancelAnimationFrame", (id: number): void => {
+		frameCbs[id - 1] = () => {
+			/* cancelled */
+		};
+	});
 });
 
 afterEach(() => {
@@ -176,6 +223,72 @@ describe("CanvasIframe content-height reporting", () => {
 		render(<Setup />);
 		expect(resizeObservedEl).toBeNull();
 		expect(mutationObservedEl).toBeNull();
+	});
+
+	// Regression: `scrollHeight` never returns less than the element's own
+	// padding box, and Puck pins `#frame-root` at `min-height: 100vh` — so
+	// once the host applies a reported height, `scrollHeight` reports THAT
+	// height back rather than the content's. Feeding it in again resized the
+	// iframe, re-fired these observers, and walked the value down by the
+	// canvas frame's border on every pass until React aborted the render
+	// with "Maximum update depth exceeded".
+	it("measures the real content extent, not the viewport-floored scrollHeight", () => {
+		const { doc, frameRoot } = makeIframeDoc();
+		stubScrollHeight(frameRoot, 4998); // the previous report, echoed back
+		const content = doc.createElement("div");
+		stubRect(content, 300); // the page itself is only 300px tall
+		frameRoot.appendChild(content);
+
+		const { getByTestId } = render(<Setup doc={doc} />);
+		expect(getByTestId("height").textContent).toBe("300");
+
+		// The echo changes on every pass (the iframe keeps resizing); the
+		// content does not, so the reported height must not move either.
+		stubScrollHeight(frameRoot, 4996);
+		fireResize();
+		expect(getByTestId("height").textContent).toBe("300");
+	});
+
+	it("swallows a measurement that moved by exactly as much as the iframe viewport", () => {
+		const { doc, frameRoot } = makeIframeDoc();
+		// Mutable on purpose — the test moves it to simulate the iframe
+		// resizing under an applied height (`Window.innerHeight` is readonly).
+		const view = { innerHeight: 800 };
+		stubDefaultView(doc, view);
+		// A `min-h-screen` page: its own height IS the viewport height, so
+		// growing the frame grows the content — circularity no measurement
+		// strategy can remove. The reported height must still hold still.
+		const content = doc.createElement("div");
+		stubRect(content, 800);
+		frameRoot.appendChild(content);
+
+		const { getByTestId } = render(<Setup doc={doc} />);
+		expect(getByTestId("height").textContent).toBe("800");
+
+		// Host applies 800 → the iframe viewport lands 2px short (canvas
+		// frame border) → the content shrinks by exactly the same 2px.
+		view.innerHeight = 798;
+		stubRect(content, 798);
+		fireResize();
+		expect(getByTestId("height").textContent).toBe("800");
+	});
+
+	it("coalesces a burst of observer notifications into one animation frame", () => {
+		const { doc, frameRoot } = makeIframeDoc();
+		stubScrollHeight(frameRoot, 300);
+		const { getByTestId } = render(<Setup doc={doc} />);
+		expect(getByTestId("height").textContent).toBe("300");
+
+		act(() => {
+			resizeCb?.([], {} as ResizeObserver);
+			mutationCb?.([], {} as MutationObserver);
+			resizeCb?.([], {} as ResizeObserver);
+		});
+		expect(frameCbs.length).toBe(1);
+
+		stubScrollHeight(frameRoot, 900);
+		flushFrames();
+		expect(getByTestId("height").textContent).toBe("900");
 	});
 
 	it("disconnects both observers on unmount", () => {
