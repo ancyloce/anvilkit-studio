@@ -91,43 +91,53 @@ const SCROLL_RESET_DECLS: readonly (readonly [string, string])[] = [
 	["max-width", "none"],
 ];
 
+/** Snapshot one inline declaration (value AND priority); returns its restorer. */
+function captureDecl(style: CSSStyleDeclaration, property: string): () => void {
+	const value = style.getPropertyValue(property);
+	const priority = style.getPropertyPriority(property);
+	return () => {
+		if (value === "") style.removeProperty(property);
+		else style.setProperty(property, value, priority);
+	};
+}
+
 /**
- * Real content extent of Puck's `#frame-root`, measured WITHOUT its own
- * box acting as a floor.
+ * Real content extent of Puck's `#frame-root`, measured with its own
+ * viewport-derived pinning transiently removed.
  *
- * `frameRoot.scrollHeight` cannot be used for this: Puck styles
- * `#frame-root` `height: 1px; min-height: 100vh`, and `scrollHeight`
- * never reports less than the element's own padding box — so it returns
- * `max(realContent, iframeViewportHeight)`. The iframe's viewport height
- * is in turn whatever height the host applied FROM THE PREVIOUS REPORT,
- * which makes the measurement a function of its own output: every report
- * resizes the iframe, every resize re-fires the observers below, and the
- * value walks by the canvas frame's border width on each pass instead of
- * settling — an unbounded update chain that ends in React's "Maximum
- * update depth exceeded".
+ * A plain `frameRoot.scrollHeight` read cannot answer this. Puck styles
+ * `#frame-root` `height: 1px; min-height: 100vh`, and `scrollHeight` never
+ * reports less than the element's own padding box — so it returns
+ * `max(realContent, iframeViewportHeight)`, and the iframe's viewport
+ * height is whatever the host applied FROM THE PREVIOUS REPORT. That makes
+ * the measurement a function of its own output: every report resizes the
+ * iframe, every resize re-fires the observers below, and a page shorter
+ * than the viewport walks the value down by the canvas frame's border
+ * width on each pass instead of settling — an unbounded update chain that
+ * ends in React's "Maximum update depth exceeded".
  *
- * Unioning the children's bottom edges breaks that cycle: `#frame-root`'s
- * children are the actual rendered page, so their extent depends only on
- * the content, never on the box we are computing.
+ * Reading the children's boxes instead does not help: Puck's root
+ * `DropZone` resolves its own height against `#frame-root`, so it is
+ * pinned to the same viewport-derived value while the real content
+ * overflows it. Collapsing `#frame-root` for the duration of the read is
+ * what actually breaks the cycle — every box that resolved against the
+ * pinned height collapses with it, leaving `scrollHeight` reporting pure
+ * scrollable overflow (the root zone is `overflow: visible`, so nothing in
+ * between clips it away). Both writes are reverted in the same synchronous
+ * block, before style/layout can be committed to a paint, so nothing
+ * observes the collapsed state.
  */
 function measureContentHeight(frameRoot: HTMLElement): number {
-	const children = Array.from(frameRoot.children);
-	// Nothing rendered yet, or no layout engine at all (jsdom): there is
-	// no child geometry to union, so the element's own scroll extent is
-	// the best available answer.
-	if (children.length === 0) return frameRoot.scrollHeight;
-	const view = frameRoot.ownerDocument.defaultView;
-	const rootTop = frameRoot.getBoundingClientRect().top;
-	let extent = 0;
-	for (const child of children) {
-		// A `position: fixed` box is anchored to the iframe VIEWPORT rather
-		// than to the document flow, so its bottom edge tracks the height
-		// being computed here — the same circularity, one level down.
-		// `scrollHeight` excludes fixed descendants for exactly this reason.
-		if (view?.getComputedStyle?.(child).position === "fixed") continue;
-		extent = Math.max(extent, child.getBoundingClientRect().bottom - rootTop);
-	}
-	return Math.max(0, Math.ceil(extent));
+	const { style } = frameRoot;
+	const restore = [
+		captureDecl(style, "height"),
+		captureDecl(style, "min-height"),
+	];
+	style.setProperty("height", "0px", "important");
+	style.setProperty("min-height", "0px", "important");
+	const extent = frameRoot.scrollHeight;
+	for (const restoreDecl of restore) restoreDecl();
+	return extent;
 }
 
 function applyScrollReset(doc: Document): void {
@@ -226,22 +236,29 @@ export function CanvasIframe({
 
 		let lastHeight = -1;
 		let lastViewportHeight = -1;
+		let mutationObserver: MutationObserver | undefined;
 
 		const report = (): void => {
 			const height = measureContentHeight(frameRoot);
+			// `measureContentHeight` writes (and reverts) two inline
+			// declarations on `#frame-root`, which the observer below watches.
+			// Drop those self-inflicted records synchronously, before the
+			// callback microtask can see them, or every measurement schedules
+			// the next one.
+			mutationObserver?.takeRecords();
 			if (height === lastHeight) return;
 			const viewportHeight = view?.innerHeight ?? 0;
 			// Feedback breaker. Content that sizes ITSELF against the iframe
-			// viewport (`100vh`/`100dvh`, or the `scrollHeight` fallback above)
-			// re-creates the circularity that `measureContentHeight` removes for
-			// ordinary content, and no measurement strategy can undo it: growing
-			// the frame grows the viewport, which grows the content, which grows
-			// the frame. The tell is that the content moved by EXACTLY as much as
-			// the viewport did — i.e. the delta carries no information about the
-			// content itself. Swallow that one measurement rather than feeding it
-			// back: the next genuine trigger still gets through (`lastHeight` is
-			// deliberately left untouched), so such a page renders slightly off
-			// instead of locking the editor into an unbounded update loop.
+			// viewport (`100vh`/`100dvh`) re-creates the circularity that
+			// `measureContentHeight` removes for ordinary content, and no
+			// measurement strategy can undo it: growing the frame grows the
+			// viewport, which grows the content, which grows the frame. The tell
+			// is that the content moved by EXACTLY as much as the viewport did —
+			// i.e. the delta carries no information about the content itself.
+			// Swallow that one measurement rather than feeding it back: the next
+			// genuine trigger still gets through (`lastHeight` is deliberately
+			// left untouched), so such a page renders slightly off instead of
+			// locking the editor into an unbounded update loop.
 			if (
 				lastHeight !== -1 &&
 				viewportHeight !== lastViewportHeight &&
@@ -291,7 +308,7 @@ export function CanvasIframe({
 		const Mo =
 			view?.MutationObserver ??
 			(typeof MutationObserver !== "undefined" ? MutationObserver : undefined);
-		const mutationObserver = Mo !== undefined ? new Mo(schedule) : undefined;
+		mutationObserver = Mo !== undefined ? new Mo(schedule) : undefined;
 		mutationObserver?.observe(frameRoot, {
 			childList: true,
 			subtree: true,

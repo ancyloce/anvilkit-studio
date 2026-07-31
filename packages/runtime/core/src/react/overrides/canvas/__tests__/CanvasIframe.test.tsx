@@ -105,19 +105,24 @@ function stubScrollHeight(el: Element, height: number): void {
 	});
 }
 
-/** jsdom lays nothing out, so every `getBoundingClientRect()` is 0×0 — this fakes one element's geometry. */
-function stubRect(el: Element, bottom: number): void {
-	Object.defineProperty(el, "getBoundingClientRect", {
+/**
+ * Emulates the browser's real `scrollHeight` semantics on `#frame-root`:
+ * never less than the element's OWN box, which Puck pins to the iframe
+ * viewport (`height: 1px; min-height: 100vh`). The component collapses that
+ * pinning for the duration of the read, so the floor only applies while the
+ * inline overrides are absent.
+ */
+function stubPinnedScrollHeight(
+	el: HTMLElement,
+	content: number,
+	viewport: number,
+): void {
+	Object.defineProperty(el, "scrollHeight", {
 		configurable: true,
-		value: (): DOMRect =>
-			({
-				top: 0,
-				bottom,
-				left: 0,
-				right: 0,
-				width: 0,
-				height: bottom,
-			}) as DOMRect,
+		get: (): number =>
+			el.style.getPropertyValue("min-height") === "0px"
+				? content
+				: Math.max(content, viewport),
 	});
 }
 
@@ -234,19 +239,43 @@ describe("CanvasIframe content-height reporting", () => {
 	// with "Maximum update depth exceeded".
 	it("measures the real content extent, not the viewport-floored scrollHeight", () => {
 		const { doc, frameRoot } = makeIframeDoc();
-		stubScrollHeight(frameRoot, 4998); // the previous report, echoed back
-		const content = doc.createElement("div");
-		stubRect(content, 300); // the page itself is only 300px tall
-		frameRoot.appendChild(content);
+		// A 300px page inside a 4998px-tall iframe — i.e. the frame is still
+		// carrying a height from when the page WAS long. Reading the pinned
+		// `scrollHeight` here returns 4998 (the previous report echoed back),
+		// which is what walked the value down 2px per pass forever.
+		stubPinnedScrollHeight(frameRoot, 300, 4998);
 
 		const { getByTestId } = render(<Setup doc={doc} />);
 		expect(getByTestId("height").textContent).toBe("300");
+	});
 
-		// The echo changes on every pass (the iframe keeps resizing); the
-		// content does not, so the reported height must not move either.
-		stubScrollHeight(frameRoot, 4996);
-		fireResize();
-		expect(getByTestId("height").textContent).toBe("300");
+	it("restores #frame-root's own inline height/min-height after measuring", () => {
+		const { doc, frameRoot } = makeIframeDoc();
+		frameRoot.style.setProperty("min-height", "42px", "important");
+		stubPinnedScrollHeight(frameRoot, 300, 4998);
+
+		render(<Setup doc={doc} />);
+		expect(frameRoot.style.getPropertyValue("height")).toBe("");
+		expect(frameRoot.style.getPropertyValue("min-height")).toBe("42px");
+		expect(frameRoot.style.getPropertyPriority("min-height")).toBe("important");
+	});
+
+	it("ignores the mutation records its own measurement writes produce", () => {
+		const { doc, frameRoot } = makeIframeDoc();
+		stubPinnedScrollHeight(frameRoot, 300, 4998);
+		const takeRecords = vi.fn(() => [] as MutationRecord[]);
+		class RecordingMutationObserver extends MockMutationObserver {
+			override takeRecords(): MutationRecord[] {
+				return takeRecords();
+			}
+		}
+		vi.stubGlobal("MutationObserver", RecordingMutationObserver);
+
+		render(<Setup doc={doc} />);
+		fireMutation();
+		// Once per re-measure that ran while the observer was live (the mount
+		// measurement happens before it is created).
+		expect(takeRecords).toHaveBeenCalled();
 	});
 
 	it("swallows a measurement that moved by exactly as much as the iframe viewport", () => {
@@ -258,9 +287,10 @@ describe("CanvasIframe content-height reporting", () => {
 		// A `min-h-screen` page: its own height IS the viewport height, so
 		// growing the frame grows the content — circularity no measurement
 		// strategy can remove. The reported height must still hold still.
-		const content = doc.createElement("div");
-		stubRect(content, 800);
-		frameRoot.appendChild(content);
+		Object.defineProperty(frameRoot, "scrollHeight", {
+			configurable: true,
+			get: (): number => view.innerHeight,
+		});
 
 		const { getByTestId } = render(<Setup doc={doc} />);
 		expect(getByTestId("height").textContent).toBe("800");
@@ -268,7 +298,6 @@ describe("CanvasIframe content-height reporting", () => {
 		// Host applies 800 → the iframe viewport lands 2px short (canvas
 		// frame border) → the content shrinks by exactly the same 2px.
 		view.innerHeight = 798;
-		stubRect(content, 798);
 		fireResize();
 		expect(getByTestId("height").textContent).toBe("800");
 	});
