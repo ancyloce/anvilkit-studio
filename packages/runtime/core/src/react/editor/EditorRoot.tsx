@@ -29,6 +29,7 @@ import { SelectionToolbar } from "./canvas/SelectionToolbar.js";
 import { createEditorCapabilityRegistry } from "./capability-registry.js";
 import { computeCollabGateError } from "./collab-gate.js";
 import { createEditorCommandPort } from "./command-port.js";
+import { CreateComponentDialog } from "./components/CreateComponentDialog.js";
 import {
 	createEditorPerfMetrics,
 	type EditorPerfMetrics,
@@ -319,6 +320,11 @@ export default function EditorRoot({
 				<SelectionToolbar bridge={bridge} />
 				<RichTextSurfaceMount bridge={bridge} />
 			</AuthoringOverlayRoot>
+			{/* Component naming (CORE-P2-009H): must render in the MAIN
+			    document, not the canvas iframe where the toolbar that
+			    triggers it lives. Renders nothing until a capture is
+			    requested. */}
+			<CreateComponentDialog />
 			{/* §28 dev overlay (CORE-P4-002): never requested in production
 			    — `perf` is null unless NODE_ENV is explicitly
 			    non-production AND the host opted in. */}

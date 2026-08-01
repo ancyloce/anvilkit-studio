@@ -180,7 +180,7 @@ export function ComponentInstanceSection(): ReactNode {
 					>
 						{model.overrides.map((entry) => (
 							<li
-								key={`${entry.definitionNodeId}:${entry.label}`}
+								key={`${entry.kind}:${entry.definitionNodeId}:${entry.label}`}
 								className="flex items-center gap-1"
 								data-testid="ak-component-override"
 								data-override-label={entry.label}
@@ -195,25 +195,30 @@ export function ComponentInstanceSection(): ReactNode {
 									className="h-5 px-1.5 text-[10px]"
 									disabled={!model.canMutate || busy}
 									onClick={() =>
-										void run(() => model.resetOverride(entry.target))
+										void run(() => model.resetOverride(entry))
 									}
 									data-testid="ak-component-override-reset"
 								>
 									{msg("studio.editor.component.instance.reset")}
 								</Button>
-								<Button
-									type="button"
-									variant="ghost"
-									size="sm"
-									className="h-5 px-1.5 text-[10px]"
-									disabled={!model.canMutate || busy || model.unresolved}
-									onClick={() =>
-										void run(() => model.promoteOverride(entry.target))
-									}
-									data-testid="ak-component-override-promote"
-								>
-									{msg("studio.editor.component.instance.promote")}
-								</Button>
+								{/* Promote writes into the definition, which only makes
+								    sense for a definition-node override — an exposed-prop
+								    override has no definition node to write to. */}
+								{entry.kind === "node" ? (
+									<Button
+										type="button"
+										variant="ghost"
+										size="sm"
+										className="h-5 px-1.5 text-[10px]"
+										disabled={!model.canMutate || busy || model.unresolved}
+										onClick={() =>
+											void run(() => model.promoteOverride(entry.target))
+										}
+										data-testid="ak-component-override-promote"
+									>
+										{msg("studio.editor.component.instance.promote")}
+									</Button>
+								) : null}
 							</li>
 						))}
 					</ul>

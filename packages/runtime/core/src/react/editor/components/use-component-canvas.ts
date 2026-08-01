@@ -32,7 +32,7 @@ import {
 } from "../../../editor/index.js";
 import type { InternalEditorCommandPort } from "../command-port.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
-import { createEditorScopeController, scopedDefinitionId } from "./scope.js";
+import { getEditorScopeController, scopedDefinitionId } from "./scope.js";
 
 /** One entry in the variant strip. */
 export interface ComponentCombination {
@@ -97,7 +97,7 @@ export function useComponentCanvas(): ComponentCanvas | null {
 		() =>
 			selection == null
 				? null
-				: createEditorScopeController({
+				: getEditorScopeController(selection, {
 						getSelection: () => selection.getState(),
 						setScope: (scope) => selection.setScope(scope),
 						selectMany: (nodeIds) => selection.selectMany(nodeIds),

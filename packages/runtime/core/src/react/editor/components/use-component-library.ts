@@ -30,7 +30,7 @@ import type {
 import { use, useCallback, useMemo, useSyncExternalStore } from "react";
 import type { InternalEditorCommandPort } from "../command-port.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
-import { createEditorScopeController, scopedDefinitionId } from "./scope.js";
+import { getEditorScopeController, scopedDefinitionId } from "./scope.js";
 
 /** One row in the Components panel. */
 export interface ComponentLibraryEntry {
@@ -105,7 +105,7 @@ export function useComponentLibrary(): ComponentLibrary | null {
 		() =>
 			selection == null
 				? null
-				: createEditorScopeController({
+				: getEditorScopeController(selection, {
 						getSelection: () => selection.getState(),
 						setScope: (scope) => selection.setScope(scope),
 						selectMany: (nodeIds) => selection.selectMany(nodeIds),
@@ -228,6 +228,24 @@ export function useComponentLibrary(): ComponentLibrary | null {
 		[port, scopeController],
 	);
 
+	/**
+	 * Delete a definition, optionally detaching every instance first.
+	 *
+	 * The two halves use different seams because they are different
+	 * kinds of change, and conflating them is what makes deletion lose
+	 * data:
+	 *
+	 * - `component.definition.detachAll` **rewrites the Puck tree**
+	 *   (each instance becomes ordinary nodes), which the pure sidecar
+	 *   reducer cannot express — so it runs through `commitNative`
+	 *   with `buildDetachPlan`, exactly like create-from-selection.
+	 * - `component.definition.delete` is a pure sidecar reduction.
+	 *
+	 * Both land in ONE `commitNative`: the plan detaches and removes
+	 * the definition in the same builder, so a single undo restores
+	 * the definition *and* every instance reference (§14.5), and a
+	 * failure part-way commits nothing.
+	 */
 	const deleteDefinition = useCallback(
 		async (
 			definitionId: string,
@@ -236,46 +254,66 @@ export function useComponentLibrary(): ComponentLibrary | null {
 			if (port == null) {
 				return { status: "rejected", errors: [] };
 			}
-			const revision = port.getSnapshot().revision;
-			const base = {
-				expectedRevision: revision,
-				source: "inspector" as const,
-				timestamp: Date.now(),
-			};
-			// Detach-all + delete as ONE batch: all-or-nothing, so a
-			// rejected delete cannot leave the document with every
-			// instance detached and the definition still present (§14.5).
-			const command =
-				options?.detachAll === true
-					? {
-							...base,
-							id: crypto.randomUUID(),
-							type: "batch" as const,
-							commands: [
-								{
-									...base,
-									id: crypto.randomUUID(),
-									type: "component.definition.detachAll" as const,
-									definitionId,
-								},
-								{
-									...base,
-									id: crypto.randomUUID(),
-									type: "component.definition.delete" as const,
-									definitionId,
-								},
-							],
-						}
-					: {
-							...base,
-							id: crypto.randomUUID(),
-							type: "component.definition.delete" as const,
-							definitionId,
-						};
-			const result = await port.execute(command as never);
+			if (options?.detachAll !== true) {
+				const result = await port.execute({
+					id: crypto.randomUUID(),
+					expectedRevision: port.getSnapshot().revision,
+					source: "inspector",
+					timestamp: Date.now(),
+					type: "component.definition.delete",
+					definitionId,
+				} as never);
+				return {
+					status: result.status === "committed" ? "committed" : "rejected",
+					errors: result.errors,
+				};
+			}
+
+			const { buildDetachPlan, deleteDefinition: dropDefinition, isDetachFailure } =
+				await import("../../../editor/index.js");
+			let failure: EditorError | null = null;
+			const committed = port.commitNative((data, authoring) => {
+				const instanceNodeIds = Object.entries(authoring.nodes)
+					.filter(
+						([, record]) =>
+							record.componentInstance?.definitionId === definitionId,
+					)
+					.map(([nodeId]) => nodeId);
+
+				if (instanceNodeIds.length === 0) {
+					const next = dropDefinition(authoring, definitionId);
+					return next === authoring ? null : { data, authoring: next };
+				}
+				const plan = buildDetachPlan(
+					data,
+					authoring,
+					instanceNodeIds,
+					() => crypto.randomUUID(),
+				);
+				if (plan === null) return null;
+				if (isDetachFailure(plan)) {
+					failure = {
+						code: "EDITOR_DEFINITION_UNAVAILABLE",
+						severity: "error",
+						message:
+							"an instance of this component could not be detached; nothing was deleted",
+						recoverable: true,
+						nodeIds: [plan.instanceNodeId],
+						details: { kind: "componentDefinition", definitionId },
+					};
+					return null;
+				}
+				return {
+					data: plan.data,
+					authoring: dropDefinition(plan.authoring, definitionId),
+				};
+			});
+			if (failure !== null) {
+				return { status: "rejected", errors: [failure] };
+			}
 			return {
-				status: result.status === "committed" ? "committed" : "rejected",
-				errors: result.errors,
+				status: committed === "committed" ? "committed" : "rejected",
+				errors: [],
 			};
 		},
 		[port],

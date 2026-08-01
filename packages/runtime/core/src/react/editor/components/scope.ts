@@ -105,12 +105,47 @@ export interface ScopeControllerDeps {
 }
 
 /**
+ * One shared scope controller per selection controller.
+ *
+ * The remembered page selection is closure state, so two independently
+ * created controllers over the same selection store each remember
+ * *their own* entry selection — and the surface that enters (the
+ * Components panel) is not the surface that exits (the component
+ * canvas breadcrumb), so exiting restored nothing. Keying the
+ * controller by its selection store makes "enter here, leave there"
+ * work, which is the only way a user actually navigates.
+ *
+ * A `WeakMap` so a torn-down `<Studio>` instance is collectable.
+ */
+const SHARED_CONTROLLERS = new WeakMap<object, EditorScopeController>();
+
+/**
+ * The scope controller for a selection store, created once and shared.
+ *
+ * `owner` is the identity the controller is cached under — pass the
+ * selection controller itself.
+ */
+export function getEditorScopeController(
+	owner: object,
+	deps: ScopeControllerDeps,
+): EditorScopeController {
+	const existing = SHARED_CONTROLLERS.get(owner);
+	if (existing !== undefined) {
+		return existing;
+	}
+	const created = createEditorScopeController(deps);
+	SHARED_CONTROLLERS.set(owner, created);
+	return created;
+}
+
+/**
  * Build the scope controller.
  *
  * Exiting restores the page selection that was active on entry —
  * navigation should feel like stepping back out, not like losing your
  * place. The remembered selection is plain closure state: it is UI
- * convenience, so persisting it would be wrong.
+ * convenience, so persisting it would be wrong. Callers that need the
+ * memory shared across surfaces use {@link getEditorScopeController}.
  */
 export function createEditorScopeController(
 	deps: ScopeControllerDeps,

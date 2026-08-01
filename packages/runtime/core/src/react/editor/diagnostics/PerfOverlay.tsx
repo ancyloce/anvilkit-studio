@@ -100,7 +100,11 @@ export default function PerfOverlay({
 		<aside
 			data-testid={PERF_OVERLAY_MARKER}
 			aria-label={msg("studio.editor.perf.title")}
-			className="pointer-events-auto fixed bottom-2 right-2 z-[9999] max-w-xs rounded-md border border-border bg-background/95 p-2 font-mono text-[11px] leading-tight text-foreground shadow-lg"
+			// Editor-chrome tokens + the shared floating elevation, matching
+			// `ActionBar` and `SelectionToolbar` — this used generic shadcn
+			// surfaces and Tailwind's `shadow-lg`, making it the third
+			// distinct elevation treatment among the studio's floating panels.
+			className="pointer-events-auto fixed bottom-2 right-2 z-[9999] max-w-xs rounded-md border border-[var(--ak-studio-border)] bg-[var(--editor-panel-raised)]/95 p-2 font-mono text-[11px] leading-tight text-[var(--ak-studio-panel-fg)] shadow-[var(--shadow-floating)]"
 		>
 			<div className="flex items-center justify-between gap-2">
 				<strong className="font-semibold">
@@ -108,7 +112,7 @@ export default function PerfOverlay({
 				</strong>
 				<button
 					type="button"
-					className="rounded px-1 text-muted-foreground hover:text-foreground"
+					className="rounded px-1 text-[var(--ak-studio-muted-fg)] transition-colors hover:text-[var(--ak-studio-fg)]"
 					onClick={() => setCollapsed((value) => !value)}
 					data-testid="ak-editor-perf-toggle"
 				>

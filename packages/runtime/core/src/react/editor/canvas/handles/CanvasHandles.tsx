@@ -799,7 +799,11 @@ function Handle({
 				padding: 0,
 				boxSizing: "border-box",
 				border: "1px solid var(--editor-selection, #3b82f6)",
-				background: "var(--editor-panel, #fff)",
+				// `--ak-studio-panel`, not `--editor-panel`: only the
+				// `--ak-studio-*` bridge is injected into the canvas iframe
+				// (`theme/iframe-theme.ts`), so `--editor-panel` silently fell
+				// back to #fff and pinned handles to light mode.
+				background: "var(--ak-studio-panel, #fff)",
 				borderRadius: definition.id === "radius" ? "50%" : "2px",
 				cursor:
 					definition.id === "resize-se"
@@ -945,7 +949,7 @@ export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 						top: guide.axis === "y" ? `${guide.position}px` : "0",
 						width: guide.axis === "x" ? "1px" : `${guideExtent.width}px`,
 						height: guide.axis === "y" ? "1px" : `${guideExtent.height}px`,
-						background: "var(--editor-snap-guide, #ec4899)",
+						background: "var(--editor-snap-guide, #db2777)",
 						pointerEvents: "none",
 					}}
 				/>
@@ -969,7 +973,7 @@ export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 						font: "10px/1.4 system-ui, sans-serif",
 						padding: "0 3px",
 						borderRadius: "2px",
-						background: "var(--editor-snap-guide, #ec4899)",
+						background: "var(--editor-snap-guide, #db2777)",
 						color: "#fff",
 						pointerEvents: "none",
 						whiteSpace: "nowrap",

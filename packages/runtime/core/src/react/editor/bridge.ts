@@ -94,6 +94,27 @@ export interface StudioEditorBridge {
 	 */
 	readonly diagnostics: EditorDiagnosticCenter;
 
+	/**
+	 * Pending create-component-from-selection request (CORE-P2-009H;
+	 * ED-COMP-001).
+	 *
+	 * The capture affordance lives on the canvas selection toolbar,
+	 * which renders **inside the canvas iframe**; the naming dialog
+	 * cannot. So the toolbar files a request here and
+	 * `CreateComponentDialog` — mounted in the main document — picks it
+	 * up, asks for a name, and runs the capture. That indirection is
+	 * what removes the hardcoded `"Component"` name without moving a
+	 * modal into an iframe.
+	 */
+	readonly componentCapture: {
+		/** File a request to name and capture these nodes. */
+		readonly request: (nodeIds: readonly string[]) => void;
+		/** The nodes awaiting a name, or `null`. */
+		readonly pending: () => readonly string[] | null;
+		/** Drop the request (cancel, or after a successful capture). */
+		readonly clear: () => void;
+	};
+
 	/** The live command port; `null` until the lazy impl mounts. */
 	port: EditorCommandPort | null;
 	/** The live selection controller (CORE-P1A-002); `null` until mounted. */
@@ -168,6 +189,7 @@ export function createStudioEditorBridge(): StudioEditorBridge {
 	let version = 0;
 	let styleVersion = 0;
 	let dataVersion = 0;
+	let pendingCapture: readonly string[] | null = null;
 	const wake = (): void => {
 		for (const listener of listeners) {
 			listener();
@@ -206,6 +228,18 @@ export function createStudioEditorBridge(): StudioEditorBridge {
 		diagnostics: createEditorDiagnosticCenter({
 			onDiagnosticsChange: () => bridge.notify(),
 		}),
+		componentCapture: {
+			request: (nodeIds) => {
+				pendingCapture = nodeIds.length === 0 ? null : [...nodeIds];
+				bridge.notify();
+			},
+			pending: () => pendingCapture,
+			clear: () => {
+				if (pendingCapture === null) return;
+				pendingCapture = null;
+				bridge.notify();
+			},
+		},
 		port: null,
 		selection: null,
 		capabilities: null,

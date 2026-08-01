@@ -69,11 +69,19 @@ const BULK_COMMANDS = ["duplicate", "delete", "lock", "hide", "wrap"] as const;
 const CREATE_COMPONENT_ACTION = "create-component";
 
 /**
- * Capture the current selection as a document-local component
- * (CORE-P2-004): validate, then commit definition + tree replacement
- * + selection in ONE history-recording dispatch.
+ * Ask for a component name, then capture (CORE-P2-004/-009H;
+ * ED-COMP-001).
+ *
+ * Validation runs **here**, before the dialog opens: a selection that
+ * cannot be captured should say so immediately rather than after the
+ * user has typed a name. Only a valid selection files the request.
+ *
+ * The capture itself runs in `CreateComponentDialog` (main document —
+ * this toolbar renders inside the canvas iframe, where a modal cannot
+ * live) and is still ONE `commitNative`, so one undo restores the
+ * exact pre-capture document.
  */
-async function createComponentFromSelection(
+async function requestComponentCapture(
 	bridge: StudioEditorBridge,
 	port: InternalEditorCommandPort,
 ): Promise<void> {
@@ -81,8 +89,9 @@ async function createComponentFromSelection(
 	if (selectedIds.length === 0) {
 		return;
 	}
-	const { buildCreateComponentPlan, validateCreateComponentSelection } =
-		await import("../../../editor/index.js");
+	const { validateCreateComponentSelection } = await import(
+		"../../../editor/index.js"
+	);
 	const snapshot = port.getSnapshot();
 	const data = port.readData();
 	const errors = validateCreateComponentSelection(
@@ -97,24 +106,7 @@ async function createComponentFromSelection(
 		return;
 	}
 	bridge.diagnostics.setDiagnostics("editor.component.create", []);
-	const definitionId = crypto.randomUUID();
-	const instanceNodeId = crypto.randomUUID();
-	const timestamp = new Date().toISOString();
-	const committed = port.commitNative((currentData, currentAuthoring) => {
-		const plan = buildCreateComponentPlan(currentData, currentAuthoring, {
-			nodeIds: selectedIds,
-			name: "Component",
-			definitionId,
-			instanceNodeId,
-			timestamp,
-		});
-		return plan === null
-			? null
-			: { data: plan.data, authoring: plan.authoring };
-	});
-	if (committed === "committed") {
-		bridge.selection?.select(instanceNodeId);
-	}
+	bridge.componentCapture.request(selectedIds);
 }
 
 /** Build the §13.6 align input over the live selection. */
@@ -260,7 +252,7 @@ export function SelectionToolbar({ bridge }: SelectionToolbarProps): ReactNode {
 				return;
 			}
 			if (action === CREATE_COMPONENT_ACTION) {
-				void createComponentFromSelection(bridge, port);
+				void requestComponentCapture(bridge, port);
 				return;
 			}
 			if ((BULK_COMMANDS as readonly string[]).includes(action)) {
@@ -317,17 +309,11 @@ export function SelectionToolbar({ bridge }: SelectionToolbarProps): ReactNode {
 			aria-label={label}
 			title={label}
 			disabled={disabled}
-			style={{
-				font: "10px/1.6 system-ui, sans-serif",
-				padding: "3px 6px",
-				border: "none",
-				borderRadius: "3px",
-				background: "transparent",
-				color: "inherit",
-				cursor: disabled ? "default" : "pointer",
-				opacity: disabled ? 0.4 : 1,
-				pointerEvents: "auto",
-			}}
+			// Presentation (including :hover and :disabled, which inline
+			// styles cannot express) lives in the `[data-ak-toolbar-action]`
+			// rules shipped to BOTH documents — `overrides/styles.src.css`
+			// for the host and `theme/iframe-theme.ts` for the canvas iframe.
+			style={{ pointerEvents: "auto" }}
 		>
 			{label}
 		</button>
@@ -339,21 +325,18 @@ export function SelectionToolbar({ bridge }: SelectionToolbarProps): ReactNode {
 			role="toolbar"
 			data-ak-selection-toolbar
 			aria-label={msg("studio.editor.canvas.align.toolbar")}
+			// Only the computed position is inline; surface, border, elevation
+			// and hover feedback come from the `[data-ak-selection-toolbar]`
+			// rules in `overrides/styles.src.css` + `theme/iframe-theme.ts`.
+			// Those use `--ak-studio-panel` / `--ak-studio-panel-fg`, which —
+			// unlike the previous `--editor-text` (defined nowhere, so text
+			// was pinned to #111 and vanished on the dark panel) — are
+			// guaranteed present in both documents.
 			style={{
 				position: "absolute",
 				left: `${left}px`,
 				top: `${top}px`,
-				display: "flex",
-				alignItems: "center",
-				gap: "1px",
-				padding: "1px 3px",
-				borderRadius: "4px",
-				border: "1px solid var(--editor-selection, #3b82f6)",
-				background: "var(--editor-panel, #fff)",
-				color: "var(--editor-text, #111)",
-				boxShadow: "0 1px 4px rgba(0,0,0,0.15)",
 				pointerEvents: "auto",
-				whiteSpace: "nowrap",
 				zIndex: 1,
 			}}
 		>
@@ -370,16 +353,7 @@ export function SelectionToolbar({ bridge }: SelectionToolbarProps): ReactNode {
 				msg("studio.editor.canvas.align.distributeV"),
 				!canDistribute,
 			)}
-			<span
-				aria-hidden="true"
-				style={{
-					width: "1px",
-					alignSelf: "stretch",
-					background: "var(--editor-selection, #3b82f6)",
-					opacity: 0.3,
-					margin: "0 2px",
-				}}
-			/>
+			<span aria-hidden="true" data-ak-toolbar-separator />
 			{BULK_COMMANDS.map((command) =>
 				button(command, msg(`studio.editor.shortcuts.${command}`)),
 			)}

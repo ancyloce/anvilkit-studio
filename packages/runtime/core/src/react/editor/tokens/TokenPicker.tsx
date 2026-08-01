@@ -102,8 +102,13 @@ export function TokenPicker({
 				onClick={() => picker.attach(entry.token.id)}
 				aria-current={entry.token.id === attached ? "true" : undefined}
 				className={cn(
-					"flex w-full items-center gap-2 rounded px-2 py-1 text-left text-xs hover:bg-[var(--ak-studio-hover)]",
-					entry.token.id === attached ? "bg-[var(--ak-studio-hover)]" : null,
+					"flex w-full items-center gap-2 rounded px-2 py-1 text-left text-xs transition-colors hover:bg-[var(--ak-studio-hover)]",
+					// Attached row uses the brand-tinted selection token, not
+					// the neutral hover token — otherwise the current token
+					// looks identical to whatever row the pointer is over.
+					entry.token.id === attached
+						? "bg-[var(--ak-studio-layer-selection)]"
+						: null,
 				)}
 				data-testid="ak-token-option"
 			>
@@ -198,7 +203,7 @@ export function TokenPicker({
 									<button
 										type="button"
 										onClick={() => void picker.importValue(value)}
-										className="flex w-full items-center gap-2 rounded px-2 py-1 text-left text-xs hover:bg-[var(--ak-studio-hover)]"
+										className="flex w-full items-center gap-2 rounded px-2 py-1 text-left text-xs transition-colors hover:bg-[var(--ak-studio-hover)]"
 										data-testid="ak-token-import-option"
 									>
 										<span className="flex-1 truncate">{value.label}</span>

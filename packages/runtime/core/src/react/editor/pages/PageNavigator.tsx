@@ -97,8 +97,9 @@ export function PageNavigator({ activePageId }: PageNavigatorProps): ReactNode {
 							variant="ghost"
 							size="sm"
 							className={cn(
-								"h-6 w-full justify-start px-2 text-[11px]",
-								page.id === activePageId && "bg-[var(--ak-studio-hover)]",
+								"h-6 w-full justify-start px-2 text-[11px] transition-colors",
+								page.id === activePageId &&
+									"bg-[var(--ak-studio-layer-selection)]",
 							)}
 							aria-current={page.id === activePageId ? "page" : undefined}
 							onClick={() => {

@@ -37,10 +37,14 @@ export {
 } from "./authoring-style-context.js";
 export type { CanvasDomRegistry } from "./canvas/dom-registry.js";
 export { ComponentCanvasPanel } from "./components/ComponentCanvasPanel.js";
+export { ComponentInstanceSection } from "./components/ComponentInstanceSection.js";
+export { ComponentsPanel } from "./components/ComponentsPanel.js";
+export { CreateComponentDialog } from "./components/CreateComponentDialog.js";
 export {
 	componentScope,
 	createEditorScopeController,
 	type EditorScopeController,
+	getEditorScopeController,
 	scopedDefinitionId,
 	scopeGuardError,
 } from "./components/scope.js";
@@ -50,10 +54,28 @@ export {
 	useComponentCanvas,
 } from "./components/use-component-canvas.js";
 export {
+	type ComponentInstanceModel,
+	type InstanceOverrideEntry,
+	useComponentInstance,
+} from "./components/use-component-instance.js";
+export {
+	type ComponentLibrary,
+	type ComponentLibraryEntry,
+	type DeleteDefinitionOutcome,
+	useComponentLibrary,
+} from "./components/use-component-library.js";
+export {
 	type CreateComponentAction,
 	type CreateComponentOutcome,
 	useCreateComponent,
 } from "./components/use-create-component.js";
+export {
+	MAX_EXPRESSIBLE_COMBINATIONS,
+	useVariantAuthoring,
+	type VariantAuthoring,
+	type VariantEditOutcome,
+} from "./components/use-variant-authoring.js";
+export { VariantAxisEditor } from "./components/VariantAxisEditor.js";
 export {
 	type DecoratePuckConfigOptions,
 	decoratePuckConfig,

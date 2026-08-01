@@ -200,7 +200,9 @@ export default function RichTextSurface({
 				top: `${rect.top + (view?.scrollY ?? 0)}px`,
 				minWidth: `${Math.max(rect.width, 80)}px`,
 				minHeight: `${Math.max(rect.height, 24)}px`,
-				background: "var(--editor-panel, #fff)",
+				// See CanvasHandles: `--editor-panel` is absent from the iframe
+				// token snapshot, so this surface was pinned to light mode.
+				background: "var(--ak-studio-panel, #fff)",
 				border: "1px solid var(--editor-selection, #3b82f6)",
 				borderRadius: "2px",
 				padding: "2px 4px",

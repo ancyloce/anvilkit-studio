@@ -19,6 +19,7 @@ import type { ReactNode } from "react";
 import { InspectorSection } from "@/overrides/layout/InspectorSection";
 import { useMsg } from "@/state/editor-i18n-context";
 import { BindingsSection } from "../bindings/BindingsSection.js";
+import { ComponentInstanceSection } from "../components/ComponentInstanceSection.js";
 import { InteractionsSection } from "../interactions/InteractionsSection.js";
 import { ImageSection } from "./sections/image/ImageSection.js";
 import { LayoutSection } from "./sections/layout/LayoutSection.js";
@@ -85,6 +86,21 @@ const SECTIONS: readonly InspectorSectionDefinition[] = [
 			);
 		},
 		Component: InteractionsSection,
+	},
+	{
+		id: "component",
+		titleKey: "studio.editor.inspector.section.component",
+		// Gated on the node BEING an instance, not on a declared
+		// capability: an instance is an editor construct, so a legacy
+		// component can never be one and ED-INSPECT-002 holds trivially.
+		visible: (context) => {
+			const primary = context.selection.primaryId;
+			if (primary === undefined) {
+				return false;
+			}
+			return context.authoring.nodes[primary]?.componentInstance !== undefined;
+		},
+		Component: ComponentInstanceSection,
 	},
 	{
 		id: "bindings",
