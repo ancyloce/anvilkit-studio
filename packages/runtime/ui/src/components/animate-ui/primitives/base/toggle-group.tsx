@@ -57,7 +57,11 @@ function Toggle({
 	pressed,
 	defaultPressed,
 	onPressedChange,
-	nativeButton,
+	// `render` below is always a real <button> (motion.button), so Base UI must
+	// be told so — otherwise it assumes a non-button and layers its own
+	// role/aria-disabled shims over native semantics, warning loudly in dev.
+	// Matches `switch.tsx`, which already defaults this to true.
+	nativeButton = true,
 	disabled,
 	...props
 }: ToggleProps) {

@@ -1,15 +1,14 @@
 "use client";
 
-import * as React from "react";
+import { useControlledState } from "@anvilkit/ui/hooks/use-controlled-state";
+import { getStrictContext } from "@anvilkit/ui/lib/get-strict-context";
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
 import {
-	motion,
 	type HTMLMotionProps,
+	motion,
 	type SVGMotionProps,
 } from "motion/react";
-
-import { getStrictContext } from "@anvilkit/ui/lib/get-strict-context";
-import { useControlledState } from "@anvilkit/ui/hooks/use-controlled-state";
+import * as React from "react";
 
 type CheckboxContextType = {
 	isChecked: boolean;
@@ -33,7 +32,11 @@ function Checkbox({
 	onCheckedChange,
 	indeterminate,
 	value,
-	nativeButton,
+	// `render` below is always a real <button> (motion.button), so Base UI must
+	// be told so. Leaving this undefined makes it assume a non-button and apply
+	// its own role/aria-disabled shims on top of native semantics, which it
+	// warns about loudly in dev. Callers can still override.
+	nativeButton = true,
 	parent,
 	disabled,
 	readOnly,
@@ -145,9 +148,9 @@ function CheckboxIndicator(props: CheckboxIndicatorProps) {
 
 export {
 	Checkbox,
-	CheckboxIndicator,
-	useCheckbox,
-	type CheckboxProps,
-	type CheckboxIndicatorProps,
 	type CheckboxContextType,
+	CheckboxIndicator,
+	type CheckboxIndicatorProps,
+	type CheckboxProps,
+	useCheckbox,
 };
