@@ -58,6 +58,10 @@ export {
 	type DecoratePuckConfigOptions,
 	decoratePuckConfig,
 } from "./decorate-config.js";
+export {
+	EditorSurfaceSlot,
+	type EditorSurfaceSlotProps,
+} from "./EditorSurfaceSlot.js";
 // Hosts render `EditorError`s themselves (Core ships no diagnostics UI),
 // so the code → catalog-key mapping is part of the public surface, not
 // an internal detail of Core's own dialogs.

@@ -27,12 +27,13 @@ import {
 	useMemo,
 	useSyncExternalStore,
 } from "react";
-import { BindingRenderMount } from "./bindings/BindingRenderMount.js";
 import {
 	AuthoringStyleContext,
 	type AuthoringStyleLookup,
 } from "./authoring-style-context.js";
+import { BindingRenderMount } from "./bindings/BindingRenderMount.js";
 import type { StudioEditorBridge } from "./bridge.js";
+import { EditorSurfaceSlot } from "./EditorSurfaceSlot.js";
 import { StudioEditorBridgeContext } from "./use-studio-editor.js";
 
 const EditorRoot = lazy(() => import("./EditorRoot.js"));
@@ -42,6 +43,13 @@ export interface StudioEditorMountProps {
 	readonly editor: StudioEditorConfig | undefined;
 	/** The controller-owned per-instance bridge. */
 	readonly bridge: StudioEditorBridge;
+	/**
+	 * Host node for the persistent editor slot
+	 * (`StudioProps.editorSlot`). Rendered inside the editor providers,
+	 * beside the `<Puck>` subtree, so it survives popover and rail-tab
+	 * churn (CORE-P3-008).
+	 */
+	readonly editorSlot?: ReactNode;
 	/** The `<Puck>` subtree the editor contexts must enclose. */
 	readonly children: ReactNode;
 }
@@ -54,6 +62,7 @@ export interface StudioEditorMountProps {
 export function StudioEditorMount({
 	editor,
 	bridge,
+	editorSlot,
 	children,
 }: StudioEditorMountProps): ReactNode {
 	// Style-lookup identity tracks the style version so decorated
@@ -85,6 +94,10 @@ export function StudioEditorMount({
 				{/* Render-time binding resolution (CORE-P3-006): visibility
 				    and repeat reach the canvas through this. */}
 				<BindingRenderMount bridge={bridge}>{children}</BindingRenderMount>
+				{/* Persistent host/plugin chrome (CORE-P3-008). A sibling of
+				    the Puck subtree, not a child of any popover or rail
+				    module, so a multi-step flow survives menu churn. */}
+				<EditorSurfaceSlot hostSlot={editorSlot} />
 				<Suspense fallback={null}>
 					<EditorRoot editor={editor} bridge={bridge} />
 				</Suspense>

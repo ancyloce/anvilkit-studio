@@ -17,6 +17,7 @@
 
 import type { StudioEditorConfig } from "@anvilkit/contracts/editor";
 import { lazy, type ReactNode, Suspense, useEffect, useState } from "react";
+import type { EditorFeatureScanDocument } from "../../editor/index.js";
 import { useStudioPluginContext } from "../../studio/context/plugin-context.js";
 import { createDomAccessibilityScanner } from "./a11y/dom-rules/index.js";
 import type { StudioEditorBridge } from "./bridge.js";
@@ -147,6 +148,9 @@ export default function EditorRoot({
 		const capabilities = createEditorCapabilityRegistry({
 			getPuckApi: () => ctx.getPuckApi(),
 			readAuthoring: () => port.readCurrent().state,
+			// Prop-level detection needs the document, not just the
+			// sidecar — `richText` lives in component props (DD-DEC-018).
+			readDocument: () => port.readData() as EditorFeatureScanDocument,
 		});
 		// Style signal (CORE-P1A-009): decorated canvas renders only need
 		// re-rendering when a node GAINS or LOSES authoring (attribute

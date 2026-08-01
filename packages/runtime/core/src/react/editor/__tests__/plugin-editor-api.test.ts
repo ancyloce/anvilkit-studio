@@ -85,6 +85,42 @@ describe("createEditorCapabilityRegistry (CORE-P1A-003)", () => {
 		expect(registry.listUsedFeatures()).toEqual(["responsive", "tokens"]);
 	});
 
+	it("detects richText from the document, which the sidecar cannot show", () => {
+		// DD-DEC-018 / CORE-P3-009. The registry's feature list is what
+		// export preflight consumes; before it read the document, a
+		// rich-text page reported zero used features and could be
+		// exported through a format that declares no support for it.
+		const registry = createEditorCapabilityRegistry({
+			getPuckApi: fakePuckApi,
+			readAuthoring: createEmptyAuthoringState,
+			readDocument: () => ({
+				root: { props: {} },
+				content: [
+					{
+						type: "Hero",
+						props: {
+							id: "hero-1",
+							headline: {
+								format: "tiptap",
+								value: { version: "1", type: "doc", content: [] },
+							},
+						},
+					},
+				],
+				zones: {},
+			}),
+		});
+		expect(registry.listUsedFeatures()).toEqual(["richText"]);
+	});
+
+	it("falls back to sidecar-only features when no document is supplied", () => {
+		const registry = createEditorCapabilityRegistry({
+			getPuckApi: fakePuckApi,
+			readAuthoring: createEmptyAuthoringState,
+		});
+		expect(registry.listUsedFeatures()).toEqual([]);
+	});
+
 	it("survives a throwing Puck id index (undo-crash regression)", () => {
 		// Puck's `getItemById` throws while its app state is mid-
 		// transition — observed in the browser on the render right

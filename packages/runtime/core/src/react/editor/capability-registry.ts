@@ -11,6 +11,12 @@
  * (`getItemById`). `listUsedFeatures` delegates to the shared
  * `@anvilkit/ir/editor` projection — the same set exporter preflight
  * consumes, so the two can never disagree.
+ *
+ * `readDocument` is optional so existing callers keep compiling, but
+ * every in-repo construction site supplies it: without the document
+ * the scan cannot see `richText` (which lives in component props),
+ * and a registry that under-reports used features would let a
+ * document slip past the production export block (DD-DEC-018).
  */
 
 import type {
@@ -19,7 +25,10 @@ import type {
 	EditorFeatureId,
 } from "@anvilkit/contracts/editor";
 import type { PuckApi } from "@puckeditor/core";
-import { listUsedAuthoringFeatures } from "../../editor/index.js";
+import {
+	type EditorFeatureScanDocument,
+	listUsedEditorFeatures,
+} from "../../editor/index.js";
 import type { EditorCapabilityRegistry } from "../../types/editor-api.js";
 import { readEditorMetadata } from "./decorate-config.js";
 
@@ -29,6 +38,11 @@ export interface CapabilityRegistryDeps {
 	readonly getPuckApi: () => PuckApi;
 	/** Current parsed authoring state (the command port's read side). */
 	readonly readAuthoring: () => AuthoringStateV1;
+	/**
+	 * Current document, for prop-level feature detection. Omitting it
+	 * limits `listUsedFeatures` to sidecar-visible features.
+	 */
+	readonly readDocument?: () => EditorFeatureScanDocument | null;
 }
 
 /** Build the per-`<Studio>` capability registry. */
@@ -51,7 +65,9 @@ export function createEditorCapabilityRegistry(
 				| Record<string, unknown>
 				| undefined;
 			const component = components?.[componentType];
-			return component === undefined ? undefined : readEditorMetadata(component);
+			return component === undefined
+				? undefined
+				: readEditorMetadata(component);
 		} catch {
 			return undefined;
 		}
@@ -76,7 +92,10 @@ export function createEditorCapabilityRegistry(
 			}
 		},
 		listUsedFeatures(): readonly EditorFeatureId[] {
-			return listUsedAuthoringFeatures(deps.readAuthoring());
+			return listUsedEditorFeatures(
+				deps.readAuthoring(),
+				deps.readDocument?.() ?? null,
+			);
 		},
 	};
 }

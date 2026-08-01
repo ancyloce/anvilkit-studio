@@ -37,13 +37,15 @@ import type {
 } from "@anvilkit/contracts/editor";
 import { use, useMemo } from "react";
 import {
+	type EditorFeatureScanDocument,
 	type ExportPreflightResult,
-	listUsedAuthoringFeatures,
+	listUsedEditorFeatures,
 	type PreflightA11yIssue,
 	runExportPreflight,
 } from "../../editor/index.js";
 import type { AccessibilityIssue } from "./a11y/contract-rules.js";
 import { useAccessibilityIssues } from "./a11y/use-accessibility-issues.js";
+import type { InternalEditorCommandPort } from "./command-port.js";
 import { StudioEditorBridgeContext } from "./use-studio-editor.js";
 
 /** Inputs the caller supplies per export attempt. */
@@ -72,7 +74,9 @@ export function useExportPreflight(
 	input: UseExportPreflightInput,
 ): ExportPreflightResult | null {
 	const bridge = use(StudioEditorBridgeContext);
-	const port = bridge?.port;
+	// `readData` is an internal seam, not part of the plugin-facing
+	// port — the same cast `useCreateComponent` uses.
+	const port = bridge?.port as InternalEditorCommandPort | null | undefined;
 	const policies = bridge?.editorConfig?.policies;
 	const { capabilities, a11yIssues, mode } = input;
 	const live = useAccessibilityIssues();
@@ -90,8 +94,13 @@ export function useExportPreflight(
 	return useMemo(() => {
 		if (port == null) return null;
 		const authoring = port.getSnapshot().authoring;
-		const usedFeatures: readonly EditorFeatureId[] =
-			listUsedAuthoringFeatures(authoring);
+		// The document, not just the sidecar: `richText` lives in
+		// component props and is invisible to a sidecar-only scan
+		// (DD-DEC-018).
+		const usedFeatures: readonly EditorFeatureId[] = listUsedEditorFeatures(
+			authoring,
+			port.readData() as EditorFeatureScanDocument,
+		);
 		return runExportPreflight({
 			usedFeatures,
 			capabilities,
