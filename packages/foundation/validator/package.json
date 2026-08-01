@@ -37,7 +37,7 @@
 		"access": "public"
 	},
 	"peerDependencies": {
-		"@puckeditor/core": "^0.22.2",
+		"@puckeditor/core": "^0.22.4",
 		"zod": "^4.4.3"
 	},
 	"peerDependenciesMeta": {
@@ -74,7 +74,7 @@
 		"@anvilkit/biome-config": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
-		"@puckeditor/core": "^0.22.2",
+		"@puckeditor/core": "^0.22.4",
 		"@rslib/core": "^0.23.2",
 		"@types/node": "^26.1.1",
 		"esbuild": "^0.28.1",
