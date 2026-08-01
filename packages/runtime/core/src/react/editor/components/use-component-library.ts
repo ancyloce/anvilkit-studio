@@ -213,7 +213,7 @@ export function useComponentLibrary(): ComponentLibrary | null {
 				return await port.execute({
 					id: crypto.randomUUID(),
 					expectedRevision: port.getSnapshot().revision,
-					source: "ui",
+					source: "inspector",
 					timestamp: Date.now(),
 					type: "component.definition.update",
 					definitionId,
@@ -239,7 +239,7 @@ export function useComponentLibrary(): ComponentLibrary | null {
 			const revision = port.getSnapshot().revision;
 			const base = {
 				expectedRevision: revision,
-				source: "ui" as const,
+				source: "inspector" as const,
 				timestamp: Date.now(),
 			};
 			// Detach-all + delete as ONE batch: all-or-nothing, so a

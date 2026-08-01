@@ -24,6 +24,7 @@ import { Button } from "@/primitives/button";
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
 import { useComponentCanvas } from "./use-component-canvas.js";
+import { VariantAxisEditor } from "./VariantAxisEditor.js";
 
 function isNode(value: unknown): value is SerializablePuckNode {
 	return (
@@ -108,10 +109,10 @@ export function ComponentCanvasPanel(): ReactNode {
 							aria-selected={combination.key === canvas.activeKey}
 							onClick={() => canvas.setActive(combination.key)}
 							className={cn(
-								"rounded border px-2 py-1 text-[11px]",
+								"rounded border px-2 py-1 text-[11px] transition-colors",
 								combination.key === canvas.activeKey
-									? "border-[var(--ak-studio-border)] bg-[var(--ak-studio-hover)]"
-									: "border-transparent",
+									? "border-[var(--ak-studio-border)] bg-[var(--ak-studio-layer-selection)]"
+									: "border-transparent hover:bg-[var(--ak-studio-hover)]",
 								combination.declared
 									? null
 									: "text-[var(--ak-studio-muted-fg)]",
@@ -142,6 +143,12 @@ export function ComponentCanvasPanel(): ReactNode {
 					</li>
 				))}
 			</ul>
+
+			{/* Variant axis authoring (ED-VARIANT-001). It lives here
+			    because axes are definition state and definition edits
+			    require this scope (freeze §6) — the form cannot be
+			    rendered anywhere its submits would be valid. */}
+			<VariantAxisEditor />
 		</section>
 	);
 }
