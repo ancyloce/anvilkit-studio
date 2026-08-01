@@ -148,6 +148,8 @@ export function createShellPluginContext({
 			sidebarRegistryStore.getState().registerCopySnippetPack(pack),
 		registerCopilotPanel: (panel) =>
 			sidebarRegistryStore.getState().registerCopilotPanel(panel),
+		registerEditorSurface: (surface) =>
+			sidebarRegistryStore.getState().registerEditorSurface(surface),
 		registerHistoryPanel: (panel) =>
 			sidebarRegistryStore.getState().registerHistoryPanel(panel),
 		registerDesignSystemPanel: (panel) =>

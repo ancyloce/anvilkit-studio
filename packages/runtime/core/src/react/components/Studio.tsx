@@ -365,6 +365,7 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 		<StudioEditorMount
 			editor={isAnvilkit ? props.editor : undefined}
 			bridge={editorBridge}
+			editorSlot={isAnvilkit ? props.editorSlot : undefined}
 		>
 			{puckElement}
 		</StudioEditorMount>

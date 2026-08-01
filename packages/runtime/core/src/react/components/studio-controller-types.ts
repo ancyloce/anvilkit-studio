@@ -237,6 +237,32 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 */
 	readonly headerEnd?: ReactNode;
 	/**
+	 * Optional host node mounted **persistently** inside the visual
+	 * editor's provider tree, beside the `<Puck>` subtree (DD-0019
+	 * §21.2; PLAN-0020 CORE-P3-008).
+	 *
+	 * Use this — not {@link headerEnd} — for anything that owns a
+	 * multi-step flow. `headerEnd` renders inside the system menu's
+	 * `<Popover>`, whose content is lazy and unmounts when the popover
+	 * closes; a review dialog opened from there is destroyed mid-flow.
+	 * Sidebar panels have the same problem when their rail tab loses
+	 * focus. This slot lives exactly as long as the editor runtime.
+	 *
+	 * The node renders inside `StudioEditorBridgeContext`, so it may
+	 * call `useStudioEditor()`, the editor hooks, and the typed command
+	 * port. It renders no wrapper element: position it yourself (a
+	 * portal or absolute positioning) — core imposes no layout.
+	 *
+	 * Rendered only when `editor.features.enabled === true` and
+	 * `chrome="anvilkit"`; ignored otherwise, so hosts that do not set
+	 * it see byte-identical behavior. A surface that throws is caught
+	 * and unmounted without taking the editor down.
+	 *
+	 * Plugins reach the same slot through
+	 * `StudioPluginContext.registerEditorSurface`.
+	 */
+	readonly editorSlot?: ReactNode;
+	/**
 	 * Optional diagnostics sink for plugin log records and Studio setup
 	 * failures. Metadata is shallow-redacted before delivery.
 	 */
