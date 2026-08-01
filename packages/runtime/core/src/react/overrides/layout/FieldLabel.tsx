@@ -107,8 +107,13 @@ const rootClassName =
 	"flex w-full flex-col items-stretch gap-2 text-sm text-[var(--ak-studio-fg)]";
 const labelClassName =
 	"flex w-fit items-center gap-1.5 text-xs font-medium leading-none text-[var(--ak-studio-muted-fg)]";
+// `stroke-width` is set in CSS, not via lucide's `strokeWidth` prop, so it
+// applies to BOTH tiers of this slot — the built-in field-type icon and a
+// host-supplied `icon`. Setting it on the prop alone left custom icons at
+// lucide's default 2 next to built-ins at 1.75, in the same 14px box. CSS
+// wins over the SVG presentation attribute, so this overrides lucide.
 const iconClassName =
-	"flex size-3.5 shrink-0 items-center justify-center text-[var(--ak-studio-muted-fg)] [&>svg]:size-3.5 [&>svg]:shrink-0";
+	"flex size-3.5 shrink-0 items-center justify-center text-[var(--ak-studio-muted-fg)] [&>svg]:size-3.5 [&>svg]:shrink-0 [&>svg]:[stroke-width:1.75]";
 const descriptionClassName =
 	"text-[11px] leading-4 font-normal text-[var(--ak-studio-muted-fg)]";
 
@@ -129,7 +134,7 @@ function LabelIcon({
 			className={iconClassName}
 		>
 			{icon === undefined || icon === null || icon === false ? (
-				<DefaultIcon strokeWidth={1.75} />
+				<DefaultIcon />
 			) : (
 				icon
 			)}

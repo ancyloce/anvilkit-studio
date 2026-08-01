@@ -136,12 +136,16 @@ function GridPreview({
 
 	if (thumbnail !== undefined && !thumbnailFailed) {
 		return (
+			// Inset hairline rather than `outline`: the tile clips with
+			// `overflow-hidden`, which would swallow an outer outline. Pure
+			// black / pure white — a tinted neutral picks up the surface
+			// beneath it and reads as dirt on the image edge.
 			<img
 				src={thumbnail}
 				alt={`${title} preview`}
 				loading="lazy"
 				draggable={false}
-				className="size-full object-cover"
+				className="size-full object-cover shadow-[inset_0_0_0_1px_oklch(0_0_0/0.1)] dark:shadow-[inset_0_0_0_1px_oklch(1_0_0/0.1)]"
 				onError={() => setThumbnailFailed(true)}
 			/>
 		);
@@ -190,7 +194,7 @@ export function DrawerItem({ name, children }: DrawerItemProps): ReactNode {
 			<Item
 				variant="default"
 				size="xs"
-				className="group/drawer-item relative h-9 w-full cursor-grab items-center gap-2 rounded-md border-transparent bg-transparent px-2 text-left text-[var(--ak-studio-fg)] hover:bg-[var(--ak-studio-muted)] active:cursor-grabbing"
+				className="group/drawer-item relative h-9 w-full cursor-grab items-center gap-2 rounded-md border-transparent bg-transparent px-2 text-left text-[var(--ak-studio-fg)] transition-colors hover:bg-[var(--ak-studio-muted)] active:cursor-grabbing"
 				data-drawer-item={name}
 			>
 				<span className="flex size-6 shrink-0 items-center justify-center rounded bg-[var(--ak-studio-muted)] text-[var(--ak-studio-muted-fg)] [&_svg]:size-3.5">
@@ -218,7 +222,7 @@ export function DrawerItem({ name, children }: DrawerItemProps): ReactNode {
 			// Hover stays NEUTRAL (raised surface + stronger neutral border) —
 			// the brand outline is reserved for the dragging state, painted by
 			// the scoped `[data-dnd-dragging]` rule in styles.src.css.
-			className="group/drawer-item h-full cursor-grab items-stretch rounded-md bg-[var(--ak-studio-muted)] p-0 text-center text-[var(--ak-studio-fg)] hover:border-[var(--ak-studio-muted-fg)]/35 hover:bg-[var(--editor-panel-raised)] active:cursor-grabbing overflow-hidden"
+			className="group/drawer-item h-full cursor-grab items-stretch rounded-md bg-[var(--ak-studio-muted)] p-0 text-center text-[var(--ak-studio-fg)] transition-colors hover:border-[var(--ak-studio-muted-fg)]/35 hover:bg-[var(--editor-panel-raised)] active:cursor-grabbing overflow-hidden"
 			data-drawer-item={name}
 		>
 			{/* 16:10, not 4:3 — task §5.4: compact ratio, no oversized cards. */}

@@ -38,7 +38,7 @@ export function PropertyResetButton({
 			aria-label={msg("studio.field.reset")}
 			disabled={!modified}
 			className={cn(
-				"text-[var(--ak-studio-muted-fg)] hover:text-[var(--ak-studio-fg)]",
+				"text-[var(--ak-studio-muted-fg)] transition-colors hover:text-[var(--ak-studio-fg)]",
 				!modified && "invisible",
 			)}
 			onClick={onReset}

@@ -467,7 +467,7 @@ const ArrayRow = memo(function ArrayRow({
 					disabled={!canReorder}
 					draggable={canReorder}
 					className={cn(
-						"text-muted-foreground hover:text-foreground",
+						"text-muted-foreground transition-colors hover:text-foreground",
 						canReorder && "cursor-grab active:cursor-grabbing",
 					)}
 					onDragStart={(event) => onDragStart(event, index)}
@@ -513,7 +513,7 @@ const ArrayRow = memo(function ArrayRow({
 							size="icon-sm"
 							aria-label={msg("studio.field.array.remove")}
 							disabled={removeDisabled}
-							className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+							className="text-destructive transition-colors hover:bg-destructive/10 hover:text-destructive"
 							onClick={() => onRemove(index)}
 						>
 							<Trash2 data-icon="inline-start" aria-hidden="true" />

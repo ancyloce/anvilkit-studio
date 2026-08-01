@@ -203,12 +203,29 @@
 	--editor-drop-target: rgb(86 131 218 / 18%);
 	--editor-grid: rgb(0 0 0 / 5%);
 	--editor-overlay: rgb(0 0 0 / 38%);
+	/*
+	 * Snap/measure guide accent for the canvas handle overlay. Deliberately
+	 * OFF the Iris brand ramp — snap guides are a measurement affordance and
+	 * follow the industry magenta convention, so they must never read as a
+	 * selection state. Pink-600 rather than pink-500: the gap labels paint
+	 * white 10px text on this fill, which needs ≥4.5:1 (pink-500 is 3.53:1,
+	 * this is 4.60:1).
+	 */
+	--editor-snap-guide: #db2777;
 
-	/* Elevation (DESIGN.md §5.4) — same values in both modes. */
-	--shadow-overlay: 0 12px 32px rgb(0 0 0 / 28%);
-	--shadow-popover: 0 8px 24px rgb(0 0 0 / 22%);
-	--shadow-floating: 0 4px 16px rgb(0 0 0 / 24%);
-	--shadow-canvas: 0 8px 28px rgb(0 0 0 / 20%);
+	/*
+	 * Elevation (DESIGN.md §5.4) — same values in both modes.
+	 *
+	 * Two layers each: a tight contact shadow that anchors the surface to
+	 * what's beneath it, plus the original wide ambient blur. A lone
+	 * large-blur shadow reads as a smudge rather than lift. The ambient
+	 * alpha is trimmed to offset the added contact layer so total visual
+	 * weight matches the previous single-layer values.
+	 */
+	--shadow-overlay: 0 2px 4px rgb(0 0 0 / 10%), 0 12px 32px rgb(0 0 0 / 24%);
+	--shadow-popover: 0 1px 3px rgb(0 0 0 / 9%), 0 8px 24px rgb(0 0 0 / 19%);
+	--shadow-floating: 0 1px 2px rgb(0 0 0 / 8%), 0 4px 16px rgb(0 0 0 / 21%);
+	--shadow-canvas: 0 1px 3px rgb(0 0 0 / 8%), 0 8px 28px rgb(0 0 0 / 17%);
 }
 
 .dark {
@@ -245,9 +262,31 @@
 	--ak-studio-border: var(--border);
 	--ak-studio-muted: var(--muted);
 	--ak-studio-muted-fg: var(--muted-foreground);
+	/*
+	 * Transient row/control surface — pointer hover AND low-emphasis
+	 * "current item" states (token picker attached row, page navigator
+	 * active page, component canvas selection). Bridged to `--muted` so it
+	 * flips with the host theme like its siblings.
+	 */
+	--ak-studio-hover: var(--muted);
 	--ak-studio-accent: var(--ak-studio-theme);
 	--ak-studio-accent-fg: var(--ak-studio-theme-fg);
 	--ak-studio-ring: var(--ak-studio-theme);
+	/*
+	 * Inline validation/error text (binding errors, interaction warnings, AI
+	 * proposal failures, page-navigator errors). Bridged to shadcn
+	 * `--destructive` so it flips with the theme — the call sites previously
+	 * carried a `#b42318` fallback for a token nothing defined, which pinned
+	 * every error message to a light-mode red on dark panels.
+	 */
+	--ak-studio-danger-fg: var(--destructive);
+	/*
+	 * Optional second-elevation chip surface (inspector field-shell badges).
+	 * `transparent` preserves the existing appearance exactly — the point of
+	 * declaring it is to make the token real and host-overridable rather than
+	 * leaving it as an undefined `var()` with an inline fallback.
+	 */
+	--ak-studio-surface-2: transparent;
 	/* Unused by any current selector (the layer tree renders its own
 	   `LayerRow`/`LayerTree` components, not Puck's `<Puck.Outline />`) —
 	   kept defined only for backward compatibility with hosts that may read
@@ -524,6 +563,65 @@
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 4px;
+}
+
+/*
+ * Multi-select align/distribute toolbar (`SelectionToolbar`). Presentation
+ * lives here rather than in inline styles for two reasons: inline styles
+ * cannot express `:hover`/`:disabled` (the buttons previously had NO hover
+ * feedback at all), and they cannot be themed. The component keeps only its
+ * computed position inline.
+ *
+ * Surface tokens are `--ak-studio-*`, not `--editor-*`: the toolbar paints
+ * inside the canvas iframe, and only the `--ak-studio-*` bridge is
+ * guaranteed present in both documents (see `theme/iframe-theme.ts`).
+ *
+ * Concentric: 4px container radius − 1px vertical padding = 3px on the
+ * buttons.
+ */
+[data-ak-selection-toolbar] {
+	display: flex;
+	align-items: center;
+	gap: 1px;
+	padding: 1px 3px;
+	border-radius: 4px;
+	border: 1px solid var(--editor-selection);
+	background: var(--ak-studio-panel);
+	color: var(--ak-studio-panel-fg);
+	box-shadow: var(--shadow-floating);
+	white-space: nowrap;
+}
+
+[data-ak-toolbar-action] {
+	font:
+		10px / 1.6 system-ui,
+		sans-serif;
+	padding: 3px 6px;
+	border: none;
+	border-radius: 3px;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+	transition:
+		background-color 150ms ease-out,
+		color 150ms ease-out;
+}
+
+[data-ak-toolbar-action]:hover:not(:disabled) {
+	background: var(--ak-studio-hover);
+}
+
+[data-ak-toolbar-action]:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+
+[data-ak-selection-toolbar] [data-ak-toolbar-separator] {
+	width: 1px;
+	align-self: stretch;
+	margin: 0 2px;
+	background: var(--editor-selection);
+	opacity: 0.3;
 }
 
 /*
