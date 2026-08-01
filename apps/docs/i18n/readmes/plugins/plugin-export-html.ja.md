@@ -10,7 +10,7 @@ Anvilkit Studio 向けの HTML エクスポートプラグイン。`PageIR` ド�
 pnpm add @anvilkit/plugin-export-html @anvilkit/core react react-dom @puckeditor/core
 ```
 
-非オプションの peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.22.2`。ランタイム依存は `@anvilkit/core` のみです。
+非オプションの peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.22.4`。ランタイム依存は `@anvilkit/core` のみです。
 
 ## クイックスタート
 

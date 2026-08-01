@@ -10,7 +10,7 @@ Anvilkit Studio 向けの React（`.tsx` / `.jsx`）エクスポートプラグ�
 pnpm add @anvilkit/plugin-export-react @anvilkit/core react @puckeditor/core
 ```
 
-任意ではない peer 依存関係：`react >=19.0.0`、`@puckeditor/core ^0.22.2`、`@anvilkit/core ^0.1.4`。`react-dom` は不要です——このプラグインが出力するのはソースであり、レンダリングされた DOM ではありません。
+任意ではない peer 依存関係：`react >=19.0.0`、`@puckeditor/core ^0.22.4`、`@anvilkit/core ^0.1.4`。`react-dom` は不要です——このプラグインが出力するのはソースであり、レンダリングされた DOM ではありません。
 
 ## クイックスタート
 

@@ -10,7 +10,7 @@ Anvilkit Studio용 React(`.tsx` / `.jsx`) 내보내기 플러그인. 정규화�
 pnpm add @anvilkit/plugin-export-react @anvilkit/core react @puckeditor/core
 ```
 
-선택이 아닌 peer 의존성: `react >=19.0.0`, `@puckeditor/core ^0.22.2`, `@anvilkit/core ^0.1.4`. `react-dom`은 필요하지 않습니다——이 플러그인은 렌더링된 DOM이 아니라 소스를 출력합니다.
+선택이 아닌 peer 의존성: `react >=19.0.0`, `@puckeditor/core ^0.22.4`, `@anvilkit/core ^0.1.4`. `react-dom`은 필요하지 않습니다——이 플러그인은 렌더링된 DOM이 아니라 소스를 출력합니다.
 
 ## 빠른 시작
 
