@@ -78,7 +78,11 @@ export type EditorTab =
 	| "copilot"
 	| "history"
 	| "design-system"
-	| "seo";
+	| "seo"
+	// The visual editor's component library (CORE-P2-009F). Additive:
+	// persisted state from before this member is still valid, so the
+	// persist version does not move.
+	| "components";
 
 export type ComponentViewMode = "grid" | "list";
 
@@ -215,6 +219,7 @@ const VALID_ACTIVE_TABS: ReadonlySet<EditorTab> = new Set([
 	"history",
 	"design-system",
 	"seo",
+	"components",
 ]);
 
 const VALID_VIEW_MODES: ReadonlySet<ComponentViewMode> = new Set([

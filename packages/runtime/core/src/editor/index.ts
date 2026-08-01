@@ -103,6 +103,11 @@ export {
 	isDetachFailure,
 } from "./components/detach.js";
 export {
+	buildInsertInstancePlan,
+	type InsertInstanceInput,
+	type InsertInstancePlan,
+} from "./components/insert.js";
+export {
 	collectDefinitionNodeIds,
 	collectOrphanOverrides,
 	type OrphanOverride,
