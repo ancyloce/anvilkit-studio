@@ -12,7 +12,7 @@
 	"dependencies": {
 		"@anvilkit/core": "0.1.0-alpha.0",
 		"@anvilkit/ir": "0.1.0-alpha.0",
-		"@puckeditor/core": "^0.22.2",
+		"@puckeditor/core": "^0.22.4",
 		"next": "^16.2.9",
 		"react": "^19.2.8",
 		"react-dom": "^19.2.8"
