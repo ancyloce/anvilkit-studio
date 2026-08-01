@@ -31,7 +31,7 @@
 			"versioning": "fixed",
 			"peers": {
 				"react": ">=19.0.0",
-				"@puckeditor/core": "^0.22.2"
+				"@puckeditor/core": "^0.22.4"
 			}
 		},
 		"packages/extensions/plugins/plugin-export-html": {
@@ -41,7 +41,7 @@
 			"versioning": "fixed",
 			"peers": {
 				"react": ">=19.0.0",
-				"@puckeditor/core": "^0.22.2"
+				"@puckeditor/core": "^0.22.4"
 			}
 		},
 		"packages/extensions/plugins/plugin-export-react": {
@@ -51,7 +51,7 @@
 			"versioning": "fixed",
 			"peers": {
 				"react": ">=19.0.0",
-				"@puckeditor/core": "^0.22.2"
+				"@puckeditor/core": "^0.22.4"
 			}
 		},
 		"packages/extensions/plugins/plugin-asset-manager": {
@@ -61,7 +61,7 @@
 			"versioning": "fixed",
 			"peers": {
 				"react": ">=19.2.0",
-				"@puckeditor/core": "^0.22.2"
+				"@puckeditor/core": "^0.22.4"
 			}
 		},
 		"packages/extensions/plugins/plugin-version-history": {
@@ -71,7 +71,7 @@
 			"versioning": "fixed",
 			"peers": {
 				"react": ">=19.0.0",
-				"@puckeditor/core": "^0.22.2"
+				"@puckeditor/core": "^0.22.4"
 			}
 		},
 		"packages/extensions/plugins/plugin-collab-yjs": {
@@ -81,7 +81,7 @@
 			"versioning": "independent",
 			"peers": {
 				"react": ">=19.0.0",
-				"@puckeditor/core": "^0.22.2"
+				"@puckeditor/core": "^0.22.4"
 			}
 		},
 		"packages/extensions/plugins/plugin-collab-ui": {
@@ -91,7 +91,7 @@
 			"versioning": "independent",
 			"peers": {
 				"react": ">=19.0.0",
-				"@puckeditor/core": "^0.22.2"
+				"@puckeditor/core": "^0.22.4"
 			}
 		},
 		"packages/extensions/plugins/plugin-canvas-studio": {
@@ -101,7 +101,7 @@
 			"versioning": "independent",
 			"peers": {
 				"react": ">=19.0.0",
-				"@puckeditor/core": "^0.22.2"
+				"@puckeditor/core": "^0.22.4"
 			}
 		},
 		"packages/extensions/plugins/plugin-export-canvas": {
@@ -111,7 +111,7 @@
 			"versioning": "independent",
 			"peers": {
 				"react": ">=19.0.0",
-				"@puckeditor/core": "^0.22.2"
+				"@puckeditor/core": "^0.22.4"
 			}
 		},
 		"packages/extensions/plugins/plugin-ai-image": {
@@ -121,7 +121,7 @@
 			"versioning": "independent",
 			"peers": {
 				"react": ">=19.0.0",
-				"@puckeditor/core": "^0.22.2"
+				"@puckeditor/core": "^0.22.4"
 			}
 		},
 		"packages/extensions/plugins/plugin-design-system": {
@@ -131,7 +131,7 @@
 			"versioning": "independent",
 			"peers": {
 				"react": ">=19.0.0",
-				"@puckeditor/core": "^0.22.2"
+				"@puckeditor/core": "^0.22.4"
 			}
 		},
 		"packages/extensions/plugins/plugin-page-seo": {
@@ -141,7 +141,7 @@
 			"versioning": "independent",
 			"peers": {
 				"react": ">=19.0.0",
-				"@puckeditor/core": "^0.22.2"
+				"@puckeditor/core": "^0.22.4"
 			}
 		},
 		"packages/capabilities/canvas/core": {
