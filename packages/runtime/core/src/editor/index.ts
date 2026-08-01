@@ -25,7 +25,11 @@
 // the engine so React-layer consumers reach it without importing
 // `@anvilkit/ir` directly — `src/editor/` is the one directory the
 // `check:no-headless-import` gate allowlists for ir imports.
-export { listUsedAuthoringFeatures } from "@anvilkit/ir/editor";
+export {
+	type EditorFeatureScanDocument,
+	listUsedAuthoringFeatures,
+	listUsedEditorFeatures,
+} from "@anvilkit/ir/editor";
 export {
 	AI_PROPOSAL_LIMITS,
 	assessProposal,

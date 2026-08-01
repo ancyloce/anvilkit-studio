@@ -30,6 +30,7 @@ import type {
 	StudioCopilotPanel,
 	StudioCopySnippetPack,
 	StudioDesignSystemPanel,
+	StudioEditorSurface,
 	StudioHistoryPanel,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
@@ -49,6 +50,11 @@ export interface SidebarRegistryState {
 	readonly designSystemPanel: StudioDesignSystemPanel | null;
 	readonly seoPanel: StudioSeoPanel | null;
 	readonly pageSettingsSeoFields: StudioPageSettingsSeoFields | null;
+	/**
+	 * Persistent editor surfaces, keyed by id (CORE-P3-008). Multiple
+	 * plugins may contribute; the slot renders every entry.
+	 */
+	readonly editorSurfaces: ReadonlyMap<string, StudioEditorSurface>;
 	registerInsertSection(section: StudioInsertSection): StudioSidebarUnregister;
 	registerLayerQuickAdd(item: StudioLayerQuickAdd): StudioSidebarUnregister;
 	registerAssetSource(source: StudioAssetSource): StudioSidebarUnregister;
@@ -63,6 +69,7 @@ export interface SidebarRegistryState {
 	registerPageSettingsSeoFields(
 		fields: StudioPageSettingsSeoFields,
 	): StudioSidebarUnregister;
+	registerEditorSurface(surface: StudioEditorSurface): StudioSidebarUnregister;
 	/**
 	 * Clear every contributed surface back to the empty initial state
 	 * (review finding Z-g). Mainly a test/teardown convenience — the
@@ -77,6 +84,7 @@ const EMPTY_INSERT = new Map<string, StudioInsertSection>();
 const EMPTY_QUICK = new Map<string, StudioLayerQuickAdd>();
 const EMPTY_ACTIONS = new Map<string, StudioAssetAction>();
 const EMPTY_PACKS = new Map<string, StudioCopySnippetPack>();
+const EMPTY_SURFACES = new Map<string, StudioEditorSurface>();
 
 /**
  * `NODE_ENV` via `globalThis` — mirrors `config/env-parser` and
@@ -125,6 +133,25 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 		designSystemPanel: null,
 		seoPanel: null,
 		pageSettingsSeoFields: null,
+		editorSurfaces: EMPTY_SURFACES,
+
+		registerEditorSurface(surface) {
+			// Keyed like `registerInsertSection` rather than
+			// single-occupancy like the panel seams: an AI plugin and a
+			// review plugin can both contribute persistent chrome.
+			set((state) => {
+				const next = new Map(state.editorSurfaces);
+				next.set(surface.id, surface);
+				return { editorSurfaces: next };
+			});
+			return () => {
+				const current = get().editorSurfaces;
+				if (current.get(surface.id) !== surface) return;
+				const next = new Map(current);
+				next.delete(surface.id);
+				set({ editorSurfaces: next });
+			};
+		},
 
 		registerInsertSection(section) {
 			set((state) => {
@@ -294,6 +321,7 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 				designSystemPanel: null,
 				seoPanel: null,
 				pageSettingsSeoFields: null,
+				editorSurfaces: EMPTY_SURFACES,
 			});
 		},
 	}));

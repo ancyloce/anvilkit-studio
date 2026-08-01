@@ -295,6 +295,7 @@ function wrapRegisterMethodsForTeardown(
 		registerAssetAction: track(pluginCtx.registerAssetAction),
 		registerCopySnippetPack: track(pluginCtx.registerCopySnippetPack),
 		registerCopilotPanel: track(pluginCtx.registerCopilotPanel),
+		registerEditorSurface: track(pluginCtx.registerEditorSurface),
 		registerHistoryPanel: track(pluginCtx.registerHistoryPanel),
 		registerDesignSystemPanel: track(pluginCtx.registerDesignSystemPanel),
 		registerSeoPanel: track(pluginCtx.registerSeoPanel),
@@ -609,6 +610,11 @@ export async function compilePlugins(
 			combineUnregister(
 				sidebar.registerCopilotPanel(panel),
 				ctx.registerCopilotPanel?.(panel),
+			),
+		registerEditorSurface: (surface) =>
+			combineUnregister(
+				sidebar.registerEditorSurface(surface),
+				ctx.registerEditorSurface?.(surface),
 			),
 		registerHistoryPanel: (panel) =>
 			combineUnregister(

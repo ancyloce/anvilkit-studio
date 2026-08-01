@@ -528,6 +528,49 @@ export interface StudioPageSettingsSeoFields {
 }
 
 // -----------------------------------------------------------------------------
+// Persistent editor surfaces
+// -----------------------------------------------------------------------------
+
+/**
+ * A persistent, editor-aware UI surface contributed by a plugin
+ * (DD-0019 §21.2; PLAN-0020 CORE-P3-008).
+ *
+ * ### Why this exists rather than reusing an existing seam
+ *
+ * Every other host seam in the chrome is *transient*: `headerEnd`
+ * renders inside the system menu's `<Popover>`, whose content is lazy
+ * and **unmounts when the popover closes**; the sidebar panels
+ * (`registerCopilotPanel` and friends) unmount when their rail tab is
+ * not the active one. A surface that owns a multi-step flow — the
+ * §21.2 AI proposal review being the motivating one: propose →
+ * preview → confirm → undo — is destroyed mid-flow by either.
+ *
+ * Surfaces registered here render inside the editor's provider tree
+ * (so `useStudioEditor()`, the command port, and selection all work)
+ * as a sibling of the `<Puck>` subtree, and stay mounted for as long
+ * as the editor runtime is enabled. They render nothing themselves —
+ * position and visibility belong to the surface, which is expected to
+ * portal or absolutely position whatever chrome it needs.
+ *
+ * Keyed by `id`, so several plugins may contribute independently
+ * (unlike the single-occupancy panel seams).
+ *
+ * Contributes **no** bytes to the `<Studio>` entry chunk: core only
+ * renders whatever thunk it was handed, and that thunk is reached
+ * exclusively while `editor.features.enabled === true`.
+ */
+export interface StudioEditorSurface {
+	/** Stable id; re-registering the same id replaces the entry. */
+	readonly id: string;
+	/**
+	 * Render the surface. Called on every render of the slot; the
+	 * returned tree is mounted inside the editor's provider tree, so it
+	 * may call `useStudioEditor()` and the editor hooks.
+	 */
+	readonly render: () => ReactNode;
+}
+
+// -----------------------------------------------------------------------------
 // Common
 // -----------------------------------------------------------------------------
 

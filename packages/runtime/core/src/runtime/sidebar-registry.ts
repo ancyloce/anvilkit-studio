@@ -28,6 +28,7 @@ import type {
 	StudioCopilotPanel,
 	StudioCopySnippetPack,
 	StudioDesignSystemPanel,
+	StudioEditorSurface,
 	StudioHistoryPanel,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
@@ -54,6 +55,8 @@ export interface StudioSidebarContributions {
 	readonly designSystemPanel: StudioDesignSystemPanel | null;
 	readonly seoPanel: StudioSeoPanel | null;
 	readonly pageSettingsSeoFields: StudioPageSettingsSeoFields | null;
+	/** Persistent editor surfaces, keyed by id (CORE-P3-008). */
+	readonly editorSurfaces: ReadonlyMap<string, StudioEditorSurface>;
 }
 
 /**
@@ -77,6 +80,7 @@ export interface SidebarRegistry {
 	registerPageSettingsSeoFields(
 		fields: StudioPageSettingsSeoFields,
 	): StudioSidebarUnregister;
+	registerEditorSurface(surface: StudioEditorSurface): StudioSidebarUnregister;
 	/** Freeze the current contributions into an immutable snapshot. */
 	snapshot(): StudioSidebarContributions;
 }
@@ -126,6 +130,7 @@ export function createSidebarRegistry(): SidebarRegistry {
 	const layerQuickAdds = new Map<string, StudioLayerQuickAdd>();
 	const assetActions = new Map<string, StudioAssetAction>();
 	const copyPacks = new Map<string, StudioCopySnippetPack>();
+	const editorSurfaces = new Map<string, StudioEditorSurface>();
 	let assetSource: StudioAssetSource | null = null;
 	let copilotPanel: StudioCopilotPanel | null = null;
 	let historyPanel: StudioHistoryPanel | null = null;
@@ -134,6 +139,16 @@ export function createSidebarRegistry(): SidebarRegistry {
 	let pageSettingsSeoFields: StudioPageSettingsSeoFields | null = null;
 
 	return {
+		registerEditorSurface(surface) {
+			// Keyed, not single-occupancy: several plugins may contribute
+			// persistent editor chrome at once.
+			editorSurfaces.set(surface.id, surface);
+			return () => {
+				if (editorSurfaces.get(surface.id) === surface) {
+					editorSurfaces.delete(surface.id);
+				}
+			};
+		},
 		registerInsertSection(section) {
 			insertSections.set(section.id, section);
 			return () => {
@@ -245,6 +260,7 @@ export function createSidebarRegistry(): SidebarRegistry {
 				designSystemPanel,
 				seoPanel,
 				pageSettingsSeoFields,
+				editorSurfaces: new Map(editorSurfaces),
 			};
 		},
 	};

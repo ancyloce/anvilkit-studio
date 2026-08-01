@@ -26,6 +26,7 @@ import type {
 	StudioAssetAction,
 	StudioAssetSource,
 	StudioCopilotPanel,
+	StudioEditorSurface,
 	StudioCopySnippetPack,
 	StudioDesignSystemPanel,
 	StudioHistoryPanel,
@@ -285,6 +286,27 @@ export interface StudioPluginContext<
 	 */
 	readonly registerCopilotPanel?: (
 		panel: StudioCopilotPanel,
+	) => StudioSidebarUnregister;
+
+	/**
+	 * Register a **persistent, editor-aware** UI surface (DD-0019
+	 * §21.2; PLAN-0020 CORE-P3-008).
+	 *
+	 * Unlike every other seam here, the contributed tree renders inside
+	 * the editor's provider tree as a sibling of `<Puck>` and stays
+	 * mounted for as long as the editor runtime is enabled — it is not
+	 * torn down when a popover closes or a rail tab loses focus. That is
+	 * what makes multi-step flows (the §21.2 AI proposal review:
+	 * propose → preview → confirm → undo) survivable.
+	 *
+	 * Keyed by `id`, so several plugins may contribute at once. Present
+	 * only under the AnvilKit chrome; a no-op elsewhere.
+	 *
+	 * Returns an `unregister()` handle that removes the surface iff the
+	 * registry still holds the one captured in its closure.
+	 */
+	readonly registerEditorSurface?: (
+		surface: StudioEditorSurface,
 	) => StudioSidebarUnregister;
 
 	/**
