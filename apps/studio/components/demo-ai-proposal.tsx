@@ -20,23 +20,23 @@
  * render would re-stamp `expectedRevision` continuously and defeat the
  * staleness invalidation §21.2 requires.
  *
- * ## NOT CURRENTLY MOUNTED — no slot exists for it
+ * ## Mounted through `StudioProps.editorSlot`
  *
- * This component is correct and typechecks, but the demo has nowhere to
- * render it. The only host slot inside the editor's provider tree is
- * `StudioProps.headerEnd`, which lands inside `SystemMenuTrigger`'s
- * `<Popover>`: its content is lazy (absent from the DOM until opened)
- * and **unmounts when the popover closes**, which would destroy the
- * review dialog mid-flow. Puck `overrides` are merged into `<Puck>`,
- * but the AnvilKit chrome replaces Puck's header, so those do not
- * render either.
+ * This used to be unwired: the only host slot inside the editor's
+ * provider tree was `StudioProps.headerEnd`, which lands inside
+ * `SystemMenuTrigger`'s `<Popover>` — lazy content that **unmounts
+ * when the popover closes**, destroying the review dialog mid-flow.
+ * Puck `overrides` are merged into `<Puck>`, but the AnvilKit chrome
+ * replaces Puck's header, so those never render either.
  *
- * So the gap is a **host-extensibility** one, not an AI one: there is
- * no slot where a host or plugin can render persistent, editor-aware
- * chrome UI. Closing it is a product decision (a new slot, or an AI
- * plugin surface), not something to improvise for a demo — so this file
- * is left unwired as the reference implementation for whoever adds one.
- * Delete it if that route is not taken.
+ * The gap was **host extensibility**, not AI, and core closed it with
+ * `StudioProps.editorSlot` (CORE-P3-008): a persistent mount point
+ * inside the editor's provider tree, beside the `<Puck>` subtree, that
+ * lives as long as the editor runtime. `page.tsx` passes this
+ * component there, so §32.4's review scenario is reachable in the app.
+ *
+ * Core imposes no layout on the slot, so this component positions its
+ * own trigger.
  */
 
 import type { EditorCommandProposal } from "@anvilkit/core/editor";
@@ -82,12 +82,14 @@ export function DemoAiProposal(): ReactNode {
 
 	return (
 		<>
+			{/* The slot renders no wrapper, so the trigger positions
+			    itself: fixed, above the chrome, out of the canvas. */}
 			<button
 				type="button"
 				onClick={propose}
 				disabled={inputs.selectedIds.length === 0}
 				data-testid="demo-ai-propose"
-				className="rounded border border-neutral-300 px-2 py-1 text-xs disabled:opacity-50 dark:border-neutral-700"
+				className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded border border-neutral-300 bg-white px-2 py-1 text-xs shadow-md disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900"
 			>
 				Propose AI change
 			</button>

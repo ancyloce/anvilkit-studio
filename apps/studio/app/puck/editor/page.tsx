@@ -36,6 +36,7 @@ import {
 	useState,
 	useSyncExternalStore,
 } from "react";
+import { DemoAiProposal } from "@/components/demo-ai-proposal";
 import { useDemoIdentity } from "@/lib/collab-identity";
 import { resolveCollabRelayUrl } from "@/lib/collab-relay-url";
 import { createCopilotSidebarPlugin } from "@/lib/copilot-sidebar-plugin";
@@ -974,13 +975,15 @@ export default function PuckEditorPage() {
 	async function exportPreflight(
 		capabilities: EditorExportCapabilities | undefined,
 	): Promise<ExportPreflightResult | undefined> {
-		const {
-			listUsedAuthoringFeatures,
-			readAuthoringState,
-			runExportPreflight,
-		} = await import("@anvilkit/core/editor");
-		const usedFeatures = listUsedAuthoringFeatures(
+		const { listUsedEditorFeatures, readAuthoringState, runExportPreflight } =
+			await import("@anvilkit/core/editor");
+		// The whole document, not just the sidecar: `richText` is stored
+		// in component props, so a sidecar-only scan reports it as unused
+		// and a rich-text page would slip past the production block
+		// (DD-DEC-018).
+		const usedFeatures = listUsedEditorFeatures(
 			readAuthoringState(publishedData).state,
+			publishedData,
 		);
 		if (usedFeatures.length === 0) return undefined;
 		return runExportPreflight({
@@ -1220,6 +1223,11 @@ export default function PuckEditorPage() {
 								}
 							: undefined
 					}
+					// §21.2's proposal flow needs a slot that outlives a
+					// popover: `editorSlot` mounts inside the editor's
+					// provider tree beside <Puck>, so the review dialog is
+					// not destroyed mid-flow (CORE-P3-008).
+					editorSlot={visualEditorMode ? <DemoAiProposal /> : undefined}
 				/>
 			</section>
 
