@@ -93,9 +93,9 @@ export async function buildPublishedMetadata(
  *
  * `opts.preview` opts into preview mode: the in-progress `draft` is served
  * instead (falling back to `published`). The editor's header Preview action uses
- * this to render the live, possibly-unsaved document it just stored as the
- * page's draft in SQLite — so the preview transports the document through the
- * durable store, not the URL. The public render routes never set it.
+ * this to render the live, possibly-unsaved document it just stored in the
+ * `__preview__` scratch record — so the preview transports the document through
+ * the durable store, not the URL. The public render routes never set it.
  */
 export async function loadPublishedRender(
 	segments: string[],

@@ -15,10 +15,11 @@
 // This route renders *only* the page content:
 //   - `?slug=<slug>` serves the published document from the durable store
 //     (the editor's publish flow navigates here);
-//   - `?slug=<slug>&preview=1` serves the page's in-progress *draft* — the
-//     editor's header Preview action stores the live document to SQLite as the
-//     draft, then opens this URL, so the document travels through the durable
-//     store rather than being concatenated into the URL;
+//   - `?slug=<slug>&preview=1` serves the record's in-progress *draft* — the
+//     editor's header Preview action stores the live document into the
+//     `__preview__` scratch record, then opens this URL, so the document travels
+//     through the durable store rather than being concatenated into the URL (and
+//     no real page's saved draft is touched);
 //   - otherwise it falls back to the shared showcase payload (`?data=` or the
 //     default demo data) that backs the static "server render" links.
 // No masthead, notes, links, or JSON panel — just the page.

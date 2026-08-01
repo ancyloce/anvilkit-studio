@@ -141,23 +141,6 @@ function handleLocaleChange(locale: string): void {
 	console.info("[demo] studio locale switched →", locale);
 }
 
-// Stash a slugless / in-progress document in the durable `__preview__`
-// scratch slot. Returns `false` (and the caller aborts) on a transport error.
-async function storePreviewScratch(
-	data: Data<DemoComponents, PageRootProps>,
-): Promise<boolean> {
-	try {
-		const res = await fetch("/api/pages/preview", {
-			method: "POST",
-			headers: { "content-type": "application/json" },
-			body: JSON.stringify({ data }),
-		});
-		return res.ok;
-	} catch {
-		return false;
-	}
-}
-
 // Editor-only config: extends the shared `demoConfig` with the
 // demo-only `TokenSwatch` component that dogfoods the design-system
 // plugin's token-bound field factories. Defined here (not in
@@ -911,8 +894,15 @@ export default function PuckEditorPage() {
 		// serializing the whole document into the URL (`?data=`), persist it to
 		// SQLite and open the render route in preview mode so it reads it back —
 		// the document travels through the durable store, never the URL.
+		//
+		// EVERY preview goes through the shared `__preview__` scratch slot, a
+		// slugged page included. Preview is a *read* action on a throwaway
+		// snapshot, so it must not (a) overwrite the page's own saved draft with
+		// live, possibly-unwanted edits, nor (b) be gated on the publish-grade
+		// `PageRootSchema` — a document being authored (Slug root field typed but
+		// not yet slugified, Title cleared) fails that schema, and previously that
+		// aborted the preview outright.
 		const typed = liveData as unknown as Data<DemoComponents, PageRootProps>;
-		const slug = typed.root.props?.slug ?? "";
 		// Open the preview tab synchronously (inside the click gesture) so it
 		// isn't popup-blocked; fill it once the document is stored.
 		const previewWindow = window.open("", "_blank");
@@ -920,22 +910,17 @@ export default function PuckEditorPage() {
 			previewWindow.document.write("Generating preview…");
 		}
 
-		// A real, slugged page stores as that page's draft (keyed by slug); a
-		// slugless / in-progress page falls back to the shared `__preview__`
-		// scratch slot, which bypasses the strict slug validation.
-		const previewSlug = slug.length > 0 ? slug : PREVIEW_SLOT_SLUG;
-		const stored =
-			slug.length > 0
-				? (await persistPage("draft", typed)).ok
-				: await storePreviewScratch(typed);
-		if (!stored) {
-			console.error("[demo] preview blocked — could not store the document");
+		const stored = await persistPage("preview", typed);
+		if (!stored.ok) {
+			// Surface the reason, like `handleSaveDraft` / `handlePublishClick` do —
+			// a bare "could not store the document" is unactionable.
+			console.error("[demo] preview blocked —", stored.issue);
 			previewWindow?.close();
 			return;
 		}
 
 		const previewUrl = `/puck/render?slug=${encodeURIComponent(
-			previewSlug,
+			PREVIEW_SLOT_SLUG,
 		)}&preview=1`;
 		if (previewWindow !== null) {
 			previewWindow.location.href = previewUrl;

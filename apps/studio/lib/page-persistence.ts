@@ -4,7 +4,7 @@ import type { Data } from "@puckeditor/core";
 import type { ApiResponse } from "./page-storage/response";
 import type { DemoComponents } from "./puck-demo";
 
-export type PersistKind = "draft" | "publish";
+export type PersistKind = "draft" | "publish" | "preview";
 export interface PersistResult {
 	readonly ok: boolean;
 	/** The first validation issue / server message when `ok === false`. */
@@ -18,18 +18,28 @@ export interface PersistResult {
  * rejected/failed write — the caller surfaces the issue and aborts (nothing is
  * served). The legacy `localStorage` MVP and the `NEXT_PUBLIC_USE_REMOTE_STORAGE`
  * gate are gone: every save/publish is durable.
+ *
+ * `kind: "preview"` is the one exception to the validation gate. It targets the
+ * `__preview__` scratch slot (`POST /api/pages/preview`), which bypasses the
+ * canonical `PageRootSchema` *by design*: a preview renders the LIVE document,
+ * which is routinely mid-authoring (a Slug root field typed but not yet
+ * slugified, a cleared Title). Validating it here would reject exactly the
+ * in-progress documents preview exists to show. The scratch route ignores the
+ * `slug` in the body, so the shared request shape is kept.
  */
 export async function persistPage(
 	kind: PersistKind,
 	data: Data<DemoComponents, PageRootProps>,
 ): Promise<PersistResult> {
 	const rootProps = data.root.props as PageRootProps | undefined;
-	const result = validatePagePayload(rootProps);
-	if (!result.valid) {
-		return {
-			ok: false,
-			issue: result.issues[0]?.message ?? "Invalid page payload",
-		};
+	if (kind !== "preview") {
+		const result = validatePagePayload(rootProps);
+		if (!result.valid) {
+			return {
+				ok: false,
+				issue: result.issues[0]?.message ?? "Invalid page payload",
+			};
+		}
 	}
 
 	const slug = rootProps?.slug ?? "";
