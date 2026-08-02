@@ -80,6 +80,15 @@ export {
 	type DecoratePuckConfigOptions,
 	decoratePuckConfig,
 } from "./decorate-config.js";
+export { DesignSystemPanel } from "./tokens/DesignSystemPanel.js";
+export {
+	type DesignSystemModel,
+	type DesignSystemOutcome,
+	type DesignSystemStyle,
+	type DesignSystemToken,
+	type TokenDeletionPreview,
+	useDesignSystem,
+} from "./tokens/use-design-system.js";
 export {
 	EditorSurfaceSlot,
 	type EditorSurfaceSlotProps,

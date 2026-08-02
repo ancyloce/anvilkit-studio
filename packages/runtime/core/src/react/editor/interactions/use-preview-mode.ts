@@ -67,22 +67,38 @@ function getReducedMotionServerSnapshot(): boolean {
 export function usePreviewSession(mode: EditorRunMode): PreviewSession {
 	const [session, setSession] = useState(() => createPreviewSession(mode));
 
+	// ONE effect owns both replacement and disposal, and it disposes only
+	// the session it is responsible for — never the replacement it just
+	// scheduled.
+	//
+	// This was two effects, and the split was an infinite render loop.
+	// The replacing effect returned `() => next.dispose()`, so the
+	// sequence was: create `next` → `setSession(next)` → deps change →
+	// React runs that cleanup and disposes `next` → the effect re-runs,
+	// the `!session.disposed` guard now fails against the session it had
+	// just installed → create another → forever. Under React StrictMode
+	// (Next dev) it needs no mode change at all to start: the simulated
+	// unmount disposes the initial session, and the remount finds it
+	// disposed. "Maximum update depth exceeded" on `?editor=1` was this.
+	//
+	// The guard has to test `disposed` as well as `mode` — a StrictMode
+	// remount must get a live session back — so the cleanup must not be
+	// the thing that makes it disposed.
 	useEffect(() => {
-		// `session` from the closure may be the initial one, which already
-		// matches `mode`; only replace when the mode actually diverged.
-		if (session.mode === mode && !session.disposed) return;
-		const next = createPreviewSession(mode);
-		setSession(next);
-		return () => {
-			next.dispose();
-		};
+		if (session.mode === mode && !session.disposed) {
+			// This session is the current one: own its teardown, so a mode
+			// change or an unmount releases every timer, observer,
+			// animation and temporary variant override it acquired.
+			return () => {
+				session.dispose();
+			};
+		}
+		// Stale or disposed: schedule the replacement and return NO
+		// cleanup. `next` becomes `session` on the next render, and that
+		// render's run of this effect takes ownership of disposing it.
+		setSession(createPreviewSession(mode));
+		return undefined;
 	}, [mode, session]);
-
-	useEffect(() => {
-		return () => {
-			session.dispose();
-		};
-	}, [session]);
 
 	return session;
 }

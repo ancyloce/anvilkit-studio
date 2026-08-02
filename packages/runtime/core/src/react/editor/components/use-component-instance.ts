@@ -380,7 +380,13 @@ export function useComponentInstance(): ComponentInstanceModel | null {
 
 	const diagnostics = useMemo(() => {
 		void version;
-		return bridge?.diagnostics.getDiagnostics(DIAGNOSTIC_CHANNEL) ?? [];
+		// `getDiagnostics()` returns every channel flattened; the
+		// component-instance entries are the ones this hook published.
+		return (bridge?.diagnostics.getDiagnostics() ?? []).filter(
+			(error) =>
+				error.details?.kind === "componentInstance" ||
+				error.details?.kind === "variantOverride",
+		);
 	}, [bridge, version]);
 
 	return useMemo(() => {

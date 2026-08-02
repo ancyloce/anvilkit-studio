@@ -29,7 +29,7 @@ import type {
 	TokenType,
 } from "@anvilkit/contracts/editor";
 import type { ReactNode } from "react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/primitives/button";
 import {
 	Dialog,
@@ -103,16 +103,19 @@ function TokenDeleteDialog({
 	const [busy, setBusy] = useState(false);
 
 	// Load the impact once, on open. Re-planning per keystroke would
-	// show the user a moving target while they decide.
-	if (preview === null && !busy) {
-		setBusy(true);
+	// show the user a moving target while they decide — and planning
+	// during render would be a side effect in the render phase.
+	useEffect(() => {
+		let cancelled = false;
 		void model
 			.previewTokenDeletion(entry.token.id, { kind: "materialize" })
 			.then((next) => {
-				setPreview(next);
-				setBusy(false);
+				if (!cancelled) setPreview(next);
 			});
-	}
+		return () => {
+			cancelled = true;
+		};
+	}, [model, entry.token.id]);
 
 	const run = useCallback(
 		async (disposition: TokenDeletionDisposition) => {
@@ -162,7 +165,10 @@ function TokenDeleteDialog({
 						<span className="text-[var(--ak-studio-muted-fg)]">
 							{msg("studio.editor.token.delete.replaceWith")}
 						</span>
-						<Select value={replacementId} onValueChange={setReplacementId}>
+						<Select
+							value={replacementId}
+							onValueChange={(next) => setReplacementId(next ?? "")}
+						>
 							<SelectTrigger
 								className="h-7 text-[11px]"
 								aria-label={msg("studio.editor.token.delete.replaceWith")}
@@ -339,6 +345,7 @@ function TokenRow({
 					value={aliasTarget}
 					disabled={!model.canMutate}
 					onValueChange={async (next) => {
+						if (next === null) return;
 						setAliasTarget(next);
 						setErrors(
 							(
@@ -663,7 +670,9 @@ export function DesignSystemPanel(): ReactNode {
 					<Select
 						value={type}
 						disabled={!model.canMutate}
-						onValueChange={(next) => setType(next as TokenType)}
+						onValueChange={(next) => {
+							if (next !== null) setType(next as TokenType);
+						}}
 					>
 						<SelectTrigger
 							className="h-6 w-24 text-[10px]"

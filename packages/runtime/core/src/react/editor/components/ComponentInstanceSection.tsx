@@ -110,14 +110,19 @@ export function ComponentInstanceSection(): ReactNode {
 								<Select
 									value={current}
 									disabled={!model.canMutate || busy}
-									onValueChange={(next) =>
+									onValueChange={(next) => {
+										// Base UI yields `null` when a selection is
+										// cleared; an axis with no option chosen is a
+										// legal intermediate state expressed by
+										// omitting the key, not by storing null.
+										if (next === null) return;
 										void run(() =>
 											model.setVariant({
 												...model.instance.variantSelection,
 												[axis.id]: next,
 											}),
-										)
-									}
+										);
+									}}
 								>
 									<SelectTrigger
 										className="h-7 text-[11px]"

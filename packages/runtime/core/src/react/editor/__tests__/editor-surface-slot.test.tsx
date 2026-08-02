@@ -209,7 +209,11 @@ describe("<EditorSurfaceSlot> (CORE-P3-008)", () => {
 	});
 
 	it("isolates a crashing surface without taking the editor down", async () => {
-		const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+		// The boundary logs the crash on purpose; silence it so the
+		// expected failure does not read as a broken test run.
+		const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {
+			// intentionally silent
+		});
 		const store = createSidebarRegistryStore();
 		renderSlot({ store, hostSlot: <span data-testid="host-ok">ok</span> });
 		act(() => {
