@@ -4215,9 +4215,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/sidebar-registry.ts",
-							"line": 50,
+							"line": 51,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L50"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L51"
 						}
 					],
 					"type": {
@@ -4258,9 +4258,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/sidebar-registry.ts",
-							"line": 49,
+							"line": 50,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L49"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L50"
 						}
 					],
 					"type": {
@@ -4294,9 +4294,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/sidebar-registry.ts",
-							"line": 52,
+							"line": 53,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L52"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L53"
 						}
 					],
 					"type": {
@@ -4330,9 +4330,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/sidebar-registry.ts",
-							"line": 51,
+							"line": 52,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L51"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L52"
 						}
 					],
 					"type": {
@@ -4373,9 +4373,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/sidebar-registry.ts",
-							"line": 54,
+							"line": 55,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L54"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L55"
 						}
 					],
 					"type": {
@@ -4399,6 +4399,57 @@
 					}
 				},
 				{
+					"id": 185,
+					"name": "editorSurfaces",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Persistent editor surfaces, keyed by id (CORE-P3-008)."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/sidebar-registry.ts",
+							"line": 59,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L59"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es2015.collection.d.ts",
+							"qualifiedName": "ReadonlyMap"
+						},
+						"typeArguments": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/sidebar.ts",
+									"qualifiedName": "StudioEditorSurface"
+								},
+								"name": "StudioEditorSurface",
+								"package": "@anvilkit/core"
+							}
+						],
+						"name": "ReadonlyMap",
+						"package": "typescript"
+					}
+				},
+				{
 					"id": 181,
 					"name": "historyPanel",
 					"variant": "declaration",
@@ -4409,9 +4460,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/sidebar-registry.ts",
-							"line": 53,
+							"line": 54,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L53"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L54"
 						}
 					],
 					"type": {
@@ -4445,9 +4496,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/sidebar-registry.ts",
-							"line": 47,
+							"line": 48,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L47"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L48"
 						}
 					],
 					"type": {
@@ -4488,9 +4539,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/sidebar-registry.ts",
-							"line": 48,
+							"line": 49,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L48"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L49"
 						}
 					],
 					"type": {
@@ -4531,9 +4582,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/sidebar-registry.ts",
-							"line": 56,
+							"line": 57,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L56"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L57"
 						}
 					],
 					"type": {
@@ -4567,9 +4618,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/sidebar-registry.ts",
-							"line": 55,
+							"line": 56,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L55"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L56"
 						}
 					],
 					"type": {
@@ -4602,6 +4653,7 @@
 						180,
 						179,
 						182,
+						185,
 						181,
 						175,
 						176,
@@ -4613,9 +4665,9 @@
 			"sources": [
 				{
 					"fileName": "runtime/sidebar-registry.ts",
-					"line": 46,
+					"line": 47,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L46"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L47"
 				}
 			]
 		},
@@ -5704,7 +5756,7 @@
 			}
 		},
 		{
-			"id": 185,
+			"id": 186,
 			"name": "CORE_VERSION",
 			"variant": "declaration",
 			"kind": 32,
@@ -5989,9 +6041,9 @@
 			"sources": [
 				{
 					"fileName": "runtime/compile-plugins.ts",
-					"line": 499,
+					"line": 500,
 					"character": 22,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L499"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L500"
 				}
 			],
 			"signatures": [
@@ -6004,9 +6056,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 499,
+							"line": 500,
 							"character": 22,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L499"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L500"
 						}
 					],
 					"parameters": [
@@ -8240,7 +8292,7 @@
 		{
 			"title": "Variables",
 			"children": [
-				185,
+				186,
 				1,
 				137
 			]
@@ -9188,6 +9240,11 @@
 			"qualifiedName": "StudioSidebarContributions.pageSettingsSeoFields"
 		},
 		"185": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/sidebar-registry.ts",
+			"qualifiedName": "StudioSidebarContributions.editorSurfaces"
+		},
+		"186": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/version.ts",
 			"qualifiedName": "CORE_VERSION"
