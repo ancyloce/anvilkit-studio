@@ -1,7 +1,7 @@
 {
 	"name": "@anvilkit/core",
 	"version": "0.1.18",
-	"description": "Anvilkit Studio runtime — types, plugin engine, React shell, and config system for the Puck-native visual editor.",
+	"description": "Anvilkit Studio runtime \u2014 types, plugin engine, React shell, and config system for the Puck-native visual editor.",
 	"type": "module",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
@@ -247,6 +247,7 @@
 		"check:no-dynamic-eval": "node ./scripts/check-no-dynamic-eval.mjs",
 		"check:peer-deps": "node ./scripts/check-peer-deps.mjs",
 		"check:bundle-budget": "node ./scripts/check-bundle-budget.mjs",
+		"check:release-baselines": "node ./scripts/check-release-baselines.mjs",
 		"check:api-snapshot": "typedoc --json ./api/api-snapshot.json --entryPoints ./src/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
 		"check:api-snapshot-runtime": "typedoc --json ./api/api-snapshot.runtime.json --entryPoints ./src/runtime/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
 		"check:api-snapshot-config": "typedoc --json ./api/api-snapshot.config.json --entryPoints ./src/config/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
