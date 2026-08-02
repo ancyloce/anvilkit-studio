@@ -21,6 +21,7 @@
  */
 
 import {
+	Component as ComponentIcon,
 	History as HistoryIcon,
 	Image as ImageIcon,
 	Layers as LayersIcon,
@@ -39,6 +40,7 @@ import {
 	type Ref,
 	useCallback,
 	useImperativeHandle,
+	useMemo,
 	useRef,
 } from "react";
 import { useShallow } from "zustand/shallow";
@@ -54,6 +56,7 @@ import {
 	useEditorUiStore,
 } from "@/state/slices/editor-ui-selectors";
 import type { EditorTab } from "@/state/slices/editor-ui-store";
+import { useOptionalStudioEditor } from "../../../react/editor/use-studio-editor.js";
 import { railTabId, SIDEBAR_PANEL_ID } from "./SidebarRail.ids";
 
 interface RailModule {
@@ -66,6 +69,14 @@ interface RailModule {
 	 * modules (`insert`, `layer`).
 	 */
 	readonly isVisible?: (registry: SidebarRegistryState) => boolean;
+	/**
+	 * Modules that only exist while the visual editor runtime is
+	 * mounted. Their visibility cannot come from the sidebar registry
+	 * (no plugin contributes them) — it comes from
+	 * `StudioProps.editor.features.enabled`, so a host without the
+	 * editor sees a byte-identical rail.
+	 */
+	readonly requiresEditor?: boolean;
 	/**
 	 * `core` modules (Insert, Layers) are always present. `extension`
 	 * modules are host/plugin-contributed and only ever appear below a
@@ -131,6 +142,13 @@ const RAIL_MODULES: readonly RailModule[] = [
 		isVisible: (s) => s.seoPanel !== null,
 		group: "extension",
 	},
+	{
+		key: "components",
+		icon: ComponentIcon,
+		labelKey: "studio.module.components.name",
+		requiresEditor: true,
+		group: "extension",
+	},
 ];
 
 export interface SidebarRailHandle {
@@ -151,8 +169,18 @@ export const SidebarRail = memo(function SidebarRail({
 	// predicate (always-visible modules omit it). `useShallow` keeps
 	// `visibleModules` referentially stable while the visible set is
 	// unchanged, since RAIL_MODULES entries have stable identity.
-	const visibleModules = useSidebarRegistry(
+	const registryVisible = useSidebarRegistry(
 		useShallow((s) => RAIL_MODULES.filter((m) => m.isVisible?.(s) ?? true)),
+	);
+	// `useOptionalStudioEditor()` is null unless the editor runtime is
+	// mounted, which is exactly the gate `requiresEditor` wants.
+	const editorMounted = useOptionalStudioEditor() !== null;
+	const visibleModules = useMemo(
+		() =>
+			registryVisible.filter(
+				(module) => module.requiresEditor !== true || editorMounted,
+			),
+		[registryVisible, editorMounted],
 	);
 	const containerRef = useRef<HTMLDivElement | null>(null);
 

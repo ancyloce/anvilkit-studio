@@ -26,6 +26,7 @@ import { HistoryModule } from "./sidebar/modules/HistoryModule";
 import { ImageModule } from "./sidebar/modules/ImageModule";
 import { InsertModule } from "./sidebar/modules/InsertModule";
 import { LayerModule } from "./sidebar/modules/LayerModule";
+import { ComponentsModule } from "./sidebar/modules/ComponentsModule";
 import { SeoModule } from "./sidebar/modules/SeoModule";
 import { TextModule } from "./sidebar/modules/TextModule";
 import {
@@ -45,6 +46,7 @@ const MODULE_TITLE_KEYS: Readonly<Record<EditorTab, string>> = {
 	history: "studio.module.history.name",
 	"design-system": "studio.module.designSystem.name",
 	seo: "studio.module.seo.name",
+	components: "studio.module.components.name",
 };
 
 function renderModuleBody(tab: EditorTab): ReactNode {
@@ -65,6 +67,8 @@ function renderModuleBody(tab: EditorTab): ReactNode {
 			return <DesignSystemModule />;
 		case "seo":
 			return <SeoModule />;
+		case "components":
+			return <ComponentsModule />;
 	}
 }
 
