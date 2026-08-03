@@ -18,6 +18,7 @@ import {
 	useSyncExternalStore,
 } from "react";
 import type { InternalEditorCommandPort } from "../command-port.js";
+import { activeTokenMode } from "../tokens/token-mode.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
 import {
 	applyAuthoringStylesheet,
@@ -57,6 +58,13 @@ export default function AuthoringStylesheet({
 				cache,
 				// Dev-only counters (CORE-P4-002); `undefined` in production.
 				bridge?.perf?.resolverCache,
+				// §15.1 token modes. This MUST be the mode the authoring
+				// surfaces write into — the picker and the design-system
+				// panel both create token values under
+				// `activeTokenMode(...)`, so resolving under anything else
+				// reports `missing-value` and the property vanishes from
+				// the canvas while still exporting correctly.
+				{ tokenMode: activeTokenMode(bridge?.editorConfig) },
 			),
 			// Strict-CSP hosts (§29, CORE-P4-004): nonce or constructable
 			// stylesheet. `undefined` keeps the default `<style>` path.

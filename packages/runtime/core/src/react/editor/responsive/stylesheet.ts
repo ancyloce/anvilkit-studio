@@ -28,14 +28,30 @@
 import type {
 	AuthoringStateV1,
 	BreakpointDefinition,
+	EditorError,
 	EditorStyleAdapter,
 	NodeAuthoringStateV1,
 	ResponsiveValue,
 } from "@anvilkit/contracts/editor";
-import { resolveAuthoringStyle } from "../../../editor/index.js";
+import {
+	resolveAuthoringStyle,
+	substituteTokens,
+	type TokenSubstitutionContext,
+} from "../../../editor/index.js";
 
 /** The id of the injected `<style>` element. */
 export const AUTHORING_STYLE_ELEMENT_ID = "ak-authoring-styles";
+
+/** Token mode context for substitution; see {@link buildAuthoringStylesheet}. */
+type TokenSubstitution = TokenSubstitutionContext;
+
+/** Per-document token options a host can influence (§15.1 modes). */
+export interface AuthoringStylesheetTokenOptions {
+	/** Active token mode. Defaults to `"default"`, as the exporter does. */
+	readonly tokenMode?: string;
+	/** Mode consulted when a token carries no value in `tokenMode`. */
+	readonly defaultTokenMode?: string;
+}
 
 type FamilyKey = "layout" | "style" | "typography";
 
@@ -70,17 +86,38 @@ function layerHidden(
 	return override === null ? undefined : override;
 }
 
-/** Serialize one node's rule body at one layer ("" when empty). */
+/**
+ * Serialize one node's rule body at one layer ("" when empty).
+ *
+ * Token references are substituted FIRST. `resolveAuthoringStyle` is a
+ * pure serializer with no token awareness — hand it a
+ * `{kind:"token"}` value and it emits nothing for that property. The
+ * export pipeline always ran `resolveNodeAuthoring` (which substitutes)
+ * before serializing; this live path did not, so a token-backed value
+ * exported correctly but vanished from the canvas. Substituting per
+ * layer, rather than resolving an effective value for one viewport,
+ * keeps the per-layer delta emission this file depends on.
+ */
 function nodeLayerCss(
 	nodeId: string,
 	record: NodeAuthoringStateV1,
 	layer: "base" | string,
+	tokens: TokenSubstitution,
 ): string {
+	// Diagnostics are collected and dropped: unresolvable references
+	// keep the reference in place (§25 renderer fallback), and this
+	// builder has no channel to surface warnings on. The diagnostics
+	// centre already reports them from the resolve path.
+	const diagnostics: EditorError[] = [];
+	const substitute = <T>(spec: T): T =>
+		spec === undefined
+			? spec
+			: (substituteTokens(spec, tokens, diagnostics) as T);
 	const resolved = resolveAuthoringStyle({
 		nodeId,
-		layout: layerSpec(record, "layout", layer),
-		style: layerSpec(record, "style", layer),
-		typography: layerSpec(record, "typography", layer),
+		layout: substitute(layerSpec(record, "layout", layer)),
+		style: substitute(layerSpec(record, "style", layer)),
+		typography: substitute(layerSpec(record, "typography", layer)),
 		hidden: layerHidden(record, layer) === true,
 	});
 	const entries = Object.entries(resolved.inlineStyle);
@@ -100,6 +137,17 @@ function cssEscape(value: string): string {
 
 interface NodeFragments {
 	readonly record: NodeAuthoringStateV1;
+	/**
+	 * The token table the fragments were serialized against.
+	 *
+	 * Reference-keying on the node record ALONE was the second half of
+	 * the token bug: editing a token's value changes
+	 * `authoring.tokens`, never a node record, so every cached fragment
+	 * stayed valid and the canvas kept painting the old resolved
+	 * literal. The engine preserves references, so this compare is O(1)
+	 * and still lets an unrelated commit reuse every fragment.
+	 */
+	readonly tokens: unknown;
 	/** Layer key ("base" or breakpoint id) → serialized rule ("" = none). */
 	readonly byLayer: ReadonlyMap<string, string>;
 }
@@ -132,6 +180,7 @@ export function buildAuthoringStylesheet(
 	breakpoints: readonly BreakpointDefinition[],
 	cache?: AuthoringStylesheetCache,
 	stats?: AuthoringStylesheetCacheStats,
+	tokenOptions?: AuthoringStylesheetTokenOptions,
 ): string {
 	const enabled = [...breakpoints]
 		.filter((breakpoint) => breakpoint.enabled)
@@ -141,11 +190,24 @@ export function buildAuthoringStylesheet(
 		...enabled.map((breakpoint) => breakpoint.id),
 	];
 	const nodeIds = Object.keys(authoring.nodes).sort();
+	// `"default"` matches `buildExportStylesheet`, so the canvas and the
+	// exported page resolve a token the same way.
+	const tokens: TokenSubstitution = {
+		authoring,
+		tokenMode: tokenOptions?.tokenMode ?? "default",
+		...(tokenOptions?.defaultTokenMode !== undefined
+			? { defaultTokenMode: tokenOptions.defaultTokenMode }
+			: {}),
+	};
 
 	const fragmentsFor = (nodeId: string): NodeFragments => {
 		const record = authoring.nodes[nodeId] as NodeAuthoringStateV1;
 		const cached = cache?.get(nodeId);
-		if (cached !== undefined && cached.record === record) {
+		if (
+			cached !== undefined &&
+			cached.record === record &&
+			cached.tokens === authoring.tokens
+		) {
 			if (stats !== undefined) {
 				stats.hits += 1;
 			}
@@ -156,9 +218,13 @@ export function buildAuthoringStylesheet(
 		}
 		const byLayer = new Map<string, string>();
 		for (const layer of layers) {
-			byLayer.set(layer, nodeLayerCss(nodeId, record, layer));
+			byLayer.set(layer, nodeLayerCss(nodeId, record, layer, tokens));
 		}
-		const fragments: NodeFragments = { record, byLayer };
+		const fragments: NodeFragments = {
+			record,
+			tokens: authoring.tokens,
+			byLayer,
+		};
 		cache?.set(nodeId, fragments);
 		return fragments;
 	};
