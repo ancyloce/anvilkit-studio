@@ -70,6 +70,8 @@ function FillControl({
 			label={msg("studio.editor.inspector.style.fill")}
 			state={field.state}
 			onReset={() => void field.reset()}
+			// Kind select plus a per-kind editor beneath it.
+			layout="stack"
 		>
 			<div className="flex flex-col gap-1.5">
 				<Select
@@ -109,7 +111,18 @@ function FillControl({
 						className="h-7 w-full text-xs"
 						data-testid="ak-style-fill-kind"
 					>
-						<SelectValue placeholder={msg("studio.editor.inspector.unset")} />
+						{/*
+						 * The unset sentinel is a *selected* value, so the
+						 * trigger's placeholder never applies to it — without
+						 * this the closed trigger reads `__unset__`.
+						 */}
+						<SelectValue placeholder={msg("studio.editor.inspector.unset")}>
+							{(value: unknown) =>
+								typeof value === "string" && value !== "__unset__"
+									? msg(`studio.editor.inspector.style.fill.${value}`)
+									: msg("studio.editor.inspector.unset")
+							}
+						</SelectValue>
 					</SelectTrigger>
 					<SelectContent>
 						<SelectItem value="__unset__">
@@ -286,6 +299,8 @@ function BorderControl({
 			label={msg("studio.editor.inspector.style.border")}
 			state={field.state}
 			onReset={() => void field.reset()}
+			// Width + style + colour on one line needs the full width.
+			layout="stack"
 		>
 			<div className="flex items-center gap-1" data-testid="ak-style-border">
 				<Input
@@ -374,6 +389,8 @@ function RadiusControl({
 			label={msg("studio.editor.inspector.style.radius")}
 			state={field.state}
 			onReset={() => void field.reset()}
+			// Per-corner mode lays out four inputs side by side.
+			layout="stack"
 		>
 			<div className="flex flex-col gap-1" data-testid="ak-style-radius">
 				<div className="flex items-center gap-1">
@@ -449,6 +466,8 @@ function ShadowsControl({
 			label={msg("studio.editor.inspector.style.shadows")}
 			state={field.state}
 			onReset={() => void field.reset()}
+			// A list of shadow layers, one row each.
+			layout="stack"
 		>
 			<div className="flex flex-col gap-1" data-testid="ak-style-shadows">
 				{shadows.map((shadow, index) => (

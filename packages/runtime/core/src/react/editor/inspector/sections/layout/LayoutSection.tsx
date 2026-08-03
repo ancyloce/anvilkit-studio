@@ -11,6 +11,14 @@
  * width/height/min/max; four-edge margin/padding; position; overflow;
  * zIndex. Every write is a `node.layout.set` patch through the port
  * at the active layer.
+ *
+ * Presentation: the small, comparable-at-a-glance enums (flex
+ * direction, wrap, cross-axis alignment) render as segmented
+ * icon/label rows rather than dropdowns; the longer ones
+ * (display, justification, position, overflow) stay selects, where a
+ * seven-item list is genuinely easier to scan closed than open. No
+ * property, option or command changed — this is the control shape
+ * only.
  */
 
 import type {
@@ -21,11 +29,24 @@ import type {
 	GridTrackList,
 	LayoutSpec,
 } from "@anvilkit/contracts/editor";
+import {
+	AlignCenterVertical,
+	AlignEndVertical,
+	AlignStartVertical,
+	Baseline,
+	MoveHorizontal,
+	MoveVertical,
+	StretchVertical,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { useMsg } from "@/state/editor-i18n-context";
 import { BoxEdgesControl } from "../../controls/BoxEdgesControl.js";
 import { LengthControl } from "../../controls/LengthControl.js";
 import { NumberControl } from "../../controls/NumberControl.js";
+import {
+	SegmentedControl,
+	type SegmentedOption,
+} from "../../controls/SegmentedControl.js";
 import { SelectControl } from "../../controls/SelectControl.js";
 import type { InspectorSectionProps } from "../../sections-registry.js";
 import {
@@ -43,6 +64,20 @@ const ALIGN_OPTIONS: readonly CssAlignment[] = [
 	"stretch",
 	"baseline",
 ];
+
+/** Icons for the segmented rows, keyed by option (same order). */
+const DIRECTION_ICONS: Record<(typeof DIRECTION_OPTIONS)[number], ReactNode> = {
+	row: <MoveHorizontal aria-hidden="true" />,
+	column: <MoveVertical aria-hidden="true" />,
+};
+
+const ALIGN_ICONS: Record<CssAlignment, ReactNode> = {
+	start: <AlignStartVertical aria-hidden="true" />,
+	center: <AlignCenterVertical aria-hidden="true" />,
+	end: <AlignEndVertical aria-hidden="true" />,
+	stretch: <StretchVertical aria-hidden="true" />,
+	baseline: <Baseline aria-hidden="true" />,
+};
 const JUSTIFY_OPTIONS: readonly CssJustification[] = [
 	"start",
 	"center",
@@ -169,6 +204,25 @@ export function LayoutSection({ context }: InspectorSectionProps): ReactNode {
 	const displayValue =
 		display.state.kind === "value" ? display.state.value : undefined;
 
+	const directionOptions: readonly SegmentedOption<
+		(typeof DIRECTION_OPTIONS)[number]
+	>[] = DIRECTION_OPTIONS.map((option) => ({
+		value: option,
+		label: msg(`studio.editor.inspector.layout.direction.${option}`),
+		icon: DIRECTION_ICONS[option],
+	}));
+	const wrapOptions: readonly SegmentedOption<(typeof WRAP_OPTIONS)[number]>[] =
+		WRAP_OPTIONS.map((option) => ({
+			value: option,
+			label: msg(`studio.editor.inspector.layout.wrap.${option}`),
+		}));
+	const alignOptions: readonly SegmentedOption<CssAlignment>[] =
+		ALIGN_OPTIONS.map((option) => ({
+			value: option,
+			label: msg(`studio.editor.inspector.layout.align.${option}`),
+			icon: ALIGN_ICONS[option],
+		}));
+
 	return (
 		<div className="flex flex-col gap-2.5" data-testid="ak-layout-section">
 			<SelectControl
@@ -179,30 +233,29 @@ export function LayoutSection({ context }: InspectorSectionProps): ReactNode {
 			/>
 			{displayValue === "flex" ? (
 				<>
-					<div className="grid grid-cols-2 gap-2">
-						<SelectControl
-							label={msg("studio.editor.inspector.layout.direction")}
-							field={direction}
-							options={DIRECTION_OPTIONS}
-						/>
-						<SelectControl
-							label={msg("studio.editor.inspector.layout.wrap")}
-							field={wrap}
-							options={WRAP_OPTIONS}
-						/>
-					</div>
-					<div className="grid grid-cols-2 gap-2">
-						<SelectControl
-							label={msg("studio.editor.inspector.layout.alignItems")}
-							field={alignItems}
-							options={ALIGN_OPTIONS}
-						/>
-						<SelectControl
-							label={msg("studio.editor.inspector.layout.justifyContent")}
-							field={justifyContent}
-							options={JUSTIFY_OPTIONS}
-						/>
-					</div>
+					<SegmentedControl
+						label={msg("studio.editor.inspector.layout.direction")}
+						field={direction}
+						options={directionOptions}
+						testId="ak-layout-direction"
+					/>
+					<SelectControl
+						label={msg("studio.editor.inspector.layout.justifyContent")}
+						field={justifyContent}
+						options={JUSTIFY_OPTIONS}
+					/>
+					<SegmentedControl
+						label={msg("studio.editor.inspector.layout.alignItems")}
+						field={alignItems}
+						options={alignOptions}
+						testId="ak-layout-align"
+					/>
+					<SegmentedControl
+						label={msg("studio.editor.inspector.layout.wrap")}
+						field={wrap}
+						options={wrapOptions}
+						testId="ak-layout-wrap"
+					/>
 					<LengthControl
 						label={msg("studio.editor.inspector.layout.gap")}
 						field={gap}
@@ -226,53 +279,51 @@ export function LayoutSection({ context }: InspectorSectionProps): ReactNode {
 						label={msg("studio.editor.inspector.layout.gap")}
 						field={gap}
 					/>
-					<div className="grid grid-cols-2 gap-2">
-						<SelectControl
-							label={msg("studio.editor.inspector.layout.alignItems")}
-							field={alignItems}
-							options={ALIGN_OPTIONS}
-						/>
-						<SelectControl
-							label={msg("studio.editor.inspector.layout.justifyContent")}
-							field={justifyContent}
-							options={JUSTIFY_OPTIONS}
-						/>
-					</div>
+					<SelectControl
+						label={msg("studio.editor.inspector.layout.justifyContent")}
+						field={justifyContent}
+						options={JUSTIFY_OPTIONS}
+					/>
+					<SegmentedControl
+						label={msg("studio.editor.inspector.layout.alignItems")}
+						field={alignItems}
+						options={alignOptions}
+					/>
 				</>
 			) : null}
-			<div className="grid grid-cols-2 gap-2">
-				<LengthControl
-					label={msg("studio.editor.inspector.layout.width")}
-					field={width}
-					allowKeywords
-					testId="ak-layout-width"
-				/>
-				<LengthControl
-					label={msg("studio.editor.inspector.layout.height")}
-					field={height}
-					allowKeywords
-				/>
-			</div>
-			<div className="grid grid-cols-2 gap-2">
-				<LengthControl
-					label={msg("studio.editor.inspector.layout.minWidth")}
-					field={minWidth}
-				/>
-				<LengthControl
-					label={msg("studio.editor.inspector.layout.maxWidth")}
-					field={maxWidth}
-				/>
-			</div>
-			<div className="grid grid-cols-2 gap-2">
-				<LengthControl
-					label={msg("studio.editor.inspector.layout.minHeight")}
-					field={minHeight}
-				/>
-				<LengthControl
-					label={msg("studio.editor.inspector.layout.maxHeight")}
-					field={maxHeight}
-				/>
-			</div>
+			{/*
+			 * One property per row (label gutter + control) rather than the
+			 * old two-up grid: at inspector width a 50% column left each
+			 * length control with ~60px for its number input plus a unit
+			 * select, and every label truncated.
+			 */}
+			<LengthControl
+				label={msg("studio.editor.inspector.layout.width")}
+				field={width}
+				allowKeywords
+				testId="ak-layout-width"
+			/>
+			<LengthControl
+				label={msg("studio.editor.inspector.layout.height")}
+				field={height}
+				allowKeywords
+			/>
+			<LengthControl
+				label={msg("studio.editor.inspector.layout.minWidth")}
+				field={minWidth}
+			/>
+			<LengthControl
+				label={msg("studio.editor.inspector.layout.maxWidth")}
+				field={maxWidth}
+			/>
+			<LengthControl
+				label={msg("studio.editor.inspector.layout.minHeight")}
+				field={minHeight}
+			/>
+			<LengthControl
+				label={msg("studio.editor.inspector.layout.maxHeight")}
+				field={maxHeight}
+			/>
 			<BoxEdgesControl
 				label={msg("studio.editor.inspector.layout.margin")}
 				field={margin}
@@ -283,18 +334,16 @@ export function LayoutSection({ context }: InspectorSectionProps): ReactNode {
 				field={padding}
 				testId="ak-layout-padding"
 			/>
-			<div className="grid grid-cols-2 gap-2">
-				<SelectControl
-					label={msg("studio.editor.inspector.layout.position")}
-					field={position}
-					options={POSITION_OPTIONS}
-				/>
-				<SelectControl
-					label={msg("studio.editor.inspector.layout.overflow")}
-					field={overflow}
-					options={OVERFLOW_OPTIONS}
-				/>
-			</div>
+			<SelectControl
+				label={msg("studio.editor.inspector.layout.position")}
+				field={position}
+				options={POSITION_OPTIONS}
+			/>
+			<SelectControl
+				label={msg("studio.editor.inspector.layout.overflow")}
+				field={overflow}
+				options={OVERFLOW_OPTIONS}
+			/>
 			<NumberControl
 				label={msg("studio.editor.inspector.layout.zIndex")}
 				field={zIndex}

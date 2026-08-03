@@ -15,6 +15,14 @@
  * component declares the section's family capability; legacy
  * components (no `metadata.editor`) surface no universal sections at
  * all (ED-INSPECT-002 coexistence rule).
+ *
+ * ### Tab categories
+ *
+ * Each definition also declares the inspector tab it belongs to. The
+ * tabbed inspector renders one category at a time, so the category is
+ * a property of the section list (one place, deterministic) rather
+ * than a second list per tab — adding a section still means adding one
+ * entry, and it lands in exactly one tab.
  */
 
 import type { ComponentType } from "react";
@@ -26,11 +34,25 @@ export interface InspectorSectionProps {
 	readonly context: EditorInspectorContext;
 }
 
+/**
+ * Which inspector tab hosts a section. `properties` shares its tab
+ * with the native Puck field tree, which `FieldsPanel` owns — an
+ * editor-only section categorised `properties` composes *after* those
+ * fields, exactly as the whole block used to (ED-INSPECT-002).
+ */
+export type InspectorSectionCategory =
+	| "style"
+	| "properties"
+	| "data"
+	| "animation";
+
 /** One universal section entry in the panel's static list. */
 export interface InspectorSectionDefinition {
 	readonly id: string;
 	/** `studio.editor.inspector.section.*` catalog key. */
 	readonly titleKey: string;
+	/** The inspector tab this section renders under. */
+	readonly category: InspectorSectionCategory;
 	/** The capability family gating visibility (family sections). */
 	readonly family?: InspectorFamily;
 	/** Custom visibility gate (non-family sections, e.g. image). */

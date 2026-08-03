@@ -7,6 +7,10 @@
  * Renders the shared `@anvilkit/ui` select primitive inside an
  * {@link InspectorFieldShell}. Commits on selection; the sentinel
  * `unset` option resets the property at the active layer.
+ *
+ * The sentinel is a real selected value, not an absent one, so the
+ * trigger's `placeholder` never applies to it — without the render
+ * function below the closed trigger literally reads `__unset__`.
  */
 
 import type { ReactNode } from "react";
@@ -71,7 +75,13 @@ export function SelectControl<T extends string>({
 					className="h-7 w-full text-xs"
 					data-testid={testId}
 				>
-					<SelectValue placeholder={msg("studio.editor.inspector.unset")} />
+					<SelectValue placeholder={msg("studio.editor.inspector.unset")}>
+						{(value: unknown) =>
+							value === UNSET_SENTINEL || value === null || value === undefined
+								? msg("studio.editor.inspector.unset")
+								: (optionLabel?.(value as T) ?? String(value))
+						}
+					</SelectValue>
 				</SelectTrigger>
 				<SelectContent>
 					<SelectItem value={UNSET_SENTINEL}>

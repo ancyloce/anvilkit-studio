@@ -125,6 +125,8 @@ export function BoxEdgesControl({
 			label={label}
 			state={field.state}
 			onReset={() => void field.reset()}
+			// Four side-by-side inputs need the full panel width.
+			layout="stack"
 		>
 			<div className="grid grid-cols-4 gap-1" data-testid={testId}>
 				{EDGES.map((edge) => (

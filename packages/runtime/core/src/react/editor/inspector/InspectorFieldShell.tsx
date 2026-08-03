@@ -18,6 +18,16 @@
  *
  * All interactive elements are `@anvilkit/ui`-backed primitives
  * (repository rule — no hand-rolled controls).
+ *
+ * ### Layout
+ *
+ * `row` (the default) is the professional-inspector shape: a muted
+ * label in a fixed-width gutter with the control filling the rest, so
+ * a column of properties reads as one aligned list instead of a stack
+ * of label/control pairs. Controls whose body is itself multi-row (box
+ * edges, shadow layers, the gradient editor) pass `layout="stack"` and
+ * keep the label above, which is the only shape that fits them at
+ * inspector width.
  */
 
 import { RotateCcw } from "lucide-react";
@@ -35,6 +45,8 @@ export interface InspectorFieldShellProps {
 	readonly onReset: () => void;
 	/** The control itself (input, select, toggle group, …). */
 	readonly children: ReactNode;
+	/** `row` = label gutter + control; `stack` = label above. */
+	readonly layout?: "row" | "stack";
 	readonly className?: string;
 }
 
@@ -67,6 +79,7 @@ export function InspectorFieldShell({
 	state,
 	onReset,
 	children,
+	layout = "row",
 	className,
 }: InspectorFieldShellProps): ReactNode {
 	const msg = useMsg();
@@ -75,47 +88,68 @@ export function InspectorFieldShell({
 	}
 	const badge = sourceBadge(state, msg);
 	const writtenAtLayer = state.kind === "value" && state.writtenAtLayer;
-	return (
-		<div className={cn("flex flex-col gap-1", className)}>
-			<div className="flex items-center justify-between gap-2">
-				<span className="truncate text-[11px] font-medium text-[var(--ak-studio-muted-fg)]">
-					{label}
-				</span>
-				<span className="flex items-center gap-1">
-					{badge !== null ? (
-						<span
-							className="rounded bg-[var(--ak-studio-surface-2,transparent)] px-1 text-[10px] text-[var(--ak-studio-muted-fg)] opacity-80"
-							data-testid="ak-inspector-source"
-						>
-							{badge}
-						</span>
-					) : null}
-					{writtenAtLayer ? (
-						<Button
-							type="button"
-							variant="ghost"
-							size="icon"
-							className="size-5"
-							aria-label={msg("studio.editor.inspector.reset")}
-							title={msg("studio.editor.inspector.reset")}
-							onClick={onReset}
-							data-testid="ak-inspector-reset"
-						>
-							<RotateCcw className="size-3" aria-hidden="true" />
-						</Button>
-					) : null}
-				</span>
-			</div>
-			{state.kind === "mixed" ? (
-				<span
-					className="rounded border border-dashed border-[var(--ak-studio-border)] px-2 py-1 text-[11px] text-[var(--ak-studio-muted-fg)] italic"
-					data-testid="ak-inspector-mixed"
-				>
-					{msg("studio.editor.inspector.mixed")}
-				</span>
-			) : (
-				children
+	const row = layout === "row";
+
+	const labelCell = (
+		<div
+			className={cn(
+				"flex min-w-0 items-center gap-1",
+				row ? "w-[38%] shrink-0 py-1.5" : "justify-between",
 			)}
+		>
+			<span className="truncate text-[11px] font-medium text-[var(--ak-studio-muted-fg)]">
+				{label}
+			</span>
+			<span className="flex shrink-0 items-center gap-0.5">
+				{badge !== null ? (
+					<span
+						className="rounded bg-[var(--ak-studio-surface-2,transparent)] px-1 text-[10px] text-[var(--ak-studio-muted-fg)] opacity-80"
+						data-testid="ak-inspector-source"
+					>
+						{badge}
+					</span>
+				) : null}
+				{writtenAtLayer ? (
+					<Button
+						type="button"
+						variant="ghost"
+						size="icon"
+						className="size-5"
+						aria-label={msg("studio.editor.inspector.reset")}
+						title={msg("studio.editor.inspector.reset")}
+						onClick={onReset}
+						data-testid="ak-inspector-reset"
+					>
+						<RotateCcw className="size-3" aria-hidden="true" />
+					</Button>
+				) : null}
+			</span>
+		</div>
+	);
+
+	const body =
+		state.kind === "mixed" ? (
+			<span
+				className="rounded border border-dashed border-[var(--ak-studio-border)] px-2 py-1 text-[11px] text-[var(--ak-studio-muted-fg)] italic"
+				data-testid="ak-inspector-mixed"
+			>
+				{msg("studio.editor.inspector.mixed")}
+			</span>
+		) : (
+			children
+		);
+
+	return (
+		<div
+			className={cn(
+				row ? "flex items-start gap-2" : "flex flex-col gap-1",
+				className,
+			)}
+		>
+			{labelCell}
+			<div className={cn("flex min-w-0 flex-col gap-1", row && "flex-1")}>
+				{body}
+			</div>
 		</div>
 	);
 }

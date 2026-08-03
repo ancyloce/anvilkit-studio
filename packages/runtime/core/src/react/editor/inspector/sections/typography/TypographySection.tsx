@@ -249,62 +249,59 @@ export function TypographySection({
 
 	return (
 		<div className="flex flex-col gap-2.5" data-testid="ak-typography-section">
+			{/*
+			 * One property per row: the shared field shell now renders a label
+			 * gutter plus control, so a two-up grid left every control at a
+			 * quarter of the panel width.
+			 */}
 			<FontFamilyControl field={fontFamily} />
-			<div className="grid grid-cols-2 gap-2">
-				<LengthControl
-					label={msg("studio.editor.inspector.typography.fontSize")}
-					field={literalField(fontSize)}
-					testId="ak-typography-size"
-				/>
-				<SelectControl
-					label={msg("studio.editor.inspector.typography.fontWeight")}
-					field={weightAsString}
-					options={WEIGHT_OPTIONS}
-					testId="ak-typography-weight"
-				/>
-			</div>
-			<div className="grid grid-cols-2 gap-2">
-				<NumberControl
-					label={msg("studio.editor.inspector.typography.lineHeight")}
-					field={lineHeightNumber}
-					min={0}
-					step={0.1}
-				/>
-				<LengthControl
-					label={msg("studio.editor.inspector.typography.letterSpacing")}
-					field={literalField(letterSpacing)}
-				/>
-			</div>
+			<LengthControl
+				label={msg("studio.editor.inspector.typography.fontSize")}
+				field={literalField(fontSize)}
+				testId="ak-typography-size"
+			/>
+			<SelectControl
+				label={msg("studio.editor.inspector.typography.fontWeight")}
+				field={weightAsString}
+				options={WEIGHT_OPTIONS}
+				testId="ak-typography-weight"
+			/>
+			<NumberControl
+				label={msg("studio.editor.inspector.typography.lineHeight")}
+				field={lineHeightNumber}
+				min={0}
+				step={0.1}
+			/>
+			<LengthControl
+				label={msg("studio.editor.inspector.typography.letterSpacing")}
+				field={literalField(letterSpacing)}
+			/>
 			<ColorControl
 				label={msg("studio.editor.inspector.typography.color")}
 				field={color}
 				testId="ak-typography-color"
 			/>
-			<div className="grid grid-cols-2 gap-2">
-				<SelectControl
-					label={msg("studio.editor.inspector.typography.textAlign")}
-					field={textAlign}
-					options={ALIGN_OPTIONS}
-					testId="ak-typography-align"
-				/>
-				<SelectControl
-					label={msg("studio.editor.inspector.typography.textDecoration")}
-					field={textDecoration}
-					options={DECORATION_OPTIONS}
-				/>
-			</div>
-			<div className="grid grid-cols-2 gap-2">
-				<SelectControl
-					label={msg("studio.editor.inspector.typography.textTransform")}
-					field={textTransform}
-					options={TRANSFORM_OPTIONS}
-				/>
-				<SelectControl
-					label={msg("studio.editor.inspector.typography.textWrap")}
-					field={textWrap}
-					options={WRAP_OPTIONS}
-				/>
-			</div>
+			<SelectControl
+				label={msg("studio.editor.inspector.typography.textAlign")}
+				field={textAlign}
+				options={ALIGN_OPTIONS}
+				testId="ak-typography-align"
+			/>
+			<SelectControl
+				label={msg("studio.editor.inspector.typography.textDecoration")}
+				field={textDecoration}
+				options={DECORATION_OPTIONS}
+			/>
+			<SelectControl
+				label={msg("studio.editor.inspector.typography.textTransform")}
+				field={textTransform}
+				options={TRANSFORM_OPTIONS}
+			/>
+			<SelectControl
+				label={msg("studio.editor.inspector.typography.textWrap")}
+				field={textWrap}
+				options={WRAP_OPTIONS}
+			/>
 		</div>
 	);
 }
