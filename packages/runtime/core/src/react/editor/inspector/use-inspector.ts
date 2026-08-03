@@ -147,7 +147,6 @@ export function useInspectorField<T>(
 		layer,
 		viewportWidth,
 		commands,
-		revision,
 		capableNodeIds,
 	} = context;
 	const nodeIds = capableNodeIds(family);
@@ -168,9 +167,31 @@ export function useInspectorField<T>(
 
 	const write = useCallback(
 		(value: T | null): Promise<EditorCommandResult> => {
+			/*
+			 * Revision, authoring and breakpoints are read from the port
+			 * HERE, not captured from the render snapshot above.
+			 *
+			 * A control can dispatch from a callback created before an
+			 * intervening commit — the token picker's create-from-literal
+			 * and import-as-copy both do exactly that: they commit
+			 * `token.create`, then attach the new token through the
+			 * caller's `onAttach`, which lands in this `write` while the
+			 * enclosing render still holds the pre-create revision. The
+			 * port compares `expectedRevision` strictly, so the attach was
+			 * rejected as a conflict and the field silently kept its old
+			 * literal — the token appeared in the design panel but nothing
+			 * used it. Reading live is also what `useDesignSystem`'s
+			 * dispatcher already does, so this makes the two agree.
+			 *
+			 * The port's optimistic-concurrency guard is untouched: it
+			 * still rejects any command whose `expectedRevision` is stale.
+			 * What changes is that the inspector no longer manufactures a
+			 * stale one out of its own render timing.
+			 */
+			const snapshot = commands.getSnapshot();
 			const command = {
 				id: crypto.randomUUID(),
-				expectedRevision: revision,
+				expectedRevision: snapshot.revision,
 				source: "inspector",
 				timestamp: Date.now(),
 				type: FAMILY_COMMAND_TYPE[family],
@@ -180,25 +201,18 @@ export function useInspectorField<T>(
 			} as const;
 			// First write at a preset-backed breakpoint materializes the
 			// effective set in the same intent (CORE-P1A-008) — switching
-			// layers alone never entered history.
+			// layers alone never entered history. Materialization reads the
+			// same live snapshot, so it cannot plan against an authoring
+			// state the document has already moved past.
 			return commands.execute(
 				withBreakpointMaterialization(
 					command as Parameters<typeof withBreakpointMaterialization>[0],
-					authoring,
-					breakpoints,
+					snapshot.authoring,
+					snapshot.breakpoints,
 				),
 			);
 		},
-		[
-			commands,
-			revision,
-			family,
-			nodeIds,
-			layer,
-			property,
-			authoring,
-			breakpoints,
-		],
+		[commands, family, nodeIds, layer, property],
 	);
 
 	return useMemo(
