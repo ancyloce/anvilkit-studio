@@ -29,7 +29,7 @@ import type {
 	TokenType,
 } from "@anvilkit/contracts/editor";
 import type { ReactNode } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/primitives/button";
 import {
 	Dialog,
@@ -63,6 +63,45 @@ const TOKEN_TYPES: readonly TokenType[] = [
 	"shadow",
 	"radius",
 ];
+
+/**
+ * How a stored literal is shown in a text field, and whether editing it
+ * as text can round-trip.
+ *
+ * Only primitives round-trip. `length` and `radius` literals are
+ * `CssLength` objects and `color` literals are `CssColor` objects —
+ * `String()` renders those as `[object Object]`, and writing the field
+ * back would replace the object with that string. Those are displayed
+ * read-only instead, so the value is visible but cannot be corrupted by
+ * a blur.
+ */
+function literalText(value: unknown): {
+	readonly text: string;
+	readonly editable: boolean;
+} {
+	if (value === undefined || value === null) {
+		return { text: "", editable: true };
+	}
+	if (typeof value === "object") {
+		return { text: JSON.stringify(value), editable: false };
+	}
+	return { text: String(value), editable: true };
+}
+
+/**
+ * Keep a literal's declared type across a text edit.
+ *
+ * The token's `type` is the discriminator the engine itself uses
+ * (`materializeTokenLiteral`), so a `number` token keeps storing a
+ * number rather than silently becoming the string `"8"`. Text that is
+ * not a finite number is passed through unchanged for the reducer to
+ * reject with a real message.
+ */
+function coerceLiteral(type: TokenType, text: string): unknown {
+	if (type !== "number") return text;
+	const next = Number(text);
+	return text.trim().length > 0 && Number.isFinite(next) ? next : text;
+}
 
 function ErrorList({
 	errors,
@@ -102,34 +141,54 @@ function TokenDeleteDialog({
 	const [errors, setErrors] = useState<readonly EditorError[]>([]);
 	const [busy, setBusy] = useState(false);
 
-	// Load the impact once, on open. Re-planning per keystroke would
-	// show the user a moving target while they decide — and planning
-	// during render would be a side effect in the render phase.
+	/*
+	 * The one disposition the dialog both previews AND commits. Deriving
+	 * it in a single place is what makes the header's promise true: the
+	 * impact on screen is planned for exactly the operation the footer
+	 * runs. Previously the plan was pinned to `materialize` while the
+	 * footer committed `replace`, so choosing a replacement showed the
+	 * site count, alias-dependent count and plan errors of a different
+	 * operation — and any replace-specific error never reached the user.
+	 */
+	const disposition = useMemo<TokenDeletionDisposition>(
+		() =>
+			replacementId.length > 0
+				? { kind: "replace", tokenId: replacementId }
+				: { kind: "materialize" },
+		[replacementId],
+	);
+
+	// Re-planned when the disposition changes — a discrete choice, not a
+	// keystroke, so this is not the moving target that re-planning per
+	// character would be. Planning during render would be a render-phase
+	// side effect, hence the effect.
 	useEffect(() => {
 		let cancelled = false;
 		void model
-			.previewTokenDeletion(entry.token.id, { kind: "materialize" })
+			.previewTokenDeletion(entry.token.id, disposition)
 			.then((next) => {
 				if (!cancelled) setPreview(next);
 			});
 		return () => {
 			cancelled = true;
 		};
-	}, [model, entry.token.id]);
+	}, [model, entry.token.id, disposition]);
 
-	const run = useCallback(
-		async (disposition: TokenDeletionDisposition) => {
-			setBusy(true);
+	const run = useCallback(async () => {
+		setBusy(true);
+		try {
 			const outcome = await model.deleteToken(entry.token.id, disposition);
-			setBusy(false);
 			if (outcome.status === "committed") {
 				onClose();
 				return;
 			}
 			setErrors(outcome.errors);
-		},
-		[model, entry.token.id, onClose],
-	);
+		} finally {
+			// Always clears: without it a rejected promise left every
+			// control in this modal disabled with no close button.
+			setBusy(false);
+		}
+	}, [model, entry.token.id, disposition, onClose]);
 
 	return (
 		<Dialog
@@ -191,38 +250,34 @@ function TokenDeleteDialog({
 
 				<ErrorList errors={errors} testId="ak-token-delete-errors" />
 				<DialogFooter className="mt-2">
+					{/* Never disabled: this dialog has no close button, so cancel
+					    is the only way out and must survive an in-flight or
+					    never-settling delete. */}
 					<Button
 						type="button"
 						variant="ghost"
-						disabled={busy}
 						onClick={onClose}
 						data-testid="ak-token-delete-cancel"
 					>
 						{msg("studio.editor.component.delete.cancel")}
 					</Button>
-					{replacementId.length > 0 ? (
-						<Button
-							type="button"
-							variant="destructive"
-							disabled={busy}
-							onClick={() =>
-								void run({ kind: "replace", tokenId: replacementId })
-							}
-							data-testid="ak-token-delete-replace"
-						>
-							{msg("studio.editor.token.delete.replace")}
-						</Button>
-					) : (
-						<Button
-							type="button"
-							variant="destructive"
-							disabled={busy}
-							onClick={() => void run({ kind: "materialize" })}
-							data-testid="ak-token-delete-materialize"
-						>
-							{msg("studio.editor.token.delete.materialize")}
-						</Button>
-					)}
+					<Button
+						type="button"
+						variant="destructive"
+						disabled={busy}
+						onClick={() => void run()}
+						data-testid={
+							disposition.kind === "replace"
+								? "ak-token-delete-replace"
+								: "ak-token-delete-materialize"
+						}
+					>
+						{msg(
+							disposition.kind === "replace"
+								? "studio.editor.token.delete.replace"
+								: "studio.editor.token.delete.materialize",
+						)}
+					</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
@@ -240,7 +295,6 @@ function TokenRow({
 	readonly onDelete: () => void;
 }): ReactNode {
 	const msg = useMsg();
-	const [name, setName] = useState(entry.path);
 	const [errors, setErrors] = useState<readonly EditorError[]>([]);
 	const [aliasTarget, setAliasTarget] = useState("");
 
@@ -251,16 +305,26 @@ function TokenRow({
 			data-token-id={entry.token.id}
 		>
 			<div className="flex items-center gap-1">
+				{/*
+				 * Uncontrolled, and keyed on the stored path so an EXTERNAL
+				 * rename re-seeds it. Local `useState(entry.path)` was a
+				 * once-only initializer on a row keyed by token id, so after
+				 * Ctrl+Z the field still showed the undone name, the blur
+				 * guard compared it against the reverted `entry.path`, and
+				 * the rename was re-dispatched — undo could not stick. Same
+				 * for a collab peer's rename.
+				 */}
 				<Input
-					value={name}
+					key={entry.path}
+					defaultValue={entry.path}
 					aria-label={msg("studio.editor.token.name")}
 					className="h-6 flex-1 text-[11px]"
 					data-testid="ak-token-name"
 					disabled={!model.canMutate}
-					onChange={(event) => setName(event.target.value)}
-					onBlur={async () => {
-						if (name === entry.path) return;
-						setErrors((await model.renameToken(entry.token.id, name)).errors);
+					onBlur={async (event) => {
+						const next = event.target.value;
+						if (next === entry.path) return;
+						setErrors((await model.renameToken(entry.token.id, next)).errors);
 					}}
 					onKeyDown={(event) => {
 						if (event.key === "Enter") event.currentTarget.blur();
@@ -291,6 +355,9 @@ function TokenRow({
 				{model.modes.map((mode) => {
 					const value = entry.token.values[mode.id];
 					const resolved = entry.resolvedByMode[mode.id];
+					const literal =
+						value?.kind === "literal" ? literalText(value.value) : null;
+					const text = literal?.text ?? "";
 					return (
 						<li
 							key={mode.id}
@@ -302,9 +369,8 @@ function TokenRow({
 								{mode.name}
 							</span>
 							<Input
-								defaultValue={
-									value?.kind === "literal" ? String(value.value ?? "") : ""
-								}
+								key={text}
+								defaultValue={text}
 								aria-label={`${entry.path} ${mode.name}`}
 								placeholder={
 									value === undefined
@@ -313,13 +379,22 @@ function TokenRow({
 								}
 								className="h-5 flex-1 text-[10px]"
 								data-testid="ak-token-mode-value"
-								disabled={!model.canMutate || value?.kind === "alias"}
+								disabled={
+									!model.canMutate ||
+									value?.kind === "alias" ||
+									literal?.editable === false
+								}
 								onBlur={async (event) => {
+									const next = event.target.value;
+									// An untouched field must not write. Tabbing through a
+									// mode with no declared value used to convert it from
+									// inherited into an empty-string literal of its own.
+									if (next === text) return;
 									setErrors(
 										(
 											await model.setTokenValue(entry.token.id, mode.id, {
 												kind: "literal",
-												value: event.target.value,
+												value: coerceLiteral(entry.token.type, next),
 											})
 										).errors,
 									);
@@ -331,7 +406,7 @@ function TokenRow({
 							>
 								{resolved === undefined
 									? msg("studio.editor.token.unresolved")
-									: String(resolved)}
+									: literalText(resolved).text}
 							</span>
 						</li>
 					);

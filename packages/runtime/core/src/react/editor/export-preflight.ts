@@ -35,7 +35,7 @@ import type {
 	EditorExportCapabilities,
 	EditorFeatureId,
 } from "@anvilkit/contracts/editor";
-import { use, useMemo } from "react";
+import { use, useMemo, useSyncExternalStore } from "react";
 import {
 	type EditorFeatureScanDocument,
 	type ExportPreflightResult,
@@ -82,6 +82,25 @@ export function useExportPreflight(
 	const live = useAccessibilityIssues();
 	const liveIssues = live?.issues;
 
+	/*
+	 * The verdict is derived from the live document, so it has to be
+	 * recomputed whenever the document moves — `port` is one stable object
+	 * for the editor's lifetime and never signals a change by identity.
+	 * Both counters are read because the feature scan spans both sources:
+	 * the sidecar (`getVersion`) and the Puck data that carries `richText`
+	 * in component props (`getDataVersion`, DD-DEC-018).
+	 */
+	const version = useSyncExternalStore(
+		bridge === null ? noopSubscribe : bridge.subscribe,
+		bridge === null ? zero : bridge.getVersion,
+		bridge === null ? zero : bridge.getVersion,
+	);
+	const dataVersion = useSyncExternalStore(
+		bridge === null ? noopSubscribe : bridge.subscribe,
+		bridge === null ? zero : bridge.getDataVersion,
+		bridge === null ? zero : bridge.getDataVersion,
+	);
+
 	const effectiveIssues = useMemo(
 		() =>
 			a11yIssues ??
@@ -92,6 +111,8 @@ export function useExportPreflight(
 	);
 
 	return useMemo(() => {
+		void version;
+		void dataVersion;
 		if (port == null) return null;
 		const authoring = port.getSnapshot().authoring;
 		// The document, not just the sidecar: `richText` lives in
@@ -108,7 +129,25 @@ export function useExportPreflight(
 			...(policies === undefined ? {} : { policies }),
 			...(mode === undefined ? {} : { mode }),
 		});
-	}, [port, capabilities, effectiveIssues, policies, mode]);
+	}, [
+		port,
+		capabilities,
+		effectiveIssues,
+		policies,
+		mode,
+		version,
+		dataVersion,
+	]);
+}
+
+function noopSubscribe(): () => void {
+	return noop;
+}
+function noop(): void {
+	// The no-bridge store never changes.
+}
+function zero(): number {
+	return 0;
 }
 
 /**

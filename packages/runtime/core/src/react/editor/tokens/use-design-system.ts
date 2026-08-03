@@ -184,9 +184,22 @@ export function useDesignSystem(): DesignSystemModel | null {
 		return port?.getSnapshot() ?? null;
 	}, [port, version]);
 
+	/*
+	 * The token and style lists are derived from the sidecar alone, so they
+	 * key off the authoring state rather than the snapshot. `getVersion`
+	 * also fires on selection and diagnostic churn, and `getSnapshot()`
+	 * builds a fresh wrapper every time — keying on the snapshot re-walked
+	 * every node, style and component definition (plus a resolve per token
+	 * per mode) on every canvas click, with this panel mounted permanently
+	 * by `ComponentsModule`'s `keepMounted`. `revision` rides along so an
+	 * in-place sidecar mutation cannot go unnoticed.
+	 */
+	const authoring = snapshot?.authoring ?? null;
+	const revision = snapshot?.revision ?? -1;
+
 	const tokens = useMemo((): readonly DesignSystemToken[] => {
-		if (snapshot === null) return [];
-		const authoring = snapshot.authoring;
+		void revision;
+		if (authoring === null) return [];
 		const modeIds = Object.keys(authoring.tokenModes);
 		const effectiveModes = modeIds.length > 0 ? modeIds : [defaultMode];
 		// One usage pass for every token rather than per-token scans.
@@ -200,7 +213,7 @@ export function useDesignSystem(): DesignSystemModel | null {
 						token.id,
 						mode,
 						authoring.tokens,
-						authoring.tokenModes,
+						defaultMode,
 					);
 					if (value !== undefined) anyResolved = true;
 					resolvedByMode[mode] = value;
@@ -215,11 +228,11 @@ export function useDesignSystem(): DesignSystemModel | null {
 				};
 			})
 			.sort((a, b) => a.path.localeCompare(b.path));
-	}, [snapshot, defaultMode]);
+	}, [authoring, revision, defaultMode]);
 
 	const styles = useMemo((): readonly DesignSystemStyle[] => {
-		if (snapshot === null) return [];
-		const authoring = snapshot.authoring;
+		void revision;
+		if (authoring === null) return [];
 		const byDefinition = new Map<string, string[]>();
 		for (const [nodeId, record] of Object.entries(authoring.nodes)) {
 			const refs = record.styleRefs;
@@ -240,7 +253,7 @@ export function useDesignSystem(): DesignSystemModel | null {
 				nodeIds: byDefinition.get(definition.id) ?? [],
 			}))
 			.sort((a, b) => a.definition.name.localeCompare(b.definition.name));
-	}, [snapshot]);
+	}, [authoring, revision]);
 
 	const createToken = useCallback(
 		async (input: {
@@ -639,14 +652,20 @@ function usageCounts(authoring: {
  * `resolveToken`: the list resolves every token in every mode on each
  * render, and the alias chain is capped at the same depth the engine
  * enforces, so a cycle terminates instead of hanging.
+ *
+ * The fallback rule is the engine's, verbatim (§15.1, `resolve/token.ts`):
+ * the requested mode, then the configured default mode, then nothing.
+ * It deliberately does NOT fall back to "whatever mode happens to be
+ * declared first" — that reported a light-mode literal as the resolved
+ * dark-mode value, so a token declared in one mode looked fully specified
+ * in every mode, and which mode leaked depended on key insertion order.
  */
 function resolveTokenSync(
 	tokenId: string,
 	mode: TokenModeId,
 	tokens: Readonly<Record<string, DesignToken>>,
-	modes: Readonly<Record<string, unknown>>,
+	defaultModeId: TokenModeId,
 ): unknown {
-	void modes;
 	const seen = new Set<string>();
 	let currentId = tokenId;
 	for (let depth = 0; depth < 8; depth += 1) {
@@ -654,9 +673,16 @@ function resolveTokenSync(
 		seen.add(currentId);
 		const token = tokens[currentId];
 		if (token === undefined) return undefined;
-		const value = token.values[mode] ?? Object.values(token.values)[0];
+		const value =
+			token.values[mode] ??
+			(defaultModeId === mode ? undefined : token.values[defaultModeId]);
 		if (value === undefined) return undefined;
 		if (value.kind === "literal") return value.value;
+		// Aliases resolve only to a compatible type (§15.1) — matching the
+		// engine, so the panel cannot show a value the engine calls a
+		// type-mismatch.
+		const target = tokens[value.tokenId];
+		if (target !== undefined && target.type !== token.type) return undefined;
 		currentId = value.tokenId;
 	}
 	return undefined;
