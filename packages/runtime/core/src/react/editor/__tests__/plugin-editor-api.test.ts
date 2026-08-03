@@ -294,6 +294,48 @@ describe("createEditorDiagnosticCenter (CORE-P1A-003/-004)", () => {
 		expect(events).toHaveLength(count);
 	});
 
+	it("reads one source's slice without the flattened view's cross-channel bleed", () => {
+		// `getDiagnostics()` flattens every source with nothing marking
+		// which channel an entry came from, so a surface rendering only
+		// its own messages had to re-identify them by `details.kind` —
+		// and two channels publishing the same kind then rendered under
+		// each other's surface.
+		const center = createEditorDiagnosticCenter();
+		const mine = {
+			code: "EDITOR_DEFINITION_UNAVAILABLE",
+			severity: "error",
+			message: "mine",
+			recoverable: true,
+			details: { kind: "componentInstance" },
+		} as const;
+		const theirs = {
+			code: "EDITOR_COMMAND_CONFLICT",
+			severity: "error",
+			message: "theirs",
+			recoverable: true,
+			details: { kind: "componentInstance" },
+		} as const;
+		center.setDiagnostics("editor.component.instance", [mine]);
+		center.setDiagnostics("editor.component.create", [theirs]);
+
+		// Indistinguishable by shape — which is exactly the bug.
+		expect(center.getDiagnostics()).toHaveLength(2);
+		expect(center.getDiagnosticsFor("editor.component.instance")).toEqual([
+			mine,
+		]);
+		expect(center.getDiagnosticsFor("editor.component.create")).toEqual([
+			theirs,
+		]);
+		// A cleared channel reads empty even while its peer still has entries.
+		center.setDiagnostics("editor.component.instance", []);
+		expect(center.getDiagnosticsFor("editor.component.instance")).toEqual([]);
+		expect(center.getDiagnostics()).toHaveLength(1);
+		// Misses share one frozen empty slice, so memo identity holds.
+		expect(center.getDiagnosticsFor("nobody")).toBe(
+			center.getDiagnosticsFor("editor.component.instance"),
+		);
+	});
+
 	it("isolates throwing subscribers", () => {
 		const center = createEditorDiagnosticCenter();
 		const seen: EditorEvent[] = [];

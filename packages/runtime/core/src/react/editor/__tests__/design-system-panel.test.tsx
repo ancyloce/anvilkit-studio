@@ -529,3 +529,120 @@ describe("Reusable style management (ED-STYLEDEF-001/-002)", () => {
 		expect(recorded).toHaveLength(0);
 	});
 });
+
+/**
+ * Regression cover for the CORE review of this branch. Each case is a
+ * defect that shipped in the first cut of this panel and that the type
+ * checker and the tests above both let through.
+ */
+describe("design-system panel — review regressions", () => {
+	it("does not write a literal when an inherited mode is blurred untouched", async () => {
+		// Tabbing through a mode with no declared value used to commit
+		// `{kind:"literal", value:""}`, permanently converting an inherited
+		// mode into an empty-string literal of its own.
+		const { port, recorded } = await mount({
+			tokens: { t1: token("t1", "color.brand", "#111111") },
+			tokenModes: {
+				light: { id: "light", name: "Light" },
+				dark: { id: "dark", name: "Dark" },
+			},
+		});
+		await waitFor(() =>
+			expect(screen.getAllByTestId("ak-token-mode")).toHaveLength(2),
+		);
+		const darkRow = screen
+			.getAllByTestId("ak-token-mode")
+			.find((row) => row.getAttribute("data-mode-id") === "dark");
+		fireEvent.blur(
+			within(darkRow as HTMLElement).getByTestId("ak-token-mode-value"),
+		);
+		await Promise.resolve();
+		expect(authoringOf(port).tokens.t1?.values.dark).toBeUndefined();
+		expect(recorded).toHaveLength(0);
+	});
+
+	it("keeps a number token's value a number across an edit", async () => {
+		// `String(8)` renders "8"; writing the raw text back silently
+		// changed the stored type to a string.
+		const { port } = await mount({
+			tokens: {
+				t1: token("t1", "size.gap", 8, {
+					type: "number",
+					values: { light: { kind: "literal", value: 8 } },
+				} as Partial<DesignToken>),
+			},
+		});
+		const input = await screen.findByTestId("ak-token-mode-value");
+		fireEvent.blur(input, { target: { value: "12" } });
+		await waitFor(() =>
+			expect(authoringOf(port).tokens.t1?.values.light).toEqual({
+				kind: "literal",
+				value: 12,
+			}),
+		);
+	});
+
+	it("reports a mode with no value as unresolved instead of leaking another mode's literal", async () => {
+		// The old fallback was `Object.values(token.values)[0]` — an
+		// arbitrary mode, picked by key insertion order. A token declared
+		// only in `dark` therefore reported a resolved value for `light`
+		// while the same row's input showed the "inherited" placeholder.
+		// §15.1 allows exactly one fallback: the configured default mode,
+		// which here IS `light`, so nothing may stand in for it.
+		await mount({
+			tokens: {
+				t1: token("t1", "color.brand", "#111111", {
+					values: { dark: { kind: "literal", value: "#222222" } },
+				} as Partial<DesignToken>),
+			},
+			tokenModes: {
+				light: { id: "light", name: "Light" },
+				dark: { id: "dark", name: "Dark" },
+			},
+		});
+		await waitFor(() =>
+			expect(screen.getAllByTestId("ak-token-mode")).toHaveLength(2),
+		);
+		const rowFor = (mode: string) =>
+			screen
+				.getAllByTestId("ak-token-mode")
+				.find((row) => row.getAttribute("data-mode-id") === mode) as HTMLElement;
+
+		expect(
+			within(rowFor("dark")).getByTestId("ak-token-resolved").textContent,
+		).toBe("#222222");
+		expect(
+			within(rowFor("light")).getByTestId("ak-token-resolved").textContent,
+		).not.toContain("#222222");
+	});
+
+	it("re-seeds the name input when the token is renamed externally", async () => {
+		// The input seeded from `useState(entry.path)` — a once-only
+		// initializer on a row keyed by token id, so it never re-synced.
+		// After an undo the field still showed the undone name and the
+		// next blur re-dispatched it, making the rename un-undoable.
+		const { port } = await mount({
+			tokens: { t1: token("t1", "color.old", "#111111") },
+		});
+		const input = await screen.findByTestId("ak-token-name");
+		expect((input as HTMLInputElement).value).toBe("color.old");
+
+		await act(async () => {
+			await port.execute({
+				id: "external-rename",
+				expectedRevision: port.getSnapshot().revision,
+				source: "inspector",
+				timestamp: 0,
+				type: "token.update",
+				tokenId: "t1",
+				patch: { name: "color.external", path: ["color", "external"] },
+			} as never);
+		});
+
+		await waitFor(() =>
+			expect(
+				(screen.getByTestId("ak-token-name") as HTMLInputElement).value,
+			).toBe("color.external"),
+		);
+	});
+});
