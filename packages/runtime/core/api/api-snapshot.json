@@ -12636,11 +12636,11 @@
 							},
 							{
 								"type": "literal",
-								"value": "script"
+								"value": "style"
 							},
 							{
 								"type": "literal",
-								"value": "style"
+								"value": "script"
 							}
 						]
 					}
