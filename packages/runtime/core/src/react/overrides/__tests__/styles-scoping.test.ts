@@ -55,6 +55,37 @@ describe("styles.src.css scoping", () => {
 		}
 	});
 
+	/**
+	 * Regression: Puck's `fields` override renders inside a plain
+	 * `display: block` `<form class="_PuckFields_…">`, so `FieldsPanel`'s
+	 * `h-full` resolved against nothing and the WHOLE inspector — sticky
+	 * header and, after the tabbed redesign, the tab strip — scrolled
+	 * inside the outer resizable panel. The rule below re-establishes the
+	 * height chain so only the active tab's body scrolls (DESIGN.md §7.8).
+	 */
+	it("makes the Puck fields form a flex column so only the inspector body scrolls", () => {
+		const rule = code.match(
+			/\[data-ak-studio-root\]\s+\[class\*="_PuckFields_"\]\s*\{[^}]*\}/,
+		);
+		expect(
+			rule,
+			"the _PuckFields_ height-chain rule is missing",
+		).not.toBeNull();
+		const body = rule?.[0] ?? "";
+		expect(body).toMatch(/display:\s*flex/);
+		expect(body).toMatch(/flex-direction:\s*column/);
+		expect(body).toMatch(/min-height:\s*0/);
+	});
+
+	it("scopes the Puck fields form rule so Puck's own chrome is untouched", () => {
+		const puckFieldsRules =
+			code.match(/[^{}]*\[class\*="_PuckFields_"\][^{]*\{/g) ?? [];
+		expect(puckFieldsRules.length).toBeGreaterThan(0);
+		for (const selector of puckFieldsRules) {
+			expect(selector).toMatch(/data-ak-studio-root/);
+		}
+	});
+
 	it("reserves the brand outline for the dragging state, not hover", () => {
 		// The dragging rule uses the brand selection token…
 		const draggingRule = code.match(/\[data-dnd-dragging\][^{]*\{[^}]*\}/g);

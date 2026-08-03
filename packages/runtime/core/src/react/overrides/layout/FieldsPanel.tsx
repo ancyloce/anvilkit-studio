@@ -31,6 +31,13 @@
  * are unaffected. Fields produced dynamically by `resolveFields`
  * that are absent from the static config simply have no metadata and
  * stay ungrouped — never dropped.
+ *
+ * Placement: the assembled field tree is handed to
+ * {@link EditorInspectorMount}. With the visual editor on it becomes
+ * the `properties` tab of the four-tab inspector (style / properties /
+ * data / animation); with the editor off it is the panel body, exactly
+ * as before. This panel keeps owning selection, breadcrumbs, the
+ * header and the component actions in both shapes.
  */
 
 import { ChevronRight, Copy, MoreHorizontal, Trash2 } from "lucide-react";
@@ -339,47 +346,54 @@ export function FieldsPanel({
 					) : null}
 				</div>
 			</header>
-			<div className="min-h-0 flex-1 overflow-auto">
-				<div
-					className={cn(
-						// Dim-and-settle, not `animate-pulse`: these are the REAL fields,
-						// not a skeleton, and an infinite keyframe loop made the whole
-						// inspector breathe on every load. A one-way opacity transition
-						// is also interruptible, so a fast load never strands a frame.
-						"flex flex-col gap-3 transition-opacity duration-150 ease-out",
-						isLoading ? "opacity-70" : null,
-					)}
-				>
-					{grouped === null ? (
-						children
-					) : (
-						<>
-							{grouped.ungrouped}
-							{grouped.sections.map((section) => (
-								<InspectorSection
-									key={section.id}
-									id={`fields:${selectedType ?? "root"}:${section.id}`}
-									title={
-										isCanonicalFieldSection(section.id)
-											? msg(fieldSectionTitleKey(section.id))
-											: section.id
-									}
-									defaultExpanded={section.id !== "advanced"}
-								>
-									<div className="flex flex-col gap-3 pt-1 pb-2">
-										{section.nodes}
-									</div>
-								</InspectorSection>
-							))}
-						</>
-					)}
-					{/* Universal editor sections (CORE-P1A-005, ED-INSPECT-002):
-					    composed strictly AFTER the native Puck fields — never
-					    replacing or reordering them. Renders null (and fetches
-					    nothing) unless the editor feature is enabled. */}
-					<EditorInspectorMount />
-				</div>
-			</div>
+			{/*
+			 * The native field tree is built ONCE here and handed to the
+			 * mount, which decides where it lands: under the `properties`
+			 * tab of the visual editor's four-tab inspector, or — with the
+			 * editor off — alone in the single scroll body this panel has
+			 * always rendered (ED-INSPECT-002 coexistence rule). Either way
+			 * grouping, ordering and the loading treatment below are
+			 * untouched by the editor.
+			 */}
+			<EditorInspectorMount
+				properties={
+					<div
+						className={cn(
+							// Dim-and-settle, not `animate-pulse`: these are the REAL fields,
+							// not a skeleton, and an infinite keyframe loop made the whole
+							// inspector breathe on every load. A one-way opacity transition
+							// is also interruptible, so a fast load never strands a frame.
+							"flex flex-col gap-3 transition-opacity duration-150 ease-out",
+							isLoading ? "opacity-70" : null,
+						)}
+						data-testid="ak-fields-panel-native"
+					>
+						{grouped === null ? (
+							children
+						) : (
+							<>
+								{grouped.ungrouped}
+								{grouped.sections.map((section) => (
+									<InspectorSection
+										key={section.id}
+										id={`fields:${selectedType ?? "root"}:${section.id}`}
+										title={
+											isCanonicalFieldSection(section.id)
+												? msg(fieldSectionTitleKey(section.id))
+												: section.id
+										}
+										defaultExpanded={section.id !== "advanced"}
+									>
+										<div className="flex flex-col gap-3 pt-1 pb-2">
+											{section.nodes}
+										</div>
+									</InspectorSection>
+								))}
+							</>
+						)}
+					</div>
+				}
+			/>
 		</div>
 	);
 }

@@ -625,6 +625,33 @@
 }
 
 /*
+ * Puck renders the `fields` override inside its own `<form
+ * class="_PuckFields_…">`, a plain `display: block` box with no
+ * height. That broke the height chain: `FieldsPanel`'s `h-full` had
+ * nothing definite to resolve against, so the panel grew to its
+ * content and the *whole* inspector — sticky header included —
+ * scrolled inside the outer resizable panel instead of scrolling its
+ * own body (DESIGN.md §7.8 "only the body scrolls").
+ *
+ * With the four-tab inspector that stops being cosmetic: the tab
+ * strip is a flex sibling of the scroll region, so an unconstrained
+ * chain scrolls the tabs off the top of the panel.
+ *
+ * Making the form a flex column that fills its parent restores the
+ * chain. `[class*="_PuckFields_"]` matches only the form itself —
+ * Puck's sibling class names are `_PuckFields--wrapFields_` and
+ * `_PuckFields-field_`, neither of which contains `_PuckFields_` —
+ * and the `[data-ak-studio-root]` scope keeps Puck's own chrome
+ * (`chrome="puck"`, rendered outside this root) untouched.
+ */
+[data-ak-studio-root] [class*="_PuckFields_"] {
+	display: flex;
+	flex: 1 1 0%;
+	flex-direction: column;
+	min-height: 0;
+}
+
+/*
  * Field separators in Puck's `_PuckFields_` panel default to
  * `--puck-color-grey-09`, which reads slightly off against the
  * chrome's `--ak-studio-border`. Re-point the divider to the

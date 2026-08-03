@@ -114,5 +114,55 @@ describe("FieldsPanel", () => {
 		expect(screen.getByTestId("ak-fields-panel-title").textContent).toBe(
 			"Root",
 		);
+		// Root selections are still a real selection: the field tree
+		// renders, it is simply the root's.
+		expect(screen.getByTestId("puck-field")).toBeTruthy();
+	});
+});
+
+describe("FieldsPanel — visual editor off (ED-INSPECT-002)", () => {
+	function renderLegacy(isLoading = false): void {
+		puckState = {
+			appState: {
+				ui: { itemSelector: { index: 0, zone: "default-zone" } },
+				data: { content: [{ type: "Hero", props: { id: "h-1" } }] },
+			},
+		};
+		render(
+			<EditorI18nProvider>
+				<FieldsPanel
+					isLoading={isLoading}
+					itemSelector={{ index: 0, zone: "default-zone" }}
+				>
+					<div data-testid="puck-field" />
+				</FieldsPanel>
+			</EditorI18nProvider>,
+		);
+	}
+
+	it("renders the native field tree with no tab bar and no editor sections", () => {
+		renderLegacy();
+		expect(screen.getByTestId("puck-field")).toBeTruthy();
+		// None of the tabbed inspector's surfaces exist without the editor.
+		expect(screen.queryByTestId("ak-inspector-tabs")).toBeNull();
+		expect(screen.queryByTestId("ak-editor-inspector")).toBeNull();
+		expect(document.querySelectorAll("[role='tablist']")).toHaveLength(0);
+		expect(screen.queryByTestId("ak-layout-section")).toBeNull();
+	});
+
+	it("keeps the fields inside the panel's own single scroll body", () => {
+		renderLegacy();
+		const body = screen
+			.getByTestId("puck-field")
+			.closest(".overflow-auto") as HTMLElement | null;
+		expect(body).not.toBeNull();
+		expect(body?.className).toContain("flex-1");
+	});
+
+	it("keeps the loading treatment on the native field tree", () => {
+		renderLegacy(true);
+		expect(screen.getByTestId("ak-fields-panel-native").className).toContain(
+			"opacity-70",
+		);
 	});
 });
