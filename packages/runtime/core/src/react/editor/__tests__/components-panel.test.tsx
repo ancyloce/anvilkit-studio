@@ -33,17 +33,21 @@ import { act } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { StudioConfigSchema } from "@/config/schema";
 import { StudioPluginContextProvider } from "@/context/plugin-context";
+import { EditorStoreProvider } from "@/state/EditorStoreProvider";
 import { EditorI18nProvider } from "@/state/editor-i18n-context";
 import { createEditorStore } from "@/state/editor-store-bundle";
-import { EditorStoreProvider } from "@/state/EditorStoreProvider";
 import type { StudioPluginContext } from "@/types/plugin";
-import type { InternalEditorCommandPort } from "../command-port.js";
 import { createStudioEditorBridge } from "../bridge.js";
+import type { InternalEditorCommandPort } from "../command-port.js";
 import { ComponentCanvasPanel } from "../components/ComponentCanvasPanel.js";
 import { ComponentInstanceSection } from "../components/ComponentInstanceSection.js";
 import { ComponentsPanel } from "../components/ComponentsPanel.js";
 import { componentScope } from "../components/scope.js";
 import { StudioEditorMount } from "../StudioEditorMount.js";
+import {
+	applyPuckDataAction,
+	type PuckDataAction,
+} from "./puck-store-double.js";
 
 afterEach(cleanup);
 
@@ -65,9 +69,7 @@ function definition(
 			props: {
 				id: "n-root",
 				label: "base",
-				children: [
-					{ type: "Text", props: { id: "n-text", text: "base" } },
-				],
+				children: [{ type: "Text", props: { id: "n-text", text: "base" } }],
 			},
 		} as never,
 		exposedProps: [],
@@ -133,11 +135,12 @@ function createCtx(
 					},
 				},
 				config,
-				dispatch: (action: { data?: PuckData; recordHistory?: boolean }) => {
-					if (action.data !== undefined) {
-						data = action.data;
+				dispatch: (action: PuckDataAction) => {
+					const next = applyPuckDataAction(data, action);
+					if (next !== data) {
+						data = next;
 						if (action.recordHistory === true) {
-							recorded.push(action.data);
+							recorded.push(data);
 						}
 					}
 				},
@@ -350,7 +353,8 @@ describe("Variant axis authoring (ED-VARIANT-001)", () => {
 		const { port } = await inScope();
 		await addAxis("Size");
 		await waitFor(() => {
-			const axes = authoringOf(port).componentDefinitions.def?.variantAxes ?? [];
+			const axes =
+				authoringOf(port).componentDefinitions.def?.variantAxes ?? [];
 			expect(axes).toHaveLength(1);
 			expect(axes[0]?.name).toBe("Size");
 			expect(axes[0]?.options).toHaveLength(1);
@@ -388,7 +392,9 @@ describe("Variant axis authoring (ED-VARIANT-001)", () => {
 				authoringOf(port).componentDefinitions.def?.variantAxes[0]?.options,
 			).toHaveLength(1),
 		);
-		fireEvent.click(screen.getAllByTestId("ak-variant-option-remove")[0] as HTMLElement);
+		fireEvent.click(
+			screen.getAllByTestId("ak-variant-option-remove")[0] as HTMLElement,
+		);
 		await waitFor(() =>
 			expect(screen.getByTestId("ak-variant-axis-errors")).toBeTruthy(),
 		);
@@ -426,7 +432,9 @@ describe("Variant axis authoring (ED-VARIANT-001)", () => {
 				authoringOf(port).componentDefinitions.def?.variantAxes,
 			).toHaveLength(0),
 		);
-		expect(authoringOf(port).componentDefinitions.def?.variants).toHaveLength(0);
+		expect(authoringOf(port).componentDefinitions.def?.variants).toHaveLength(
+			0,
+		);
 	});
 
 	it("enforces the 3-axis cap and says so", async () => {
@@ -471,9 +479,7 @@ describe("Variant axis authoring (ED-VARIANT-001)", () => {
 		const axisId =
 			authoringOf(port).componentDefinitions.def?.variantAxes[0]?.id ?? "";
 		const input = screen.getByTestId(`ak-variant-option-add-${axisId}-input`);
-		const submit = screen.getByTestId(
-			`ak-variant-option-add-${axisId}-submit`,
-		);
+		const submit = screen.getByTestId(`ak-variant-option-add-${axisId}-submit`);
 		for (let index = 2; index <= 20; index += 1) {
 			fireEvent.change(input, { target: { value: `Option ${index}` } });
 			fireEvent.click(submit);
@@ -541,7 +547,9 @@ describe("Instance inspector (ED-COMP-003/-004/-007/-008, ED-VARIANT-002)", () =
 		});
 		act(() => bridge.selection?.select("a"));
 		await waitFor(() =>
-			expect(screen.getByTestId("ak-component-variant-select-size")).toBeTruthy(),
+			expect(
+				screen.getByTestId("ak-component-variant-select-size"),
+			).toBeTruthy(),
 		);
 		const before = recorded.length;
 		await act(async () => {
@@ -706,9 +714,7 @@ describe("Instance inspector (ED-COMP-003/-004/-007/-008, ED-VARIANT-002)", () =
 		);
 		fireEvent.click(screen.getByTestId("ak-component-detach"));
 		await waitFor(() =>
-			expect(
-				authoringOf(port).nodes.a?.componentInstance,
-			).toBeUndefined(),
+			expect(authoringOf(port).nodes.a?.componentInstance).toBeUndefined(),
 		);
 	});
 
@@ -721,16 +727,18 @@ describe("Instance inspector (ED-COMP-003/-004/-007/-008, ED-VARIANT-002)", () =
 		});
 		act(() => bridge.selection?.select("a"));
 		await waitFor(() =>
-			expect(screen.getByTestId("ak-component-instance-unresolved")).toBeTruthy(),
+			expect(
+				screen.getByTestId("ak-component-instance-unresolved"),
+			).toBeTruthy(),
 		);
 		// The diagnostic is explicit AND the data survives untouched.
 		expect(
 			authoringOf(port).nodes.a?.componentInstance?.nodeOverrides["n-text"],
 		).toEqual({ props: { text: "kept" } });
 		// Destructive affordances are disabled while unresolved.
-		expect(screen.getByTestId("ak-component-detach").hasAttribute("disabled")).toBe(
-			true,
-		);
+		expect(
+			screen.getByTestId("ak-component-detach").hasAttribute("disabled"),
+		).toBe(true);
 	});
 });
 
@@ -759,9 +767,9 @@ describe("Definition deletion lifecycle (ED-COMP-006)", () => {
 		expect(screen.getByTestId("ak-component-delete-impact")).toBeTruthy();
 		fireEvent.click(screen.getByTestId("ak-component-delete-confirm"));
 		await waitFor(() =>
-			expect(
-				Object.keys(authoringOf(port).componentDefinitions),
-			).toHaveLength(0),
+			expect(Object.keys(authoringOf(port).componentDefinitions)).toHaveLength(
+				0,
+			),
 		);
 	});
 
@@ -791,9 +799,9 @@ describe("Definition deletion lifecycle (ED-COMP-006)", () => {
 		const before = recorded.length;
 		fireEvent.click(screen.getByTestId("ak-component-delete-detach-all"));
 		await waitFor(() =>
-			expect(
-				Object.keys(authoringOf(port).componentDefinitions),
-			).toHaveLength(0),
+			expect(Object.keys(authoringOf(port).componentDefinitions)).toHaveLength(
+				0,
+			),
 		);
 		// Detach-all + delete is ONE batch, therefore one undo step.
 		expect(recorded.length).toBe(before + 1);
@@ -837,7 +845,9 @@ describe("CreateComponentDialog — named capture (ED-COMP-001)", () => {
 		const input = await screen.findByTestId("ak-create-component-name");
 		fireEvent.change(input, { target: { value: "   " } });
 		expect(
-			screen.getByTestId("ak-create-component-confirm").hasAttribute("disabled"),
+			screen
+				.getByTestId("ak-create-component-confirm")
+				.hasAttribute("disabled"),
 		).toBe(true);
 	});
 });

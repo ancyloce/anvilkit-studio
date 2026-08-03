@@ -29,6 +29,10 @@ import {
 	tiptapToPlainText,
 } from "../inline/tiptap-contract.js";
 import { createEditorSelectionController } from "../selection.js";
+import {
+	applyPuckDataAction,
+	type PuckDataAction,
+} from "./puck-store-double.js";
 
 afterEach(() => {
 	vi.useRealTimers();
@@ -67,10 +71,8 @@ function setup(metadata: EditorCapabilityMetadata = TEXT_METADATA) {
 						return data;
 					},
 				},
-				dispatch: (action: { recordHistory?: boolean; data?: typeof data }) => {
-					if (action.data !== undefined) {
-						data = action.data;
-					}
+				dispatch: (action: PuckDataAction) => {
+					data = applyPuckDataAction(data, action);
 					if (action.recordHistory === true) {
 						recorded += 1;
 					}

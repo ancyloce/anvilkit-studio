@@ -17,27 +17,27 @@ import {
 	createEditorCommandPort,
 	type InternalEditorCommandPort,
 } from "../command-port.js";
+import {
+	applyPuckDataAction,
+	type PuckDataAction,
+} from "./puck-store-double.js";
 
 function harness(initial: PuckData) {
 	let data = initial;
 	const histories: PuckData[] = [initial];
 	let index = 0;
 	const probe = createHistoryRecordingProbe();
-	const dispatch = probe.wrap(
-		(action: {
-			readonly recordHistory?: boolean;
-			readonly data?: PuckData;
-		}) => {
-			if (action.data !== undefined) {
-				data = action.data;
-				if (action.recordHistory === true) {
-					histories.splice(index + 1);
-					histories.push(data);
-					index = histories.length - 1;
-				}
+	const dispatch = probe.wrap((action: PuckDataAction) => {
+		const next = applyPuckDataAction(data, action);
+		if (next !== data) {
+			data = next;
+			if (action.recordHistory === true) {
+				histories.splice(index + 1);
+				histories.push(data);
+				index = histories.length - 1;
 			}
-		},
-	);
+		}
+	});
 	const port = createEditorCommandPort({
 		getPuckApi: () =>
 			({

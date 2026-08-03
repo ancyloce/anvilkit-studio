@@ -33,6 +33,10 @@ import { createStudioEditorBridge } from "../bridge.js";
 import { EditorInspectorMount } from "../inspector/EditorInspectorMount.js";
 import { projectProperty, readFieldState } from "../inspector/field-state.js";
 import { StudioEditorMount } from "../StudioEditorMount.js";
+import {
+	applyPuckDataAction,
+	type PuckDataAction,
+} from "./puck-store-double.js";
 
 afterEach(cleanup);
 
@@ -173,10 +177,8 @@ function createCtx(): StudioPluginContext {
 					},
 				},
 				config,
-				dispatch: (action: { data?: typeof data }) => {
-					if (action.data !== undefined) {
-						data = action.data;
-					}
+				dispatch: (action: PuckDataAction) => {
+					data = applyPuckDataAction(data, action);
 				},
 				getItemById: (id: string) =>
 					id.startsWith("plain")

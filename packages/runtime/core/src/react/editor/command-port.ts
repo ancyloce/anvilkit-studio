@@ -9,10 +9,17 @@
  *
  * `execute()` runs `applyEditorCommand` over the cached parsed
  * authoring state and, when the reduction changed state, performs
- * **exactly one** `dispatch({ type: "setData", recordHistory: true })`
- * per intent — the verified `insert-component-node.ts` idiom, so every
- * commit is one undoable Puck history entry (single-intent rule,
- * §10.5) and Puck 0.22's per-`setData` warning is never amplified.
+ * **exactly one** `dispatch({ type: "replaceRoot", recordHistory: true })`
+ * per intent, so every commit is one undoable Puck history entry
+ * (single-intent rule, §10.5).
+ *
+ * It is `replaceRoot` and not `setData` because `writeAuthoringState`
+ * only ever rewrites `root.props` — the sidecar — and never `content`
+ * or `zones`. Dispatching the whole document was therefore strictly
+ * wider than the write it performed, and it tripped Puck 0.22's
+ * "`setData` is expensive and may cause unnecessary re-renders"
+ * console warning on every single commit. `commitNative` keeps
+ * `setData`: that path really does replace the tree.
  *
  * ### Parsed-state cache (the ~119 ms rule)
  *
@@ -366,15 +373,23 @@ export function createEditorCommandPort(
 				errors: [],
 				migrated: false,
 			};
+			// `replaceRoot` spread-merges `root.props` and leaves `content`
+			// untouched, which is exactly the write `writeAuthoringState`
+			// made. It also copies the sidecar VALUE by reference, so the
+			// identity the parsed-state cache keys on survives the round
+			// trip and the echoed `onChange` still classifies as
+			// self-originated.
+			//
 			// Single documented boundary cast (insert-component-node
 			// precedent): the live generic config's data type cannot be
 			// expressed here, so the action is cast as a whole.
 			api.dispatch({
-				type: "setData",
-				// Excluded from history unless flagged — this is the single
-				// history-recording dispatch for the whole intent (§10.5).
+				type: "replaceRoot",
+				// `replaceRoot` records history by default; stated
+				// explicitly because this is the single history-recording
+				// dispatch for the whole intent (§10.5).
 				recordHistory: true,
-				data: nextData,
+				root: nextData.root,
 			} as unknown as Parameters<PuckApi["dispatch"]>[0]);
 
 			const result: EditorCommandResult = {

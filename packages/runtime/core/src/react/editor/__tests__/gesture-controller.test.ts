@@ -16,6 +16,10 @@ import {
 	createEditorCommandPort,
 	type InternalEditorCommandPort,
 } from "../command-port.js";
+import {
+	applyPuckDataAction,
+	type PuckDataAction,
+} from "./puck-store-double.js";
 
 function portWithHistory(): {
 	port: InternalEditorCommandPort;
@@ -31,10 +35,8 @@ function portWithHistory(): {
 						return data;
 					},
 				},
-				dispatch: (action: { recordHistory?: boolean; data?: typeof data }) => {
-					if (action.data !== undefined) {
-						data = action.data;
-					}
+				dispatch: (action: PuckDataAction) => {
+					data = applyPuckDataAction(data, action);
 					if (action.recordHistory === true) {
 						recorded += 1;
 					}

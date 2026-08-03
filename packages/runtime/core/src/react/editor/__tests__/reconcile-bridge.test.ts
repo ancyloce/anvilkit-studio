@@ -26,6 +26,10 @@ import {
 	type InternalEditorCommandPort,
 } from "../command-port.js";
 import { duplicateNode, removeNode } from "../native-tree.js";
+import {
+	applyPuckDataAction,
+	type PuckDataAction,
+} from "./puck-store-double.js";
 
 /** A document with a zone-nested child under legacy-1. */
 function nestedDoc(sidecar?: AuthoringStateV1): PuckData {
@@ -53,21 +57,18 @@ function harness(initial: PuckData): Harness {
 	const histories: PuckData[] = [initial];
 	let index = 0;
 	const probe = createHistoryRecordingProbe();
-	const dispatch = probe.wrap(
-		(action: {
-			readonly recordHistory?: boolean;
-			readonly data?: PuckData;
-		}) => {
-			if (action.data !== undefined) {
-				data = action.data;
-				if (action.recordHistory === true) {
-					histories.splice(index + 1);
-					histories.push(data);
-					index = histories.length - 1;
-				}
-			}
-		},
-	);
+	const dispatch = probe.wrap((action: PuckDataAction) => {
+		const next = applyPuckDataAction(data, action);
+		if (next === data) {
+			return;
+		}
+		data = next;
+		if (action.recordHistory === true) {
+			histories.splice(index + 1);
+			histories.push(data);
+			index = histories.length - 1;
+		}
+	});
 	const port = createEditorCommandPort({
 		getPuckApi: () =>
 			({

@@ -2,11 +2,13 @@
  * @file CORE-P1A-001 — `createEditorCommandPort` over a stateful fake
  * Puck store (§27.3 command matrix for the Phase 1A subset).
  *
- * The fake store implements the exact contract the port relies on:
- * `dispatch({ type: "setData", recordHistory })` with a Puck-style
- * history stack (record-flagged snapshots only), `history.back/
- * forward` restoring recorded snapshots, and fresh `appState.data`
- * per `getPuck()` call. Every intent is asserted through the shared
+ * The fake store implements the exact contract the port relies on —
+ * `dispatch({ type: "replaceRoot", recordHistory })` for commits, and
+ * `setData` for the foreign-write cases that swap a whole document —
+ * over a Puck-style history stack (record-flagged snapshots only),
+ * with `history.back/forward` restoring recorded snapshots and fresh
+ * `appState.data` per `getPuck()` call. Action semantics live in
+ * `puck-store-double.ts`, shared with every other editor harness. Every intent is asserted through the shared
  * `createHistoryRecordingProbe` (single-intent history rule, §10.5).
  * Assertions use "≤1 recording dispatch per isolated intent", not
  * exact global counts, per the debounce-window tolerance rule.
@@ -33,6 +35,10 @@ import {
 	type EditorCommandPortDeps,
 	type InternalEditorCommandPort,
 } from "../command-port.js";
+import {
+	applyPuckDataAction,
+	type PuckDataAction,
+} from "./puck-store-double.js";
 
 interface FakePuck {
 	readonly getPuckApi: () => PuckApi;
@@ -41,23 +47,24 @@ interface FakePuck {
 	readonly forward: () => PuckData;
 	readonly recordingCount: () => number;
 	readonly resetProbe: () => void;
+	/** Every action type dispatched so far, in order. */
+	readonly actionTypes: () => readonly string[];
 }
 
 function createFakePuck(initialData: PuckData): FakePuck {
 	let data = initialData;
 	const histories: PuckData[] = [initialData];
 	let index = 0;
+	const seenActions: string[] = [];
 	const probe = createHistoryRecordingProbe();
 	const dispatch = probe.wrap(
-		(action: {
-			readonly type: string;
-			readonly recordHistory?: boolean;
-			readonly data?: PuckData;
-		}) => {
-			if (action.type !== "setData" || action.data === undefined) {
+		(action: PuckDataAction & { readonly type: string }) => {
+			seenActions.push(action.type);
+			const next = applyPuckDataAction(data, action);
+			if (next === data) {
 				throw new Error(`fake puck got unexpected action "${action.type}"`);
 			}
-			data = action.data;
+			data = next;
 			if (action.recordHistory === true) {
 				histories.splice(index + 1);
 				histories.push(data);
@@ -88,6 +95,7 @@ function createFakePuck(initialData: PuckData): FakePuck {
 		},
 		recordingCount: () => probe.count(),
 		resetProbe: () => probe.reset(),
+		actionTypes: () => seenActions,
 	};
 }
 
@@ -147,7 +155,7 @@ function codes(errors: readonly EditorError[]): readonly string[] {
 }
 
 describe("createEditorCommandPort — commit path (§10.2–§10.5)", () => {
-	it("commits a rename through exactly one history-recording setData", async () => {
+	it("commits a rename through exactly one history-recording replaceRoot", async () => {
 		const { port, puck } = createPort(buildLegacyPuckData());
 		const result = await port.execute(
 			command(0, { type: "node.rename", nodeId: "legacy-0", name: "Hero" }),
@@ -161,6 +169,42 @@ describe("createEditorCommandPort — commit path (§10.2–§10.5)", () => {
 		const sidecar = readSidecar(puck.getData());
 		expect(sidecar?.revision).toBe(1);
 		expect(sidecar?.nodes["legacy-0"]?.name).toBe("Hero");
+	});
+
+	it("commits via replaceRoot, never setData, and leaves content untouched", async () => {
+		// `writeAuthoringState` only ever rewrites `root.props`, so a
+		// whole-document `setData` was strictly wider than the write and
+		// made Puck 0.22 log "`setData` is expensive and may cause
+		// unnecessary re-renders" on every commit.
+		const { port, puck } = createPort(buildLegacyPuckData());
+		const contentBefore = puck.getData().content;
+
+		const result = await port.execute(
+			command(0, { type: "node.rename", nodeId: "legacy-0", name: "Hero" }),
+		);
+
+		expect(result.status).toBe("committed");
+		expect(puck.actionTypes()).toEqual(["replaceRoot"]);
+		expect(puck.actionTypes()).not.toContain("setData");
+		// Referentially identical: the commit touched root props only, so
+		// Puck has no tree diff to re-render.
+		expect(puck.getData().content).toBe(contentBefore);
+	});
+
+	it("keeps the sidecar reference stable through replaceRoot's props merge", async () => {
+		// The parsed-state cache keys on the sidecar VALUE identity. Puck's
+		// `replaceRoot` builds a NEW `root.props` object but copies the
+		// sidecar across by reference, so the echoed change must still
+		// classify as self-originated (no re-parse).
+		const { port, puck } = createPort(buildLegacyPuckData());
+		await port.execute(
+			command(0, { type: "node.rename", nodeId: "legacy-0", name: "Hero" }),
+		);
+		const committed = port.getSnapshot().authoring;
+
+		port.handleDataChange(puck.getData());
+
+		expect(port.getSnapshot().authoring).toBe(committed);
 	});
 
 	it("runs the full Phase 1A command matrix, one recording dispatch per intent (§27.3)", async () => {
@@ -234,7 +278,9 @@ describe("createEditorCommandPort — commit path (§10.2–§10.5)", () => {
 		expect(state.nodes["legacy-0"]?.layout?.base).toMatchObject({
 			display: "flex",
 		});
-		expect(state.nodes["legacy-1"]?.hidden?.overrides?.["bp-tablet"]).toBe(true);
+		expect(state.nodes["legacy-1"]?.hidden?.overrides?.["bp-tablet"]).toBe(
+			true,
+		);
 		// lock → unlock collapsed back to no record for node-3 name only.
 		expect(state.nodes["legacy-2"]?.locked).toBeUndefined();
 		expect(state.nodes["legacy-2"]?.name).toBe("Footer");

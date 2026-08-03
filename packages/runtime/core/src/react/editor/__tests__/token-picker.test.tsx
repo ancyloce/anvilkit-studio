@@ -7,6 +7,7 @@
  */
 
 import type {
+	CssLength,
 	EditorCapabilityMetadata,
 	ImportableTokenValue,
 	StudioEditorConfig,
@@ -22,16 +23,24 @@ import { act, type ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { StudioConfigSchema } from "@/config/schema";
 import { StudioPluginContextProvider } from "@/context/plugin-context";
-import { EditorI18nProvider } from "@/state/editor-i18n-context";
 import { EditorStoreProvider } from "@/state/EditorStoreProvider";
+import { EditorI18nProvider } from "@/state/editor-i18n-context";
 import { createEditorStore } from "@/state/editor-store-bundle";
 import type { StudioPluginContext } from "@/types/plugin";
 import { buildLegacyPuckData } from "../../../testing/editor/index.js";
 import { createStudioEditorBridge } from "../bridge.js";
-import { useEditorInspector } from "../inspector/use-inspector.js";
+import { LengthControl } from "../inspector/controls/LengthControl.js";
+import {
+	useEditorInspector,
+	useInspectorField,
+} from "../inspector/use-inspector.js";
 import { StudioEditorMount } from "../StudioEditorMount.js";
 import { TokenPicker } from "../tokens/TokenPicker.js";
 import { clearTokenRecents } from "../tokens/use-token-picker.js";
+import {
+	applyPuckDataAction,
+	type PuckDataAction,
+} from "./puck-store-double.js";
 
 afterEach(() => {
 	cleanup();
@@ -67,10 +76,8 @@ function createCtx(): StudioPluginContext {
 					},
 				},
 				config,
-				dispatch: (action: { data?: typeof data }) => {
-					if (action.data !== undefined) {
-						data = action.data;
-					}
+				dispatch: (action: PuckDataAction) => {
+					data = applyPuckDataAction(data, action);
 				},
 				getItemById: (id: string) => ({ type: "Hero", props: { id } }),
 				getSelectorForId: () => undefined,
@@ -180,7 +187,9 @@ async function openPicker(): Promise<void> {
 		expect(screen.getByTestId("ak-token-picker-trigger")).toBeTruthy(),
 	);
 	fireEvent.click(screen.getByTestId("ak-token-picker-trigger"));
-	await waitFor(() => expect(screen.getByTestId("ak-token-search")).toBeTruthy());
+	await waitFor(() =>
+		expect(screen.getByTestId("ak-token-search")).toBeTruthy(),
+	);
 }
 
 describe("TokenPicker (CORE-P2-002)", () => {
@@ -389,7 +398,9 @@ describe("TokenPicker (CORE-P2-002)", () => {
 		// Re-open: the applied token is now offered under "recent".
 		await openPicker();
 		await waitFor(() =>
-			expect(screen.getAllByTestId("ak-token-option").length).toBeGreaterThan(1),
+			expect(screen.getAllByTestId("ak-token-option").length).toBeGreaterThan(
+				1,
+			),
 		);
 	});
 
@@ -416,5 +427,97 @@ describe("token attach/detach through the inspector (§15.1)", () => {
 		await openPicker();
 		fireEvent.click(screen.getByTestId("ak-token-option"));
 		expect(commits).toEqual([{ kind: "token", tokenId: "brand" }]);
+	});
+});
+
+/**
+ * Regression: the picker's create-from-literal and import-as-copy both
+ * commit a `token.create` and then attach the new token through the
+ * caller's `onAttach`. Every test above stubs `onAttach`, so they prove
+ * it is *called* — not that the write it performs lands. Driving a real
+ * `LengthControl` closes that gap: the attach is a second command, and
+ * the second command carries its own `expectedRevision`.
+ */
+describe("create-from-literal attaches for real (CORE-P2-002)", () => {
+	function LengthField({
+		context,
+	}: {
+		readonly context: NonNullable<ReturnType<typeof useEditorInspector>>;
+	}): ReactNode {
+		const field = useInspectorField<CssLength>(context, "layout", "width");
+		return <LengthControl label="Width" field={field} testId="ak-w" />;
+	}
+
+	function LengthHarness(): ReactNode {
+		const context = useEditorInspector();
+		return context === null ? null : <LengthField context={context} />;
+	}
+
+	async function mountLength() {
+		const bridge = createStudioEditorBridge();
+		storeSeq += 1;
+		const storeId = `token-attach-test-${storeSeq}`;
+		render(
+			<EditorI18nProvider>
+				<StudioPluginContextProvider value={createCtx()}>
+					<EditorStoreProvider
+						storeId={storeId}
+						store={createEditorStore({ storeId })}
+					>
+						<StudioEditorMount
+							editor={{ features: { enabled: true } }}
+							bridge={bridge}
+						>
+							<LengthHarness />
+						</StudioEditorMount>
+					</EditorStoreProvider>
+				</StudioPluginContextProvider>
+			</EditorI18nProvider>,
+		);
+		await waitFor(() => expect(bridge.port).not.toBeNull());
+		act(() => {
+			bridge.selection?.selectMany(["legacy-0"]);
+		});
+		return bridge;
+	}
+
+	it("leaves the field pointing at the new token, not the old literal", async () => {
+		const bridge = await mountLength();
+
+		// Give the field a literal so the picker offers "create from literal".
+		await waitFor(() => expect(screen.getByTestId("ak-w")).toBeTruthy());
+		const input = screen.getByTestId("ak-w");
+		fireEvent.change(input, { target: { value: "400" } });
+		fireEvent.blur(input);
+		await waitFor(() =>
+			expect(
+				bridge.port?.getSnapshot().authoring.nodes["legacy-0"]?.layout?.base
+					?.width,
+			).toMatchObject({ kind: "unit", value: 400 }),
+		);
+
+		await openPicker();
+		fireEvent.change(screen.getByTestId("ak-token-new-name"), {
+			target: { value: "size.hero" },
+		});
+		await act(async () => {
+			fireEvent.click(screen.getByTestId("ak-token-create"));
+		});
+
+		const authoring = () => bridge.port?.getSnapshot().authoring;
+		await waitFor(() =>
+			expect(Object.keys(authoring()?.tokens ?? {})).toHaveLength(1),
+		);
+		const tokenId = Object.keys(authoring()?.tokens ?? {})[0] as string;
+
+		// The whole point of "create from this value": the field must end
+		// up token-backed. A stale `expectedRevision` on the follow-up
+		// attach silently rejected it and left the literal in place.
+		await waitFor(() =>
+			expect(authoring()?.nodes["legacy-0"]?.layout?.base?.width).toEqual({
+				kind: "token",
+				tokenId,
+			}),
+		);
 	});
 });

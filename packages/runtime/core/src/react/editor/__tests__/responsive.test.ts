@@ -32,6 +32,10 @@ import {
 	createStudioViewportController,
 	deriveFollowTarget,
 } from "../responsive/viewport-controller.js";
+import {
+	applyPuckDataAction,
+	type PuckDataAction,
+} from "./puck-store-double.js";
 
 let seq = 0;
 function setCommand(
@@ -238,13 +242,9 @@ describe("default preset + materialization (CORE-P1A-008)", () => {
 							return data;
 						},
 					},
-					dispatch: probe.wrap(
-						(action: { recordHistory?: boolean; data?: typeof data }) => {
-							if (action.data !== undefined) {
-								data = action.data;
-							}
-						},
-					),
+					dispatch: probe.wrap((action: PuckDataAction) => {
+						data = applyPuckDataAction(data, action);
+					}),
 				}) as never,
 			getData: () => data,
 			editor: { features: { enabled: true } },

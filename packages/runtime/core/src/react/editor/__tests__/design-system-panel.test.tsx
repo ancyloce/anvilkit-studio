@@ -36,6 +36,10 @@ import { createStudioEditorBridge } from "../bridge.js";
 import type { InternalEditorCommandPort } from "../command-port.js";
 import { StudioEditorMount } from "../StudioEditorMount.js";
 import { DesignSystemPanel } from "../tokens/DesignSystemPanel.js";
+import {
+	applyPuckDataAction,
+	type PuckDataAction,
+} from "./puck-store-double.js";
 
 afterEach(cleanup);
 
@@ -120,10 +124,11 @@ function createCtx(recorded: PuckData[], seed: Seed): StudioPluginContext {
 					},
 				},
 				config,
-				dispatch: (action: { data?: PuckData; recordHistory?: boolean }) => {
-					if (action.data !== undefined) {
-						data = action.data;
-						if (action.recordHistory === true) recorded.push(action.data);
+				dispatch: (action: PuckDataAction) => {
+					const next = applyPuckDataAction(data, action);
+					if (next !== data) {
+						data = next;
+						if (action.recordHistory === true) recorded.push(data);
 					}
 				},
 				getItemById: (id: string) => ({ type: "Hero", props: { id } }),
@@ -228,8 +233,19 @@ describe("Token management (ED-TOKEN-001/-002)", () => {
 	});
 
 	it("edits a per-mode value and shows the resolved literal", async () => {
+		/*
+		 * The stored literal is a TYPED `CssColor`, not the raw text.
+		 * `materializeTokenLiteral` hands a colour token's value to
+		 * `serializeCssColor`, whose switch is on `value.kind` — a bare
+		 * `"#222222"` string returns `undefined` there, so a
+		 * string-valued colour token renders nothing at all. The panel
+		 * therefore parses the field against the token's declared type
+		 * and stores the shape the serializer can actually emit.
+		 */
 		const { port } = await mount({
-			tokens: { t1: token("t1", "color.brand", "#111111") },
+			tokens: {
+				t1: token("t1", "color.brand", { kind: "hex", value: "#111111" }),
+			},
 			tokenModes: {
 				light: { id: "light", name: "Light" },
 				dark: { id: "dark", name: "Dark" },
@@ -244,13 +260,61 @@ describe("Token management (ED-TOKEN-001/-002)", () => {
 		const input = within(darkRow as HTMLElement).getByTestId(
 			"ak-token-mode-value",
 		);
+		// The input shows the serialized text, and the blur round-trips
+		// it back through the parser.
+		expect((input as HTMLInputElement).disabled).toBe(false);
 		fireEvent.blur(input, { target: { value: "#222222" } });
 		await waitFor(() =>
 			expect(authoringOf(port).tokens.t1?.values.dark).toEqual({
 				kind: "literal",
-				value: "#222222",
+				value: { kind: "hex", value: "#222222" },
 			}),
 		);
+	});
+
+	it("edits a length token's value, which used to be read-only", async () => {
+		// `length` literals are `CssLength` objects, so the old
+		// `String(value)` display gave up and disabled the input — the
+		// panel could not edit the type the token picker creates most.
+		const { port } = await mount({
+			tokens: {
+				t1: token("t1", "size.hero", { kind: "unit", value: 400, unit: "px" }, {
+					type: "length",
+				} as Partial<DesignToken>),
+			},
+		});
+		const input = await screen.findByTestId("ak-token-mode-value");
+		expect((input as HTMLInputElement).disabled).toBe(false);
+		expect((input as HTMLInputElement).value).toBe("400px");
+
+		fireEvent.blur(input, { target: { value: "640px" } });
+		await waitFor(() =>
+			expect(authoringOf(port).tokens.t1?.values.light).toEqual({
+				kind: "literal",
+				value: { kind: "unit", value: 640, unit: "px" },
+			}),
+		);
+	});
+
+	it("refuses an unparsable value instead of storing the raw text", async () => {
+		const { port } = await mount({
+			tokens: {
+				t1: token("t1", "size.hero", { kind: "unit", value: 400, unit: "px" }, {
+					type: "length",
+				} as Partial<DesignToken>),
+			},
+		});
+		const input = await screen.findByTestId("ak-token-mode-value");
+		fireEvent.blur(input, { target: { value: "not-a-length" } });
+
+		await waitFor(() =>
+			expect(screen.getByTestId("ak-token-row-errors")).toBeTruthy(),
+		);
+		// The durable value is untouched — no silent shape corruption.
+		expect(authoringOf(port).tokens.t1?.values.light).toEqual({
+			kind: "literal",
+			value: { kind: "unit", value: 400, unit: "px" },
+		});
 	});
 
 	it("shows how many places reference a token (ED-TOKEN-002)", async () => {
@@ -606,7 +670,9 @@ describe("design-system panel — review regressions", () => {
 		const rowFor = (mode: string) =>
 			screen
 				.getAllByTestId("ak-token-mode")
-				.find((row) => row.getAttribute("data-mode-id") === mode) as HTMLElement;
+				.find(
+					(row) => row.getAttribute("data-mode-id") === mode,
+				) as HTMLElement;
 
 		expect(
 			within(rowFor("dark")).getByTestId("ak-token-resolved").textContent,

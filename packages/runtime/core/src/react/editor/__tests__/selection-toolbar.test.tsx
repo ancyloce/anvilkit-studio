@@ -18,6 +18,10 @@ import { AuthoringOverlayRoot } from "../canvas/overlay-root.js";
 import { SelectionToolbar } from "../canvas/SelectionToolbar.js";
 import { createEditorCommandPort } from "../command-port.js";
 import { createEditorSelectionController } from "../selection.js";
+import {
+	applyPuckDataAction,
+	type PuckDataAction,
+} from "./puck-store-double.js";
 
 afterEach(cleanup);
 
@@ -32,10 +36,8 @@ function setup() {
 			},
 		},
 		config: { components: {} },
-		dispatch: (action: { recordHistory?: boolean; data?: typeof data }) => {
-			if (action.data !== undefined) {
-				data = action.data;
-			}
+		dispatch: (action: PuckDataAction) => {
+			data = applyPuckDataAction(data, action);
 			if (action.recordHistory === true) {
 				recorded += 1;
 			}

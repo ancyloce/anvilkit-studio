@@ -134,3 +134,117 @@ describe("applyAuthoringStylesheet", () => {
 		expect(element.textContent).toBe("b { color: blue }");
 	});
 });
+
+/**
+ * Regression: token-backed values on the live canvas.
+ *
+ * `resolveAuthoringStyle` is a pure serializer with no token
+ * awareness, and this builder used to hand it the raw spec. A
+ * `{kind:"token"}` value therefore serialized to nothing — the export
+ * pipeline (which runs `resolveNodeAuthoring` first) emitted the
+ * property correctly while the canvas silently dropped it, so
+ * attaching a token made the value disappear from the page the author
+ * was looking at.
+ *
+ * The fragment cache is the second half: it keyed on the node record
+ * alone, and editing a token changes `authoring.tokens` without
+ * touching any node record, so a token edit re-rendered nothing.
+ */
+describe("buildAuthoringStylesheet — token substitution (§15.1)", () => {
+	const TOKEN_MODE = { tokenMode: "light" } as const;
+
+	function withToken(px: number): AuthoringStateV1 {
+		return {
+			...createEmptyAuthoringState(),
+			breakpoints: [],
+			tokens: {
+				"tok-1": {
+					id: "tok-1",
+					name: "size.hero",
+					path: ["size", "hero"],
+					type: "length",
+					values: {
+						light: {
+							kind: "literal",
+							value: { kind: "unit", value: px, unit: "px" },
+						},
+					},
+				},
+			},
+			nodes: {
+				"node-a": {
+					version: "1",
+					layout: { base: { width: { kind: "token", tokenId: "tok-1" } } },
+				},
+			},
+		} as unknown as AuthoringStateV1;
+	}
+
+	it("emits the token's resolved literal, not nothing", () => {
+		expect(
+			buildAuthoringStylesheet(
+				withToken(400),
+				[],
+				undefined,
+				undefined,
+				TOKEN_MODE,
+			),
+		).toBe('[data-ak-node="node-a"] { width: 400px; }');
+	});
+
+	it("re-emits when the token's value changes and the node record does not", () => {
+		const cache = createStylesheetCache();
+		const first = withToken(400);
+		expect(
+			buildAuthoringStylesheet(first, [], cache, undefined, TOKEN_MODE),
+		).toContain("width: 400px;");
+
+		// Same node record object, new token table — exactly what a token
+		// edit in the design panel produces.
+		const edited: AuthoringStateV1 = {
+			...first,
+			tokens: {
+				"tok-1": {
+					...(first.tokens as Record<string, { values: unknown }>)["tok-1"],
+					values: {
+						light: {
+							kind: "literal",
+							value: { kind: "unit", value: 640, unit: "px" },
+						},
+					},
+				},
+			},
+		} as unknown as AuthoringStateV1;
+		expect(edited.nodes["node-a"]).toBe(first.nodes["node-a"]);
+
+		expect(
+			buildAuthoringStylesheet(edited, [], cache, undefined, TOKEN_MODE),
+		).toContain("width: 640px;");
+	});
+
+	it("still reuses cached fragments when the token table is unchanged", () => {
+		const cache = createStylesheetCache();
+		const stats = { hits: 0, misses: 0 };
+		const state = withToken(400);
+		buildAuthoringStylesheet(state, [], cache, stats, TOKEN_MODE);
+		expect(stats).toEqual({ hits: 0, misses: 1 });
+		buildAuthoringStylesheet(state, [], cache, stats, TOKEN_MODE);
+		expect(stats).toEqual({ hits: 1, misses: 1 });
+	});
+
+	it("leaves an unresolvable reference out rather than emitting garbage", () => {
+		const dangling = {
+			...createEmptyAuthoringState(),
+			breakpoints: [],
+			nodes: {
+				"node-a": {
+					version: "1",
+					layout: { base: { width: { kind: "token", tokenId: "missing" } } },
+				},
+			},
+		} as unknown as AuthoringStateV1;
+		expect(
+			buildAuthoringStylesheet(dangling, [], undefined, undefined, TOKEN_MODE),
+		).toBe("");
+	});
+});

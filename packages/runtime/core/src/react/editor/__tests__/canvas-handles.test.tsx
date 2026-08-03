@@ -16,6 +16,10 @@ import { CanvasHandles } from "../canvas/handles/CanvasHandles.js";
 import { AuthoringOverlayRoot } from "../canvas/overlay-root.js";
 import { createEditorCommandPort } from "../command-port.js";
 import { createEditorSelectionController } from "../selection.js";
+import {
+	applyPuckDataAction,
+	type PuckDataAction,
+} from "./puck-store-double.js";
 
 afterEach(cleanup);
 
@@ -53,10 +57,8 @@ function setup(options?: {
 						return data;
 					},
 				},
-				dispatch: (action: { recordHistory?: boolean; data?: typeof data }) => {
-					if (action.data !== undefined) {
-						data = action.data;
-					}
+				dispatch: (action: PuckDataAction) => {
+					data = applyPuckDataAction(data, action);
 					if (action.recordHistory === true) {
 						recorded += 1;
 					}
