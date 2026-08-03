@@ -22,6 +22,8 @@ const TOKEN_BLOCK = `:root,
 	--editor-selection: var(--brand);
 	--editor-selection-soft: rgb(86 131 218 / 12%);
 	--editor-drop-target: rgb(86 131 218 / 18%);
+	--editor-snap-guide: #db2777;
+	--shadow-floating: 0 1px 2px rgb(0 0 0 / 8%), 0 4px 16px rgb(0 0 0 / 21%);
 	--ak-studio-theme: var(--brand);
 	--ak-studio-theme-fg: oklch(1 0 0);
 	--ak-studio-bg: var(--background);
@@ -31,6 +33,7 @@ const TOKEN_BLOCK = `:root,
 	--ak-studio-border: var(--border);
 	--ak-studio-muted: var(--muted);
 	--ak-studio-muted-fg: var(--muted-foreground);
+	--ak-studio-hover: var(--muted);
 	--ak-studio-accent: var(--ak-studio-theme);
 	--ak-studio-accent-fg: var(--ak-studio-theme-fg);
 	--ak-studio-ring: var(--ak-studio-theme);
@@ -132,6 +135,11 @@ body {
  * (host-document) so the ring paints in both documents — Puck's canvas
  * iframe does not inherit host-document utility classes.
  *
+ * The two copies are byte-compared by `overrides/__tests__/chrome-parity.test.ts`
+ * — they drifted once (2px vs 1px ring, 6px vs 4px label radius, and a `.dark`
+ * override that put the 11px label back on `--brand`), and because the canvas
+ * is iframed by default the diverged copy was the one users saw. Edit both.
+ *
  * Also suppresses Puck's built-in azure outline on the inner
  * `_DraggableComponent-overlay_` element so we don't get a double ring.
  */
@@ -150,15 +158,20 @@ const IFRAME_SELECTION_BLOCK = `[class*="_DraggableComponent-overlay_"] {
 [data-ak-overlay][data-overlay-state="hover"] {
 	outline-width: 1px;
 	outline-offset: -1px;
-	outline-color: color-mix(in oklab, var(--ak-studio-accent) 30%, transparent);
+	outline-color: color-mix(in oklab, var(--editor-selection) 30%, transparent);
 }
 
 [data-ak-overlay][data-overlay-state="selected"] {
-	outline-width: 2px;
-	outline-offset: -2px;
-	outline-color: var(--ak-studio-accent);
+	outline-width: 1px;
+	outline-offset: -1px;
+	outline-color: var(--editor-selection);
 }
 
+/*
+ * Pinned to \`--brand-deep\` with light text in BOTH modes — deliberately no
+ * \`.dark\` override. DESIGN.md §3.2 requires ≥15px/600 for white-on-\`--brand\`
+ * and this label is 11px/500, so the deeper fill is the only accessible one.
+ */
 [data-ak-overlay-label] {
 	pointer-events: none;
 	position: absolute;
@@ -168,20 +181,15 @@ const IFRAME_SELECTION_BLOCK = `[class*="_DraggableComponent-overlay_"] {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
-	padding: 4px 8px;
-	padding-top: 6px;
-	border-top-left-radius: 6px;
-	border-top-right-radius: 6px;
+	padding: 3px 6px;
+	padding-top: 4px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
 	font-size: 11px;
 	font-weight: 500;
-	line-height: 1;
-	background-color: var(--ak-studio-accent);
-	color: #fff;
-}
-
-.dark [data-ak-overlay-label] {
-	background-color: var(--ak-studio-accent);
-	color: var(--ak-studio-accent-fg);
+	line-height: 1.3;
+	background-color: var(--brand-deep);
+	color: oklch(0.985 0 0);
 }
 
 [data-ak-overlay][data-label-position="inside"] [data-ak-overlay-label] {
@@ -189,7 +197,54 @@ const IFRAME_SELECTION_BLOCK = `[class*="_DraggableComponent-overlay_"] {
 	top: 0;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
-	border-bottom-right-radius: 6px;
+	border-bottom-right-radius: 4px;
+}
+
+/*
+ * Multi-select align/distribute toolbar (\`SelectionToolbar\`). It portals into
+ * THIS document, so its entire presentation has to live here — the host
+ * stylesheet never reaches the iframe, and inline styles cannot express the
+ * \`:hover\` / \`:disabled\` states.
+ */
+[data-ak-selection-toolbar] {
+	display: flex;
+	align-items: center;
+	gap: 1px;
+	padding: 1px 3px;
+	border-radius: 4px;
+	border: 1px solid var(--editor-selection);
+	background: var(--ak-studio-panel);
+	color: var(--ak-studio-panel-fg);
+	box-shadow: var(--shadow-floating);
+	white-space: nowrap;
+}
+
+[data-ak-toolbar-action] {
+	font: 10px/1.6 system-ui, sans-serif;
+	padding: 3px 6px;
+	border: none;
+	border-radius: 3px;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+	transition: background-color 150ms ease-out, color 150ms ease-out;
+}
+
+[data-ak-toolbar-action]:hover:not(:disabled) {
+	background: var(--ak-studio-hover);
+}
+
+[data-ak-toolbar-action]:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+
+[data-ak-selection-toolbar] [data-ak-toolbar-separator] {
+	width: 1px;
+	align-self: stretch;
+	margin: 0 2px;
+	background: var(--editor-selection);
+	opacity: 0.3;
 }
 
 /*
