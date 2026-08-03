@@ -50,6 +50,14 @@
  *   never overwrites `drawerCollapsed`/`inspectorCollapsed`/the panel
  *   widths, it only changes what the layout shell renders while active.
  *
+ * Visual-editor inspector tabs (Style / Properties / Data / Animation):
+ * - `inspectorTab` — which inspector tab is showing. Transient by
+ *   design: the spec wants the tab kept while the author moves between
+ *   nodes in one mounted Studio, but reset to `properties` on a fresh
+ *   mount, and `useRehydratedStore` builds a new store per mount — so
+ *   leaving it out of `partialize` gives exactly that, with no second
+ *   state system and nothing written to the document or Puck history.
+ *
  * Inspector `object`-field sections (task Phase 7):
  * - `fieldSectionsExpanded` — id-keyed map of which `<InspectorSection>`
  *   (collapsible `object`-field groups in `FieldsPanel`) are open. Keyed
@@ -92,6 +100,19 @@ export type CopyCategoryFilter = "all" | "basic" | "brand";
 
 export type LayerPanelMode = "pages" | "layers";
 
+/**
+ * The visual editor inspector's four tabs, in display order. Ordered
+ * const tuple so the tab bar and the validity check share one source.
+ */
+export const INSPECTOR_TABS = [
+	"style",
+	"properties",
+	"data",
+	"animation",
+] as const;
+
+export type InspectorTab = (typeof INSPECTOR_TABS)[number];
+
 export interface EditorUiState {
 	readonly activeTab: EditorTab;
 	readonly drawerSearch: string;
@@ -117,6 +138,11 @@ export interface EditorUiState {
 	 * preview, unable to see the handles, would be a trap.
 	 */
 	readonly interactionPreview: boolean;
+	/**
+	 * Active inspector tab. Session-scoped like `focusMode` — see the
+	 * file header; never persisted, never a document mutation.
+	 */
+	readonly inspectorTab: InspectorTab;
 	readonly fieldSectionsExpanded: Readonly<Record<string, boolean>>;
 	setActiveTab(tab: EditorTab): void;
 	setDrawerSearch(query: string): void;
@@ -137,6 +163,7 @@ export interface EditorUiState {
 	setInspectorCollapsed(collapsed: boolean): void;
 	setFocusMode(focusMode: boolean): void;
 	setInteractionPreview(value: boolean): void;
+	setInspectorTab(tab: InspectorTab): void;
 	reset(): void;
 }
 
@@ -173,15 +200,17 @@ const INITIAL_STATE = {
 	inspectorCollapsed: false,
 	focusMode: false,
 	interactionPreview: false,
+	inspectorTab: "properties" as InspectorTab,
 } as const;
 
 /**
  * Persisted slice — declared explicitly so a field rename fails to
  * compile here instead of silently dropping the persisted value.
- * `drawerSearch`, `canvasRootHeight`, `focusMode`, and
- * `interactionPreview` are dropped on purpose (transient input, measured
- * layout, and two session-scoped viewing overrides). Sidebar-module preferences are persisted per
- * the policy in PRD §9.3.
+ * `drawerSearch`, `canvasRootHeight`, `focusMode`,
+ * `interactionPreview`, and `inspectorTab` are dropped on purpose
+ * (transient input, measured layout, and three session-scoped viewing
+ * overrides). Sidebar-module preferences are persisted per the policy
+ * in PRD §9.3.
  */
 interface EditorUiPersistedSlice {
 	readonly activeTab: EditorTab;
@@ -508,6 +537,9 @@ export function createEditorUiStore(
 				},
 				setInteractionPreview(value) {
 					set({ interactionPreview: value });
+				},
+				setInspectorTab(inspectorTab) {
+					set({ inspectorTab });
 				},
 				reset() {
 					set({ ...INITIAL_STATE });

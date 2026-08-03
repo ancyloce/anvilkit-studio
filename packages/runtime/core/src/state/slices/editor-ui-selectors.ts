@@ -20,6 +20,7 @@ import type {
 	CopyCategoryFilter,
 	EditorTab,
 	EditorUiState,
+	InspectorTab,
 	LayerPanelMode,
 } from "./editor-ui-store";
 
@@ -123,6 +124,15 @@ export function useLayerPanelMode(): readonly [
 ] {
 	return useEditorUiStore(
 		useShallow((s) => [s.layerPanelMode, s.setLayerPanelMode] as const),
+	);
+}
+
+export function useInspectorTab(): readonly [
+	InspectorTab,
+	(tab: InspectorTab) => void,
+] {
+	return useEditorUiStore(
+		useShallow((s) => [s.inspectorTab, s.setInspectorTab] as const),
 	);
 }
 

@@ -88,6 +88,7 @@ export {
 	useEditorUiStore,
 	useFieldSectionsExpanded,
 	useInsertSectionsExpanded,
+	useInspectorTab,
 	useLayerPanelMode,
 	usePagesExpanded,
 } from "./slices/editor-ui-selectors";
@@ -101,6 +102,8 @@ export {
 	type EditorTab,
 	type EditorUiState,
 	type EditorUiStoreApi,
+	INSPECTOR_TABS,
+	type InspectorTab,
 	type LayerPanelMode,
 } from "./slices/editor-ui-store";
 export {
