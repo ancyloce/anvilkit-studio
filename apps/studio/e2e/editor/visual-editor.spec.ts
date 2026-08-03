@@ -146,7 +146,12 @@ test.describe("visual editor mount (CORE-P1B-012)", () => {
 		await expect(page.getByTestId("ak-editor-inspector")).toBeVisible({
 			timeout: 15_000,
 		});
-		await expect(page.getByTestId("ak-layout-section")).toBeVisible();
+		// The universal sections now live behind the inspector's Style
+		// tab; Properties (the native field tree) is what opens by default.
+		await page.getByTestId("ak-inspector-tab-style").click();
+		await expect(page.getByTestId("ak-layout-section")).toBeVisible({
+			timeout: 15_000,
+		});
 	});
 
 	test("resize gesture commits once and one Undo restores it (§10.5)", async ({

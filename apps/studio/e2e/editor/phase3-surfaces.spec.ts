@@ -86,6 +86,24 @@ async function selectFirstNode(page: Page): Promise<string> {
 	return nodeId as string;
 }
 
+/**
+ * Open one of the inspector's four tabs. The universal sections used to
+ * be appended under the native fields in one column; they are now
+ * grouped into style / properties / data / animation, with `properties`
+ * active on mount, so every section assertion opens its tab first.
+ */
+async function openInspectorTab(
+	page: Page,
+	tab: "style" | "properties" | "data" | "animation",
+): Promise<void> {
+	const trigger = page.getByTestId(`ak-inspector-tab-${tab}`);
+	await expect(trigger).toBeVisible({ timeout: 30_000 });
+	await trigger.click();
+	await expect(page.getByTestId(`ak-inspector-panel-${tab}`)).toBeVisible({
+		timeout: 15_000,
+	});
+}
+
 test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 	// Every test here loads the editor, whose documented cold start is
 	// 60-90 s under `next dev --turbopack`. Playwright's default 30 s
@@ -143,6 +161,7 @@ test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 		await openLayersPanel(page);
 		await selectFirstNode(page);
 
+		await openInspectorTab(page, "animation");
 		const section = page.getByTestId("ak-interactions-section");
 		await expect(section).toBeVisible({ timeout: 20_000 });
 		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(0);
@@ -171,6 +190,7 @@ test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 		await openEditor(page);
 		await openLayersPanel(page);
 		await selectFirstNode(page);
+		await openInspectorTab(page, "animation");
 		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
 			timeout: 20_000,
 		});
@@ -191,6 +211,7 @@ test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 		await openLayersPanel(page);
 		await selectFirstNode(page);
 
+		await openInspectorTab(page, "data");
 		const section = page.getByTestId("ak-bindings-section");
 		await expect(section).toBeVisible({ timeout: 20_000 });
 
@@ -218,6 +239,7 @@ test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 		await openEditor(page);
 		await openLayersPanel(page);
 		await selectFirstNode(page);
+		await openInspectorTab(page, "data");
 		await expect(page.getByTestId("ak-bindings-section")).toBeVisible({
 			timeout: 20_000,
 		});
@@ -240,6 +262,7 @@ test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 		await openEditor(page);
 		await openLayersPanel(page);
 		await selectFirstNode(page);
+		await openInspectorTab(page, "data");
 		await expect(page.getByTestId("ak-bindings-section")).toBeVisible({
 			timeout: 20_000,
 		});
@@ -258,6 +281,7 @@ test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 		await openEditor(page);
 		await openLayersPanel(page);
 		await selectFirstNode(page);
+		await openInspectorTab(page, "animation");
 		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
 			timeout: 20_000,
 		});
@@ -282,6 +306,7 @@ test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 		await openEditor(page);
 		await openLayersPanel(page);
 		await selectFirstNode(page);
+		await openInspectorTab(page, "animation");
 		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
 			timeout: 20_000,
 		});
@@ -302,6 +327,7 @@ test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 		await openEditor(page);
 		await openLayersPanel(page);
 		await selectFirstNode(page);
+		await openInspectorTab(page, "animation");
 		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
 			timeout: 20_000,
 		});
@@ -365,6 +391,12 @@ test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 		// ED-INSPECT-002's coexistence rule at the product level: nothing
 		// from Phase 3 renders until a capable node is selected.
 		await openEditor(page);
+		// No selection → `FieldsPanel` renders its quiet empty state, so
+		// neither the tab strip nor any Phase 3 section exists.
+		await expect(page.getByTestId("ak-fields-panel-empty")).toBeVisible({
+			timeout: 30_000,
+		});
+		await expect(page.getByTestId("ak-inspector-tabs")).toBeHidden();
 		await expect(page.getByTestId("ak-interactions-section")).toBeHidden();
 		await expect(page.getByTestId("ak-bindings-section")).toBeHidden();
 	});

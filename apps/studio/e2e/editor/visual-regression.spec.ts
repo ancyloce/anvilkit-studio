@@ -88,10 +88,36 @@ async function selectViaLayers(page: Page, nodeId: string): Promise<void> {
 	});
 }
 
+/** Open one of the inspector's four tabs and wait for its panel. */
+async function openInspectorTab(
+	page: Page,
+	tab: "style" | "properties" | "data" | "animation",
+): Promise<void> {
+	await page.getByTestId(`ak-inspector-tab-${tab}`).click();
+	await expect(page.getByTestId(`ak-inspector-panel-${tab}`)).toBeVisible({
+		timeout: 15_000,
+	});
+}
+
+/**
+ * Force the editor chrome into dark mode. The theme toggle writes the
+ * `dark` class onto the document element, which is what the editor
+ * tokens key off — setting it directly keeps the shot independent of
+ * the runner's OS colour-scheme preference.
+ */
+async function forceDarkTheme(page: Page): Promise<void> {
+	await page.emulateMedia({ colorScheme: "dark" });
+	await page.evaluate(() => {
+		document.documentElement.classList.add("dark");
+		document.documentElement.style.colorScheme = "dark";
+	});
+}
+
 test.describe("editor inspector visual certification", () => {
 	test("layout section renders stably", async ({ page }) => {
 		await openEditor(page);
 		await selectViaLayers(page, "hero-primary");
+		await openInspectorTab(page, "style");
 		const section = page.getByTestId("ak-layout-section");
 		await expect(section).toBeVisible();
 		await expect(section).toHaveScreenshot(
@@ -103,6 +129,7 @@ test.describe("editor inspector visual certification", () => {
 	test("style section renders stably", async ({ page }) => {
 		await openEditor(page);
 		await selectViaLayers(page, "hero-primary");
+		await openInspectorTab(page, "style");
 		const section = page.getByTestId("ak-style-section");
 		await expect(section).toBeVisible({ timeout: 15_000 });
 		await expect(section).toHaveScreenshot("inspector-style-section.png", SHOT);
@@ -111,6 +138,7 @@ test.describe("editor inspector visual certification", () => {
 	test("typography section renders stably", async ({ page }) => {
 		await openEditor(page);
 		await selectViaLayers(page, "hero-primary");
+		await openInspectorTab(page, "style");
 		const section = page.getByTestId("ak-typography-section");
 		await expect(section).toBeVisible({ timeout: 15_000 });
 		await expect(section).toHaveScreenshot(
@@ -129,6 +157,43 @@ test.describe("editor inspector visual certification", () => {
 		await target.click();
 		await expect(target).toContainText(/tablet/i, { timeout: 10_000 });
 		await expect(target).toHaveScreenshot("write-target-tablet.png", SHOT);
+	});
+
+	// The four-tab inspector is the surface the redesign owns, and a
+	// per-section shot cannot see the tab strip, the panel chrome or the
+	// spacing between them — so the whole inspector is certified too, in
+	// dark mode, at its default width (DESIGN.md §7.8, 336 px).
+	test("tabbed inspector renders stably in dark mode at its default width", async ({
+		page,
+	}) => {
+		await openEditor(page);
+		await forceDarkTheme(page);
+		await selectViaLayers(page, "hero-primary");
+		const inspector = page.getByTestId("ak-editor-inspector");
+		await expect(inspector).toBeVisible({ timeout: 15_000 });
+		// Properties is the default tab, so this shot is the landing state.
+		await expect(page.getByTestId("ak-inspector-panel-properties")).toBeVisible(
+			{ timeout: 15_000 },
+		);
+		await expect(inspector).toHaveScreenshot(
+			"inspector-tabs-properties-dark.png",
+			SHOT,
+		);
+
+		await openInspectorTab(page, "style");
+		await expect(inspector).toHaveScreenshot(
+			"inspector-tabs-style-dark.png",
+			SHOT,
+		);
+	});
+
+	test("inspector tab strip renders stably in dark mode", async ({ page }) => {
+		await openEditor(page);
+		await forceDarkTheme(page);
+		await selectViaLayers(page, "hero-primary");
+		const tabs = page.getByTestId("ak-inspector-tabs");
+		await expect(tabs).toBeVisible({ timeout: 15_000 });
+		await expect(tabs).toHaveScreenshot("inspector-tab-strip-dark.png", SHOT);
 	});
 
 	test("layers panel renders stably", async ({ page }) => {

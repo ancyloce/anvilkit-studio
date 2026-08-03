@@ -34,14 +34,23 @@ async function openEditor(page: Page): Promise<void> {
 	});
 }
 
-/** Open the Layers rail module and its inner Layers tab. */
+/**
+ * Open the Layers rail module and its inner Layers tab.
+ *
+ * Idempotent: the rail implements collapse-on-active-click (PRD §3.2,
+ * `SidebarRail.handleTabClick`), so a second blind click on an already
+ * active-and-expanded tab COLLAPSES the panel. Several scenarios below
+ * call this both directly and through `createNamedComponent`, which is
+ * exactly that second click.
+ */
 async function openLayersPanel(page: Page): Promise<void> {
-	const railTab = page.locator("#ak-rail-tab-layer");
-	await railTab.waitFor({ state: "attached", timeout: 30_000 });
-	await railTab.click({ force: true });
-	await expect(page.getByTestId("ak-module-layer")).toBeVisible({
-		timeout: 10_000,
-	});
+	const module = page.getByTestId("ak-module-layer");
+	if (!(await module.isVisible().catch(() => false))) {
+		const railTab = page.locator("#ak-rail-tab-layer");
+		await railTab.waitFor({ state: "attached", timeout: 30_000 });
+		await railTab.click({ force: true });
+	}
+	await expect(module).toBeVisible({ timeout: 15_000 });
 	await page.getByTestId("ak-layer-tab-layers").click({ force: true });
 	await expect(page.getByTestId("ak-layer-layers")).toBeVisible({
 		timeout: 10_000,

@@ -143,6 +143,12 @@ test.describe("editor accessibility acceptance (§27.6)", () => {
 		await expect(page.getByTestId("ak-editor-inspector")).toBeVisible({
 			timeout: 15_000,
 		});
+		// Open the Style tab so the axe sweep covers the universal
+		// controls too, not only the tab strip and the native fields.
+		await page.getByTestId("ak-inspector-tab-style").click();
+		await expect(page.getByTestId("ak-inspector-panel-style")).toBeVisible({
+			timeout: 15_000,
+		});
 
 		const violations = await runAxe(page);
 		const serious = violations.filter(
@@ -189,6 +195,8 @@ test.describe("editor accessibility acceptance (§27.6)", () => {
 		await expect(page.getByTestId("ak-editor-inspector")).toBeVisible({
 			timeout: 15_000,
 		});
+		// Layout lives under the inspector's Style tab.
+		await page.getByTestId("ak-inspector-tab-style").click();
 		const field = page
 			.getByTestId("ak-editor-inspector")
 			.getByRole("textbox", { name: /width/i })
