@@ -25,6 +25,7 @@ import type {
 	EditorSelectionState,
 } from "@anvilkit/contracts/editor";
 import { makeEditorError } from "../../../editor/index.js";
+import type { EditorSelectionController } from "../selection.js";
 
 /** The commands that edit a definition and so require its scope. */
 const DEFINITION_EDIT_TYPES = new Set<string>([
@@ -121,20 +122,32 @@ const SHARED_CONTROLLERS = new WeakMap<object, EditorScopeController>();
 
 /**
  * The scope controller for a selection store, created once and shared.
+ * The selection controller is both the cache key and the source of the
+ * controller's dependencies.
  *
- * `owner` is the identity the controller is cached under — pass the
- * selection controller itself.
+ * It deliberately does **not** accept a {@link ScopeControllerDeps} bag.
+ * This is a get-or-create cache, so a bag passed by the second and every
+ * later caller would be silently discarded in favour of whichever
+ * surface happened to mount first — the classic footgun, with no error
+ * and no warning. Deriving the deps from the cache key removes the
+ * possibility outright: there is nothing a caller can pass that could be
+ * ignored. Callers wanting their own isolated controller (tests, a
+ * read-only surface) construct one with
+ * {@link createEditorScopeController} instead.
  */
 export function getEditorScopeController(
-	owner: object,
-	deps: ScopeControllerDeps,
+	selection: EditorSelectionController,
 ): EditorScopeController {
-	const existing = SHARED_CONTROLLERS.get(owner);
+	const existing = SHARED_CONTROLLERS.get(selection);
 	if (existing !== undefined) {
 		return existing;
 	}
-	const created = createEditorScopeController(deps);
-	SHARED_CONTROLLERS.set(owner, created);
+	const created = createEditorScopeController({
+		getSelection: () => selection.getState(),
+		setScope: (scope) => selection.setScope(scope),
+		selectMany: (nodeIds) => selection.selectMany(nodeIds),
+	});
+	SHARED_CONTROLLERS.set(selection, created);
 	return created;
 }
 

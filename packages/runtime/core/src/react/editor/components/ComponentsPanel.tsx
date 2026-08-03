@@ -104,15 +104,21 @@ function DeleteDefinitionDialog({
 	const run = useCallback(
 		async (detachAll: boolean) => {
 			setBusy(true);
-			const outcome = await library.deleteDefinition(entry.definition.id, {
-				detachAll,
-			});
-			setBusy(false);
-			if (outcome.status === "committed") {
-				onClose();
-				return;
+			try {
+				const outcome = await library.deleteDefinition(entry.definition.id, {
+					detachAll,
+				});
+				if (outcome.status === "committed") {
+					onClose();
+					return;
+				}
+				setErrors(outcome.errors);
+			} finally {
+				// Always clears: without it a rejected delete left every
+				// control in this modal disabled, and it renders no close
+				// button.
+				setBusy(false);
 			}
-			setErrors(outcome.errors);
 		},
 		[library, entry.definition.id, onClose],
 	);
@@ -157,12 +163,13 @@ function DeleteDefinitionDialog({
 				) : null}
 				<ErrorList errors={errors} testId="ak-component-delete-errors" />
 				<DialogFooter className="mt-2">
+					{/* Never disabled: there is no close button, so cancel is the
+					    only way out and must survive an in-flight delete. */}
 					<DialogClose
 						render={
 							<Button
 								variant="ghost"
 								type="button"
-								disabled={busy}
 								data-testid="ak-component-delete-cancel"
 							>
 								{msg("studio.editor.component.delete.cancel")}

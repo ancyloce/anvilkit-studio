@@ -78,7 +78,7 @@ export function CreateComponentDialog(): ReactNode {
 	}, [bridge]);
 
 	const confirm = useCallback(async () => {
-		if (create === null) {
+		if (create === null || pending === null) {
 			close();
 			return;
 		}
@@ -87,14 +87,23 @@ export function CreateComponentDialog(): ReactNode {
 			return;
 		}
 		setBusy(true);
-		const outcome = await create.create(trimmed);
-		setBusy(false);
-		if (outcome.status === "committed") {
-			close();
-			return;
+		try {
+			// The nodes the toolbar validated and filed — NOT whatever is
+			// selected by the time the user finishes typing.
+			const outcome = await create.create(trimmed, pending);
+			if (outcome.status === "committed") {
+				close();
+				return;
+			}
+			setErrors(outcome.errors);
+		} finally {
+			// Always clears. Without it a rejected capture (a failed chunk
+			// fetch, an unavailable `crypto.randomUUID` on an insecure
+			// origin) left every control in this modal disabled, and the
+			// dialog renders no close button.
+			setBusy(false);
 		}
-		setErrors(outcome.errors);
-	}, [create, name, close]);
+	}, [create, name, close, pending]);
 
 	if (pending === null) {
 		return null;
@@ -143,10 +152,11 @@ export function CreateComponentDialog(): ReactNode {
 					</ul>
 				) : null}
 				<DialogFooter className="mt-2">
+					{/* Never disabled: there is no close button, so cancel is the
+					    only way out and must survive an in-flight capture. */}
 					<Button
 						type="button"
 						variant="ghost"
-						disabled={busy}
 						onClick={close}
 						data-testid="ak-create-component-cancel"
 					>

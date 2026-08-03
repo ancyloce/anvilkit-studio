@@ -48,10 +48,16 @@ export function ComponentInstanceSection(): ReactNode {
 		return null;
 	}
 
+	// `finally`, so a rejected action (a failed engine chunk fetch, a
+	// throwing detach) cannot leave every control in this section
+	// permanently disabled.
 	const run = async (action: () => Promise<unknown>) => {
 		setBusy(true);
-		await action();
-		setBusy(false);
+		try {
+			await action();
+		} finally {
+			setBusy(false);
+		}
 	};
 
 	return (
@@ -199,9 +205,7 @@ export function ComponentInstanceSection(): ReactNode {
 									size="sm"
 									className="h-5 px-1.5 text-[10px]"
 									disabled={!model.canMutate || busy}
-									onClick={() =>
-										void run(() => model.resetOverride(entry))
-									}
+									onClick={() => void run(() => model.resetOverride(entry))}
 									data-testid="ak-component-override-reset"
 								>
 									{msg("studio.editor.component.instance.reset")}

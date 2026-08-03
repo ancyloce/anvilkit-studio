@@ -90,6 +90,50 @@ function combinationsOf(axes: readonly VariantAxis[]): number {
 	);
 }
 
+/**
+ * Report declared variants that an axis or option removal destroyed.
+ *
+ * Collapsing selections that are no longer distinct is *required* —
+ * `validateVariantModel` rejects an ambiguous model, so leaving them
+ * would make the removal read to the user as "remove failed". But the
+ * variants that collapse take their per-variant node overrides and
+ * content with them. §14.2 permits the loss; it does not permit the
+ * loss to be silent, and this file's own contract is that errors are
+ * "never silently swallowed".
+ *
+ * `warning`, not `error`: the edit committed, and this describes what
+ * it cost rather than a reason to undo it.
+ */
+function variantsDroppedWarning(
+	definitionId: string,
+	dropped: number,
+): EditorError | null {
+	if (dropped <= 0) return null;
+	return {
+		code: "EDITOR_COMMAND_CONFLICT",
+		severity: "warning",
+		message:
+			dropped === 1
+				? "1 declared variant was removed — it no longer addresses a distinct combination"
+				: `${dropped} declared variants were removed — they no longer address distinct combinations`,
+		recoverable: true,
+		details: {
+			kind: "variantOverride",
+			definitionId,
+			reason: "variants-dropped",
+			dropped,
+		},
+	};
+}
+
+/** Append a non-null warning to a committed result's error list. */
+function withWarning(
+	errors: readonly EditorError[],
+	warning: EditorError | null,
+): readonly EditorError[] {
+	return warning === null ? errors : [...errors, warning];
+}
+
 function limitError(
 	message: string,
 	details: Readonly<Record<string, unknown>>,
@@ -292,9 +336,19 @@ export function useVariantAuthoring(): VariantAuthoring | null {
 					variants: nextAxes.length === 0 ? [] : nextVariants,
 				} as never,
 			});
+			const committed = result.status === "committed";
 			return {
-				status: result.status === "committed" ? "committed" : "rejected",
-				errors: result.errors,
+				status: committed ? "committed" : "rejected",
+				errors: committed
+					? withWarning(
+							result.errors,
+							variantsDroppedWarning(
+								definition.id,
+								definition.variants.length -
+									(nextAxes.length === 0 ? 0 : nextVariants.length),
+							),
+						)
+					: result.errors,
 			};
 		},
 		[definition, port],
@@ -434,9 +488,18 @@ export function useVariantAuthoring(): VariantAuthoring | null {
 				definitionId: definition.id,
 				patch: { variantAxes: nextAxes, variants: nextVariants } as never,
 			});
+			const committed = result.status === "committed";
 			return {
-				status: result.status === "committed" ? "committed" : "rejected",
-				errors: result.errors,
+				status: committed ? "committed" : "rejected",
+				errors: committed
+					? withWarning(
+							result.errors,
+							variantsDroppedWarning(
+								definition.id,
+								definition.variants.length - nextVariants.length,
+							),
+						)
+					: result.errors,
 			};
 		},
 		[definition, port],

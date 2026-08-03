@@ -29,7 +29,21 @@ export interface CreateComponentOutcome {
 
 /** Create a document-local component from the current selection. */
 export interface CreateComponentAction {
-	readonly create: (name: string) => Promise<CreateComponentOutcome>;
+	/**
+	 * Capture `nodeIds` — defaulting to the live selection — under `name`.
+	 *
+	 * The dialog passes the ids the toolbar validated and filed on
+	 * `bridge.componentCapture`, because the selection can move between
+	 * filing the request and confirming the name: a collab peer's edit,
+	 * an undo that remaps selection, or a programmatic `select()` from
+	 * another surface. Re-reading the live selection at confirm time
+	 * captured a different set of nodes than the one the user targeted
+	 * and than the one that was validated.
+	 */
+	readonly create: (
+		name: string,
+		nodeIds?: readonly string[],
+	) => Promise<CreateComponentOutcome>;
 	/** True when the live selection could be captured right now. */
 	readonly canCreate: boolean;
 }
@@ -49,13 +63,19 @@ export function useCreateComponent(): CreateComponentAction | null {
 	const port = bridge?.port as InternalEditorCommandPort | null | undefined;
 
 	const create = useCallback(
-		async (name: string): Promise<CreateComponentOutcome> => {
+		async (
+			name: string,
+			nodeIds?: readonly string[],
+		): Promise<CreateComponentOutcome> => {
 			if (bridge == null || port == null) {
 				return { status: "rejected", errors: [] };
 			}
 			const { buildCreateComponentPlan, validateCreateComponentSelection } =
 				await import("../../../editor/index.js");
-			const selection = port.getSnapshot().selection.selectedIds;
+			// Explicit ids win; they are still re-validated below against the
+			// CURRENT document, so a node deleted since the request was filed
+			// rejects with a message rather than capturing a stale set.
+			const selection = nodeIds ?? port.getSnapshot().selection.selectedIds;
 			const data = port.readData();
 			const authoring = port.getSnapshot().authoring;
 

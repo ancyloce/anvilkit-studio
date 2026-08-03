@@ -102,14 +102,7 @@ export function useComponentLibrary(): ComponentLibrary | null {
 	const selection = bridge?.selection;
 
 	const scopeController = useMemo(
-		() =>
-			selection == null
-				? null
-				: getEditorScopeController(selection, {
-						getSelection: () => selection.getState(),
-						setScope: (scope) => selection.setScope(scope),
-						selectMany: (nodeIds) => selection.selectMany(nodeIds),
-					}),
+		() => (selection == null ? null : getEditorScopeController(selection)),
 		[selection],
 	);
 
@@ -269,8 +262,11 @@ export function useComponentLibrary(): ComponentLibrary | null {
 				};
 			}
 
-			const { buildDetachPlan, deleteDefinition: dropDefinition, isDetachFailure } =
-				await import("../../../editor/index.js");
+			const {
+				buildDetachPlan,
+				deleteDefinition: dropDefinition,
+				isDetachFailure,
+			} = await import("../../../editor/index.js");
 			let failure: EditorError | null = null;
 			const committed = port.commitNative((data, authoring) => {
 				const instanceNodeIds = Object.entries(authoring.nodes)
@@ -284,11 +280,8 @@ export function useComponentLibrary(): ComponentLibrary | null {
 					const next = dropDefinition(authoring, definitionId);
 					return next === authoring ? null : { data, authoring: next };
 				}
-				const plan = buildDetachPlan(
-					data,
-					authoring,
-					instanceNodeIds,
-					() => crypto.randomUUID(),
+				const plan = buildDetachPlan(data, authoring, instanceNodeIds, () =>
+					crypto.randomUUID(),
 				);
 				if (plan === null) return null;
 				if (isDetachFailure(plan)) {

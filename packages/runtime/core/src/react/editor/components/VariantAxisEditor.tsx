@@ -38,13 +38,26 @@ function ErrorList({
 	if (errors.length === 0) return null;
 	return (
 		<ul
-			className="flex flex-col gap-0.5 text-[11px] text-[var(--destructive)]"
+			className="flex flex-col gap-0.5 text-[11px]"
 			data-testid={testId}
 			role="status"
 			aria-live="polite"
 		>
+			{/* Coloured per entry: this list also carries `warning`
+			    severities (an edit that committed but dropped declared
+			    variants), and painting those as errors would read as a
+			    failure. */}
 			{errors.map((error) => (
-				<li key={`${error.code}:${error.message}`}>{error.message}</li>
+				<li
+					key={`${error.code}:${error.message}`}
+					className={
+						error.severity === "error"
+							? "text-[var(--destructive)]"
+							: "text-[var(--ak-studio-muted-fg)]"
+					}
+				>
+					{error.message}
+				</li>
 			))}
 		</ul>
 	);

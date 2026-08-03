@@ -32,7 +32,13 @@ import type {
 	EditorError,
 	ResponsiveLayerRef,
 } from "@anvilkit/contracts/editor";
-import { use, useCallback, useMemo, useSyncExternalStore } from "react";
+import {
+	use,
+	useCallback,
+	useEffect,
+	useMemo,
+	useSyncExternalStore,
+} from "react";
 import type { InternalEditorCommandPort } from "../command-port.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
 import { getEditorScopeController } from "./scope.js";
@@ -290,7 +296,8 @@ export function useComponentInstance(): ComponentInstanceModel | null {
 			// is looking at the override) without weakening the guard.
 			const selection = bridge.selection;
 			const previous = port?.getSnapshot().selection.scope ?? "page";
-			const targetScope = `component:${resolved.instance.definitionId}` as const;
+			const targetScope =
+				`component:${resolved.instance.definitionId}` as const;
 			const needsScope = previous !== targetScope && selection != null;
 			if (needsScope) {
 				selection?.setScope(targetScope);
@@ -304,7 +311,14 @@ export function useComponentInstance(): ComponentInstanceModel | null {
 				}));
 			} finally {
 				if (needsScope) {
-					selection?.setScope("page");
+					// Back to the scope the user was actually in — not a
+					// hardcoded "page". Promoting from inside another
+					// component's isolated scope used to eject the user to the
+					// page entirely. This does not route through
+					// `getEditorScopeController`, whose `exitScope()` always
+					// lands on "page" and so cannot express a transient
+					// round-trip back to the originating scope.
+					selection?.setScope(previous);
 					selection?.select(resolved.nodeId);
 				}
 			}
@@ -335,11 +349,8 @@ export function useComponentInstance(): ComponentInstanceModel | null {
 		);
 		let failure: EditorError | null = null;
 		const committed = port.commitNative((data, authoring) => {
-			const plan = buildDetachPlan(
-				data,
-				authoring,
-				[resolved.nodeId],
-				() => crypto.randomUUID(),
+			const plan = buildDetachPlan(data, authoring, [resolved.nodeId], () =>
+				crypto.randomUUID(),
 			);
 			if (plan === null) return null;
 			if (isDetachFailure(plan)) {
@@ -360,6 +371,10 @@ export function useComponentInstance(): ComponentInstanceModel | null {
 			bridge.diagnostics.setDiagnostics(DIAGNOSTIC_CHANNEL, [failure]);
 			return { status: "rejected", errors: [failure] };
 		}
+		// A successful detach clears whatever the previous attempt left
+		// behind, so a stale failure cannot outlive the condition it
+		// described.
+		bridge.diagnostics.setDiagnostics(DIAGNOSTIC_CHANNEL, []);
 		return {
 			status: committed === "committed" ? "committed" : "rejected",
 			errors: [],
@@ -371,22 +386,34 @@ export function useComponentInstance(): ComponentInstanceModel | null {
 		const selection = bridge.selection;
 		// Route through the same controller the Components panel uses so
 		// exit restores the page selection identically (§10.6).
-		getEditorScopeController(selection, {
-			getSelection: () => selection.getState(),
-			setScope: (scope) => selection.setScope(scope),
-			selectMany: (nodeIds) => selection.selectMany(nodeIds),
-		}).enterComponent(resolved.instance.definitionId);
+		getEditorScopeController(selection).enterComponent(
+			resolved.instance.definitionId,
+		);
 	}, [resolved, bridge]);
+
+	/*
+	 * Diagnostics here describe ONE instance, so they are dropped the
+	 * moment the user selects a different one. Without this, switching
+	 * instance A's variant (say, two overrides dropped) and then clicking
+	 * instance B rendered A's drop report inside B's inspector as though
+	 * it described B.
+	 */
+	const instanceNodeId = resolved?.nodeId;
+	useEffect(() => {
+		// `instanceNodeId` is the trigger, not an input — re-running when
+		// it changes is the entire point of this effect.
+		void instanceNodeId;
+		bridge?.diagnostics.setDiagnostics(DIAGNOSTIC_CHANNEL, []);
+	}, [bridge, instanceNodeId]);
 
 	const diagnostics = useMemo(() => {
 		void version;
-		// `getDiagnostics()` returns every channel flattened; the
-		// component-instance entries are the ones this hook published.
-		return (bridge?.diagnostics.getDiagnostics() ?? []).filter(
-			(error) =>
-				error.details?.kind === "componentInstance" ||
-				error.details?.kind === "variantOverride",
-		);
+		// This hook's OWN channel. The flattened `getDiagnostics()` view
+		// spans every source, so re-identifying entries by `details.kind`
+		// also picked up identically-shaped diagnostics published
+		// elsewhere — `validateCreateComponentSelection` emits
+		// `kind: "componentInstance"` errors onto the create channel.
+		return bridge?.diagnostics.getDiagnosticsFor(DIAGNOSTIC_CHANNEL) ?? [];
 	}, [bridge, version]);
 
 	return useMemo(() => {

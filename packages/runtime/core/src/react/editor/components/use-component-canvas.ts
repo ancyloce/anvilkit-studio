@@ -94,14 +94,7 @@ export function useComponentCanvas(): ComponentCanvas | null {
 	const selection = bridge?.selection;
 
 	const scopeController = useMemo(
-		() =>
-			selection == null
-				? null
-				: getEditorScopeController(selection, {
-						getSelection: () => selection.getState(),
-						setScope: (scope) => selection.setScope(scope),
-						selectMany: (nodeIds) => selection.selectMany(nodeIds),
-					}),
+		() => (selection == null ? null : getEditorScopeController(selection)),
 		[selection],
 	);
 
