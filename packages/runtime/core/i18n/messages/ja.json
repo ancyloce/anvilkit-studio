@@ -543,6 +543,7 @@
 	"studio.editor.token.usage": "参照数",
 	"studio.editor.token.inherited": "継承",
 	"studio.editor.token.unresolved": "未解決",
+	"studio.editor.token.invalidValue": "有効な {type} の値ではありません。",
 	"studio.editor.token.delete.title": "トークンを削除",
 	"studio.editor.token.delete.impact": "{count} 件の参照と {aliases} 件のエイリアスが更新されます。",
 	"studio.editor.token.delete.replaceWith": "置き換え先",

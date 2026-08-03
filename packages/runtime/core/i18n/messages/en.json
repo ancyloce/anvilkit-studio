@@ -543,6 +543,7 @@
 	"studio.editor.token.usage": "References",
 	"studio.editor.token.inherited": "Inherited",
 	"studio.editor.token.unresolved": "Unresolved",
+	"studio.editor.token.invalidValue": "Not a valid {type} value.",
 	"studio.editor.token.delete.title": "Delete token",
 	"studio.editor.token.delete.impact": "{count} reference(s) and {aliases} alias(es) will be updated.",
 	"studio.editor.token.delete.replaceWith": "Replace with",

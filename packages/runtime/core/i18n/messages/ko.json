@@ -543,6 +543,7 @@
 	"studio.editor.token.usage": "참조 수",
 	"studio.editor.token.inherited": "상속됨",
 	"studio.editor.token.unresolved": "확인 불가",
+	"studio.editor.token.invalidValue": "유효한 {type} 값이 아닙니다.",
 	"studio.editor.token.delete.title": "토큰 삭제",
 	"studio.editor.token.delete.impact": "참조 {count}개와 별칭 {aliases}개가 업데이트됩니다.",
 	"studio.editor.token.delete.replaceWith": "대체 대상",

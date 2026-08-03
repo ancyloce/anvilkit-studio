@@ -543,6 +543,7 @@
 	"studio.editor.token.usage": "引用次数",
 	"studio.editor.token.inherited": "继承",
 	"studio.editor.token.unresolved": "无法解析",
+	"studio.editor.token.invalidValue": "不是有效的 {type} 值。",
 	"studio.editor.token.delete.title": "删除令牌",
 	"studio.editor.token.delete.impact": "将更新 {count} 处引用和 {aliases} 个别名。",
 	"studio.editor.token.delete.replaceWith": "替换为",
