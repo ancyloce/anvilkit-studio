@@ -236,6 +236,8 @@ export {
 	type ResolveContext,
 	type ResolvedNodeAuthoring,
 	resolveNodeAuthoring,
+	substituteTokens,
+	type TokenSubstitutionContext,
 } from "./resolve/node.js";
 export {
 	getMatchingBreakpoints,

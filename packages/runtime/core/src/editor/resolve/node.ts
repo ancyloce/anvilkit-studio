@@ -154,13 +154,26 @@ function resolveFamily(
 }
 
 /**
+ * The slice of {@link ResolveContext} token substitution actually
+ * reads. Narrow on purpose so callers that have no viewport — the live
+ * authoring stylesheet emits per-layer deltas, not an effective value
+ * for one width — can substitute without inventing a `viewportWidth`.
+ */
+export interface TokenSubstitutionContext {
+	readonly authoring: Pick<AuthoringStateV1, "tokens" | "tokenModes">;
+	readonly tokenMode: string;
+	/** §15.1 mode fallback; typically `StudioEditorConfig.defaultTokenMode`. */
+	readonly defaultTokenMode?: string;
+}
+
+/**
  * Substitute token references with resolved literals across a
  * resolved spec tree. Unresolvable references keep the reference in
  * place (renderers fall back per §25) and add a diagnostic.
  */
-function substituteTokens(
+export function substituteTokens(
 	value: unknown,
-	context: ResolveContext,
+	context: TokenSubstitutionContext,
 	diagnostics: EditorError[],
 ): unknown {
 	if (Array.isArray(value)) {
