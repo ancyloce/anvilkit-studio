@@ -36,7 +36,21 @@ export interface EditorDiagnosticCenter extends EditorDiagnosticPort {
 	 * the slice. Emits `diagnostic.changed` when the set changed.
 	 */
 	setDiagnostics(source: string, diagnostics: readonly EditorError[]): void;
+	/**
+	 * One source's persistent diagnostics.
+	 *
+	 * {@link EditorDiagnosticPort.getDiagnostics} flattens every source
+	 * into one list with nothing marking which channel an entry came
+	 * from, so a surface that renders only its own messages has to
+	 * re-identify them by shape — and two channels publishing the same
+	 * `details.kind` then render under each other's surface. This reads
+	 * the slice directly.
+	 */
+	getDiagnosticsFor(source: string): readonly EditorError[];
 }
+
+/** Stable empty slice, so `getDiagnosticsFor` misses keep memo identity. */
+const NO_DIAGNOSTICS: readonly EditorError[] = [];
 
 /** Create a per-instance diagnostic center. */
 export function createEditorDiagnosticCenter(options?: {
@@ -53,6 +67,7 @@ export function createEditorDiagnosticCenter(options?: {
 
 	const center: EditorDiagnosticCenter = {
 		getDiagnostics: () => flattened,
+		getDiagnosticsFor: (source) => bySource.get(source) ?? NO_DIAGNOSTICS,
 		subscribe(listener) {
 			listeners.add(listener);
 			return () => {
