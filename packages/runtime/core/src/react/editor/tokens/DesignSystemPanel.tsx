@@ -47,6 +47,7 @@ import {
 	SelectValue,
 } from "@/primitives/select";
 import { useMsg } from "@/state/editor-i18n-context";
+import { formatTokenLiteral, parseTokenLiteral } from "./token-literal-text.js";
 import {
 	type DesignSystemModel,
 	type DesignSystemToken,
@@ -68,39 +69,22 @@ const TOKEN_TYPES: readonly TokenType[] = [
  * How a stored literal is shown in a text field, and whether editing it
  * as text can round-trip.
  *
- * Only primitives round-trip. `length` and `radius` literals are
- * `CssLength` objects and `color` literals are `CssColor` objects —
- * `String()` renders those as `[object Object]`, and writing the field
- * back would replace the object with that string. Those are displayed
- * read-only instead, so the value is visible but cannot be corrupted by
- * a blur.
+ * Delegates to the shared round-trip in `token-literal-text.ts`, which
+ * formats through the engine's own serializers and parses back against
+ * the token's declared type. `length`, `radius` and `color` literals
+ * are objects and used to be shown read-only here (a `String()` of them
+ * is `[object Object]`, and writing that back replaced the object with
+ * the string) — which meant the panel could not edit the very types the
+ * token picker creates most.
  */
-function literalText(value: unknown): {
+function literalText(
+	value: unknown,
+	type: TokenType,
+): {
 	readonly text: string;
 	readonly editable: boolean;
 } {
-	if (value === undefined || value === null) {
-		return { text: "", editable: true };
-	}
-	if (typeof value === "object") {
-		return { text: JSON.stringify(value), editable: false };
-	}
-	return { text: String(value), editable: true };
-}
-
-/**
- * Keep a literal's declared type across a text edit.
- *
- * The token's `type` is the discriminator the engine itself uses
- * (`materializeTokenLiteral`), so a `number` token keeps storing a
- * number rather than silently becoming the string `"8"`. Text that is
- * not a finite number is passed through unchanged for the reducer to
- * reject with a real message.
- */
-function coerceLiteral(type: TokenType, text: string): unknown {
-	if (type !== "number") return text;
-	const next = Number(text);
-	return text.trim().length > 0 && Number.isFinite(next) ? next : text;
+	return formatTokenLiteral(type, value);
 }
 
 function ErrorList({
@@ -356,7 +340,9 @@ function TokenRow({
 					const value = entry.token.values[mode.id];
 					const resolved = entry.resolvedByMode[mode.id];
 					const literal =
-						value?.kind === "literal" ? literalText(value.value) : null;
+						value?.kind === "literal"
+							? literalText(value.value, entry.token.type)
+							: null;
 					const text = literal?.text ?? "";
 					return (
 						<li
@@ -390,11 +376,31 @@ function TokenRow({
 									// mode with no declared value used to convert it from
 									// inherited into an empty-string literal of its own.
 									if (next === text) return;
+									// Strict parse against the token's DECLARED type — the
+									// same discriminator the engine resolves with. An
+									// unparsable draft is reported and never written, so a
+									// typo cannot replace a `CssLength` object with the raw
+									// string the author happened to type.
+									const parsed = parseTokenLiteral(entry.token.type, next);
+									if (parsed === null) {
+										setErrors([
+											{
+												code: "EDITOR_INVALID_CSS_VALUE",
+												severity: "error",
+												message: msg(
+													"studio.editor.token.invalidValue",
+												).replace("{type}", entry.token.type),
+												recoverable: true,
+												details: { kind: "token", tokenId: entry.token.id },
+											},
+										]);
+										return;
+									}
 									setErrors(
 										(
 											await model.setTokenValue(entry.token.id, mode.id, {
 												kind: "literal",
-												value: coerceLiteral(entry.token.type, next),
+												value: parsed.value,
 											})
 										).errors,
 									);
@@ -406,7 +412,7 @@ function TokenRow({
 							>
 								{resolved === undefined
 									? msg("studio.editor.token.unresolved")
-									: literalText(resolved).text}
+									: literalText(resolved, entry.token.type).text}
 							</span>
 						</li>
 					);

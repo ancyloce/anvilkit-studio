@@ -41,6 +41,7 @@ import type {
 import { use, useCallback, useMemo, useSyncExternalStore } from "react";
 import type { InternalEditorCommandPort } from "../command-port.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
+import { activeTokenMode } from "./token-mode.js";
 
 /** One token row, with everything the management UI displays. */
 export interface DesignSystemToken {
@@ -157,7 +158,7 @@ export function useDesignSystem(): DesignSystemModel | null {
 		bridge === null ? zero : bridge.getVersion,
 	);
 	const port = bridge?.port as InternalEditorCommandPort | null | undefined;
-	const defaultMode = bridge?.editorConfig?.defaultTokenMode ?? "light";
+	const defaultMode = activeTokenMode(bridge?.editorConfig);
 	const activeLayer: ResponsiveLayerRef =
 		bridge?.responsive?.getActiveLayer() ?? "base";
 

@@ -21,14 +21,10 @@ import type {
 	TokenType,
 	TokenValue,
 } from "@anvilkit/contracts/editor";
-import {
-	useCallback,
-	useMemo,
-	useState,
-	useSyncExternalStore,
-} from "react";
+import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 import { resolveToken } from "../../../editor/index.js";
 import type { EditorInspectorContext } from "../inspector/use-inspector.js";
+import { activeTokenMode } from "./token-mode.js";
 
 /** How many recently-applied tokens the picker offers. */
 const RECENTS_LIMIT = 5;
@@ -93,7 +89,7 @@ export function resolveTokenLiteral(
 ): unknown {
 	const resolution = resolveToken(
 		tokenId,
-		context.bridge.editorConfig?.defaultTokenMode ?? "light",
+		activeTokenMode(context.bridge.editorConfig),
 		context.authoring.tokens,
 		context.authoring.tokenModes,
 	);
@@ -164,9 +160,9 @@ export function useTokenPicker(
 	type: TokenType,
 	onAttach: (tokenId: string) => void,
 ): TokenPickerState {
-	const { authoring, commands, revision, bridge } = context;
+	const { authoring, commands, bridge } = context;
 	const [search, setSearch] = useState("");
-	const tokenMode = bridge.editorConfig?.defaultTokenMode ?? "light";
+	const tokenMode = activeTokenMode(bridge.editorConfig);
 
 	const allEntries = useMemo((): readonly TokenPickerEntry[] => {
 		return Object.values(authoring.tokens)
@@ -250,9 +246,13 @@ export function useTokenPicker(
 
 	const createToken = useCallback(
 		async (token: DesignToken): Promise<EditorCommandResult> => {
+			// Live revision, for the same reason `useInspectorField` reads
+			// one: two picker actions inside a single render (create, then
+			// create again, or import twice) would otherwise send the
+			// second command with the first one's revision.
 			const result = await commands.execute({
 				id: crypto.randomUUID(),
-				expectedRevision: revision,
+				expectedRevision: commands.getSnapshot().revision,
 				source: "inspector",
 				timestamp: Date.now(),
 				type: "token.create",
@@ -265,7 +265,7 @@ export function useTokenPicker(
 			}
 			return result;
 		},
-		[commands, revision, attach],
+		[commands, attach],
 	);
 
 	const createFromLiteral = useCallback(
