@@ -1,9 +1,17 @@
 # Realtime collaboration — conflict resolution and trust model
 
-**Status:** alpha (`@anvilkit/plugin-collab-yjs@0.1.0-alpha.0`,
-M12 / `phase6-018`)
+**Status:** Active — pre-1.0 (`@anvilkit/plugin-collab-yjs@0.10.0-rc.10`;
+originally drafted for `0.1.0-alpha.0` at M12 / `phase6-018`)
 **Owner:** plugins workgroup
-**Last updated:** 2026-04-28
+**Last updated:** 2026-08-04 — version, file paths, the `yjs` pin, and the
+`decodeIR` validation claim re-verified against the tree.
+
+> The plugin has moved from `0.1.0-alpha.0` to `0.10.0-rc.10`, but the
+> **encoding has not changed**: `encodeIR()` still serialises the whole
+> `PageIR` to a single JSON string, so every conflict-resolution and
+> convergence guarantee below still holds as written. The "alpha" labels in
+> § 2.1 and § 6 are kept because the *limitations* they name are still real;
+> read them as "current encoding", not as "an old release".
 
 This document is the authoritative reference for the conflict
 resolution semantics, ordering guarantees, and trust boundaries of
@@ -31,9 +39,9 @@ The alpha encoding stores the latest live `PageIR` as a single JSON
 string under one Y.Map key (`pageIR`). Each saved snapshot is stored
 under stable per-id metadata and payload keys so the adapter can still
 honor the base `SnapshotAdapter` history contract. See
-[`packages/plugins/plugin-collab-yjs/src/encode.ts`](../../packages/plugins/plugin-collab-yjs/src/encode.ts)
+[`packages/extensions/plugins/plugin-collab-yjs/src/utils/encode.ts`](../../packages/extensions/plugins/plugin-collab-yjs/src/utils/encode.ts)
 and
-[`packages/plugins/plugin-collab-yjs/src/yjs-adapter.ts`](../../packages/plugins/plugin-collab-yjs/src/yjs-adapter.ts).
+[`packages/extensions/plugins/plugin-collab-yjs/src/utils/yjs-adapter.ts`](../../packages/extensions/plugins/plugin-collab-yjs/src/utils/yjs-adapter.ts).
 
 This is the simplest encoding that satisfies the M12 exit criteria —
 it gives **convergence** for free on the live document (Yjs guarantees
@@ -44,7 +52,8 @@ so non-conflicting snapshot saves can coexist even while the live
 writes are LWW on the WHOLE PageIR, not per-prop; see § 2 for what
 that means in practice.
 
-The GA target (post-1.1) is to mirror the IR tree natively in Yjs —
+The GA target — still open, and not tied to a version now that the `1.1`
+cut never happened — is to mirror the IR tree natively in Yjs —
 each `PageIRNode` becomes a Y.Map, props become Y.Map entries,
 `children` becomes a Y.Array. That gives per-prop merge for
 non-conflicting concurrent edits and is the standard Yjs pattern for
@@ -80,8 +89,11 @@ write:
    winner; neither side wins systematically across runs.
 3. **Local writes never echo.** A replica never observes its own
    write through its own `subscribe()` callback. The plugin filters
-   on `transaction.origin === localPeer.id`. See
-   `yjs-adapter.ts:105-121`.
+   local-origin transactions via the `isLocalOrigin(transaction.origin,
+   localPeer)` helper in `src/utils/yjs-adapter.ts` (the observer
+   call sites are around lines 267 and 300; the helper itself is defined
+   just below them). It also skips transactions tagged with the
+   cross-tab `BROADCAST_ORIGIN`.
 4. **Update ordering is preserved per origin.** `subscribe()`
    delivers updates from a remote origin in the same order Yjs
    committed them locally. The
@@ -101,8 +113,9 @@ write:
 The
 `disjoint prop keys on the same node — LWW collapses to one writer (alpha)`
 test in `src/__tests__/concurrent-edit.test.ts` pins this exact
-limitation. The post-1.1 native-tree encoding will tighten this to
-per-prop merge; that test will need to be flipped at the same time.
+limitation. The native-tree encoding will tighten this to per-prop merge; that test
+will need to be flipped at the same time. It has not happened yet — the
+test still asserts the LWW collapse today.
 
 ---
 
@@ -244,9 +257,10 @@ are tracked for the post-1.1 native-tree migration:
   the transport. y-websocket has no built-in backpressure; hosts
   that need rate limiting must wrap the adapter's `save` and debounce.
 
-These are referenced in
-`docs/announcements/2027-12-v1-1-ga.md`
-under the "Alpha caveats" section.
+These were also summarised under "Alpha caveats" in the `v1.1` GA
+announcement draft. That release was never cut and the draft is now
+archived at `docs/archive/announcements/2027-12-v1-1-ga.md` — **this
+section is the maintained copy**; prefer it.
 
 ---
 
@@ -257,9 +271,13 @@ remotely. From the host's perspective, this is **untrusted input**:
 
 - The `PageIR` may have been authored by another peer running a
   malicious build of the plugin, or with a corrupted Y.Doc.
-- The `PageIR` shape is validated only at the encoding boundary
-  (`decodeIR()` checks `version === "1"`); no schema-level
-  validation is performed before dispatch.
+- The `PageIR` shape is validated only at the encoding boundary.
+  `decodeIR()` checks `version === "1"` plus the structural backbone of
+  the root node (`root.id` / `root.type` are strings, and `assets` /
+  `metadata` shape when present) — a robustness check against corrupt
+  blobs from the adapter's own persistence, **not** a security boundary,
+  as the source comment states. No schema-level validation, and no
+  per-component prop allow-listing, is performed before dispatch.
 
 Hosts MUST treat the IR delivered by `subscribe()` the same way
 they treat IR delivered by `validateAiOutput()`: route it through
@@ -349,9 +367,11 @@ one-shot `console.warn` on first call.
 
 `StudioPluginRegistration` is no longer React-free at the *type*
 level: `providers` / `overlays` / `slots` carry `ComponentType` values.
-The runtime layer (`@anvilkit/core/runtime/compile-plugins`) continues
-to treat these as opaque — it never instantiates them. The React
-boundary is `<Studio>` (`packages/core/src/react/components/Studio.tsx`),
+The runtime layer
+(`packages/runtime/core/src/runtime/compile-plugins.ts`, reachable as the
+`@anvilkit/core/runtime` subpath) continues to treat these as opaque — it
+never instantiates them. The React boundary is `<Studio>`
+(`packages/runtime/core/src/react/components/Studio.tsx`),
 which composes providers, dispatches overlays by placement, and
 forwards slot components into `<ChromePropsProvider>`.
 
@@ -359,18 +379,25 @@ forwards slot components into `<ChromePropsProvider>`.
 
 ## 8. References
 
-- `@anvilkit/plugin-collab-yjs` —
-  `packages/plugins/plugin-collab-yjs/src/yjs-adapter.ts` (adapter),
-  `src/plugin.ts` (Studio plugin), `src/encode.ts` (IR encoding).
+All paths below were re-verified on 2026-08-04. The package lives at
+`packages/extensions/plugins/plugin-collab-yjs` (it was
+`packages/plugins/plugin-collab-yjs` before the layered-package move),
+and its sources now sit under `src/utils/` rather than at `src/` root.
+
+- `@anvilkit/plugin-collab-yjs` — `src/utils/yjs-adapter.ts` (adapter),
+  `src/plugin.ts` (Studio plugin), `src/utils/encode.ts` (IR encoding).
 - Integration tests — `src/__tests__/partition.test.ts`,
   `src/__tests__/concurrent-edit.test.ts`,
-  `src/__tests__/lock-contention.test.ts`.
+  `src/__tests__/lock-contention.test.ts`,
+  `src/__tests__/round-trip.test.ts`.
 - `@anvilkit/plugin-version-history` — defines the SnapshotAdapter
   v2 contract that the Yjs adapter implements
-  (`packages/plugins/plugin-version-history/src/types.ts`).
+  (`packages/extensions/plugins/plugin-version-history/src/types/types.ts`).
 - `@anvilkit/core/types` — `PageIR`, `PageIRNode`, `PageIRNodeMeta`.
 - Yjs docs — [https://docs.yjs.dev/](https://docs.yjs.dev/) for
-  general CRDT semantics; the alpha plugin pins to `yjs@^13.6.27`.
+  general CRDT semantics. The plugin pins `yjs@^13.6.31` and
+  `y-protocols@^1.0.7` as dependencies, and declares
+  `y-websocket@^3.0.0` plus `@hocuspocus/provider@^4.4.0` as peers.
 - y-protocols Awareness —
   [https://github.com/yjs/y-protocols](https://github.com/yjs/y-protocols).
 - Reference transport — `examples/y-websocket-server.mjs` under

@@ -1,8 +1,11 @@
 # Plugin trust model
 
-**Status:** draft, pre-`v1.0.0-beta.0` (`phase4-014`)
+**Status:** Active — the current trust model for the shipping `0.1.x` line.
+(Originally drafted as `phase4-014` pre-`v1.0.0-beta.0`; that tag was never
+cut, but everything here applies to what ships today.)
 **Review owner:** _unassigned_ (external reviewer recommended)
-**Last updated:** 2026-04-19
+**Last updated:** 2026-08-04 — APIs, file paths, and the `decodeIR`
+validation claim re-verified against the tree.
 
 This document describes the trust boundaries between Anvilkit Studio,
 the host application, and any loaded plugin — including the two
@@ -37,7 +40,9 @@ There are three principals, not two:
   headless CMS backend, etc. It vets the plugins it installs, owns
   the secrets, and owns the backend routes any plugin calls.
 - **Plugins** are third-party (or first-party) packages the host
-  opts into via `createStudio({ plugins: [...] })`. They are _not
+  opts into by passing them to the editor: `<Studio plugins={[...]} />`.
+  (There is no `createStudio()` function — an earlier draft named one.
+  The config-building helper is `createStudioConfig()`.) They are _not
   sandboxed_ (see §2).
 
 The most important thing to internalise is this: **Studio trusts the
@@ -55,9 +60,10 @@ in `@anvilkit/core/types`). That context gives the plugin:
   A plugin can replace the entire document with
   `{ type: "setData", data: ... }`, insert a node, remove a node,
   move a node — anything the human editor can do.
-- **The host's `studioConfig` snapshot** — whatever options the host
-  passed to `createStudio({ ... })`. If the host puts secrets in
-  there, the plugin sees them. Don't.
+- **The host's `studioConfig` snapshot** — the frozen, merged config
+  produced by `createStudioConfig()` after layering defaults, environment
+  variables, and host overrides. If the host puts secrets in there, the
+  plugin sees them. Don't.
 - **Event bus** via `ctx.emit()` / `ctx.on()` — plugin-to-plugin
   messaging with no access control.
 - **Structured logging** via `ctx.log()`.
@@ -84,7 +90,8 @@ Because Studio cannot vet plugins, the host must:
    server, not in client code. (See `phase4-010` for worked
    adapters.) Do not ship the adapter as a fetch-from-browser
    function with an embedded key — that leaks the key to anyone who
-   views source. See `docs/guides/ai-integration.mdx` §"Do not do
+   views source. See the AI integration guide,
+   `apps/docs/content/docs/guides/ai-integration.mdx`, §"Do not do
    this" (post-`phase4-010`).
 3. **Apply a Content Security Policy** on the rendered export. The
    HTML exporter emits HTML that you serve to end users; a CSP that
@@ -101,8 +108,10 @@ Because Studio cannot vet plugins, the host must:
 
 `@anvilkit/validator` exposes `validateAiOutput(response, components)`
 — a Zod-backed gate that every LLM response must pass before the AI
-copilot dispatches it to the Puck store
-(`create-ai-copilot-plugin.ts` §`runGeneration`).
+copilot dispatches it to the Puck store. Implementation:
+`packages/foundation/validator/src/validate-ai-output.ts`; call site:
+`packages/extensions/plugins/plugin-ai-copilot/src/plugin.ts`
+(the file was named `create-ai-copilot-plugin.ts` when this was drafted).
 
 **What it enforces (errors that make `valid = false`):**
 
@@ -146,8 +155,10 @@ dispatches. The IR is dropped.
 
 The HTML exporter's threat model is that **every string field in the
 IR is attacker-controlled**, because an LLM may have produced it and
-end users may have typed it. The implementation (`emit-html.ts` +
-`internal/escape-html.ts`) holds three invariants:
+end users may have typed it. The implementation
+(`packages/extensions/plugins/plugin-export-html/src/emit/emit-html.ts`
++ `src/internal/escape-html.ts` in the same package) holds three
+invariants:
 
 1. **Every text field is routed through `escapeHtml()`** before it
    is concatenated into element content. `escapeHtml()` replaces
@@ -165,7 +176,8 @@ end users may have typed it. The implementation (`emit-html.ts` +
    `"jav\tascript:"` and `" javascript:"` are both rejected.
 
 **Known surface we explicitly block (see
-`src/__tests__/security.test.ts` in the plugin):**
+`packages/extensions/plugins/plugin-export-html/src/__tests__/security.test.ts`,
+currently 27 cases):**
 
 - `<script>` injected via a text prop — escaped to `&lt;script&gt;`.
 - `" onmouseover=alert(1)` injected via a string prop used in an
@@ -211,11 +223,16 @@ that IR into Puck via `setData`.
 - `subscribe()` callbacks MUST be treated as untrusted input. The IR
   may have been authored by another peer running a malicious build of
   the plugin, or with a corrupted or hostile Y.Doc payload.
-- The encoding boundary (`decodeIR()`) only validates
-  `version === "1"`. It does NOT run the full Zod schema; it does
-  NOT enforce per-component prop allow-lists; it does NOT escape
-  string values. Hosts must layer those checks on top — the same
-  way the AI copilot routes `validateAiOutput()` before dispatch.
+- The encoding boundary (`decodeIR()`,
+  `packages/extensions/plugins/plugin-collab-yjs/src/utils/encode.ts`)
+  validates `version === "1"` **and** the structural backbone of the root
+  node (`root.id` / `root.type` are strings, plus `assets` / `metadata`
+  shape when present). That check was widened after this section was
+  written, but it is **robustness, not a security boundary** — the source
+  says so explicitly. It still does NOT run the full Zod schema, does NOT
+  enforce per-component prop allow-lists, and does NOT escape string
+  values. Hosts must layer those checks on top — the same way the AI
+  copilot routes `validateAiOutput()` before dispatch.
 - The CRDT layer is content-blind. Lock metadata (`PageIRNode.meta.locked`)
   is **advisory only** at the CRDT boundary; enforcement is the
   host's responsibility (see
@@ -250,16 +267,18 @@ plugin lives in
 
 _None._
 
-> New findings must be filed as P0/P1 issues and resolved before the
-> `v1.0.0-beta.0` tag. This section must stay empty (aside from the
-> `_None_` marker) for release.
+> New findings must be filed as P0/P1 issues and resolved before the next
+> release cut. This section must stay empty (aside from the `_None_`
+> marker) at release time. (The original gate named the `v1.0.0-beta.0`
+> tag, which was never cut — the rule now applies per release.)
 
 ### Closed findings (history)
 
 All three phase4-014 audit findings are now fixed in
 `@anvilkit/validator` (iteration 5); the corresponding pin tests in
-`plugin-ai-copilot/src/__tests__/security.test.ts` were flipped to
-assert `VALIDATION_FAILED` instead of the pre-fix behaviour.
+`packages/extensions/plugins/plugin-ai-copilot/src/__tests__/security.test.ts`
+were flipped to assert `VALIDATION_FAILED` instead of the pre-fix
+behaviour.
 
 - **F-1 (P2, closed iteration 5):** Validator now emits
   `[INVALID_ROOT_TYPE]` when `root.type !== "__root__"`. Pin test:
@@ -323,18 +342,32 @@ within 5 business days, independent of CVE disclosure timelines.
 
 ## References
 
-- `@anvilkit/plugin-export-html` — `src/emit-html.ts`,
-  `src/internal/escape-html.ts`.
+All paths below were re-verified on 2026-08-04.
+
+- `@anvilkit/plugin-export-html` —
+  `packages/extensions/plugins/plugin-export-html/src/emit/emit-html.ts`,
+  `.../src/internal/escape-html.ts`.
 - `@anvilkit/plugin-ai-copilot` —
-  `src/create-ai-copilot-plugin.ts`, `src/types.ts`.
-- `@anvilkit/validator` — `validateAiOutput` implementation and
-  Zod schemas.
-- `apps/cli/src/commands/add.ts` — `anvilkit add` resolution flow
-  and the `--unsafe` opt-in.
-- `apps/docs/src/registry/feed.schema.ts` — canonical Zod schema
-  for the registry feed.
+  `packages/extensions/plugins/plugin-ai-copilot/src/plugin.ts`,
+  `.../src/types/types.ts`.
+- `@anvilkit/validator` —
+  `packages/foundation/validator/src/validate-ai-output.ts`
+  (`validateAiOutput`) and `.../src/section.ts`
+  (`validateAiSectionPatch`).
+- `@anvilkit/plugin-asset-manager` — hostile-URL contract test at
+  `packages/extensions/plugins/plugin-asset-manager/src/__tests__/plugin-hostile-url.test.ts`.
+- `packages/tooling/cli/src/commands/add.ts` — `anvilkit add`
+  resolution flow and the `--unsafe` opt-in. The production feed URL is
+  pinned in `packages/tooling/cli/src/utils/registry-client.ts`.
+- `apps/docs/src/registry/feed.schema.mjs` — canonical schema for the
+  registry feed (it is a `.mjs` module, not the `.ts` file named in the
+  original draft); the served artifact is
+  `apps/docs/public/registry/feed.schema.json`.
 - `.github/workflows/marketplace-scorecard.yml` — scorecard CI
   implementation (`phase6-014`).
-- Architecture doc §9 (secrets boundary), §11 (risk register).
-- `docs/tasks/phase4-010-ai-integration-guide.md` (host-side
-  adapter patterns).
+- `docs/architecture/repository-structure.md` — package layering and the
+  Studio/platform boundary.
+- Host-side adapter patterns — `apps/docs/content/docs/guides/ai-integration.mdx`
+  (plus `.zh` / `.ja` / `.ko` translations). The originating `phase4-010`
+  task note no longer exists anywhere in the tree; the guide superseded
+  it.
