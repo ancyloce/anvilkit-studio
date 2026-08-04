@@ -274,6 +274,49 @@ string not captured — match loosely and confirm before acting.
   `slider.tsx` carries a scoped `biome-ignore` matching the package's existing
   convention for positional lists. Do not re-report.
 
+## GP-014 — `playground#build` ENOENT on a component's `dist/styles.css` (duplicate-builder race)
+
+- **Class:** ENVIRONMENT_ROT · **Confidence:** VERIFIED (2026-08-04, this repo)
+- **Signature:**
+  `ENOENT: no such file or directory, open '.*components/src/.*/dist/styles\.css'`
+  · `Module not found: Can't resolve '\./styles\.css'` traced through
+  `components/src/<pkg>/dist/index.js`
+- **Root cause:** `pnpm-workspace.yaml` registers **both** the umbrella package
+  `packages/extensions/components` (line 14, `anvilkit-components`) **and** each
+  component `packages/extensions/components/src/*` (line 15). Turbo therefore
+  builds every component **twice**:
+  1. `@anvilkit/hero#build` — ordered before `playground#build` via `^build`.
+  2. `anvilkit-components#build` = `pnpm -r --filter "./src/*" build` — rebuilds
+     all 12 components again. **Nothing depends on `anvilkit-components`**, so
+     turbo has no ordering edge between it and `playground#build`.
+
+  Each component's build is `rslib build --lib esm && rslib build --lib cjs
+  --no-clean` — the **first** pass has no `--no-clean`, so it *cleans* `dist/`.
+  The duplicate builder therefore deletes `dist/styles.css` out from under
+  playground's webpack, which has already begun reading `dist/index.js`.
+- **Observed instance:** in one `pnpm build` run — L753
+  `playground:build: $ next build --webpack` (webpack starts), then L759
+  `anvilkit-components:build: $ pnpm -r --filter "./src/*" build` (rebuild
+  starts). Playground failed; `hero/dist/styles.css` (28,874 B) exists and is
+  intact once both finish.
+- **Tell it is not your code:** all 12 components have both `src/styles.css` and
+  `dist/styles.css` after the run. The artifact is not missing — it was
+  *transiently* missing.
+- **Remedy / triage:** re-run the app build alone once dependencies are settled:
+  ```sh
+  pnpm --filter playground build     # verified green, exit 0, ~30 s
+  ```
+  Or serialise to remove the overlap: `pnpm exec turbo run build --concurrency=1`.
+- **Verify fixed:** the isolated build compiles successfully and
+  `ls packages/extensions/components/src/hero/dist/styles.css` is present.
+- **Durable fix (NOT applied — needs owner decision):** `anvilkit-components#build`
+  is redundant inside the root turbo graph, since turbo already builds each
+  `src/*` component directly; the umbrella script exists for the nested
+  workspace's own `release` flow (`changeset version && pnpm build && changeset
+  publish`). Options: drop `build` from the umbrella manifest, exclude it from the
+  root graph, or give the umbrella an ordering edge. Any of these changes how
+  components are built for release — do not apply without agreement.
+
 ---
 
 ## Appending a new entry
