@@ -40,6 +40,7 @@ Configured in `.claude/settings.json`:
 ## Hard Rules
 
 - **Git is read-only for Claude** — see **Git Policy** above.
+- **The Puck contract is mandatory** — see **Unified Puck Contract (Mandatory)** below. Violations are architecture-blocking.
 - **Reuse before writing.** No new utility, wrapper, hook, component, abstraction, or dependency without passing the Reuse-First check below.
 - **Formatting is Biome with TAB indentation.** Never run Prettier. Never introduce CRLF line endings. Root `pnpm format` fans out to the per-package Biome scripts.
 - **UI work uses `@anvilkit/ui` primitives.** Do not hand-roll native controls (e.g. a native `<select>` language switcher), bespoke CSS, or custom components when a shared primitive exists.
@@ -120,6 +121,18 @@ Before theorizing about a code bug, rule out the environment causes that have re
 3. **Nested pnpm workspace install order clobbering the TypeScript version** → `pnpm why typescript` in the failing package. A package present in two workspaces gets whichever install ran last.
 4. **Drifted API snapshots** → regenerate rather than hand-edit, but do not accept the result blindly. `git add` any new source files *before* regenerating, or the emitter drops their URLs; then classify the diff as benign path/hash drift vs a real API change.
 5. **A concurrent Claude or editor session mutating the same checkout** → `git status` before and after any long run. A new failure in a previously-green package is probably not yours.
+
+## Unified Puck Contract (Mandatory)
+
+Non-negotiable. A violation is **architecture-blocking**: stop and resolve it before landing, never after.
+
+1. **Puck is the sole editor contract.** `Config` + `Data` + the public `PuckApi` + `Render` are the only underlying contract. Nothing else may define what a document is or how it renders.
+2. **Render state lives in declared fields.** Node-level render state must live in declared component props/fields; document-level state must live in declared root props/fields. No state that affects rendering may live anywhere else.
+3. **One pipeline, four consumers.** Editor, preview, production rendering, and export must use the same `Config`, the same `Data`, the same migrations, and the same pure rendering/style pipeline. A behavioural difference between them is a bug, not a feature.
+4. **Use the public surface.** Puck public APIs, Composition, `walkTree`, and `transformProps` — all four are present in `@puckeditor/core@0.22.4`'s published types.
+5. **Never introduce** a parallel IR, an opaque root sidecar, a duplicated render pipeline, a dependency on undocumented Puck internals, or experimental Overrides as core architecture.
+6. **Compliance must be explicit.** Every PRD, technical design, implementation plan, and code change must state how it satisfies this contract. Silence is not compliance.
+7. **On conflict, stop.** If a requirement cannot be met within this contract, do not implement it — propose a Puck-native alternative or a migration path first, and get agreement before writing code.
 
 ## Architecture Contracts
 
