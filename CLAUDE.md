@@ -92,8 +92,17 @@ Scripts live in each package's manifest. Non-obvious ones: `pnpm gen:component` 
 
 ## Verification Gates
 
-- **Run in this order, and require green before declaring done:** `pnpm typecheck` → `pnpm lint` → `pnpm test` → `pnpm build`. Add `pnpm madge` and `pnpm publint` for package-level work.
-- After any multi-file change, run the full pre-push gate (`pnpm check:push`, or `pnpm check:all` for the whole workspace) and report the **exact pass/fail count from that run's output**. Do not carry a task count over from a previous run — turbo's task total varies with which packages changed (a full-workspace `check:all` currently expands to 114 tasks across 21 packages; `check:push` filters to packages changed vs `origin/main`).
+**Use the aggregate scripts — do not retype the `&&` chain.** Both fail fast at the first red stage, so the stage that fails is the stage that broke:
+
+| Script | Runs | Use when |
+| --- | --- | --- |
+| `pnpm gate:quick` | `typecheck → lint → test` | The inner loop, and after any edit. Skips app builds and the package release gates. |
+| `pnpm gate:full` | `typecheck → lint → madge → test → build → publint → check:all` | Before declaring multi-file work done. Mirrors CI's `validate` + `package-gates` jobs; `check:all` is where `check:api-snapshot`, `check:bundle-budget`, `check:circular`, and `check:publint` run. |
+
+- `gate:full` runs the **whole workspace**. For the changed-packages-only variant, use `pnpm check:push` (filters vs `origin/main`; `ANVILKIT_CHECK_BASE` overrides the base) — that is what the pre-push hook runs.
+- `gate:full` deliberately omits two CI gates: `pnpm size` (size-limit) and `node scripts/check-submodule-contracts.mjs`. Run those explicitly for release or submodule work.
+- Running a stage on its own is still fine when you know what you're checking: `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`, `pnpm madge`, `pnpm publint`.
+- After any multi-file change, run `pnpm gate:full` and report the **exact pass/fail count from that run's output**. Do not carry a task count over from a previous run — turbo's task total varies with which packages changed (a full-workspace `check:all` currently expands to 114 tasks across 21 packages).
 - Do not claim a check passed unless it was executed. Report the exact command and any pre-existing failure — never skip or hide one.
 - **Empty or ambiguous test output is a failure, not a pass.** Never report a task complete on the basis of one — re-run and read the summary line. Before declaring E2E green, confirm the run actually produced a nonzero test count.
 - Kill orphaned Playwright and dev-server processes on the target port before rerunning E2E. Use unique room IDs and avoid port collisions.
