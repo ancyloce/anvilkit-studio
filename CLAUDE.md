@@ -90,6 +90,28 @@ The authoritative current/target map, classifications, app roles, platform bound
 
 Scripts live in each package's manifest. Non-obvious ones: `pnpm gen:component` (run inside `packages/extensions/components/`), and root `pnpm check:all` / `pnpm check:push` as the aggregate release gates.
 
+## Verification Gates
+
+- **Run in this order, and require green before declaring done:** `pnpm typecheck` → `pnpm lint` → `pnpm test` → `pnpm build`. Add `pnpm madge` and `pnpm publint` for package-level work.
+- After any multi-file change, run the full pre-push gate (`pnpm check:push`, or `pnpm check:all` for the whole workspace) and report the **exact pass/fail count from that run's output**. Do not carry a task count over from a previous run — turbo's task total varies with which packages changed (a full-workspace `check:all` currently expands to 114 tasks across 21 packages; `check:push` filters to packages changed vs `origin/main`).
+- Do not claim a check passed unless it was executed. Report the exact command and any pre-existing failure — never skip or hide one.
+- **Empty or ambiguous test output is a failure, not a pass.** Never report a task complete on the basis of one — re-run and read the summary line. Before declaring E2E green, confirm the run actually produced a nonzero test count.
+- Kill orphaned Playwright and dev-server processes on the target port before rerunning E2E. Use unique room IDs and avoid port collisions.
+- Rebuild affected packages before declaring runtime/browser-facing changes done.
+- For UI behavior, drive the real app (`/run`), not only unit tests.
+- Do not regenerate snapshots blindly. Distinguish benign hash drift from a real API change — see **Environment Hygiene** item 4.
+- CI (`.github/workflows/ci.yml`) is path-aware, gated by a `changes` classification job: `validate` (lint/typecheck/madge/test/build), `package-gates` (publint + `check:all`), `editor-perf`, `studio-e2e`, `playground-e2e`, `docs`.
+
+## Environment Hygiene (read before debugging build errors)
+
+Before theorizing about a code bug, rule out the environment causes that have repeatedly bitten this repo. In this repo the root cause is environmental more often than not, so state the result of each relevant check before proposing a root cause.
+
+1. **Stale Next.js cache** → `rm -rf apps/*/.next` and restart the dev server. Never delete `.next` or a `dist/` while a dev server or watcher is running.
+2. **Orphaned Playwright webServer holding a port** → check the port and `pkill -f playwright` before rerunning E2E.
+3. **Nested pnpm workspace install order clobbering the TypeScript version** → `pnpm why typescript` in the failing package. A package present in two workspaces gets whichever install ran last.
+4. **Drifted API snapshots** → regenerate rather than hand-edit, but do not accept the result blindly. `git add` any new source files *before* regenerating, or the emitter drops their URLs; then classify the diff as benign path/hash drift vs a real API change.
+5. **A concurrent Claude or editor session mutating the same checkout** → `git status` before and after any long run. A new failure in a previously-green package is probably not yours.
+
 ## Architecture Contracts
 
 - Each component is its own npm package; there is no umbrella package.
@@ -129,23 +151,11 @@ Scripts live in each package's manifest. Non-obvious ones: `pnpm gen:component` 
 - Prefer explicit per-file edits over `replace_all`, and verify every intended occurrence actually changed.
 - Report any file you touched outside the requested scope, even if the change was correct.
 
-## Verification Gates
-
-- Run and report the relevant gates before claiming completion: `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`. Add `pnpm madge` and `pnpm publint` for package-level work.
-- After any multi-file change, run the full pre-push gate (`pnpm check:push`, or `pnpm check:all` for the whole workspace) and report the **exact pass/fail count from that run's output**. Do not carry a task count over from a previous run — turbo's task total varies with which packages changed (a full-workspace `check:all` currently expands to 114 tasks across 21 packages; `check:push` filters to packages changed vs `origin/main`).
-- Do not claim a check passed unless it was executed. Report the exact command and any pre-existing failure — never skip or hide one.
-- **Empty test output is a failure, not a pass.** Before declaring E2E green, confirm the run actually produced test output with a nonzero test count.
-- Kill orphaned Playwright and dev-server processes on the target port before rerunning E2E. Use unique room IDs and avoid port collisions.
-- Rebuild affected packages before declaring runtime/browser-facing changes done.
-- For UI behavior, drive the real app (`/run`), not only unit tests.
-- Do not regenerate snapshots blindly. Distinguish benign hash drift from real API changes.
-- CI (`.github/workflows/ci.yml`) is path-aware, gated by a `changes` classification job: `validate` (lint/typecheck/madge/test/build), `package-gates` (publint + `check:all`), `editor-perf`, `studio-e2e`, `playground-e2e`, `docs`.
-
 ## Documents & PRDs
 
 - PRDs, review reports, and implementation plans live under `docs/` with a zero-padded four-digit index per subdirectory: `docs/prd/` (note: singular), `docs/plans/`, `docs/reviews/`, `docs/adr/`, `docs/tasks/`, `docs/analysis/`, `docs/migration/`, `docs/security/`. Many also carry a `-MMDD-HHMM` suffix, e.g. `docs/reviews/0004-prd-0012-remaining-unimplemented-0717.md`.
 - **List the target directory to claim the next free index immediately before writing** — a concurrent session may have taken it. Never overwrite an existing document; back it up or take the next index.
-- Every claim in a PRD or review report must be verified against actual repo files and cite the file path. Do not restate a claim from an earlier document without re-verifying it.
+- Every claim in a PRD, design doc, review report, or implementation plan must be verified against the actual source *before* you write or edit the document, and must cite `file:line`. Do not restate a claim from an earlier document without re-verifying it. Flag unverifiable claims explicitly rather than repeating them, and never cite a path you have not confirmed exists.
 - `.gitignore` ignores `/docs/*` **except** `architecture/`, `adr/`, `policies/`, `migration/`, and `security/`. Documents written to `docs/prd/`, `docs/plans/`, `docs/reviews/`, `docs/tasks/`, and `docs/analysis/` are working-only and will not appear in a fresh clone — say so when handing one over.
 
 ## Submodules
