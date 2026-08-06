@@ -18,6 +18,21 @@ import type {
 	StudioPluginMeta,
 	StudioSidebarUnregister,
 } from "@anvilkit/core";
+import type {
+	AnvilAppearanceV1,
+	BindingV1,
+	InteractionV1,
+} from "@anvilkit/core/editor";
+import {
+	anvilRootAttrs,
+	anvilTargetAttrs,
+	withBindingResolution,
+} from "@anvilkit/core/editor";
+import {
+	appearanceField,
+	bindingsField,
+	interactionsField,
+} from "@anvilkit/core/react/editor";
 import {
 	createDesignBlockConfig,
 	type DesignBlockProps,
@@ -72,6 +87,10 @@ import { demoCopySnippetPack } from "./demo-copy-snippet-pack";
 export type ImageProps = {
 	src: string;
 	alt: string;
+	/** PLAN-0025 §5.1 authoring carriers (declared hidden fields). */
+	appearance?: AnvilAppearanceV1;
+	interactions?: readonly InteractionV1[];
+	bindings?: readonly BindingV1[];
 };
 
 export type DemoComponents = {
@@ -91,24 +110,72 @@ export type DemoComponents = {
 };
 
 /**
- * A deliberately tiny `<img>` component so the asset-manager sidebar's tile-click
+ * A deliberately tiny media component so the asset-manager sidebar's tile-click
  * insert (`kindToComponentName("image") === "Image"`) resolves to a registered
  * component. The `src` carries an `asset://<id>` reference that the export
  * resolver rewrites to a real URL at publish time.
+ *
+ * PLAN-0025 P3-A adoption: a stable `<figure>` root (§6.4 — the bare `<img>`
+ * had no wrapper to stamp) carrying the root target, the `<img>` as the
+ * `media` target, hidden §5.3 authoring fields from core, and metadata v2.
+ * The former hard-coded inline `maxWidth/height/display` styles are now
+ * component-layer utility classes so authored appearance can override them
+ * (§6.5 "Image required adjustments").
  */
 const imageComponentConfig: ComponentConfig<ImageProps> = {
 	label: "Image",
 	fields: {
 		src: { type: "text" },
 		alt: { type: "text" },
+		appearance: appearanceField,
+		interactions: interactionsField,
+		bindings: bindingsField,
 	},
 	defaultProps: { src: "", alt: "" },
-	render: ({ src, alt }) =>
-		createElement("img", {
-			src,
-			alt,
-			style: { maxWidth: "100%", height: "auto", display: "block" },
-		}),
+	metadata: {
+		anvilkit: {
+			editor: {
+				version: "2",
+				styleTargets: {
+					root: {
+						label: "Image",
+						responsive: true,
+						properties: [
+							"display",
+							"width",
+							"maxWidth",
+							"height",
+							"margin",
+							"padding",
+						],
+					},
+					media: {
+						label: "Media",
+						responsive: true,
+						properties: [
+							"width",
+							"maxWidth",
+							"height",
+							"borderRadius",
+							"boxShadow",
+							"opacity",
+						],
+					},
+				},
+			},
+		},
+	},
+	render: ({ id, src, alt }) =>
+		createElement(
+			"figure",
+			{ ...anvilRootAttrs(id), className: "m-0 block" },
+			createElement("img", {
+				...anvilTargetAttrs(id, "media"),
+				src,
+				alt,
+				className: "block h-auto max-w-full",
+			}),
+		),
 };
 
 export const demoDataSearchParam = "data";
@@ -169,7 +236,11 @@ export function createDemoConfig(
 	locale?: string,
 ): Config<DemoComponents, PageRootProps> {
 	const options = locale === undefined ? undefined : { locale };
-	return {
+	// P4-04 (§9.4): every consumer of this factory — the static English
+	// config, the editor's locale variants, collab — shares the SAME
+	// binding-resolution hooks, so the editor and production resolve
+	// bindings identically. Wrapping is idempotent.
+	return withBindingResolution({
 		categories: {
 			navigation: {
 				title: "Navigation",
@@ -224,7 +295,7 @@ export function createDemoConfig(
 			fields: demoRootFields,
 			defaultProps: demoRootProps("Untitled", "untitled", "draft"),
 		},
-	};
+	} as unknown as Config) as Config<DemoComponents, PageRootProps>;
 }
 
 /** Static English demo config — same shape as before the i18n wiring. */

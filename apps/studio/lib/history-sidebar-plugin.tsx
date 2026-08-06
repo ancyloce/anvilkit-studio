@@ -34,8 +34,9 @@ import {
 	type SnapshotAdapter,
 } from "@anvilkit/plugin-version-history";
 import { VersionHistoryUI } from "@anvilkit/plugin-version-history/ui";
-import { createUsePuck, type Config, type Data } from "@puckeditor/core";
+import { type Config, createUsePuck, type Data } from "@puckeditor/core";
 import { type ReactElement, useMemo } from "react";
+import { guardDocumentForV2Editor } from "./migration/v2-guard";
 
 const useStudioPuck = createUsePuck();
 
@@ -84,7 +85,29 @@ function HistorySidebarPanel({
 				adapter={adapter}
 				currentIR={currentIR}
 				onRestore={(ir) => {
-					dispatch({ type: "setData", data: irToPuckData(ir) });
+					// P5-06 (§10.4): a v1-era snapshot is the one legacy ingress
+					// left after cutover — restore routes THROUGH the migration
+					// (P3.5-03's deferred seam). Blocked snapshots never reach
+					// the editor; migrated ones enter as v2, so a later save
+					// can never write the sidecar form back.
+					const guarded = guardDocumentForV2Editor(
+						irToPuckData(ir) as Data,
+						puckConfig,
+					);
+					if (guarded.kind === "blocked") {
+						console.error(
+							"[demo] restore blocked — this snapshot cannot enter the v2 editor",
+							guarded.diagnostics,
+						);
+						return;
+					}
+					if (guarded.kind === "migrated") {
+						console.info(
+							"[demo] v1 snapshot migrated on restore",
+							guarded.diagnostics,
+						);
+					}
+					dispatch({ type: "setData", data: guarded.data });
 				}}
 			/>
 		</div>

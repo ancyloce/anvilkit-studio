@@ -9,17 +9,25 @@
  * "published" means or how SEO is derived.
  */
 import type { PageRootProps, PageSeo } from "@anvilkit/schema";
+import { resolveAllData } from "@puckeditor/core";
 import type { Metadata } from "next";
 import { resolveDataSources } from "./data-source-adapter";
 import type { DemoPageData } from "./page-storage/types";
 import { getPublishedPage, getPublishedPageWithId } from "./page-store";
+import type { DemoComponents } from "./puck-demo";
+import { demoConfig } from "./puck-demo";
 
 const slugOf = (segments: string[]): string => segments.join("/");
 
 export interface PublishedRenderModel {
 	/** Stored page record id — for `pageId` analytics attribution. */
 	readonly pageId: string;
-	/** Document with `dataSource` directives resolved into plain props. */
+	/**
+	 * The fully resolved document (§9.2): `dataSource` directives
+	 * resolved into plain props, then `resolveAllData` with the
+	 * binding-resolution hooks. Routes pass exactly this value to
+	 * `<AnvilKitRender>` — compiler and `<Render>` share it.
+	 */
 	readonly resolved: DemoPageData;
 	/**
 	 * Schema.org `WebPage` block. SEO fields (title/description/canonical) are
@@ -115,8 +123,17 @@ export async function loadPublishedRender(
 	if (seo?.description !== undefined) jsonLdData.description = seo.description;
 	if (seo?.canonical !== undefined) jsonLdData.url = seo.canonical;
 
-	// Resolve `remote_csv` dataSource directives into plain props before
-	// rendering — the component never fetches.
-	const resolved = await resolveDataSources(page);
+	// §9.2 steps 4–5 (PLAN-0025): first the existing dataSource
+	// resolution (`remote_csv` directives into plain props — the
+	// component never fetches), then Puck's official `resolveAllData`,
+	// which runs the binding-resolution `resolveData` hooks wired into
+	// `demoConfig` (P4-04). The returned document is THE document: the
+	// routes hand exactly this value to `<AnvilKitRender>`, whose
+	// compiler and `<Render>` therefore can never see different data.
+	const sourced = await resolveDataSources(page);
+	const resolved = await resolveAllData<DemoComponents, PageRootProps>(
+		sourced,
+		demoConfig,
+	);
 	return { pageId, resolved, jsonLd: jsonLdData };
 }
