@@ -19,9 +19,6 @@
 		"anvilkit-components#typecheck": {
 			"dependsOn": ["^build", "@anvilkit/ui#build", "@anvilkit/utils#build"]
 		},
-		"anvilkit-components#build": {
-			"dependsOn": ["^build", "@anvilkit/ui#build", "@anvilkit/utils#build"]
-		},
 		"@anvilkit/docs-site#build": {
 			"dependsOn": ["^build"],
 			"inputs": [
