@@ -1,23 +1,27 @@
 ---
 name: phase-execute
 description: |
-  Phased PRD-driven execution for anvilkit-studio milestones. Given a PRD or
-  plan reference and a target phase, decomposes the phase into atomic tasks,
-  presents the plan for approval, then executes one task at a time — running
-  typecheck/lint/test/build gates after each, checkpointing every task to a
-  resumable on-disk ledger, then an optional, `--codex`-gated capped Codex
-  review→revise loop (up to 2 revise rounds, output shown verbatim) — and
-  waits for "continue" or "next" before advancing. Codifies the M9–M13 /
-  Phase A–G / PLAN-0020 workflow.
+  Self-healing autonomous phase runner for numbered implementation plans
+  (docs/plans/*, docs/prd/*). Executes a phase task-by-task with no per-task
+  approval wait: scoped gates after every task (typecheck + lint + affected
+  package tests), the full repo-wide gate only at phase boundaries, and a
+  checkpoint to .claude/state/phase-run.json after EVERY task so an
+  interrupted run resumes from the exact next task without re-exploring the
+  baseline. Cleans orphaned Playwright/dev-server state before any E2E run
+  and never lets Playwright boot its own server. Retries a failing spec up to
+  3 times: pass-on-retry is quarantined to docs/flaky-tests.md; 3 identical
+  failures stop the phase with a diagnostic report. Guards every edit against
+  concurrent checkout mutation via file-hash re-verification. Emits
+  docs/reports/phase-<N>-deliverables.md at phase end.
   Use when asked to "execute phase X of <plan>", "drive the next phase",
-  "phase-execute <plan>", "resume the phase", or to advance a milestone with
-  explicit gating.
+  "phase-execute <plan>", "resume the phase", or "dry-run phase X".
 triggers:
   - phase execute
   - execute phase
   - drive the next phase
   - advance the milestone
   - resume the phase
+  - dry-run the phase
 allowed-tools:
   - Bash
   - Read
@@ -33,434 +37,330 @@ allowed-tools:
   - TaskList
 ---
 
-# Phase Execute
+# Phase Execute — self-healing autonomous phase runner
 
-Codifies the PRD → phase decomposition → gated execution rhythm used across
-M9–M13, Phase A–G, and the PLAN-0020 phases in this repo.
+Runs one phase of a numbered implementation plan task-by-task, checkpointing
+after every task. Two failure modes cost the most time in this repo and this
+skill exists to prevent both: **an interrupted session losing a whole phase's
+context**, and **a gate believed green that was never actually proven green**.
 
-Two failure modes have cost the most time here, and §0/§5 exist to prevent
-them: **an interrupted session losing a whole phase's context**, and
-**a gate believed green that was never actually proven green**.
+CLAUDE.md's rules apply in full (git read-only, Biome/TAB, Reuse-First, never
+weaken a gate, the Unified Puck Contract). Skill-specific mechanics follow.
 
-## Inputs
+## 0. Startup: resume or initialize
 
-The user invokes this skill with a reference to a PRD or plan and (optionally)
-a target phase. Plans and PRDs live under lowercase `docs/prd/`, `docs/plans/`,
-and `docs/tasks/` (that whole tree is git-ignored — working state, not
-published docs). Examples:
+Do this before reading anything else.
 
-- `/phase-execute docs/prd/0012-anvilkit-canvas-core-editing-features.md --phase M4`
-- `/phase-execute docs/plans/0020-core-visual-editor-implementation-plan-0722-1925.md --phase 4`
-- `/phase-execute <plan>` (skill asks which phase)
-- `/phase-execute <plan> --phase M2 --codex` (also run §5d after each task)
-- `/phase-execute --resume` (pick up an interrupted run from its ledger)
+**a. Confirm the authoritative checkout.** `pwd` and
+`git rev-parse --show-toplevel` must be `/root/Rhett/anvilkit-studio`. Never
+run a phase from `.claude/worktrees/*`. Abort loudly if they differ.
 
-Flags, all off by default and freely composable:
+**b. Check for an existing run.** Read `.claude/state/phase-run.json`:
 
-| Flag | Effect |
-| --- | --- |
-| `--phase <id>` | Target phase. If absent, ask before any other work. |
-| `--autonomous` | Skip the per-task `continue` wait. Gates still run. |
-| `--codex` | Enable the §5d Codex review→revise inspection. Also implied if the user explicitly asks for a "codex review" / "security review" / "best-practices review" of the phase work. |
-| `--resume` | Read the ledger and continue from the first non-done task (§0). |
+- **File exists and `nextTask` is non-null (or any task is `in_progress`)** →
+  this is a RESUME. Do **not** re-read the whole plan, re-derive the task
+  list, or re-explore the baseline. Trust the state file: report the last
+  completed task, pick up at exactly `nextTask`, and run only a cheap drift
+  check (`git rev-parse HEAD` vs `baseline.head`, `git status --porcelain`
+  vs `baseline.porcelain`). If HEAD moved or files changed, note the drift in
+  the state file's `interference` list and re-hash any target file before
+  editing it (§3a) — but still resume, don't restart.
+- **File exists for a DIFFERENT plan/phase than requested** → surface it.
+  Archive it to `.claude/state/phase-run-<phase>-<MMDD-HHMM>.archived.json`
+  only with the user's confirmation; never silently discard incomplete work.
+- **No file** → fresh run: continue with §1.
 
-## Workflow
+**c. State file protocol.** `.claude/state/phase-run.json` is the single
+durable record. Schema:
 
-### 0. Session preflight — ledger, baseline, resume
-
-Do this **before reading the plan**. It is cheap and it is what makes an
-interrupted run recoverable.
-
-**a. Confirm the authoritative checkout.**
-
-```bash
-pwd && git rev-parse --show-toplevel
+```json
+{
+  "version": 1,
+  "plan": "docs/plans/<file>.md",
+  "phase": "0",
+  "mode": "execute | dry-run",
+  "startedAt": "<ISO>",
+  "updatedAt": "<ISO>",
+  "baseline": { "head": "<sha>", "porcelain": ["<lines>"], "dirtyCount": 0 },
+  "scopeContract": ["<path allowlist>"],
+  "tasks": [
+    {
+      "phase": "0",
+      "taskId": "P0-01",
+      "title": "<from the plan>",
+      "status": "pending | in_progress | done | done-flaky | dry-run-done | blocked | failed",
+      "gatesPassed": { "typecheck": "<evidence or skipped>", "lint": "…", "test": "…" },
+      "filesTouched": ["<paths>"],
+      "fileHashes": { "<path>": "<sha256 recorded at §3a>" },
+      "retryCount": 0,
+      "lastError": null,
+      "notes": "<discoveries, deferred items>"
+    }
+  ],
+  "nextTask": "P0-03 | null",
+  "interference": [],
+  "flakes": [],
+  "deferred": []
+}
 ```
 
-Must be `/root/Rhett/anvilkit-studio`. Never execute a phase from
-`.claude/worktrees/*` — those are real checkouts of other branches and hold
-stale copies of this skill and of CLAUDE.md. Abort loudly if the paths differ.
+Write it **after every task, before anything else** — atomically: Write to
+`.claude/state/phase-run.json.tmp`, then `mv -f` over the real path, so a
+crash mid-write can never destroy earlier checkpoints. A session limit then
+costs one task, not the phase. `updatedAt` and `nextTask` change on every
+write. When the phase completes, set `nextTask: null` — that is the
+"complete" marker resume checks.
 
-**b. Locate or create the run ledger.**
+## 1. Plan and phase resolution (fresh runs only)
 
-The ledger lives at `docs/runs/<plan-slug>-<phase>.md` — git-ignored via
-`/docs/*`, so it never pollutes the working tree the user reviews. Look for
-it first:
+- Read the plan end-to-end. Locate the target phase; if the user didn't name
+  one, the "next unexecuted phase" is the lowest phase with no `done` tasks in
+  any state/ledger record and no corresponding `docs/reports/phase-<N>-*` file.
+- Quote the phase's scope and exit gate back in 3–6 lines.
+- Check `docs/tasks/` for an existing decomposition before making one.
+- If any task conflicts with the Unified Puck Contract (CLAUDE.md), stop and
+  surface it before executing anything — violations are architecture-blocking.
 
-```bash
-ls docs/runs/ 2>/dev/null
-```
+## 2. Task list and scope contract
 
-- **Ledger exists** (or `--resume` was passed) → read it, report the last
-  completed task and the first non-done one, and resume there. Do **not**
-  re-run completed tasks; do re-run §5 gates once before continuing, because
-  the tree may have moved since (see (c)).
-- **No ledger** → create it after the §2 task list is approved, using the
-  template in §6b. Never overwrite an existing ledger for the same phase;
-  if one exists for a run the user considers finished, suffix the new one
-  `-run2`.
+- Break the phase into its plan-defined tasks (or 3–8 atomic tasks if the plan
+  doesn't enumerate them). Each task must be independently verifiable.
+- Record in the state file a **scope contract**: the explicit path allowlist
+  this phase may edit. Work outside it becomes a `deferred` entry, never a
+  silent expansion.
+- Print the task list + scope contract, then proceed — this runner is
+  autonomous by default; do not wait for per-task approval. Halt only for:
+  a gate failure after 3 retries (§3d), file deletion, a new dependency,
+  plan ambiguity, or a Puck-contract conflict.
 
-**c. Snapshot the baseline.**
+## 3. Task loop
 
-```bash
-git log --oneline -3
-git status --porcelain | wc -l
-git status --porcelain > /tmp/phase-baseline.txt
-```
+For each task: guard (§3a) → edit (§3b) → gates (§3c, self-heal §3d) →
+checkpoint (§3e). Mark `in_progress` in the state file when starting, so a
+crash mid-task is visible on resume.
 
-Record the HEAD sha and the dirty-file count in the ledger header. **This
-repo has concurrent writers**: another session/agent works it in parallel and
-commits under the user's identity, and an auto-commit hook can move your own
-edits out of `git status` before you look. The baseline is what lets you tell
-their churn from yours in §5.
+### 3a. Concurrency guard — hash before, re-verify before write
 
-### 1. Read the plan, identify the phase
+This checkout has concurrent writers (other sessions, an auto-commit hook).
+Before applying any edit:
 
-- Read the PRD/plan file end-to-end.
-- Locate the target phase section. Quote its scope and acceptance criteria
-  back to the user in 3–6 lines so we're aligned before decomposing.
-- If the phase references shared contracts (adapter interfaces, IR types,
-  registry methods) spanning packages, list them — that is the integration
-  boundary. Shared types are owned by `@anvilkit/contracts`.
-- Check for a matching task file under `docs/tasks/` before decomposing; many
-  phases are already broken down there.
+1. `git status --porcelain` — snapshot it. Diff against `baseline.porcelain`;
+   record unexpected new entries in `interference`.
+2. `sha256sum <each target file>` — record in the task's `fileHashes`.
+3. **Immediately before every Write/Edit to a file, re-run `sha256sum` on it.**
+   - Hash unchanged → proceed.
+   - Hash changed → do NOT write. Re-read the file, re-derive the edit against
+     its current content, record the event in `interference`, and only then
+     write (re-verifying once more). Never clobber another writer's change.
+4. After the write, verify the edit landed (grep for the new content; after
+   any `replace_all`, grep the old pattern for zero remaining hits — always
+   excluding `node_modules`, `dist`, `.claude/worktrees`).
 
-### 2. Decompose, and declare a scope contract
+Submodule caveat: edits inside `packages/extensions/components`,
+`packages/extensions/plugins/*`, `packages/capabilities/canvas/*`, and collab
+plugins may not show in superproject status — run the porcelain check inside
+the submodule working tree too, and list submodule files separately.
 
-- Break the phase into 3–8 atomic tasks. Each must be independently
-  verifiable and committable.
-- Register them with TaskCreate. One task = one logical change = one gate run.
-  TaskCreate is in-session only — the **ledger (§6b) is the durable record**.
-- Alongside the task list, state an explicit **scope contract**:
+### 3b. Execute the edit
 
-  ```
-  Scope contract for <plan> <phase>
-    May edit:   <explicit path allowlist — packages/dirs, not "the repo">
-    May read:   anything
-    Will NOT:   commit, push, run workspace-wide codegen/formatters,
-                touch packages outside the allowlist, or weaken any gate
-    Verify cmd: <the per-task gate command set from §5>
-  ```
+- Run the Reuse-First check before any new helper/abstraction/dependency.
+  New dependencies halt for user confirmation.
+- Respect the active hooks: `dist/` writes blocked (edit source, rebuild),
+  Biome autoformats every write, classic-JSX packages need
+  `import * as React from "react";`.
+- File deletion: never autonomous. Grep inbound references, record the
+  deletion list + counts in `notes`, mark the task `blocked`, and stop.
 
-- Present task list + scope contract to the user **before any edits** and wait
-  for `continue`, `next`, `go`, or similar. Under `--autonomous`, still print
-  both, then proceed.
-- If a later task needs a path outside the allowlist, surface it as a
-  follow-up and ask — do not widen the contract silently.
+### 3c. Per-task gates (scoped) and phase-boundary gate (full)
 
-### 3. Pre-edit discovery (refactors / multi-mount changes)
-
-- For `<Studio>` / `<CanvasStudio>` mount changes, new plugin wiring, or a new
-  component package, spawn the **`wiring-enumerator`** agent — it reports
-  every mount and wiring site (file:line) with wiring status across studio,
-  docs, and core.
-- For any other broad call-site sweep, spawn **`Explore`** and keep only the
-  findings in this conversation.
-- Enumerate **before editing**. Both the default and collab paths must be
-  wired. New components must additionally be wired into
-  `apps/studio/lib/puck-demo.ts` and `transpilePackages` in
-  `apps/studio/next.config.js`.
-
-### 4. Execute one task at a time
-
-For each task:
-
-1. Mark it `in_progress` via TaskUpdate.
-2. Run the CLAUDE.md `## Reuse-First Engineering` pre-code check before writing
-   any new helper, hook, wrapper, component, abstraction, or dependency. New
-   dependencies require explicit user confirmation.
-3. Make edits scoped strictly to the task's allowlist paths.
-4. **Prove every edit landed** (§4a).
-5. Run the gates (§5), then §5d if `--codex`.
-6. Report per §6a and append the ledger row per §6b.
-7. Mark `completed` via TaskUpdate.
-8. **Halt and wait** for `continue` / `next` (unless `--autonomous`).
-
-If a task involves deleting any file, first grep inbound references, present
-the deletion list with reference counts, and wait for explicit approval before
-any `rm`.
-
-#### 4a. Prove the edit landed
-
-An edit reported as applied is not evidence it was applied everywhere it
-needed to be. Before running gates:
-
-- **Never trust `replace_all` for a multi-occurrence change.** It matches one
-  exact string; a different indentation, a trailing comma, or a line break
-  silently leaves occurrences behind. After any `replace_all`, grep the old
-  pattern and confirm **zero** remaining hits — scoped to the project, always
-  excluding `node_modules` and `.claude/worktrees` (the latter silently
-  doubles every hit).
-- After a rename or signature change, grep the **old** symbol repo-wide and
-  confirm the only hits are intentional (changelogs, migration docs).
-- If a file you edited also appears in the §0 baseline as already-dirty,
-  re-read it before gating — a concurrent writer may share it.
-
-**Hooks fire mid-task — expect them:**
-
-- `git commit` / `git push` are hard-blocked by a PreToolUse hook. A blocked
-  call is the policy working, not a gate failure. Never route around it.
-- Writes under any `dist/` are blocked. Edit source and rebuild — rslib wipes
-  `dist/` anyway.
-- Biome autoformats every file written via Write/Edit, immediately after the
-  write. Do not re-format or "fix" the result by hand.
-- JSX without a React binding is **blocked** in `packages/extensions/plugins/**`
-  and `packages/capabilities/canvas/**` `.tsx`. Those build classic JSX, so a
-  missing binding throws `React is not defined` at runtime from `dist` and
-  **typecheck will not catch it**. Add `import * as React from "react";`.
-
-### 5. Verification gates
-
-After every task, run in this order:
+**After each task, run only the scoped gates for the affected packages:**
 
 ```bash
-pnpm typecheck
-pnpm lint
-pnpm test
-pnpm build
+pnpm --filter <pkg> typecheck && pnpm --filter <pkg> lint && pnpm --filter <pkg> test
 ```
 
-Use `typecheck`, never `check-types`.
+- Multiple affected packages → repeat `--filter` per package.
+- The components tree is a **nested workspace**: run from
+  `packages/extensions/components/` for packages under it.
+- Rebuild an affected package (`pnpm --filter <pkg> build`) before any gate
+  that consumes its `dist` (dependent-package tests, E2E, browser checks).
+- **Do NOT run the repo-wide gate per task.** The full gate runs once per
+  phase boundary: `pnpm gate:full` (typecheck → lint → madge → test → build →
+  publint → check:all). Add `pnpm size` and
+  `node scripts/check-submodule-contracts.mjs` for release/submodule work.
 
-For phases touching specific packages, add:
+**Evidence rule — a gate is green only if it printed a result.** Quote the
+numeric summary line (test/file counts, task counts) into `gatesPassed`.
+Empty or ambiguous output is a FAILURE. A pipe hides the real exit code —
+check `${PIPESTATUS[0]}` or scan for `ELIFECYCLE`. Record before → after test
+counts for tasks that claim new tests.
 
-- Any changed package → `pnpm --filter <pkg> check:all` (the manifest-
-  discovered aggregate; `pnpm check:push` runs it for everything changed vs
-  `origin/main` and is what the pre-push hook enforces)
-- Any publishable package → `pnpm publint` and `pnpm size`
-- Structural / import-graph changes → `pnpm madge`
-- `@anvilkit/core` editor-engine changes → `pnpm --filter @anvilkit/core
-  bench:editor` (7 §28 metrics, fails on budget violation or >10% regression)
+### 3d. Self-healing retry policy
 
-#### 5a. Evidence rule — a gate is not green until it printed a result
+On a gate failure, do not immediately retry blind. Classify first, in order:
 
-Most false "all green" reports in this repo came from reading absent output as
-success. Therefore:
+1. **Environment rot** — check CLAUDE.md's Environment Hygiene list: stale
+   `.next`, orphaned Playwright/port holder, nested-workspace TypeScript
+   clobber (`pnpm why typescript`), drifted api-snapshots, concurrent-session
+   churn (`git log --oneline -8` for commits you didn't make). Match against
+   `.claude/rules/gate-playbook.md`; the `gate-guardian` skill runs this
+   classification end-to-end, and the `release-gate-triager` agent settles
+   pre-existing-vs-regression calls.
+2. **Apply the matched remedy**, re-run only the failed gate, increment
+   `retryCount`, record the classification in `lastError`.
+3. **Code regression from this task's edit** → fix within scope, re-run.
+4. **Pre-existing failure** (red on clean baseline) → record it in `notes`
+   and `deferred`, do not fix out of scope, do not count it against the task.
 
-- **Quote the numeric result line** for each gate (test files/tests counts,
-  package counts). "Passed" with nothing to cite is not a pass.
-- **Empty output is a FAILURE, not a pass.** So is a run that ended before
-  emitting a summary. Investigate; never report it green.
-- **A pipe hides the real exit code.** `pnpm x 2>&1 | tail -60` reports the
-  *pipe's* status (0), not pnpm's. Scan the tail text for `ELIFECYCLE` /
-  `exited with status`, or use `${PIPESTATUS[0]}`.
-- **Record before → after test counts** per task; a delta of 0 on a task that
-  claimed new tests is a red flag worth one minute of checking.
-- Do not claim a check passed unless it was actually executed; report the
-  exact command.
+Cap: `retryCount` ≤ 3 per task. On the 4th failure, set `status: "blocked"`,
+`lastError` to the final classified error, write the checkpoint, write a
+diagnostic report `docs/reports/phase-<N>-diagnostic-<taskId>-<MMDD-HHMM>.md`
+(command, full failing output tail, classifications tried, remedies applied,
+state snapshot), and stop the phase. Never weaken a test/gate/budget to pass.
 
-#### 5b. Triage a failure before fixing it
+### 3e. Checkpoint after EVERY task
 
-- **Code issue** → fix within task scope and re-run.
-- **Module-resolution error** → rebuild affected packages with `pnpm build`
-  before assuming it is a code problem.
-- **Concurrent-session churn** → a package that passed earlier in this phase
-  and now fails is often another session's commit. Re-run
-  `git status --porcelain`, diff against the §0 baseline, and check
-  `git log --oneline -8` for commits you did not make (recent timestamps are
-  the giveaway). If it is theirs: report it, do not fix their in-flight
-  files, and continue with work that does not depend on them. Note that
-  `git stash` probing does not work here — the auto-commit hook may have
-  already committed your edits.
-- **Suspected flake** → re-run that spec alone 3×. Any pass ⇒ flaky: record it
-  in the ledger's Flakes section with the command and move on. 3 failures ⇒
-  real, fix it. Do not burn the phase's budget re-running a full suite to
-  chase one nondeterministic spec.
-- **Pre-existing infra issue** → report clearly, never silently skip. When the
-  pre-existing-vs-regression call is not obvious, spawn the
-  **`release-gate-triager`** agent — it runs `check:all` per changed package
-  in isolation and classifies each failure against this repo's known patterns
-  (api-snapshot drift, bundle-size overflow, concurrency phantoms, classic-JSX
-  runtime breaks).
-- **Three failed retries** → halt and ask the user how to proceed.
+Update the state file (atomic write per §0c) the moment a task reaches a
+terminal status — before reporting, before starting the next task. Also print
+the one-line task report:
 
-Never weaken tests, lint rules, type checks, or size budgets to get green.
+```
+<taskId>: <title> — <status>. Gates: <evidence>. Files: <n>. Retries: <n>.
+```
 
-#### 5c. E2E preflight and postflight
+## 4. E2E protocol — cleanup first, explicit server, never let Playwright boot
 
-E2E on this box is the single largest source of wasted cycles. `apps/studio`'s
-`playwright.config.ts` sets `reuseExistingServer: true` locally, so Playwright
-**attaches to whatever already holds :3000** instead of booting clean.
+E2E on this box is the largest source of wasted cycles. Before ANY E2E run:
 
-**Preflight — every E2E run:**
+**1. Cleanup (always, even if things "look" clean):**
 
-1. If you rebuilt any workspace package's `dist` this session, the running
-   `next dev` still has the **old modules resident**, and every editor spec
-   fails with a missing `ak-write-target` that looks exactly like your code
-   broke the editor. Check whether the server predates your rebuild:
+```bash
+pkill -f '[p]laywright' 2>/dev/null; sleep 1
+PID=$(ss -tlnp 2>/dev/null | grep ":${PORT} " | grep -oP 'pid=\K[0-9]+' | head -1)
+[ -n "$PID" ] && kill "$PID" && sleep 2
+```
 
-   ```bash
-   ps -o lstart= -p $(ss -tlnp | grep :3000 | grep -oP 'pid=\K[0-9]+')
+WSL2 caveats: a port can be blocked by a **Windows port reservation even with
+an empty `ss` listing** — if binding fails, pick a fresh port rather than
+fighting it. If any workspace `dist` was rebuilt this session, also
+`rm -rf apps/<app>/.next` (a running dev server keeps old modules resident —
+never delete `.next` while a server is still running; kill first).
+
+**2. Start the server explicitly — Playwright must NEVER spawn it:**
+
+```bash
+(cd apps/<app> && PORT=$PORT pnpm dev > "$CLAUDE_JOB_DIR/tmp/<app>-dev.log" 2>&1 &)
+```
+
+**3. Health-check the port before starting Playwright:**
+
+```bash
+for i in $(seq 1 60); do
+  curl --noproxy '*' -sf -o /dev/null "http://localhost:$PORT" && break
+  sleep 5
+done
+```
+
+`--noproxy '*'` is mandatory (the proxy intercepts localhost). The studio
+webServer boot is ~2.5 min of silence — that is NORMAL; allow ≥5 min before
+calling it hung. If the health check never passes, that is an environment
+failure (§3d) — do not start Playwright.
+
+**4. Run Playwright against the running server** (`reuseExistingServer: true`
+attaches to it; if a config lacks that, override it — never let the config
+boot its own). Use `--workers=1` and unique room IDs for collab specs. Run a
+known-green baseline spec first; if it fails identically to the new spec, the
+cause is environmental — say so instead of debugging the new spec.
+
+**5. Postflight:** assert a **non-zero passed count** from the reporter.
+Empty output or `0 passed` is a FAILURE, never green.
+
+## 5. Flaky-test policy
+
+When a spec fails (unit or E2E):
+
+1. **Re-run only that spec**, not the suite:
+   `pnpm --filter <pkg> exec vitest run <path>` or
+   `pnpm --filter <app> exec playwright test <spec> --workers=1`.
+   Up to **3 total attempts** for that spec.
+2. **Capture a failure signature** per attempt: strip ANSI
+   (`sed 's/\x1b\[[0-9;]*m//g'`), take the first assertion/Error line, drop
+   timestamps, durations, ports, and hex addresses.
+3. **Passes on retry** → flaky. Append (never rewrite) an entry to
+   `docs/flaky-tests.md` — create it with a table header if missing, dedupe
+   by spec+signature:
+
+   ```markdown
+   | <YYYY-MM-DD> | <spec path> | <failure signature> | fail×<n>→pass | <phase>/<taskId> |
    ```
 
-   If it started earlier: kill it, `rm -rf apps/studio/.next`, and let
-   Playwright boot fresh (pay the 60–90 s cold compile).
-2. A killed Playwright run orphans a zombie `next dev` holding its port.
-   **Boot on a fresh `PORT` rather than fighting it** — faster and safer than
-   hunting PIDs. WSL2 also inherits Windows port reservations, so a port can
-   be blocked with an empty `ss` listing.
-3. Use `--workers=1` on this box. Use unique room IDs for collab specs.
-4. Run the **pre-existing baseline spec first** (e.g.
-   `e2e/editor/visual-editor.spec.ts`). If it fails identically to your new
-   spec, the cause is environmental, not your code — say so instead of
-   debugging the new spec.
+   Add the spec to the state file's `flakes`, mark the task `done-flaky`,
+   and continue the phase.
+4. **Fails 3 times with an identical signature** → deterministic failure:
+   stop the phase per §3d (diagnostic report + `blocked`).
+5. **Fails 3 times with differing signatures** → unstable environment:
+   run the §3d environment classification once; if no remedy matches, stop
+   the phase and report it as `blocked: env`, not as a code regression.
 
-**Postflight — before reporting anything:**
+Known env-not-regression patterns here: sidebar-modules visual baselines
+missing on Linux; headless Chromium screenshots hanging (use `xvfb-run` +
+`headless: false`); jsdom rendering 0 virtual rows without layout.
 
-- Assert the reporter printed a **non-zero passed count**. Empty output or
-  `0 passed` is FAILED (§5a), never green.
-- If the suite could not complete for environmental reasons (WSL2 compile
-  timeouts, headless Chromium screenshot hangs), record it in the ledger as
-  `blocked: env` with the evidence — do not report the task green, and do not
-  report it as a code regression either.
+## 6. Phase boundary: full gate + deliverables report
 
-For UI behavior, drive the real app with `/run` — not unit tests alone.
+When the last task reaches a terminal status:
 
-#### 5d. Codex review loop (opt-in via `--codex`, capped, visible)
+1. Run `pnpm gate:full` and record the **exact pass/fail counts from that
+   run's output** (never carry a count over from a previous run).
+2. Re-check drift against `baseline` one final time; list any interference.
+3. Write `docs/reports/phase-<N>-deliverables.md`. **Never overwrite** — if
+   the file exists, suffix `-run2` (or `-MMDD-HHMM`). Template:
 
-Runs **only when `--codex` was passed**; otherwise skip entirely and go to §6.
-Once enabled, do not ask "should I review?" or "should I apply fixes?" — this
-section owns those decisions.
+   ```markdown
+   # Phase <N> deliverables — <plan title>
 
-After §5 gates pass and **before** halting for `continue`, review the
-working-tree changes. Bounded to **2 revise rounds / 3 reviews**, in every
-mode including `--autonomous`. Do not raise the cap without editing this file.
+   - Run: <startedAt> → <finishedAt> · mode: <execute|dry-run> · baseline: <sha>
 
-**Invocation.** Via the Skill tool: `/codex:review --wait --scope working-tree`.
-`--wait` skips the plugin's foreground/background prompt. Do not copy the
-plugin's `${CLAUDE_PLUGIN_ROOT}` invocation — that variable is empty here;
-resolve the script if needed with
-`ls -d ~/.claude/plugins/cache/openai-codex/codex/*/scripts/codex-companion.mjs`.
+   ## Tasks completed
+   | Task | Title | Status | Gates (evidence) | Files |
 
-**Scope.** Working-tree only. This repo never auto-commits during phase
-execution, so `--base main` finds no committed diff.
+   ## Phase-boundary gate
+   <exact command + pass/fail counts + any pre-existing failures>
 
-**Timeout.** Hard 5 minutes per round. Repo-wide uncommitted review is **known
-to hit the 124 timeout here** (it scans submodule churn and auto-runs the slow
-project `tsc --noEmit`). On timeout: treat as "review unavailable", skip
-further rounds for this task, record `codex: timeout` in §6a. If a second
-opinion is still wanted, fall back to a scoped `codex exec -s read-only` whose
-prompt (a) runs exactly `git diff -- <task paths>` plus reads named new files,
-(b) forbids build/tsc/test runs, (c) ignores submodules and the generated
-`api-snapshot.json` — stash a regenerated snapshot so its multi-thousand-line
-diff doesn't dominate.
+   ## Tests added
+   <package: before → after (+delta)>
 
-**Visibility.** Print Codex stdout **verbatim** before acting on it. The user
-must always see what triggered a revise edit.
+   ## Flakes quarantined
+   <rows mirrored from docs/flaky-tests.md, or none>
 
-**Classification.** *Blocking* = correctness bugs, security issues, broken
-contracts, regressions of the phase's acceptance criteria, or anything labeled
-`bug` / `incorrect` / `broken` / `vulnerability` / `regression` / `must-fix` /
-`critical` / `high`. *Minor* = `nit` / `consider` / `could` / `suggestion` /
-`style` / naming / optional refactor / `low` / `info`. **Ambiguous ⇒ minor** —
-revising on ambiguous output is how loops become unbounded.
+   ## Deferred items
+   <out-of-scope findings, blocked follow-ups, pre-existing failures>
 
-**Loop.** Review → if only minor, exit to §6. If blocking, apply **minimal**
-fixes scoped to those findings only (no opportunistic refactors), re-run §5
-gates (the 3-retry rule still applies), and review again. After the 3rd review,
-if blocking findings remain: **halt**, summarize the survivors verbatim, and
-wait for the user. Log per round:
-`Codex round <n>: <blocking> blocking, <minor> minor` + verbatim stdout.
+   ## Files touched
+   <superproject list; submodule files listed separately>
+   ```
 
-### 6. Per-task report and checkpoint
+4. Set `nextTask: null`, write the final checkpoint, and report. Note that
+   `docs/reports/` is git-ignored (working docs) — say so when handing over.
 
-#### 6a. Report format
+## 7. Dry-run mode
 
-```
-Task <n>: <title> — DONE
-  Files: <N changed> (<list>)
-  Submodule files: <list, or none>
-  Tests: <before> → <after> (+<delta>)
-  Gates: typecheck ✓ (<evidence>)  lint ✓  test ✓ (<N files, M tests>)  build ✓
-  Drift: <clean vs §0 baseline | files changed by another session>
-  Codex: <rounds> round(s), <resolved> resolved, <minor> minor, <blocking> remain
-  Notes: <surprises; pre-existing failures; quarantined flakes; follow-ups>
-```
+`--dry-run` (or "dry-run phase X") validates the phase against reality
+without mutating the repo:
 
-List submodule files separately — edits inside submodules may not show in
-superproject status, so inspect inside the submodule working tree rather than
-trusting root `git status`. Omit `Codex:` when `--codex` was not passed.
-
-#### 6b. Ledger checkpoint (do this every task, before halting)
-
-Append the task's row to `docs/runs/<plan-slug>-<phase>.md` **immediately**
-after gates pass — before the `continue` wait, before anything else. A session
-limit or crash then costs one task, not the phase. Create it on first use as:
-
-```markdown
-# Phase run: <plan> — <phase>
-
-- Started: <YYYY-MM-DD>  ·  Checkout: /root/Rhett/anvilkit-studio
-- Baseline HEAD: <sha>  ·  Baseline dirty files: <n>
-- Flags: <--codex / --autonomous / none>
-- Scope contract: <allowlist>
-
-## Tasks
-
-| # | Task | Status | Gates | Tests | Files | Notes |
-| - | ---- | ------ | ----- | ----- | ----- | ----- |
-
-## Quarantined flakes
-
-## Follow-ups (out of scope, surfaced during the run)
-```
-
-Append rows with a shell redirect rather than a full rewrite, so a partial
-write can never destroy earlier checkpoints. `Status` is one of `done`,
-`failed`, `blocked: env`, `blocked: user`.
-
-On resume, this table — not the conversation, not TaskList — is the source of
-truth for what already happened.
-
-### 7. Phase completion
-
-- Re-run the full repo gates: `pnpm typecheck`, `pnpm lint`, `pnpm test`,
-  `pnpm build`, plus `pnpm madge` / `pnpm publint` where applicable.
-  `pnpm check:push` is the closest single proxy for the pre-push hook.
-- Re-check drift against the §0 baseline one last time and re-read any file
-  you edited that a concurrent session also touched.
-- Produce a phase summary: tasks completed, total test delta, files touched
-  (superproject and submodule, listed separately), quarantined flakes, open
-  follow-ups, pre-existing infra issues.
-- **Docs codegen is workspace-wide — treat it as out of scope by default.**
-  `pnpm generate:api` has no per-package flag: it walks every package with an
-  `api-snapshot.json` and has regenerated 1000+ files across unrelated
-  packages, and it fails outright if any other package's `dist/types` is
-  mid-build. If the phase changed component/plugin APIs, prefer telling the
-  user to run it at a clean point. If you do run it and it touches more than
-  `apps/docs/content/docs/api/<pkg>/**` plus
-  `apps/docs/.api-snapshots/<pkg>.json`, revert the rest
-  (`git checkout --` for tracked, `git clean -fd --` for generated untracked).
-- Write long reports to a file under `docs/reviews/` — **never overwrite an
-  existing plan/report file**; check first and back it up.
-- Mark the ledger complete and ask whether to advance to the next phase.
-
-## Hard rules
-
-CLAUDE.md's rules apply in full and are not repeated here (git read-only,
-Biome/TAB formatting, Reuse-First, never weaken a gate). Skill-specific:
-
-- **One task at a time.** No batching or parallel tasks unless `--autonomous`.
-- **Checkpoint before you wait.** The ledger row is written before the
-  `continue` halt, always.
-- **No scope drift.** Work outside the §2 allowlist becomes a follow-up note,
-  never a silent expansion.
-- **Evidence over assertion.** Every green claim cites its command and its
-  numeric result (§5a).
-- **Stop on real ambiguity.** If the PRD is unclear about what a phase
-  requires, ask before guessing.
-- **Bounded review autonomy.** With `--codex`, §5d runs unasked up to 2 revise
-  rounds, then halts with the survivors. Never silently keep revising.
-- **No silent edits.** Print Codex's verbatim output before any revise edit.
-
-## Optional: autonomous mode
-
-With `--autonomous` (or "run the whole phase without stopping"), skip the
-per-task `continue` wait but keep every gate run, every ledger checkpoint, and
-— with `--codex` — the §5d loop. Halt only on: gate failure after 3 retries,
-PRD ambiguity, a task requiring `rm` / file deletion, a new dependency, work
-outside the scope contract, or §5d hitting its cap with blockers remaining.
-
-`--autonomous` does **not** raise the §5d cap. Long unattended runs are
-exactly where an unbounded revise loop or an unproven "green" does the most
-damage — the ledger and §5a are what make this mode safe to leave alone.
+- **No source edits, no installs, no servers, no suite runs.** Read-only
+  verification only.
+- Per task: verify the task's preconditions against the actual tree (the
+  files it assumes exist, the versions/APIs it assumes present), enumerate
+  the planned edits and their target files, record real `fileHashes` for
+  those targets (they double as the §3a baseline for a later execute run),
+  set `gatesPassed` values to `"skipped (dry-run)"`, and set
+  `status: "dry-run-done"`.
+- The checkpoint protocol is UNCHANGED: write the state file after every
+  task, exactly as in execute mode — dry-run exists partly to prove the
+  resume machinery works.
+- A precondition that fails verification marks the task `blocked` with
+  `lastError` explaining the mismatch — that is the dry run doing its job.
+- At the end, emit the deliverables report with mode `dry-run`, and clear
+  `.claude/state/phase-run.json` to `nextTask: null` only if the user wants
+  the slot freed; otherwise leave it as the primed baseline for execution.

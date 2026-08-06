@@ -309,13 +309,24 @@ string not captured — match loosely and confirm before acting.
   Or serialise to remove the overlap: `pnpm exec turbo run build --concurrency=1`.
 - **Verify fixed:** the isolated build compiles successfully and
   `ls packages/extensions/components/src/hero/dist/styles.css` is present.
-- **Durable fix (NOT applied — needs owner decision):** `anvilkit-components#build`
-  is redundant inside the root turbo graph, since turbo already builds each
-  `src/*` component directly; the umbrella script exists for the nested
-  workspace's own `release` flow (`changeset version && pnpm build && changeset
-  publish`). Options: drop `build` from the umbrella manifest, exclude it from the
-  root graph, or give the umbrella an ordering edge. Any of these changes how
-  components are built for release — do not apply without agreement.
+- **Durable fix — APPLIED and VERIFIED 2026-08-04.** The umbrella's `build` script
+  was renamed to `build:packages`, so turbo's root `build` graph no longer matches
+  it and the duplicate builder cannot be scheduled at all (turbo only runs tasks
+  for packages that define the script). Changes:
+  - `packages/extensions/components/package.json` (**submodule**) —
+    `build` → `build:packages`; `release` now calls `pnpm build:packages`.
+  - `packages/extensions/components/CLAUDE.md` (**submodule**) — documented
+    commands updated plus a note explaining why the script is not called `build`.
+  - `turbo.json` — removed the now-dead `anvilkit-components#build` entry.
+    (`anvilkit-components#typecheck` is intentionally **kept**: it is duplicate
+    work too, but typecheck writes no artifacts, so it cannot race.)
+  - **Verification (cold, forced):** `pnpm exec turbo run build --force` →
+    exit 0, **52/52 tasks, 0 cached**, all 12 components genuinely rebuilt
+    concurrently with `playground#build`, `anvilkit-components:build:` occurrences
+    **0**, playground "Compiled successfully in 65 s", `hero/dist/styles.css`
+    intact at 28,874 B. This is the exact scenario that previously failed.
+  - **If this regresses:** check whether a `build` script was re-added to
+    `packages/extensions/components/package.json`.
 
 ---
 
