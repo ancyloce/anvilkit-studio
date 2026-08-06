@@ -35,7 +35,7 @@ import {
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useMsg } from "@/state/editor-i18n-context";
-import { readEditorMetadata } from "../../react/editor/decorate-config.js";
+import { readEditorMetadata } from "../../editor/capability-metadata.js";
 import {
 	type CanvasDropKind,
 	hasCanvasDropPayload,
