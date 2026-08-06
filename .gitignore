@@ -63,6 +63,6 @@ output
 .idea/
 .gstack/
 patches/
-
+.claude/state/
 # inline-style→tailwind codemod backups
 .codemod-backups/
