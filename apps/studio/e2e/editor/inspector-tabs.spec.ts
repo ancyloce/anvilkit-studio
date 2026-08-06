@@ -170,20 +170,22 @@ test.describe("inspector tabs — style / properties / data / animation", () => 
 		await openEditor(page);
 		await selectFirstNode(page);
 
+		// PLAN-0025 P3-F: the host injects no capabilities, and the demo's
+		// first node (Navbar) declares no v1 editor metadata — the three
+		// editor-owned tabs honestly show their §8.5 empty states instead
+		// of fabricated sections.
 		await openInspectorTab(page, "style");
-		await expect(page.getByTestId("ak-layout-section")).toBeVisible({
+		await expect(page.getByTestId("ak-inspector-empty-style")).toBeVisible({
 			timeout: 15_000,
 		});
-		await expect(page.getByTestId("ak-style-section")).toBeVisible();
-		await expect(page.getByTestId("ak-typography-section")).toBeVisible();
 
 		await openInspectorTab(page, "data");
-		await expect(page.getByTestId("ak-bindings-section")).toBeVisible({
+		await expect(page.getByTestId("ak-inspector-empty-data")).toBeVisible({
 			timeout: 15_000,
 		});
 
 		await openInspectorTab(page, "animation");
-		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
+		await expect(page.getByTestId("ak-inspector-empty-animation")).toBeVisible({
 			timeout: 15_000,
 		});
 
@@ -250,58 +252,29 @@ test.describe("inspector tabs — style / properties / data / animation", () => 
 		await expect.poll(active).toBe("ak-inspector-tab-style");
 	});
 
-	test("a real style value commits and undoes in one step after a tab tour", async ({
+	test("the style tab keeps its honest empty state across a tab tour", async ({
 		page,
 	}) => {
+		// PLAN-0025 P3-F (user-authorized coverage move): with no injected
+		// capabilities the undeclared first node offers no style controls,
+		// so the commit-then-single-undo choreography has no surface here.
+		// One-commit/one-undo semantics remain covered by core's command
+		// and composition integration suites; this spec now certifies the
+		// §8.5 honest state instead.
 		await openEditor(page);
 		await selectFirstNode(page);
 		await openInspectorTab(page, "style");
-
-		const panel = page.getByTestId("ak-inspector-panel-style");
-		const zIndex = panel.getByTestId("ak-layout-zindex");
-		await expect(zIndex).toBeVisible({ timeout: 15_000 });
-
-		await zIndex.click();
-		await page.keyboard.press("ControlOrMeta+a");
-		await page.keyboard.type("7");
-		await page.keyboard.press("Enter");
-		await expect(zIndex).toHaveValue("7");
-		// The reset affordance renders ONLY for a property written at the
-		// active layer, so it is proof the keystroke became a committed
-		// authoring value rather than local input state.
-		await expect(panel.getByTestId("ak-inspector-reset").first()).toBeVisible({
+		await expect(page.getByTestId("ak-inspector-empty-style")).toBeVisible({
 			timeout: 15_000,
 		});
 
-		// Tour every tab, then come back. If a tab switch had recorded a
-		// history entry, the single undo below would spend itself on that
-		// instead of the style commit.
 		await openInspectorTab(page, "properties");
 		await openInspectorTab(page, "data");
 		await openInspectorTab(page, "animation");
 		await openInspectorTab(page, "style");
-		await expect(zIndex).toHaveValue("7");
-
-		const nodeId = (await topLevelNodeIds(page))[0] as string;
-		await page.getByRole("button", { name: /undo/i }).first().click();
-
-		// Puck's undo restores the whole app state, selection included, so
-		// the inspector may drop back to its empty state. Re-select and
-		// re-open Style to read the property that actually matters.
-		await selectLayer(page, nodeId);
-		await openInspectorTab(page, "style");
-		const zIndexAfter = page
-			.getByTestId("ak-inspector-panel-style")
-			.getByTestId("ak-layout-zindex");
-		await expect(zIndexAfter).toBeVisible({ timeout: 15_000 });
-		await expect(zIndexAfter).not.toHaveValue("7");
-		// No property is written at the active layer any more — a single
-		// undo took the commit back, so no tab switch consumed one.
-		await expect(
-			page.getByTestId("ak-inspector-panel-style").getByTestId(
-				"ak-inspector-reset",
-			),
-		).toHaveCount(0, { timeout: 15_000 });
+		await expect(page.getByTestId("ak-inspector-empty-style")).toBeVisible({
+			timeout: 15_000,
+		});
 	});
 
 	test("switching tabs leaves the published document untouched", async ({
@@ -322,48 +295,33 @@ test.describe("inspector tabs — style / properties / data / animation", () => 
 		expect(await snapshot.textContent()).toBe(before);
 	});
 
-	test("authors a binding under Data and an interaction under Animation", async ({
+	test("Data and Animation show their honest empty states for an undeclared node", async ({
 		page,
 	}) => {
+		// PLAN-0025 P3-F (user-authorized coverage move): binding and
+		// interaction AUTHORING flows previously ran on fabricated
+		// capabilities; their E2E coverage returns with the composition
+		// editor's Data/Animation panels. What this certifies now: no
+		// fabricated section ever renders, and the empty states are
+		// stable across a full tab tour.
 		await openEditor(page);
 		await selectFirstNode(page);
 
-		// --- Data -----------------------------------------------------
 		await openInspectorTab(page, "data");
-		await expect(page.getByTestId("ak-bindings-section")).toBeVisible({
+		await expect(page.getByTestId("ak-inspector-empty-data")).toBeVisible({
 			timeout: 20_000,
 		});
-		await page.getByTestId("ak-binding-source").click();
-		await page.getByRole("option", { name: "Products" }).click();
-		await page.getByTestId("ak-binding-path").fill("rows.0.name");
-		await expect(page.getByTestId("ak-binding-preview-value")).toContainText(
-			"Anvil",
-			{ timeout: 15_000 },
-		);
-		await page.getByTestId("ak-binding-prop").fill("title");
-		await page.getByTestId("ak-binding-save").click();
-		await expect(page.getByTestId("ak-binding-row")).toHaveCount(1, {
-			timeout: 15_000,
-		});
+		await expect(page.getByTestId("ak-bindings-section")).toHaveCount(0);
 
-		// --- Animation ------------------------------------------------
 		await openInspectorTab(page, "animation");
-		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
+		await expect(page.getByTestId("ak-inspector-empty-animation")).toBeVisible({
 			timeout: 20_000,
 		});
-		await page
-			.getByTestId("ak-interaction-url")
-			.fill("https://example.com/inspector-tabs");
-		await page.getByTestId("ak-interaction-add").click();
-		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(1, {
-			timeout: 15_000,
-		});
+		await expect(page.getByTestId("ak-interactions-section")).toHaveCount(0);
 
-		// Both survive a return trip through the other tabs — the panels
-		// remount, the authoring behind them does not.
 		await openInspectorTab(page, "data");
-		await expect(page.getByTestId("ak-binding-row")).toHaveCount(1);
+		await expect(page.getByTestId("ak-inspector-empty-data")).toBeVisible();
 		await openInspectorTab(page, "animation");
-		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(1);
+		await expect(page.getByTestId("ak-inspector-empty-animation")).toBeVisible();
 	});
 });

@@ -135,16 +135,21 @@ test.describe("editor inspector visual certification", () => {
 		await expect(section).toHaveScreenshot("inspector-style-section.png", SHOT);
 	});
 
-	test("typography section renders stably", async ({ page }) => {
+	test("typography section stays absent for a component that does not declare it", async ({
+		page,
+	}) => {
+		// PLAN-0025 P3-F: Hero's own v1 declaration deliberately omits
+		// typography (fixed text classes), and the host no longer injects
+		// capabilities — so there is no typography section to screenshot.
+		// The layout/style shots above cover the section chrome; this
+		// asserts the honest absence instead.
 		await openEditor(page);
 		await selectViaLayers(page, "hero-primary");
 		await openInspectorTab(page, "style");
-		const section = page.getByTestId("ak-typography-section");
-		await expect(section).toBeVisible({ timeout: 15_000 });
-		await expect(section).toHaveScreenshot(
-			"inspector-typography-section.png",
-			SHOT,
-		);
+		await expect(page.getByTestId("ak-layout-section")).toBeVisible({
+			timeout: 15_000,
+		});
+		await expect(page.getByTestId("ak-typography-section")).toHaveCount(0);
 	});
 
 	test("responsive toolbar renders stably at the tablet write target", async ({

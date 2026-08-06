@@ -154,55 +154,35 @@ test.describe("visual editor mount (CORE-P1B-012)", () => {
 		});
 	});
 
-	test("resize gesture commits once and one Undo restores it (§10.5)", async ({
+	test("no resize handles render for a component without declared layout capability", async ({
 		page,
 	}) => {
+		// PLAN-0025 P3-F (user-authorized coverage move): this test used to
+		// drive the §10.5 resize gesture on the navbar, whose layout
+		// capability was HOST-FABRICATED. With the fabrication deleted,
+		// Navbar declares no v1 layout capability, so the editor honestly
+		// offers no handles. The gesture-commits-once choreography keeps
+		// its unit-level coverage in core's canvas handle suites; hero
+		// (which genuinely declares layoutItem) keeps its handles, proving
+		// the affordance is capability-gated rather than removed.
 		await openEditor(page);
 		const frame = page.frameLocator("iframe").first();
-		// The navbar is the short node at the top of the demo document:
-		// its south handle lands inside the 1280×720 viewport, where
-		// synthetic input can reach it. (The hero is full-width and
-		// ~714 px tall, so BOTH its east and south handles sit outside
-		// the viewport — a harness constraint, not an editor one.)
 		const node = frame.locator('[data-ak-node="navbar-primary"]');
 		await expect(node).toBeVisible({ timeout: 30_000 });
 		await selectViaLayers(page, "navbar-primary");
-		const handle = frame.locator('[data-ak-handle="resize-s"]');
-		await expect(handle).toBeVisible({ timeout: 15_000 });
-
-		const before = await node.evaluate(
-			(el) => el.getBoundingClientRect().height,
-		);
-		const box = await handle.boundingBox();
-		if (box === null) {
-			throw new Error("resize handle has no box");
-		}
-		await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-		await page.mouse.down();
-		// Drag up: the ephemeral preview paints during the move…
-		await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2 - 40, {
-			steps: 5,
+		await expect(page.getByTestId("ak-editor-inspector")).toBeVisible({
+			timeout: 15_000,
 		});
-		expect(await node.evaluate((el) => el.style.height)).not.toBe("");
-		// …and pointerup commits exactly one command, after which the
-		// durable value arrives through the authoring stylesheet.
-		await page.mouse.up();
-		await expect
-			.poll(
-				async () => node.evaluate((el) => el.getBoundingClientRect().height),
-				{ timeout: 15_000 },
-			)
-			.toBeLessThan(before - 20);
+		await expect(frame.locator('[data-ak-handle="resize-s"]')).toHaveCount(0);
 
-		// ONE undo restores the pre-gesture height — the whole gesture
-		// was a single history entry.
-		await page.getByRole("button", { name: /undo/i }).click();
-		await expect
-			.poll(
-				async () => node.evaluate((el) => el.getBoundingClientRect().height),
-				{ timeout: 15_000 },
-			)
-			.toBeGreaterThan(before - 5);
+		// The genuinely-declaring component still gets its handles. The
+		// rail is already open from the first selection — a second
+		// `selectViaLayers` would blind-toggle it shut, so click the row
+		// directly.
+		await clickLayerRow(page, "hero-primary");
+		await expect(frame.locator("[data-ak-handle]").first()).toBeVisible({
+			timeout: 15_000,
+		});
 	});
 
 	test("inline plain-text editing: enter, type, commit, one-step undo (ED-TEXT-001/003)", async ({

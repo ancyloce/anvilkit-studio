@@ -79,9 +79,11 @@ async function selectFirstNode(page: Page): Promise<string> {
 		// Selection is announced on the `treeitem` ROW, not on the name
 		// button: `aria-selected` is invalid on `button` (axe
 		// `aria-allowed-attr`) and moved to the row in CORE-P4-003.
-		await expect(
-			page.getByTestId(`ak-layer-node-${nodeId}`),
-		).toHaveAttribute("aria-selected", "true", { timeout: 2_000 });
+		await expect(page.getByTestId(`ak-layer-node-${nodeId}`)).toHaveAttribute(
+			"aria-selected",
+			"true",
+			{ timeout: 2_000 },
+		);
 	}).toPass({ timeout: 20_000 });
 	return nodeId as string;
 }
@@ -154,211 +156,34 @@ test.describe("Phase 3 surfaces — §32.4 (CORE-P3-001..009)", () => {
 		});
 	});
 
-	test("an interaction can be created on click, hover, and viewport", async ({
+	test("interaction and binding surfaces show honest §8.5 empty states", async ({
 		page,
 	}) => {
-		await openEditor(page);
-		await openLayersPanel(page);
-		await selectFirstNode(page);
-
-		await openInspectorTab(page, "animation");
-		const section = page.getByTestId("ak-interactions-section");
-		await expect(section).toBeVisible({ timeout: 20_000 });
-		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(0);
-
-		// §32.4 names these three triggers specifically.
-		const triggers = ["click", "hover", "viewport"] as const;
-		for (const [index, trigger] of triggers.entries()) {
-			await page.getByTestId("ak-interaction-trigger").click();
-			await page.getByRole("option").nth(index).click();
-			await page
-				.getByTestId("ak-interaction-url")
-				.fill(`https://example.com/${trigger}`);
-			await page.getByTestId("ak-interaction-add").click();
-			await expect(page.getByTestId("ak-interaction-row")).toHaveCount(
-				index + 1,
-				{ timeout: 10_000 },
-			);
-		}
-	});
-
-	test("a javascript: URL is refused at the product boundary", async ({
-		page,
-	}) => {
-		// §16 treats this as absolute — no host policy may admit it, and
-		// the rejection must reach the author rather than failing silently.
-		await openEditor(page);
-		await openLayersPanel(page);
-		await selectFirstNode(page);
-		await openInspectorTab(page, "animation");
-		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
-			timeout: 20_000,
-		});
-
-		await page.getByTestId("ak-interaction-url").fill("javascript:alert(1)");
-		await page.getByTestId("ak-interaction-add").click();
-
-		await expect(page.getByTestId("ak-interaction-errors")).toBeVisible({
-			timeout: 10_000,
-		});
-		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(0);
-	});
-
-	test("a binding resolves against host preview data and commits", async ({
-		page,
-	}) => {
+		// PLAN-0025 P3-F (user-authorized coverage move): the eight
+		// authoring flows this suite used to drive (create on
+		// click/hover/viewport, javascript: refusal, binding resolve,
+		// broken path, §19 timeout, action families, removal, timeline)
+		// ran on HOST-FABRICATED wrapper capabilities. With the
+		// fabrication deleted, no demo component declares the v1
+		// interaction/binding surfaces, so the sections honestly never
+		// render; the flows' E2E coverage returns with the composition
+		// editor's Data/Animation panels (Phase 3.5+). Their engine-level
+		// behavior stays covered by core's unit suites.
 		await openEditor(page);
 		await openLayersPanel(page);
 		await selectFirstNode(page);
 
 		await openInspectorTab(page, "data");
-		const section = page.getByTestId("ak-bindings-section");
-		await expect(section).toBeVisible({ timeout: 20_000 });
-
-		await page.getByTestId("ak-binding-source").click();
-		await page.getByRole("option", { name: "Products" }).click();
-
-		await page.getByTestId("ak-binding-path").fill("rows.0.name");
-		// Resolved against real adapter data, so the author sees the value
-		// before committing.
-		await expect(page.getByTestId("ak-binding-preview-value")).toContainText(
-			"Anvil",
-			{ timeout: 15_000 },
-		);
-
-		await page.getByTestId("ak-binding-prop").fill("title");
-		await page.getByTestId("ak-binding-save").click();
-		await expect(page.getByTestId("ak-binding-row")).toHaveCount(1, {
-			timeout: 10_000,
-		});
-	});
-
-	test("a broken path is reported as unresolved, not as empty data", async ({
-		page,
-	}) => {
-		await openEditor(page);
-		await openLayersPanel(page);
-		await selectFirstNode(page);
-		await openInspectorTab(page, "data");
-		await expect(page.getByTestId("ak-bindings-section")).toBeVisible({
+		await expect(page.getByTestId("ak-inspector-empty-data")).toBeVisible({
 			timeout: 20_000,
 		});
+		await expect(page.getByTestId("ak-bindings-section")).toHaveCount(0);
 
-		await page.getByTestId("ak-binding-source").click();
-		await page.getByRole("option", { name: "Products" }).click();
-		await page.getByTestId("ak-binding-path").fill("rows.0.nope");
-
-		const unresolved = page.getByTestId("ak-binding-preview-unresolved");
-		await expect(unresolved).toBeVisible({ timeout: 15_000 });
-		await expect(unresolved).toHaveAttribute("data-status", "missing");
-	});
-
-	test("a slow data source is contained by the §19 timeout", async ({
-		page,
-	}) => {
-		// The demo's `slow` source never answers on its own; Core's 5 s
-		// budget is what ends the request, and the author is told *why*
-		// rather than shown an empty result.
-		await openEditor(page);
-		await openLayersPanel(page);
-		await selectFirstNode(page);
-		await openInspectorTab(page, "data");
-		await expect(page.getByTestId("ak-bindings-section")).toBeVisible({
-			timeout: 20_000,
-		});
-
-		await page.getByTestId("ak-binding-source").click();
-		await page.getByRole("option", { name: "Slow source" }).click();
-
-		const failed = page.getByTestId("ak-binding-preview-failed");
-		await expect(failed).toBeVisible({ timeout: 20_000 });
-		await expect(failed).toHaveAttribute("data-reason", "timeout");
-	});
-
-	test("every action family is offered and a non-URL action commits", async ({
-		page,
-	}) => {
-		await openEditor(page);
-		await openLayersPanel(page);
-		await selectFirstNode(page);
 		await openInspectorTab(page, "animation");
-		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
+		await expect(page.getByTestId("ak-inspector-empty-animation")).toBeVisible({
 			timeout: 20_000,
 		});
-
-		// §16 declares six families; all of them must be authorable.
-		await page.getByTestId("ak-action-kind").click();
-		await expect(page.getByRole("option")).toHaveCount(6);
-
-		// Pick `scroll`, which needs a target — proving the picker is
-		// populated from the real document rather than hard-coded.
-		await page.getByRole("option", { name: /scroll/i }).click();
-		await page.getByTestId("ak-action-target").click();
-		await page.getByRole("option").first().click();
-		await page.getByTestId("ak-interaction-add").click();
-
-		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(1, {
-			timeout: 10_000,
-		});
-	});
-
-	test("an interaction can be removed again", async ({ page }) => {
-		await openEditor(page);
-		await openLayersPanel(page);
-		await selectFirstNode(page);
-		await openInspectorTab(page, "animation");
-		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
-			timeout: 20_000,
-		});
-
-		await page.getByTestId("ak-interaction-url").fill("https://example.com/a");
-		await page.getByTestId("ak-interaction-add").click();
-		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(1, {
-			timeout: 10_000,
-		});
-
-		await page.getByTestId("ak-interaction-remove").click();
-		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(0, {
-			timeout: 10_000,
-		});
-	});
-
-	test("the timeline visualises actions and reorders them", async ({ page }) => {
-		await openEditor(page);
-		await openLayersPanel(page);
-		await selectFirstNode(page);
-		await openInspectorTab(page, "animation");
-		await expect(page.getByTestId("ak-interactions-section")).toBeVisible({
-			timeout: 20_000,
-		});
-
-		await page.getByTestId("ak-interaction-url").fill("https://example.com/first");
-		await page.getByTestId("ak-interaction-add").click();
-		await expect(page.getByTestId("ak-interaction-row")).toHaveCount(1, {
-			timeout: 10_000,
-		});
-
-		await page.getByTestId("ak-interaction-timeline-toggle").click();
-		await expect(page.getByTestId("ak-timeline")).toBeVisible();
-		// One action so far: a `url` is instant, so it draws no bar.
-		await expect(page.getByTestId("ak-timeline-row")).toHaveCount(1);
-		await expect(page.getByTestId("ak-timeline-instant")).toBeVisible();
-
-		// Append a second action so ordering becomes meaningful.
-		await page.getByTestId("ak-interaction-url").fill("https://example.com/second");
-		await page.getByTestId("ak-interaction-add-action").click();
-		await expect(page.getByTestId("ak-timeline-row")).toHaveCount(2, {
-			timeout: 10_000,
-		});
-
-		// Reorder commits through `interaction.update` in one dispatch.
-		await page.getByTestId("ak-timeline-move-down").first().click();
-		await expect(page.getByTestId("ak-timeline-row")).toHaveCount(2);
-
-		// One undo restores the prior order — the chrome's button, since a
-		// keyboard shortcut never reaches Puck history from the iframe.
-		await page.getByRole("button", { name: /undo/i }).click();
-		await expect(page.getByTestId("ak-timeline-row")).toHaveCount(2);
+		await expect(page.getByTestId("ak-interactions-section")).toHaveCount(0);
 	});
 
 	test("host pages are listed and opening one calls the adapter", async ({
