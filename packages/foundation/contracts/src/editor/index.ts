@@ -35,6 +35,14 @@
  * descriptor shapes; their runtime semantics land in Phase 3.
  */
 
+export type {
+	AnvilAppearanceV1,
+	AnvilNodeFeatureProps,
+	AuthorableProps,
+	AuthorStyleV1,
+	StyleTargetId,
+	TargetAppearanceV1,
+} from "./appearance.js";
 export {
 	ANVILKIT_AUTHORING_KEY,
 	type AnvilKitRootProps,
@@ -101,6 +109,11 @@ export type {
 	UpdateTokenCommand,
 } from "./commands.js";
 export type {
+	AnvilComponentMetadataV2,
+	AuthorableStyleProperty,
+	StyleTargetCapabilityV2,
+} from "./component-metadata-v2.js";
+export type {
 	ComponentDefinitionId,
 	ComponentDefinitionV1,
 	ComponentInstanceState,
@@ -112,6 +125,11 @@ export type {
 	VariantAxis,
 	VariantAxisOption,
 } from "./components.js";
+export type {
+	AnvilKitV2RootProps,
+	DesignSystemV1,
+	DocumentComponentLibraryV1,
+} from "./design-system.js";
 export type { EditorError, EditorErrorCode } from "./errors.js";
 export type { EditorDiagnosticPort, EditorEvent } from "./events.js";
 export type {

@@ -54,6 +54,7 @@ export type {
 } from "./ai-section.js";
 export type { AssetResolution, IRAssetResolver } from "./assets.js";
 export type {
+	CompiledAppearanceArtifact,
 	ExportFormatDefinition,
 	ExportFormatRunContext,
 	ExportOptions,

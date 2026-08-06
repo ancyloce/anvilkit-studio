@@ -118,6 +118,26 @@ export type ExportOptions<
 > = T;
 
 /**
+ * The unified appearance compiler's output as exporters consume it
+ * (PLAN-0025 §9.3, P4-05/P4-06). A structural mirror of
+ * `@anvilkit/core`'s `CompiledAppearance` (contracts cannot depend on
+ * core): the export runner compiles the EXACT document being exported
+ * and hands formats this artifact, so exporters never re-derive
+ * appearance CSS with a second algorithm (§7.5 — dual resolvers are
+ * prohibited).
+ */
+export interface CompiledAppearanceArtifact {
+	/** Deterministic document CSS (base rules + media queries). */
+	readonly css: string;
+	/** Content fingerprint — the §14.4 cross-surface parity key. */
+	readonly fingerprint: string;
+	/** Ids of nodes the stylesheet actually targets. */
+	readonly styledNodeIds: readonly string[];
+	/** Styled target ids per node id (selector attribute pairs). */
+	readonly targetManifest: Readonly<Record<string, readonly string[]>>;
+}
+
+/**
  * Per-run context handed to {@link ExportFormatDefinition.run} for
  * formats that opt into asset-URL rewriting (review finding TS-c).
  *
@@ -128,9 +148,16 @@ export type ExportOptions<
  * treats a reference no resolver handles is its own policy — the bundled
  * HTML / React exporters omit unresolved `asset://` / `design://` refs and
  * emit an `ASSET_UNRESOLVED` warning rather than passing them through.
+ *
+ * `compiledAppearance` is the unified compiler's output for the
+ * document being exported (PLAN-0025 §9.3): present whenever the
+ * caller supplied its Puck `Config` to the export runner. Formats
+ * consume `css`/`styledNodeIds` directly instead of resolving node
+ * styles independently.
  */
 export interface ExportFormatRunContext {
 	readonly assetResolvers?: readonly IRAssetResolver[];
+	readonly compiledAppearance?: CompiledAppearanceArtifact;
 }
 
 /**
