@@ -9,6 +9,15 @@
  * `@anvilkit/contracts` directly.
  */
 
+export type {
+	CompiledAppearanceArtifact,
+	ExportFormatDefinition,
+	ExportFormatRunContext,
+	ExportOptions,
+	ExportResult,
+	ExportWarning,
+	ExportWarningLevel,
+} from "@anvilkit/contracts";
 /**
  * `ExportFormatDefinition.editorCapabilities` is typed against this
  * (DD-0019 §23.2, added by CORE-P0-004), but the type lives on the
@@ -19,12 +28,3 @@
  * without typechecking against a subpath it has no dependency on.
  */
 export type { EditorExportCapabilities } from "@anvilkit/contracts/editor";
-
-export type {
-	ExportFormatDefinition,
-	ExportFormatRunContext,
-	ExportOptions,
-	ExportResult,
-	ExportWarning,
-	ExportWarningLevel,
-} from "@anvilkit/contracts";

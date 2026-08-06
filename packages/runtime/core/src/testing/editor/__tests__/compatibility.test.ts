@@ -13,7 +13,6 @@ import {
 	readAuthoringState,
 	writeAuthoringState,
 } from "../../../editor/index.js";
-import { decoratePuckConfig } from "../../../react/editor/decorate-config.js";
 import {
 	assertContentFreeEvent,
 	buildAuthoringStateAtLimits,
@@ -50,10 +49,8 @@ describe("legacy documents (reader-only stage)", () => {
 		expect(result.errors[0]?.code).toBe("EDITOR_CONTRACT_UNSUPPORTED_VERSION");
 	});
 
-	it("leaves a legacy config undecorated when authoring is off", () => {
-		const config = buildRootConfigWithSlotFields();
-		expect(decoratePuckConfig(config, { enableAuthoring: false })).toBe(config);
-	});
+	// P6-01: config decoration was DELETED — "undecorated" is now the
+	// only possible state, so the old identity assertion is structural.
 });
 
 describe("fixture builders", () => {
@@ -80,19 +77,9 @@ describe("fixture builders", () => {
 		expect(a).toEqual(b);
 	});
 
-	it("tolerates ordinary root slot fields and flags the collision", () => {
-		expect(() =>
-			decoratePuckConfig(buildRootConfigWithSlotFields(), {
-				enableAuthoring: true,
-			}),
-		).not.toThrow();
-		expect(() =>
-			decoratePuckConfig(
-				buildRootConfigWithSlotFields({ collideWithSidecarKey: true }),
-				{ enableAuthoring: true },
-			),
-		).toThrow(/invariant 11/);
-	});
+	// P6-01: the sidecar-slot collision guard lived in config
+	// decoration, which was DELETED — no path inspects root slot names
+	// anymore, and v2 documents carry no sidecar to collide with.
 });
 
 describe("contract assertion helpers", () => {

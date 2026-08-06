@@ -45,6 +45,7 @@ export type {
 	StudioEditorConfig,
 } from "./editor-config.js";
 export type {
+	CompiledAppearanceArtifact,
 	EditorExportCapabilities,
 	ExportFormatDefinition,
 	ExportFormatRunContext,

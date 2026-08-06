@@ -40,7 +40,6 @@ import {
 	writeAuthoringState,
 } from "../../../editor/index.js";
 import { computeCollabGateError } from "../../../react/editor/collab-gate.js";
-import { decoratePuckConfig } from "../../../react/editor/decorate-config.js";
 import { applyAuthoringStylesheet } from "../../../react/editor/responsive/stylesheet.js";
 import {
 	buildLegacyPuckData,
@@ -64,39 +63,10 @@ function authored(): AuthoringStateV1 {
 	};
 }
 
-describe('§26.1 row 1 — chrome="puck": features are not decorated or loaded', () => {
-	it("returns the host's config by identity when authoring is off", () => {
-		// Identity, not deep-equality: a decorated copy would reset Puck's
-		// app store and change render identity for every component, which
-		// is exactly the "not decorated or loaded" promise.
-		const config = buildRootConfigWithSlotFields();
-		expect(decoratePuckConfig(config, { enableAuthoring: false })).toBe(config);
-	});
-
-	it("does not even inspect the config for the sidecar-slot collision", () => {
-		// The collision assert is an authoring-path concern. A legacy host
-		// with a root slot literally named `__anvilkit` must still boot.
-		const hostile = buildRootConfigWithSlotFields({
-			collideWithSidecarKey: true,
-		});
-		expect(() =>
-			decoratePuckConfig(hostile, { enableAuthoring: false }),
-		).not.toThrow();
-	});
-});
-
-describe("§26.1 row 2 — legacy component configs remain operational", () => {
-	it("keeps every component and its native fields after decoration", () => {
-		const config = buildRootConfigWithSlotFields();
-		const decorated = decoratePuckConfig(config, { enableAuthoring: true });
-		expect(Object.keys(decorated.components)).toEqual(
-			Object.keys(config.components),
-		);
-		expect(decorated.components.Box?.fields).toEqual(
-			config.components.Box?.fields,
-		);
-	});
-});
+// P6-01 (PLAN-0025 §11.3): §26.1 rows 1-2 asserted config-decoration
+// identity/preservation. Decoration was DELETED — the host config is
+// never transformed on ANY path now, making both rows structurally
+// true; their runtime assertions are therefore retired with the code.
 
 describe("§26.1 row 3 — legacy plugins are unaffected by the added context", () => {
 	it("declares `editor` as an OPTIONAL member, so a context without it is still valid", () => {
