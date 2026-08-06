@@ -132,6 +132,9 @@ jobs:
       - name: Lint workspace
         run: pnpm lint
 
+      - name: Puck import contract (public surface + single resolution)
+        run: pnpm check:puck-imports
+
       - name: Typecheck workspace
         run: pnpm typecheck
 
