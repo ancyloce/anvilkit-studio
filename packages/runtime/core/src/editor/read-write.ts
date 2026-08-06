@@ -135,8 +135,7 @@ function invalidSidecarResult(
 }
 
 /**
- * Write the sidecar into Puck data (DD-0019 §24.1, verbatim
- * semantics): pure spread write of the **compacted** state to
+ * Project `next` into a fresh document carrying it under
  * `root.props.__anvilkit`, never mutating the input. Read-only
  * guarding (invariant 9) is the command port's responsibility — this
  * function is a pure projection.

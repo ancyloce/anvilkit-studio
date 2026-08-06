@@ -2,7 +2,7 @@
  * @file Reading a component's `metadata.editor` declaration
  * (DD-0019 §8) — React-free.
  *
- * Lives in the engine rather than beside `decoratePuckConfig` (its
+ * Lives in the engine (its former React-side consumer, config
  * original home) so tooling that never mounts React can use it:
  * `inspectEditorCapabilities` is a build-time/dev-time report a
  * component author runs from a script or a test, and pulling the

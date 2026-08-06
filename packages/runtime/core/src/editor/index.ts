@@ -21,6 +21,16 @@
  * integration lives in `@anvilkit/core/react/editor` (Phase 1A).
  */
 
+// §5.1 authoring-carrier types, re-exported so v2-protocol consumers
+// (studio demo config, Phase 3.5 plugins) need no direct contracts dep.
+export type {
+	AnvilAppearanceV1,
+	AnvilNodeFeatureProps,
+	AuthorableProps,
+	BindingV1,
+	InteractionV1,
+	TargetAppearanceV1,
+} from "@anvilkit/contracts/editor";
 // Shared used-features projection (CORE-P1A-003): re-exported from
 // the engine so React-layer consumers reach it without importing
 // `@anvilkit/ir` directly — `src/editor/` is the one directory the
@@ -30,6 +40,64 @@ export {
 	listUsedAuthoringFeatures,
 	listUsedEditorFeatures,
 } from "@anvilkit/ir/editor";
+export {
+	legacyNodeToAppearance,
+	type MigrateToPuckNativeV2Options,
+	type MigrationDiagnostic,
+	type MigrationResult,
+	migrateToPuckNativeV2,
+	normalizeCssForParity,
+} from "../migrations/index.js";
+export {
+	AUTHORABLE_PROPERTY_LOCATIONS,
+	type AuthorablePropertyLocation,
+	authorablePropertyForSpecKey,
+	type ResolvedStyleTarget,
+	readEditorMetadataV2,
+	resolveStyleTargets,
+} from "../puck/component-metadata.js";
+export {
+	type AppearanceNode,
+	type AppearanceReadState,
+	collectAppearanceNodes,
+	documentBreakpoints,
+	readAppearanceProperty,
+	readTargetHidden,
+	readTargetStyleRefs,
+	type TargetReadInput,
+} from "../puck/read-appearance.js";
+export {
+	BINDING_SCOPE_METADATA_KEY,
+	type ProductionBindingScope,
+	withBindingResolution,
+} from "../puck/resolve-bindings.js";
+export { anvilRootAttrs, anvilTargetAttrs } from "../puck/targets.js";
+export {
+	type AppearanceCommitDeps,
+	type AppearanceCommitResult,
+	type AppearancePatch,
+	commitAppearanceUpdate,
+	type UpdateAppearanceInput,
+	type UpdateAppearanceResult,
+	updateAppearanceInData,
+} from "../puck/update-appearance.js";
+export {
+	commitDesignSystemUpdate,
+	type DesignSystemCommitDeps,
+	type DesignSystemCommitResult,
+	type UpdateDesignSystemInput,
+	type UpdateDesignSystemResult,
+	updateDesignSystemInData,
+} from "../puck/update-design-system.js";
+export {
+	type AppearanceCompilerCache,
+	type CompileAppearanceInput,
+	type CompiledAppearance,
+	type CompiledTargetFragment,
+	compileDocumentAppearance,
+	createAppearanceCompilerCache,
+	fingerprintOf,
+} from "../style-compiler/index.js";
 export {
 	AI_PROPOSAL_LIMITS,
 	assessProposal,

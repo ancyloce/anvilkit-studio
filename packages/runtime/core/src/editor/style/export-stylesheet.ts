@@ -3,6 +3,14 @@
  * authored documents (PLAN-0020 CORE-P2-012 / EP-17; DD-0019 §11.4,
  * §12.4, §23.1; REVIEW-0019 P0).
  *
+ * @deprecated PLAN-0025 P4-07 — the LEGACY export resolver. It reads
+ * only v1 sidecar documents; the export runner now compiles v2
+ * documents through the ONE unified compiler
+ * (`compileDocumentAppearance`) and hands formats the artifact on the
+ * run context (§9.3). Retained as the sidecar-document path until the
+ * Phase 5 migration; plan §11.3 allows it to remain temporarily as a
+ * deprecated thin adapter. Add no new call sites.
+ *
  * The exporter-side counterpart of the preview authoring stylesheet:
  * one CSS text over `[data-ak-node]` selectors that an export format
  * embeds in its output. Unlike the preview channel (which layers raw
