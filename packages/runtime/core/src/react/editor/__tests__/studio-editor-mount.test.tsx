@@ -5,13 +5,12 @@
  */
 
 import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
-import { type ReactNode, useContext } from "react";
+import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { StudioConfigSchema } from "@/config/schema";
 import { StudioPluginContextProvider } from "@/context/plugin-context";
 import type { StudioPluginContext } from "@/types/plugin";
 import { buildLegacyPuckData } from "../../../testing/editor/index.js";
-import { AuthoringStyleContext } from "../authoring-style-context.js";
 import { createStudioEditorBridge } from "../bridge.js";
 import { StudioEditorMount } from "../StudioEditorMount.js";
 import {
@@ -82,38 +81,9 @@ describe("<StudioEditorMount> (CORE-P1A-001)", () => {
 		expect(bridge.port?.getSnapshot().revision).toBe(0);
 	});
 
-	it("refreshes the style-lookup context once the lazy runtime installs (stamping regression)", async () => {
-		// The E2E-caught bug: EditorRoot installed `bridge.styleLookup`
-		// with a plain notify — the mount only re-derives the context on
-		// STYLE version bumps, so decorated renders stayed unstamped
-		// until the first authoring change.
-		const bridge = createStudioEditorBridge();
-		function LookupProbe(): ReactNode {
-			const lookup = useContext(AuthoringStyleContext);
-			return (
-				<span data-testid="lookup">
-					{lookup === null
-						? "null"
-						: (lookup("some-node")?.dataAttributes["data-ak-node"] ?? "empty")}
-				</span>
-			);
-		}
-		render(
-			<StudioPluginContextProvider value={createCtx()}>
-				<StudioEditorMount
-					editor={{ features: { enabled: true } }}
-					bridge={bridge}
-				>
-					<LookupProbe />
-				</StudioEditorMount>
-			</StudioPluginContextProvider>,
-		);
-		await waitFor(() => {
-			// After the lazy install the context is live and every node id
-			// resolves to a data-ak-node stamp — no authoring change needed.
-			expect(screen.getByTestId("lookup").textContent).toBe("some-node");
-		});
-	});
+	// P6-01: the authoring style context (and its stamping regression
+	// case) is gone with config decoration — the canvas DOM registry
+	// rides Puck's own data-puck-component attribute.
 
 	it("useStudioEditor throws outside an editor-enabled Studio", () => {
 		function Bare(): ReactNode {

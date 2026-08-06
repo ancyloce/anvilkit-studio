@@ -11,7 +11,7 @@
 
 import type { StudioEditorBridge } from "../bridge.js";
 import type { InternalEditorCommandPort } from "../command-port.js";
-import { readEditorMetadata } from "../decorate-config.js";
+import { readEditorMetadata } from "../../../editor/capability-metadata.js";
 import type { ShortcutContext } from "./registry.js";
 
 /** The plugin-context slice the command handlers need. */

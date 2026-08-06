@@ -213,18 +213,10 @@ export default function EditorRoot({
 		bridge.selection = selection;
 		bridge.capabilities = capabilities;
 		bridge.viewport = viewport;
-		// Attribute-only lookup (CORE-P1A-009, widened by CORE-P1B-001):
-		// EVERY decorated render stamps `data-ak-node` — the canvas DOM
-		// registry needs the attribute on unauthored nodes too (hit
-		// testing, selection rings). All style VALUES still reach the
-		// canvas through the iframe stylesheet, so inline styles stay
-		// empty and media queries keep working in the preview.
-		bridge.styleLookup = (nodeId) => ({
-			classNames: [],
-			inlineStyle: {},
-			dataAttributes: { "data-ak-node": nodeId },
-			diagnostics: [],
-		});
+		// P6-01: config decoration is gone — the canvas DOM registry
+		// indexes Puck's own `data-puck-component` attribute (its
+		// dual-attribute design), and style values reach the canvas
+		// through the compiled-appearance mount.
 		// Canvas DOM registry (CORE-P1B-001): binds to whatever iframe
 		// document the chrome last reported, and re-binds on document
 		// replacement (the feed fires again with the new doc).
@@ -269,12 +261,6 @@ export default function EditorRoot({
 		refreshSidecarDiagnostics();
 		refreshCollabGate();
 		const unsubscribeGate = bridge.subscribe(refreshCollabGate);
-		// Style-channel wake, not a plain notify: `styleLookup` just
-		// became available, and decorated canvas renders only re-read
-		// the lookup context when the STYLE version bumps
-		// (StudioEditorMount) — a plain notify would leave every
-		// already-rendered node unstamped until the first authoring
-		// change.
 		bridge.notifyStyles();
 		return () => {
 			unsubscribeGate();
@@ -287,7 +273,6 @@ export default function EditorRoot({
 				bridge.capabilities = null;
 				bridge.viewport = null;
 				bridge.responsive = null;
-				bridge.styleLookup = null;
 				inline.cancel();
 				bridge.inline = null;
 				bridge.editorConfig = null;

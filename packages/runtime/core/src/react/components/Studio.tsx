@@ -61,7 +61,6 @@ import {
 	resolveStudioViewports,
 } from "@/studio/ui/merge-studio-ui";
 import { useThemeSync } from "@/theme/use-theme-sync";
-import { decoratePuckConfig } from "../editor/decorate-config.js";
 import { StudioEditorMount } from "../editor/StudioEditorMount.js";
 import {
 	composePluginProviders,
@@ -334,18 +333,14 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 	// generic→default boundary (mirrors use-studio-controller.ts).
 	// `EMPTY_DATA` is a structurally-valid empty `Data` for any config.
 	type PuckDataFor = UserGenerics<UserConfig>["UserData"];
-	// Authoring config decoration (DD-0019 §8, CORE-P0-011). Identity
-	// passthrough when the editor flag is off (or on `chrome="puck"`,
-	// where `isAnvilkit` is false), so legacy paths see the exact same
-	// config object as before. Internally memoized by config identity +
-	// fingerprint — identity-stable results keep Puck's app store from
-	// resetting across renders.
-	const authoringPuckConfig = decoratePuckConfig(puckConfig, {
-		enableAuthoring: isAnvilkit && props.editor?.features?.enabled === true,
-	});
+	// P6-01 (PLAN-0025 §8.5/§11.3): config decoration is GONE. Since
+	// Phase 3 every component emits its official target attributes in
+	// its own render, and v2 appearance reaches the canvas through the
+	// compiled-appearance mount — the same undecorated `Config` serves
+	// the editor, preview, production, and export (§1 condition 3).
 	const puckElement = (
 		<Puck<UserConfig>
-			config={authoringPuckConfig}
+			config={puckConfig}
 			data={data ?? (EMPTY_DATA as PuckDataFor)}
 			overrides={mergedOverrides as Partial<PuckOverrides<UserConfig>>}
 			onChange={handleChange as (data: PuckDataFor) => void}

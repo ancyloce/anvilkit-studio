@@ -30,7 +30,7 @@ import {
 	listUsedEditorFeatures,
 } from "../../editor/index.js";
 import type { EditorCapabilityRegistry } from "../../types/editor-api.js";
-import { readEditorMetadata } from "./decorate-config.js";
+import { readEditorMetadata } from "../../editor/capability-metadata.js";
 
 /** Dependencies of the registry — thunks so tests need no `<Studio>`. */
 export interface CapabilityRegistryDeps {

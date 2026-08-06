@@ -78,6 +78,7 @@ import {
 import { useMsg } from "@/state/editor-i18n-context";
 import { useCanvasRootHeight } from "@/state/slices/editor-ui-selectors";
 import { useCanvasDocumentSync } from "../../editor/canvas/use-canvas-document-sync.js";
+import { CompiledAppearanceMount } from "../../editor/composition/CompiledAppearanceMount.js";
 import { AuthoringStylesheetMount } from "../../editor/responsive/AuthoringStylesheetMount.js";
 
 export interface CanvasIframeOverrideProps {
@@ -327,8 +328,13 @@ export function CanvasIframe({
 		<>
 			<CanvasDropMount document={iframeDoc} />
 			{/* Authoring stylesheet channel (CORE-P1A-009): renders nothing
-			    unless the editor feature is enabled. */}
+			    unless the editor feature is enabled. Serves LEGACY sidecar
+			    documents until the Phase 5 migration. */}
 			<AuthoringStylesheetMount document={iframeDoc} />
+			{/* Unified-compiler stylesheet (PLAN-0025 P4-07): the SAME
+			    compiled CSS as preview/production/export, for v2 documents.
+			    Exclusive with the legacy channel per document form. */}
+			<CompiledAppearanceMount />
 			{children}
 		</>
 	);

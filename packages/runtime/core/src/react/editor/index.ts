@@ -3,10 +3,10 @@
  * authoring integration (DD-0019 §22.2; PLAN-0020
  * CORE-P0-011/-012, CORE-P1A-001).
  *
- * Surface: config decoration (`decoratePuckConfig`,
- * `AuthoringBoundary`, the authoring-style context), the flag-gated
- * lazy mount (`StudioEditorMount`), and the `useStudioEditor` hook
- * family over the typed command port. The selection and viewport
+ * Surface: the flag-gated lazy mount (`StudioEditorMount`), the
+ * composition editor pieces, and the `useStudioEditor` hook family
+ * over the typed command port. Config decoration and the authoring
+ * boundary/context were deleted in PLAN-0025 P6-01. The selection and viewport
  * controllers land with later Phase 1A tasks (EP-03).
  *
  * `EditorRoot` is deliberately NOT re-exported: it is the code-split
@@ -17,9 +17,10 @@
  */
 
 export {
-	AuthoringBoundary,
-	type AuthoringBoundaryProps,
-} from "./AuthoringBoundary.js";
+	appearanceField,
+	bindingsField,
+	interactionsField,
+} from "../../puck/fields/authoring-fields.js";
 export type { AccessibilityIssue } from "./a11y/contract-rules.js";
 export {
 	type AccessibilityIssuesApi,
@@ -31,10 +32,6 @@ export {
 	type EditorProposalInputs,
 	useEditorProposalInputs,
 } from "./ai/AiProposalReviewMount.js";
-export {
-	AuthoringStyleContext,
-	type AuthoringStyleLookup,
-} from "./authoring-style-context.js";
 export type { CanvasDomRegistry } from "./canvas/dom-registry.js";
 export { ComponentCanvasPanel } from "./components/ComponentCanvasPanel.js";
 export { ComponentInstanceSection } from "./components/ComponentInstanceSection.js";
@@ -77,18 +74,25 @@ export {
 } from "./components/use-variant-authoring.js";
 export { VariantAxisEditor } from "./components/VariantAxisEditor.js";
 export {
-	type DecoratePuckConfigOptions,
-	decoratePuckConfig,
-} from "./decorate-config.js";
-export { DesignSystemPanel } from "./tokens/DesignSystemPanel.js";
+	AppearanceIframeOverride,
+	type AppearanceIframeOverrideProps,
+} from "./composition/AppearanceIframeOverride.js";
+export { CompiledAppearanceMount } from "./composition/CompiledAppearanceMount.js";
 export {
-	type DesignSystemModel,
-	type DesignSystemOutcome,
-	type DesignSystemStyle,
-	type DesignSystemToken,
-	type TokenDeletionPreview,
-	useDesignSystem,
-} from "./tokens/use-design-system.js";
+	type StudioInspectorPanel,
+	StudioPuckLayout,
+	type StudioPuckLayoutProps,
+} from "./composition/StudioPuckLayout.js";
+export { StylePanel } from "./composition/StylePanel.js";
+export {
+	type AppearanceCommitInput,
+	useAppearanceCommit,
+} from "./composition/use-appearance-commit.js";
+export {
+	type UseCompiledAppearanceOptions,
+	useCompiledAppearance,
+} from "./composition/use-compiled-appearance.js";
+export { useDesignSystemCommit } from "./composition/use-design-system-commit.js";
 export {
 	EditorSurfaceSlot,
 	type EditorSurfaceSlotProps,
@@ -117,6 +121,10 @@ export {
 	TIPTAP_ALLOWED_MARKS,
 	TIPTAP_ALLOWED_NODES,
 } from "./inline/tiptap-contract.js";
+export {
+	PuckIframeAppearanceBridge,
+	type PuckIframeAppearanceBridgeProps,
+} from "./PuckIframeAppearanceBridge.js";
 export type { StudioViewportController } from "./responsive/viewport-controller.js";
 export {
 	StudioEditorMount,
@@ -127,6 +135,15 @@ export {
 	EDITOR_SHORTCUT_KEYMAP,
 	type EditorShortcutBinding,
 } from "./shortcuts/registry.js";
+export { DesignSystemPanel } from "./tokens/DesignSystemPanel.js";
+export {
+	type DesignSystemModel,
+	type DesignSystemOutcome,
+	type DesignSystemStyle,
+	type DesignSystemToken,
+	type TokenDeletionPreview,
+	useDesignSystem,
+} from "./tokens/use-design-system.js";
 export { useResolvedNodeStyle } from "./use-resolved-node-style.js";
 export {
 	type StudioEditorHandle,

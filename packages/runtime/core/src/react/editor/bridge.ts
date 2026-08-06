@@ -32,7 +32,6 @@ import type {
 } from "@anvilkit/contracts/editor";
 import type { Data as PuckData } from "@puckeditor/core";
 import type { EditorCapabilityRegistry } from "../../types/editor-api.js";
-import type { AuthoringStyleLookup } from "./authoring-style-context.js";
 import type { CanvasDomRegistry } from "./canvas/dom-registry.js";
 import {
 	createEditorDiagnosticCenter,
@@ -121,11 +120,6 @@ export interface StudioEditorBridge {
 	selection: EditorSelectionController | null;
 	/** The live capability registry (CORE-P1A-003); `null` until mounted. */
 	capabilities: EditorCapabilityRegistry | null;
-	/**
-	 * Resolved-style lookup backing `AuthoringStyleContext`; `null`
-	 * until the editor style pipeline (CORE-P1A-009) installs it.
-	 */
-	styleLookup: AuthoringStyleLookup | null;
 	/** Impl-installed handler behind {@link notifyDataChange}. */
 	onDataChange: ((data: PuckData) => void) | null;
 	/**
@@ -243,7 +237,6 @@ export function createStudioEditorBridge(): StudioEditorBridge {
 		port: null,
 		selection: null,
 		capabilities: null,
-		styleLookup: null,
 		onDataChange: null,
 		onPuckSelectedChange: null,
 		collabCapabilities: [],

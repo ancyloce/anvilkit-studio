@@ -4,6 +4,13 @@
  * @file Authoring stylesheet emission (PLAN-0020 CORE-P1A-009;
  * ED-RESP-004/005; DD-0019 §12.4, §11.4).
  *
+ * @deprecated PLAN-0025 P4-07 — the LEGACY live resolver. It serves
+ * only v1 sidecar documents; v2 documents style the canvas through
+ * the unified compiler (`compileDocumentAppearance`) via
+ * `CompiledAppearanceMount`/`PuckIframeAppearanceBridge`. Scheduled
+ * for deletion with the sidecar runtime after the Phase 5 migration
+ * (plan §11.3); add no new call sites.
+ *
  * One scoped stylesheet per iframe over `[data-ak-node]` selectors,
  * built exclusively through the shared serializer
  * (`resolveAuthoringStyle` — never raw CSS text, never

@@ -558,3 +558,105 @@ describe("createEditorCommandPort — validate/preview/snapshot (§10.2)", () =>
 		expect(result.errors[0]?.details?.reason).toBe("port-not-ready");
 	});
 });
+
+describe("createEditorCommandPort — v2 documents (P6-00, §11.2)", () => {
+	const v2Config = {
+		components: {
+			Box: {
+				fields: {},
+				metadata: {
+					anvilkit: {
+						editor: {
+							version: "2",
+							styleTargets: {
+								root: { label: "Box", properties: ["display", "opacity"] },
+							},
+						},
+					},
+				},
+				render: () => null,
+			},
+		},
+	};
+
+	const v2Data = () =>
+		({
+			content: [{ type: "Box", props: { id: "box-1", label: "a" } }],
+			root: { props: { authoringSchemaVersion: 2 } },
+			zones: {},
+		}) as unknown as PuckData;
+
+	/** Minimal fake exposing `config` and applying functional setData. */
+	function createV2Port() {
+		let data = v2Data();
+		const actions: string[] = [];
+		const api = {
+			get appState() {
+				return { data };
+			},
+			config: v2Config,
+			dispatch: (action: {
+				type: string;
+				data?: PuckData | ((previous: PuckData) => PuckData);
+			}) => {
+				actions.push(action.type);
+				if (action.type !== "setData") return;
+				data =
+					typeof action.data === "function"
+						? action.data(data)
+						: (action.data as PuckData);
+			},
+		};
+		const port = createEditorCommandPort({
+			getPuckApi: () => api as unknown as PuckApi,
+			getData: () => data,
+			editor: { features: { enabled: true } },
+		});
+		return { port, actions, getData: () => data };
+	}
+
+	it("execute() applies style commands to §5.1 carriers and never mints a sidecar", async () => {
+		const { port, actions, getData } = createV2Port();
+		const result = await port.execute({
+			type: "node.style.set",
+			nodeIds: ["box-1"],
+			breakpointId: "base",
+			patch: { opacity: 0.5 },
+		} as unknown as EditorCommand);
+		expect(result.status).toBe("committed");
+		expect(actions).toEqual(["setData"]);
+		const text = JSON.stringify(getData());
+		expect(text.includes("__anvilkit")).toBe(false);
+		expect(text.includes('"opacity":0.5')).toBe(true);
+	});
+
+	it("execute() rejects commands with no v2 equivalent instead of minting", async () => {
+		const { port, getData } = createV2Port();
+		const result = await port.execute({
+			type: "node.lock.set",
+			nodeIds: ["box-1"],
+			locked: true,
+		} as unknown as EditorCommand);
+		expect(result.status).toBe("rejected");
+		expect(result.errors[0]?.code).toBe("EDITOR_CAPABILITY_UNSUPPORTED");
+		expect(JSON.stringify(getData()).includes("__anvilkit")).toBe(false);
+	});
+
+	it("commitNative dispatches the built tree and never mints a sidecar", () => {
+		const { port, getData } = createV2Port();
+		const outcome = port.commitNative((data) => ({
+			data: {
+				...data,
+				content: [
+					...(data as { content: unknown[] }).content,
+					{ type: "Box", props: { id: "box-2", label: "b" } },
+				],
+			} as PuckData,
+			authoring: createEmptyAuthoringState(),
+		}));
+		expect(outcome).toBe("committed");
+		const text = JSON.stringify(getData());
+		expect(text.includes('"box-2"')).toBe(true);
+		expect(text.includes("__anvilkit")).toBe(false);
+	});
+});

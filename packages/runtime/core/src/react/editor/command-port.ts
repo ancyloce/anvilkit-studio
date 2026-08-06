@@ -13,13 +13,9 @@
  * per intent, so every commit is one undoable Puck history entry
  * (single-intent rule, §10.5).
  *
- * It is `replaceRoot` and not `setData` because `writeAuthoringState`
- * only ever rewrites `root.props` — the sidecar — and never `content`
- * or `zones`. Dispatching the whole document was therefore strictly
- * wider than the write it performed, and it tripped Puck 0.22's
- * "`setData` is expensive and may cause unnecessary re-renders"
- * console warning on every single commit. `commitNative` keeps
- * `setData`: that path really does replace the tree.
+ * P6-01: the sidecar write path is gone — v2 commands translate
+ * through the command bridge into ONE functional `setData`, and
+ * legacy sidecar documents reject every write.
  *
  * ### Parsed-state cache (the ~119 ms rule)
  *
@@ -53,7 +49,11 @@ import type {
 	StudioEditorConfig,
 } from "@anvilkit/contracts/editor";
 import { ANVILKIT_AUTHORING_KEY } from "@anvilkit/contracts/editor";
-import type { PuckApi, Data as PuckData } from "@puckeditor/core";
+import type {
+	PuckApi,
+	Config as PuckConfigType,
+	Data as PuckData,
+} from "@puckeditor/core";
 import {
 	type AuthoringReadResult,
 	applyEditorCommand,
@@ -63,6 +63,7 @@ import {
 	validateEditorCommand,
 	writeAuthoringState,
 } from "../../editor/index.js";
+import { applyV2Plan, planV2Command } from "../../puck/command-bridge.js";
 import { scopeGuardError } from "./components/scope.js";
 import { effectiveBreakpoints } from "./responsive/preset.js";
 
@@ -339,6 +340,78 @@ export function createEditorCommandPort(
 				return result;
 			}
 
+			// P6-00 (PLAN-0025 §11.2): a v2 document NEVER touches the
+			// sidecar engine. The bridge translates the command vocabulary
+			// onto the §5.1/§5.2 carriers and this port performs the same
+			// single history-recording dispatch (§10.5). Commands with no
+			// v2 equivalent reject with a typed capability error instead
+			// of minting a sidecar into a v2 document.
+			const rootProps = (data.root?.props ?? {}) as Record<string, unknown>;
+			if (
+				rootProps[ANVILKIT_AUTHORING_KEY] === undefined &&
+				rootProps.authoringSchemaVersion === 2
+			) {
+				const config = (api as unknown as { config?: PuckConfigType }).config;
+				if (config === undefined) {
+					const result = rejected(read.state.revision, [
+						makeEditorError(
+							"EDITOR_COMMAND_CONFLICT",
+							"the Puck store exposes no config; the v2 command bridge cannot apply",
+						),
+					]);
+					deps.onRejected?.(command, result);
+					return result;
+				}
+				const plan = planV2Command(command);
+				if (plan.kind === "unsupported") {
+					const result = rejected(read.state.revision, [
+						makeEditorError("EDITOR_CAPABILITY_UNSUPPORTED", plan.reason),
+					]);
+					deps.onRejected?.(command, result);
+					return result;
+				}
+				const appliedV2 = applyV2Plan(plan, data, config);
+				if (appliedV2.errors.length > 0) {
+					const result = rejected(
+						read.state.revision,
+						appliedV2.errors.map((error) =>
+							"code" in error && "severity" in error
+								? (error as EditorError)
+								: makeEditorError("EDITOR_COMMAND_CONFLICT", error.message),
+						),
+					);
+					deps.onRejected?.(command, result);
+					return result;
+				}
+				if (!appliedV2.changed) {
+					return {
+						status: "noop",
+						revision: read.state.revision,
+						changedNodeIds: [],
+						errors: [],
+					};
+				}
+				api.dispatch({
+					type: "setData",
+					recordHistory: true,
+					data: (previous: PuckData) =>
+						previous === data
+							? appliedV2.data
+							: applyV2Plan(plan, previous, config).data,
+				} as unknown as Parameters<PuckApi["dispatch"]>[0]);
+				const result: EditorCommandResult = {
+					status: "committed",
+					revision: read.state.revision,
+					changedNodeIds: appliedV2.changedNodeIds,
+					errors: [],
+				};
+				deps.onCommitted?.(command, result, {
+					durationMs: performance.now() - startedAt,
+				});
+				deps.onStateChange?.();
+				return result;
+			}
+
 			const applied = applyEditorCommand(read.state, command);
 			if (applied.status === "rejected") {
 				const result = rejected(read.state.revision, applied.errors);
@@ -374,20 +447,9 @@ export function createEditorCommandPort(
 				migrated: false,
 			};
 			// `replaceRoot` spread-merges `root.props` and leaves `content`
-			// untouched, which is exactly the write `writeAuthoringState`
-			// made. It also copies the sidecar VALUE by reference, so the
-			// identity the parsed-state cache keys on survives the round
-			// trip and the echoed `onChange` still classifies as
-			// self-originated.
-			//
-			// Single documented boundary cast (insert-component-node
-			// precedent): the live generic config's data type cannot be
-			// expressed here, so the action is cast as a whole.
+			// untouched — exactly the write `writeAuthoringState` made.
 			api.dispatch({
 				type: "replaceRoot",
-				// `replaceRoot` records history by default; stated
-				// explicitly because this is the single history-recording
-				// dispatch for the whole intent (§10.5).
 				recordHistory: true,
 				root: nextData.root,
 			} as unknown as Parameters<PuckApi["dispatch"]>[0]);
@@ -425,8 +487,28 @@ export function createEditorCommandPort(
 			if (built === null) {
 				return "noop";
 			}
-			// Reconcile against the NEW tree so removed subtrees strip in
-			// the same commit (invariants 3–5 at the commit boundary).
+			// P6-00 (§11.2): a v2 document NEVER gains a sidecar. The native
+			// mutation's tree change dispatches as-is; the builder's
+			// authoring output (derived from the empty parsed state) is
+			// dropped — render state lives in the §5.1 carriers the tree
+			// already carries.
+			const nativeRootProps = (data.root?.props ?? {}) as Record<
+				string,
+				unknown
+			>;
+			if (
+				nativeRootProps[ANVILKIT_AUTHORING_KEY] === undefined &&
+				nativeRootProps.authoringSchemaVersion === 2
+			) {
+				api.dispatch({
+					type: "setData",
+					recordHistory: true,
+					data: built.data,
+				} as unknown as Parameters<PuckApi["dispatch"]>[0]);
+				deps.onStateChange?.();
+				return "committed";
+			}
+			// Legacy sidecar document: the pre-P6 reconcile-and-write path.
 			const reconciled = reconcileAuthoringState(built.authoring, built.data);
 			const nextAuthoring: AuthoringStateV1 = {
 				...reconciled.state,
