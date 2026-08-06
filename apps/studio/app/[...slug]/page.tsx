@@ -5,7 +5,7 @@
 // chunk's bare `.hidden` / `.flex`, collapsing the Navbar to its mobile menu on
 // desktop.
 import "@/lib/component-styles.css";
-import { Render } from "@puckeditor/core/rsc";
+import { AnvilKitRender } from "@anvilkit/core/react/render";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactElement } from "react";
@@ -40,7 +40,8 @@ export async function generateMetadata({
 /**
  * F6: deterministic published render. Looks the page up by slug, 404s when
  * absent, emits a JSON-LD `WebPage` block, then server-renders the Puck
- * document with `<Render>` (no editor JS).
+ * document with `<AnvilKitRender>` (PLAN-0025 §9.1 — no editor JS, one
+ * compiled appearance stylesheet shared with every rendering surface).
  */
 export default async function SlugPage({
 	params,
@@ -58,7 +59,7 @@ export default async function SlugPage({
 					__html: sanitizeJsonLdForScript(model.jsonLd),
 				}}
 			/>
-			<Render config={demoConfig} data={model.resolved} />
+			<AnvilKitRender config={demoConfig} data={model.resolved} />
 		</>
 	);
 }

@@ -3,10 +3,11 @@
 // Captures the catch-all `slug` segments, resolves the matching *published*
 // document from the durable page store (the same store the editor publishes to
 // and the public `app/[...slug]` route reads), and server-renders it with
-// `<Render>` from `@puckeditor/core/rsc` — zero editor JS. The render tree is
+// `<AnvilKitRender>` (PLAN-0025 §9.1) — zero editor JS, and the same unified
+// compiler stylesheet as every other rendering surface. The render tree is
 // wrapped in `<RenderNavigation>` so internal anchor clicks soft-navigate
 // between rendered pages instead of triggering a full reload.
-import { Render } from "@puckeditor/core/rsc";
+import { AnvilKitRender } from "@anvilkit/core/react/render";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactElement } from "react";
@@ -50,7 +51,7 @@ export default async function PuckSlugRenderPage({
 				}}
 			/>
 			<RenderNavigation>
-				<Render config={demoConfig} data={model.resolved} />
+				<AnvilKitRender config={demoConfig} data={model.resolved} />
 			</RenderNavigation>
 		</>
 	);

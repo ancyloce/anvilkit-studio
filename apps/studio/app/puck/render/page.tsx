@@ -1,13 +1,15 @@
-// The render path deliberately keeps `<Render>` from `@puckeditor/core/rsc`
-// instead of importing `<Studio>` from `@anvilkit/core`. Three reasons:
+// The render path deliberately uses `<AnvilKitRender>` from
+// `@anvilkit/core/react/render` (PLAN-0025 §9.1) instead of `<Studio>`
+// from `@anvilkit/core`. Three reasons:
 //
 //   1. `<Studio>` is the *editor* shell — it mounts `<Puck>`, runs the
 //      plugin compile + lifecycle pipeline, and is `"use client"`. The
 //      render route is a React Server Component and never needs any of
 //      that machinery.
-//   2. `@puckeditor/core/rsc` is the RSC-safe entry point for `Render`
-//      so page rendering stays on the server and ships zero editor
-//      JavaScript to the client.
+//   2. `<AnvilKitRender>` is RSC-safe: it wraps Puck's server `<Render>`
+//      and the unified appearance compiler, so page rendering stays on
+//      the server, ships zero editor JavaScript, and emits the same
+//      compiled stylesheet as the editor iframe, preview, and exports.
 //   3. Plugin lifecycle hooks (`onInit`, `onDataChange`, publish veto)
 //      have no meaning on the read path — there is no editing session
 //      to observe.
@@ -23,7 +25,7 @@
 //   - otherwise it falls back to the shared showcase payload (`?data=` or the
 //     default demo data) that backs the static "server render" links.
 // No masthead, notes, links, or JSON panel — just the page.
-import { Render } from "@puckeditor/core/rsc";
+import { AnvilKitRender } from "@anvilkit/core/react/render";
 import type { ReactElement } from "react";
 import { PublishedPageAnalytics } from "@/components/PublishedPageAnalytics";
 import { loadPublishedRender } from "@/lib/published-render";
@@ -69,7 +71,7 @@ export default async function PuckRenderPage({
 						slug={slug}
 						preview={preview}
 					/>
-					<Render config={demoConfig} data={model.resolved} />
+					<AnvilKitRender config={demoConfig} data={model.resolved} />
 				</RenderNavigation>
 			);
 		}
@@ -84,7 +86,7 @@ export default async function PuckRenderPage({
 	return (
 		<RenderNavigation>
 			<PublishedPageAnalytics slug={slug ?? ""} preview={preview} />
-			<Render config={demoConfig} data={renderData} />
+			<AnvilKitRender config={demoConfig} data={renderData} />
 		</RenderNavigation>
 	);
 }

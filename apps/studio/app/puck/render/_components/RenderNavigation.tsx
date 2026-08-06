@@ -3,8 +3,9 @@
 /**
  * @file Client-side navigation interceptor for rendered pages.
  *
- * The render path uses `<Render>` from `@puckeditor/core/rsc`, which emits
- * plain `<a href>` anchors (e.g. an `@anvilkit/button` configured with a path).
+ * The render path uses `<AnvilKitRender>` (Puck's server `<Render>` plus the
+ * compiled appearance stylesheet), which emits plain `<a href>` anchors (e.g.
+ * an `@anvilkit/button` configured with a path).
  * A bare anchor click triggers a full-document reload. This wrapper performs
  * event delegation over its subtree: a left-click on an internal anchor is
  * rewritten to the page's `/puck/render/<slug>` route and pushed through the

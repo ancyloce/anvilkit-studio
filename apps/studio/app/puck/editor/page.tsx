@@ -53,6 +53,7 @@ import {
 	loadExportHtml,
 	loadExportReact,
 } from "@/lib/lazy-plugins";
+import { guardDocumentForV2Editor } from "@/lib/migration/v2-guard";
 import { PREVIEW_SLOT_SLUG } from "@/lib/page-link";
 import { persistPage } from "@/lib/page-persistence";
 import { pageValidationPlugin } from "@/lib/page-validation-plugin";
@@ -316,99 +317,12 @@ export default function PuckEditorPage() {
 		[studioLocale],
 	);
 
-	// E2E capability metadata (CORE-P1B-012): with `?editor=1`, every
-	// demo component carries editor metadata so the inspector, handles,
-	// and a11y rules have targets to operate on.
-	//
-	// Component-declared metadata wins (REVIEW-0019 P1 adoption):
-	// packages that publish their own `metadata.editor` — currently
-	// `@anvilkit/section`, `@anvilkit/hero`, `@anvilkit/bento-grid`,
-	// all `styleTarget: "root"` — keep their declaration verbatim, so
-	// the root render-prop path runs against real components. The host
-	// adds only the two Phase 3 demo flags (interactions, bindings)
-	// the §32.4 E2E drives, and only where the package left them
-	// undeclared. Non-adopted components keep the legacy full
-	// "wrapper" injection until their packages adopt.
-	const e2eEditorConfig = useMemo(() => {
-		if (!visualEditorMode) {
-			return localizedEditorConfig;
-		}
-		// Structural mirror of core's `readEditorMetadata` acceptance
-		// (version "1" + a known styleTarget). Local on purpose: a static
-		// value import of `@anvilkit/core/editor` here would pull the
-		// whole React-free engine into this page's initial chunk — the
-		// engine import below (export preflight) is dynamic for the same
-		// reason. Core re-validates authoritatively at decorate time.
-		const declaredEditorMetadata = (
-			component: unknown,
-		): Record<string, unknown> | undefined => {
-			const editor = (
-				component as { metadata?: { editor?: unknown } } | undefined
-			)?.metadata?.editor;
-			if (typeof editor !== "object" || editor === null) {
-				return undefined;
-			}
-			const candidate = editor as { version?: unknown; styleTarget?: unknown };
-			return candidate.version === "1" &&
-				(candidate.styleTarget === "root" ||
-					candidate.styleTarget === "wrapper" ||
-					candidate.styleTarget === "none")
-				? (editor as Record<string, unknown>)
-				: undefined;
-		};
-		const components = Object.fromEntries(
-			Object.entries(
-				(localizedEditorConfig as { components?: Record<string, unknown> })
-					.components ?? {},
-			).map(([type, component]) => {
-				const declared = declaredEditorMetadata(component);
-				return [
-					type,
-					{
-						...(component as object),
-						metadata: {
-							...((component as { metadata?: object }).metadata ?? {}),
-							editor: declared
-								? {
-										...declared,
-										capabilities: {
-											// Demo-only Phase 3 surfaces; the package's own
-											// declaration wins on every key it sets.
-											interactions: true,
-											bindings: true,
-											...(declared.capabilities as object | undefined),
-										},
-									}
-								: {
-										// "wrapper" (not "root"): non-adopted packages do
-										// not consume the `editorDataAttributes` render
-										// props, so root-target stamping has nothing to
-										// spread them. The wrapper target is the §8 path
-										// where CORE owns the stamped element — consent is
-										// this host config declaration (OQ-001 semantics).
-										version: "1",
-										styleTarget: "wrapper",
-										capabilities: {
-											layoutItem: true,
-											layoutContainer: true,
-											visualStyle: true,
-											typography: true,
-											responsive: true,
-											// Phase 3 surfaces (CORE-P3-001/-006): the
-											// interactions and data sections are gated on
-											// these flags, so without them the §32.4 E2E
-											// has nothing to drive.
-											interactions: true,
-											bindings: true,
-										},
-									},
-						},
-					},
-				];
-			}),
-		);
-		return { ...(localizedEditorConfig as object), components } as never;
-	}, [localizedEditorConfig, visualEditorMode]);
+	// PLAN-0025 P3-F (§8.5/§11.3): the host injects NO capabilities.
+	// Every registered demo component now declares its own genuine
+	// metadata (v2 `metadata.anvilkit.editor` from the packages and the
+	// demo-local Image; three packages also keep their own v1 blocks
+	// until cutover). Components without a declaration honestly show
+	// the editor's empty states — fabricating support is prohibited.
 
 	const handleStudioLocaleChange = useCallback((locale: string) => {
 		handleLocaleChange(locale);
@@ -582,7 +496,26 @@ export default function PuckEditorPage() {
 			// incoming one (falling back to the default showcase for pages
 			// created at runtime). The functional updater reads the latest
 			// `publishedData` without re-subscribing on every edit.
-			setPublishedData(pageDataMap[next] ?? createDemoData());
+			//
+			// P5-06 (§10.4): every document entering the v2 editor passes
+			// the guard — the in-memory seeds are v2-native (pass-through),
+			// but any future store-fed or imported document is migrated on
+			// read or refused here, never opened in sidecar form.
+			const incoming = pageDataMap[next] ?? createDemoData();
+			const guarded = guardDocumentForV2Editor(
+				incoming as unknown as Data,
+				editorDemoConfig as unknown as Config,
+			);
+			if (guarded.kind === "blocked") {
+				console.error(
+					"[demo] page blocked from the v2 editor — legacy document failed migration",
+					guarded.diagnostics,
+				);
+				return;
+			}
+			setPublishedData(
+				guarded.data as unknown as Data<DemoComponents, PageRootProps>,
+			);
 			activePageIdRef.current = next;
 			setActivePageId(next);
 		};
@@ -1007,6 +940,10 @@ export default function PuckEditorPage() {
 			const result = await runExport({
 				format: htmlFormat,
 				data: publishedData as unknown as Data,
+				// P4-05 (§9.3): the runner compiles the exported document with
+				// the SAME config `toIR` is bound to and hands formats the
+				// artifact — exporters never re-derive appearance CSS.
+				config: editorDemoConfig as unknown as Config,
 				toIR: () => buildExportIR(),
 				options: { title: "Exported Page" },
 				preflight: await exportPreflight(htmlFormat.editorCapabilities),
@@ -1033,6 +970,10 @@ export default function PuckEditorPage() {
 			const result = await runExport({
 				format: reactFormat,
 				data: publishedData as unknown as Data,
+				// P4-05 (§9.3): the runner compiles the exported document with
+				// the SAME config `toIR` is bound to and hands formats the
+				// artifact — exporters never re-derive appearance CSS.
+				config: editorDemoConfig as unknown as Config,
 				toIR: () => buildExportIR(),
 				options: { syntax: "tsx" },
 				preflight: await exportPreflight(reactFormat.editorCapabilities),
@@ -1065,6 +1006,9 @@ export default function PuckEditorPage() {
 				const result = await runExport({
 					format: htmlFormat,
 					data: publishedData as unknown as Data,
+					// P4-05 (§9.3): same config as `toIR`; formats consume the
+					// runner-compiled appearance artifact.
+					config: editorDemoConfig as unknown as Config,
 					toIR: () => buildExportIR(),
 					options: { title: "Exported Page" },
 					preflight: await exportPreflight(htmlFormat.editorCapabilities),
@@ -1097,6 +1041,9 @@ export default function PuckEditorPage() {
 				const result = await runExport({
 					format: reactFormat,
 					data: publishedData as unknown as Data,
+					// P4-05 (§9.3): same config as `toIR`; formats consume the
+					// runner-compiled appearance artifact.
+					config: editorDemoConfig as unknown as Config,
 					toIR: () => buildExportIR(),
 					options: { syntax: "tsx" },
 					preflight: await exportPreflight(reactFormat.editorCapabilities),
@@ -1198,7 +1145,7 @@ export default function PuckEditorPage() {
 					// read post-mount from the URL, so the flag joins the key.
 					key={visualEditorMode ? `${activePageId}::editor` : activePageId}
 					storeId="demo-editor"
-					puckConfig={e2eEditorConfig as unknown as Config}
+					puckConfig={localizedEditorConfig as unknown as Config}
 					data={publishedData}
 					plugins={plugins}
 					loading={<StudioLoadingScreen />}
