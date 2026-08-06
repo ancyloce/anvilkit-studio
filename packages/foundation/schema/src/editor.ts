@@ -15,6 +15,19 @@
  */
 
 export {
+	AnvilAppearanceSchema,
+	AuthorableStylePropertySchema,
+	AuthorStyleSchema,
+	ComponentMetadataV2Schema,
+	canonicalizeAppearance,
+	DesignSystemSchema,
+	DocumentComponentLibrarySchema,
+	StyleTargetCapabilityV2Schema,
+	safeParseAppearance,
+	safeParseDesignSystem,
+	TargetAppearanceSchema,
+} from "./editor/appearance.js";
+export {
 	AuthoringStateSchema,
 	createEmptyAuthoringState,
 	safeParseAuthoringState,

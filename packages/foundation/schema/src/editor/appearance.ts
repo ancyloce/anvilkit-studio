@@ -1,0 +1,172 @@
+/**
+ * @file PLAN-0025 P1-01 — v2 appearance/design-system/metadata
+ * validation and canonicalization.
+ *
+ * Composes the existing family schemas (specs, responsive values,
+ * tokens, style definitions, component definitions) into the v2
+ * carriers. Loose objects throughout, matching the repo's
+ * hostile-peer + forward-compat convention.
+ *
+ * Canonicalization: an appearance with no effective content collapses
+ * to `undefined` (plan §5.1) so empty shells are never persisted on
+ * nodes.
+ */
+
+import type {
+	AnvilAppearanceV1,
+	AnvilComponentMetadataV2,
+	AuthorableStyleProperty,
+	AuthorStyleV1,
+	DesignSystemV1,
+	DocumentComponentLibraryV1,
+	TargetAppearanceV1,
+} from "@anvilkit/contracts/editor";
+import { z } from "zod";
+import { ComponentDefinitionCollectionSchema } from "./components.js";
+import { LayoutSpecSchema } from "./layout.js";
+import { IdSchema, responsiveValueSchema } from "./primitives.js";
+import { BreakpointSetSchema } from "./responsive.js";
+import { VisualStyleSpecSchema } from "./style.js";
+import { StyleDefinitionCollectionSchema } from "./style-definitions.js";
+import { TokenCollectionSchema, TokenModeSchema } from "./tokens.js";
+import { TypographySpecSchema } from "./typography.js";
+
+export const AuthorStyleSchema: z.ZodType<AuthorStyleV1> = z.looseObject({
+	layout: LayoutSpecSchema.optional(),
+	visual: VisualStyleSpecSchema.optional(),
+	typography: TypographySpecSchema.optional(),
+});
+
+export const TargetAppearanceSchema: z.ZodType<TargetAppearanceV1> =
+	z.looseObject({
+		styleRefs: responsiveValueSchema(z.array(IdSchema)).optional(),
+		style: responsiveValueSchema(AuthorStyleSchema).optional(),
+		hidden: responsiveValueSchema(z.boolean()).optional(),
+	});
+
+export const AnvilAppearanceSchema: z.ZodType<AnvilAppearanceV1> =
+	z.looseObject({
+		version: z.literal("1"),
+		targets: z.record(IdSchema, TargetAppearanceSchema).optional(),
+	});
+
+export const DesignSystemSchema: z.ZodType<DesignSystemV1> = z.looseObject({
+	version: z.literal("1"),
+	breakpoints: BreakpointSetSchema,
+	tokens: TokenCollectionSchema,
+	tokenModes: z.record(IdSchema, TokenModeSchema),
+	defaultTokenMode: IdSchema,
+	styleDefinitions: StyleDefinitionCollectionSchema,
+});
+
+export const DocumentComponentLibrarySchema: z.ZodType<DocumentComponentLibraryV1> =
+	z.looseObject({
+		version: z.literal("1"),
+		definitions: ComponentDefinitionCollectionSchema,
+	});
+
+/** Mirrors `AuthorableStyleProperty` — extending it is a gated schema change. */
+export const AuthorableStylePropertySchema: z.ZodType<AuthorableStyleProperty> =
+	z.enum([
+		"display",
+		"position",
+		"width",
+		"minWidth",
+		"maxWidth",
+		"height",
+		"margin",
+		"padding",
+		"gap",
+		"alignItems",
+		"justifyContent",
+		"background",
+		"border",
+		"borderRadius",
+		"boxShadow",
+		"opacity",
+		"color",
+		"fontFamily",
+		"fontSize",
+		"fontWeight",
+		"lineHeight",
+		"letterSpacing",
+		"textAlign",
+	]);
+
+export const StyleTargetCapabilityV2Schema = z.looseObject({
+	label: z.string().min(1),
+	properties: z.array(AuthorableStylePropertySchema),
+	responsive: z.boolean().optional(),
+});
+
+const InlineTextTargetSchema = z.looseObject({
+	id: IdSchema,
+	propPath: z.string().min(1),
+	format: z.enum(["plain", "tiptap"]),
+});
+
+const ImageTargetSchema = z.looseObject({
+	id: IdSchema,
+	srcPropPath: z.string().min(1),
+	altPropPath: z.string().min(1).optional(),
+	cropPropPath: z.string().min(1).optional(),
+});
+
+const SlotCapabilitySchema = z.looseObject({
+	allowedTypes: z.array(z.string().min(1)).optional(),
+	reorder: z.boolean().optional(),
+	layoutContainer: z.boolean().optional(),
+});
+
+export const ComponentMetadataV2Schema: z.ZodType<AnvilComponentMetadataV2> =
+	z.looseObject({
+		version: z.literal("2"),
+		styleTargets: z.record(IdSchema, StyleTargetCapabilityV2Schema),
+		inlineText: z.array(InlineTextTargetSchema).optional(),
+		images: z.array(ImageTargetSchema).optional(),
+		slots: z.record(IdSchema, SlotCapabilitySchema).optional(),
+		interactions: z.boolean().optional(),
+		bindings: z.boolean().optional(),
+	});
+
+function responsiveHasContent(value: {
+	readonly base?: unknown;
+	readonly overrides?: Readonly<Record<string, unknown>>;
+}): boolean {
+	if (value.base !== undefined) return true;
+	return Object.keys(value.overrides ?? {}).length > 0;
+}
+
+function targetHasContent(target: TargetAppearanceV1): boolean {
+	if (target.styleRefs !== undefined && responsiveHasContent(target.styleRefs))
+		return true;
+	if (target.style !== undefined && responsiveHasContent(target.style))
+		return true;
+	if (target.hidden !== undefined && responsiveHasContent(target.hidden))
+		return true;
+	return false;
+}
+
+/**
+ * Canonicalize an appearance: drop content-free targets, and collapse
+ * a content-free appearance to `undefined`. Never mutates its input.
+ */
+export function canonicalizeAppearance(
+	appearance: AnvilAppearanceV1 | undefined,
+): AnvilAppearanceV1 | undefined {
+	if (appearance === undefined) return undefined;
+	const kept: Record<string, TargetAppearanceV1> = {};
+	for (const [id, target] of Object.entries(appearance.targets ?? {})) {
+		if (targetHasContent(target)) kept[id] = target;
+	}
+	if (Object.keys(kept).length === 0) return undefined;
+	return { version: "1", targets: kept };
+}
+
+export function safeParseAppearance(value: unknown) {
+	return AnvilAppearanceSchema.safeParse(value);
+}
+
+export function safeParseDesignSystem(value: unknown) {
+	return DesignSystemSchema.safeParse(value);
+}
