@@ -8,7 +8,7 @@
  * cleared). No DOM — that is the `download.ts` concern.
  */
 
-import type { Data as PuckData } from "@puckeditor/core";
+import type { Config as PuckConfig, Data as PuckData } from "@puckeditor/core";
 import { describe, expect, it, vi } from "vitest";
 
 import { runExport } from "@/export/run-export";
@@ -16,6 +16,8 @@ import { StudioExportError } from "@/runtime/errors";
 import type { ExportStoreApi } from "@/state/index";
 import type { ExportFormatDefinition, ExportResult } from "@/types/export";
 import type { PageIR } from "@/types/ir";
+import type { CompiledAppearance } from "../../style-compiler/compile.js";
+import { compileDocumentAppearance } from "../../style-compiler/compile.js";
 
 const DATA = { root: { props: {} }, content: [], zones: {} } as PuckData;
 const IR = { version: "1", root: { type: "__root__" } } as unknown as PageIR;
@@ -221,5 +223,113 @@ describe("runExport — error wrapping", () => {
 
 		expect(error).toBeInstanceOf(StudioExportError);
 		expect(run).not.toHaveBeenCalled();
+	});
+});
+
+describe("runExport — compiled appearance (P4-05, §9.3)", () => {
+	const v2Config = {
+		components: {
+			Hero: {
+				fields: {},
+				metadata: {
+					anvilkit: {
+						editor: {
+							version: "2",
+							styleTargets: {
+								root: { label: "Hero", properties: ["display"] },
+							},
+						},
+					},
+				},
+				render: () => null,
+			},
+		},
+	} as unknown as PuckConfig;
+
+	const v2Data = {
+		content: [
+			{
+				type: "Hero",
+				props: {
+					id: "hero-1",
+					appearance: {
+						version: "1",
+						targets: {
+							root: { style: { base: { layout: { display: "flex" } } } },
+						},
+					},
+				},
+			},
+		],
+		root: { props: {} },
+		zones: {},
+	} as unknown as PuckData;
+
+	it("compiles the exported document and hands formats the artifact on the run context", async () => {
+		const run = vi.fn<ExportFormatDefinition["run"]>(async () => ({
+			content: "x",
+			filename: "p",
+		}));
+		await runExport({
+			format: makeFormat(run),
+			data: v2Data,
+			config: v2Config,
+			toIR: () => IR,
+		});
+		const runCtx = run.mock.calls[0]?.[2] as
+			| { compiledAppearance?: CompiledAppearance }
+			| undefined;
+		const direct = compileDocumentAppearance({
+			data: v2Data,
+			config: v2Config,
+		});
+		expect(runCtx?.compiledAppearance?.css).toBe(direct.css);
+		expect(runCtx?.compiledAppearance?.fingerprint).toBe(direct.fingerprint);
+	});
+
+	it("fans compiler diagnostics out through onWarning (§9.2 step 6)", async () => {
+		const bogusTargetData = {
+			content: [
+				{
+					type: "Hero",
+					props: {
+						id: "hero-1",
+						appearance: {
+							version: "1",
+							targets: {
+								bogus: { style: { base: { layout: { display: "flex" } } } },
+							},
+						},
+					},
+				},
+			],
+			root: { props: {} },
+			zones: {},
+		} as unknown as PuckData;
+		const warnings: string[] = [];
+		await runExport({
+			format: makeFormat(async () => ({ content: "x", filename: "p" })),
+			data: bogusTargetData,
+			config: v2Config,
+			toIR: () => IR,
+			onWarning: (warning) => {
+				warnings.push(warning.code);
+			},
+		});
+		const direct = compileDocumentAppearance({
+			data: bogusTargetData,
+			config: v2Config,
+		});
+		expect(direct.diagnostics.length).toBeGreaterThan(0);
+		expect(warnings.length).toBeGreaterThanOrEqual(direct.diagnostics.length);
+	});
+
+	it("passes no artifact when no config is supplied", async () => {
+		const run = vi.fn<ExportFormatDefinition["run"]>(async () => ({
+			content: "x",
+			filename: "p",
+		}));
+		await runExport({ format: makeFormat(run), data: v2Data, toIR: () => IR });
+		expect(run.mock.calls[0]?.[2]).toBeUndefined();
 	});
 });

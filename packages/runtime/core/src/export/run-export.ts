@@ -24,12 +24,7 @@
  * {@link exportAndDownload} in the browser.
  */
 
-import type { Data as PuckData } from "@puckeditor/core";
-
-import type {
-	ExportPreflightResult,
-	ExportValidationEvent,
-} from "../editor/export-preflight.js";
+import type { Config as PuckConfig, Data as PuckData } from "@puckeditor/core";
 import { StudioExportError } from "@/runtime/errors";
 import type { ExportStoreApi } from "@/state/index";
 import type { IRAssetResolver } from "@/types/asset-resolver";
@@ -40,6 +35,11 @@ import type {
 	ExportWarning,
 } from "@/types/export";
 import type { PageIR } from "@/types/ir";
+import type {
+	ExportPreflightResult,
+	ExportValidationEvent,
+} from "../editor/export-preflight.js";
+import { compileDocumentAppearance } from "../style-compiler/compile.js";
 
 /** Options for {@link runExport}. */
 export interface RunExportOptions<
@@ -52,6 +52,17 @@ export interface RunExportOptions<
 	readonly format: ExportFormatDefinition<Opts>;
 	/** The Puck page data to export. Normalized to IR via {@link toIR}. */
 	readonly data: PuckData;
+	/**
+	 * The Puck `Config` for {@link data} (PLAN-0025 §9.3, P4-05). When
+	 * provided, the runner compiles the EXACT exported document through
+	 * the unified appearance compiler and hands formats the result via
+	 * the run context's `compiledAppearance` — so an exporter never
+	 * re-derives appearance CSS with a second algorithm. Compiler
+	 * diagnostics fan out through {@link onWarning} (§9.2 step 6).
+	 */
+	readonly config?: PuckConfig;
+	/** Token mode for the appearance compile; design-system default when omitted. */
+	readonly tokenMode?: string;
 	/**
 	 * Normalizes Puck `Data` to a {@link PageIR}. Inject
 	 * `@anvilkit/ir`'s `puckDataToIR` here (bound to the host's
@@ -158,19 +169,40 @@ export async function runExport<
 		throw new StudioExportError(
 			format.id,
 			`Export blocked: format "${format.id}" does not support ${
-				features.length > 0 ? features.join(", ") : "features used by this document"
+				features.length > 0
+					? features.join(", ")
+					: "features used by this document"
 			}`,
 			{ cause: options.preflight },
 		);
 	}
 	store?.setIsExporting(true);
 	let result: ExportResult;
+	// §9.3: compile the exact document being exported — same Data the
+	// IR is normalized from, so stylesheet and markup can never derive
+	// from different documents. Total (never throws); diagnostics fan
+	// out below with the format's own warnings.
+	const compiledAppearance =
+		options.config !== undefined
+			? compileDocumentAppearance({
+					data,
+					config: options.config,
+					tokenMode: options.tokenMode,
+				})
+			: undefined;
 	try {
 		const ir = await toIR(data);
+		const runContext =
+			assetResolvers !== undefined || compiledAppearance !== undefined
+				? {
+						...(assetResolvers !== undefined ? { assetResolvers } : {}),
+						...(compiledAppearance !== undefined ? { compiledAppearance } : {}),
+					}
+				: undefined;
 		result = await format.run(
 			ir,
 			(options.options ?? {}) as ExportOptions<Opts>,
-			assetResolvers !== undefined ? { assetResolvers } : undefined,
+			runContext,
 		);
 		store?.recordExport(format.id, true);
 	} catch (error) {
@@ -204,6 +236,15 @@ export async function runExport<
 				level: "warn",
 				code: error.code,
 				message: error.message,
+			});
+		}
+		// §9.2 step 6: appearance-compiler diagnostics may not be
+		// silently discarded — they ride the same warning channel.
+		for (const diagnostic of compiledAppearance?.diagnostics ?? []) {
+			onWarning({
+				level: diagnostic.severity === "error" ? "error" : "warn",
+				code: diagnostic.code,
+				message: diagnostic.message,
 			});
 		}
 		for (const warning of result.warnings ?? []) {
