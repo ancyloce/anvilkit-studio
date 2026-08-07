@@ -68,7 +68,7 @@ export interface TiptapBlockNode {
  * the `RichTextField` field type and canvas inline editing — one
  * schema and sanitizer for both surfaces so they cannot drift.
  */
-export interface TiptapDocumentV1 {
+export interface TiptapDocument {
 	readonly version: "1";
 	readonly type: "doc";
 	readonly content: readonly TiptapBlockNode[];
@@ -77,7 +77,7 @@ export interface TiptapDocumentV1 {
 /** An inline-editable text value (DD-0019 §17, verbatim). */
 export type InlineTextValue =
 	| { readonly format: "plain"; readonly value: string }
-	| { readonly format: "tiptap"; readonly value: TiptapDocumentV1 };
+	| { readonly format: "tiptap"; readonly value: TiptapDocument };
 
 /**
  * Image adjustment state (DD-0019 §17, verbatim). Crop uses

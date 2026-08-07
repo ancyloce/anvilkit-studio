@@ -36,22 +36,17 @@
  */
 
 export type {
-	AnvilAppearanceV1,
+	AnvilAppearance,
 	AnvilNodeFeatureProps,
 	AuthorableProps,
-	AuthorStyleV1,
+	AuthorStyle,
 	StyleTargetId,
-	TargetAppearanceV1,
+	TargetAppearance,
 } from "./appearance.js";
-export {
-	ANVILKIT_AUTHORING_KEY,
-	type AnvilKitRootProps,
-	type AuthoringStateV1,
-} from "./authoring-state.js";
 export type {
 	BindingId,
 	BindingTarget,
-	BindingV1,
+	Binding,
 	DataSchema,
 	DataSourceDescriptor,
 	EditorDataSourceAdapter,
@@ -60,62 +55,19 @@ export type {
 	SafeExpression,
 } from "./bindings.js";
 export type {
-	EditorCapabilityMetadata,
 	ImageTarget,
 	InlineTextTarget,
 	SlotCapability,
 } from "./capability-metadata.js";
 export type { StudioPluginCollabCapability } from "./collab.js";
 export type {
-	AtomicEditorCommand,
-	AttachStyleDefinitionCommand,
-	BatchEditorCommand,
-	CreateComponentDefinitionCommand,
-	CreateInteractionCommand,
-	CreateStyleDefinitionCommand,
-	CreateTokenCommand,
-	DeleteComponentDefinitionCommand,
-	DeleteInteractionCommand,
-	DeleteStyleDefinitionCommand,
-	DeleteTokenCommand,
-	DetachAllComponentInstancesCommand,
-	DetachComponentInstanceCommand,
-	DetachStyleDefinitionCommand,
-	EditorCommand,
-	EditorCommandBase,
-	EditorCommandPort,
-	EditorCommandResult,
-	EditorCommandSnapshot,
-	EditorPreviewResult,
-	EditorSelectionState,
-	PromoteComponentOverrideCommand,
-	RenameNodeCommand,
-	ResetAllComponentOverridesCommand,
-	ResetComponentOverrideCommand,
-	SetBreakpointsCommand,
-	SetComponentNodeOverrideCommand,
-	SetComponentPropOverrideCommand,
-	SetInstanceVariantCommand,
-	SetNodeLayoutCommand,
-	SetNodeLockCommand,
-	SetNodeStyleCommand,
-	SetNodeTypographyCommand,
-	SetNodeVisibilityCommand,
-	SetResponsiveOverrideCommand,
-	UpdateBindingCommand,
-	UpdateComponentDefinitionCommand,
-	UpdateInteractionCommand,
-	UpdateStyleDefinitionCommand,
-	UpdateTokenCommand,
-} from "./commands.js";
-export type {
-	AnvilComponentMetadataV2,
+	AnvilComponentMetadata,
 	AuthorableStyleProperty,
-	StyleTargetCapabilityV2,
-} from "./component-metadata-v2.js";
+	StyleTargetCapability,
+} from "./component-metadata.js";
 export type {
 	ComponentDefinitionId,
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	ComponentInstanceState,
 	ComponentOverrideTarget,
 	ComponentPropDefinition,
@@ -126,9 +78,9 @@ export type {
 	VariantAxisOption,
 } from "./components.js";
 export type {
-	AnvilKitV2RootProps,
-	DesignSystemV1,
-	DocumentComponentLibraryV1,
+	AnvilRootProps,
+	DesignSystem,
+	DocumentComponentLibrary,
 } from "./design-system.js";
 export type { EditorError, EditorErrorCode } from "./errors.js";
 export type { EditorDiagnosticPort, EditorEvent } from "./events.js";
@@ -143,7 +95,7 @@ export type {
 	InteractionAction,
 	InteractionId,
 	InteractionTrigger,
-	InteractionV1,
+	Interaction,
 	MotionTransition,
 } from "./interactions.js";
 export {
@@ -157,7 +109,7 @@ export type {
 	InlineTextValue,
 	NodeAuthoringStateV1,
 	TiptapBlockNode,
-	TiptapDocumentV1,
+	TiptapDocument,
 } from "./node-state.js";
 export type {
 	ComponentDefinitionDeletePolicy,
@@ -184,7 +136,7 @@ export type {
 export type {
 	StyleDefinitionDeletionDisposition,
 	StyleDefinitionId,
-	StyleDefinitionV1,
+	StyleDefinition,
 } from "./style-definitions.js";
 export type {
 	DesignToken,
@@ -222,3 +174,4 @@ export type {
 	SizeValue,
 	TokenOrLiteral,
 } from "./values.js";
+export type { EditorSelectionState } from "./selection.js";

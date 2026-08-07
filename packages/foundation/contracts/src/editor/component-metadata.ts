@@ -47,10 +47,31 @@ export type AuthorableStyleProperty =
 	| "fontWeight"
 	| "lineHeight"
 	| "letterSpacing"
-	| "textAlign";
+	| "textAlign"
+	// Widened 23 -> 40 by `p1-004` (ED-FA-001, ADR 0007 decision 5): the
+	// authoring vocabulary now equals the spec vocabulary exactly, so
+	// every spec key is grantable and there is no "why is this one
+	// missing" question. The renderer already serialized all 40.
+	| "direction"
+	| "wrap"
+	| "rowGap"
+	| "columnGap"
+	| "columns"
+	| "rows"
+	| "minHeight"
+	| "maxHeight"
+	| "inset"
+	| "overflow"
+	| "zIndex"
+	| "filter"
+	| "blendMode"
+	| "cursor"
+	| "textDecoration"
+	| "textTransform"
+	| "textWrap";
 
 /** One named target's granted authoring surface. */
-export interface StyleTargetCapabilityV2 {
+export interface StyleTargetCapability {
 	readonly label: string;
 	readonly properties: readonly AuthorableStyleProperty[];
 	readonly responsive?: boolean;
@@ -61,9 +82,8 @@ export interface StyleTargetCapabilityV2 {
  * component's DATA contract: renaming a published target requires a
  * prop migration (plan §6.4).
  */
-export interface AnvilComponentMetadataV2 {
-	readonly version: "2";
-	readonly styleTargets: Readonly<Record<string, StyleTargetCapabilityV2>>;
+export interface AnvilComponentMetadata {
+	readonly styleTargets: Readonly<Record<string, StyleTargetCapability>>;
 	readonly inlineText?: readonly InlineTextTarget[];
 	readonly images?: readonly ImageTarget[];
 	readonly slots?: Readonly<Record<string, SlotCapability>>;

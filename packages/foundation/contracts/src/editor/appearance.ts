@@ -1,63 +1,65 @@
 /**
- * @file PLAN-0025 §5.1 — Puck-native node authoring props (v2).
+ * @file Puck-native node authoring props (PLAN-0026 §2).
  *
- * In the v2 model every render-affecting node value lives in that
- * node's own Puck component props, keyed by named style target —
- * replacing the v1 sidecar's node map. Reuses the existing spec,
- * responsive, interaction, and binding contracts verbatim; only the
- * carrier shape is new.
+ * Every render-affecting node value lives in that node's own Puck
+ * component props, keyed by named style target. There is one document
+ * form and it carries no version vocabulary: these interfaces have no
+ * `version` member, and the schema mirror does not require one.
+ * Documents written before the rename may still carry a stale
+ * `version` key — the schemas are `looseObject`, so it is preserved as
+ * an unknown key and read by nothing, until `p7-002` strips it from
+ * the store.
  *
  * Canonicalization rule (enforced by `@anvilkit/schema/editor`): an
  * appearance object with no effective content must canonicalize to
  * `undefined` — empty shells are never stored on nodes.
  */
 
-import type { BindingV1 } from "./bindings.js";
-import type { InteractionV1 } from "./interactions.js";
+import type { Binding } from "./bindings.js";
+import type { Interaction } from "./interactions.js";
 import type { ResponsiveValue } from "./responsive.js";
 import type { LayoutSpec, TypographySpec, VisualStyleSpec } from "./specs.js";
 import type { StyleDefinitionId } from "./style-definitions.js";
 
-/** A component-declared style target name (metadata v2 key). */
+/** A component-declared style target name. */
 export type StyleTargetId = string;
 
 /**
- * One layer of authored style for a target: the three existing spec
- * families under their v2 names (`visual` carries `VisualStyleSpec`).
+ * One layer of authored style for a target: the three spec families
+ * (`visual` carries `VisualStyleSpec`).
  */
-export interface AuthorStyleV1 {
+export interface AuthorStyle {
 	readonly layout?: LayoutSpec;
 	readonly visual?: VisualStyleSpec;
 	readonly typography?: TypographySpec;
 }
 
 /** Authored appearance for ONE declared target of a node. */
-export interface TargetAppearanceV1 {
+export interface TargetAppearance {
 	readonly styleRefs?: ResponsiveValue<readonly StyleDefinitionId[]>;
-	readonly style?: ResponsiveValue<AuthorStyleV1>;
+	readonly style?: ResponsiveValue<AuthorStyle>;
 	readonly hidden?: ResponsiveValue<boolean>;
 }
 
 /**
- * The versioned per-node appearance prop. `targets` keys must match
- * the component's declared `metadata.anvilkit.editor.styleTargets`;
+ * The per-node appearance prop. `targets` keys must match the
+ * component's declared `metadata.anvilkit.editor.styleTargets`;
  * unknown targets are compiler diagnostics, never silently styled.
  */
-export interface AnvilAppearanceV1 {
-	readonly version: "1";
-	readonly targets?: Readonly<Record<StyleTargetId, TargetAppearanceV1>>;
+export interface AnvilAppearance {
+	readonly targets?: Readonly<Record<StyleTargetId, TargetAppearance>>;
 }
 
 /**
- * The v2 authoring feature props a component may declare. Interaction
- * ownership is the trigger node; binding ownership is the bound node
- * (plan §5.1 ownership rules). Cross-node references use stable
- * component `props.id` values and are references, not containment.
+ * The authoring feature props a component may declare. Interaction
+ * ownership is the trigger node; binding ownership is the bound node.
+ * Cross-node references use stable component `props.id` values and are
+ * references, not containment.
  */
 export interface AnvilNodeFeatureProps {
-	readonly appearance?: AnvilAppearanceV1;
-	readonly interactions?: readonly InteractionV1[];
-	readonly bindings?: readonly BindingV1[];
+	readonly appearance?: AnvilAppearance;
+	readonly interactions?: readonly Interaction[];
+	readonly bindings?: readonly Binding[];
 }
 
 /** A component's business props widened with the authoring props. */

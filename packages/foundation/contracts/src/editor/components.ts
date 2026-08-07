@@ -84,7 +84,7 @@ export interface ComponentVariant {
 }
 
 /** A document-local component definition (DD-0019 §14.2, verbatim). */
-export interface ComponentDefinitionV1 {
+export interface ComponentDefinition {
 	readonly version: "1";
 	readonly id: ComponentDefinitionId;
 	readonly name: string;

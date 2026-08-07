@@ -1,11 +1,13 @@
 /**
- * @file Component capability contract (DD-0019 §8).
+ * @file Shared component-capability target types.
  *
- * Declared under the existing Puck component config at
- * `metadata.editor`. Explicit metadata always wins over the legacy
- * text/image drop heuristics. Absent metadata is equivalent to
- * `styleTarget: "none"` — native fields, slots, drawer behavior, and
- * preview remain unchanged (DD-DEC-015/-016).
+ * These three are declaration shapes referenced by the canonical
+ * component contract (`component-metadata.ts`) at
+ * `metadata.anvilkit.editor`. The v1 `EditorCapabilityMetadata`
+ * envelope that also lived here was deleted by `p1-005`; these
+ * survive because `AnvilComponentMetadata` uses them verbatim, and
+ * because `ED-FA-010` (slots) and `ED-FA-011` (image targets) build on
+ * them.
  */
 
 /** One declared inline-text editing target (DD-0019 §8, verbatim). */
@@ -36,23 +38,3 @@ export interface SlotCapability {
 	readonly layoutContainer?: boolean;
 }
 
-/**
- * The component capability metadata (DD-0019 §8, verbatim), declared
- * at `metadata.editor` on a Puck component config.
- */
-export interface EditorCapabilityMetadata {
-	readonly version: "1";
-	readonly styleTarget: "root" | "wrapper" | "none";
-	readonly capabilities: {
-		readonly layoutItem?: boolean;
-		readonly layoutContainer?: boolean;
-		readonly visualStyle?: boolean;
-		readonly typography?: boolean;
-		readonly responsive?: boolean;
-		readonly interactions?: boolean;
-		readonly bindings?: boolean;
-		readonly inlineText?: readonly InlineTextTarget[];
-		readonly imageAdjust?: readonly ImageTarget[];
-	};
-	readonly slotMap?: Readonly<Record<string, SlotCapability>>;
-}

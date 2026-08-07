@@ -26,7 +26,7 @@ export type StyleDefinitionDeletionDisposition =
 	| { readonly kind: "discard" };
 
 /** A reusable, document-local style definition (DD-0019 §9.4). */
-export interface StyleDefinitionV1 {
+export interface StyleDefinition {
 	readonly version: "1";
 	readonly id: StyleDefinitionId;
 	readonly name: string;

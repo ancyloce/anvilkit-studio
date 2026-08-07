@@ -55,7 +55,7 @@ export type BindingTarget =
 	  };
 
 /** A stored binding (DD-0019 §19, verbatim). */
-export interface BindingV1 {
+export interface Binding {
 	readonly version: "1";
 	readonly id: BindingId;
 	readonly nodeId: string;

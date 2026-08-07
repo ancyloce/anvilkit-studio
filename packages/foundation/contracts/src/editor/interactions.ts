@@ -101,7 +101,7 @@ export type InteractionAction =
 	  };
 
 /** A stored interaction (DD-0019 §16, verbatim). */
-export interface InteractionV1 {
+export interface Interaction {
 	readonly version: "1";
 	readonly id: InteractionId;
 	readonly name: string;
