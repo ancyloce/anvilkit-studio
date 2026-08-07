@@ -6,7 +6,7 @@
  */
 
 import type {
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	ComponentInstanceState,
 	SerializablePuckNode,
 } from "@anvilkit/contracts/editor";
@@ -21,8 +21,8 @@ import {
 const px = (value: number) => ({ kind: "unit", value, unit: "px" }) as const;
 
 function definition(
-	partial: Partial<ComponentDefinitionV1> & Pick<ComponentDefinitionV1, "id">,
-): ComponentDefinitionV1 {
+	partial: Partial<ComponentDefinition> & Pick<ComponentDefinition, "id">,
+): ComponentDefinition {
 	return {
 		version: "1",
 		name: partial.id,
@@ -34,7 +34,7 @@ function definition(
 		createdAt: "2026-01-01T00:00:00.000Z",
 		updatedAt: "2026-01-01T00:00:00.000Z",
 		...partial,
-	} as ComponentDefinitionV1;
+	} as ComponentDefinition;
 }
 
 function instance(
@@ -350,7 +350,7 @@ describe("cycles and depth (§24.4)", () => {
 	});
 
 	it("caps nesting depth at the frozen limit", () => {
-		const definitions: Record<string, ComponentDefinitionV1> = {};
+		const definitions: Record<string, ComponentDefinition> = {};
 		for (let index = 0; index < 14; index += 1) {
 			definitions[`d${index}`] = nesting(`d${index}`, `d${index + 1}`);
 		}

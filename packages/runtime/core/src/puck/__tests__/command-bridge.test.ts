@@ -5,7 +5,9 @@
  * equivalent surface `unsupported` instead of guessing.
  */
 
-import type { EditorCommand } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../../editor/legacy/index.js";
 import type { Config, Data } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import { applyV2Plan, planV2Command } from "../command-bridge.js";

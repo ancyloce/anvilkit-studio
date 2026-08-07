@@ -3,7 +3,9 @@
  * DD-0019 §21.2).
  */
 
-import type { EditorCommand } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	AI_PROPOSAL_LIMITS,

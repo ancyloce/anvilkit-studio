@@ -23,7 +23,7 @@
  * an editor with no adapter has nothing to offer.
  */
 
-import type { BindingTarget, BindingV1 } from "@anvilkit/contracts/editor";
+import type { BindingTarget, Binding } from "@anvilkit/contracts/editor";
 import { type ReactNode, useMemo, useState } from "react";
 import { Button } from "@/primitives/button";
 import { Input } from "@/primitives/input";
@@ -67,7 +67,7 @@ function buildTarget(
 }
 
 /** One-line summary of an existing binding. */
-function summarize(binding: BindingV1): string {
+function summarize(binding: Binding): string {
 	const target =
 		binding.target.type === "prop"
 			? `prop ${binding.target.path.join(".")}`

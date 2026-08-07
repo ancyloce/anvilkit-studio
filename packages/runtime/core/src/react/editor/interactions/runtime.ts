@@ -38,7 +38,7 @@
 
 import type {
 	InteractionAction,
-	InteractionV1,
+	Interaction,
 	MotionTransition,
 } from "@anvilkit/contracts/editor";
 import { animate } from "motion";
@@ -231,7 +231,7 @@ function runAction(
 }
 
 /** Run every action of an interaction, honouring its conditions. */
-function fire(interaction: InteractionV1, deps: InteractionRuntimeDeps): void {
+function fire(interaction: Interaction, deps: InteractionRuntimeDeps): void {
 	// A listener can fire between preview exit and teardown completing.
 	if (deps.session.disposed) return;
 	for (const condition of interaction.conditions ?? []) {
@@ -248,7 +248,7 @@ function fire(interaction: InteractionV1, deps: InteractionRuntimeDeps): void {
  * Bind one interaction's trigger. Returns nothing — every resource is
  * registered with the session, which is the only teardown path.
  */
-function bind(interaction: InteractionV1, deps: InteractionRuntimeDeps): void {
+function bind(interaction: Interaction, deps: InteractionRuntimeDeps): void {
 	const source = deps.getElement(interaction.sourceNodeId);
 	const trigger = interaction.trigger;
 
@@ -315,7 +315,7 @@ function bind(interaction: InteractionV1, deps: InteractionRuntimeDeps): void {
  * against nodes that are not there.
  */
 export function bindInteractions(
-	interactions: readonly InteractionV1[],
+	interactions: readonly Interaction[],
 	deps: InteractionRuntimeDeps,
 ): void {
 	if (deps.session.disposed) return;

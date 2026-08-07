@@ -26,21 +26,21 @@
  */
 
 import type {
-	AnvilAppearanceV1,
-	TargetAppearanceV1,
+	AnvilAppearance,
+	TargetAppearance,
 } from "@anvilkit/contracts/editor";
 import { safeParseAppearance } from "@anvilkit/schema/editor";
 import type { ReactNode } from "react";
 import { useMsg } from "@/state/editor-i18n-context";
 import {
 	type ResolvedStyleTarget,
-	readEditorMetadataV2,
+	readEditorMetadataFor,
 	resolveStyleTargets,
 } from "../../../puck/component-metadata.js";
 import { useReactivePuck } from "../../overrides/utils/use-reactive-puck.js";
 
 /** Tolerant read of a node's authored appearance prop. */
-function appearanceOf(props: unknown): AnvilAppearanceV1 | undefined {
+function appearanceOf(props: unknown): AnvilAppearance | undefined {
 	const value = (props as { appearance?: unknown } | undefined)?.appearance;
 	if (value === undefined) return undefined;
 	const parsed = safeParseAppearance(value);
@@ -48,7 +48,7 @@ function appearanceOf(props: unknown): AnvilAppearanceV1 | undefined {
 }
 
 /** Authored-state summary for one target (P2-03 grows this). */
-function summarize(target: TargetAppearanceV1 | undefined): {
+function summarize(target: TargetAppearance | undefined): {
 	readonly baseProperties: number;
 	readonly overrideLayers: number;
 	readonly styleRefs: number;
@@ -75,7 +75,7 @@ function TargetSection({
 	appearance,
 }: {
 	readonly target: ResolvedStyleTarget;
-	readonly appearance: AnvilAppearanceV1 | undefined;
+	readonly appearance: AnvilAppearance | undefined;
 }): ReactNode {
 	const authored = summarize(appearance?.targets?.[target.id]);
 	return (
@@ -126,7 +126,7 @@ export function StylePanel(): ReactNode {
 
 	const targets = resolveStyleTargets(config, selectedItem.type);
 	const declared =
-		readEditorMetadataV2(config, selectedItem.type) !== undefined &&
+		readEditorMetadataFor(config, selectedItem.type) !== undefined &&
 		targets.length > 0;
 	if (!declared) {
 		// §8.5: a component that has not declared editable appearance says

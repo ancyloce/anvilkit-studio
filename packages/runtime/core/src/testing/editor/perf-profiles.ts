@@ -20,12 +20,16 @@
  */
 
 import type {
-	AuthoringStateV1,
 	BreakpointDefinition,
-	EditorCapabilityMetadata,
+	AnvilComponentMetadata,
 	NodeAuthoringStateV1,
 } from "@anvilkit/contracts/editor";
-import { ANVILKIT_AUTHORING_KEY } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../editor/legacy/index.js";
+import {
+	ANVILKIT_AUTHORING_KEY,
+} from "../../editor/legacy/index.js";
 import type { Data } from "@puckeditor/core";
 import type { EditorCapabilityRegistry } from "../../types/editor-api.js";
 
@@ -132,46 +136,52 @@ function px(value: number) {
  * and the inspector both have real work to do.
  */
 const PERF_METADATA: Readonly<
-	Record<string, EditorCapabilityMetadata | undefined>
+	Record<string, AnvilComponentMetadata | undefined>
 > = {
 	Box: {
-		version: "1",
-		styleTarget: "root",
-		capabilities: {
-			layoutContainer: true,
-			layoutItem: true,
-			visualStyle: true,
-			responsive: true,
+		styleTargets: {
+			root: {
+				label: "Box",
+				properties: [
+					"display",
+					"gap",
+					"padding",
+					"width",
+					"height",
+					"background",
+					"borderRadius",
+				],
+				responsive: true,
+			},
 		},
 	},
 	Heading: {
-		version: "1",
-		styleTarget: "root",
-		capabilities: {
-			layoutItem: true,
-			typography: true,
-			responsive: true,
-			inlineText: [{ id: "text", propPath: "text", format: "plain" }],
+		styleTargets: {
+			root: {
+				label: "Heading",
+				properties: ["width", "margin", "fontSize", "fontWeight", "color"],
+				responsive: true,
+			},
 		},
+		inlineText: [{ id: "text", propPath: "text", format: "plain" }],
 	},
 	Image: {
-		version: "1",
-		styleTarget: "root",
-		capabilities: {
-			layoutItem: true,
-			visualStyle: true,
-			imageAdjust: [{ id: "media", srcPropPath: "src", altPropPath: "alt" }],
+		styleTargets: {
+			root: {
+				label: "Image",
+				properties: ["width", "height", "borderRadius", "opacity"],
+			},
 		},
+		images: [{ id: "media", srcPropPath: "src", altPropPath: "alt" }],
 	},
 	Button: {
-		version: "1",
-		styleTarget: "root",
-		capabilities: {
-			layoutItem: true,
-			typography: true,
-			interactions: true,
-			inlineText: [{ id: "label", propPath: "label", format: "plain" }],
+		styleTargets: {
+			root: {
+				label: "Button",
+				properties: ["width", "padding", "fontSize", "color", "background"],
+			},
 		},
+		interactions: true,
 	},
 };
 

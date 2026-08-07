@@ -36,11 +36,13 @@
  */
 
 import type {
-	AuthoringStateV1,
 	EditorError,
 	EditorPolicies,
-	InteractionV1,
+	Interaction,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
 import { InteractionSchema } from "@anvilkit/schema/editor";
 import { makeEditorError } from "../diagnostics.js";
@@ -82,7 +84,7 @@ export function urlScheme(url: string): string | undefined {
 
 /** Every `url` action carried by an interaction, with its index. */
 function urlActions(
-	interaction: InteractionV1,
+	interaction: Interaction,
 ): readonly { readonly index: number; readonly url: string }[] {
 	const found: { index: number; url: string }[] = [];
 	interaction.actions.forEach((action, index) => {
@@ -97,7 +99,7 @@ function urlActions(
  * not the structural parse also failed.
  */
 function forbiddenSchemeErrors(
-	interaction: InteractionV1,
+	interaction: Interaction,
 ): readonly EditorError[] {
 	const errors: EditorError[] = [];
 	for (const { index, url } of urlActions(interaction)) {
@@ -140,7 +142,7 @@ function isUrlSchemeIssue(issue: { readonly path: PropertyKey[] }): boolean {
  * strict URL refinement.
  */
 function structureErrors(
-	interaction: InteractionV1,
+	interaction: Interaction,
 	policies: EditorPolicies,
 ): readonly EditorError[] {
 	const parsed = InteractionSchema.safeParse(interaction);
@@ -183,7 +185,7 @@ function structureErrors(
  */
 export function interactionCreateErrors(
 	state: AuthoringStateV1,
-	interaction: InteractionV1,
+	interaction: Interaction,
 	policies: EditorPolicies = {},
 ): readonly EditorError[] {
 	const errors: EditorError[] = [];
@@ -258,7 +260,7 @@ export function interactionCreateErrors(
  */
 export function interactionUpdateErrors(
 	state: AuthoringStateV1,
-	interaction: InteractionV1,
+	interaction: Interaction,
 	policies: EditorPolicies = {},
 ): readonly EditorError[] {
 	const errors: EditorError[] = [];

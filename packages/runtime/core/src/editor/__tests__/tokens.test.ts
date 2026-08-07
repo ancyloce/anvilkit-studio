@@ -5,10 +5,14 @@
  */
 
 import type {
-	AuthoringStateV1,
 	DesignToken,
-	EditorCommandBase,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandBase,
+} from "../legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	aliasDependents,

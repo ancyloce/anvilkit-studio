@@ -8,7 +8,9 @@
  */
 
 import type { PageIR } from "@anvilkit/contracts";
-import type { AuthoringStateV1 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import { buildExportAuthoring } from "../index.js";
 

@@ -13,9 +13,11 @@
  */
 
 import type {
-	ComponentDefinitionV1,
-	EditorCommandResult,
+	ComponentDefinition,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandResult,
+} from "../../../editor/legacy/index.js";
 import type { Data as PuckData } from "@puckeditor/core";
 import {
 	use,
@@ -46,7 +48,7 @@ export interface ComponentCombination {
 
 /** The isolated component canvas surface. */
 export interface ComponentCanvas {
-	readonly definition: ComponentDefinitionV1;
+	readonly definition: ComponentDefinition;
 	/** Combination strip: main first, then every expressible combination. */
 	readonly combinations: readonly ComponentCombination[];
 	readonly activeKey: string;
@@ -64,7 +66,7 @@ export interface ComponentCanvas {
 const MAIN_KEY = "";
 
 function labelFor(
-	definition: ComponentDefinitionV1,
+	definition: ComponentDefinition,
 	selection: Readonly<Record<string, string>>,
 ): string {
 	const parts = definition.variantAxes
@@ -98,7 +100,7 @@ export function useComponentCanvas(): ComponentCanvas | null {
 		[selection],
 	);
 
-	const definition = useMemo((): ComponentDefinitionV1 | null => {
+	const definition = useMemo((): ComponentDefinition | null => {
 		void version;
 		if (port == null) {
 			return null;

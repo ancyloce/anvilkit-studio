@@ -20,10 +20,12 @@
  */
 
 import type {
-	EditorCommand,
 	EditorError,
 	EditorSelectionState,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../../../editor/legacy/index.js";
 import { makeEditorError } from "../../../editor/index.js";
 import type { EditorSelectionController } from "../selection.js";
 

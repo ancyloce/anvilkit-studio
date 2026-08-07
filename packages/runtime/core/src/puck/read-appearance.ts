@@ -15,13 +15,13 @@
  */
 
 import type {
-	AnvilAppearanceV1,
+	AnvilAppearance,
 	AuthorableStyleProperty,
 	BreakpointDefinition,
 	ResolvedValue,
 	ResponsiveLayerRef,
 	ResponsiveValue,
-	TargetAppearanceV1,
+	TargetAppearance,
 } from "@anvilkit/contracts/editor";
 import {
 	safeParseAppearance,
@@ -40,7 +40,7 @@ import {
 export interface AppearanceNode {
 	readonly nodeId: string;
 	readonly type: string;
-	readonly appearance: AnvilAppearanceV1 | undefined;
+	readonly appearance: AnvilAppearance | undefined;
 }
 
 /**
@@ -82,7 +82,7 @@ export function collectAppearanceNodes(
 			};
 			const nodeId = typeof props.id === "string" ? props.id : undefined;
 			if (nodeId === undefined) continue;
-			let appearance: AnvilAppearanceV1 | undefined;
+			let appearance: AnvilAppearance | undefined;
 			if (props.appearance !== undefined) {
 				const parsed = safeParseAppearance(props.appearance);
 				appearance = parsed.success ? parsed.data : undefined;
@@ -202,8 +202,8 @@ function readLayered<T>(
 function capableTargets(
 	input: TargetReadInput,
 	capable: (targetProperties: readonly AuthorableStyleProperty[]) => boolean,
-): (TargetAppearanceV1 | undefined)[] {
-	const capableNodes: (TargetAppearanceV1 | undefined)[] = [];
+): (TargetAppearance | undefined)[] {
+	const capableNodes: (TargetAppearance | undefined)[] = [];
 	for (const nodeId of input.nodeIds) {
 		const node = input.nodes.get(nodeId);
 		if (node === undefined) continue;
@@ -218,7 +218,7 @@ function capableTargets(
 
 /** Project one §6.1 property out of a target's layered style value. */
 function projectTargetProperty(
-	target: TargetAppearanceV1 | undefined,
+	target: TargetAppearance | undefined,
 	property: AuthorableStyleProperty,
 ): ResponsiveValue<unknown> | undefined {
 	const style = target?.style;

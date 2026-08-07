@@ -10,10 +10,12 @@
  */
 
 import type {
-	AuthoringStateV1,
 	EditorError,
 	TokenDeletionDisposition,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { makeEditorError } from "../diagnostics.js";
 import { materializeTokenLiteral, resolveToken } from "../resolve/token.js";
 import { aliasDependents, collectTokenUsage } from "./usage.js";

@@ -50,7 +50,6 @@ function docWith(
 		root: {
 			props: {
 				designSystem: {
-					version: "1",
 					breakpoints: [
 						{ id: "bp-sm", label: "S", maxWidth: 640, order: 0, enabled: true },
 					],
@@ -66,7 +65,6 @@ function docWith(
 }
 
 const displayFlex = {
-	version: "1",
 	targets: { root: { style: { base: { layout: { display: "flex" } } } } },
 };
 
@@ -208,7 +206,6 @@ describe("updateAppearanceInData (P2-04)", () => {
 		});
 		expect(written.status).toBe("updated");
 		expect(appearanceOf(written.data, 0)).toEqual({
-			version: "1",
 			targets: {
 				root: {
 					style: {
@@ -251,7 +248,6 @@ describe("updateAppearanceInData (P2-04)", () => {
 		});
 		expect(refs.status).toBe("updated");
 		expect(appearanceOf(refs.data, 0)).toEqual({
-			version: "1",
 			targets: {
 				root: { styleRefs: { base: ["card"] }, hidden: { base: true } },
 			},
@@ -287,12 +283,15 @@ describe("updateAppearanceInData (P2-04)", () => {
 			}
 		).content[0];
 		expect(outer?.props.body[0]?.props.appearance).toEqual({
-			version: "1",
 			targets: { root: { style: { base: { layout: { display: "grid" } } } } },
 		});
 	});
 
-	it("refuses to overwrite an existing appearance that fails validation", () => {
+	it("preserves keys it does not understand instead of destroying them", () => {
+		// PLAN-0026 §5: tolerance is generic unknown-key preservation, not
+		// a version branch. A document written before the canonical rename
+		// may carry a stale `version`; editing it must not silently drop
+		// that, or any other key the current contract has no name for.
 		const data = docWith([
 			{ id: "a", appearance: { version: "999", garbage: true } },
 		]);
@@ -304,11 +303,11 @@ describe("updateAppearanceInData (P2-04)", () => {
 			layer: "base",
 			patch: { kind: "set-property", property: "display", value: "flex" },
 		});
-		expect(result.status).toBe("rejected");
-		expect(result.errors[0]?.code).toBe("EDITOR_CONTRACT_UNSUPPORTED_VERSION");
+		expect(result.status).toBe("updated");
 		expect(appearanceOf(result.data, 0)).toEqual({
 			version: "999",
 			garbage: true,
+			targets: { root: { style: { base: { layout: { display: "flex" } } } } },
 		});
 	});
 

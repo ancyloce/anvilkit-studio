@@ -24,7 +24,9 @@
  * do not cross into the iframe document).
  */
 
-import type { EditorCommand } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../../../editor/legacy/index.js";
 import {
 	type ReactNode,
 	useEffect,

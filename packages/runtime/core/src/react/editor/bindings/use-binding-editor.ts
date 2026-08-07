@@ -16,10 +16,12 @@
 
 import type {
 	BindingTarget,
-	BindingV1,
+	Binding,
 	DataSourceDescriptor,
-	EditorCommandResult,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandResult,
+} from "../../../editor/legacy/index.js";
 import { useCallback, useMemo, useState } from "react";
 import type { PreviewDataResult } from "../../../editor/index.js";
 import type { EditorInspectorContext } from "../inspector/use-inspector.js";
@@ -28,7 +30,7 @@ import { useDataSources, usePreviewData } from "./use-data-sources.js";
 /** What the bindings section renders and drives. */
 export interface BindingEditorState {
 	/** Bindings already attached to the selected node. */
-	readonly bindings: readonly BindingV1[];
+	readonly bindings: readonly Binding[];
 	readonly sources: readonly DataSourceDescriptor[];
 	/** Live preview for the selected source, or `null` before one is chosen. */
 	readonly preview: PreviewDataResult | null;
@@ -74,7 +76,7 @@ export function useBindingEditor(
 			readonly dataPath: readonly string[];
 		}): Promise<EditorCommandResult | null> => {
 			if (primaryId === undefined) return null;
-			const binding: BindingV1 = {
+			const binding: Binding = {
 				version: "1",
 				id: crypto.randomUUID(),
 				nodeId: primaryId,

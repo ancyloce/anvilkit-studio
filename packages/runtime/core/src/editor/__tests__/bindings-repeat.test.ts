@@ -4,11 +4,15 @@
  */
 
 import type {
-	AuthoringStateV1,
-	BindingV1,
-	EditorCommandBase,
+	Binding,
 	JsonValue,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandBase,
+} from "../legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	applyEditorCommand,
@@ -33,7 +37,7 @@ function base(expectedRevision: number): EditorCommandBase {
 	};
 }
 
-function binding(patch: Partial<BindingV1> = {}): BindingV1 {
+function binding(patch: Partial<Binding> = {}): Binding {
 	return {
 		version: "1",
 		id: "b1",

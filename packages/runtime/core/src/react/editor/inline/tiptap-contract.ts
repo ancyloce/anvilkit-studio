@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * @file `TiptapDocumentV1` — the single versioned rich-text schema +
+ * @file `TiptapDocument` — the single versioned rich-text schema +
  * sanitizer (PLAN-0020 CORE-P1B-009D; ED-TEXT-002; DD-DEC-012;
  * DD-0019 §17).
  *
@@ -22,7 +22,7 @@
 
 import type {
 	TiptapBlockNode,
-	TiptapDocumentV1,
+	TiptapDocument,
 } from "@anvilkit/contracts/editor";
 import StarterKit from "@tiptap/starter-kit";
 
@@ -60,7 +60,7 @@ export function createTiptapExtensions(): unknown[] {
 }
 
 /** An empty v1 document. */
-export function emptyTiptapDocument(): TiptapDocumentV1 {
+export function emptyTiptapDocument(): TiptapDocument {
 	return { version: "1", type: "doc", content: [] };
 }
 
@@ -141,10 +141,10 @@ function sanitizeNode(input: unknown): readonly TiptapBlockNode[] {
 
 /**
  * Sanitize arbitrary Tiptap-shaped JSON into a canonical
- * {@link TiptapDocumentV1}. Total: never throws; unparseable input
+ * {@link TiptapDocument}. Total: never throws; unparseable input
  * yields the empty document.
  */
-export function sanitizeTiptapDocument(input: unknown): TiptapDocumentV1 {
+export function sanitizeTiptapDocument(input: unknown): TiptapDocument {
 	const doc = input as LooseNode & { version?: unknown };
 	if (typeof doc !== "object" || doc === null || doc.type !== "doc") {
 		return emptyTiptapDocument();
@@ -159,7 +159,7 @@ export function sanitizeTiptapDocument(input: unknown): TiptapDocumentV1 {
 }
 
 /** Flatten a document to plain text (plain-target conversions). */
-export function tiptapToPlainText(doc: TiptapDocumentV1): string {
+export function tiptapToPlainText(doc: TiptapDocument): string {
 	const walk = (nodes: readonly TiptapBlockNode[]): string =>
 		nodes
 			.map((node) => {
@@ -179,7 +179,7 @@ export function tiptapToPlainText(doc: TiptapDocumentV1): string {
 }
 
 /** Wrap plain text into a minimal v1 document. */
-export function tiptapFromPlainText(text: string): TiptapDocumentV1 {
+export function tiptapFromPlainText(text: string): TiptapDocument {
 	const paragraphs = text.split(/\r?\n/).map((line) => ({
 		type: "paragraph" as const,
 		...(line.length > 0

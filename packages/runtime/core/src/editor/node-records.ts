@@ -10,9 +10,11 @@
  */
 
 import type {
-	AuthoringStateV1,
 	NodeAuthoringStateV1,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "./legacy/index.js";
 
 /** The canonical empty record. */
 export const EMPTY_RECORD: NodeAuthoringStateV1 = { version: "1" };

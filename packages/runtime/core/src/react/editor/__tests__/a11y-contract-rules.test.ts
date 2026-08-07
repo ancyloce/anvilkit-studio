@@ -5,26 +5,30 @@
  * ≤100 ms @1k-nodes evaluation budget.
  */
 
-import type { EditorCapabilityMetadata } from "@anvilkit/contracts/editor";
+import type { AnvilComponentMetadata } from "@anvilkit/contracts/editor";
 import type { Data as PuckData } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import type { EditorCapabilityRegistry } from "../../../types/editor-api.js";
 import { evaluateContractRules } from "../a11y/contract-rules.js";
 
-const IMAGE_METADATA: EditorCapabilityMetadata = {
-	version: "1",
-	styleTarget: "root",
-	capabilities: {
-		imageAdjust: [{ id: "main", srcPropPath: "src", altPropPath: "alt" }],
+const IMAGE_METADATA: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: [],
+		},
 	},
+	images: [{ id: "main", srcPropPath: "src", altPropPath: "alt" }],
 };
 
-const BUTTON_METADATA: EditorCapabilityMetadata = {
-	version: "1",
-	styleTarget: "root",
-	capabilities: {
-		inlineText: [{ id: "label", propPath: "label", format: "plain" }],
+const BUTTON_METADATA: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: [],
+		},
 	},
+	inlineText: [{ id: "label", propPath: "label", format: "plain" }],
 };
 
 const registry: EditorCapabilityRegistry = {

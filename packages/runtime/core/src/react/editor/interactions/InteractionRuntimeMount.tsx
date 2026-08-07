@@ -17,7 +17,7 @@
  * question is answered.
  */
 
-import type { InteractionV1 } from "@anvilkit/contracts/editor";
+import type { Interaction } from "@anvilkit/contracts/editor";
 import { type ReactNode, use, useEffect, useSyncExternalStore } from "react";
 import { EditorUiStoreContext } from "@/state/slices/EditorUiStoreProvider";
 import {
@@ -57,7 +57,7 @@ export function InteractionRuntimeMount({
 		const port = bridge.port;
 		if (registry == null || doc === null || port == null) return;
 
-		const interactions: readonly InteractionV1[] = Object.values(
+		const interactions: readonly Interaction[] = Object.values(
 			port.getSnapshot().authoring.interactions,
 		);
 		if (interactions.length === 0) return;

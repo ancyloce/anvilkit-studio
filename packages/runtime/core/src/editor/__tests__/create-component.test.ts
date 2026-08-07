@@ -6,7 +6,9 @@
  * containment channels — including root slot props.
  */
 
-import type { AuthoringStateV1 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import type { Data as PuckData } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import {

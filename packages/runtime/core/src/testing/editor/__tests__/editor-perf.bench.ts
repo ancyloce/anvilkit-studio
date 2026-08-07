@@ -46,7 +46,9 @@ import { arch, platform } from "node:os";
 import { dirname, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import { fileURLToPath } from "node:url";
-import type { EditorCommand } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../../../editor/legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	applyEditorCommand,

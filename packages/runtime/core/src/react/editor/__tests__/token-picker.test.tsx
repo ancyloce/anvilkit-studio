@@ -8,7 +8,7 @@
 
 import type {
 	CssLength,
-	EditorCapabilityMetadata,
+	AnvilComponentMetadata,
 	ImportableTokenValue,
 	StudioEditorConfig,
 } from "@anvilkit/contracts/editor";
@@ -47,14 +47,12 @@ afterEach(() => {
 	clearTokenRecents();
 });
 
-const CAPABLE: EditorCapabilityMetadata = {
-	version: "1",
-	styleTarget: "root",
-	capabilities: {
-		layoutContainer: true,
-		layoutItem: true,
-		visualStyle: true,
-		typography: true,
+const CAPABLE: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: ["display", "gap", "padding", "width", "height", "margin", "background", "borderRadius", "boxShadow", "opacity", "fontSize", "fontWeight", "color", "textAlign"],
+		},
 	},
 };
 
@@ -64,7 +62,7 @@ const px = (value: number) => ({ kind: "unit", value, unit: "px" }) as const;
 function createCtx(): StudioPluginContext {
 	let data = buildLegacyPuckData();
 	const config = {
-		components: { Hero: { metadata: { editor: CAPABLE } }, Legacy: {} },
+		components: { Hero: { metadata: { anvilkit: { editor: CAPABLE } } }, Legacy: {} },
 	};
 	return {
 		getData: () => data,

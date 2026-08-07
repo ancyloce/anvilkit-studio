@@ -30,12 +30,14 @@
  */
 
 import type {
-	BindingV1,
-	DesignSystemV1,
-	EditorCommand,
-	InteractionV1,
+	Binding,
+	DesignSystem,
+	Interaction,
 	ResponsiveLayerRef,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../editor/legacy/index.js";
 import type { Config, Data } from "@puckeditor/core";
 import { walkTree } from "@puckeditor/core";
 import { authorablePropertyForSpecKey } from "./component-metadata.js";
@@ -57,16 +59,16 @@ export type V2CommandPlan =
 	| {
 			readonly kind: "design-system";
 			readonly update: (
-				current: DesignSystemV1 | undefined,
-			) => DesignSystemV1 | undefined;
+				current: DesignSystem | undefined,
+			) => DesignSystem | undefined;
 	  }
 	| {
 			readonly kind: "node-carriers";
 			readonly carrier: "interactions" | "bindings";
 			readonly ownerNodeId: string;
 			readonly update: (
-				current: readonly (InteractionV1 | BindingV1)[],
-			) => readonly (InteractionV1 | BindingV1)[];
+				current: readonly (Interaction | Binding)[],
+			) => readonly (Interaction | Binding)[];
 	  }
 	| { readonly kind: "composite"; readonly plans: readonly V2CommandPlan[] }
 	| {
@@ -99,8 +101,7 @@ const FAMILY_OF = {
 } as const;
 
 /** Empty design system, for creates on documents that have none. */
-const EMPTY_DESIGN_SYSTEM: DesignSystemV1 = {
-	version: "1",
+const EMPTY_DESIGN_SYSTEM: DesignSystem = {
 	breakpoints: [],
 	tokens: {},
 	tokenModes: {},
@@ -178,12 +179,12 @@ export function planV2Command(command: EditorCommand): V2CommandPlan {
 				kind: "design-system",
 				update: (current) => ({
 					...(current ?? EMPTY_DESIGN_SYSTEM),
-					breakpoints: c.breakpoints as DesignSystemV1["breakpoints"],
+					breakpoints: c.breakpoints as DesignSystem["breakpoints"],
 				}),
 			};
 		case "token.create":
 		case "token.update": {
-			const token = c.token as DesignSystemV1["tokens"][string];
+			const token = c.token as DesignSystem["tokens"][string];
 			return {
 				kind: "design-system",
 				update: (current) => {
@@ -209,7 +210,7 @@ export function planV2Command(command: EditorCommand): V2CommandPlan {
 		case "styleDefinition.create":
 		case "styleDefinition.update": {
 			const definition =
-				c.definition as DesignSystemV1["styleDefinitions"][string];
+				c.definition as DesignSystem["styleDefinitions"][string];
 			return {
 				kind: "design-system",
 				update: (current) => {
@@ -277,27 +278,27 @@ export function planV2Command(command: EditorCommand): V2CommandPlan {
 			};
 		case "interaction.create":
 		case "interaction.update": {
-			const interaction = c.interaction as InteractionV1;
+			const interaction = c.interaction as Interaction;
 			return {
 				kind: "node-carriers",
 				carrier: "interactions",
 				ownerNodeId: interaction.sourceNodeId,
 				update: (current) => [
 					...current.filter(
-						(entry) => (entry as InteractionV1).id !== interaction.id,
+						(entry) => (entry as Interaction).id !== interaction.id,
 					),
 					interaction,
 				],
 			};
 		}
 		case "binding.update": {
-			const binding = c.binding as BindingV1;
+			const binding = c.binding as Binding;
 			return {
 				kind: "node-carriers",
 				carrier: "bindings",
 				ownerNodeId: binding.nodeId,
 				update: (current) => [
-					...current.filter((entry) => (entry as BindingV1).id !== binding.id),
+					...current.filter((entry) => (entry as Binding).id !== binding.id),
 					binding,
 				],
 			};
@@ -393,7 +394,7 @@ export function applyV2Plan(
 					const props = item.props as Record<string, unknown>;
 					if (props.id !== plan.ownerNodeId) return item;
 					const current = Array.isArray(props[plan.carrier])
-						? (props[plan.carrier] as readonly (InteractionV1 | BindingV1)[])
+						? (props[plan.carrier] as readonly (Interaction | Binding)[])
 						: [];
 					const updated = plan.update(current);
 					touched = true;
@@ -527,7 +528,7 @@ export function applyV2Plan(
 					if (
 						Array.isArray(list) &&
 						list.some(
-							(entry) => (entry as InteractionV1).id === plan.interactionId,
+							(entry) => (entry as Interaction).id === plan.interactionId,
 						)
 					) {
 						ownerId = (props.id as string) ?? null;
@@ -551,7 +552,7 @@ export function applyV2Plan(
 					ownerNodeId: ownerId,
 					update: (current) =>
 						current.filter(
-							(entry) => (entry as InteractionV1).id !== plan.interactionId,
+							(entry) => (entry as Interaction).id !== plan.interactionId,
 						),
 				},
 				data,

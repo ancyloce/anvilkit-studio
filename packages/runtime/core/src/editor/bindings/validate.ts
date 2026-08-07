@@ -14,10 +14,12 @@
  */
 
 import type {
-	AuthoringStateV1,
-	BindingV1,
+	Binding,
 	EditorError,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { BindingSchema } from "@anvilkit/schema/editor";
 import { makeEditorError } from "../diagnostics.js";
 
@@ -31,7 +33,7 @@ import { makeEditorError } from "../diagnostics.js";
  */
 export function bindingUpdateErrors(
 	state: AuthoringStateV1,
-	binding: BindingV1,
+	binding: Binding,
 ): readonly EditorError[] {
 	const errors: EditorError[] = [];
 

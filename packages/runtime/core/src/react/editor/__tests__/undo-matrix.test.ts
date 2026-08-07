@@ -5,7 +5,9 @@
  * the revision, which travels with the history entry (freeze §9/§10).
  */
 
-import type { AuthoringStateV1 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
 import type { Data as PuckData } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import { deepEqualJson } from "../../../editor/index.js";

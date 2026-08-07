@@ -19,7 +19,7 @@
  */
 
 import type {
-	EditorCapabilityMetadata,
+	AnvilComponentMetadata,
 	InlineTextTarget,
 } from "@anvilkit/contracts/editor";
 import type { CanvasDomRegistry } from "../canvas/dom-registry.js";
@@ -29,9 +29,9 @@ export const TEXT_TARGET_ATTRIBUTE = "data-ak-text-target";
 
 /** Declared inline-text targets of a component (empty when none). */
 export function declaredTextTargets(
-	metadata: EditorCapabilityMetadata | undefined,
+	metadata: AnvilComponentMetadata | undefined,
 ): readonly InlineTextTarget[] {
-	return metadata?.capabilities.inlineText ?? [];
+	return metadata?.inlineText ?? [];
 }
 
 /**
@@ -39,7 +39,7 @@ export function declaredTextTargets(
  * legacy text-drop heuristic for this component.
  */
 export function hasDeclaredTextTargets(
-	metadata: EditorCapabilityMetadata | undefined,
+	metadata: AnvilComponentMetadata | undefined,
 ): boolean {
 	return declaredTextTargets(metadata).length > 0;
 }
@@ -58,7 +58,7 @@ export interface ResolvedTextTarget {
  */
 export function resolveTextTargets(
 	nodeId: string,
-	metadata: EditorCapabilityMetadata | undefined,
+	metadata: AnvilComponentMetadata | undefined,
 	registry: CanvasDomRegistry,
 ): readonly ResolvedTextTarget[] {
 	const targets = declaredTextTargets(metadata);
@@ -92,7 +92,7 @@ export function resolveTextTargets(
 export function targetFromElement(
 	element: Element,
 	nodeId: string,
-	metadata: EditorCapabilityMetadata | undefined,
+	metadata: AnvilComponentMetadata | undefined,
 	registry: CanvasDomRegistry,
 ): ResolvedTextTarget | null {
 	const targets = declaredTextTargets(metadata);

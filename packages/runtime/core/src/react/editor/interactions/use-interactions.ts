@@ -17,12 +17,14 @@
  */
 
 import type {
-	EditorCommandResult,
 	InteractionAction,
 	InteractionTrigger,
-	InteractionV1,
+	Interaction,
 	VariantAxis,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandResult,
+} from "../../../editor/legacy/index.js";
 import { useCallback, useMemo, useState } from "react";
 import {
 	indexNodeLocations,
@@ -41,7 +43,7 @@ export interface InteractionTargetOption {
 
 /** One interaction as the inspector renders it. */
 export interface NodeInteractionRow {
-	readonly interaction: InteractionV1;
+	readonly interaction: Interaction;
 	/**
 	 * False when the author disabled it or a reference dangles. The
 	 * stored flag is never rewritten — see `interactions/resolve.ts`.
@@ -68,7 +70,7 @@ export interface NodeInteractionsState {
 	) => Promise<EditorCommandResult | null>;
 	/** Replace an interaction — used by rename and timeline reorder. */
 	readonly updateInteraction: (
-		interaction: InteractionV1,
+		interaction: Interaction,
 	) => Promise<EditorCommandResult | null>;
 	/** Remove an interaction. */
 	readonly deleteInteraction: (
@@ -166,7 +168,7 @@ export function useNodeInteractions(
 			action: InteractionAction,
 		): Promise<EditorCommandResult | null> => {
 			if (primaryId === undefined) return null;
-			const interaction: InteractionV1 = {
+			const interaction: Interaction = {
 				version: "1",
 				id: crypto.randomUUID(),
 				name,
@@ -194,7 +196,7 @@ export function useNodeInteractions(
 	);
 
 	const updateInteraction = useCallback(
-		async (interaction: InteractionV1): Promise<EditorCommandResult | null> => {
+		async (interaction: Interaction): Promise<EditorCommandResult | null> => {
 			const result = await commands.execute({
 				id: crypto.randomUUID(),
 				expectedRevision: revision,

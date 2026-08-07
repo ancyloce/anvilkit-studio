@@ -6,9 +6,11 @@
  */
 
 import type {
-	EditorCommand,
 	EditorSelectionState,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../../../editor/legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	componentScope,

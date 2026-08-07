@@ -23,11 +23,15 @@
  */
 
 import type {
-	EditorCommand,
-	EditorCommandResult,
 	EditorError,
-	EditorPreviewResult,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../../../editor/legacy/index.js";
+import type {
+	EditorCommandResult,
+	EditorPreviewResult,
+} from "../../../editor/legacy/index.js";
 import { useCallback, useMemo, useState } from "react";
 import {
 	assessProposal,

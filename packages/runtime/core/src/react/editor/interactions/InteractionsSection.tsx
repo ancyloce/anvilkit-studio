@@ -16,7 +16,7 @@
 
 import type {
 	InteractionTrigger,
-	InteractionV1,
+	Interaction,
 } from "@anvilkit/contracts/editor";
 import { type ReactNode, useState } from "react";
 import { Button } from "@/primitives/button";
@@ -70,7 +70,7 @@ const TRIGGER_CHOICES: readonly {
 ];
 
 /** A one-line human summary of what an interaction does. */
-function summarize(interaction: InteractionV1): string {
+function summarize(interaction: Interaction): string {
 	const action = interaction.actions[0];
 	const rest =
 		interaction.actions.length > 1 ? ` +${interaction.actions.length - 1}` : "";

@@ -5,7 +5,9 @@
  * fragment-cache reuse, and iframe application idempotence.
  */
 
-import type { AuthoringStateV1 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
 import { describe, expect, it } from "vitest";
 import { createEmptyAuthoringState } from "../../../editor/index.js";
 import {

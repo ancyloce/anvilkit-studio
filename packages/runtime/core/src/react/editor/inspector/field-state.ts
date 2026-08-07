@@ -26,13 +26,15 @@
  */
 
 import type {
-	AuthoringStateV1,
 	BreakpointDefinition,
 	NodeAuthoringStateV1,
 	ResolvedValue,
 	ResponsiveLayerRef,
 	ResponsiveValue,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
 import {
 	deepEqualJson,
 	resolveResponsiveValue,

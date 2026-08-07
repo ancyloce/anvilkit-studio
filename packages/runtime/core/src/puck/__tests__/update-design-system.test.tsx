@@ -7,7 +7,7 @@
 
 // @vitest-environment jsdom
 
-import type { DesignSystemV1 } from "@anvilkit/contracts/editor";
+import type { DesignSystem } from "@anvilkit/contracts/editor";
 import type { Config, Data, PuckApi } from "@puckeditor/core";
 import { Puck, useGetPuck } from "@puckeditor/core";
 import { act, cleanup, render } from "@testing-library/react";
@@ -18,8 +18,7 @@ import {
 	updateDesignSystemInData,
 } from "../update-design-system.js";
 
-const designSystem: DesignSystemV1 = {
-	version: "1",
+const designSystem: DesignSystem = {
 	breakpoints: [
 		{ id: "bp-sm", label: "S", maxWidth: 640, order: 0, enabled: true },
 	],
@@ -47,7 +46,7 @@ describe("updateDesignSystemInData (P2-05)", () => {
 		const result = updateDesignSystemInData({
 			data,
 			update: (current) => ({
-				...(current as DesignSystemV1),
+				...(current as DesignSystem),
 				defaultTokenMode: "light",
 				tokenModes: {
 					light: { id: "light", name: "Light" },
@@ -61,7 +60,7 @@ describe("updateDesignSystemInData (P2-05)", () => {
 		).root.props;
 		expect(rootProps.title).toBe("Page");
 		expect(
-			(rootProps.designSystem as DesignSystemV1).tokenModes.dark?.name,
+			(rootProps.designSystem as DesignSystem).tokenModes.dark?.name,
 		).toBe("Dark");
 	});
 
@@ -89,7 +88,7 @@ describe("updateDesignSystemInData (P2-05)", () => {
 		const data = docWith({ designSystem });
 		const result = updateDesignSystemInData({
 			data,
-			update: () => ({ version: "1" }) as unknown as DesignSystemV1,
+			update: () => ({ version: "1" }) as unknown as DesignSystem,
 		});
 		expect(result.status).toBe("rejected");
 		expect(result.errors[0]?.code).toBe("EDITOR_INVALID_CSS_VALUE");
@@ -159,10 +158,10 @@ describe("commitDesignSystemUpdate against a live <Puck> (P2-05)", () => {
 				},
 			});
 
-		const addDark = (current: DesignSystemV1 | undefined): DesignSystemV1 => ({
-			...(current as DesignSystemV1),
+		const addDark = (current: DesignSystem | undefined): DesignSystem => ({
+			...(current as DesignSystem),
 			tokenModes: {
-				...(current as DesignSystemV1).tokenModes,
+				...(current as DesignSystem).tokenModes,
 				dark: { id: "dark", name: "Dark" },
 			},
 		});
@@ -173,7 +172,7 @@ describe("commitDesignSystemUpdate against a live <Puck> (P2-05)", () => {
 		expect(outcome?.status).toBe("committed");
 		expect(dispatches).toBe(1);
 		const live = freshApi().appState.data as unknown as {
-			root: { props: { title: string; designSystem: DesignSystemV1 } };
+			root: { props: { title: string; designSystem: DesignSystem } };
 		};
 		expect(live.root.props.title).toBe("Page");
 		expect(live.root.props.designSystem.tokenModes.dark?.name).toBe("Dark");

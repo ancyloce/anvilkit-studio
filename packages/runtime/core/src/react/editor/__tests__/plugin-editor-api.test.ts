@@ -5,7 +5,7 @@
  */
 
 import type {
-	EditorCapabilityMetadata,
+	AnvilComponentMetadata,
 	EditorEvent,
 } from "@anvilkit/contracts/editor";
 import type { PuckApi } from "@puckeditor/core";
@@ -17,17 +17,20 @@ import { createEditorDiagnosticCenter } from "../diagnostics/center.js";
 import { createPluginEditorApi } from "../plugin-editor-api.js";
 import { createEditorSelectionController } from "../selection.js";
 
-const CAPABLE_METADATA: EditorCapabilityMetadata = {
-	version: "1",
-	styleTarget: "root",
-	capabilities: { layoutItem: true, visualStyle: true },
+const CAPABLE_METADATA: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: ["width", "height", "margin", "background", "borderRadius", "boxShadow", "opacity"],
+		},
+	},
 };
 
 function fakePuckApi(): PuckApi {
 	return {
 		config: {
 			components: {
-				Hero: { metadata: { editor: CAPABLE_METADATA } },
+				Hero: { metadata: { anvilkit: { editor: CAPABLE_METADATA } } },
 				Legacy: {},
 				Broken: { metadata: { editor: { version: "2" } } },
 			},

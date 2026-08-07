@@ -6,8 +6,8 @@
  */
 
 import type {
-	ComponentDefinitionV1,
-	EditorCapabilityMetadata,
+	ComponentDefinition,
+	AnvilComponentMetadata,
 } from "@anvilkit/contracts/editor";
 import type { Data as PuckData } from "@puckeditor/core";
 import {
@@ -32,13 +32,16 @@ import { StudioEditorMount } from "../StudioEditorMount.js";
 
 afterEach(cleanup);
 
-const CAPABLE: EditorCapabilityMetadata = {
-	version: "1",
-	styleTarget: "root",
-	capabilities: { layoutContainer: true },
+const CAPABLE: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: ["display", "gap", "padding"],
+		},
+	},
 };
 
-const DEFINITION: ComponentDefinitionV1 = {
+const DEFINITION: ComponentDefinition = {
 	version: "1",
 	id: "def",
 	name: "Card",
@@ -98,7 +101,7 @@ function seedData(): PuckData {
 
 function createCtx(recorded: PuckData[]): StudioPluginContext {
 	let data = seedData();
-	const config = { components: { Hero: { metadata: { editor: CAPABLE } } } };
+	const config = { components: { Hero: { metadata: { anvilkit: { editor: CAPABLE } } } } };
 	return {
 		getData: () => data,
 		getPuckApi: () =>

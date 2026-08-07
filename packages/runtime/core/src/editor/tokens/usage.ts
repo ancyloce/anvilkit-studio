@@ -7,7 +7,9 @@
  * always agree on the site set.
  */
 
-import type { AuthoringStateV1 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { mapAuthoringTokens, type TokenUsageSite } from "./walk.js";
 
 /** Every reference to a token, keyed by the referenced token id. */

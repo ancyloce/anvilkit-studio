@@ -80,7 +80,7 @@ export const SECTIONS: readonly InspectorSectionDefinition[] = [
 				return false;
 			}
 			const metadata = context.bridge.capabilities?.forNode(primary);
-			return (metadata?.capabilities.imageAdjust?.length ?? 0) > 0;
+			return (metadata?.images?.length ?? 0) > 0;
 		},
 		Component: ImageSection,
 	},
@@ -99,8 +99,7 @@ export const SECTIONS: readonly InspectorSectionDefinition[] = [
 				return false;
 			}
 			return (
-				context.bridge.capabilities?.forNode(primary)?.capabilities
-					.interactions === true
+				context.bridge.capabilities?.forNode(primary)?.interactions === true
 			);
 		},
 		Component: InteractionsSection,
@@ -138,7 +137,7 @@ export const SECTIONS: readonly InspectorSectionDefinition[] = [
 				return false;
 			}
 			return (
-				context.bridge.capabilities?.forNode(primary)?.capabilities.bindings ===
+				context.bridge.capabilities?.forNode(primary)?.bindings ===
 				true
 			);
 		},

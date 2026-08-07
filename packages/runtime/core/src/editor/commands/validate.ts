@@ -12,16 +12,20 @@
  */
 
 import type {
-	AtomicEditorCommand,
-	AuthoringStateV1,
 	DesignToken,
-	EditorCommand,
 	EditorError,
 	EditorPatch,
 	EditorPolicies,
 	ResponsiveLayerRef,
-	StyleDefinitionV1,
+	StyleDefinition,
 } from "@anvilkit/contracts/editor";
+import type {
+	AtomicEditorCommand,
+	EditorCommand,
+} from "../legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
 import {
 	DesignTokenSchema,
@@ -191,7 +195,7 @@ function missingStyleDefinitionErrors(
 
 function styleDefinitionShapeErrors(
 	styleDefinitionId: string,
-	definition: StyleDefinitionV1,
+	definition: StyleDefinition,
 ): readonly EditorError[] {
 	const parsed = StyleDefinitionSchema.safeParse(definition);
 	if (parsed.success) {

@@ -13,9 +13,11 @@
  */
 
 import type {
-	EditorCommandPort,
 	EditorDiagnosticPort,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandPort,
+} from "../../editor/legacy/index.js";
 import { createContext, use, useSyncExternalStore } from "react";
 import type { StudioEditorBridge } from "./bridge.js";
 import type { StudioViewportController } from "./responsive/viewport-controller.js";

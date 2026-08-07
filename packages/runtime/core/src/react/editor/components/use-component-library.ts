@@ -23,10 +23,12 @@
  */
 
 import type {
-	ComponentDefinitionV1,
-	EditorCommandResult,
+	ComponentDefinition,
 	EditorError,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandResult,
+} from "../../../editor/legacy/index.js";
 import { use, useCallback, useMemo, useSyncExternalStore } from "react";
 import type { InternalEditorCommandPort } from "../command-port.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
@@ -34,7 +36,7 @@ import { getEditorScopeController, scopedDefinitionId } from "./scope.js";
 
 /** One row in the Components panel. */
 export interface ComponentLibraryEntry {
-	readonly definition: ComponentDefinitionV1;
+	readonly definition: ComponentDefinition;
 	/** Live page-scope instances referencing this definition. */
 	readonly instanceCount: number;
 	/** Referencing node ids (capped by the engine at 50). */

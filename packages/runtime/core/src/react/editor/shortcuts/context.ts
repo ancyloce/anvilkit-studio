@@ -11,7 +11,7 @@
 
 import type { StudioEditorBridge } from "../bridge.js";
 import type { InternalEditorCommandPort } from "../command-port.js";
-import { readEditorMetadata } from "../../../editor/capability-metadata.js";
+import { readEditorMetadata } from "../../../puck/component-metadata.js";
 import type { ShortcutContext } from "./registry.js";
 
 /** The plugin-context slice the command handlers need. */
@@ -28,11 +28,11 @@ export function pickWrapContainer(
 ): { readonly type: string; readonly slotName: string } | null {
 	for (const [type, component] of Object.entries(components ?? {})) {
 		const metadata = readEditorMetadata(component);
-		const slotName = Object.keys(metadata?.slotMap ?? {})[0];
-		if (
-			metadata?.capabilities.layoutContainer === true &&
-			slotName !== undefined
-		) {
+		const slots = metadata?.slots ?? {};
+		const slotName = Object.keys(slots).find(
+			(name) => slots[name]?.layoutContainer === true,
+		);
+		if (slotName !== undefined) {
 			return { type, slotName };
 		}
 	}

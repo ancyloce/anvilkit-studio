@@ -9,8 +9,12 @@
  * gate (the backup/restore drill is CLI-level — P5-02).
  */
 
-import type { AuthoringStateV1 } from "@anvilkit/contracts/editor";
-import { ANVILKIT_AUTHORING_KEY } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../editor/legacy/index.js";
+import {
+	ANVILKIT_AUTHORING_KEY,
+} from "../../editor/legacy/index.js";
 import type { Config, Data } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import { buildExportStylesheet } from "../../editor/style/export-stylesheet.js";
@@ -107,10 +111,16 @@ describe("migrateToPuckNativeV2 — §14.5 matrix", () => {
 		]);
 		const rootProps = props(result.data?.root);
 		expect(rootProps.designSystem).toMatchObject({
-			version: "1",
 			defaultTokenMode: "default",
 		});
-		expect(rootProps.componentLibrary).toMatchObject({ version: "1" });
+		// The canonical library carries no version marker; assert on the
+		// thing that actually matters — the definitions moved across.
+		expect(
+			Object.keys(
+				(rootProps.componentLibrary as { definitions?: object })?.definitions ??
+					{},
+			).length,
+		).toBeGreaterThan(0);
 	});
 
 	it("full legacy document: slots + zones + every component type migrate with §5.1 ownership", () => {
@@ -131,7 +141,6 @@ describe("migrateToPuckNativeV2 — §14.5 matrix", () => {
 		expect(rootProps.authoringSchemaVersion).toBe(2);
 		expect(rootProps.title).toBe("Legacy fixture page");
 		expect(rootProps.designSystem).toMatchObject({
-			version: "1",
 			defaultTokenMode: "default",
 			breakpoints: legacyAuthoringSidecar.breakpoints,
 		});
@@ -143,7 +152,6 @@ describe("migrateToPuckNativeV2 — §14.5 matrix", () => {
 		const hero = data.content[0];
 		const heroProps = props(hero);
 		expect(heroProps.appearance).toMatchObject({
-			version: "1",
 			targets: {
 				root: {
 					style: {

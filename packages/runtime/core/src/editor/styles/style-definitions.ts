@@ -13,13 +13,15 @@
  */
 
 import type {
-	AuthoringStateV1,
 	NodeAuthoringStateV1,
 	ResponsiveLayerRef,
 	ResponsiveValue,
 	StyleDefinitionId,
-	StyleDefinitionV1,
+	StyleDefinition,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { getRecord, withRecord } from "../node-records.js";
 import { mergePropertyWise } from "../resolve/merge.js";
 
@@ -170,7 +172,7 @@ function declaredLayers(
 }
 
 function familyAt(
-	definition: StyleDefinitionV1 | undefined,
+	definition: StyleDefinition | undefined,
 	family: StyleFamily,
 	layer: ResponsiveLayerRef,
 ): object | undefined {

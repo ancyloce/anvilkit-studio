@@ -11,12 +11,14 @@
  */
 
 import type {
-	EditorCapabilityMetadata,
-	EditorCommandPort,
+	AnvilComponentMetadata,
 	EditorDiagnosticPort,
 	EditorFeatureId,
 	EditorSelectionState,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandPort,
+} from "../editor/legacy/index.js";
 
 /**
  * Capability lookup over the live document and config
@@ -28,9 +30,9 @@ export interface EditorCapabilityRegistry {
 	 * The declared `metadata.editor` capability metadata for a component
 	 * type; `undefined` for legacy components (≡ `styleTarget: "none"`).
 	 */
-	forComponent(componentType: string): EditorCapabilityMetadata | undefined;
+	forComponent(componentType: string): AnvilComponentMetadata | undefined;
 	/** {@link forComponent} resolved through a node's component type. */
-	forNode(nodeId: string): EditorCapabilityMetadata | undefined;
+	forNode(nodeId: string): AnvilComponentMetadata | undefined;
 	/**
 	 * The editor features the current document uses (sidecar-visible
 	 * set — the same projection exporter preflight consumes).

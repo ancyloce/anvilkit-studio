@@ -11,10 +11,14 @@
  */
 
 import type {
-	AuthoringStateV1,
-	EditorCommand,
 	EditorError,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { makeEditorError } from "../diagnostics.js";
 import { deepEqualJson } from "../patch.js";
 import { reduceValidatedCommand } from "./reduce.js";

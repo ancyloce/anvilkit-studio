@@ -9,8 +9,8 @@
  */
 
 import type {
-	AnvilAppearanceV1,
-	DesignSystemV1,
+	AnvilAppearance,
+	DesignSystem,
 } from "@anvilkit/contracts/editor";
 import type { Config, Data } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
@@ -20,8 +20,7 @@ import {
 	createAppearanceCompilerCache,
 } from "../../../style-compiler/index.js";
 
-const designSystem: DesignSystemV1 = {
-	version: "1",
+const designSystem: DesignSystem = {
 	breakpoints: [
 		{
 			id: "bp-tablet",
@@ -61,8 +60,7 @@ const designSystem: DesignSystemV1 = {
 	},
 };
 
-const heroAppearance: AnvilAppearanceV1 = {
-	version: "1",
+const heroAppearance: AnvilAppearance = {
 	targets: {
 		root: {
 			style: {

@@ -22,7 +22,7 @@
  */
 
 import type {
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	ComponentVariant,
 	EditorError,
 	VariantAxis,
@@ -50,7 +50,7 @@ export function variantCombinationCount(axes: readonly VariantAxis[]): number {
  * empty array means the model is unambiguous and within caps.
  */
 export function validateVariantModel(
-	definition: ComponentDefinitionV1,
+	definition: ComponentDefinition,
 ): readonly EditorError[] {
 	const errors: EditorError[] = [];
 	const definitionId = definition.id;
@@ -256,7 +256,7 @@ export function validateVariantModel(
  * ED-VARIANT-001 requires.
  */
 export function matchVariant(
-	definition: ComponentDefinitionV1,
+	definition: ComponentDefinition,
 	selection: Readonly<Record<string, string>>,
 ): ComponentVariant | undefined {
 	if (definition.variantAxes.length === 0) {

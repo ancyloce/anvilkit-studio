@@ -15,15 +15,18 @@
  */
 
 import type {
-	AuthoringStateV1,
 	BreakpointDefinition,
-	EditorCommandPort,
-	EditorCommandResult,
 	EditorPatch,
 	EditorSelectionState,
 	ResponsiveLayerRef,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+	EditorCommandPort,
+	EditorCommandResult,
+} from "../../../editor/legacy/index.js";
 import { use, useCallback, useMemo, useSyncExternalStore } from "react";
+import { grantsFamily } from "../../../puck/component-metadata.js";
 import type { StudioEditorBridge } from "../bridge.js";
 import { withBreakpointMaterialization } from "../responsive/materialize.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
@@ -91,17 +94,17 @@ export function useEditorInspector(): EditorInspectorContext | null {
 				if (metadata === undefined) {
 					return false;
 				}
-				const capabilities = metadata.capabilities;
+				// Family gating derives from the granted property set —
+				// the same `AUTHORABLE_PROPERTY_LOCATIONS` map the
+				// compiler enforces — so the inspector structurally
+				// cannot offer a family the compiler would drop.
 				switch (family) {
 					case "layout":
-						return (
-							capabilities.layoutItem === true ||
-							capabilities.layoutContainer === true
-						);
+						return grantsFamily(metadata, "layout");
 					case "style":
-						return capabilities.visualStyle === true;
+						return grantsFamily(metadata, "visual");
 					case "typography":
-						return capabilities.typography === true;
+						return grantsFamily(metadata, "typography");
 				}
 			});
 			capabilityCache.set(family, ids);

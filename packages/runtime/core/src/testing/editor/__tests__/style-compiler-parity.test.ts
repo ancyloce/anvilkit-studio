@@ -17,7 +17,7 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { DesignSystemV1 } from "@anvilkit/contracts/editor";
+import type { DesignSystem } from "@anvilkit/contracts/editor";
 import type { Config, Data } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 // The conversion + normalization moved into PRODUCTION code with
@@ -32,8 +32,7 @@ import { compileDocumentAppearance } from "../../../style-compiler/index.js";
 import { legacyAuthoringSidecar } from "./legacy-fixtures.js";
 
 /** v2 design system derived from the legacy sidecar collections. */
-const designSystem: DesignSystemV1 = {
-	version: "1",
+const designSystem: DesignSystem = {
 	breakpoints: legacyAuthoringSidecar.breakpoints,
 	tokens: legacyAuthoringSidecar.tokens,
 	tokenModes: legacyAuthoringSidecar.tokenModes,

@@ -11,16 +11,18 @@
  */
 
 import type {
-	AuthoringStateV1,
 	BreakpointDefinition,
 	EditorError,
 	LayoutSpec,
 	NodeAuthoringStateV1,
 	ResponsiveValue,
-	StyleDefinitionV1,
+	StyleDefinition,
 	TypographySpec,
 	VisualStyleSpec,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { makeEditorError } from "../diagnostics.js";
 import { isTokenRef } from "../tokens/walk.js";
 import { mergePropertyWise } from "./merge.js";
@@ -61,7 +63,7 @@ export interface ResolvedNodeAuthoring {
 type FamilyKey = "layout" | "style" | "typography";
 
 function familyOf(
-	definition: StyleDefinitionV1 | undefined,
+	definition: StyleDefinition | undefined,
 	family: FamilyKey,
 ): ResponsiveValue<object> | undefined {
 	return definition?.[family] as ResponsiveValue<object> | undefined;
@@ -85,7 +87,7 @@ function resolveStyleRefs(
 	node: NodeAuthoringStateV1 | undefined,
 	context: ResolveContext,
 ): {
-	readonly definitions: readonly StyleDefinitionV1[];
+	readonly definitions: readonly StyleDefinition[];
 	readonly diagnostics: readonly EditorError[];
 } {
 	const refs = node?.styleRefs;
@@ -103,7 +105,7 @@ function resolveStyleRefs(
 		}
 	}
 	const diagnostics: EditorError[] = [];
-	const definitions: StyleDefinitionV1[] = [];
+	const definitions: StyleDefinition[] = [];
 	for (const id of active ?? []) {
 		const definition = context.authoring.styleDefinitions[id];
 		if (definition === undefined) {
@@ -124,7 +126,7 @@ function resolveStyleRefs(
 function resolveFamily(
 	family: FamilyKey,
 	node: NodeAuthoringStateV1 | undefined,
-	definitions: readonly StyleDefinitionV1[],
+	definitions: readonly StyleDefinition[],
 	context: ResolveContext,
 	nodeId: string,
 ): object {

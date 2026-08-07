@@ -6,10 +6,14 @@
  */
 
 import type {
-	AuthoringStateV1,
-	ComponentDefinitionV1,
-	EditorCommandBase,
+	ComponentDefinition,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandBase,
+} from "../legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	applyEditorCommand,
@@ -31,7 +35,7 @@ function base(expectedRevision: number): EditorCommandBase {
 
 const px = (value: number) => ({ kind: "unit", value, unit: "px" }) as const;
 
-const DEFINITION: ComponentDefinitionV1 = {
+const DEFINITION: ComponentDefinition = {
 	version: "1",
 	id: "def",
 	name: "Card",

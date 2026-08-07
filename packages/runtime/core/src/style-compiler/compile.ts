@@ -29,18 +29,20 @@
  */
 
 import type {
-	AnvilAppearanceV1,
-	AuthoringStateV1,
-	AuthorStyleV1,
-	DesignSystemV1,
+	AnvilAppearance,
+	AuthorStyle,
+	DesignSystem,
 	EditorError,
 	LayoutSpec,
 	NodeAuthoringStateV1,
 	ResponsiveValue,
-	TargetAppearanceV1,
+	TargetAppearance,
 	TypographySpec,
 	VisualStyleSpec,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../editor/legacy/index.js";
 import { safeParseDesignSystem } from "@anvilkit/schema/editor";
 import type { Config, Data } from "@puckeditor/core";
 import { walkTree } from "@puckeditor/core";
@@ -50,7 +52,7 @@ import { resolveAuthoringStyle } from "../editor/style/resolve-authoring-style.j
 import {
 	type AuthorablePropertyLocation,
 	authorablePropertyForSpecKey,
-	readEditorMetadataV2,
+	readEditorMetadataFor,
 	resolveStyleTargets,
 } from "../puck/component-metadata.js";
 import type { AppearanceCompilerCache } from "./cache.js";
@@ -80,8 +82,7 @@ export interface CompiledAppearance {
 	readonly fingerprint: string;
 }
 
-const EMPTY_DESIGN_SYSTEM: DesignSystemV1 = {
-	version: "1",
+const EMPTY_DESIGN_SYSTEM: DesignSystem = {
 	breakpoints: [],
 	tokens: {},
 	tokenModes: {},
@@ -92,7 +93,7 @@ const EMPTY_DESIGN_SYSTEM: DesignSystemV1 = {
 interface CollectedNode {
 	readonly nodeId: string;
 	readonly type: string;
-	readonly appearance: AnvilAppearanceV1;
+	readonly appearance: AnvilAppearance;
 }
 
 interface TargetCapability {
@@ -115,7 +116,7 @@ type MetadataByType = ReadonlyMap<
 function readMetadataV2(config: Config): MetadataByType {
 	const byType = new Map<string, ReadonlyMap<string, TargetCapability>>();
 	for (const type of Object.keys(config.components ?? {})) {
-		if (readEditorMetadataV2(config, type) === undefined) continue;
+		if (readEditorMetadataFor(config, type) === undefined) continue;
 		const targets = new Map<string, TargetCapability>();
 		for (const target of resolveStyleTargets(config, type)) {
 			targets.set(target.id, { properties: new Set(target.properties) });
@@ -125,14 +126,14 @@ function readMetadataV2(config: Config): MetadataByType {
 	return byType;
 }
 
-/** Project one family out of a `ResponsiveValue<AuthorStyleV1>`. */
-function projectFamily<K extends keyof AuthorStyleV1>(
-	style: ResponsiveValue<AuthorStyleV1> | undefined,
+/** Project one family out of a `ResponsiveValue<AuthorStyle>`. */
+function projectFamily<K extends keyof AuthorStyle>(
+	style: ResponsiveValue<AuthorStyle> | undefined,
 	family: K,
-): ResponsiveValue<NonNullable<AuthorStyleV1[K]>> | undefined {
+): ResponsiveValue<NonNullable<AuthorStyle[K]>> | undefined {
 	if (style === undefined) return undefined;
 	const base = style.base?.[family];
-	const overrides: Record<string, NonNullable<AuthorStyleV1[K]> | null> = {};
+	const overrides: Record<string, NonNullable<AuthorStyle[K]> | null> = {};
 	for (const [breakpointId, layer] of Object.entries(style.overrides ?? {})) {
 		if (layer === null) {
 			overrides[breakpointId] = null;
@@ -140,21 +141,21 @@ function projectFamily<K extends keyof AuthorStyleV1>(
 		}
 		const projected = layer?.[family];
 		if (projected !== undefined && projected !== null) {
-			overrides[breakpointId] = projected as NonNullable<AuthorStyleV1[K]>;
+			overrides[breakpointId] = projected as NonNullable<AuthorStyle[K]>;
 		}
 	}
 	const hasOverrides = Object.keys(overrides).length > 0;
 	if (base === undefined && !hasOverrides) return undefined;
 	return {
 		...(base !== undefined
-			? { base: base as NonNullable<AuthorStyleV1[K]> }
+			? { base: base as NonNullable<AuthorStyle[K]> }
 			: {}),
 		...(hasOverrides ? { overrides } : {}),
 	};
 }
 
 /** Synthesize a v1 node record from one target's v2 appearance. */
-function syntheticRecord(target: TargetAppearanceV1): NodeAuthoringStateV1 {
+function syntheticRecord(target: TargetAppearance): NodeAuthoringStateV1 {
 	const layout = projectFamily(target.style, "layout") as
 		| ResponsiveValue<LayoutSpec>
 		| undefined;
@@ -259,13 +260,13 @@ export function compileDocumentAppearance(
 				continue;
 			}
 			seenIds.add(nodeId);
-			const appearance = (item.props as { appearance?: AnvilAppearanceV1 })
+			const appearance = (item.props as { appearance?: AnvilAppearance })
 				.appearance;
-			if (
-				appearance === undefined ||
-				appearance.version !== "1" ||
-				appearance.targets === undefined
-			) {
+			// No version gate: there is one document form. A document
+			// written before the rename may still carry a stale `version`
+			// key, which is preserved as an unknown key and read by
+			// nothing (PLAN-0026 §5; stripped from the store by `p7-002`).
+			if (appearance === undefined || appearance.targets === undefined) {
 				continue;
 			}
 			collected.push({ nodeId, type: String(item.type), appearance });

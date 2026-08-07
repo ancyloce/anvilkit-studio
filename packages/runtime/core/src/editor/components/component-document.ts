@@ -23,7 +23,7 @@
  */
 
 import type {
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	JsonValue,
 	NodeOverridePatch,
 	SerializablePuckNode,
@@ -49,7 +49,7 @@ function isNode(value: unknown): value is SerializablePuckNode {
  * component" mode.
  */
 export function componentDocument(
-	definition: ComponentDefinitionV1,
+	definition: ComponentDefinition,
 	selection: Readonly<Record<string, string>> = {},
 ): PuckData {
 	const patch = matchVariant(definition, selection)?.patch ?? {};
@@ -137,7 +137,7 @@ function propDelta(
  * definition (empty content, or a different root node id).
  */
 export function foldComponentDocument(
-	definition: ComponentDefinitionV1,
+	definition: ComponentDefinition,
 	data: PuckData,
 	selection: Readonly<Record<string, string>> = {},
 ): ComponentEditSink | null {
@@ -183,7 +183,7 @@ export function foldComponentDocument(
 
 /** Every combination a definition's axes can express, in axis order. */
 export function variantCombinations(
-	definition: ComponentDefinitionV1,
+	definition: ComponentDefinition,
 ): readonly Readonly<Record<string, string>>[] {
 	return definition.variantAxes.reduce<Record<string, string>[]>(
 		(combinations, axis) =>

@@ -16,16 +16,20 @@
  */
 
 import type {
-	AuthoringStateV1,
-	EditorCommand,
-	EditorCommandPort,
-	EditorCommandResult,
-	EditorCommandSnapshot,
 	EditorError,
-	EditorPreviewResult,
 	EditorSelectionState,
 	StudioEditorConfig,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../../editor/legacy/index.js";
+import type {
+	AuthoringStateV1,
+	EditorCommandPort,
+	EditorCommandResult,
+	EditorCommandSnapshot,
+	EditorPreviewResult,
+} from "../../editor/legacy/index.js";
 import type {
 	EditorSelectionReader,
 	StudioPluginEditorApi,

@@ -9,7 +9,7 @@
 
 import type {
 	EditorPatch,
-	StyleDefinitionV1,
+	StyleDefinition,
 } from "@anvilkit/contracts/editor";
 import { applyEditorPatch } from "../patch.js";
 
@@ -19,12 +19,12 @@ import { applyEditorPatch } from "../patch.js";
  * through.
  */
 export function applyStyleDefinitionPatch(
-	definition: StyleDefinitionV1,
-	patch: EditorPatch<Omit<StyleDefinitionV1, "id" | "version">>,
-): StyleDefinitionV1 {
-	const next = applyEditorPatch<StyleDefinitionV1>(
+	definition: StyleDefinition,
+	patch: EditorPatch<Omit<StyleDefinition, "id" | "version">>,
+): StyleDefinition {
+	const next = applyEditorPatch<StyleDefinition>(
 		definition,
-		patch as EditorPatch<StyleDefinitionV1>,
+		patch as EditorPatch<StyleDefinition>,
 	);
 	if (next === undefined) {
 		return definition;

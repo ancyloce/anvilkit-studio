@@ -7,10 +7,14 @@
  */
 
 import type {
-	AuthoringStateV1,
-	EditorCommandBase,
-	StyleDefinitionV1,
+	StyleDefinition,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandBase,
+} from "../legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	applyEditorCommand,
@@ -39,7 +43,7 @@ function definition(
 	id: string,
 	layout: Record<string, unknown>,
 	overrides?: Record<string, Record<string, unknown>>,
-): StyleDefinitionV1 {
+): StyleDefinition {
 	return {
 		version: "1",
 		id,
@@ -48,7 +52,7 @@ function definition(
 		layout: { base: layout, ...(overrides ? { overrides } : {}) },
 		createdAt: "2026-01-01T00:00:00.000Z",
 		updatedAt: "2026-01-01T00:00:00.000Z",
-	} as StyleDefinitionV1;
+	} as StyleDefinition;
 }
 
 const BP = {
@@ -60,7 +64,7 @@ const BP = {
 } as const;
 
 function docWith(
-	definitions: readonly StyleDefinitionV1[],
+	definitions: readonly StyleDefinition[],
 	nodes: AuthoringStateV1["nodes"] = {},
 ): AuthoringStateV1 {
 	return {
@@ -390,7 +394,7 @@ describe("deletion materializes resolved values (§15.1)", () => {
 describe("stable exporter CSS variable names (§15.1)", () => {
 	it("keeps the id-derived suffix stable across a rename", () => {
 		const before = definition("sd-1", {});
-		const renamed: StyleDefinitionV1 = { ...before, name: "Totally Renamed" };
+		const renamed: StyleDefinition = { ...before, name: "Totally Renamed" };
 		const a = styleDefinitionCssVariableName({ ...before, name: "Card" });
 		const b = styleDefinitionCssVariableName(renamed);
 		expect(a).not.toBe(b);

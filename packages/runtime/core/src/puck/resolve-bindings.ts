@@ -3,7 +3,7 @@
  * adapter (PLAN-0025 §9.4).
  *
  * §5.1 stores binding declarations on the bound node
- * (`props.bindings: BindingV1[]`); this module makes them take effect
+ * (`props.bindings: Binding[]`); this module makes them take effect
  * through Puck's public data-resolution machinery and nothing else:
  * `withBindingResolution(config)` wraps every component's
  * `resolveData` hook so that
@@ -37,8 +37,8 @@
  */
 
 import type {
-	AnvilAppearanceV1,
-	BindingV1,
+	AnvilAppearance,
+	Binding,
 	JsonValue,
 } from "@anvilkit/contracts/editor";
 import type { ComponentConfig, Config } from "@puckeditor/core";
@@ -172,7 +172,7 @@ function applyNodeBindings(
 
 	let next = props;
 	for (const candidate of bindings) {
-		const binding = candidate as BindingV1;
+		const binding = candidate as Binding;
 		// §5.1 ownership: a stored binding binds THIS node. A foreign
 		// nodeId is a data error — skipped, never applied elsewhere.
 		if (binding.nodeId !== props.id) continue;
@@ -218,7 +218,7 @@ function hideRootTarget(
 		string,
 		unknown
 	> &
-		AnvilAppearanceV1;
+		AnvilAppearance;
 	const targets = (appearance.targets ?? {}) as Record<
 		string,
 		Record<string, unknown>

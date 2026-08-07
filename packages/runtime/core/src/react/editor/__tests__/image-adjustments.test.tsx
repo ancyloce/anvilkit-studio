@@ -6,7 +6,7 @@
  * the canvas-drop suite).
  */
 
-import type { EditorCapabilityMetadata } from "@anvilkit/contracts/editor";
+import type { AnvilComponentMetadata } from "@anvilkit/contracts/editor";
 import type { Data as PuckData } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import type { EditorCapabilityRegistry } from "../../../types/editor-api.js";
@@ -18,11 +18,14 @@ import {
 } from "../inline/image/adjustments.js";
 import { findNodeProps, setNodeProp } from "../native-tree.js";
 
-const IMAGE_METADATA: EditorCapabilityMetadata = {
-	version: "1",
-	styleTarget: "root",
-	capabilities: {
-		imageAdjust: [
+const IMAGE_METADATA: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: [],
+		},
+	},
+	images: [
 			{
 				id: "main",
 				srcPropPath: "image.src",
@@ -30,7 +33,6 @@ const IMAGE_METADATA: EditorCapabilityMetadata = {
 				cropPropPath: "image.adjustment",
 			},
 		],
-	},
 };
 
 const registry: EditorCapabilityRegistry = {

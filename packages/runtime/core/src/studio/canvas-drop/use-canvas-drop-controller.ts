@@ -35,7 +35,7 @@ import {
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useMsg } from "@/state/editor-i18n-context";
-import { readEditorMetadata } from "../../editor/capability-metadata.js";
+import { readEditorMetadata } from "../../puck/component-metadata.js";
 import {
 	type CanvasDropKind,
 	hasCanvasDropPayload,
@@ -323,8 +323,8 @@ export function useCanvasDropController(doc: Document | undefined): void {
 			);
 			const declaredTarget =
 				payload.kind === "text"
-					? (declaredMeta?.capabilities.inlineText?.[0]?.propPath ?? null)
-					: (declaredMeta?.capabilities.imageAdjust?.[0]?.srcPropPath ?? null);
+					? (declaredMeta?.inlineText?.[0]?.propPath ?? null)
+					: (declaredMeta?.images?.[0]?.srcPropPath ?? null);
 			if (declaredTarget !== null) {
 				let declaredProps = setPropAtPath(
 					targetItem.props,
@@ -333,7 +333,7 @@ export function useCanvasDropController(doc: Document | undefined): void {
 				);
 				if (payload.kind === "image" && payload.alt !== "") {
 					const altPath =
-						declaredMeta?.capabilities.imageAdjust?.[0]?.altPropPath;
+						declaredMeta?.images?.[0]?.altPropPath;
 					if (altPath !== undefined) {
 						declaredProps = setPropAtPath(
 							declaredProps,

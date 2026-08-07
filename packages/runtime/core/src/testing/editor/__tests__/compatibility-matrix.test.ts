@@ -22,10 +22,14 @@
  */
 
 import type {
-	AuthoringStateV1,
 	StudioEditorFeatures,
 } from "@anvilkit/contracts/editor";
-import { ANVILKIT_AUTHORING_KEY } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
+import {
+	ANVILKIT_AUTHORING_KEY,
+} from "../../../editor/legacy/index.js";
 import {
 	CURRENT_AUTHORING_VERSION,
 	canonicalSerializeAuthoring,

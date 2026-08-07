@@ -340,7 +340,7 @@ function isRefusal(step: Step): step is Refusal {
  * Evaluate a {@link SafeExpression} against a binding scope.
  *
  * Total: every input produces a `value`, `missing` or `rejected`
- * result. Callers apply `BindingV1.fallback` on `missing`, and surface
+ * result. Callers apply `Binding.fallback` on `missing`, and surface
  * `rejected` as a diagnostic — a refused expression must never be
  * treated as "false", because that would silently hide content whose
  * visibility binding was tampered with.

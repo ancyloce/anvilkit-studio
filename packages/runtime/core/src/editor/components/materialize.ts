@@ -28,7 +28,7 @@
 
 import type {
 	ComponentDefinitionId,
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	ComponentInstanceState,
 	ComponentPropDefinition,
 	JsonValue,
@@ -202,7 +202,7 @@ function applyPropsByNodeId(
  * nothing and simply renders the definition base.
  */
 function selectVariant(
-	definition: ComponentDefinitionV1,
+	definition: ComponentDefinition,
 	selection: Readonly<Record<string, string>>,
 ): Readonly<Record<string, NodeOverridePatch>> {
 	// One matcher, shared with the variant-model validator, so
@@ -243,7 +243,7 @@ function applyExposedProps(
 export function materializeInstance(
 	instanceNodeId: string,
 	instance: ComponentInstanceState,
-	definitions: Readonly<Record<string, ComponentDefinitionV1>>,
+	definitions: Readonly<Record<string, ComponentDefinition>>,
 	stack: readonly ComponentDefinitionId[] = [],
 ): MaterializeResult {
 	if (stack.includes(instance.definitionId)) {
@@ -368,7 +368,7 @@ export function materializeInstance(
  */
 export function formatComponentPath(
 	path: readonly ComponentDefinitionId[],
-	definitions: Readonly<Record<string, ComponentDefinitionV1>>,
+	definitions: Readonly<Record<string, ComponentDefinition>>,
 ): string {
 	return path.map((id) => definitions[id]?.name ?? id).join(" → ");
 }

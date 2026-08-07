@@ -10,7 +10,7 @@
 import type {
 	AnimationStep,
 	InteractionAction,
-	InteractionV1,
+	Interaction,
 	MotionTransition,
 } from "@anvilkit/contracts/editor";
 import { cleanup, render, screen } from "@testing-library/react";
@@ -29,7 +29,7 @@ const step = (
 	transition: MotionTransition = tween(200),
 ): AnimationStep => ({ to, transition });
 
-function interaction(actions: readonly InteractionAction[]): InteractionV1 {
+function interaction(actions: readonly InteractionAction[]): Interaction {
 	return {
 		version: "1",
 		id: "i1",
@@ -41,7 +41,7 @@ function interaction(actions: readonly InteractionAction[]): InteractionV1 {
 	};
 }
 
-function show(value: InteractionV1): void {
+function show(value: Interaction): void {
 	render(
 		<EditorI18nProvider>
 			<TimelinePanel interaction={value} />

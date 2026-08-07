@@ -10,8 +10,8 @@
  */
 
 import type {
-	AnvilAppearanceV1,
-	DesignSystemV1,
+	AnvilAppearance,
+	DesignSystem,
 } from "@anvilkit/contracts/editor";
 import type { Config, Data, PuckApi } from "@puckeditor/core";
 import { Puck, useGetPuck } from "@puckeditor/core";
@@ -48,18 +48,15 @@ const config: Config = {
 	},
 } as unknown as Config;
 
-const flexAppearance: AnvilAppearanceV1 = {
-	version: "1",
+const flexAppearance: AnvilAppearance = {
 	targets: { root: { style: { base: { layout: { display: "flex" } } } } },
 };
 
-const gridAppearance: AnvilAppearanceV1 = {
-	version: "1",
+const gridAppearance: AnvilAppearance = {
 	targets: { root: { style: { base: { layout: { display: "grid" } } } } },
 };
 
-const designSystem: DesignSystemV1 = {
-	version: "1",
+const designSystem: DesignSystem = {
 	breakpoints: [
 		{ id: "bp-sm", label: "S", maxWidth: 640, order: 0, enabled: true },
 	],
@@ -180,9 +177,9 @@ describe("history (P2-07)", () => {
 			commitDesignSystemUpdate(
 				{ getPuckApi: getPuck as () => PuckApi },
 				(current) => ({
-					...(current as DesignSystemV1),
+					...(current as DesignSystem),
 					tokenModes: {
-						...(current as DesignSystemV1).tokenModes,
+						...(current as DesignSystem).tokenModes,
 						dark: { id: "dark", name: "Dark" },
 					},
 				}),

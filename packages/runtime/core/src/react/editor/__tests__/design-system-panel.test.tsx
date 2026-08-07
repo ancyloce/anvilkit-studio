@@ -12,8 +12,8 @@
 
 import type {
 	DesignToken,
-	EditorCapabilityMetadata,
-	StyleDefinitionV1,
+	AnvilComponentMetadata,
+	StyleDefinition,
 } from "@anvilkit/contracts/editor";
 import type { Data as PuckData } from "@puckeditor/core";
 import {
@@ -43,10 +43,13 @@ import {
 
 afterEach(cleanup);
 
-const CAPABLE: EditorCapabilityMetadata = {
-	version: "1",
-	styleTarget: "root",
-	capabilities: { layoutContainer: true, visualStyle: true },
+const CAPABLE: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: ["display", "gap", "padding", "background", "borderRadius", "boxShadow", "opacity"],
+		},
+	},
 };
 
 function token(
@@ -65,7 +68,7 @@ function token(
 	} as DesignToken;
 }
 
-function style(id: string, name: string): StyleDefinitionV1 {
+function style(id: string, name: string): StyleDefinition {
 	return {
 		version: "1",
 		id,
@@ -79,7 +82,7 @@ function style(id: string, name: string): StyleDefinitionV1 {
 interface Seed {
 	readonly tokens?: Readonly<Record<string, DesignToken>>;
 	readonly tokenModes?: Readonly<Record<string, { id: string; name: string }>>;
-	readonly styleDefinitions?: Readonly<Record<string, StyleDefinitionV1>>;
+	readonly styleDefinitions?: Readonly<Record<string, StyleDefinition>>;
 	readonly nodes?: Readonly<Record<string, unknown>>;
 }
 
@@ -113,7 +116,7 @@ function seedData(seed: Seed): PuckData {
 
 function createCtx(recorded: PuckData[], seed: Seed): StudioPluginContext {
 	let data = seedData(seed);
-	const config = { components: { Hero: { metadata: { editor: CAPABLE } } } };
+	const config = { components: { Hero: { metadata: { anvilkit: { editor: CAPABLE } } } } };
 	return {
 		getData: () => data,
 		getPuckApi: () =>

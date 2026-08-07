@@ -4,7 +4,7 @@
  */
 
 import type {
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	SerializablePuckNode,
 } from "@anvilkit/contracts/editor";
 import type { Data as PuckData } from "@puckeditor/core";
@@ -15,7 +15,7 @@ import {
 	variantCombinations,
 } from "../index.js";
 
-const DEFINITION: ComponentDefinitionV1 = {
+const DEFINITION: ComponentDefinition = {
 	version: "1",
 	id: "def",
 	name: "Card",
@@ -205,7 +205,7 @@ describe("variantCombinations", () => {
 	});
 
 	it("multiplies across two axes", () => {
-		const twoAxis: ComponentDefinitionV1 = {
+		const twoAxis: ComponentDefinition = {
 			...DEFINITION,
 			variantAxes: [
 				...DEFINITION.variantAxes,

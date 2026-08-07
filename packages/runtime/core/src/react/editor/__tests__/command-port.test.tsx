@@ -15,12 +15,18 @@
  */
 
 import type {
-	AtomicEditorCommand,
-	AuthoringStateV1,
-	EditorCommand,
 	EditorError,
 } from "@anvilkit/contracts/editor";
-import { ANVILKIT_AUTHORING_KEY } from "@anvilkit/contracts/editor";
+import type {
+	AtomicEditorCommand,
+	EditorCommand,
+} from "../../../editor/legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
+import {
+	ANVILKIT_AUTHORING_KEY,
+} from "../../../editor/legacy/index.js";
 import type { PuckApi, Data as PuckData } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import { createEmptyAuthoringState } from "../../../editor/index.js";

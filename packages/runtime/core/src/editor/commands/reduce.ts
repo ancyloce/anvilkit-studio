@@ -10,14 +10,18 @@
  */
 
 import type {
-	AtomicEditorCommand,
-	AuthoringStateV1,
 	EditorPatch,
 	NodeAuthoringStateV1,
 	ResponsiveFamily,
 	ResponsiveLayerRef,
 	ResponsiveValue,
 } from "@anvilkit/contracts/editor";
+import type {
+	AtomicEditorCommand,
+} from "../legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import {
 	setNodeOverride,
 	setPropOverride,

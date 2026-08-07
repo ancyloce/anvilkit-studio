@@ -35,9 +35,11 @@
 
 import type {
 	CssLength,
-	EditorCommand,
 	ResponsiveLayerRef,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../../../../editor/legacy/index.js";
 import {
 	type KeyboardEvent as ReactKeyboardEvent,
 	type ReactNode,
@@ -52,6 +54,7 @@ import {
 } from "react";
 import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioEditorBridge } from "../../bridge.js";
+import { grantedProperties } from "../../../../puck/component-metadata.js";
 import type { InternalEditorCommandPort } from "../../command-port.js";
 import { withBreakpointMaterialization } from "../../responsive/materialize.js";
 import { isElementNode } from "../dom-registry.js";
@@ -883,7 +886,13 @@ export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 		return null;
 	}
 
-	const capabilities = metadata.capabilities;
+	// Each handle is gated on the property it actually edits, read from
+	// the component's declared style targets. The v1 contract gated on
+	// two coarse booleans (`layoutItem` / `layoutContainer`); the
+	// canonical contract carries the granted property set, so a handle
+	// can ask the precise question — "may I author `padding` here?" —
+	// instead of inferring it from a component-level flag.
+	const granted = grantedProperties(metadata);
 	// Inline-style fallback: detached documents (tests, pre-attach
 	// races) have no view to compute styles through.
 	const display =
@@ -892,21 +901,20 @@ export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 	const eligible = HANDLES.filter((definition) => {
 		switch (definition.id) {
 			case "resize-e":
+				return granted.has("width");
 			case "resize-s":
+				return granted.has("height");
 			case "resize-se":
-				return capabilities.layoutItem === true;
+				return granted.has("width") || granted.has("height");
 			case "gap":
-				return (
-					capabilities.layoutContainer === true &&
-					(display === "flex" || display === "grid")
-				);
+				return granted.has("gap") && (display === "flex" || display === "grid");
 			case "padding-top":
 			case "padding-right":
 			case "padding-bottom":
 			case "padding-left":
-				return capabilities.layoutContainer === true;
+				return granted.has("padding");
 			case "radius":
-				return capabilities.visualStyle === true;
+				return granted.has("borderRadius");
 		}
 	});
 	if (eligible.length === 0) {

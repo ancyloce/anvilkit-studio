@@ -9,7 +9,7 @@
  */
 
 import type {
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	EditorPatch,
 } from "@anvilkit/contracts/editor";
 import { applyEditorPatch } from "../patch.js";
@@ -21,14 +21,14 @@ import { applyEditorPatch } from "../patch.js";
  * a stale value.
  */
 export function applyComponentDefinitionPatch(
-	definition: ComponentDefinitionV1,
+	definition: ComponentDefinition,
 	patch: EditorPatch<
-		Omit<ComponentDefinitionV1, "id" | "version" | "revision">
+		Omit<ComponentDefinition, "id" | "version" | "revision">
 	>,
-): ComponentDefinitionV1 {
-	const next = applyEditorPatch<ComponentDefinitionV1>(
+): ComponentDefinition {
+	const next = applyEditorPatch<ComponentDefinition>(
 		definition,
-		patch as EditorPatch<ComponentDefinitionV1>,
+		patch as EditorPatch<ComponentDefinition>,
 	);
 	if (next === undefined) {
 		return definition;

@@ -13,9 +13,8 @@
  */
 
 import type {
-	AuthoringStateV1,
 	ComponentDefinitionId,
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	ComponentInstanceState,
 	NodeAuthoringStateV1,
 	NodeOverridePatch,
@@ -23,9 +22,12 @@ import type {
 	ResponsiveLayerRef,
 	ResponsiveValue,
 	StyleDefinitionId,
-	StyleDefinitionV1,
+	StyleDefinition,
 	TokenModeId,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 
 /** The authoring families that can carry token references. */
 export type TokenReferenceFamily = "layout" | "style" | "typography";
@@ -257,9 +259,9 @@ function mapInstanceOverrides(
 }
 
 function mapComponentDefinition(
-	definition: ComponentDefinitionV1,
+	definition: ComponentDefinition,
 	visitor: TokenRefVisitor,
-): ComponentDefinitionV1 {
+): ComponentDefinition {
 	let changed = false;
 	const nextVariants = definition.variants.map((variant) => {
 		let variantChanged = false;
@@ -327,7 +329,7 @@ export function mapAuthoringTokens(
 		nextNodes[nodeId] = nextRecord;
 	}
 
-	const nextStyleDefinitions: Record<string, StyleDefinitionV1> = {};
+	const nextStyleDefinitions: Record<string, StyleDefinition> = {};
 	for (const [id, definition] of Object.entries(state.styleDefinitions)) {
 		const mapped = mapFamilyContainer(
 			definition,
@@ -346,7 +348,7 @@ export function mapAuthoringTokens(
 		nextStyleDefinitions[id] = mapped;
 	}
 
-	const nextComponentDefinitions: Record<string, ComponentDefinitionV1> = {};
+	const nextComponentDefinitions: Record<string, ComponentDefinition> = {};
 	for (const [id, definition] of Object.entries(state.componentDefinitions)) {
 		const mapped = mapComponentDefinition(definition, visitor);
 		if (mapped !== definition) {

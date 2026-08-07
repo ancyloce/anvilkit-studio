@@ -28,16 +28,18 @@
 
 import type {
 	DesignToken,
-	EditorCommandResult,
 	EditorError,
 	ResponsiveLayerRef,
 	StyleDefinitionDeletionDisposition,
-	StyleDefinitionV1,
+	StyleDefinition,
 	TokenDeletionDisposition,
 	TokenModeId,
 	TokenType,
 	TokenValue,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandResult,
+} from "../../../editor/legacy/index.js";
 import { use, useCallback, useMemo, useSyncExternalStore } from "react";
 import type { InternalEditorCommandPort } from "../command-port.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
@@ -60,7 +62,7 @@ export interface DesignSystemToken {
 
 /** One reusable style definition row. */
 export interface DesignSystemStyle {
-	readonly definition: StyleDefinitionV1;
+	readonly definition: StyleDefinition;
 	/** Node ids referencing it, at any layer. */
 	readonly nodeIds: readonly string[];
 }
@@ -122,7 +124,7 @@ export interface DesignSystemModel {
 
 	readonly createStyle: (
 		name: string,
-		appliesTo?: StyleDefinitionV1["appliesTo"],
+		appliesTo?: StyleDefinition["appliesTo"],
 	) => Promise<DesignSystemOutcome>;
 	readonly renameStyle: (
 		styleDefinitionId: string,
@@ -401,7 +403,7 @@ export function useDesignSystem(): DesignSystemModel | null {
 	const createStyle = useCallback(
 		async (
 			name: string,
-			appliesTo: StyleDefinitionV1["appliesTo"] = "any",
+			appliesTo: StyleDefinition["appliesTo"] = "any",
 		): Promise<DesignSystemOutcome> => {
 			const trimmed = name.trim();
 			if (trimmed.length === 0) {
@@ -416,7 +418,7 @@ export function useDesignSystem(): DesignSystemModel | null {
 				};
 			}
 			const timestamp = new Date().toISOString();
-			const definition: StyleDefinitionV1 = {
+			const definition: StyleDefinition = {
 				version: "1",
 				id: crypto.randomUUID(),
 				name: trimmed,

@@ -9,7 +9,9 @@
  * — §21.2 step 6).
  */
 
-import type { EditorCommand } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../../../editor/legacy/index.js";
 import {
 	cleanup,
 	fireEvent,

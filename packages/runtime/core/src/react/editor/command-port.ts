@@ -38,17 +38,23 @@
  */
 
 import type {
-	AuthoringStateV1,
-	EditorCommand,
-	EditorCommandPort,
-	EditorCommandResult,
-	EditorCommandSnapshot,
 	EditorError,
-	EditorPreviewResult,
 	EditorSelectionState,
 	StudioEditorConfig,
 } from "@anvilkit/contracts/editor";
-import { ANVILKIT_AUTHORING_KEY } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../../editor/legacy/index.js";
+import type {
+	AuthoringStateV1,
+	EditorCommandPort,
+	EditorCommandResult,
+	EditorCommandSnapshot,
+	EditorPreviewResult,
+} from "../../editor/legacy/index.js";
+import {
+	ANVILKIT_AUTHORING_KEY,
+} from "../../editor/legacy/index.js";
 import type {
 	PuckApi,
 	Config as PuckConfigType,
@@ -346,6 +352,13 @@ export function createEditorCommandPort(
 			// single history-recording dispatch (§10.5). Commands with no
 			// v2 equivalent reject with a typed capability error instead
 			// of minting a sidecar into a v2 document.
+			// Routing marker: `authoringSchemaVersion` is no longer a
+			// DECLARED root prop (`p1-001` removed it from the contract),
+			// but it is still written into stored documents by the
+			// migration and read here off untyped root props. It survives
+			// as a transitional routing marker until `p7-002` strips it
+			// from the store; the write path stops needing it when
+			// `p3-009` deletes the sidecar engine.
 			const rootProps = (data.root?.props ?? {}) as Record<string, unknown>;
 			if (
 				rootProps[ANVILKIT_AUTHORING_KEY] === undefined &&
@@ -492,6 +505,7 @@ export function createEditorCommandPort(
 			// authoring output (derived from the empty parsed state) is
 			// dropped — render state lives in the §5.1 carriers the tree
 			// already carries.
+			// Same transitional routing marker as above (`p1-001`).
 			const nativeRootProps = (data.root?.props ?? {}) as Record<
 				string,
 				unknown

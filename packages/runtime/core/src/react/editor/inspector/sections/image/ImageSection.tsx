@@ -67,7 +67,7 @@ export function ImageSection({ context }: InspectorSectionProps): ReactNode {
 	const metadata =
 		primary === undefined ? undefined : bridge.capabilities?.forNode(primary);
 	const target: ImageTarget | undefined =
-		metadata?.capabilities.imageAdjust?.[0];
+		metadata?.images?.[0];
 
 	const props =
 		primary === undefined || port === null

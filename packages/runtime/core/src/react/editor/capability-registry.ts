@@ -20,17 +20,19 @@
  */
 
 import type {
-	AuthoringStateV1,
-	EditorCapabilityMetadata,
+	AnvilComponentMetadata,
 	EditorFeatureId,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../editor/legacy/index.js";
 import type { PuckApi } from "@puckeditor/core";
 import {
 	type EditorFeatureScanDocument,
 	listUsedEditorFeatures,
 } from "../../editor/index.js";
 import type { EditorCapabilityRegistry } from "../../types/editor-api.js";
-import { readEditorMetadata } from "../../editor/capability-metadata.js";
+import { readEditorMetadata } from "../../puck/component-metadata.js";
 
 /** Dependencies of the registry — thunks so tests need no `<Studio>`. */
 export interface CapabilityRegistryDeps {
@@ -59,7 +61,7 @@ export function createEditorCapabilityRegistry(
 
 	const forComponent = (
 		componentType: string,
-	): EditorCapabilityMetadata | undefined => {
+	): AnvilComponentMetadata | undefined => {
 		try {
 			const components = api()?.config.components as
 				| Record<string, unknown>
@@ -75,7 +77,7 @@ export function createEditorCapabilityRegistry(
 
 	return {
 		forComponent,
-		forNode(nodeId: string): EditorCapabilityMetadata | undefined {
+		forNode(nodeId: string): AnvilComponentMetadata | undefined {
 			// Puck's own id index throws while its app state is mid-
 			// transition — notably on the render right after an undo of a
 			// tree mutation. A capability lookup is advisory, so a

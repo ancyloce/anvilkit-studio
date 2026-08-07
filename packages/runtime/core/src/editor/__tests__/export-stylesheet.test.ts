@@ -7,9 +7,11 @@
  */
 
 import type {
-	AuthoringStateV1,
 	BreakpointDefinition,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import { buildExportStylesheet } from "../index.js";
 

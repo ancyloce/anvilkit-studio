@@ -25,13 +25,15 @@
  */
 
 import type {
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	ComponentInstanceState,
 	ComponentOverrideTarget,
-	EditorCommandResult,
 	EditorError,
 	ResponsiveLayerRef,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandResult,
+} from "../../../editor/legacy/index.js";
 import {
 	use,
 	useCallback,
@@ -65,7 +67,7 @@ export interface ComponentInstanceModel {
 	readonly nodeId: string;
 	readonly instance: ComponentInstanceState;
 	/** `null` when the referenced definition is not in the document. */
-	readonly definition: ComponentDefinitionV1 | null;
+	readonly definition: ComponentDefinition | null;
 	/** True when the definition is missing — data retained (ED-COMP-007). */
 	readonly unresolved: boolean;
 	readonly overrides: readonly InstanceOverrideEntry[];

@@ -8,10 +8,14 @@
  */
 
 import type {
-	AuthoringStateV1,
 	BreakpointDefinition,
-	SetBreakpointsCommand,
 } from "@anvilkit/contracts/editor";
+import type {
+	SetBreakpointsCommand,
+} from "../../../editor/legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	applyEditorCommand,

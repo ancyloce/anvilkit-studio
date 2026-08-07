@@ -126,7 +126,7 @@ export function evaluateContractRules(
 	for (const node of walkTree(data)) {
 		const metadata = capabilities.forComponent(node.type);
 
-		for (const target of metadata?.capabilities.imageAdjust ?? []) {
+		for (const target of metadata?.images ?? []) {
 			if (target.altPropPath === undefined) {
 				continue;
 			}
@@ -146,7 +146,7 @@ export function evaluateContractRules(
 		}
 
 		if (INTERACTIVE_TYPE_PATTERN.test(node.type)) {
-			const textTargets = metadata?.capabilities.inlineText ?? [];
+			const textTargets = metadata?.inlineText ?? [];
 			const candidates =
 				textTargets.length > 0
 					? textTargets.map((target) => target.propPath)

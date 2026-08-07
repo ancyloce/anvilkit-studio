@@ -33,13 +33,15 @@
  */
 
 import type {
-	AuthoringStateV1,
 	BreakpointDefinition,
 	EditorError,
 	EditorStyleAdapter,
 	NodeAuthoringStateV1,
 	ResponsiveValue,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
 import {
 	resolveAuthoringStyle,
 	substituteTokens,

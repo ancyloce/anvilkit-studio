@@ -14,10 +14,12 @@
  */
 
 import type {
-	AuthoringStateV1,
 	BreakpointDefinition,
 	StudioEditorConfig,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
 
 /** OQ-002 default preset: base + 991 / 767 / 479. */
 export const DEFAULT_BREAKPOINT_PRESET: readonly BreakpointDefinition[] = [

@@ -9,10 +9,12 @@
  */
 
 import type {
-	AuthoringStateV1,
 	EditorDiagnosticPort,
 	EditorEvent,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { EditorI18nProvider } from "@/state/editor-i18n-context";

@@ -4,7 +4,9 @@
  * duplicate remap.
  */
 
-import type { AuthoringStateV1 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import type { Data } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import {

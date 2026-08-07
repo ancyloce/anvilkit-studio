@@ -6,9 +6,11 @@
  */
 
 import type {
-	AuthoringStateV1,
 	EditorCommandBase,
-} from "@anvilkit/contracts/editor";
+} from "../legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	applyEditorCommand,

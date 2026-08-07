@@ -16,9 +16,11 @@
  */
 
 import type {
-	AuthoringStateV1,
 	ComponentDefinitionId,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import type { Data as PuckData } from "@puckeditor/core";
 import type { PuckTreeNode } from "../tree/nodes.js";
 

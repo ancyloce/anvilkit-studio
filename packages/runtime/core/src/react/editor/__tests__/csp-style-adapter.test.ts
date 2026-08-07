@@ -10,9 +10,11 @@
  */
 
 import type {
-	AuthoringStateV1,
 	EditorStyleAdapter,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
 import { describe, expect, it, vi } from "vitest";
 import { createEmptyAuthoringState } from "../../../editor/index.js";
 import {

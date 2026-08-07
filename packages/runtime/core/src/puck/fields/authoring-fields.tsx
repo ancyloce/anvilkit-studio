@@ -13,15 +13,15 @@
  */
 
 import type {
-	AnvilAppearanceV1,
-	BindingV1,
-	InteractionV1,
+	AnvilAppearance,
+	Binding,
+	Interaction,
 } from "@anvilkit/contracts/editor";
 import type { CustomField } from "@puckeditor/core";
 import { createElement } from "react";
 
 /** The declared `appearance` field (§5.1 node authoring props). */
-export const appearanceField: CustomField<AnvilAppearanceV1 | undefined> = {
+export const appearanceField: CustomField<AnvilAppearance | undefined> = {
 	type: "custom",
 	visible: false,
 	render: () => createElement("span", { hidden: true }),
@@ -29,7 +29,7 @@ export const appearanceField: CustomField<AnvilAppearanceV1 | undefined> = {
 
 /** The declared `interactions` field (owned by the trigger node). */
 export const interactionsField: CustomField<
-	readonly InteractionV1[] | undefined
+	readonly Interaction[] | undefined
 > = {
 	type: "custom",
 	visible: false,
@@ -37,7 +37,7 @@ export const interactionsField: CustomField<
 };
 
 /** The declared `bindings` field (owned by the bound node). */
-export const bindingsField: CustomField<readonly BindingV1[] | undefined> = {
+export const bindingsField: CustomField<readonly Binding[] | undefined> = {
 	type: "custom",
 	visible: false,
 	render: () => createElement("span", { hidden: true }),

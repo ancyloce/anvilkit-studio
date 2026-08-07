@@ -22,11 +22,13 @@
  */
 
 import type {
-	AuthoringStateV1,
 	ComponentDefinitionDeletePolicy,
 	ComponentDefinitionId,
 	EditorError,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { makeEditorError } from "../diagnostics.js";
 
 /** How many referencing node ids a diagnostic carries (freeze §4). */

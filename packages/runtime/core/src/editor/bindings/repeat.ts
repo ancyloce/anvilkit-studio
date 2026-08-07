@@ -32,7 +32,7 @@
  */
 
 import type {
-	BindingV1,
+	Binding,
 	JsonValue,
 	SafeCondition,
 } from "@anvilkit/contracts/editor";
@@ -188,7 +188,7 @@ export function isVisibleInPreview(resolution: VisibilityResolution): boolean {
  * this module knowing anything about export.
  */
 export function repeatExportBlockers(
-	bindings: Readonly<Record<string, BindingV1>>,
+	bindings: Readonly<Record<string, Binding>>,
 	expansions: ReadonlyMap<string, RepeatExpansion>,
 ): readonly string[] {
 	const blocked: string[] = [];

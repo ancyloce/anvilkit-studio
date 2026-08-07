@@ -24,13 +24,13 @@
  */
 
 import type {
-	AnvilAppearanceV1,
+	AnvilAppearance,
 	AuthorableStyleProperty,
-	AuthorStyleV1,
+	AuthorStyle,
 	EditorError,
 	ResponsiveLayerRef,
 	ResponsiveValue,
-	TargetAppearanceV1,
+	TargetAppearance,
 } from "@anvilkit/contracts/editor";
 import {
 	canonicalizeAppearance,
@@ -122,11 +122,11 @@ function withLayerValue<T>(
 
 /** Apply a `set-property` patch inside the layered style carrier. */
 function withStyleProperty(
-	style: ResponsiveValue<AuthorStyleV1> | undefined,
+	style: ResponsiveValue<AuthorStyle> | undefined,
 	layer: ResponsiveLayerRef,
 	property: AuthorableStyleProperty,
 	value: unknown,
-): ResponsiveValue<AuthorStyleV1> | undefined {
+): ResponsiveValue<AuthorStyle> | undefined {
 	const location = AUTHORABLE_PROPERTY_LOCATIONS[property];
 	const currentLayer =
 		layer === "base" ? style?.base : (style?.overrides?.[layer] ?? undefined);
@@ -152,20 +152,20 @@ function withStyleProperty(
 	else draftLayer[location.family] = nextFamily;
 	const nextLayer =
 		Object.keys(draftLayer).length > 0
-			? (draftLayer as AuthorStyleV1)
+			? (draftLayer as AuthorStyle)
 			: undefined;
 	return withLayerValue(style, layer, nextLayer);
 }
 
 /** Apply the patch to one target's appearance carrier. */
 function withPatchedTarget(
-	target: TargetAppearanceV1 | undefined,
+	target: TargetAppearance | undefined,
 	layer: ResponsiveLayerRef,
 	patch: AppearancePatch,
-): TargetAppearanceV1 | undefined {
+): TargetAppearance | undefined {
 	const draft: {
 		styleRefs?: ResponsiveValue<readonly string[]>;
-		style?: ResponsiveValue<AuthorStyleV1>;
+		style?: ResponsiveValue<AuthorStyle>;
 		hidden?: ResponsiveValue<boolean>;
 	} = { ...target };
 	if (patch.kind === "set-property") {
@@ -191,20 +191,41 @@ function withPatchedTarget(
 
 /** Apply the patch to one node's (validated) appearance value. */
 function withPatchedAppearance(
-	appearance: AnvilAppearanceV1 | undefined,
+	appearance: AnvilAppearance | undefined,
 	targetId: string,
 	layer: ResponsiveLayerRef,
 	patch: AppearancePatch,
-): AnvilAppearanceV1 | undefined {
+): AnvilAppearance | undefined {
+	// Keys we do not understand are PRESERVED, never dropped. The
+	// schemas are `looseObject` precisely so a document written before
+	// the canonical rename (which may still carry a stale `version`)
+	// keeps working until `p7-002` strips it from the store — and
+	// PLAN-0026 §5 defines that tolerance as *generic unknown-key
+	// preservation*. Rebuilding the value from `targets` alone would
+	// silently destroy them on the first edit.
+	const { targets: _known, ...unknown } = (appearance ?? {}) as Record<
+		string,
+		unknown
+	>;
 	const targets = { ...appearance?.targets };
 	const nextTarget = withPatchedTarget(targets[targetId], layer, patch);
 	if (nextTarget === undefined) delete targets[targetId];
 	else targets[targetId] = nextTarget;
-	const draft: AnvilAppearanceV1 = {
-		version: "1",
+	const draft: AnvilAppearance = {
 		...(Object.keys(targets).length > 0 ? { targets } : {}),
 	};
-	return canonicalizeAppearance(draft);
+	const canonical = canonicalizeAppearance(draft);
+	const hasUnknown = Object.keys(unknown).length > 0;
+	if (canonical === undefined) {
+		// `canonicalizeAppearance` collapses a target-free appearance to
+		// `undefined` ("empty shells are never stored"). That rule must
+		// not become a data-loss path for keys that arrived with the
+		// document.
+		return hasUnknown ? (unknown as AnvilAppearance) : undefined;
+	}
+	return hasUnknown
+		? ({ ...unknown, ...canonical } as AnvilAppearance)
+		: canonical;
 }
 
 /**
@@ -263,7 +284,7 @@ export function updateAppearanceInData(
 	});
 
 	// Validate the ENTIRE intent before writing anything.
-	const nextById = new Map<string, AnvilAppearanceV1 | undefined>();
+	const nextById = new Map<string, AnvilAppearance | undefined>();
 	for (const nodeId of input.nodeIds) {
 		const node = collected.get(nodeId);
 		if (node === undefined) {
@@ -309,7 +330,7 @@ export function updateAppearanceInData(
 			continue;
 		}
 
-		let current: AnvilAppearanceV1 | undefined;
+		let current: AnvilAppearance | undefined;
 		if (node.appearance !== undefined) {
 			const parsed = safeParseAppearance(node.appearance);
 			if (!parsed.success) {

@@ -8,7 +8,7 @@
  * runtime that silently bound nothing would pass the weaker check.
  */
 
-import type { InteractionV1 } from "@anvilkit/contracts/editor";
+import type { Interaction } from "@anvilkit/contracts/editor";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
 	createPreviewSession,
@@ -23,7 +23,7 @@ vi.mock("motion", () => ({
 	animate: vi.fn(() => ({ stop: vi.fn() })),
 }));
 
-function interaction(patch: Partial<InteractionV1> = {}): InteractionV1 {
+function interaction(patch: Partial<Interaction> = {}): Interaction {
 	return {
 		version: "1",
 		id: "i1",

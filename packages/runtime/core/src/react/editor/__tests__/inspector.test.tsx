@@ -8,10 +8,12 @@
  */
 
 import type {
-	AuthoringStateV1,
-	EditorCapabilityMetadata,
+	AnvilComponentMetadata,
 	StudioEditorConfig,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
 import {
 	cleanup,
 	fireEvent,
@@ -138,32 +140,33 @@ describe("field-state computation (CORE-P1A-005)", () => {
 // Mounted panel flows.
 // ---------------------------------------------------------------------------
 
-const CAPABLE: EditorCapabilityMetadata = {
-	version: "1",
-	styleTarget: "root",
-	capabilities: {
-		layoutItem: true,
-		visualStyle: true,
-		typography: true,
+const CAPABLE: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: ["width", "height", "margin", "background", "borderRadius", "boxShadow", "opacity", "fontSize", "fontWeight", "color", "textAlign"],
+		},
 	},
 };
 
 /** Everything `Hero` declares, plus the data and animation families. */
-const RICH: EditorCapabilityMetadata = {
-	...CAPABLE,
-	capabilities: {
-		...CAPABLE.capabilities,
-		bindings: true,
-		interactions: true,
+const RICH: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: ["width", "background", "fontSize"],
+		},
 	},
+	interactions: true,
+	bindings: true,
 };
 
 function createCtx(): StudioPluginContext {
 	let data = buildLegacyPuckData();
 	const config = {
 		components: {
-			Hero: { metadata: { editor: CAPABLE } },
-			Rich: { metadata: { editor: RICH } },
+			Hero: { metadata: { anvilkit: { editor: CAPABLE } } },
+			Rich: { metadata: { anvilkit: { editor: RICH } } },
 			Legacy: {},
 		},
 	};

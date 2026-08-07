@@ -29,14 +29,16 @@
  */
 
 import type {
-	AuthoringStateV1,
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	ComponentInstanceState,
 	EditorError,
 	JsonValue,
 	NodeOverridePatch,
 	SerializablePuckNode,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { makeEditorError } from "../diagnostics.js";
 import { withRecord } from "../node-records.js";
 import { materializeInstance } from "./materialize.js";
@@ -99,7 +101,7 @@ function resolveUnderSelection(
 	instanceNodeId: string,
 	instance: ComponentInstanceState,
 	selection: Readonly<Record<string, string>>,
-	definitions: Readonly<Record<string, ComponentDefinitionV1>>,
+	definitions: Readonly<Record<string, ComponentDefinition>>,
 ): Map<string, SerializablePuckNode> | undefined {
 	const probe = materializeInstance(
 		instanceNodeId,

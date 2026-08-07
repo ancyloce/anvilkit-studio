@@ -15,10 +15,14 @@
  */
 
 import type {
-	AuthoringStateV1,
 	NodeAuthoringStateV1,
 } from "@anvilkit/contracts/editor";
-import { ANVILKIT_AUTHORING_KEY } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
+import {
+	ANVILKIT_AUTHORING_KEY,
+} from "../../../editor/legacy/index.js";
 import type { Data, Config as PuckConfig } from "@puckeditor/core";
 import {
 	buildLegacyPuckData,

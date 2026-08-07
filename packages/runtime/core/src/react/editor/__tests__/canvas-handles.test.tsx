@@ -5,7 +5,7 @@
  * and the §13.6 live announcement carrying value + active layer.
  */
 
-import type { EditorCapabilityMetadata } from "@anvilkit/contracts/editor";
+import type { AnvilComponentMetadata } from "@anvilkit/contracts/editor";
 import { act, cleanup, render, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { EditorI18nProvider } from "@/state/editor-i18n-context";
@@ -23,18 +23,17 @@ import {
 
 afterEach(cleanup);
 
-const FULL_CAPS: EditorCapabilityMetadata = {
-	version: "1",
-	styleTarget: "root",
-	capabilities: {
-		layoutItem: true,
-		layoutContainer: true,
-		visualStyle: true,
+const FULL_CAPS: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: ["display", "gap", "padding", "width", "height", "margin", "background", "borderRadius", "boxShadow", "opacity"],
+		},
 	},
 };
 
 function setup(options?: {
-	readonly metadata?: EditorCapabilityMetadata | undefined;
+	readonly metadata?: AnvilComponentMetadata | undefined;
 	readonly locked?: boolean;
 	/** Inline display for the target (gap eligibility needs flex/grid). */
 	readonly display?: string;

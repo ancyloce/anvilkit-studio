@@ -12,13 +12,13 @@
  * the `testing/editor` fixture pack).
  */
 
-import type { BindingV1 } from "./bindings.js";
-import type { ComponentDefinitionV1 } from "./components.js";
-import type { InteractionV1 } from "./interactions.js";
-import type { NodeAuthoringStateV1 } from "./node-state.js";
-import type { BreakpointDefinition } from "./responsive.js";
-import type { StyleDefinitionV1 } from "./style-definitions.js";
-import type { DesignToken, TokenMode } from "./tokens.js";
+import type { Binding } from "@anvilkit/contracts/editor";
+import type { ComponentDefinition } from "@anvilkit/contracts/editor";
+import type { Interaction } from "@anvilkit/contracts/editor";
+import type { NodeAuthoringStateV1 } from "@anvilkit/contracts/editor";
+import type { BreakpointDefinition } from "@anvilkit/contracts/editor";
+import type { StyleDefinition } from "@anvilkit/contracts/editor";
+import type { DesignToken, TokenMode } from "@anvilkit/contracts/editor";
 
 /**
  * The root-props key that carries the authoring sidecar. The root
@@ -44,12 +44,12 @@ export interface AuthoringStateV1 {
 	readonly nodes: Readonly<Record<string, NodeAuthoringStateV1>>;
 	readonly tokens: Readonly<Record<string, DesignToken>>;
 	readonly tokenModes: Readonly<Record<string, TokenMode>>;
-	readonly styleDefinitions: Readonly<Record<string, StyleDefinitionV1>>;
+	readonly styleDefinitions: Readonly<Record<string, StyleDefinition>>;
 	readonly componentDefinitions: Readonly<
-		Record<string, ComponentDefinitionV1>
+		Record<string, ComponentDefinition>
 	>;
-	readonly interactions: Readonly<Record<string, InteractionV1>>;
-	readonly bindings: Readonly<Record<string, BindingV1>>;
+	readonly interactions: Readonly<Record<string, Interaction>>;
+	readonly bindings: Readonly<Record<string, Binding>>;
 }
 
 /**

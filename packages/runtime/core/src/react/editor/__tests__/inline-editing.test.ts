@@ -7,7 +7,7 @@
  * Tiptap sanitizer allowlist.
  */
 
-import type { EditorCapabilityMetadata } from "@anvilkit/contracts/editor";
+import type { AnvilComponentMetadata } from "@anvilkit/contracts/editor";
 import type { Data as PuckData } from "@puckeditor/core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createStudioEditorBridge } from "../bridge.js";
@@ -38,12 +38,14 @@ afterEach(() => {
 	vi.useRealTimers();
 });
 
-const TEXT_METADATA: EditorCapabilityMetadata = {
-	version: "1",
-	styleTarget: "root",
-	capabilities: {
-		inlineText: [{ id: "title", propPath: "title", format: "plain" }],
+const TEXT_METADATA: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: [],
+		},
 	},
+	inlineText: [{ id: "title", propPath: "title", format: "plain" }],
 };
 
 function docData(): PuckData {
@@ -59,7 +61,7 @@ function docData(): PuckData {
 	} as unknown as PuckData;
 }
 
-function setup(metadata: EditorCapabilityMetadata = TEXT_METADATA) {
+function setup(metadata: AnvilComponentMetadata = TEXT_METADATA) {
 	const bridge = createStudioEditorBridge();
 	let data = docData();
 	let recorded = 0;

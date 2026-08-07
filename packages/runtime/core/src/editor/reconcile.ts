@@ -19,10 +19,12 @@
  */
 
 import type {
-	AuthoringStateV1,
-	InteractionV1,
+	Interaction,
 	NodeAuthoringStateV1,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "./legacy/index.js";
 import type { Data } from "@puckeditor/core";
 
 function looksLikeComponentData(
@@ -147,7 +149,7 @@ export function reconcileAuthoringState(
 
 	// Pass 2: drop interactions/bindings anchored to missing nodes.
 	const removedInteractions: string[] = [];
-	const keptInteractions: Record<string, InteractionV1> = {};
+	const keptInteractions: Record<string, Interaction> = {};
 	for (const [id, interaction] of Object.entries(state.interactions)) {
 		if (liveIds.has(interaction.sourceNodeId)) {
 			keptInteractions[id] = interaction;

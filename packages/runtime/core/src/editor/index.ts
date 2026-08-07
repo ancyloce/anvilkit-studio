@@ -24,12 +24,12 @@
 // §5.1 authoring-carrier types, re-exported so v2-protocol consumers
 // (studio demo config, Phase 3.5 plugins) need no direct contracts dep.
 export type {
-	AnvilAppearanceV1,
+	AnvilAppearance,
 	AnvilNodeFeatureProps,
 	AuthorableProps,
-	BindingV1,
-	InteractionV1,
-	TargetAppearanceV1,
+	Binding,
+	Interaction,
+	TargetAppearance,
 } from "@anvilkit/contracts/editor";
 // Shared used-features projection (CORE-P1A-003): re-exported from
 // the engine so React-layer consumers reach it without importing
@@ -53,7 +53,7 @@ export {
 	type AuthorablePropertyLocation,
 	authorablePropertyForSpecKey,
 	type ResolvedStyleTarget,
-	readEditorMetadataV2,
+	readEditorMetadataFor,
 	resolveStyleTargets,
 } from "../puck/component-metadata.js";
 export {
@@ -137,7 +137,7 @@ export {
 	type VisibilityResolution,
 } from "./bindings/repeat.js";
 export { bindingUpdateErrors } from "./bindings/validate.js";
-export { readEditorMetadata } from "./capability-metadata.js";
+
 export {
 	type AuthoringChangeSet,
 	applyEditorCommand,

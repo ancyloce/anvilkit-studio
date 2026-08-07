@@ -5,12 +5,16 @@
  */
 
 import type {
-	AuthoringStateV1,
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	ComponentVariant,
-	EditorCommandBase,
 	VariantAxis,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandBase,
+} from "../legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	applyEditorCommand,
@@ -53,7 +57,7 @@ const variant = (
 function definition(
 	axes: readonly VariantAxis[],
 	variants: readonly ComponentVariant[],
-): ComponentDefinitionV1 {
+): ComponentDefinition {
 	return {
 		version: "1",
 		id: "def",
@@ -71,7 +75,7 @@ function definition(
 const SIZE = axis("size", ["sm", "lg"]);
 const TONE = axis("tone", ["light", "dark"]);
 
-function docWith(def: ComponentDefinitionV1): AuthoringStateV1 {
+function docWith(def: ComponentDefinition): AuthoringStateV1 {
 	return {
 		...createEmptyAuthoringState(),
 		componentDefinitions: { def },
@@ -289,7 +293,7 @@ describe("variant patch at its §24.4 position (009B)", () => {
 	});
 
 	it("stays below exposed props and node overrides", () => {
-		const withExposed: ComponentDefinitionV1 = {
+		const withExposed: ComponentDefinition = {
 			...def,
 			exposedProps: [
 				{ id: "p", name: "P", type: "text", sourcePath: ["label"] },

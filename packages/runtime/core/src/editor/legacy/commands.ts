@@ -1,44 +1,43 @@
 /**
- * @file The typed editor command and transaction contract
- * (DD-0019 §10.1–§10.3, §10.6, §14.6; frozen by CORE-P0-001 —
- * `docs/architecture/editor-command-transaction-contract-freeze.md`).
+ * @file The legacy `EditorCommand` IR — core-internal since `p1-005`.
  *
- * Every mutation from the inspector, canvas, layers, keyboard,
- * plugin, or AI flows through this layer; no entry point may write
- * `root.props.__anvilkit` directly. Reducers are pure and
- * deterministic: all generated IDs are caller-supplied
- * (`crypto.randomUUID()` at call sites, never inside reducers) and
- * timestamps derive from `EditorCommandBase.timestamp` (freeze D-7).
+ * Moved out of the published `@anvilkit/contracts` surface: the
+ * canonical contract is `Config` + `Data` + `PuckApi` + `Render`, and a
+ * parallel command IR may not sit beside it in the public API. These
+ * declarations survive only for the engine that still implements them,
+ * and are deleted with it in `p3-009`.
+ *
+ * NOTHING NEW MAY IMPORT FROM HERE.
  */
-
 import type { AuthoringStateV1 } from "./authoring-state.js";
-import type { BindingV1 } from "./bindings.js";
+import type { Binding } from "@anvilkit/contracts/editor";
 import type {
+	EditorSelectionState,
 	ComponentDefinitionId,
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	ComponentOverrideTarget,
 	NodeOverridePatch,
-} from "./components.js";
-import type { EditorError } from "./errors.js";
-import type { InteractionId, InteractionV1 } from "./interactions.js";
+} from "@anvilkit/contracts/editor";
+import type { EditorError } from "@anvilkit/contracts/editor";
+import type { InteractionId, Interaction } from "@anvilkit/contracts/editor";
 import type {
 	BreakpointDefinition,
 	BreakpointId,
 	ResponsiveFamily,
 	ResponsiveLayerRef,
-} from "./responsive.js";
-import type { LayoutSpec, TypographySpec, VisualStyleSpec } from "./specs.js";
+} from "@anvilkit/contracts/editor";
+import type { LayoutSpec, TypographySpec, VisualStyleSpec } from "@anvilkit/contracts/editor";
 import type {
 	StyleDefinitionDeletionDisposition,
 	StyleDefinitionId,
-	StyleDefinitionV1,
-} from "./style-definitions.js";
+	StyleDefinition,
+} from "@anvilkit/contracts/editor";
 import type {
 	DesignToken,
 	TokenDeletionDisposition,
 	TokenModeId,
-} from "./tokens.js";
-import type { EditorPatch, JsonValue } from "./values.js";
+} from "@anvilkit/contracts/editor";
+import type { EditorPatch, JsonValue } from "@anvilkit/contracts/editor";
 
 /**
  * Fields shared by every command (DD-0019 §10.1, verbatim).
@@ -153,7 +152,7 @@ export interface SetBreakpointsCommand extends EditorCommandBase {
 /** Create a reusable style definition (caller-supplied id). */
 export interface CreateStyleDefinitionCommand extends EditorCommandBase {
 	readonly type: "styleDefinition.create";
-	readonly definition: StyleDefinitionV1;
+	readonly definition: StyleDefinition;
 }
 
 /** Attach a style definition to nodes at a layer, in list order. */
@@ -175,7 +174,7 @@ export interface AttachStyleDefinitionCommand extends EditorCommandBase {
 export interface UpdateStyleDefinitionCommand extends EditorCommandBase {
 	readonly type: "styleDefinition.update";
 	readonly styleDefinitionId: StyleDefinitionId;
-	readonly patch: EditorPatch<Omit<StyleDefinitionV1, "id" | "version">>;
+	readonly patch: EditorPatch<Omit<StyleDefinition, "id" | "version">>;
 }
 
 /**
@@ -245,7 +244,7 @@ export interface DeleteTokenCommand extends EditorCommandBase {
  */
 export interface CreateComponentDefinitionCommand extends EditorCommandBase {
 	readonly type: "component.definition.create";
-	readonly definition: ComponentDefinitionV1;
+	readonly definition: ComponentDefinition;
 	/** The page nodes the new instance replaces, in parent order. */
 	readonly replaceNodeIds: readonly string[];
 	/** Caller-supplied node id for the new instance node. */
@@ -267,7 +266,7 @@ export interface UpdateComponentDefinitionCommand extends EditorCommandBase {
 	readonly type: "component.definition.update";
 	readonly definitionId: ComponentDefinitionId;
 	readonly patch: EditorPatch<
-		Omit<ComponentDefinitionV1, "id" | "version" | "revision">
+		Omit<ComponentDefinition, "id" | "version" | "revision">
 	>;
 }
 
@@ -379,7 +378,7 @@ export interface PromoteComponentOverrideCommand extends EditorCommandBase {
 /** Create an interaction (caller-supplied id). */
 export interface CreateInteractionCommand extends EditorCommandBase {
 	readonly type: "interaction.create";
-	readonly interaction: InteractionV1;
+	readonly interaction: Interaction;
 }
 
 /**
@@ -397,7 +396,7 @@ export interface CreateInteractionCommand extends EditorCommandBase {
  */
 export interface UpdateInteractionCommand extends EditorCommandBase {
 	readonly type: "interaction.update";
-	readonly interaction: InteractionV1;
+	readonly interaction: Interaction;
 }
 
 /** Remove an interaction (freeze D-2 addition, CORE-P3-001). */
@@ -409,7 +408,7 @@ export interface DeleteInteractionCommand extends EditorCommandBase {
 /** Write a binding — upsert semantics (freeze §2). */
 export interface UpdateBindingCommand extends EditorCommandBase {
 	readonly type: "binding.update";
-	readonly binding: BindingV1;
+	readonly binding: Binding;
 }
 
 /**
@@ -468,19 +467,6 @@ export interface BatchEditorCommand extends EditorCommandBase {
 
 /** Any editor command (DD-0019 §10.1, verbatim). */
 export type EditorCommand = AtomicEditorCommand | BatchEditorCommand;
-
-/**
- * Multi-selection state (DD-0019 §10.6, verbatim). Core stores the
- * full selection; the primary id is synchronized to Puck. Locked
- * nodes may be selected and copied but not mutated; selections cannot
- * span component editing scopes. Never undoable.
- */
-export interface EditorSelectionState {
-	readonly primaryId?: string;
-	readonly selectedIds: readonly string[];
-	readonly anchorId?: string;
-	readonly scope: "page" | `component:${string}`;
-}
 
 /** Result of an executed command (DD-0019 §10.2, verbatim). */
 export interface EditorCommandResult {

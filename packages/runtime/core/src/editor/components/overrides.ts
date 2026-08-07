@@ -24,8 +24,7 @@
  */
 
 import type {
-	AuthoringStateV1,
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	ComponentOverrideTarget,
 	JsonValue,
 	NodeOverridePatch,
@@ -34,6 +33,9 @@ import type {
 	ResponsiveValue,
 	SerializablePuckNode,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { withRecord } from "../node-records.js";
 
 /** The families of a `NodeOverridePatch` that are responsive. */
@@ -247,11 +249,11 @@ export function resetAllComponentOverrides(
 
 /** Write a value at a path inside a definition node's props. */
 function writeDefinitionProp(
-	definition: ComponentDefinitionV1,
+	definition: ComponentDefinition,
 	definitionNodeId: string,
 	path: PropertyPath,
 	value: JsonValue,
-): ComponentDefinitionV1 | undefined {
+): ComponentDefinition | undefined {
 	let found = false;
 	const walk = (node: SerializablePuckNode): SerializablePuckNode => {
 		const props: Record<string, JsonValue> = { ...node.props };

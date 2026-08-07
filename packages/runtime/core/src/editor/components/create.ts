@@ -17,12 +17,14 @@
  */
 
 import type {
-	AuthoringStateV1,
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	EditorError,
 	JsonValue,
 	SerializablePuckNode,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
 import type { Data as PuckData } from "@puckeditor/core";
 import { makeEditorError } from "../diagnostics.js";
@@ -37,13 +39,13 @@ import {
  * The editor-owned wrapper type used when a multi-node selection has
  * no single root (§14.3). It is a *definition-internal* node type; it
  * never needs a host component registration because it only ever
- * appears inside `ComponentDefinitionV1.root`.
+ * appears inside `ComponentDefinition.root`.
  */
 export const COMPONENT_FRAME_TYPE = "ComponentFrame";
 
 /** A validated create-component request. */
 export interface CreateComponentPlan {
-	readonly definition: ComponentDefinitionV1;
+	readonly definition: ComponentDefinition;
 	readonly data: PuckData;
 	readonly authoring: AuthoringStateV1;
 	readonly instanceNodeId: string;
@@ -279,7 +281,7 @@ export function buildCreateComponentPlan(
 					},
 				};
 
-	const definition: ComponentDefinitionV1 = {
+	const definition: ComponentDefinition = {
 		version: "1",
 		id: input.definitionId,
 		name: input.name,

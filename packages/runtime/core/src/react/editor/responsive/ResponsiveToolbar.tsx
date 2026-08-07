@@ -13,10 +13,12 @@
  */
 
 import type {
-	AuthoringStateV1,
 	BreakpointDefinition,
-	EditorCommandPort,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+	EditorCommandPort,
+} from "../../../editor/legacy/index.js";
 import { ChevronDown, Eye, Link2, Plus, Trash2 } from "lucide-react";
 import { type ReactNode, useMemo, useState } from "react";
 import { Button } from "@/primitives/button";

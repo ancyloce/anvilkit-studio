@@ -15,20 +15,22 @@
  */
 
 import type {
-	AuthoringStateV1,
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	ComponentInstanceState,
 	EditorError,
 	JsonValue,
 	NodeOverridePatch,
 	SerializablePuckNode,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { makeEditorError } from "../diagnostics.js";
 import { withRecord } from "../node-records.js";
 
 /** Every node id declared inside a definition's root subtree. */
 export function collectDefinitionNodeIds(
-	definition: ComponentDefinitionV1,
+	definition: ComponentDefinition,
 ): ReadonlySet<string> {
 	const ids = new Set<string>();
 	const walk = (node: SerializablePuckNode): void => {

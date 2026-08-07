@@ -12,12 +12,16 @@
  */
 
 import type {
-	AtomicEditorCommand,
-	AuthoringStateV1,
 	BreakpointDefinition,
-	EditorCommand,
 	ResponsiveLayerRef,
 } from "@anvilkit/contracts/editor";
+import type {
+	AtomicEditorCommand,
+	EditorCommand,
+} from "../../../editor/legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
 
 /**
  * Wrap `command` so that writing at a not-yet-materialized breakpoint

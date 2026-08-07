@@ -402,10 +402,9 @@ describe("useCanvasDropController", () => {
 		components["Text"] = {
 			fields: { text: { type: "text" }, subtitle: { type: "text" } },
 			metadata: {
-				editor: {
-					version: "1",
-					styleTarget: "root",
-					capabilities: {
+				anvilkit: {
+					editor: {
+						styleTargets: { root: { label: "Text", properties: [] } },
 						inlineText: [
 							{ id: "subtitle", propPath: "subtitle", format: "plain" },
 						],
@@ -442,11 +441,10 @@ describe("useCanvasDropController", () => {
 		components["Text"] = {
 			fields: { text: { type: "text" } },
 			metadata: {
-				editor: {
-					version: "1",
-					styleTarget: "root",
-					capabilities: {
-						imageAdjust: [
+				anvilkit: {
+					editor: {
+						styleTargets: { root: { label: "Text", properties: [] } },
+						images: [
 							{ id: "cover", srcPropPath: "cover", altPropPath: "coverAlt" },
 						],
 					},

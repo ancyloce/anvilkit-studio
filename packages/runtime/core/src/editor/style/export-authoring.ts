@@ -26,7 +26,9 @@
  */
 
 import type { ExportWarning, PageIR, PageIRNode } from "@anvilkit/contracts";
-import type { AuthoringStateV1 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import type { Data } from "@puckeditor/core";
 import type { MaterializeResult } from "../components/materialize.js";
 import {

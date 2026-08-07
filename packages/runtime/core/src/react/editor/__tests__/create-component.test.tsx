@@ -5,7 +5,7 @@
  * CFX-C06), and rejected requests dispatch nothing.
  */
 
-import type { EditorCapabilityMetadata } from "@anvilkit/contracts/editor";
+import type { AnvilComponentMetadata } from "@anvilkit/contracts/editor";
 import type { Data as PuckData } from "@puckeditor/core";
 import { cleanup, render, waitFor } from "@testing-library/react";
 import { act, type ReactNode } from "react";
@@ -22,10 +22,13 @@ import { StudioEditorMount } from "../StudioEditorMount.js";
 
 afterEach(cleanup);
 
-const CAPABLE: EditorCapabilityMetadata = {
-	version: "1",
-	styleTarget: "root",
-	capabilities: { layoutContainer: true, layoutItem: true },
+const CAPABLE: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: ["display", "gap", "padding", "width", "height", "margin"],
+		},
+	},
 };
 
 const node = (id: string) => ({ type: "Hero", props: { id } });
@@ -41,7 +44,7 @@ function seedData(): PuckData {
 /** Records every history-recording dispatch the port makes. */
 function createCtx(recorded: PuckData[]): StudioPluginContext {
 	let data = seedData();
-	const config = { components: { Hero: { metadata: { editor: CAPABLE } } } };
+	const config = { components: { Hero: { metadata: { anvilkit: { editor: CAPABLE } } } } };
 	return {
 		getData: () => data,
 		getPuckApi: () =>

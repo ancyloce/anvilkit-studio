@@ -15,12 +15,16 @@
  */
 
 import type {
-	AuthoringStateV1,
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	DesignToken,
-	EditorCommandBase,
 	SerializablePuckNode,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandBase,
+} from "../../../editor/legacy/index.js";
+import type {
+	AuthoringStateV1,
+} from "../../../editor/legacy/index.js";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
 import {
 	ComponentInstanceStateSchema,
@@ -71,8 +75,8 @@ const hex = (value: string) => ({ kind: "hex", value }) as const;
 const ISO = "2026-01-01T00:00:00.000Z";
 
 function definition(
-	overrides: Partial<ComponentDefinitionV1> = {},
-): ComponentDefinitionV1 {
+	overrides: Partial<ComponentDefinition> = {},
+): ComponentDefinition {
 	return {
 		version: "1",
 		id: "def",
@@ -98,7 +102,7 @@ function definition(
 }
 
 function docWith(
-	def: ComponentDefinitionV1,
+	def: ComponentDefinition,
 	instanceIds: readonly string[],
 	instanceOverrides: Record<string, unknown> = {},
 ): AuthoringStateV1 {
@@ -348,7 +352,7 @@ describe("ADR 0005 Appendix A — component fixtures", () => {
 	});
 
 	it("CFX-C07 cycle and depth rejection", () => {
-		const nesting = (id: string, child: string): ComponentDefinitionV1 =>
+		const nesting = (id: string, child: string): ComponentDefinition =>
 			definition({
 				id,
 				name: id,
@@ -398,7 +402,7 @@ describe("ADR 0005 Appendix A — component fixtures", () => {
 			);
 		}
 
-		const deep: Record<string, ComponentDefinitionV1> = {};
+		const deep: Record<string, ComponentDefinition> = {};
 		const depth = EDITOR_COUNT_LIMITS.componentNestingDepth + 4;
 		for (let index = 0; index < depth; index += 1) {
 			deep[`d${index}`] = nesting(`d${index}`, `d${index + 1}`);

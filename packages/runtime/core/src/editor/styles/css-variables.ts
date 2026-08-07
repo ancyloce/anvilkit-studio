@@ -15,7 +15,7 @@
 
 import type {
 	DesignToken,
-	StyleDefinitionV1,
+	StyleDefinition,
 } from "@anvilkit/contracts/editor";
 
 /** Namespace prefixes, kept distinct so the two spaces cannot collide. */
@@ -64,7 +64,7 @@ export function tokenCssVariableName(token: DesignToken): string {
  * the name — which is exactly why the id hash is appended.
  */
 export function styleDefinitionCssVariableName(
-	definition: StyleDefinitionV1,
+	definition: StyleDefinition,
 ): string {
 	return `${STYLE_PREFIX}-${slugify([definition.name])}-${stableIdHash(definition.id)}`;
 }

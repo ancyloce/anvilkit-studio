@@ -25,7 +25,7 @@
 
 import type {
 	InteractionAction,
-	InteractionV1,
+	Interaction,
 } from "@anvilkit/contracts/editor";
 
 /** A reference an interaction makes to a node in the tree. */
@@ -37,7 +37,7 @@ export interface InteractionReference {
 
 /** The outcome of resolving one interaction's references. */
 export interface ResolvedInteraction {
-	readonly interaction: InteractionV1;
+	readonly interaction: Interaction;
 	/**
 	 * Whether the interaction should run. False when the author
 	 * disabled it **or** when any reference dangles — the stored
@@ -66,7 +66,7 @@ function actionReference(action: InteractionAction): string | undefined {
 
 /** Every node reference an interaction makes, in document order. */
 export function interactionReferences(
-	interaction: InteractionV1,
+	interaction: Interaction,
 ): readonly InteractionReference[] {
 	const references: InteractionReference[] = [
 		{ origin: "source", nodeId: interaction.sourceNodeId },
@@ -91,7 +91,7 @@ export function interactionReferences(
  * Puck tree); this module stays pure and React-free.
  */
 export function resolveInteraction(
-	interaction: InteractionV1,
+	interaction: Interaction,
 	nodeExists: (nodeId: string) => boolean,
 ): ResolvedInteraction {
 	const missingReferences = interactionReferences(interaction).filter(
@@ -112,7 +112,7 @@ export function resolveInteraction(
  * between otherwise identical documents.
  */
 export function resolveInteractions(
-	interactions: Readonly<Record<string, InteractionV1>>,
+	interactions: Readonly<Record<string, Interaction>>,
 	nodeExists: (nodeId: string) => boolean,
 ): readonly ResolvedInteraction[] {
 	return Object.values(interactions).map((interaction) =>

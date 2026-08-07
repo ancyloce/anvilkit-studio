@@ -17,7 +17,7 @@
  * prop entirely (canonical absence, like appearance).
  */
 
-import type { DesignSystemV1, EditorError } from "@anvilkit/contracts/editor";
+import type { DesignSystem, EditorError } from "@anvilkit/contracts/editor";
 import { safeParseDesignSystem } from "@anvilkit/schema/editor";
 import type { Data, PuckApi } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
@@ -32,8 +32,8 @@ export interface UpdateDesignSystemInput {
 	 * (`undefined` removes it). Must be pure.
 	 */
 	readonly update: (
-		current: DesignSystemV1 | undefined,
-	) => DesignSystemV1 | undefined;
+		current: DesignSystem | undefined,
+	) => DesignSystem | undefined;
 }
 
 /** Outcome of the pure update. */
@@ -50,7 +50,7 @@ function rawDesignSystemOf(data: Data): unknown {
 }
 
 /** Produce the next document with `root.props.designSystem` replaced. */
-function withDesignSystem(data: Data, next: DesignSystemV1 | undefined): Data {
+function withDesignSystem(data: Data, next: DesignSystem | undefined): Data {
 	const root = (data.root ?? {}) as { props?: Record<string, unknown> };
 	const { designSystem: _dropped, ...restProps } = root.props ?? {};
 	return {
@@ -79,7 +79,7 @@ export function updateDesignSystemInData(
 	});
 
 	const raw = rawDesignSystemOf(input.data);
-	let current: DesignSystemV1 | undefined;
+	let current: DesignSystem | undefined;
 	if (raw !== undefined) {
 		const parsed = safeParseDesignSystem(raw);
 		if (!parsed.success) {

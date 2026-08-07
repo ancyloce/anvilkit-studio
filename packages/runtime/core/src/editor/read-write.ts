@@ -13,8 +13,15 @@
  * replaced with an empty state (invariant 9, §25).
  */
 
-import type { AuthoringStateV1, EditorError } from "@anvilkit/contracts/editor";
-import { ANVILKIT_AUTHORING_KEY } from "@anvilkit/contracts/editor";
+import type {
+	EditorError,
+} from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "./legacy/index.js";
+import {
+	ANVILKIT_AUTHORING_KEY,
+} from "./legacy/index.js";
 import {
 	compactAuthoringState,
 	createEmptyAuthoringState,

@@ -27,7 +27,12 @@
  * refused, never adjusted.
  */
 
-import type { EditorCommand, EditorError } from "@anvilkit/contracts/editor";
+import type {
+	EditorError,
+} from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../legacy/index.js";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
 import { makeEditorError } from "../diagnostics.js";
 

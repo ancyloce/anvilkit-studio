@@ -20,7 +20,7 @@
  * this surface belongs to CORE-P1B-012.
  */
 
-import type { TiptapDocumentV1 } from "@anvilkit/contracts/editor";
+import type { TiptapDocument } from "@anvilkit/contracts/editor";
 import { EditorContent, type JSONContent, useEditor } from "@tiptap/react";
 import {
 	type ReactNode,
@@ -47,12 +47,12 @@ export interface RichTextSurfaceProps {
 /**
  * Seed the editing session's initial document. Phase 1B seeds from
  * the rendered text (a total, host-independent contract); reading a
- * `TiptapDocumentV1` prop verbatim joins the Phase 3 binding pass.
+ * `TiptapDocument` prop verbatim joins the Phase 3 binding pass.
  */
 function currentValue(
 	bridge: StudioEditorBridge,
 	nodeId: string,
-): TiptapDocumentV1 {
+): TiptapDocument {
 	const element = bridge.canvasRegistry?.getPrimaryElement(nodeId) ?? null;
 	if (element === null) {
 		return emptyTiptapDocument();

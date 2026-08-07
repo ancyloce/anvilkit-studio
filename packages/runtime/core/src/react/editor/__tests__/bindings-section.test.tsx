@@ -8,10 +8,12 @@
  */
 
 import type {
-	EditorCommand,
 	EditorDataSourceAdapter,
 	JsonValue,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../../../editor/legacy/index.js";
 import {
 	cleanup,
 	fireEvent,

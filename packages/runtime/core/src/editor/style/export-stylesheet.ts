@@ -44,11 +44,13 @@
  */
 
 import type {
-	AuthoringStateV1,
 	EditorError,
 	NodeAuthoringStateV1,
 	NodeOverridePatch,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { resolveNodeAuthoring } from "../resolve/node.js";
 import { resolveAuthoringStyle } from "./resolve-authoring-style.js";
 

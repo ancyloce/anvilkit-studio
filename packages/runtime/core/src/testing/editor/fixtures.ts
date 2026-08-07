@@ -8,14 +8,18 @@
  */
 
 import type {
-	AuthoringStateV1,
 	DesignToken,
 	NodeAuthoringStateV1,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../../editor/legacy/index.js";
 import {
-	ANVILKIT_AUTHORING_KEY,
 	EDITOR_COUNT_LIMITS,
 } from "@anvilkit/contracts/editor";
+import {
+	ANVILKIT_AUTHORING_KEY,
+} from "../../editor/legacy/index.js";
 import type { Data, Config as PuckConfig } from "@puckeditor/core";
 
 /** Sizing knobs for {@link buildAuthoringStateAtLimits}. */

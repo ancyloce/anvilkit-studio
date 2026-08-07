@@ -22,7 +22,9 @@
  * the stable memoized API from serving stale state between renders.
  */
 
-import type { EditorCommandResult } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandResult,
+} from "../../../../../../editor/legacy/index.js";
 import { useMemo } from "react";
 import type { EditorSelectionController } from "../../../../../../react/editor/selection.js";
 import { useOptionalStudioEditor } from "../../../../../../react/editor/use-studio-editor.js";

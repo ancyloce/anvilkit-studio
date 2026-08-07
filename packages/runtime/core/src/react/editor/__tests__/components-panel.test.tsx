@@ -17,8 +17,8 @@
  */
 
 import type {
-	ComponentDefinitionV1,
-	EditorCapabilityMetadata,
+	ComponentDefinition,
+	AnvilComponentMetadata,
 } from "@anvilkit/contracts/editor";
 import type { Data as PuckData } from "@puckeditor/core";
 import {
@@ -51,15 +51,18 @@ import {
 
 afterEach(cleanup);
 
-const CAPABLE: EditorCapabilityMetadata = {
-	version: "1",
-	styleTarget: "root",
-	capabilities: { layoutContainer: true, layoutItem: true },
+const CAPABLE: AnvilComponentMetadata = {
+	styleTargets: {
+		root: {
+			label: "Target",
+			properties: ["display", "gap", "padding", "width", "height", "margin"],
+		},
+	},
 };
 
 function definition(
-	overrides: Partial<ComponentDefinitionV1> = {},
-): ComponentDefinitionV1 {
+	overrides: Partial<ComponentDefinition> = {},
+): ComponentDefinition {
 	return {
 		version: "1",
 		id: "def",
@@ -83,7 +86,7 @@ function definition(
 }
 
 interface SeedOptions {
-	readonly definitions?: Readonly<Record<string, ComponentDefinitionV1>>;
+	readonly definitions?: Readonly<Record<string, ComponentDefinition>>;
 	readonly nodes?: Readonly<Record<string, unknown>>;
 	readonly content?: readonly unknown[];
 }
@@ -121,8 +124,8 @@ function createCtx(
 	let data = seedData(options);
 	const config = {
 		components: {
-			Hero: { metadata: { editor: CAPABLE } },
-			Box: { metadata: { editor: CAPABLE } },
+			Hero: { metadata: { anvilkit: { editor: CAPABLE } } },
+			Box: { metadata: { anvilkit: { editor: CAPABLE } } },
 		},
 	};
 	return {

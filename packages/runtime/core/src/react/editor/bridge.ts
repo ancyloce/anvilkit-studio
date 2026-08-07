@@ -25,11 +25,13 @@
  */
 
 import type {
-	EditorCommandPort,
 	ResponsiveLayerRef,
 	StudioEditorConfig,
 	StudioPluginCollabCapability,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandPort,
+} from "../../editor/legacy/index.js";
 import type { Data as PuckData } from "@puckeditor/core";
 import type { EditorCapabilityRegistry } from "../../types/editor-api.js";
 import type { CanvasDomRegistry } from "./canvas/dom-registry.js";

@@ -21,7 +21,9 @@
  *   a document that changed underneath it.
  */
 
-import type { EditorCommand } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommand,
+} from "../../../editor/legacy/index.js";
 import type { InternalEditorCommandPort } from "../command-port.js";
 import type { CanvasPoint } from "./geometry.js";
 

@@ -18,8 +18,13 @@
  * without mounting a `<Studio>`.
  */
 
-import type { EditorCapabilityMetadata } from "@anvilkit/contracts/editor";
-import { readEditorMetadata } from "./capability-metadata.js";
+import type { AnvilComponentMetadata } from "@anvilkit/contracts/editor";
+import {
+	grantedProperties,
+	grantsFamily,
+	grantsLayoutContainer,
+	readEditorMetadata,
+} from "../puck/component-metadata.js";
 
 /** The §26.2 adoption ladder. */
 export type EditorAdoptionLevel = 0 | 1 | 2 | 3 | 4;
@@ -60,70 +65,62 @@ export interface EditorCapabilityInspection {
 	readonly countsByLevel: Readonly<Record<EditorAdoptionLevel, number>>;
 }
 
-const CAPABILITY_ORDER = [
-	"layoutContainer",
-	"layoutItem",
-	"visualStyle",
-	"typography",
-	"responsive",
-	"interactions",
-	"bindings",
-	"inlineText",
-	"imageAdjust",
-] as const;
-
-function declaredNames(metadata: EditorCapabilityMetadata): string[] {
+function declaredNames(metadata: AnvilComponentMetadata): string[] {
 	const names: string[] = [];
-	for (const key of CAPABILITY_ORDER) {
-		const value = metadata.capabilities[key];
-		if (value === true) {
-			names.push(key);
-			continue;
-		}
-		if (Array.isArray(value) && value.length > 0) {
-			names.push(`${key}[${value.length}]`);
-		}
+	const targets = Object.keys(metadata.styleTargets ?? {});
+	if (targets.length > 0) {
+		names.push(`styleTargets[${targets.length}]`);
+		names.push(`properties[${grantedProperties(metadata).size}]`);
 	}
-	if (metadata.slotMap !== undefined) {
-		names.push(`slotMap[${Object.keys(metadata.slotMap).length}]`);
+	if ((metadata.inlineText?.length ?? 0) > 0) {
+		names.push(`inlineText[${metadata.inlineText?.length}]`);
 	}
+	if ((metadata.images?.length ?? 0) > 0) {
+		names.push(`images[${metadata.images?.length}]`);
+	}
+	if (metadata.slots !== undefined) {
+		names.push(`slots[${Object.keys(metadata.slots).length}]`);
+	}
+	if (metadata.interactions === true) names.push("interactions");
+	if (metadata.bindings === true) names.push("bindings");
 	return names;
 }
 
-/** Whether any styling-adjacent capability is declared (Level 2). */
-function hasStyleCapability(metadata: EditorCapabilityMetadata): boolean {
-	const capabilities = metadata.capabilities;
+/** Whether any declared target grants an authorable property (Level 2). */
+function hasStyleCapability(metadata: AnvilComponentMetadata): boolean {
 	return (
-		capabilities.layoutContainer === true ||
-		capabilities.layoutItem === true ||
-		capabilities.visualStyle === true ||
-		capabilities.typography === true
+		grantsFamily(metadata, "layout") ||
+		grantsFamily(metadata, "visual") ||
+		grantsFamily(metadata, "typography")
 	);
 }
 
-/** Whether an explicit inline target is declared (Level 3). */
-function hasInlineTarget(metadata: EditorCapabilityMetadata): boolean {
+/** Whether an explicit inline or image target is declared (Level 3). */
+function hasInlineTarget(metadata: AnvilComponentMetadata): boolean {
 	return (
-		(metadata.capabilities.inlineText?.length ?? 0) > 0 ||
-		(metadata.capabilities.imageAdjust?.length ?? 0) > 0
+		(metadata.inlineText?.length ?? 0) > 0 || (metadata.images?.length ?? 0) > 0
 	);
 }
 
 /** Whether the composition surface is declared (Level 4). */
-function hasCompositionSurface(metadata: EditorCapabilityMetadata): boolean {
+function hasCompositionSurface(metadata: AnvilComponentMetadata): boolean {
 	return (
-		Object.keys(metadata.slotMap ?? {}).length > 0 &&
-		metadata.capabilities.interactions === true
+		Object.keys(metadata.slots ?? {}).length > 0 &&
+		metadata.interactions === true
 	);
 }
 
 function levelOf(
-	metadata: EditorCapabilityMetadata | undefined,
+	metadata: AnvilComponentMetadata | undefined,
 ): EditorAdoptionLevel {
-	// Level 0 is both "no declaration" and "declared, but explicitly not
-	// a style target" — §26.2 defines Level 1 as a *stable root target*,
-	// and `styleTarget: "none"` is the author saying there isn't one.
-	if (metadata === undefined || metadata.styleTarget === "none") {
+	// Level 0 is both "no declaration" and "a declaration that names no
+	// style target" — §26.2 defines Level 1 as a *stable root target*,
+	// and an empty `styleTargets` is the author saying there isn't one.
+	// (The v1 contract spelled this `styleTarget: "none"`.)
+	if (
+		metadata === undefined ||
+		Object.keys(metadata.styleTargets ?? {}).length === 0
+	) {
 		return 0;
 	}
 	if (!hasStyleCapability(metadata)) {
@@ -137,34 +134,36 @@ function levelOf(
 
 function missingFor(
 	level: EditorAdoptionLevel,
-	metadata: EditorCapabilityMetadata | undefined,
+	metadata: AnvilComponentMetadata | undefined,
 ): string[] {
 	switch (level) {
 		case 0:
 			return metadata === undefined
 				? [
-						'metadata.editor = { version: "1", styleTarget: "root", capabilities: {} }',
-						"render a single stable root element that carries the props Core stamps",
+						"metadata.anvilkit.editor = { styleTargets: { root: { label, properties: [] } } }",
+						"stamp each declared target with `anvilTargetAttrs(id, target)` so the compiler can address it",
 					]
-				: ['styleTarget: "root" (or "wrapper") — "none" opts out of selection'];
+				: [
+						"at least one entry in styleTargets — an empty map opts out of selection",
+					];
 		case 1:
 			return [
-				"at least one of capabilities.layoutContainer / layoutItem / visualStyle / typography",
+				"at least one authorable property on a declared target (see AUTHORABLE_PROPERTY_LOCATIONS)",
 			];
 		case 2:
 			return [
-				"capabilities.inlineText: [{ id, propPath, format }] for editable text",
-				"or capabilities.imageAdjust: [{ id, srcPropPath, altPropPath }] for images",
+				"inlineText: [{ id, propPath, format }] for editable text",
+				"or images: [{ id, srcPropPath, altPropPath }] for images",
 			];
 		case 3: {
 			const missing: string[] = [];
-			if (Object.keys(metadata?.slotMap ?? {}).length === 0) {
+			if (Object.keys(metadata?.slots ?? {}).length === 0) {
 				missing.push(
 					"slotMap: { <slotFieldName>: { allowedTypes?, reorder? } }",
 				);
 			}
-			if (metadata?.capabilities.interactions !== true) {
-				missing.push("capabilities.interactions: true");
+			if (metadata?.interactions !== true) {
+				missing.push("interactions: true");
 			}
 			return missing;
 		}
@@ -174,7 +173,7 @@ function missingFor(
 }
 
 function warningsFor(
-	metadata: EditorCapabilityMetadata | undefined,
+	metadata: AnvilComponentMetadata | undefined,
 	componentType: string,
 	component: unknown,
 ): string[] {
@@ -182,36 +181,41 @@ function warningsFor(
 	if (metadata === undefined) {
 		// Distinguish "no declaration" from "a declaration that failed to
 		// parse" — they look identical downstream but need opposite fixes.
-		const raw = (component as { metadata?: { editor?: unknown } } | undefined)
-			?.metadata?.editor;
+		const raw = (
+			component as
+				| { metadata?: { anvilkit?: { editor?: unknown } } }
+				| undefined
+		)?.metadata?.anvilkit?.editor;
 		if (raw !== undefined && raw !== null) {
 			warnings.push(
-				`metadata.editor is present but not a valid v1 declaration — it is being ignored entirely (check \`version: "1"\` and \`styleTarget\`)`,
+				"metadata.anvilkit.editor is present but not a valid declaration — it is being ignored entirely (it must be an object with a `styleTargets` record)",
 			);
 		}
 		return warnings;
 	}
-	if (
-		metadata.capabilities.responsive === true &&
-		!hasStyleCapability(metadata)
-	) {
-		warnings.push(
-			"capabilities.responsive is declared but no layout/style/typography capability is — there is nothing for a breakpoint override to change",
-		);
+	const responsiveTargets = Object.entries(metadata.styleTargets ?? {}).filter(
+		([, target]) => target.responsive === true,
+	);
+	for (const [id, target] of responsiveTargets) {
+		if (target.properties.length === 0) {
+			warnings.push(
+				`style target "${id}" is declared responsive but grants no properties — there is nothing for a breakpoint override to change`,
+			);
+		}
 	}
-	for (const target of metadata.capabilities.imageAdjust ?? []) {
+	for (const target of metadata.images ?? []) {
 		if (target.altPropPath === undefined) {
 			warnings.push(
-				`imageAdjust target "${target.id}" declares no altPropPath — the accessibility rules cannot flag or fix missing alt text for ${componentType}`,
+				`image target "${target.id}" declares no altPropPath — the accessibility rules cannot flag or fix missing alt text for ${componentType}`,
 			);
 		}
 	}
 	if (
-		Object.keys(metadata.slotMap ?? {}).length > 0 &&
-		metadata.capabilities.layoutContainer !== true
+		Object.keys(metadata.slots ?? {}).length > 0 &&
+		!grantsLayoutContainer(metadata)
 	) {
 		warnings.push(
-			"slotMap is declared without capabilities.layoutContainer — children can be placed but the container itself cannot be laid out",
+			"slots are declared but no target grants a container-layout property (gap, padding, columns, …) — children can be placed but the container itself cannot be laid out",
 		);
 	}
 	return warnings;

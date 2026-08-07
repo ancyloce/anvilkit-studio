@@ -24,10 +24,12 @@
  */
 
 import type {
-	AtomicEditorCommand,
 	CssLength,
-	EditorCommand,
 } from "@anvilkit/contracts/editor";
+import type {
+	AtomicEditorCommand,
+	EditorCommand,
+} from "../../../editor/legacy/index.js";
 import type { CanvasRect } from "./geometry.js";
 
 /** Alignment edges (§13.6). */

@@ -36,20 +36,22 @@
  */
 
 import type {
-	AnvilAppearanceV1,
-	AuthorStyleV1,
-	BindingV1,
-	DesignSystemV1,
-	DocumentComponentLibraryV1,
-	InteractionV1,
+	AnvilAppearance,
+	AuthorStyle,
+	Binding,
+	DesignSystem,
+	DocumentComponentLibrary,
+	Interaction,
 	NodeAuthoringStateV1,
 } from "@anvilkit/contracts/editor";
-import { ANVILKIT_AUTHORING_KEY } from "@anvilkit/contracts/editor";
+import {
+	ANVILKIT_AUTHORING_KEY,
+} from "../editor/legacy/index.js";
 import type { Config, Data } from "@puckeditor/core";
 import { migrate, transformProps, walkTree } from "@puckeditor/core";
 import { readAuthoringState } from "../editor/read-write.js";
 import { buildExportStylesheet } from "../editor/style/export-stylesheet.js";
-import { readEditorMetadataV2 } from "../puck/component-metadata.js";
+import { readEditorMetadataFor } from "../puck/component-metadata.js";
 import { compileDocumentAppearance } from "../style-compiler/compile.js";
 
 /** One migration diagnostic. Module-owned (plan §10.2 shape). */
@@ -98,17 +100,17 @@ export interface MigrateToPuckNativeV2Options {
 /**
  * v2 appearance derived from one legacy node record (P1-06-proven
  * conversion): the three v1 spec families fold into layered
- * `AuthorStyleV1` values on the `root` target; `styleRefs` and
+ * `AuthorStyle` values on the `root` target; `styleRefs` and
  * `hidden` carry over shape-identical.
  */
 export function legacyNodeToAppearance(
 	record: NodeAuthoringStateV1,
-): AnvilAppearanceV1 | undefined {
+): AnvilAppearance | undefined {
 	const layers = new Set<string>(["base"]);
 	for (const family of [record.layout, record.style, record.typography]) {
 		for (const key of Object.keys(family?.overrides ?? {})) layers.add(key);
 	}
-	const styleAt = (layer: string): AuthorStyleV1 | undefined => {
+	const styleAt = (layer: string): AuthorStyle | undefined => {
 		const pick = <T>(
 			family:
 				| { base?: T; overrides?: Readonly<Record<string, T | null>> }
@@ -136,7 +138,7 @@ export function legacyNodeToAppearance(
 		};
 	};
 	const base = styleAt("base");
-	const overrides: Record<string, AuthorStyleV1> = {};
+	const overrides: Record<string, AuthorStyle> = {};
 	for (const layer of layers) {
 		if (layer === "base") continue;
 		const value = styleAt(layer);
@@ -152,7 +154,6 @@ export function legacyNodeToAppearance(
 		return undefined;
 	}
 	return {
-		version: "1",
 		targets: {
 			root: {
 				...(hasStyle
@@ -229,7 +230,7 @@ function collectLiveNodes(data: Data, config: Config): LiveNode[] {
 }
 
 /** Detect alias cycles per token per mode (§10.2 step 10). */
-function findTokenCycles(tokens: DesignSystemV1["tokens"]): readonly string[] {
+function findTokenCycles(tokens: DesignSystem["tokens"]): readonly string[] {
 	const cyclic: string[] = [];
 	for (const [tokenId, token] of Object.entries(tokens)) {
 		for (const value of Object.values(token.values ?? {})) {
@@ -359,7 +360,7 @@ export function migrateToPuckNativeV2(
 		const type = typeById.get(nodeId);
 		if (type === undefined) continue; // orphan — handled below
 		if (unknownComponentTypes.includes(type)) continue; // already fatal
-		const metadata = readEditorMetadataV2(baseConfig, type);
+		const metadata = readEditorMetadataFor(baseConfig, type);
 		if (metadata?.styleTargets.root === undefined) {
 			const entry = `${type}#root`;
 			if (!unknownTargets.includes(entry)) unknownTargets.push(entry);
@@ -387,7 +388,7 @@ export function migrateToPuckNativeV2(
 
 	// Step 6 — §5.1 ownership: interactions to their trigger node,
 	// bindings to their bound node. Orphans reported.
-	const interactionsByNode = new Map<string, InteractionV1[]>();
+	const interactionsByNode = new Map<string, Interaction[]>();
 	for (const interaction of Object.values(state.interactions)) {
 		const owner = interaction.sourceNodeId;
 		if (!liveIds.has(owner)) {
@@ -403,7 +404,7 @@ export function migrateToPuckNativeV2(
 		list.push(interaction);
 		interactionsByNode.set(owner, list);
 	}
-	const bindingsByNode = new Map<string, BindingV1[]>();
+	const bindingsByNode = new Map<string, Binding[]>();
 	for (const binding of Object.values(state.bindings)) {
 		const owner = binding.nodeId;
 		if (!liveIds.has(owner)) {
@@ -496,9 +497,8 @@ export function migrateToPuckNativeV2(
 		Object.keys(state.tokens).length > 0 ||
 		Object.keys(state.tokenModes).length > 0 ||
 		Object.keys(state.styleDefinitions).length > 0;
-	const designSystem: DesignSystemV1 | undefined = hasDesignSystem
+	const designSystem: DesignSystem | undefined = hasDesignSystem
 		? {
-				version: "1",
 				breakpoints: state.breakpoints,
 				tokens: state.tokens,
 				tokenModes: state.tokenModes,
@@ -506,9 +506,9 @@ export function migrateToPuckNativeV2(
 				styleDefinitions: state.styleDefinitions,
 			}
 		: undefined;
-	const componentLibrary: DocumentComponentLibraryV1 | undefined =
+	const componentLibrary: DocumentComponentLibrary | undefined =
 		Object.keys(state.componentDefinitions).length > 0
-			? { version: "1", definitions: state.componentDefinitions }
+			? { definitions: state.componentDefinitions }
 			: undefined;
 
 	const { [ANVILKIT_AUTHORING_KEY]: _removedSidecar, ...remainingRootProps } =

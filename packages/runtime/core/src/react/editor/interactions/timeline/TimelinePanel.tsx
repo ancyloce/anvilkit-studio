@@ -25,7 +25,7 @@
  * read-only panel.
  */
 
-import type { InteractionV1 } from "@anvilkit/contracts/editor";
+import type { Interaction } from "@anvilkit/contracts/editor";
 import type { ReactNode } from "react";
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
@@ -39,12 +39,12 @@ import { usePrefersReducedMotion } from "../use-preview-mode.js";
 
 /** Props for {@link TimelinePanel}. */
 export interface TimelinePanelProps {
-	readonly interaction: InteractionV1;
+	readonly interaction: Interaction;
 	/**
 	 * Commit a reordered interaction. Omitted = read-only, which is what
 	 * a caller without `interaction.update` should pass.
 	 */
-	readonly onReorder?: (next: InteractionV1) => void;
+	readonly onReorder?: (next: Interaction) => void;
 }
 
 /** Percentage width for a segment on the shared axis. */

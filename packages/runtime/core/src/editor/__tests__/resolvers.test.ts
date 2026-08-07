@@ -4,11 +4,13 @@
  */
 
 import type {
-	AuthoringStateV1,
 	BreakpointDefinition,
 	DesignToken,
 	ResponsiveValue,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	createEmptyAuthoringState,

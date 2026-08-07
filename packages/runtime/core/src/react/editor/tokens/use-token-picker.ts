@@ -15,12 +15,14 @@
 
 import type {
 	DesignToken,
-	EditorCommandResult,
 	ImportableTokenValue,
 	JsonValue,
 	TokenType,
 	TokenValue,
 } from "@anvilkit/contracts/editor";
+import type {
+	EditorCommandResult,
+} from "../../../editor/legacy/index.js";
 import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 import { resolveToken } from "../../../editor/index.js";
 import type { EditorInspectorContext } from "../inspector/use-inspector.js";

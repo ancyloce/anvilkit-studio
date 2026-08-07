@@ -31,7 +31,7 @@
  */
 
 import type {
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	EditorError,
 	VariantAxis,
 } from "@anvilkit/contracts/editor";
@@ -53,7 +53,7 @@ export interface VariantEditOutcome {
 
 /** Variant-axis authoring for the component currently in scope. */
 export interface VariantAuthoring {
-	readonly definition: ComponentDefinitionV1;
+	readonly definition: ComponentDefinition;
 	readonly axes: readonly VariantAxis[];
 	/** Product of every axis's option count; `0` with no axes. */
 	readonly expressibleCombinations: number;
@@ -178,7 +178,7 @@ export function useVariantAuthoring(): VariantAuthoring | null {
 	);
 	const port = bridge?.port as InternalEditorCommandPort | null | undefined;
 
-	const definition = useMemo((): ComponentDefinitionV1 | null => {
+	const definition = useMemo((): ComponentDefinition | null => {
 		void version;
 		if (port == null) return null;
 		const snapshot = port.getSnapshot();

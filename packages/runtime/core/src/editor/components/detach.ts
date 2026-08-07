@@ -17,10 +17,12 @@
  */
 
 import type {
-	AuthoringStateV1,
 	NodeAuthoringStateV1,
 	SerializablePuckNode,
 } from "@anvilkit/contracts/editor";
+import type {
+	AuthoringStateV1,
+} from "../legacy/index.js";
 import type { Data as PuckData } from "@puckeditor/core";
 import { withRecord } from "../node-records.js";
 import {
