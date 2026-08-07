@@ -1,5 +1,5 @@
 import type { CanvasTemplateDefinition } from "@anvilkit/canvas-core";
-import { CANVAS_SIZE_PRESETS, migrateCanvasIR } from "@anvilkit/canvas-core";
+import { findSizePreset, migrateCanvasIR } from "@anvilkit/canvas-core";
 import a4Flyer from "./a4-flyer.json" with { type: "json" };
 import businessCard from "./business-card.json" with { type: "json" };
 import fbCover from "./fb-cover.json" with { type: "json" };
@@ -13,9 +13,30 @@ import slide16x9 from "./slide-16x9.json" with { type: "json" };
 import slideTitle from "./slide-title.json" with { type: "json" };
 import twitterHeader from "./twitter-header.json" with { type: "json" };
 
-/** Every preset in `ids` that exists in {@link CANVAS_SIZE_PRESETS}. */
+/**
+ * Resolves each id against `CANVAS_SIZE_PRESETS` (`@anvilkit/canvas-core`),
+ * in the order given, and **throws on an id that does not exist**.
+ *
+ * The throw is the point (cp0-003). This started life as
+ * `CANVAS_SIZE_PRESETS.filter((p) => ids.includes(p.id))`, which silently
+ * dropped an unknown id — a typo'd or aspirational preset name produced an
+ * empty `supportedSizes` that no test and no editor surface would notice
+ * (nothing in `@anvilkit/canvas-editor` reads `supportedSizes`: the Templates
+ * panel's size filter matches on `document.pages[0].size`, so a wrong id has
+ * no on-screen symptom at all). Every id here is a hard-coded literal in this
+ * file, never user data, so the only way to trip this is a developer mistake —
+ * which the package's Vitest suite then fails on at module load.
+ */
 function sizePresets(...ids: string[]) {
-	return CANVAS_SIZE_PRESETS.filter((preset) => ids.includes(preset.id));
+	return ids.map((id) => {
+		const preset = findSizePreset(id);
+		if (!preset) {
+			throw new Error(
+				`@anvilkit/canvas-templates: unknown size preset id "${id}" — not in CANVAS_SIZE_PRESETS.`,
+			);
+		}
+		return preset;
+	});
 }
 
 /**

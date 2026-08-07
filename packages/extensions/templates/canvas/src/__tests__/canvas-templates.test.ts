@@ -1,6 +1,8 @@
 import {
 	CANVAS_IR_VERSION,
+	CANVAS_SIZE_PRESETS,
 	CanvasTemplateDefinitionSchema,
+	findSizePreset,
 	migrateCanvasIR,
 } from "@anvilkit/canvas-core";
 import { describe, expect, it } from "vitest";
@@ -100,6 +102,45 @@ describe("@anvilkit/canvas-templates", () => {
 			"presentation-section",
 		] as const) {
 			expect(canvasTemplates[id].supportedSizes).toEqual([]);
+		}
+	});
+
+	// cp0-003 regression guards. Preset ids are referenced in exactly one
+	// place — the `sizePresets(...)` call sites in ../index.ts (no template
+	// JSON carries a preset id) — and `sizePresets` used to `filter` the
+	// catalog, so an id that matched nothing vanished without a trace.
+	it("resolves every size preset id the catalog references", () => {
+		for (const template of canvasTemplateList) {
+			for (const preset of template.supportedSizes) {
+				// Identity, not just existence: a `supportedSizes` entry must BE
+				// the catalog's own entry, never a hand-copied literal that can
+				// drift from it.
+				expect(findSizePreset(preset.id)).toEqual(preset);
+			}
+		}
+	});
+
+	it("declares a size preset for every template whose page matches one", () => {
+		for (const template of canvasTemplateList) {
+			const page = template.document.pages[0]?.size;
+			expect(page).toBeDefined();
+			if (!page) continue;
+			const matching = CANVAS_SIZE_PRESETS.filter(
+				(preset) =>
+					preset.unit === page.unit &&
+					preset.width === page.width &&
+					preset.height === page.height,
+			);
+			// A template sized exactly like a shipped preset must say so; one
+			// with no matching preset must declare nothing rather than guess.
+			// Which of several same-size presets it names is left open on
+			// purpose (1080×1920 matches three).
+			expect(
+				template.supportedSizes.length > 0,
+				`${template.id} (${page.width}×${page.height}${page.unit}) matches [${matching
+					.map((preset) => preset.id)
+					.join(", ")}]`,
+			).toBe(matching.length > 0);
 		}
 	});
 
