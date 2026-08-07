@@ -5,7 +5,7 @@
  *
  * `listUsedAuthoringFeatures()` scanned only the authoring sidecar.
  * `richText` is stored in **component props** (the shared
- * `TiptapDocumentV1` contract), so a rich-text document reported
+ * `TiptapDocument` contract), so a rich-text document reported
  * *zero* used features and sailed through the production block of a
  * format that declares no rich-text support — silently exporting a
  * page whose text content the target could not render.
@@ -25,7 +25,7 @@
 
 import { expect, type Page, test } from "@playwright/test";
 
-/** A `TiptapDocumentV1` exactly as the shared sanitizer emits it. */
+/** A `TiptapDocument` exactly as the shared sanitizer emits it. */
 const TIPTAP_DOC = {
 	version: "1",
 	type: "doc",

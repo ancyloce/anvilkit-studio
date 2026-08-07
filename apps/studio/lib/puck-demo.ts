@@ -19,9 +19,9 @@ import type {
 	StudioSidebarUnregister,
 } from "@anvilkit/core";
 import type {
-	AnvilAppearanceV1,
-	BindingV1,
-	InteractionV1,
+	AnvilAppearance,
+	Binding,
+	Interaction,
 } from "@anvilkit/core/editor";
 import {
 	anvilRootAttrs,
@@ -88,9 +88,9 @@ export type ImageProps = {
 	src: string;
 	alt: string;
 	/** PLAN-0025 §5.1 authoring carriers (declared hidden fields). */
-	appearance?: AnvilAppearanceV1;
-	interactions?: readonly InteractionV1[];
-	bindings?: readonly BindingV1[];
+	appearance?: AnvilAppearance;
+	interactions?: readonly Interaction[];
+	bindings?: readonly Binding[];
 };
 
 export type DemoComponents = {

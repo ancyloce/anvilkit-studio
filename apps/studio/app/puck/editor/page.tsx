@@ -908,16 +908,18 @@ export default function PuckEditorPage() {
 	async function exportPreflight(
 		capabilities: EditorExportCapabilities | undefined,
 	): Promise<ExportPreflightResult | undefined> {
-		const { listUsedEditorFeatures, readAuthoringState, runExportPreflight } =
-			await import("@anvilkit/core/editor");
-		// The whole document, not just the sidecar: `richText` is stored
-		// in component props, so a sidecar-only scan reports it as unused
-		// and a rich-text page would slip past the production block
-		// (DD-DEC-018).
-		const usedFeatures = listUsedEditorFeatures(
-			readAuthoringState(publishedData).state,
-			publishedData,
+		const { listUsedDocumentFeatures, runExportPreflight } = await import(
+			"@anvilkit/core/editor"
 		);
+		// Scanned straight off the document (`p2-007`). This used to parse
+		// a sidecar first — `readAuthoringState(publishedData).state` — on
+		// documents that have no sidecar, so every feature except
+		// `richText` came back unused and a page using responsive styles,
+		// tokens, local components, interactions or bindings could slip
+		// past the production export block entirely (DD-0019 `ED-FA-017`,
+		// PLAN-0026 §3.8.6 blocker 2). Features are now read from the
+		// declared carriers the document actually uses.
+		const usedFeatures = listUsedDocumentFeatures(publishedData);
 		if (usedFeatures.length === 0) return undefined;
 		return runExportPreflight({
 			usedFeatures,
