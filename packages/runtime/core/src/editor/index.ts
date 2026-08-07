@@ -38,6 +38,7 @@ export type {
 export {
 	type EditorFeatureScanDocument,
 	listUsedAuthoringFeatures,
+	listUsedDocumentFeatures,
 	listUsedEditorFeatures,
 } from "@anvilkit/ir/editor";
 export {
@@ -81,6 +82,84 @@ export {
 	type UpdateAppearanceResult,
 	updateAppearanceInData,
 } from "../puck/update-appearance.js";
+export {
+	type AnnotationCommitDeps,
+	type AnnotationCommitResult,
+	type AnnotationEdit,
+	commitAnnotationUpdate,
+	isNodeLocked,
+	type UpdateAnnotationsInput,
+	type UpdateAnnotationsResult,
+	updateAnnotationsInData,
+} from "../puck/update-annotations.js";
+export {
+	commitDeleteNodes,
+	commitDuplicateNodes,
+	commitInsertNode,
+	commitReorderNode,
+	deleteNodesInData,
+	duplicateNodesInData,
+	type InsertNodeInput,
+	insertNodeInData,
+	normalizeZone,
+	type ReorderNodeInput,
+	reorderNodeInData,
+	ROOT_ZONE,
+	type TreeCommitDeps,
+	type TreeCommitResult,
+	type UpdateTreeResult,
+} from "../puck/update-tree.js";
+export {
+	type CarrierCommitDeps,
+	type CarrierCommitResult,
+	commitBindingsUpdate,
+	commitInlineTextUpdate,
+	commitInteractionsUpdate,
+	type NodeCarrier,
+	type UpdateCarrierInput,
+	type UpdateCarrierResult,
+	type UpdateInlineTextInput,
+	updateBindingsInData,
+	updateInlineTextInData,
+	updateInteractionsInData,
+} from "../puck/update-carriers.js";
+export {
+	commitDetachInstance,
+	commitInstanceOverride,
+	type DetachInstanceInput,
+	type DetachInstanceResult,
+	detachInstanceInData,
+	type InstanceCommitDeps,
+	type InstanceCommitResult,
+	type InstanceOverrideEdit,
+	type UpdateInstanceOverridesInput,
+	type UpdateInstanceOverridesResult,
+	updateInstanceOverridesInData,
+} from "../puck/update-instance-overrides.js";
+export {
+	commitInstanceSelection,
+	commitVariantModelUpdate,
+	MAX_EXPRESSIBLE_COMBINATIONS,
+	type UpdateInstanceSelectionInput,
+	type UpdateVariantModelInput,
+	type UpdateVariantResult,
+	updateInstanceSelectionInData,
+	updateVariantModelInData,
+	type VariantCommitDeps,
+	type VariantCommitResult,
+	type VariantModelEdit,
+} from "../puck/update-variants.js";
+export {
+	commitComponentLibraryUpdate,
+	type ComponentLibraryCommitDeps,
+	type ComponentLibraryCommitResult,
+	type ComponentLibraryEdit,
+	countDefinitionInstances,
+	type DefinitionInstanceUsage,
+	type UpdateComponentLibraryInput,
+	type UpdateComponentLibraryResult,
+	updateComponentLibraryInData,
+} from "../puck/update-component-library.js";
 export {
 	commitDesignSystemUpdate,
 	type DesignSystemCommitDeps,
