@@ -14,10 +14,6 @@
  * inventing them here would put a mutation path outside the freeze.
  */
 
-import type {
-	InteractionTrigger,
-	Interaction,
-} from "@anvilkit/contracts/editor";
 import { type ReactNode, useState } from "react";
 import { Button } from "@/primitives/button";
 import {
@@ -30,61 +26,21 @@ import {
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
 import type { InspectorSectionProps } from "../inspector/sections-registry.js";
+import { usePageAdapter } from "../pages/use-page-adapter.js";
 import {
-	ActionEditor,
 	type ActionDraft,
+	ActionEditor,
 	buildAction,
 	EMPTY_ACTION_DRAFT,
 } from "./ActionEditor.js";
-import { usePageAdapter } from "../pages/use-page-adapter.js";
+import {
+	describeActionDraft,
+	summarizeInteraction as summarize,
+	TRIGGER_CHOICES,
+	triggerChoice,
+} from "./interaction-summary.js";
 import { TimelinePanel } from "./timeline/TimelinePanel.js";
 import { useNodeInteractions } from "./use-interactions.js";
-
-/**
- * The trigger choices offered by the picker.
- *
- * §32.4 exercises click, hover and viewport, and each carries the extra
- * members §16 makes mandatory (`phase`, `threshold`) — so the picker
- * emits complete triggers rather than a bare type the schema rejects.
- */
-const TRIGGER_CHOICES: readonly {
-	readonly id: string;
-	readonly labelKey: string;
-	readonly trigger: InteractionTrigger;
-}[] = [
-	{
-		id: "click",
-		labelKey: "studio.editor.interaction.trigger.click",
-		trigger: { type: "click" },
-	},
-	{
-		id: "hover",
-		labelKey: "studio.editor.interaction.trigger.hover",
-		trigger: { type: "hover", phase: "enter" },
-	},
-	{
-		id: "viewport",
-		labelKey: "studio.editor.interaction.trigger.viewport",
-		trigger: { type: "viewport", phase: "enter", threshold: 0.5 },
-	},
-];
-
-/** A one-line human summary of what an interaction does. */
-function summarize(interaction: Interaction): string {
-	const action = interaction.actions[0];
-	const rest =
-		interaction.actions.length > 1 ? ` +${interaction.actions.length - 1}` : "";
-	if (action === undefined) return `${interaction.trigger.type} → —${rest}`;
-	const target =
-		action.type === "url"
-			? action.url
-			: action.type === "navigate"
-				? action.pageId
-				: action.type === "animate"
-					? action.targetNodeIds.join(", ")
-					: action.targetNodeId;
-	return `${interaction.trigger.type} → ${action.type} ${target}${rest}`;
-}
 
 /** The §16 interactions editor for the selected node. */
 export function InteractionsSection({
@@ -104,12 +60,9 @@ export function InteractionsSection({
 		if (action === null || busy) return;
 		setBusy(true);
 		try {
-			const choice =
-				TRIGGER_CHOICES.find((entry) => entry.id === triggerId) ??
-				TRIGGER_CHOICES[0];
 			const result = await state.createInteraction(
-				describeAction(draft),
-				choice?.trigger ?? { type: "click" },
+				describeActionDraft(draft),
+				triggerChoice(triggerId).trigger,
 				action,
 			);
 			// Reset only on success, so a rejected action stays visible for
@@ -277,28 +230,4 @@ export function InteractionsSection({
 			) : null}
 		</div>
 	);
-}
-
-/**
- * A default interaction name.
- *
- * Authors rename interactions later; what matters here is that a list
- * of six actions is distinguishable at a glance, which the family plus
- * its subject gives cheaply.
- */
-function describeAction(draft: ActionDraft): string {
-	switch (draft.kind) {
-		case "url":
-			return draft.url.trim();
-		case "navigate":
-			return `Go to ${draft.pageId.trim()}`;
-		case "scroll":
-			return "Scroll to element";
-		case "visibility":
-			return `${draft.visibility} element`;
-		case "variant":
-			return `Set ${draft.axisId} to ${draft.optionId}`;
-		default:
-			return `Animate ${draft.property}`;
-	}
 }
