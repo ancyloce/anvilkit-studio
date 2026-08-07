@@ -10,7 +10,7 @@
 import type {
 	InteractionAction,
 	InteractionTrigger,
-	InteractionV1,
+	Interaction,
 	MotionTransition,
 } from "@anvilkit/contracts/editor";
 import { z } from "zod";
@@ -146,7 +146,7 @@ export const InteractionActionSchema: z.ZodType<InteractionAction> =
 	]) as unknown as z.ZodType<InteractionAction>;
 
 /** A stored interaction (verbatim shape + the ≤100 actions cap). */
-export const InteractionSchema: z.ZodType<InteractionV1> = z
+export const InteractionSchema: z.ZodType<Interaction> = z
 	.looseObject({
 		version: z.literal("1"),
 		id: IdSchema,
@@ -159,7 +159,7 @@ export const InteractionSchema: z.ZodType<InteractionV1> = z
 	})
 	.superRefine((interaction, ctx) =>
 		addLimitIssue(ctx, "actionsPerInteraction", interaction.actions.length),
-	) as unknown as z.ZodType<InteractionV1>;
+	) as unknown as z.ZodType<Interaction>;
 
 /** The document interaction collection (≤1,000 interactions). */
 export const InteractionCollectionSchema = limitedRecordSchema(

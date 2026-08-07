@@ -9,7 +9,7 @@
  * unchanged.
  */
 
-import type { BindingV1, SafeExpression } from "@anvilkit/contracts/editor";
+import type { Binding, SafeExpression } from "@anvilkit/contracts/editor";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
 import { z } from "zod";
 import { JsonValueSchema } from "./json.js";
@@ -139,7 +139,7 @@ export const BindingTargetSchema = z.discriminatedUnion("type", [
 ]);
 
 /** A stored binding (DD-0019 §19, verbatim shape). */
-export const BindingSchema: z.ZodType<BindingV1> = z.looseObject({
+export const BindingSchema: z.ZodType<Binding> = z.looseObject({
 	version: z.literal("1"),
 	id: IdSchema,
 	nodeId: PersistedNodeIdSchema,

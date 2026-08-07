@@ -16,7 +16,7 @@
  * that differ only in key insertion order serialize identically.
  */
 
-import type { AuthoringStateV1 } from "@anvilkit/contracts/editor";
+import type { AuthoringStateV1 } from "./authoring-state.js";
 import { compactAuthoringState } from "./compact.js";
 
 function stableStringify(value: unknown): string | undefined {

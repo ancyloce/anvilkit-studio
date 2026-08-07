@@ -7,7 +7,7 @@
  * CORE-P0-001 D-7).
  */
 
-import type { StyleDefinitionV1 } from "@anvilkit/contracts/editor";
+import type { StyleDefinition } from "@anvilkit/contracts/editor";
 import { z } from "zod";
 import { LayoutSpecSchema } from "./layout.js";
 import {
@@ -19,7 +19,7 @@ import { VisualStyleSpecSchema } from "./style.js";
 import { TypographySpecSchema } from "./typography.js";
 
 /** A reusable, document-local style definition (verbatim shape). */
-export const StyleDefinitionSchema: z.ZodType<StyleDefinitionV1> =
+export const StyleDefinitionSchema: z.ZodType<StyleDefinition> =
 	z.looseObject({
 		version: z.literal("1"),
 		id: IdSchema,

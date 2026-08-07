@@ -13,13 +13,13 @@
  */
 
 import type {
-	AnvilAppearanceV1,
-	AnvilComponentMetadataV2,
+	AnvilAppearance,
+	AnvilComponentMetadata,
 	AuthorableStyleProperty,
-	AuthorStyleV1,
-	DesignSystemV1,
-	DocumentComponentLibraryV1,
-	TargetAppearanceV1,
+	AuthorStyle,
+	DesignSystem,
+	DocumentComponentLibrary,
+	TargetAppearance,
 } from "@anvilkit/contracts/editor";
 import { z } from "zod";
 import { ComponentDefinitionCollectionSchema } from "./components.js";
@@ -31,27 +31,25 @@ import { StyleDefinitionCollectionSchema } from "./style-definitions.js";
 import { TokenCollectionSchema, TokenModeSchema } from "./tokens.js";
 import { TypographySpecSchema } from "./typography.js";
 
-export const AuthorStyleSchema: z.ZodType<AuthorStyleV1> = z.looseObject({
+export const AuthorStyleSchema: z.ZodType<AuthorStyle> = z.looseObject({
 	layout: LayoutSpecSchema.optional(),
 	visual: VisualStyleSpecSchema.optional(),
 	typography: TypographySpecSchema.optional(),
 });
 
-export const TargetAppearanceSchema: z.ZodType<TargetAppearanceV1> =
+export const TargetAppearanceSchema: z.ZodType<TargetAppearance> =
 	z.looseObject({
 		styleRefs: responsiveValueSchema(z.array(IdSchema)).optional(),
 		style: responsiveValueSchema(AuthorStyleSchema).optional(),
 		hidden: responsiveValueSchema(z.boolean()).optional(),
 	});
 
-export const AnvilAppearanceSchema: z.ZodType<AnvilAppearanceV1> =
+export const AnvilAppearanceSchema: z.ZodType<AnvilAppearance> =
 	z.looseObject({
-		version: z.literal("1"),
 		targets: z.record(IdSchema, TargetAppearanceSchema).optional(),
 	});
 
-export const DesignSystemSchema: z.ZodType<DesignSystemV1> = z.looseObject({
-	version: z.literal("1"),
+export const DesignSystemSchema: z.ZodType<DesignSystem> = z.looseObject({
 	breakpoints: BreakpointSetSchema,
 	tokens: TokenCollectionSchema,
 	tokenModes: z.record(IdSchema, TokenModeSchema),
@@ -59,9 +57,8 @@ export const DesignSystemSchema: z.ZodType<DesignSystemV1> = z.looseObject({
 	styleDefinitions: StyleDefinitionCollectionSchema,
 });
 
-export const DocumentComponentLibrarySchema: z.ZodType<DocumentComponentLibraryV1> =
+export const DocumentComponentLibrarySchema: z.ZodType<DocumentComponentLibrary> =
 	z.looseObject({
-		version: z.literal("1"),
 		definitions: ComponentDefinitionCollectionSchema,
 	});
 
@@ -91,9 +88,26 @@ export const AuthorableStylePropertySchema: z.ZodType<AuthorableStyleProperty> =
 		"lineHeight",
 		"letterSpacing",
 		"textAlign",
+		"direction",
+		"wrap",
+		"rowGap",
+		"columnGap",
+		"columns",
+		"rows",
+		"minHeight",
+		"maxHeight",
+		"inset",
+		"overflow",
+		"zIndex",
+		"filter",
+		"blendMode",
+		"cursor",
+		"textDecoration",
+		"textTransform",
+		"textWrap",
 	]);
 
-export const StyleTargetCapabilityV2Schema = z.looseObject({
+export const StyleTargetCapabilitySchema = z.looseObject({
 	label: z.string().min(1),
 	properties: z.array(AuthorableStylePropertySchema),
 	responsive: z.boolean().optional(),
@@ -118,10 +132,9 @@ const SlotCapabilitySchema = z.looseObject({
 	layoutContainer: z.boolean().optional(),
 });
 
-export const ComponentMetadataV2Schema: z.ZodType<AnvilComponentMetadataV2> =
+export const ComponentMetadataSchema: z.ZodType<AnvilComponentMetadata> =
 	z.looseObject({
-		version: z.literal("2"),
-		styleTargets: z.record(IdSchema, StyleTargetCapabilityV2Schema),
+		styleTargets: z.record(IdSchema, StyleTargetCapabilitySchema),
 		inlineText: z.array(InlineTextTargetSchema).optional(),
 		images: z.array(ImageTargetSchema).optional(),
 		slots: z.record(IdSchema, SlotCapabilitySchema).optional(),
@@ -137,7 +150,7 @@ function responsiveHasContent(value: {
 	return Object.keys(value.overrides ?? {}).length > 0;
 }
 
-function targetHasContent(target: TargetAppearanceV1): boolean {
+function targetHasContent(target: TargetAppearance): boolean {
 	if (target.styleRefs !== undefined && responsiveHasContent(target.styleRefs))
 		return true;
 	if (target.style !== undefined && responsiveHasContent(target.style))
@@ -152,15 +165,15 @@ function targetHasContent(target: TargetAppearanceV1): boolean {
  * a content-free appearance to `undefined`. Never mutates its input.
  */
 export function canonicalizeAppearance(
-	appearance: AnvilAppearanceV1 | undefined,
-): AnvilAppearanceV1 | undefined {
+	appearance: AnvilAppearance | undefined,
+): AnvilAppearance | undefined {
 	if (appearance === undefined) return undefined;
-	const kept: Record<string, TargetAppearanceV1> = {};
+	const kept: Record<string, TargetAppearance> = {};
 	for (const [id, target] of Object.entries(appearance.targets ?? {})) {
 		if (targetHasContent(target)) kept[id] = target;
 	}
 	if (Object.keys(kept).length === 0) return undefined;
-	return { version: "1", targets: kept };
+	return { targets: kept };
 }
 
 export function safeParseAppearance(value: unknown) {

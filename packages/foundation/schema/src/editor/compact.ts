@@ -16,10 +16,10 @@
  */
 
 import type {
-	AuthoringStateV1,
 	NodeAuthoringStateV1,
 	ResponsiveValue,
 } from "@anvilkit/contracts/editor";
+import type { AuthoringStateV1 } from "./authoring-state.js";
 import { normalizeBreakpointOrder } from "./responsive.js";
 
 const RESPONSIVE_FAMILY_KEYS = [

@@ -10,7 +10,7 @@
  * `detectAuthoringVersion`).
  */
 
-import type { AuthoringStateV1 } from "@anvilkit/contracts/editor";
+import type { AuthoringStateV1 } from "../authoring-state.js";
 
 /** The current authoring contract version. */
 export const CURRENT_AUTHORING_VERSION = "1";

@@ -11,7 +11,7 @@
  */
 
 import type {
-	ComponentDefinitionV1,
+	ComponentDefinition,
 	ComponentInstanceState,
 	SerializablePuckNode,
 } from "@anvilkit/contracts/editor";
@@ -49,7 +49,7 @@ export const ComponentPropDefinitionSchema = z.looseObject({
 });
 
 /** A document-local component definition (verbatim shape + caps). */
-export const ComponentDefinitionSchema: z.ZodType<ComponentDefinitionV1> = z
+export const ComponentDefinitionSchema: z.ZodType<ComponentDefinition> = z
 	.looseObject({
 		version: z.literal("1"),
 		id: IdSchema,
@@ -82,7 +82,7 @@ export const ComponentDefinitionSchema: z.ZodType<ComponentDefinitionV1> = z
 				}
 			}
 		}
-	}) as unknown as z.ZodType<ComponentDefinitionV1>;
+	}) as unknown as z.ZodType<ComponentDefinition>;
 
 /** Per-instance component state (verbatim shape; frozen id rules). */
 export const ComponentInstanceStateSchema: z.ZodType<ComponentInstanceState> =

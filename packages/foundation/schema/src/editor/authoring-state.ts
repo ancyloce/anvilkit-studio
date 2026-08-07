@@ -9,7 +9,16 @@
  * cleanup) belong to the core resolver and reconciliation engine.
  */
 
-import type { AuthoringStateV1 } from "@anvilkit/contracts/editor";
+import type {
+	Binding,
+	BreakpointDefinition,
+	ComponentDefinition,
+	DesignToken,
+	Interaction,
+	NodeAuthoringStateV1,
+	StyleDefinition,
+	TokenMode,
+} from "@anvilkit/contracts/editor";
 import { z } from "zod";
 import { BindingCollectionSchema } from "./bindings.js";
 import { ComponentDefinitionCollectionSchema } from "./components.js";
@@ -19,6 +28,32 @@ import { NonNegativeIntegerSchema } from "./primitives.js";
 import { BreakpointSetSchema } from "./responsive.js";
 import { StyleDefinitionCollectionSchema } from "./style-definitions.js";
 import { TokenCollectionSchema, TokenModeCollectionSchema } from "./tokens.js";
+
+/**
+ * The sidecar envelope, declared locally.
+ *
+ * `p1-005` moved the sidecar contract out of published
+ * `@anvilkit/contracts` into `@anvilkit/core`'s internals.
+ * `@anvilkit/schema` is a FOUNDATION package and must not import from
+ * a runtime one, so it carries its own view — mirroring the original
+ * shape and reusing the member contracts that are still published.
+ * The three modules that consume it (`compact`, `canonical-serialize`,
+ * `migrations`) are the cluster `p1-006` audits for deletion; this
+ * type dies with them.
+ */
+export interface AuthoringStateV1 {
+	readonly version: "1";
+	readonly revision: number;
+	readonly breakpoints: readonly BreakpointDefinition[];
+	readonly nodes: Readonly<Record<string, NodeAuthoringStateV1>>;
+	readonly tokens: Readonly<Record<string, DesignToken>>;
+	readonly tokenModes: Readonly<Record<string, TokenMode>>;
+	readonly styleDefinitions: Readonly<Record<string, StyleDefinition>>;
+	readonly componentDefinitions: Readonly<Record<string, ComponentDefinition>>;
+	readonly interactions: Readonly<Record<string, Interaction>>;
+	readonly bindings: Readonly<Record<string, Binding>>;
+}
+
 
 function keysMatchIds(
 	collection: Readonly<Record<string, { readonly id: string }>>,

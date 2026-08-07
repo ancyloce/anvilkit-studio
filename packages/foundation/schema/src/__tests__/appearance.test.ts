@@ -5,18 +5,18 @@
  */
 
 import type {
-	AnvilAppearanceV1,
-	DesignSystemV1,
+	AnvilAppearance,
+	DesignSystem,
 } from "@anvilkit/contracts/editor";
 import { describe, expect, it } from "vitest";
 import {
 	AnvilAppearanceSchema,
-	ComponentMetadataV2Schema,
+	ComponentMetadataSchema,
 	canonicalizeAppearance,
 	DesignSystemSchema,
 } from "../editor/appearance.js";
 
-const appearance: AnvilAppearanceV1 = {
+const appearance: AnvilAppearance = {
 	version: "1",
 	targets: {
 		root: {
@@ -35,7 +35,7 @@ const appearance: AnvilAppearanceV1 = {
 	},
 };
 
-const designSystem: DesignSystemV1 = {
+const designSystem: DesignSystem = {
 	version: "1",
 	breakpoints: [
 		{
@@ -94,7 +94,7 @@ describe("appearance schema (P1-01)", () => {
 		const input = {
 			version: "1",
 			targets: { root: appearance.targets?.root ?? {}, empty: {} },
-		} as AnvilAppearanceV1;
+		} as AnvilAppearance;
 		const before = JSON.stringify(input);
 		canonicalizeAppearance(input);
 		expect(JSON.stringify(input)).toBe(before);
@@ -114,7 +114,7 @@ describe("design system schema (P1-01)", () => {
 
 describe("component metadata v2 schema (P1-01)", () => {
 	it("accepts named targets with allowlisted properties", () => {
-		const parsed = ComponentMetadataV2Schema.safeParse({
+		const parsed = ComponentMetadataSchema.safeParse({
 			version: "2",
 			styleTargets: {
 				root: {
@@ -131,7 +131,7 @@ describe("component metadata v2 schema (P1-01)", () => {
 
 	it("rejects a property outside the authorable allowlist", () => {
 		expect(
-			ComponentMetadataV2Schema.safeParse({
+			ComponentMetadataSchema.safeParse({
 				version: "2",
 				styleTargets: { root: { label: "X", properties: ["zIndex"] } },
 			}).success,
