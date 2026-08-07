@@ -19,6 +19,8 @@ import type {
 	AuthorStyle,
 	DesignSystem,
 	DocumentComponentLibrary,
+	EditorAnnotation,
+	EditorAnnotations,
 	TargetAppearance,
 } from "@anvilkit/contracts/editor";
 import { z } from "zod";
@@ -56,6 +58,30 @@ export const DesignSystemSchema: z.ZodType<DesignSystem> = z.looseObject({
 	defaultTokenMode: IdSchema,
 	styleDefinitions: StyleDefinitionCollectionSchema,
 });
+
+/**
+ * Editor annotations (PLAN-0026 §3.6). The per-entry object is
+ * `strictObject` **on purpose** — unlike every other schema in this
+ * directory, which is `looseObject` for forward compatibility. An
+ * unknown key inside an annotation entry is a validation error,
+ * because tolerating one is how this closed map would grow back into
+ * a sidecar.
+ */
+export const EditorAnnotationSchema: z.ZodType<EditorAnnotation> =
+	z.strictObject({
+		name: z.string().optional(),
+		locked: z.boolean().optional(),
+	});
+
+export const EditorAnnotationsSchema: z.ZodType<EditorAnnotations> = z.record(
+	IdSchema,
+	EditorAnnotationSchema,
+);
+
+/** Validate an annotations map; `undefined` when it is not valid. */
+export function safeParseEditorAnnotations(value: unknown) {
+	return EditorAnnotationsSchema.safeParse(value);
+}
 
 export const DocumentComponentLibrarySchema: z.ZodType<DocumentComponentLibrary> =
 	z.looseObject({
