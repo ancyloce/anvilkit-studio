@@ -5,7 +5,7 @@
  */
 
 import type { PageIR, PageIRNode } from "@anvilkit/contracts";
-import type { AuthoringStateV1 } from "@anvilkit/contracts/editor";
+
 import { describe, expect, it } from "vitest";
 import {
 	type EditorFeatureScanDocument,
@@ -14,6 +14,27 @@ import {
 	projectAuthoringToIR,
 	validateExportCapabilities,
 } from "../editor/index.js";
+
+/**
+ * The sidecar envelope, declared locally for this fixture.
+ *
+ * `p1-005` moved the sidecar contract out of published
+ * `@anvilkit/contracts`. This suite certifies behaviour that still
+ * reads the sidecar, so it carries its own structural view until that
+ * behaviour is removed.
+ */
+type AuthoringStateV1 = {
+	readonly version: "1";
+	readonly revision: number;
+	readonly breakpoints: readonly unknown[];
+	readonly nodes: Readonly<Record<string, Record<string, unknown>>>;
+	readonly tokens: Readonly<Record<string, unknown>>;
+	readonly tokenModes: Readonly<Record<string, unknown>>;
+	readonly styleDefinitions: Readonly<Record<string, unknown>>;
+	readonly componentDefinitions: Readonly<Record<string, unknown>>;
+	readonly interactions: Readonly<Record<string, unknown>>;
+	readonly bindings: Readonly<Record<string, unknown>>;
+};
 
 function emptyAuthoring(): AuthoringStateV1 {
 	return {

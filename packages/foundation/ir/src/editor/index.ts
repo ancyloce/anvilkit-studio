@@ -24,12 +24,44 @@
 
 import type { PageIR, PageIRNode } from "@anvilkit/contracts";
 import type {
-	AuthoringStateV1,
+	Binding,
+	BreakpointDefinition,
+	ComponentDefinition,
+	DesignToken,
 	EditorError,
 	EditorExportCapabilities,
 	EditorFeatureId,
 	ExportValidationResult,
+	Interaction,
+	NodeAuthoringStateV1,
+	StyleDefinition,
+	TokenMode,
 } from "@anvilkit/contracts/editor";
+
+/**
+ * The sidecar envelope this scanner reads, declared locally.
+ *
+ * `p1-005` moved the sidecar contract out of published
+ * `@anvilkit/contracts` into `@anvilkit/core`'s internals. `ir` is a
+ * FOUNDATION package and must not import from a runtime one — the
+ * dependency direction is `apps → extensions → capabilities → runtime
+ * → foundation` — so it carries its own view, mirroring the original
+ * shape and reusing the member contracts that are still published.
+ * `p2-007` rewrites this module onto `DocumentModel` and deletes this
+ * with it.
+ */
+interface AuthoringStateV1 {
+	readonly version: "1";
+	readonly revision: number;
+	readonly breakpoints: readonly BreakpointDefinition[];
+	readonly nodes: Readonly<Record<string, NodeAuthoringStateV1>>;
+	readonly tokens: Readonly<Record<string, DesignToken>>;
+	readonly tokenModes: Readonly<Record<string, TokenMode>>;
+	readonly styleDefinitions: Readonly<Record<string, StyleDefinition>>;
+	readonly componentDefinitions: Readonly<Record<string, ComponentDefinition>>;
+	readonly interactions: Readonly<Record<string, Interaction>>;
+	readonly bindings: Readonly<Record<string, Binding>>;
+}
 
 function hasLockedRecords(authoring: AuthoringStateV1): boolean {
 	return Object.values(authoring.nodes).some(
@@ -212,7 +244,7 @@ function* scanRoots(
  * | `variants` | definition axes/variants, or any instance `variantSelection` |
  * | `interactions` | sidecar interactions, or any node `interactionRefs` |
  * | `bindings` | sidecar bindings, or any node `bindingRefs` |
- * | `richText` | a `TiptapDocumentV1` in component props, definition roots, or instance overrides |
+ * | `richText` | a `TiptapDocument` in component props, definition roots, or instance overrides |
  *
  * The dangling-reference arms (a node referencing a definition that
  * the sidecar no longer holds) matter: they are exactly the states a
