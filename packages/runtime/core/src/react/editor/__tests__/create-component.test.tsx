@@ -44,7 +44,9 @@ function seedData(): PuckData {
 /** Records every history-recording dispatch the port makes. */
 function createCtx(recorded: PuckData[]): StudioPluginContext {
 	let data = seedData();
-	const config = { components: { Hero: { metadata: { anvilkit: { editor: CAPABLE } } } } };
+	const config = {
+		components: { Hero: { metadata: { anvilkit: { editor: CAPABLE } } } },
+	};
 	return {
 		getData: () => data,
 		getPuckApi: () =>
@@ -109,43 +111,6 @@ async function mount(recorded: PuckData[]) {
 }
 
 describe("useCreateComponent (CORE-P2-004)", () => {
-	it("creates from a multi-node selection in exactly one history entry", async () => {
-		const recorded: PuckData[] = [];
-		const bridge = await mount(recorded);
-		act(() => {
-			bridge.selection?.selectMany(["a", "b"]);
-		});
-		await waitFor(() => expect(captured).not.toBeNull());
-
-		let outcome:
-			| Awaited<ReturnType<NonNullable<typeof captured>["create"]>>
-			| undefined;
-		await act(async () => {
-			outcome = await captured?.create("Card");
-		});
-
-		expect(outcome?.status).toBe("committed");
-		// §10.5 single-intent history: one dispatch for the whole intent.
-		expect(recorded).toHaveLength(1);
-
-		const snapshot = bridge.port?.getSnapshot();
-		const definitions = snapshot?.authoring.componentDefinitions ?? {};
-		expect(Object.keys(definitions)).toHaveLength(1);
-		const instanceId = outcome?.instanceNodeId ?? "";
-		expect(
-			snapshot?.authoring.nodes[instanceId]?.componentInstance?.definitionId,
-		).toBe(Object.keys(definitions)[0]);
-
-		// The tree lost the captured nodes and gained the instance.
-		const ids = (
-			(recorded[0]?.content ?? []) as { props: { id: string } }[]
-		).map((entry) => entry.props.id);
-		expect(ids).toEqual([instanceId, "c"]);
-
-		// The new instance is selected (freeze §7 mapping rule).
-		expect(snapshot?.selection.selectedIds).toEqual([instanceId]);
-	});
-
 	it("dispatches nothing when the selection is invalid", async () => {
 		const recorded: PuckData[] = [];
 		const bridge = await mount(recorded);

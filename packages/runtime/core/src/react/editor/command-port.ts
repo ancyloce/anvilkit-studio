@@ -141,6 +141,27 @@ export interface InternalEditorCommandPort extends EditorCommandPort {
 	readonly readCurrent: () => AuthoringReadResult;
 	/** The live Puck data (prop-reading surfaces, e.g. image section). */
 	readonly readData: () => PuckData;
+	/**
+	 * The live `PuckApi`, or `null` when `<Puck>` is not mounted.
+	 *
+	 * The canonical (`p3-001`+) commit helpers take a `getPuckApi`
+	 * dependency, and the surfaces that call them — the inspector's
+	 * component section, the capture dialog, the canvas toolbar — are
+	 * also rendered **bare**, outside a `<Puck>` provider, by panel
+	 * tests and by hosts that compose the chrome themselves. Binding
+	 * those call sites with `useGetPuck` would throw during render of a
+	 * shared inspector section and take down every surface that renders
+	 * the inspector at all, not just component authoring.
+	 *
+	 * Reusing the port's existing injection avoids adding a second,
+	 * parallel way to reach the same store. `null` means "no document
+	 * to commit against" and callers must degrade to a refusal, never
+	 * to a silent no-op that reads as success.
+	 *
+	 * Optional because test doubles of this interface predate it and
+	 * legitimately do not provide it.
+	 */
+	readonly tryGetPuckApi?: () => PuckApi | null;
 	/** True while the collab gate holds authoring writers closed. */
 	readonly writersDisabled: () => boolean;
 	/**
@@ -564,6 +585,16 @@ export function createEditorCommandPort(
 
 		readCurrent,
 		readData: currentData,
+
+		tryGetPuckApi(): PuckApi | null {
+			try {
+				return deps.getPuckApi();
+			} catch {
+				// Documented on `deps.getPuckApi`: it may throw before
+				// `<Puck>` finishes mounting.
+				return null;
+			}
+		},
 	};
 	return port;
 }

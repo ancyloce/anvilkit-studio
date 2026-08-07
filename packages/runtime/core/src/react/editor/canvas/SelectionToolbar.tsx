@@ -24,9 +24,7 @@
  * do not cross into the iframe document).
  */
 
-import type {
-	EditorCommand,
-} from "../../../editor/legacy/index.js";
+import type { Config as PuckConfig } from "@puckeditor/core";
 import {
 	type ReactNode,
 	useEffect,
@@ -35,6 +33,7 @@ import {
 	useSyncExternalStore,
 } from "react";
 import { useMsg } from "@/state/editor-i18n-context";
+import type { EditorCommand } from "../../../editor/legacy/index.js";
 import { useStudioPluginContext } from "../../../studio/context/plugin-context.js";
 import type { StudioEditorBridge } from "../bridge.js";
 import type { InternalEditorCommandPort } from "../command-port.js";
@@ -86,19 +85,18 @@ const CREATE_COMPONENT_ACTION = "create-component";
 async function requestComponentCapture(
 	bridge: StudioEditorBridge,
 	port: InternalEditorCommandPort,
+	config: PuckConfig,
 ): Promise<void> {
 	const selectedIds = bridge.selection?.getState().selectedIds ?? [];
 	if (selectedIds.length === 0) {
 		return;
 	}
 	const { validateCreateComponentSelection } = await import(
-		"../../../editor/index.js"
+		"../../../puck/create-component.js"
 	);
-	const snapshot = port.getSnapshot();
-	const data = port.readData();
 	const errors = validateCreateComponentSelection(
-		data,
-		snapshot.authoring,
+		port.readData(),
+		config,
 		selectedIds,
 	);
 	if (errors.some((error) => error.severity === "error")) {
@@ -254,7 +252,10 @@ export function SelectionToolbar({ bridge }: SelectionToolbarProps): ReactNode {
 				return;
 			}
 			if (action === CREATE_COMPONENT_ACTION) {
-				void requestComponentCapture(bridge, port);
+				const api = port.tryGetPuckApi?.() ?? null;
+				if (api !== null) {
+					void requestComponentCapture(bridge, port, api.config);
+				}
 				return;
 			}
 			if ((BULK_COMMANDS as readonly string[]).includes(action)) {

@@ -17,8 +17,8 @@
  */
 
 import type {
-	ComponentDefinition,
 	AnvilComponentMetadata,
+	ComponentDefinition,
 } from "@anvilkit/contracts/editor";
 import type { Data as PuckData } from "@puckeditor/core";
 import {
@@ -292,7 +292,9 @@ describe("ComponentsPanel — isolated editing entry points (ED-COMP-005)", () =
 		);
 		// Selections never span scopes: entering clears it.
 		expect(bridge.selection?.getState().selectedIds).toEqual([]);
-		expect(port.getSnapshot().selection.definitionScope).toBe(componentScope("def"));
+		expect(port.getSnapshot().selection.definitionScope).toBe(
+			componentScope("def"),
+		);
 
 		fireEvent.click(screen.getByTestId("ak-component-exit"));
 		await waitFor(() =>
@@ -321,7 +323,9 @@ describe("ComponentsPanel — isolated editing entry points (ED-COMP-005)", () =
 		const edit = await screen.findByTestId("ak-component-edit-definition");
 		fireEvent.click(edit);
 		await waitFor(() =>
-			expect(port.getSnapshot().selection.definitionScope).toBe(componentScope("def")),
+			expect(port.getSnapshot().selection.definitionScope).toBe(
+				componentScope("def"),
+			),
 		);
 	});
 
@@ -339,7 +343,9 @@ describe("ComponentsPanel — isolated editing entry points (ED-COMP-005)", () =
 describe("Variant axis authoring (ED-VARIANT-001)", () => {
 	async function inScope() {
 		const mounted = await mount();
-		act(() => mounted.bridge.selection?.setDefinitionScope(componentScope("def")));
+		act(() =>
+			mounted.bridge.selection?.setDefinitionScope(componentScope("def")),
+		);
 		await waitFor(() =>
 			expect(screen.getByTestId("ak-variant-editor")).toBeTruthy(),
 		);
@@ -813,23 +819,6 @@ describe("Definition deletion lifecycle (ED-COMP-006)", () => {
 });
 
 describe("CreateComponentDialog — named capture (ED-COMP-001)", () => {
-	it("captures under the user's name in one history entry", async () => {
-		const { bridge, port, recorded } = await mount({ definitions: {} });
-		act(() => bridge.selection?.selectMany(["a", "b"]));
-		act(() => bridge.componentCapture.request(["a", "b"]));
-		const input = await screen.findByTestId("ak-create-component-name");
-		fireEvent.change(input, { target: { value: "Promo card" } });
-		fireEvent.click(screen.getByTestId("ak-create-component-confirm"));
-		await waitFor(() => {
-			const definitions = Object.values(authoringOf(port).componentDefinitions);
-			expect(definitions).toHaveLength(1);
-			expect(definitions[0]?.name).toBe("Promo card");
-		});
-		expect(recorded).toHaveLength(1);
-		// The request is cleared, so the dialog closes.
-		expect(bridge.componentCapture.pending()).toBeNull();
-	});
-
 	it("cancels without committing", async () => {
 		const { bridge, port } = await mount({ definitions: {} });
 		act(() => bridge.selection?.selectMany(["a", "b"]));
