@@ -92,6 +92,18 @@ export {
 	type UseCompiledAppearanceOptions,
 	useCompiledAppearance,
 } from "./composition/use-compiled-appearance.js";
+export {
+	createEditorApi,
+	type EditorApiDeps,
+	resolveEditorIntent,
+} from "./editor-api.js";
+export { useAnnotationCommit } from "./composition/use-annotation-commit.js";
+export {
+	useBindingsCommit,
+	useInlineTextCommit,
+	useInteractionsCommit,
+} from "./composition/use-carrier-commits.js";
+export { useComponentLibraryCommit } from "./composition/use-component-library-commit.js";
 export { useDesignSystemCommit } from "./composition/use-design-system-commit.js";
 export {
 	EditorSurfaceSlot,
@@ -144,6 +156,10 @@ export {
 	type TokenDeletionPreview,
 	useDesignSystem,
 } from "./tokens/use-design-system.js";
+export {
+	useDocumentModel,
+	useNodeField,
+} from "./use-document-model.js";
 export { useResolvedNodeStyle } from "./use-resolved-node-style.js";
 export {
 	type StudioEditorHandle,

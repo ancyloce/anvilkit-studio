@@ -22,8 +22,11 @@ import { use, useMemo, useSyncExternalStore } from "react";
 import {
 	type ResolvedAuthoringStyle,
 	resolveAuthoringStyle,
-	resolveNodeAuthoring,
+	resolveTargetAppearance,
 } from "../../editor/index.js";
+import { readDocument } from "../../document-model/index.js";
+import { ROOT_STYLE_TARGET_ID } from "../../puck/targets.js";
+import { useOptionalReactivePuck } from "../overrides/utils/use-reactive-puck.js";
 import { StudioEditorBridgeContext } from "./use-studio-editor.js";
 
 const DEFAULT_VIEWPORT_WIDTH = 1280;
@@ -39,20 +42,47 @@ export function useResolvedNodeStyle(
 		bridge === null ? zero : bridge.getVersion,
 		bridge === null ? zero : bridge.getVersion,
 	);
+	const puckConfig = useOptionalReactivePuck((state) => state.config, null);
+	const puckData = useOptionalReactivePuck(
+		(state) => state.appState.data,
+		null,
+	);
+	const model = useMemo(
+		() =>
+			puckConfig === null || puckData === null
+				? null
+				: readDocument(puckData, puckConfig),
+		[puckConfig, puckData],
+	);
 	return useMemo(() => {
 		void version;
-		const port = bridge?.port;
-		if (bridge == null || port == null || nodeId === undefined) {
+		if (bridge == null || nodeId === undefined) {
 			return undefined;
 		}
-		const snapshot = port.getSnapshot();
-		const resolved = resolveNodeAuthoring(nodeId, {
-			authoring: snapshot.authoring,
-			breakpoints: snapshot.breakpoints,
-			viewportWidth:
-				bridge.responsive?.getViewportWidth() ?? DEFAULT_VIEWPORT_WIDTH,
-			tokenMode: DEFAULT_TOKEN_MODE,
-		});
+		// Ported off the sidecar by `p2-007`: appearance and the design
+		// system are read from the canonical document model, so this hook
+		// and the compiler resolve the same node from the same `Data`
+		// through the same cascade. Outside a `<Puck>` provider the model
+		// is unavailable and the hook reports no style rather than
+		// inventing one.
+		const node = model?.nodes.get(nodeId);
+		if (model == null) {
+			return undefined;
+		}
+		const resolved = resolveTargetAppearance(
+			node?.appearance?.targets?.[ROOT_STYLE_TARGET_ID],
+			{
+				designSystem: model.designSystem ?? {
+					styleDefinitions: {},
+					tokens: {},
+					tokenModes: {},
+				},
+				breakpoints: model.designSystem?.breakpoints ?? [],
+				viewportWidth:
+					bridge.responsive?.getViewportWidth() ?? DEFAULT_VIEWPORT_WIDTH,
+				tokenMode: DEFAULT_TOKEN_MODE,
+			},
+		);
 		return resolveAuthoringStyle({
 			nodeId,
 			layout: resolved.layout,
@@ -60,7 +90,7 @@ export function useResolvedNodeStyle(
 			typography: resolved.typography,
 			hidden: resolved.hidden,
 		});
-	}, [bridge, nodeId, version]);
+	}, [bridge, nodeId, version, model]);
 }
 
 function noopSubscribe(): () => void {

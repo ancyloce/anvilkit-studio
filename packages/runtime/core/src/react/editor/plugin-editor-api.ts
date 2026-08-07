@@ -51,7 +51,8 @@ const EMPTY_AUTHORING: AuthoringStateV1 = {
 
 const EMPTY_SELECTION: EditorSelectionState = {
 	selectedIds: [],
-	scope: "page",
+	definitionScope: "page",
+	mode: "page",
 };
 
 function portNotReadyError(): EditorError {

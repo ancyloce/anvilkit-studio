@@ -26,7 +26,13 @@ import type {
 	EditorCommandResult,
 } from "../../../editor/legacy/index.js";
 import { use, useCallback, useMemo, useSyncExternalStore } from "react";
-import { grantsFamily } from "../../../puck/component-metadata.js";
+import {
+	AUTHORABLE_PROPERTY_LOCATIONS,
+	resolveStyleTargetsFor,
+} from "../../../puck/component-metadata.js";
+import { readDocument } from "../../../document-model/index.js";
+import { useOptionalReactivePuck } from "../../overrides/utils/use-reactive-puck.js";
+import { ROOT_STYLE_TARGET_ID } from "../../../puck/targets.js";
 import type { StudioEditorBridge } from "../bridge.js";
 import { withBreakpointMaterialization } from "../responsive/materialize.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
@@ -56,8 +62,20 @@ export interface EditorInspectorContext {
 	/** The active write layer (base until CORE-P1A-008 installs). */
 	readonly layer: ResponsiveLayerRef;
 	readonly viewportWidth: number;
-	/** Selected node ids whose components support `family`. */
-	readonly capableNodeIds: (family: InspectorFamily) => readonly string[];
+	/**
+	 * Selected node ids whose component grants `family` **on
+	 * `targetId`** (the node's root target when omitted).
+	 *
+	 * Per **target**, not per node: a component may declare `root` with
+	 * layout properties and `cardTitle` with typography only, and the
+	 * inspector must reflect that rather than answering one question for
+	 * the whole node. This is the read-side precondition for `p5-003`'s
+	 * target-scoped Style tab.
+	 */
+	readonly capableNodeIds: (
+		family: InspectorFamily,
+		targetId?: string,
+	) => readonly string[];
 }
 
 /**
@@ -72,6 +90,23 @@ export function useEditorInspector(): EditorInspectorContext | null {
 		bridge === null ? zero : bridge.getVersion,
 		bridge === null ? zero : bridge.getVersion,
 	);
+	// Capability gating reads the canonical document model. Selectors are
+	// the OPTIONAL variant because inspector specs mount these hooks
+	// without a `<Puck>` provider; outside it the model is `null` and
+	// every node gates closed, which is the honest answer — the host may
+	// not fabricate support it cannot verify.
+	const puckConfig = useOptionalReactivePuck((state) => state.config, null);
+	const puckData = useOptionalReactivePuck(
+		(state) => state.appState.data,
+		null,
+	);
+	const model = useMemo(
+		() =>
+			puckConfig === null || puckData === null
+				? null
+				: readDocument(puckData, puckConfig),
+		[puckConfig, puckData],
+	);
 	return useMemo(() => {
 		void version;
 		const port = bridge?.port;
@@ -82,32 +117,48 @@ export function useEditorInspector(): EditorInspectorContext | null {
 		if (snapshot.selection.selectedIds.length === 0) {
 			return null;
 		}
-		const capabilityCache = new Map<InspectorFamily, readonly string[]>();
-		const capableNodeIds = (family: InspectorFamily): readonly string[] => {
-			const cached = capabilityCache.get(family);
+		const capabilityCache = new Map<string, readonly string[]>();
+		const capableNodeIds = (
+			family: InspectorFamily,
+			targetId: string = ROOT_STYLE_TARGET_ID,
+		): readonly string[] => {
+			const cacheKey = `${family}\u0000${targetId}`;
+			const cached = capabilityCache.get(cacheKey);
 			if (cached !== undefined) {
 				return cached;
 			}
-			const registry = bridge.capabilities;
+			// The inspector family names differ from the spec family
+			// names for the visual family only (`style` vs `visual`).
+			const specFamily = family === "style" ? "visual" : family;
 			const ids = snapshot.selection.selectedIds.filter((nodeId) => {
-				const metadata = registry?.forNode(nodeId);
-				if (metadata === undefined) {
+				// Gating reads the component's DECLARED style targets,
+				// resolved by the one canonical reader and cached per
+				// component type — the same `resolveStyleTargets` +
+				// `AUTHORABLE_PROPERTY_LOCATIONS` pair the compiler
+				// enforces, so the panel structurally cannot offer what
+				// the compiler would drop. There is no capability
+				// registry and no boolean flag in this path.
+				// Declared targets come from the canonical read model when
+				// the React `<Puck>` provider is reachable. When it is not
+				// — the bare mounts inspector specs use, and only those —
+				// they come from the same canonical reader via the
+				// bridge's metadata lookup. Both paths validate through
+				// ONE resolution (`resolveStyleTargetsFor`), so neither
+				// can trust a malformed declaration the compiler would
+				// reject. The fallback retires with the bridge in P3/P4.
+				const declared =
+					model?.nodes.get(nodeId)?.styleTargets ??
+					resolveStyleTargetsFor(bridge.capabilities?.forNode(nodeId));
+				const target = declared.find((entry) => entry.id === targetId);
+				if (target === undefined) {
 					return false;
 				}
-				// Family gating derives from the granted property set —
-				// the same `AUTHORABLE_PROPERTY_LOCATIONS` map the
-				// compiler enforces — so the inspector structurally
-				// cannot offer a family the compiler would drop.
-				switch (family) {
-					case "layout":
-						return grantsFamily(metadata, "layout");
-					case "style":
-						return grantsFamily(metadata, "visual");
-					case "typography":
-						return grantsFamily(metadata, "typography");
-				}
+				return target.properties.some(
+					(property) =>
+						AUTHORABLE_PROPERTY_LOCATIONS[property]?.family === specFamily,
+				);
 			});
-			capabilityCache.set(family, ids);
+			capabilityCache.set(cacheKey, ids);
 			return ids;
 		};
 		return {
@@ -122,7 +173,7 @@ export function useEditorInspector(): EditorInspectorContext | null {
 				bridge.responsive?.getViewportWidth() ?? DEFAULT_VIEWPORT_WIDTH,
 			capableNodeIds,
 		};
-	}, [bridge, version]);
+	}, [bridge, version, model]);
 }
 
 /** The per-field surface a control renders and commits through. */

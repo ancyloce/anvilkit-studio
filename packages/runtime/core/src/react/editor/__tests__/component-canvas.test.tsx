@@ -169,7 +169,7 @@ describe("ComponentCanvasPanel (CORE-P2-009F/G)", () => {
 	it("renders the definition and its combination strip in component scope", async () => {
 		const bridge = await mount();
 		act(() => {
-			bridge.selection?.setScope(componentScope("def"));
+			bridge.selection?.setDefinitionScope(componentScope("def"));
 		});
 		await waitFor(() =>
 			expect(screen.getByTestId("ak-component-canvas")).toBeTruthy(),
@@ -185,7 +185,7 @@ describe("ComponentCanvasPanel (CORE-P2-009F/G)", () => {
 		const recorded: PuckData[] = [];
 		const bridge = await mount(recorded);
 		act(() => {
-			bridge.selection?.setScope(componentScope("def"));
+			bridge.selection?.setDefinitionScope(componentScope("def"));
 		});
 		await waitFor(() =>
 			expect(screen.getByTestId("ak-component-variant-strip")).toBeTruthy(),
@@ -203,7 +203,7 @@ describe("ComponentCanvasPanel (CORE-P2-009F/G)", () => {
 	it("exits back to page scope and stops rendering", async () => {
 		const bridge = await mount();
 		act(() => {
-			bridge.selection?.setScope(componentScope("def"));
+			bridge.selection?.setDefinitionScope(componentScope("def"));
 		});
 		await waitFor(() =>
 			expect(screen.getByTestId("ak-component-exit")).toBeTruthy(),
@@ -212,13 +212,13 @@ describe("ComponentCanvasPanel (CORE-P2-009F/G)", () => {
 		await waitFor(() =>
 			expect(screen.queryByTestId("ak-component-canvas")).toBeNull(),
 		);
-		expect(bridge.selection?.getState().scope).toBe("page");
+		expect(bridge.selection?.getState().definitionScope).toBe("page");
 	});
 
 	it("renders nothing for a scope whose definition is gone", async () => {
 		const bridge = await mount();
 		act(() => {
-			bridge.selection?.setScope(componentScope("missing"));
+			bridge.selection?.setDefinitionScope(componentScope("missing"));
 		});
 		await new Promise((resolve) => setTimeout(resolve, 20));
 		expect(screen.queryByTestId("ak-component-canvas")).toBeNull();

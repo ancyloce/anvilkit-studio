@@ -292,7 +292,7 @@ describe("ComponentsPanel — isolated editing entry points (ED-COMP-005)", () =
 		);
 		// Selections never span scopes: entering clears it.
 		expect(bridge.selection?.getState().selectedIds).toEqual([]);
-		expect(port.getSnapshot().selection.scope).toBe(componentScope("def"));
+		expect(port.getSnapshot().selection.definitionScope).toBe(componentScope("def"));
 
 		fireEvent.click(screen.getByTestId("ak-component-exit"));
 		await waitFor(() =>
@@ -321,17 +321,17 @@ describe("ComponentsPanel — isolated editing entry points (ED-COMP-005)", () =
 		const edit = await screen.findByTestId("ak-component-edit-definition");
 		fireEvent.click(edit);
 		await waitFor(() =>
-			expect(port.getSnapshot().selection.scope).toBe(componentScope("def")),
+			expect(port.getSnapshot().selection.definitionScope).toBe(componentScope("def")),
 		);
 	});
 
 	it("never lets a selection span page and component scopes", async () => {
 		const { bridge } = await mount();
 		act(() => bridge.selection?.selectMany(["a", "b"]));
-		act(() => bridge.selection?.setScope(componentScope("def")));
+		act(() => bridge.selection?.setDefinitionScope(componentScope("def")));
 		expect(bridge.selection?.getState().selectedIds).toEqual([]);
 		act(() => bridge.selection?.select("n-root"));
-		act(() => bridge.selection?.setScope("page"));
+		act(() => bridge.selection?.setDefinitionScope("page"));
 		expect(bridge.selection?.getState().selectedIds).toEqual([]);
 	});
 });
@@ -339,7 +339,7 @@ describe("ComponentsPanel — isolated editing entry points (ED-COMP-005)", () =
 describe("Variant axis authoring (ED-VARIANT-001)", () => {
 	async function inScope() {
 		const mounted = await mount();
-		act(() => mounted.bridge.selection?.setScope(componentScope("def")));
+		act(() => mounted.bridge.selection?.setDefinitionScope(componentScope("def")));
 		await waitFor(() =>
 			expect(screen.getByTestId("ak-variant-editor")).toBeTruthy(),
 		);
@@ -706,7 +706,7 @@ describe("Instance inspector (ED-COMP-003/-004/-007/-008, ED-VARIANT-002)", () =
 			).toBeUndefined(),
 		);
 		// … and the scope is back on the page, with the instance selected.
-		expect(port.getSnapshot().selection.scope).toBe("page");
+		expect(port.getSnapshot().selection.definitionScope).toBe("page");
 	});
 
 	it("detaches an instance", async () => {

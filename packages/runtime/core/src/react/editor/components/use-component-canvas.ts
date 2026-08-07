@@ -105,7 +105,7 @@ export function useComponentCanvas(): ComponentCanvas | null {
 		if (port == null) {
 			return null;
 		}
-		const definitionId = scopedDefinitionId(port.getSnapshot().selection.scope);
+		const definitionId = scopedDefinitionId(port.getSnapshot().selection.definitionScope);
 		if (definitionId === undefined) {
 			return null;
 		}

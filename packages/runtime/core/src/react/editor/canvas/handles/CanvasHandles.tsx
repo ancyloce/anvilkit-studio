@@ -8,11 +8,15 @@
  * node. Handle eligibility follows capability metadata and lock
  * state:
  *
- * - width / height / corner resize — `layoutItem`, unlocked;
- * - gap — `layoutContainer` with flex/grid display;
- * - padding (top edge shown; all four write per-edge) —
- *   `layoutContainer`;
- * - radius — `visualStyle`.
+ * Eligibility is asked per GRANTED PROPERTY, from the component's
+ * declared style targets — not from component-level booleans, which
+ * the v1 contract used and which cannot express the widened
+ * vocabulary (`p2-006`):
+ *
+ * - width / height / corner resize — grants `width` / `height`, unlocked;
+ * - gap — grants `gap`, with a flex/grid display;
+ * - padding (top edge shown; all four write per-edge) — grants `padding`;
+ * - radius — grants `borderRadius`.
  *
  * Flow nodes are NOT movable by x/y — reordering stays with Puck's
  * own drop semantics; `inset` handles exist only for

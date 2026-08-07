@@ -41,9 +41,16 @@ import type { InternalEditorCommandPort } from "../command-port.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
 import { scopedDefinitionId } from "./scope.js";
 
-/** The maximum expressible combinations an authored model may offer. */
-export const MAX_EXPRESSIBLE_COMBINATIONS =
-	EDITOR_COUNT_LIMITS.variantsPerComponent;
+/**
+ * The maximum expressible combinations an authored model may offer.
+ *
+ * Re-exported from `puck/update-variants.ts`, where `p3-002` moved the
+ * single declaration so the cap the commit path enforces and the cap
+ * this hook displays cannot drift apart.
+ */
+import { MAX_EXPRESSIBLE_COMBINATIONS } from "../../../puck/update-variants.js";
+
+export { MAX_EXPRESSIBLE_COMBINATIONS };
 
 /** Outcome of one axis-model edit. */
 export interface VariantEditOutcome {
@@ -182,7 +189,7 @@ export function useVariantAuthoring(): VariantAuthoring | null {
 		void version;
 		if (port == null) return null;
 		const snapshot = port.getSnapshot();
-		const definitionId = scopedDefinitionId(snapshot.selection.scope);
+		const definitionId = scopedDefinitionId(snapshot.selection.definitionScope);
 		if (definitionId === undefined) return null;
 		return snapshot.authoring.componentDefinitions[definitionId] ?? null;
 	}, [port, version]);

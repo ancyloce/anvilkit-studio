@@ -297,12 +297,12 @@ export function useComponentInstance(): ComponentInstanceModel | null {
 			// the affordance available from instance mode (where the user
 			// is looking at the override) without weakening the guard.
 			const selection = bridge.selection;
-			const previous = port?.getSnapshot().selection.scope ?? "page";
+			const previous = port?.getSnapshot().selection.definitionScope ?? "page";
 			const targetScope =
 				`component:${resolved.instance.definitionId}` as const;
 			const needsScope = previous !== targetScope && selection != null;
 			if (needsScope) {
-				selection?.setScope(targetScope);
+				selection?.setDefinitionScope(targetScope);
 			}
 			try {
 				return await dispatch(() => ({
@@ -320,7 +320,7 @@ export function useComponentInstance(): ComponentInstanceModel | null {
 					// `getEditorScopeController`, whose `exitScope()` always
 					// lands on "page" and so cannot express a transient
 					// round-trip back to the originating scope.
-					selection?.setScope(previous);
+					selection?.setDefinitionScope(previous);
 					selection?.select(resolved.nodeId);
 				}
 			}

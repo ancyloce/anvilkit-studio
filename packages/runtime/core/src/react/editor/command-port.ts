@@ -76,7 +76,8 @@ import { effectiveBreakpoints } from "./responsive/preset.js";
 /** The empty page-scope selection (replaced by CORE-P1A-002). */
 const EMPTY_SELECTION: EditorSelectionState = {
 	selectedIds: [],
-	scope: "page",
+	definitionScope: "page",
+	mode: "page",
 };
 
 /** Dependencies of the port — thunks so tests need no `<Studio>`. */
@@ -237,7 +238,7 @@ export function createEditorCommandPort(
 		if (selection === undefined) {
 			return null;
 		}
-		return scopeGuardError(selection.scope, command, (member) =>
+		return scopeGuardError(selection.definitionScope, command, (member) =>
 			member.type === "component.definition.update"
 				? member.definitionId
 				: member.type === "component.override.promote"

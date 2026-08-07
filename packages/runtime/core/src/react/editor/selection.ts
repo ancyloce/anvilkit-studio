@@ -22,7 +22,8 @@ import { createStore } from "zustand/vanilla";
 
 const EMPTY_SELECTION: EditorSelectionState = {
 	selectedIds: [],
-	scope: "page",
+	definitionScope: "page",
+	mode: "page",
 };
 
 /**
@@ -58,7 +59,31 @@ export interface EditorSelectionController {
 	 * Enter/exit a component editing scope. Always clears the
 	 * selection — selections can never span scopes (§10.6).
 	 */
-	setScope(scope: EditorSelectionState["scope"]): void;
+	setDefinitionScope(
+		definitionScope: EditorSelectionState["definitionScope"],
+	): void;
+	/**
+	 * Switch editing granularity. **Never enters history** — there is
+	 * nothing to undo, because the mode writes no document state.
+	 */
+	setMode(mode: EditorSelectionState["mode"]): void;
+	/**
+	 * Set the active style target. Cleared automatically when the
+	 * primary selection moves to a type that does not declare it.
+	 */
+	setTargetId(targetId: string | undefined): void;
+	/**
+	 * The selected ids that actually declare the active `targetId` —
+	 * the commit set.
+	 *
+	 * Multi-select in component mode means *the same target across
+	 * several nodes*, and nodes that do not declare it are excluded
+	 * **here, before dispatch**, rather than discovered afterwards
+	 * through `updateAppearanceInData`'s
+	 * `EDITOR_CAPABILITY_UNSUPPORTED` path. The inspector must never
+	 * offer a control whose commit would be rejected.
+	 */
+	targetCommitSet(): readonly string[];
 }
 
 /** The controller plus internal seams the editor root wires up. */
@@ -77,6 +102,18 @@ export interface InternalEditorSelectionController
 	 */
 	readonly setVisibleOrderProvider: (
 		provider: (() => readonly string[]) | null,
+	) => void;
+	/**
+	 * Declared-target lookup, installed by the editor root.
+	 *
+	 * The selection store stays standalone (`zustand/vanilla`, no new
+	 * store, no document access) — it asks this seam which targets a
+	 * node declares, exactly as it asks `setVisibleOrderProvider` for
+	 * tree order. Without a provider the rules degrade to "no opinion"
+	 * rather than to "nothing is capable".
+	 */
+	readonly setDeclaredTargetsProvider: (
+		provider: ((nodeId: string) => readonly string[]) | null,
 	) => void;
 }
 
@@ -101,11 +138,33 @@ export function createEditorSelectionController(
 ): InternalEditorSelectionController {
 	const store = createStore<EditorSelectionState>(() => EMPTY_SELECTION);
 	let visibleOrder: (() => readonly string[]) | null = null;
+	let declaredTargets: ((nodeId: string) => readonly string[]) | null = null;
+
+	/**
+	 * Drop a `targetId` the new primary's component does not declare.
+	 *
+	 * Applied inside `commit` rather than at each call site **on
+	 * purpose**: every selection path — `select`, `toggle`,
+	 * `selectRange`, `selectMany`, the Puck→Core sync — funnels through
+	 * here, so no path can forget the rule and leave a dangling address
+	 * behind. Falling back to `undefined` means "the node's root
+	 * target", which is always addressable.
+	 */
+	const resolveTarget = (next: EditorSelectionState): EditorSelectionState => {
+		if (next.targetId === undefined || declaredTargets === null) return next;
+		const primary = next.primaryId;
+		if (primary !== undefined && declaredTargets(primary).includes(next.targetId)) {
+			return next;
+		}
+		const { targetId: _dangling, ...rest } = next;
+		return rest;
+	};
 
 	const commit = (
-		next: EditorSelectionState,
+		candidate: EditorSelectionState,
 		options?: { readonly skipPuckSync?: boolean },
 	): void => {
+		const next = resolveTarget(candidate);
 		const prev = store.getState();
 		if (prev === next) {
 			return;
@@ -147,7 +206,9 @@ export function createEditorSelectionController(
 						? selectedIds[selectedIds.length - 1]
 						: prev.primaryId;
 				const next: EditorSelectionState = {
-					scope: prev.scope,
+					definitionScope: prev.definitionScope,
+					mode: prev.mode,
+					...(prev.targetId !== undefined ? { targetId: prev.targetId } : {}),
 					selectedIds,
 					...(primaryId !== undefined ? { primaryId } : {}),
 					...(prev.anchorId !== undefined && prev.anchorId !== nodeId
@@ -160,7 +221,9 @@ export function createEditorSelectionController(
 				return;
 			}
 			commit({
-				scope: prev.scope,
+				definitionScope: prev.definitionScope,
+				mode: prev.mode,
+				...(prev.targetId !== undefined ? { targetId: prev.targetId } : {}),
 				selectedIds: [...prev.selectedIds, nodeId],
 				primaryId: nodeId,
 				anchorId: prev.anchorId ?? nodeId,
@@ -183,7 +246,9 @@ export function createEditorSelectionController(
 			}
 			const [start, end] = from <= to ? [from, to] : [to, from];
 			commit({
-				scope: prev.scope,
+				definitionScope: prev.definitionScope,
+				mode: prev.mode,
+				...(prev.targetId !== undefined ? { targetId: prev.targetId } : {}),
 				selectedIds: order.slice(start, end + 1),
 				primaryId: nodeId,
 				anchorId: anchor,
@@ -202,7 +267,9 @@ export function createEditorSelectionController(
 					? primaryId
 					: selectedIds[0];
 			commit({
-				scope: prev.scope,
+				definitionScope: prev.definitionScope,
+				mode: prev.mode,
+				...(prev.targetId !== undefined ? { targetId: prev.targetId } : {}),
 				selectedIds,
 				...(primary !== undefined
 					? { primaryId: primary, anchorId: primary }
@@ -215,17 +282,39 @@ export function createEditorSelectionController(
 			if (prev.selectedIds.length === 0 && prev.primaryId === undefined) {
 				return;
 			}
-			commit({ scope: prev.scope, selectedIds: [] });
+			commit({
+				definitionScope: prev.definitionScope,
+				mode: prev.mode,
+				selectedIds: [],
+			});
 		},
 
-		setScope(scope) {
+		setDefinitionScope(definitionScope) {
 			const prev = store.getState();
-			if (prev.scope === scope) {
+			if (prev.definitionScope === definitionScope) {
 				return;
 			}
 			// Selections never span scopes (§10.6): entering or leaving a
 			// component scope always starts from an empty selection.
-			commit({ scope, selectedIds: [] });
+			commit({ definitionScope, mode: prev.mode, selectedIds: [] });
+		},
+
+		setMode(mode) {
+			const prev = store.getState();
+			if (prev.mode === mode) return;
+			// Leaving component mode drops the target with it — a target
+			// address is meaningless in page mode.
+			commit(
+				mode === "page"
+					? { ...prev, mode, targetId: undefined }
+					: { ...prev, mode },
+			);
+		},
+
+		setTargetId(targetId) {
+			const prev = store.getState();
+			if (prev.targetId === targetId) return;
+			commit({ ...prev, targetId });
 		},
 
 		handlePuckSelectedChange(nodeId) {
@@ -234,7 +323,14 @@ export function createEditorSelectionController(
 				if (prev.selectedIds.length === 0 && prev.primaryId === undefined) {
 					return;
 				}
-				commit({ scope: prev.scope, selectedIds: [] }, { skipPuckSync: true });
+				commit(
+					{
+						definitionScope: prev.definitionScope,
+						mode: prev.mode,
+						selectedIds: [],
+					},
+					{ skipPuckSync: true },
+				);
 				return;
 			}
 			// Echo of our own primary sync (or a canvas click on the
@@ -244,7 +340,9 @@ export function createEditorSelectionController(
 			}
 			commit(
 				{
-					scope: prev.scope,
+					definitionScope: prev.definitionScope,
+					mode: prev.mode,
+					...(prev.targetId !== undefined ? { targetId: prev.targetId } : {}),
 					selectedIds: [nodeId],
 					primaryId: nodeId,
 					anchorId: nodeId,
@@ -255,6 +353,21 @@ export function createEditorSelectionController(
 
 		setVisibleOrderProvider(provider) {
 			visibleOrder = provider;
+		},
+
+		setDeclaredTargetsProvider(provider) {
+			declaredTargets = provider;
+		},
+
+		targetCommitSet() {
+			const state = store.getState();
+			const targetId = state.targetId;
+			if (targetId === undefined || declaredTargets === null) {
+				return state.selectedIds;
+			}
+			return state.selectedIds.filter((id) =>
+				declaredTargets?.(id).includes(targetId),
+			);
 		},
 	};
 	return controller;

@@ -42,7 +42,7 @@ export function componentScope(definitionId: string): `component:${string}` {
 
 /** The definition id an isolated scope is editing, if any. */
 export function scopedDefinitionId(
-	scope: EditorSelectionState["scope"],
+	scope: EditorSelectionState["definitionScope"],
 ): string | undefined {
 	return scope === "page" ? undefined : scope.slice("component:".length);
 }
@@ -56,7 +56,7 @@ export function scopedDefinitionId(
  * which is what all-or-nothing batching requires.
  */
 export function scopeGuardError(
-	scope: EditorSelectionState["scope"],
+	scope: EditorSelectionState["definitionScope"],
 	command: EditorCommand,
 	definitionIdOf: (command: EditorCommand) => string | undefined,
 ): EditorError | null {
@@ -88,7 +88,7 @@ export function scopeGuardError(
 
 /** Enter/leave isolated component editing (DD-DEC-010). */
 export interface EditorScopeController {
-	readonly getScope: () => EditorSelectionState["scope"];
+	readonly getScope: () => EditorSelectionState["definitionScope"];
 	/** The definition being edited in isolation, or `undefined`. */
 	readonly getDefinitionId: () => string | undefined;
 	/**
@@ -103,7 +103,7 @@ export interface EditorScopeController {
 /** What the controller needs from the selection store. */
 export interface ScopeControllerDeps {
 	readonly getSelection: () => EditorSelectionState;
-	readonly setScope: (scope: EditorSelectionState["scope"]) => void;
+	readonly setDefinitionScope: (scope: EditorSelectionState["definitionScope"]) => void;
 	readonly selectMany: (nodeIds: readonly string[]) => void;
 }
 
@@ -146,7 +146,7 @@ export function getEditorScopeController(
 	}
 	const created = createEditorScopeController({
 		getSelection: () => selection.getState(),
-		setScope: (scope) => selection.setScope(scope),
+		setDefinitionScope: (scope) => selection.setDefinitionScope(scope),
 		selectMany: (nodeIds) => selection.selectMany(nodeIds),
 	});
 	SHARED_CONTROLLERS.set(selection, created);
@@ -168,23 +168,23 @@ export function createEditorScopeController(
 	let pageSelection: readonly string[] = [];
 
 	return {
-		getScope: () => deps.getSelection().scope,
-		getDefinitionId: () => scopedDefinitionId(deps.getSelection().scope),
+		getScope: () => deps.getSelection().definitionScope,
+		getDefinitionId: () => scopedDefinitionId(deps.getSelection().definitionScope),
 
 		enterComponent(definitionId) {
 			const current = deps.getSelection();
-			if (current.scope === "page") {
+			if (current.definitionScope === "page") {
 				pageSelection = current.selectedIds;
 			}
-			// `setScope` clears the selection itself (§10.6).
-			deps.setScope(componentScope(definitionId));
+			// `setDefinitionScope` clears the selection itself (§10.6).
+			deps.setDefinitionScope(componentScope(definitionId));
 		},
 
 		exitScope() {
-			if (deps.getSelection().scope === "page") {
+			if (deps.getSelection().definitionScope === "page") {
 				return;
 			}
-			deps.setScope("page");
+			deps.setDefinitionScope("page");
 			if (pageSelection.length > 0) {
 				deps.selectMany(pageSelection);
 			}

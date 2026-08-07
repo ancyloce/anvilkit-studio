@@ -101,7 +101,7 @@ function layerHidden(
  * Token references are substituted FIRST. `resolveAuthoringStyle` is a
  * pure serializer with no token awareness — hand it a
  * `{kind:"token"}` value and it emits nothing for that property. The
- * export pipeline always ran `resolveNodeAuthoring` (which substitutes)
+ * export pipeline always ran `resolveTargetAppearance` (which substitutes)
  * before serializing; this live path did not, so a token-backed value
  * exported correctly but vanished from the canvas. Substituting per
  * layer, rather than resolving an effective value for one viewport,
@@ -202,7 +202,7 @@ export function buildAuthoringStylesheet(
 	// `"default"` matches `buildExportStylesheet`, so the canvas and the
 	// exported page resolve a token the same way.
 	const tokens: TokenSubstitution = {
-		authoring,
+		designSystem: authoring,
 		tokenMode: tokenOptions?.tokenMode ?? "default",
 		...(tokenOptions?.defaultTokenMode !== undefined
 			? { defaultTokenMode: tokenOptions.defaultTokenMode }

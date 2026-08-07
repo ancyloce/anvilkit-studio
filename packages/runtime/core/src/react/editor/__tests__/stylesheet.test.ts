@@ -143,7 +143,7 @@ describe("applyAuthoringStylesheet", () => {
  * `resolveAuthoringStyle` is a pure serializer with no token
  * awareness, and this builder used to hand it the raw spec. A
  * `{kind:"token"}` value therefore serialized to nothing — the export
- * pipeline (which runs `resolveNodeAuthoring` first) emitted the
+ * pipeline (which runs `resolveTargetAppearance` first) emitted the
  * property correctly while the canvas silently dropped it, so
  * attaching a token made the value disappear from the page the author
  * was looking at.

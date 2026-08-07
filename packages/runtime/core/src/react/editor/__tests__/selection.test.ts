@@ -29,7 +29,8 @@ describe("selection controller — core semantics (§10.6)", () => {
 		const { controller, sync } = createController();
 		controller.select("a");
 		expect(controller.getState()).toEqual({
-			scope: "page",
+			definitionScope: "page",
+			mode: "page",
 			selectedIds: ["a"],
 			primaryId: "a",
 			anchorId: "a",
@@ -95,16 +96,17 @@ describe("selection controller — core semantics (§10.6)", () => {
 		expect(controller.getState().selectedIds).toEqual([]);
 	});
 
-	it("setScope always clears the selection (no cross-scope selections)", () => {
+	it("setDefinitionScope always clears the selection (no cross-scope selections)", () => {
 		const { controller } = createController();
 		controller.selectMany(["a", "b"]);
-		controller.setScope("component:def-1");
+		controller.setDefinitionScope("component:def-1");
 		expect(controller.getState()).toEqual({
-			scope: "component:def-1",
+			definitionScope: "component:def-1",
+			mode: "page",
 			selectedIds: [],
 		});
 		controller.select("inner");
-		controller.setScope("page");
+		controller.setDefinitionScope("page");
 		expect(controller.getState().selectedIds).toEqual([]);
 	});
 });

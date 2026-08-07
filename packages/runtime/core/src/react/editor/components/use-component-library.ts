@@ -197,7 +197,7 @@ export function useComponentLibrary(): ComponentLibrary | null {
 			// A rename is a definition edit, and definition edits require
 			// the component's own scope (freeze §6) — so enter it for the
 			// duration of the dispatch rather than asking the user to.
-			const previousScope = port.getSnapshot().selection.scope;
+			const previousScope = port.getSnapshot().selection.definitionScope;
 			const needsScope =
 				scopedDefinitionId(previousScope) !== definitionId &&
 				scopeController !== null;
@@ -323,7 +323,7 @@ export function useComponentLibrary(): ComponentLibrary | null {
 		return {
 			entries,
 			activeDefinitionId: scopedDefinitionId(
-				port.getSnapshot().selection.scope,
+				port.getSnapshot().selection.definitionScope,
 			),
 			canMutate,
 			deletePolicy:
