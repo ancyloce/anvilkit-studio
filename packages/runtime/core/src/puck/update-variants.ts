@@ -38,9 +38,12 @@
 
 import type {
 	ComponentDefinition,
+	ComponentInstanceState,
 	ComponentVariant,
 	EditorError,
+	JsonValue,
 	NodeOverridePatch,
+	SerializablePuckNode,
 	VariantAxis,
 	VariantAxisOption,
 } from "@anvilkit/contracts/editor";
@@ -48,15 +51,19 @@ import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
 import type { Config, Data, PuckApi } from "@puckeditor/core";
 import { walkTree } from "@puckeditor/core";
 import {
+	materializeInstance,
 	readComponentInstanceProp,
 	validateVariantModel,
-	writeComponentInstanceProp,
 	variantCombinationCount,
 	variantCombinationKey,
+	writeComponentInstanceProp,
 } from "../document-model/materialize.js";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
-import { parseComponentLibrary } from "./read-appearance.js";
+import {
+	parseComponentInstance,
+	parseComponentLibrary,
+} from "./read-appearance.js";
 import { withComponentLibrary } from "./update-component-library.js";
 
 /**
@@ -435,6 +442,192 @@ export function updateVariantModelInData(
 	return { data: nextData, status: "updated", resolvedNodeIds, errors: [] };
 }
 
+/**
+ * One override (or override property) dropped by a variant switch
+ * (`CFX-C11`; ED-VARIANT-002).
+ *
+ * **What makes an override incompatible.** A definition's node *set*
+ * is shared across variants — variant patches patch existing
+ * definition nodes rather than restructuring the tree. What a variant
+ * patch genuinely can change is which **props exist** on a node: a
+ * patch may introduce a prop that no other combination has. An
+ * instance override of such a prop is meaningful in the combination
+ * that declares it and meaningless in one that does not.
+ *
+ * So compatibility is decided by resolving the definition under the
+ * **new** combination (variant patch + exposed-prop defaults, but
+ * deliberately *without* the instance's own overrides) and asking, per
+ * override entry:
+ *
+ * - target definition node absent → the whole entry is incompatible;
+ * - overridden prop key absent on that node → that key is
+ *   incompatible, siblings survive;
+ * - authoring families (layout/style/typography/hidden) are always
+ *   compatible — they are presentation applied to a node that exists.
+ *
+ * Ported from the sidecar's `editor/components/variant-switch.ts` by
+ * the `p3-002` completion `p3-009`'s gate required. The rule is
+ * unchanged; the state it reads is the declared instance prop and the
+ * `componentLibrary` root prop instead of `AuthoringStateV1`.
+ */
+export interface DroppedOverride {
+	readonly instanceNodeId: string;
+	readonly definitionNodeId: string;
+	/** Absent when the whole entry went because the node is gone. */
+	readonly propertyKey?: string;
+	readonly reason: "node-absent" | "property-absent";
+}
+
+/** Index a materialized tree's nodes by their definition node id. */
+function indexByDefinitionNode(
+	node: SerializablePuckNode,
+	instanceNodeId: string,
+	into: Map<string, SerializablePuckNode>,
+): void {
+	const runtimeId = node.props.id;
+	if (typeof runtimeId === "string") {
+		const marker = `${instanceNodeId}::`;
+		if (runtimeId.startsWith(marker)) {
+			into.set(runtimeId.slice(marker.length), node);
+		}
+	}
+	for (const value of Object.values(node.props)) {
+		if (!Array.isArray(value)) {
+			continue;
+		}
+		for (const entry of value) {
+			if (
+				typeof entry === "object" &&
+				entry !== null &&
+				!Array.isArray(entry) &&
+				typeof (entry as { type?: unknown }).type === "string"
+			) {
+				indexByDefinitionNode(
+					entry as unknown as SerializablePuckNode,
+					instanceNodeId,
+					into,
+				);
+			}
+		}
+	}
+}
+
+/**
+ * The definition as it resolves under `selection`, with **no**
+ * instance overrides applied — the baseline compatibility is judged
+ * against.
+ */
+function resolveUnderSelection(
+	instanceNodeId: string,
+	instance: ComponentInstanceState,
+	selection: Readonly<Record<string, string>>,
+	definitions: Readonly<Record<string, ComponentDefinition>>,
+): Map<string, SerializablePuckNode> | undefined {
+	const probe = materializeInstance(
+		instanceNodeId,
+		{
+			...instance,
+			variantSelection: selection,
+			// Deliberately cleared: an override must not vouch for itself.
+			nodeOverrides: {},
+		},
+		definitions,
+	);
+	if (probe.status !== "materialized") {
+		return undefined;
+	}
+	const index = new Map<string, SerializablePuckNode>();
+	indexByDefinitionNode(probe.node, instanceNodeId, index);
+	return index;
+}
+
+/**
+ * Partition an instance's overrides into those that still apply under
+ * `resolved` and those that do not, recording each drop.
+ */
+function preserveCompatibleOverrides(
+	instanceNodeId: string,
+	nodeOverrides: Readonly<Record<string, NodeOverridePatch>>,
+	resolved: ReadonlyMap<string, SerializablePuckNode>,
+	dropped: DroppedOverride[],
+): Record<string, NodeOverridePatch> {
+	const kept: Record<string, NodeOverridePatch> = {};
+	for (const [definitionNodeId, patch] of Object.entries(nodeOverrides)) {
+		const node = resolved.get(definitionNodeId);
+		if (node === undefined) {
+			dropped.push({
+				instanceNodeId,
+				definitionNodeId,
+				reason: "node-absent",
+			});
+			continue;
+		}
+		if (patch.props === undefined) {
+			kept[definitionNodeId] = patch;
+			continue;
+		}
+		const keptProps: Record<string, JsonValue> = {};
+		for (const [key, value] of Object.entries(patch.props)) {
+			if (Object.hasOwn(node.props, key)) {
+				keptProps[key] = value;
+			} else {
+				dropped.push({
+					instanceNodeId,
+					definitionNodeId,
+					propertyKey: key,
+					reason: "property-absent",
+				});
+			}
+		}
+		const hasFamilies =
+			patch.layout !== undefined ||
+			patch.style !== undefined ||
+			patch.typography !== undefined ||
+			patch.hidden !== undefined;
+		if (Object.keys(keptProps).length === 0) {
+			if (hasFamilies) {
+				const { props: _dropped, ...rest } = patch;
+				kept[definitionNodeId] = rest;
+			}
+			continue;
+		}
+		kept[definitionNodeId] = { ...patch, props: keptProps };
+	}
+	return kept;
+}
+
+/**
+ * Dropped overrides as user-facing diagnostics (ED-VARIANT-002's
+ * "never silently discard").
+ *
+ * These are **warnings**, not errors: the switch is legitimate and
+ * proceeds. That distinction is load-bearing — see the severity
+ * partition in {@link updateInstanceSelectionInData}, where treating
+ * them as errors would reject the very switch they are reporting on.
+ */
+export function droppedOverrideDiagnostics(
+	dropped: readonly DroppedOverride[],
+): readonly EditorError[] {
+	return dropped.map((entry) =>
+		makeEditorError(
+			"EDITOR_NODE_NOT_FOUND",
+			entry.propertyKey === undefined
+				? `override on definition node "${entry.definitionNodeId}" does not apply to the selected variant and was removed`
+				: `override of "${entry.propertyKey}" on definition node "${entry.definitionNodeId}" does not apply to the selected variant and was removed`,
+			{
+				severity: "warning",
+				nodeIds: [entry.instanceNodeId],
+				details: {
+					kind: "incompatibleOverride",
+					definitionNodeId: entry.definitionNodeId,
+					propertyKey: entry.propertyKey,
+					reason: entry.reason,
+				},
+			},
+		),
+	);
+}
+
 /** Input to {@link updateInstanceSelectionInData}. */
 export interface UpdateInstanceSelectionInput {
 	readonly data: Data;
@@ -445,17 +638,25 @@ export interface UpdateInstanceSelectionInput {
 }
 
 /**
- * Set the variant selection on one or more instances.
+ * Set the variant selection on one or more instances, keeping every
+ * override that still applies and reporting each one that does not.
  *
  * Writes the instance's **declared node prop** — never the definition.
  * An option that the definition does not declare is rejected before
  * anything writes, so an instance cannot come to hold a selection the
  * model cannot express.
+ *
+ * `CFX-C11` / ED-VARIANT-002 live here: an override that the new
+ * combination cannot express is removed **and reported**, never
+ * silently kept as dead freight nor silently dropped. Exposed-property
+ * overrides are definition-level and survive every switch, so they are
+ * never touched.
  */
 export function updateInstanceSelectionInData(
 	input: UpdateInstanceSelectionInput,
 ): UpdateVariantResult {
 	const errors: EditorError[] = [];
+	const dropped: DroppedOverride[] = [];
 	const raw = (input.data.root?.props as { componentLibrary?: unknown })
 		?.componentLibrary;
 	const library = raw === undefined ? undefined : parseComponentLibrary(raw);
@@ -516,16 +717,49 @@ export function updateInstanceSelectionInData(
 				}
 			}
 			resolvedNodeIds.push(nodeId);
+
+			// Compatibility is judged against the definition resolved under
+			// the NEW combination. A carrier we cannot parse, or a probe
+			// that fails to materialize, leaves overrides untouched: it is
+			// never correct to discard an override because the *check*
+			// could not run.
+			const parsed = parseComponentInstance(instance);
+			const nextOverrides =
+				parsed === undefined
+					? undefined
+					: (() => {
+							const resolved = resolveUnderSelection(
+								nodeId,
+								parsed,
+								input.selection,
+								library?.definitions ?? {},
+							);
+							return resolved === undefined
+								? undefined
+								: preserveCompatibleOverrides(
+										nodeId,
+										parsed.nodeOverrides,
+										resolved,
+										dropped,
+									);
+						})();
+
 			return {
 				...item,
 				props: writeComponentInstanceProp(props, {
 					...instance,
 					variantSelection: input.selection,
+					...(nextOverrides !== undefined
+						? { nodeOverrides: nextOverrides }
+						: {}),
 				}) as typeof item.props,
 			};
 		}),
 	);
 
+	// Warnings must not reject the switch they are reporting on, so the
+	// gate is severity-based rather than a bare length check.
+	const warnings = droppedOverrideDiagnostics(dropped);
 	if (errors.length > 0) {
 		return {
 			data: input.data,
@@ -539,10 +773,15 @@ export function updateInstanceSelectionInData(
 			data: input.data,
 			status: "noop",
 			resolvedNodeIds: NO_IDS,
-			errors: [],
+			errors: warnings,
 		};
 	}
-	return { data: nextData, status: "updated", resolvedNodeIds, errors: [] };
+	return {
+		data: nextData,
+		status: "updated",
+		resolvedNodeIds,
+		errors: warnings,
+	};
 }
 
 /** Dependencies of the variant commit helpers. */
@@ -581,7 +820,11 @@ function commit(
 	return {
 		status: "committed",
 		resolvedNodeIds: result.resolvedNodeIds,
-		errors: [],
+		// Warnings survive a successful commit — `CFX-C11`'s dropped
+		// overrides are reported *because* the switch went through. A
+		// hard error would have forced `rejected` above, so anything
+		// reaching here is advisory by construction.
+		errors: result.errors,
 	};
 }
 
