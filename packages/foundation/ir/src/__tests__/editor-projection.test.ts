@@ -7,13 +7,6 @@
 import type { PageIR, PageIRNode } from "@anvilkit/contracts";
 
 import { describe, expect, it } from "vitest";
-import {
-	type EditorFeatureScanDocument,
-	listUsedAuthoringFeatures,
-	listUsedEditorFeatures,
-	projectAuthoringToIR,
-	validateExportCapabilities,
-} from "../editor/index.js";
 
 /**
  * The sidecar envelope, declared locally for this fixture.
@@ -35,6 +28,14 @@ type AuthoringStateV1 = {
 	readonly interactions: Readonly<Record<string, unknown>>;
 	readonly bindings: Readonly<Record<string, unknown>>;
 };
+import {
+	type EditorFeatureScanDocument,
+	listUsedAuthoringFeatures,
+	listUsedEditorFeatures,
+	projectAuthoringToIR,
+	validateExportCapabilities,
+} from "../editor/index.js";
+
 
 function emptyAuthoring(): AuthoringStateV1 {
 	return {

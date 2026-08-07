@@ -4,10 +4,7 @@
  * allowlist rejection.
  */
 
-import type {
-	AnvilAppearance,
-	DesignSystem,
-} from "@anvilkit/contracts/editor";
+import type { AnvilAppearance, DesignSystem } from "@anvilkit/contracts/editor";
 import { describe, expect, it } from "vitest";
 import {
 	AnvilAppearanceSchema,
@@ -61,10 +58,38 @@ describe("appearance schema (P1-01)", () => {
 		}
 	});
 
-	it("rejects a wrong version literal", () => {
+	it("tolerates a stale version key and round-trips it unchanged", () => {
+		// PLAN-0026 §5 / `p1-006`: the canonical appearance has no version
+		// dimension, so `version` is no longer a discriminator — it is an
+		// unknown key that `looseObject` preserves. This replaces the old
+		// "rejects a wrong version literal" assertion, whose behaviour was
+		// deliberately removed in `p1-001`: a canonical, version-free
+		// appearance had to stop failing validation. Tolerance is a
+		// time-boxed migration window that closes in `p7-002`.
+		const stale = {
+			version: "1",
+			targets: { root: { hidden: { base: true } } },
+		};
+		const parsed = AnvilAppearanceSchema.safeParse(stale);
+		expect(parsed.success).toBe(true);
+		if (parsed.success) {
+			expect(parsed.data).toStrictEqual(stale);
+		}
+
+		// An unknown *major* is tolerated on exactly the same terms — there
+		// is no version branch left to reject it.
 		expect(
 			AnvilAppearanceSchema.safeParse({ version: "2", targets: {} }).success,
-		).toBe(false);
+		).toBe(true);
+	});
+
+	it("never re-emits a version key when canonicalizing", () => {
+		const canonical = canonicalizeAppearance({
+			version: "1",
+			targets: { root: { hidden: { base: true } } },
+		});
+		expect(canonical).toBeDefined();
+		expect(Object.hasOwn(canonical as object, "version")).toBe(false);
 	});
 
 	it("canonicalizes empty shells to undefined", () => {
@@ -130,11 +155,30 @@ describe("component metadata v2 schema (P1-01)", () => {
 	});
 
 	it("rejects a property outside the authorable allowlist", () => {
+		// `zIndex` was the example here until `p1-004` widened
+		// `AuthorableStyleProperty` from 23 to 40 members and made it
+		// authorable. The assertion is unchanged in strength — only the
+		// example moved to a property that is still genuinely outside the
+		// allowlist. `float` is not one of the 40.
 		expect(
 			ComponentMetadataSchema.safeParse({
-				version: "2",
-				styleTargets: { root: { label: "X", properties: ["zIndex"] } },
+				styleTargets: { root: { label: "X", properties: ["float"] } },
 			}).success,
 		).toBe(false);
+	});
+
+	it("accepts the properties `p1-004` added to the allowlist", () => {
+		// Guards the widening from silently regressing: these are members
+		// the pre-`p1-004` 23-property vocabulary did not contain.
+		expect(
+			ComponentMetadataSchema.safeParse({
+				styleTargets: {
+					root: {
+						label: "X",
+						properties: ["zIndex", "overflow", "inset", "filter", "blendMode"],
+					},
+				},
+			}).success,
+		).toBe(true);
 	});
 });

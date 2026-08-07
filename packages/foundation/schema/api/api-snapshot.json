@@ -428,12 +428,12 @@
 									"type": {
 										"type": "reference",
 										"target": {
-											"packageName": "@anvilkit/contracts",
+											"packageName": "@anvilkit/schema",
 											"packagePath": "src/editor/authoring-state.ts",
 											"qualifiedName": "AuthoringStateV1"
 										},
 										"name": "AuthoringStateV1",
-										"package": "@anvilkit/contracts"
+										"package": "@anvilkit/schema"
 									}
 								}
 							]
@@ -1498,7 +1498,255 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them."
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "), a document written before\nfinalization may still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+									},
+									{
+										"kind": "code",
+										"text": "`looseObject`"
+									},
+									{
+										"kind": "text",
+										"text": ", never as a version branch. Nothing here reads\na "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+									},
+									{
+										"kind": "code",
+										"text": "`appearance.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " — the canonical carrier — is already version-free\n("
+									},
+									{
+										"kind": "code",
+										"text": "`p1-001`"
+									},
+									{
+										"kind": "text",
+										"text": "). Seven "
+									},
+									{
+										"kind": "code",
+										"text": "`z.literal(\"1\")`"
+									},
+									{
+										"kind": "text",
+										"text": " declarations survive elsewhere in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`./editor/`"
+									},
+									{
+										"kind": "text",
+										"text": ", in two groups. Both are deliberate; neither is dead\nvocabulary someone forgot.\n\nGROUP 1 — the legacy "
+									},
+									{
+										"kind": "code",
+										"text": "`__anvilkit`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar, not the canonical\ndocument. Retained until "
+									},
+									{
+										"kind": "code",
+										"text": "`p3-009`"
+									},
+									{
+										"kind": "text",
+										"text": " deletes their last production\nconsumer, "
+									},
+									{
+										"kind": "code",
+										"text": "`packages/runtime/core/src/editor/read-write.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ":\n\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`envelope.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keeps its literal because "
+									},
+									{
+										"kind": "code",
+										"text": "`detectAuthoringVersion`"
+									},
+									{
+										"kind": "text",
+										"text": "\n  is what classifies an "
+									},
+									{
+										"kind": "code",
+										"text": "`unsupported-major`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar into read-only\n  safe mode. That literal is the DD-0019 invariant-9 guard that\n  stops a future-major sidecar being parsed and then overwritten;\n  removing it converts a refusal into silent data loss.\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`authoring-state.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`node.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keep theirs because they\n  validate that same sidecar, which genuinely *is* version 1.\n\nGROUP 2 — "
+									},
+									{
+										"kind": "code",
+										"text": "`components.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ". These *are* canonical document sub-shapes\nand their literals are scheduled to go, but they cannot go from this\npackage alone: each schema is annotated "
+									},
+									{
+										"kind": "code",
+										"text": "`z.ZodType<T>`"
+									},
+									{
+										"kind": "text",
+										"text": " against a\ncontracts interface that still declares "
+									},
+									{
+										"kind": "code",
+										"text": "`readonly version: \"1\"`"
+									},
+									{
+										"kind": "text",
+										"text": "\n("
+									},
+									{
+										"kind": "code",
+										"text": "`contracts/src/editor/components.ts:88`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts:105`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts:59`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts:30`"
+									},
+									{
+										"kind": "text",
+										"text": "). "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-002`"
+									},
+									{
+										"kind": "text",
+										"text": " renamed those\ntypes but was scoped to renames only. Dropping the literal here\nalone is a hard "
+									},
+									{
+										"kind": "code",
+										"text": "`TS2322`"
+									},
+									{
+										"kind": "text",
+										"text": " — verified 2026-08-06 by doing it:\n\"Property 'version' is missing ... but required in type 'Binding'\".\nContracts and schema must drop it in one change, together with every\nfresh-object-literal construction site (excess-property checking\nmakes each one an error), several of which live in submodules.\nTracked as a follow-up on "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": "; not silently deferred."
 									}
 								]
 							}
@@ -1517,9 +1765,9 @@
 								"target": {
 									"packageName": "@anvilkit/contracts",
 									"packagePath": "src/editor/appearance.ts",
-									"qualifiedName": "AnvilAppearanceV1"
+									"qualifiedName": "AnvilAppearance"
 								},
-								"name": "AnvilAppearanceV1",
+								"name": "AnvilAppearance",
 								"package": "@anvilkit/contracts"
 							}
 						],
@@ -1565,7 +1813,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@anvilkit/contracts",
-									"packagePath": "src/editor/component-metadata-v2.ts",
+									"packagePath": "src/editor/component-metadata.ts",
 									"qualifiedName": "AuthorableStyleProperty"
 								},
 								"name": "AuthorableStyleProperty",
@@ -2034,12 +2282,12 @@
 							{
 								"type": "reference",
 								"target": {
-									"packageName": "@anvilkit/contracts",
+									"packageName": "@anvilkit/schema",
 									"packagePath": "src/editor/authoring-state.ts",
 									"qualifiedName": "AuthoringStateV1"
 								},
 								"name": "AuthoringStateV1",
-								"package": "@anvilkit/contracts"
+								"package": "@anvilkit/schema"
 							}
 						],
 						"name": "z.ZodType",
@@ -2112,7 +2360,255 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them."
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "), a document written before\nfinalization may still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+									},
+									{
+										"kind": "code",
+										"text": "`looseObject`"
+									},
+									{
+										"kind": "text",
+										"text": ", never as a version branch. Nothing here reads\na "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+									},
+									{
+										"kind": "code",
+										"text": "`appearance.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " — the canonical carrier — is already version-free\n("
+									},
+									{
+										"kind": "code",
+										"text": "`p1-001`"
+									},
+									{
+										"kind": "text",
+										"text": "). Seven "
+									},
+									{
+										"kind": "code",
+										"text": "`z.literal(\"1\")`"
+									},
+									{
+										"kind": "text",
+										"text": " declarations survive elsewhere in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`./editor/`"
+									},
+									{
+										"kind": "text",
+										"text": ", in two groups. Both are deliberate; neither is dead\nvocabulary someone forgot.\n\nGROUP 1 — the legacy "
+									},
+									{
+										"kind": "code",
+										"text": "`__anvilkit`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar, not the canonical\ndocument. Retained until "
+									},
+									{
+										"kind": "code",
+										"text": "`p3-009`"
+									},
+									{
+										"kind": "text",
+										"text": " deletes their last production\nconsumer, "
+									},
+									{
+										"kind": "code",
+										"text": "`packages/runtime/core/src/editor/read-write.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ":\n\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`envelope.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keeps its literal because "
+									},
+									{
+										"kind": "code",
+										"text": "`detectAuthoringVersion`"
+									},
+									{
+										"kind": "text",
+										"text": "\n  is what classifies an "
+									},
+									{
+										"kind": "code",
+										"text": "`unsupported-major`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar into read-only\n  safe mode. That literal is the DD-0019 invariant-9 guard that\n  stops a future-major sidecar being parsed and then overwritten;\n  removing it converts a refusal into silent data loss.\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`authoring-state.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`node.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keep theirs because they\n  validate that same sidecar, which genuinely *is* version 1.\n\nGROUP 2 — "
+									},
+									{
+										"kind": "code",
+										"text": "`components.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ". These *are* canonical document sub-shapes\nand their literals are scheduled to go, but they cannot go from this\npackage alone: each schema is annotated "
+									},
+									{
+										"kind": "code",
+										"text": "`z.ZodType<T>`"
+									},
+									{
+										"kind": "text",
+										"text": " against a\ncontracts interface that still declares "
+									},
+									{
+										"kind": "code",
+										"text": "`readonly version: \"1\"`"
+									},
+									{
+										"kind": "text",
+										"text": "\n("
+									},
+									{
+										"kind": "code",
+										"text": "`contracts/src/editor/components.ts:88`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts:105`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts:59`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts:30`"
+									},
+									{
+										"kind": "text",
+										"text": "). "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-002`"
+									},
+									{
+										"kind": "text",
+										"text": " renamed those\ntypes but was scoped to renames only. Dropping the literal here\nalone is a hard "
+									},
+									{
+										"kind": "code",
+										"text": "`TS2322`"
+									},
+									{
+										"kind": "text",
+										"text": " — verified 2026-08-06 by doing it:\n\"Property 'version' is missing ... but required in type 'Binding'\".\nContracts and schema must drop it in one change, together with every\nfresh-object-literal construction site (excess-property checking\nmakes each one an error), several of which live in submodules.\nTracked as a follow-up on "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": "; not silently deferred."
 									}
 								]
 							}
@@ -2131,9 +2627,9 @@
 								"target": {
 									"packageName": "@anvilkit/contracts",
 									"packagePath": "src/editor/appearance.ts",
-									"qualifiedName": "AuthorStyleV1"
+									"qualifiedName": "AuthorStyle"
 								},
-								"name": "AuthorStyleV1",
+								"name": "AuthorStyle",
 								"package": "@anvilkit/contracts"
 							}
 						],
@@ -2190,9 +2686,9 @@
 										"target": {
 											"packageName": "@anvilkit/contracts",
 											"packagePath": "src/editor/bindings.ts",
-											"qualifiedName": "BindingV1"
+											"qualifiedName": "Binding"
 										},
-										"name": "BindingV1",
+										"name": "Binding",
 										"package": "@anvilkit/contracts"
 									},
 									{
@@ -2212,9 +2708,9 @@
 												"target": {
 													"packageName": "@anvilkit/contracts",
 													"packagePath": "src/editor/bindings.ts",
-													"qualifiedName": "BindingV1"
+													"qualifiedName": "Binding"
 												},
-												"name": "BindingV1",
+												"name": "Binding",
 												"package": "@anvilkit/contracts"
 											},
 											{
@@ -2264,9 +2760,9 @@
 								"target": {
 									"packageName": "@anvilkit/contracts",
 									"packagePath": "src/editor/bindings.ts",
-									"qualifiedName": "BindingV1"
+									"qualifiedName": "Binding"
 								},
-								"name": "BindingV1",
+								"name": "Binding",
 								"package": "@anvilkit/contracts"
 							}
 						],
@@ -4569,9 +5065,9 @@
 										"target": {
 											"packageName": "@anvilkit/contracts",
 											"packagePath": "src/editor/components.ts",
-											"qualifiedName": "ComponentDefinitionV1"
+											"qualifiedName": "ComponentDefinition"
 										},
-										"name": "ComponentDefinitionV1",
+										"name": "ComponentDefinition",
 										"package": "@anvilkit/contracts"
 									},
 									{
@@ -4591,9 +5087,9 @@
 												"target": {
 													"packageName": "@anvilkit/contracts",
 													"packagePath": "src/editor/components.ts",
-													"qualifiedName": "ComponentDefinitionV1"
+													"qualifiedName": "ComponentDefinition"
 												},
-												"name": "ComponentDefinitionV1",
+												"name": "ComponentDefinition",
 												"package": "@anvilkit/contracts"
 											},
 											{
@@ -4643,9 +5139,9 @@
 								"target": {
 									"packageName": "@anvilkit/contracts",
 									"packagePath": "src/editor/components.ts",
-									"qualifiedName": "ComponentDefinitionV1"
+									"qualifiedName": "ComponentDefinition"
 								},
-								"name": "ComponentDefinitionV1",
+								"name": "ComponentDefinition",
 								"package": "@anvilkit/contracts"
 							}
 						],
@@ -4698,7 +5194,7 @@
 				},
 				{
 					"id": 58,
-					"name": "ComponentMetadataV2Schema",
+					"name": "ComponentMetadataSchema",
 					"variant": "declaration",
 					"kind": 32,
 					"flags": {
@@ -4760,7 +5256,255 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them."
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "), a document written before\nfinalization may still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+									},
+									{
+										"kind": "code",
+										"text": "`looseObject`"
+									},
+									{
+										"kind": "text",
+										"text": ", never as a version branch. Nothing here reads\na "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+									},
+									{
+										"kind": "code",
+										"text": "`appearance.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " — the canonical carrier — is already version-free\n("
+									},
+									{
+										"kind": "code",
+										"text": "`p1-001`"
+									},
+									{
+										"kind": "text",
+										"text": "). Seven "
+									},
+									{
+										"kind": "code",
+										"text": "`z.literal(\"1\")`"
+									},
+									{
+										"kind": "text",
+										"text": " declarations survive elsewhere in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`./editor/`"
+									},
+									{
+										"kind": "text",
+										"text": ", in two groups. Both are deliberate; neither is dead\nvocabulary someone forgot.\n\nGROUP 1 — the legacy "
+									},
+									{
+										"kind": "code",
+										"text": "`__anvilkit`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar, not the canonical\ndocument. Retained until "
+									},
+									{
+										"kind": "code",
+										"text": "`p3-009`"
+									},
+									{
+										"kind": "text",
+										"text": " deletes their last production\nconsumer, "
+									},
+									{
+										"kind": "code",
+										"text": "`packages/runtime/core/src/editor/read-write.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ":\n\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`envelope.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keeps its literal because "
+									},
+									{
+										"kind": "code",
+										"text": "`detectAuthoringVersion`"
+									},
+									{
+										"kind": "text",
+										"text": "\n  is what classifies an "
+									},
+									{
+										"kind": "code",
+										"text": "`unsupported-major`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar into read-only\n  safe mode. That literal is the DD-0019 invariant-9 guard that\n  stops a future-major sidecar being parsed and then overwritten;\n  removing it converts a refusal into silent data loss.\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`authoring-state.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`node.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keep theirs because they\n  validate that same sidecar, which genuinely *is* version 1.\n\nGROUP 2 — "
+									},
+									{
+										"kind": "code",
+										"text": "`components.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ". These *are* canonical document sub-shapes\nand their literals are scheduled to go, but they cannot go from this\npackage alone: each schema is annotated "
+									},
+									{
+										"kind": "code",
+										"text": "`z.ZodType<T>`"
+									},
+									{
+										"kind": "text",
+										"text": " against a\ncontracts interface that still declares "
+									},
+									{
+										"kind": "code",
+										"text": "`readonly version: \"1\"`"
+									},
+									{
+										"kind": "text",
+										"text": "\n("
+									},
+									{
+										"kind": "code",
+										"text": "`contracts/src/editor/components.ts:88`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts:105`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts:59`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts:30`"
+									},
+									{
+										"kind": "text",
+										"text": "). "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-002`"
+									},
+									{
+										"kind": "text",
+										"text": " renamed those\ntypes but was scoped to renames only. Dropping the literal here\nalone is a hard "
+									},
+									{
+										"kind": "code",
+										"text": "`TS2322`"
+									},
+									{
+										"kind": "text",
+										"text": " — verified 2026-08-06 by doing it:\n\"Property 'version' is missing ... but required in type 'Binding'\".\nContracts and schema must drop it in one change, together with every\nfresh-object-literal construction site (excess-property checking\nmakes each one an error), several of which live in submodules.\nTracked as a follow-up on "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": "; not silently deferred."
 									}
 								]
 							}
@@ -4778,10 +5522,10 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@anvilkit/contracts",
-									"packagePath": "src/editor/component-metadata-v2.ts",
-									"qualifiedName": "AnvilComponentMetadataV2"
+									"packagePath": "src/editor/component-metadata.ts",
+									"qualifiedName": "AnvilComponentMetadata"
 								},
-								"name": "AnvilComponentMetadataV2",
+								"name": "AnvilComponentMetadata",
 								"package": "@anvilkit/contracts"
 							}
 						],
@@ -7005,7 +7749,255 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them."
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "), a document written before\nfinalization may still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+									},
+									{
+										"kind": "code",
+										"text": "`looseObject`"
+									},
+									{
+										"kind": "text",
+										"text": ", never as a version branch. Nothing here reads\na "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+									},
+									{
+										"kind": "code",
+										"text": "`appearance.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " — the canonical carrier — is already version-free\n("
+									},
+									{
+										"kind": "code",
+										"text": "`p1-001`"
+									},
+									{
+										"kind": "text",
+										"text": "). Seven "
+									},
+									{
+										"kind": "code",
+										"text": "`z.literal(\"1\")`"
+									},
+									{
+										"kind": "text",
+										"text": " declarations survive elsewhere in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`./editor/`"
+									},
+									{
+										"kind": "text",
+										"text": ", in two groups. Both are deliberate; neither is dead\nvocabulary someone forgot.\n\nGROUP 1 — the legacy "
+									},
+									{
+										"kind": "code",
+										"text": "`__anvilkit`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar, not the canonical\ndocument. Retained until "
+									},
+									{
+										"kind": "code",
+										"text": "`p3-009`"
+									},
+									{
+										"kind": "text",
+										"text": " deletes their last production\nconsumer, "
+									},
+									{
+										"kind": "code",
+										"text": "`packages/runtime/core/src/editor/read-write.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ":\n\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`envelope.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keeps its literal because "
+									},
+									{
+										"kind": "code",
+										"text": "`detectAuthoringVersion`"
+									},
+									{
+										"kind": "text",
+										"text": "\n  is what classifies an "
+									},
+									{
+										"kind": "code",
+										"text": "`unsupported-major`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar into read-only\n  safe mode. That literal is the DD-0019 invariant-9 guard that\n  stops a future-major sidecar being parsed and then overwritten;\n  removing it converts a refusal into silent data loss.\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`authoring-state.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`node.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keep theirs because they\n  validate that same sidecar, which genuinely *is* version 1.\n\nGROUP 2 — "
+									},
+									{
+										"kind": "code",
+										"text": "`components.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ". These *are* canonical document sub-shapes\nand their literals are scheduled to go, but they cannot go from this\npackage alone: each schema is annotated "
+									},
+									{
+										"kind": "code",
+										"text": "`z.ZodType<T>`"
+									},
+									{
+										"kind": "text",
+										"text": " against a\ncontracts interface that still declares "
+									},
+									{
+										"kind": "code",
+										"text": "`readonly version: \"1\"`"
+									},
+									{
+										"kind": "text",
+										"text": "\n("
+									},
+									{
+										"kind": "code",
+										"text": "`contracts/src/editor/components.ts:88`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts:105`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts:59`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts:30`"
+									},
+									{
+										"kind": "text",
+										"text": "). "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-002`"
+									},
+									{
+										"kind": "text",
+										"text": " renamed those\ntypes but was scoped to renames only. Dropping the literal here\nalone is a hard "
+									},
+									{
+										"kind": "code",
+										"text": "`TS2322`"
+									},
+									{
+										"kind": "text",
+										"text": " — verified 2026-08-06 by doing it:\n\"Property 'version' is missing ... but required in type 'Binding'\".\nContracts and schema must drop it in one change, together with every\nfresh-object-literal construction site (excess-property checking\nmakes each one an error), several of which live in submodules.\nTracked as a follow-up on "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": "; not silently deferred."
 									}
 								]
 							}
@@ -7024,9 +8016,9 @@
 								"target": {
 									"packageName": "@anvilkit/contracts",
 									"packagePath": "src/editor/design-system.ts",
-									"qualifiedName": "DesignSystemV1"
+									"qualifiedName": "DesignSystem"
 								},
-								"name": "DesignSystemV1",
+								"name": "DesignSystem",
 								"package": "@anvilkit/contracts"
 							}
 						],
@@ -7283,7 +8275,255 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them."
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "), a document written before\nfinalization may still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+									},
+									{
+										"kind": "code",
+										"text": "`looseObject`"
+									},
+									{
+										"kind": "text",
+										"text": ", never as a version branch. Nothing here reads\na "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+									},
+									{
+										"kind": "code",
+										"text": "`appearance.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " — the canonical carrier — is already version-free\n("
+									},
+									{
+										"kind": "code",
+										"text": "`p1-001`"
+									},
+									{
+										"kind": "text",
+										"text": "). Seven "
+									},
+									{
+										"kind": "code",
+										"text": "`z.literal(\"1\")`"
+									},
+									{
+										"kind": "text",
+										"text": " declarations survive elsewhere in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`./editor/`"
+									},
+									{
+										"kind": "text",
+										"text": ", in two groups. Both are deliberate; neither is dead\nvocabulary someone forgot.\n\nGROUP 1 — the legacy "
+									},
+									{
+										"kind": "code",
+										"text": "`__anvilkit`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar, not the canonical\ndocument. Retained until "
+									},
+									{
+										"kind": "code",
+										"text": "`p3-009`"
+									},
+									{
+										"kind": "text",
+										"text": " deletes their last production\nconsumer, "
+									},
+									{
+										"kind": "code",
+										"text": "`packages/runtime/core/src/editor/read-write.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ":\n\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`envelope.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keeps its literal because "
+									},
+									{
+										"kind": "code",
+										"text": "`detectAuthoringVersion`"
+									},
+									{
+										"kind": "text",
+										"text": "\n  is what classifies an "
+									},
+									{
+										"kind": "code",
+										"text": "`unsupported-major`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar into read-only\n  safe mode. That literal is the DD-0019 invariant-9 guard that\n  stops a future-major sidecar being parsed and then overwritten;\n  removing it converts a refusal into silent data loss.\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`authoring-state.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`node.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keep theirs because they\n  validate that same sidecar, which genuinely *is* version 1.\n\nGROUP 2 — "
+									},
+									{
+										"kind": "code",
+										"text": "`components.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ". These *are* canonical document sub-shapes\nand their literals are scheduled to go, but they cannot go from this\npackage alone: each schema is annotated "
+									},
+									{
+										"kind": "code",
+										"text": "`z.ZodType<T>`"
+									},
+									{
+										"kind": "text",
+										"text": " against a\ncontracts interface that still declares "
+									},
+									{
+										"kind": "code",
+										"text": "`readonly version: \"1\"`"
+									},
+									{
+										"kind": "text",
+										"text": "\n("
+									},
+									{
+										"kind": "code",
+										"text": "`contracts/src/editor/components.ts:88`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts:105`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts:59`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts:30`"
+									},
+									{
+										"kind": "text",
+										"text": "). "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-002`"
+									},
+									{
+										"kind": "text",
+										"text": " renamed those\ntypes but was scoped to renames only. Dropping the literal here\nalone is a hard "
+									},
+									{
+										"kind": "code",
+										"text": "`TS2322`"
+									},
+									{
+										"kind": "text",
+										"text": " — verified 2026-08-06 by doing it:\n\"Property 'version' is missing ... but required in type 'Binding'\".\nContracts and schema must drop it in one change, together with every\nfresh-object-literal construction site (excess-property checking\nmakes each one an error), several of which live in submodules.\nTracked as a follow-up on "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": "; not silently deferred."
 									}
 								]
 							}
@@ -7302,9 +8542,9 @@
 								"target": {
 									"packageName": "@anvilkit/contracts",
 									"packagePath": "src/editor/design-system.ts",
-									"qualifiedName": "DocumentComponentLibraryV1"
+									"qualifiedName": "DocumentComponentLibrary"
 								},
-								"name": "DocumentComponentLibraryV1",
+								"name": "DocumentComponentLibrary",
 								"package": "@anvilkit/contracts"
 							}
 						],
@@ -8122,9 +9362,9 @@
 										"target": {
 											"packageName": "@anvilkit/contracts",
 											"packagePath": "src/editor/interactions.ts",
-											"qualifiedName": "InteractionV1"
+											"qualifiedName": "Interaction"
 										},
-										"name": "InteractionV1",
+										"name": "Interaction",
 										"package": "@anvilkit/contracts"
 									},
 									{
@@ -8144,9 +9384,9 @@
 												"target": {
 													"packageName": "@anvilkit/contracts",
 													"packagePath": "src/editor/interactions.ts",
-													"qualifiedName": "InteractionV1"
+													"qualifiedName": "Interaction"
 												},
-												"name": "InteractionV1",
+												"name": "Interaction",
 												"package": "@anvilkit/contracts"
 											},
 											{
@@ -8196,9 +9436,9 @@
 								"target": {
 									"packageName": "@anvilkit/contracts",
 									"packagePath": "src/editor/interactions.ts",
-									"qualifiedName": "InteractionV1"
+									"qualifiedName": "Interaction"
 								},
-								"name": "InteractionV1",
+								"name": "Interaction",
 								"package": "@anvilkit/contracts"
 							}
 						],
@@ -9157,9 +10397,9 @@
 										"target": {
 											"packageName": "@anvilkit/contracts",
 											"packagePath": "src/editor/style-definitions.ts",
-											"qualifiedName": "StyleDefinitionV1"
+											"qualifiedName": "StyleDefinition"
 										},
-										"name": "StyleDefinitionV1",
+										"name": "StyleDefinition",
 										"package": "@anvilkit/contracts"
 									},
 									{
@@ -9179,9 +10419,9 @@
 												"target": {
 													"packageName": "@anvilkit/contracts",
 													"packagePath": "src/editor/style-definitions.ts",
-													"qualifiedName": "StyleDefinitionV1"
+													"qualifiedName": "StyleDefinition"
 												},
-												"name": "StyleDefinitionV1",
+												"name": "StyleDefinition",
 												"package": "@anvilkit/contracts"
 											},
 											{
@@ -9231,9 +10471,9 @@
 								"target": {
 									"packageName": "@anvilkit/contracts",
 									"packagePath": "src/editor/style-definitions.ts",
-									"qualifiedName": "StyleDefinitionV1"
+									"qualifiedName": "StyleDefinition"
 								},
-								"name": "StyleDefinitionV1",
+								"name": "StyleDefinition",
 								"package": "@anvilkit/contracts"
 							}
 						],
@@ -9245,7 +10485,7 @@
 				},
 				{
 					"id": 64,
-					"name": "StyleTargetCapabilityV2Schema",
+					"name": "StyleTargetCapabilitySchema",
 					"variant": "declaration",
 					"kind": 32,
 					"flags": {
@@ -9307,7 +10547,255 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them."
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "), a document written before\nfinalization may still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+									},
+									{
+										"kind": "code",
+										"text": "`looseObject`"
+									},
+									{
+										"kind": "text",
+										"text": ", never as a version branch. Nothing here reads\na "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+									},
+									{
+										"kind": "code",
+										"text": "`appearance.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " — the canonical carrier — is already version-free\n("
+									},
+									{
+										"kind": "code",
+										"text": "`p1-001`"
+									},
+									{
+										"kind": "text",
+										"text": "). Seven "
+									},
+									{
+										"kind": "code",
+										"text": "`z.literal(\"1\")`"
+									},
+									{
+										"kind": "text",
+										"text": " declarations survive elsewhere in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`./editor/`"
+									},
+									{
+										"kind": "text",
+										"text": ", in two groups. Both are deliberate; neither is dead\nvocabulary someone forgot.\n\nGROUP 1 — the legacy "
+									},
+									{
+										"kind": "code",
+										"text": "`__anvilkit`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar, not the canonical\ndocument. Retained until "
+									},
+									{
+										"kind": "code",
+										"text": "`p3-009`"
+									},
+									{
+										"kind": "text",
+										"text": " deletes their last production\nconsumer, "
+									},
+									{
+										"kind": "code",
+										"text": "`packages/runtime/core/src/editor/read-write.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ":\n\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`envelope.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keeps its literal because "
+									},
+									{
+										"kind": "code",
+										"text": "`detectAuthoringVersion`"
+									},
+									{
+										"kind": "text",
+										"text": "\n  is what classifies an "
+									},
+									{
+										"kind": "code",
+										"text": "`unsupported-major`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar into read-only\n  safe mode. That literal is the DD-0019 invariant-9 guard that\n  stops a future-major sidecar being parsed and then overwritten;\n  removing it converts a refusal into silent data loss.\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`authoring-state.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`node.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keep theirs because they\n  validate that same sidecar, which genuinely *is* version 1.\n\nGROUP 2 — "
+									},
+									{
+										"kind": "code",
+										"text": "`components.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ". These *are* canonical document sub-shapes\nand their literals are scheduled to go, but they cannot go from this\npackage alone: each schema is annotated "
+									},
+									{
+										"kind": "code",
+										"text": "`z.ZodType<T>`"
+									},
+									{
+										"kind": "text",
+										"text": " against a\ncontracts interface that still declares "
+									},
+									{
+										"kind": "code",
+										"text": "`readonly version: \"1\"`"
+									},
+									{
+										"kind": "text",
+										"text": "\n("
+									},
+									{
+										"kind": "code",
+										"text": "`contracts/src/editor/components.ts:88`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts:105`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts:59`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts:30`"
+									},
+									{
+										"kind": "text",
+										"text": "). "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-002`"
+									},
+									{
+										"kind": "text",
+										"text": " renamed those\ntypes but was scoped to renames only. Dropping the literal here\nalone is a hard "
+									},
+									{
+										"kind": "code",
+										"text": "`TS2322`"
+									},
+									{
+										"kind": "text",
+										"text": " — verified 2026-08-06 by doing it:\n\"Property 'version' is missing ... but required in type 'Binding'\".\nContracts and schema must drop it in one change, together with every\nfresh-object-literal construction site (excess-property checking\nmakes each one an error), several of which live in submodules.\nTracked as a follow-up on "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": "; not silently deferred."
 									}
 								]
 							}
@@ -9374,7 +10862,7 @@
 																"type": "reference",
 																"target": {
 																	"packageName": "@anvilkit/contracts",
-																	"packagePath": "src/editor/component-metadata-v2.ts",
+																	"packagePath": "src/editor/component-metadata.ts",
 																	"qualifiedName": "AuthorableStyleProperty"
 																},
 																"name": "AuthorableStyleProperty",
@@ -9396,7 +10884,7 @@
 																		"type": "reference",
 																		"target": {
 																			"packageName": "@anvilkit/contracts",
-																			"packagePath": "src/editor/component-metadata-v2.ts",
+																			"packagePath": "src/editor/component-metadata.ts",
 																			"qualifiedName": "AuthorableStyleProperty"
 																		},
 																		"name": "AuthorableStyleProperty",
@@ -9543,7 +11031,255 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them."
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "), a document written before\nfinalization may still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+									},
+									{
+										"kind": "code",
+										"text": "`looseObject`"
+									},
+									{
+										"kind": "text",
+										"text": ", never as a version branch. Nothing here reads\na "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+									},
+									{
+										"kind": "code",
+										"text": "`appearance.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " — the canonical carrier — is already version-free\n("
+									},
+									{
+										"kind": "code",
+										"text": "`p1-001`"
+									},
+									{
+										"kind": "text",
+										"text": "). Seven "
+									},
+									{
+										"kind": "code",
+										"text": "`z.literal(\"1\")`"
+									},
+									{
+										"kind": "text",
+										"text": " declarations survive elsewhere in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`./editor/`"
+									},
+									{
+										"kind": "text",
+										"text": ", in two groups. Both are deliberate; neither is dead\nvocabulary someone forgot.\n\nGROUP 1 — the legacy "
+									},
+									{
+										"kind": "code",
+										"text": "`__anvilkit`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar, not the canonical\ndocument. Retained until "
+									},
+									{
+										"kind": "code",
+										"text": "`p3-009`"
+									},
+									{
+										"kind": "text",
+										"text": " deletes their last production\nconsumer, "
+									},
+									{
+										"kind": "code",
+										"text": "`packages/runtime/core/src/editor/read-write.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ":\n\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`envelope.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keeps its literal because "
+									},
+									{
+										"kind": "code",
+										"text": "`detectAuthoringVersion`"
+									},
+									{
+										"kind": "text",
+										"text": "\n  is what classifies an "
+									},
+									{
+										"kind": "code",
+										"text": "`unsupported-major`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar into read-only\n  safe mode. That literal is the DD-0019 invariant-9 guard that\n  stops a future-major sidecar being parsed and then overwritten;\n  removing it converts a refusal into silent data loss.\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`authoring-state.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`node.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keep theirs because they\n  validate that same sidecar, which genuinely *is* version 1.\n\nGROUP 2 — "
+									},
+									{
+										"kind": "code",
+										"text": "`components.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ". These *are* canonical document sub-shapes\nand their literals are scheduled to go, but they cannot go from this\npackage alone: each schema is annotated "
+									},
+									{
+										"kind": "code",
+										"text": "`z.ZodType<T>`"
+									},
+									{
+										"kind": "text",
+										"text": " against a\ncontracts interface that still declares "
+									},
+									{
+										"kind": "code",
+										"text": "`readonly version: \"1\"`"
+									},
+									{
+										"kind": "text",
+										"text": "\n("
+									},
+									{
+										"kind": "code",
+										"text": "`contracts/src/editor/components.ts:88`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts:105`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts:59`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts:30`"
+									},
+									{
+										"kind": "text",
+										"text": "). "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-002`"
+									},
+									{
+										"kind": "text",
+										"text": " renamed those\ntypes but was scoped to renames only. Dropping the literal here\nalone is a hard "
+									},
+									{
+										"kind": "code",
+										"text": "`TS2322`"
+									},
+									{
+										"kind": "text",
+										"text": " — verified 2026-08-06 by doing it:\n\"Property 'version' is missing ... but required in type 'Binding'\".\nContracts and schema must drop it in one change, together with every\nfresh-object-literal construction site (excess-property checking\nmakes each one an error), several of which live in submodules.\nTracked as a follow-up on "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": "; not silently deferred."
 									}
 								]
 							}
@@ -9562,9 +11298,9 @@
 								"target": {
 									"packageName": "@anvilkit/contracts",
 									"packagePath": "src/editor/appearance.ts",
-									"qualifiedName": "TargetAppearanceV1"
+									"qualifiedName": "TargetAppearance"
 								},
-								"name": "TargetAppearanceV1",
+								"name": "TargetAppearance",
 								"package": "@anvilkit/contracts"
 							}
 						],
@@ -11099,7 +12835,255 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them."
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "), a document written before\nfinalization may still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+									},
+									{
+										"kind": "code",
+										"text": "`looseObject`"
+									},
+									{
+										"kind": "text",
+										"text": ", never as a version branch. Nothing here reads\na "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+									},
+									{
+										"kind": "code",
+										"text": "`appearance.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " — the canonical carrier — is already version-free\n("
+									},
+									{
+										"kind": "code",
+										"text": "`p1-001`"
+									},
+									{
+										"kind": "text",
+										"text": "). Seven "
+									},
+									{
+										"kind": "code",
+										"text": "`z.literal(\"1\")`"
+									},
+									{
+										"kind": "text",
+										"text": " declarations survive elsewhere in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`./editor/`"
+									},
+									{
+										"kind": "text",
+										"text": ", in two groups. Both are deliberate; neither is dead\nvocabulary someone forgot.\n\nGROUP 1 — the legacy "
+									},
+									{
+										"kind": "code",
+										"text": "`__anvilkit`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar, not the canonical\ndocument. Retained until "
+									},
+									{
+										"kind": "code",
+										"text": "`p3-009`"
+									},
+									{
+										"kind": "text",
+										"text": " deletes their last production\nconsumer, "
+									},
+									{
+										"kind": "code",
+										"text": "`packages/runtime/core/src/editor/read-write.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ":\n\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`envelope.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keeps its literal because "
+									},
+									{
+										"kind": "code",
+										"text": "`detectAuthoringVersion`"
+									},
+									{
+										"kind": "text",
+										"text": "\n  is what classifies an "
+									},
+									{
+										"kind": "code",
+										"text": "`unsupported-major`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar into read-only\n  safe mode. That literal is the DD-0019 invariant-9 guard that\n  stops a future-major sidecar being parsed and then overwritten;\n  removing it converts a refusal into silent data loss.\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`authoring-state.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`node.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keep theirs because they\n  validate that same sidecar, which genuinely *is* version 1.\n\nGROUP 2 — "
+									},
+									{
+										"kind": "code",
+										"text": "`components.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ". These *are* canonical document sub-shapes\nand their literals are scheduled to go, but they cannot go from this\npackage alone: each schema is annotated "
+									},
+									{
+										"kind": "code",
+										"text": "`z.ZodType<T>`"
+									},
+									{
+										"kind": "text",
+										"text": " against a\ncontracts interface that still declares "
+									},
+									{
+										"kind": "code",
+										"text": "`readonly version: \"1\"`"
+									},
+									{
+										"kind": "text",
+										"text": "\n("
+									},
+									{
+										"kind": "code",
+										"text": "`contracts/src/editor/components.ts:88`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts:105`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts:59`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts:30`"
+									},
+									{
+										"kind": "text",
+										"text": "). "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-002`"
+									},
+									{
+										"kind": "text",
+										"text": " renamed those\ntypes but was scoped to renames only. Dropping the literal here\nalone is a hard "
+									},
+									{
+										"kind": "code",
+										"text": "`TS2322`"
+									},
+									{
+										"kind": "text",
+										"text": " — verified 2026-08-06 by doing it:\n\"Property 'version' is missing ... but required in type 'Binding'\".\nContracts and schema must drop it in one change, together with every\nfresh-object-literal construction site (excess-property checking\nmakes each one an error), several of which live in submodules.\nTracked as a follow-up on "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": "; not silently deferred."
 									}
 								]
 							}
@@ -11143,9 +13127,9 @@
 												"target": {
 													"packageName": "@anvilkit/contracts",
 													"packagePath": "src/editor/appearance.ts",
-													"qualifiedName": "AnvilAppearanceV1"
+													"qualifiedName": "AnvilAppearance"
 												},
-												"name": "AnvilAppearanceV1",
+												"name": "AnvilAppearance",
 												"package": "@anvilkit/contracts"
 											},
 											{
@@ -11164,9 +13148,9 @@
 										"target": {
 											"packageName": "@anvilkit/contracts",
 											"packagePath": "src/editor/appearance.ts",
-											"qualifiedName": "AnvilAppearanceV1"
+											"qualifiedName": "AnvilAppearance"
 										},
-										"name": "AnvilAppearanceV1",
+										"name": "AnvilAppearance",
 										"package": "@anvilkit/contracts"
 									},
 									{
@@ -11209,12 +13193,12 @@
 									"type": {
 										"type": "reference",
 										"target": {
-											"packageName": "@anvilkit/contracts",
+											"packageName": "@anvilkit/schema",
 											"packagePath": "src/editor/authoring-state.ts",
 											"qualifiedName": "AuthoringStateV1"
 										},
 										"name": "AuthoringStateV1",
-										"package": "@anvilkit/contracts"
+										"package": "@anvilkit/schema"
 									}
 								}
 							],
@@ -11301,24 +13285,24 @@
 									"type": {
 										"type": "reference",
 										"target": {
-											"packageName": "@anvilkit/contracts",
+											"packageName": "@anvilkit/schema",
 											"packagePath": "src/editor/authoring-state.ts",
 											"qualifiedName": "AuthoringStateV1"
 										},
 										"name": "AuthoringStateV1",
-										"package": "@anvilkit/contracts"
+										"package": "@anvilkit/schema"
 									}
 								}
 							],
 							"type": {
 								"type": "reference",
 								"target": {
-									"packageName": "@anvilkit/contracts",
+									"packageName": "@anvilkit/schema",
 									"packagePath": "src/editor/authoring-state.ts",
 									"qualifiedName": "AuthoringStateV1"
 								},
 								"name": "AuthoringStateV1",
-								"package": "@anvilkit/contracts"
+								"package": "@anvilkit/schema"
 							}
 						}
 					]
@@ -11585,12 +13569,12 @@
 							"type": {
 								"type": "reference",
 								"target": {
-									"packageName": "@anvilkit/contracts",
+									"packageName": "@anvilkit/schema",
 									"packagePath": "src/editor/authoring-state.ts",
 									"qualifiedName": "AuthoringStateV1"
 								},
 								"name": "AuthoringStateV1",
-								"package": "@anvilkit/contracts"
+								"package": "@anvilkit/schema"
 							}
 						}
 					]
@@ -11855,24 +13839,24 @@
 									"type": {
 										"type": "reference",
 										"target": {
-											"packageName": "@anvilkit/contracts",
+											"packageName": "@anvilkit/schema",
 											"packagePath": "src/editor/authoring-state.ts",
 											"qualifiedName": "AuthoringStateV1"
 										},
 										"name": "AuthoringStateV1",
-										"package": "@anvilkit/contracts"
+										"package": "@anvilkit/schema"
 									}
 								}
 							],
 							"type": {
 								"type": "reference",
 								"target": {
-									"packageName": "@anvilkit/contracts",
+									"packageName": "@anvilkit/schema",
 									"packagePath": "src/editor/authoring-state.ts",
 									"qualifiedName": "AuthoringStateV1"
 								},
 								"name": "AuthoringStateV1",
-								"package": "@anvilkit/contracts"
+								"package": "@anvilkit/schema"
 							}
 						}
 					]
@@ -12258,7 +14242,255 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them."
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "), a document written before\nfinalization may still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+									},
+									{
+										"kind": "code",
+										"text": "`looseObject`"
+									},
+									{
+										"kind": "text",
+										"text": ", never as a version branch. Nothing here reads\na "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+									},
+									{
+										"kind": "code",
+										"text": "`appearance.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " — the canonical carrier — is already version-free\n("
+									},
+									{
+										"kind": "code",
+										"text": "`p1-001`"
+									},
+									{
+										"kind": "text",
+										"text": "). Seven "
+									},
+									{
+										"kind": "code",
+										"text": "`z.literal(\"1\")`"
+									},
+									{
+										"kind": "text",
+										"text": " declarations survive elsewhere in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`./editor/`"
+									},
+									{
+										"kind": "text",
+										"text": ", in two groups. Both are deliberate; neither is dead\nvocabulary someone forgot.\n\nGROUP 1 — the legacy "
+									},
+									{
+										"kind": "code",
+										"text": "`__anvilkit`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar, not the canonical\ndocument. Retained until "
+									},
+									{
+										"kind": "code",
+										"text": "`p3-009`"
+									},
+									{
+										"kind": "text",
+										"text": " deletes their last production\nconsumer, "
+									},
+									{
+										"kind": "code",
+										"text": "`packages/runtime/core/src/editor/read-write.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ":\n\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`envelope.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keeps its literal because "
+									},
+									{
+										"kind": "code",
+										"text": "`detectAuthoringVersion`"
+									},
+									{
+										"kind": "text",
+										"text": "\n  is what classifies an "
+									},
+									{
+										"kind": "code",
+										"text": "`unsupported-major`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar into read-only\n  safe mode. That literal is the DD-0019 invariant-9 guard that\n  stops a future-major sidecar being parsed and then overwritten;\n  removing it converts a refusal into silent data loss.\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`authoring-state.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`node.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keep theirs because they\n  validate that same sidecar, which genuinely *is* version 1.\n\nGROUP 2 — "
+									},
+									{
+										"kind": "code",
+										"text": "`components.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ". These *are* canonical document sub-shapes\nand their literals are scheduled to go, but they cannot go from this\npackage alone: each schema is annotated "
+									},
+									{
+										"kind": "code",
+										"text": "`z.ZodType<T>`"
+									},
+									{
+										"kind": "text",
+										"text": " against a\ncontracts interface that still declares "
+									},
+									{
+										"kind": "code",
+										"text": "`readonly version: \"1\"`"
+									},
+									{
+										"kind": "text",
+										"text": "\n("
+									},
+									{
+										"kind": "code",
+										"text": "`contracts/src/editor/components.ts:88`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts:105`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts:59`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts:30`"
+									},
+									{
+										"kind": "text",
+										"text": "). "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-002`"
+									},
+									{
+										"kind": "text",
+										"text": " renamed those\ntypes but was scoped to renames only. Dropping the literal here\nalone is a hard "
+									},
+									{
+										"kind": "code",
+										"text": "`TS2322`"
+									},
+									{
+										"kind": "text",
+										"text": " — verified 2026-08-06 by doing it:\n\"Property 'version' is missing ... but required in type 'Binding'\".\nContracts and schema must drop it in one change, together with every\nfresh-object-literal construction site (excess-property checking\nmakes each one an error), several of which live in submodules.\nTracked as a follow-up on "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": "; not silently deferred."
 									}
 								]
 							}
@@ -12297,9 +14529,9 @@
 										"target": {
 											"packageName": "@anvilkit/contracts",
 											"packagePath": "src/editor/appearance.ts",
-											"qualifiedName": "AnvilAppearanceV1"
+											"qualifiedName": "AnvilAppearance"
 										},
-										"name": "AnvilAppearanceV1",
+										"name": "AnvilAppearance",
 										"package": "@anvilkit/contracts"
 									}
 								],
@@ -12719,12 +14951,12 @@
 									{
 										"type": "reference",
 										"target": {
-											"packageName": "@anvilkit/contracts",
+											"packageName": "@anvilkit/schema",
 											"packagePath": "src/editor/authoring-state.ts",
 											"qualifiedName": "AuthoringStateV1"
 										},
 										"name": "AuthoringStateV1",
-										"package": "@anvilkit/contracts"
+										"package": "@anvilkit/schema"
 									}
 								],
 								"name": "ZodSafeParseResult",
@@ -12795,7 +15027,255 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them."
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "), a document written before\nfinalization may still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+									},
+									{
+										"kind": "code",
+										"text": "`looseObject`"
+									},
+									{
+										"kind": "text",
+										"text": ", never as a version branch. Nothing here reads\na "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+									},
+									{
+										"kind": "code",
+										"text": "`appearance.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " — the canonical carrier — is already version-free\n("
+									},
+									{
+										"kind": "code",
+										"text": "`p1-001`"
+									},
+									{
+										"kind": "text",
+										"text": "). Seven "
+									},
+									{
+										"kind": "code",
+										"text": "`z.literal(\"1\")`"
+									},
+									{
+										"kind": "text",
+										"text": " declarations survive elsewhere in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`./editor/`"
+									},
+									{
+										"kind": "text",
+										"text": ", in two groups. Both are deliberate; neither is dead\nvocabulary someone forgot.\n\nGROUP 1 — the legacy "
+									},
+									{
+										"kind": "code",
+										"text": "`__anvilkit`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar, not the canonical\ndocument. Retained until "
+									},
+									{
+										"kind": "code",
+										"text": "`p3-009`"
+									},
+									{
+										"kind": "text",
+										"text": " deletes their last production\nconsumer, "
+									},
+									{
+										"kind": "code",
+										"text": "`packages/runtime/core/src/editor/read-write.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ":\n\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`envelope.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keeps its literal because "
+									},
+									{
+										"kind": "code",
+										"text": "`detectAuthoringVersion`"
+									},
+									{
+										"kind": "text",
+										"text": "\n  is what classifies an "
+									},
+									{
+										"kind": "code",
+										"text": "`unsupported-major`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar into read-only\n  safe mode. That literal is the DD-0019 invariant-9 guard that\n  stops a future-major sidecar being parsed and then overwritten;\n  removing it converts a refusal into silent data loss.\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`authoring-state.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`node.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keep theirs because they\n  validate that same sidecar, which genuinely *is* version 1.\n\nGROUP 2 — "
+									},
+									{
+										"kind": "code",
+										"text": "`components.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ". These *are* canonical document sub-shapes\nand their literals are scheduled to go, but they cannot go from this\npackage alone: each schema is annotated "
+									},
+									{
+										"kind": "code",
+										"text": "`z.ZodType<T>`"
+									},
+									{
+										"kind": "text",
+										"text": " against a\ncontracts interface that still declares "
+									},
+									{
+										"kind": "code",
+										"text": "`readonly version: \"1\"`"
+									},
+									{
+										"kind": "text",
+										"text": "\n("
+									},
+									{
+										"kind": "code",
+										"text": "`contracts/src/editor/components.ts:88`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts:105`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts:59`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts:30`"
+									},
+									{
+										"kind": "text",
+										"text": "). "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-002`"
+									},
+									{
+										"kind": "text",
+										"text": " renamed those\ntypes but was scoped to renames only. Dropping the literal here\nalone is a hard "
+									},
+									{
+										"kind": "code",
+										"text": "`TS2322`"
+									},
+									{
+										"kind": "text",
+										"text": " — verified 2026-08-06 by doing it:\n\"Property 'version' is missing ... but required in type 'Binding'\".\nContracts and schema must drop it in one change, together with every\nfresh-object-literal construction site (excess-property checking\nmakes each one an error), several of which live in submodules.\nTracked as a follow-up on "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": "; not silently deferred."
 									}
 								]
 							}
@@ -12834,9 +15314,9 @@
 										"target": {
 											"packageName": "@anvilkit/contracts",
 											"packagePath": "src/editor/design-system.ts",
-											"qualifiedName": "DesignSystemV1"
+											"qualifiedName": "DesignSystem"
 										},
-										"name": "DesignSystemV1",
+										"name": "DesignSystem",
 										"package": "@anvilkit/contracts"
 									}
 								],
@@ -14804,7 +17284,7 @@
 		"58": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/editor/appearance.ts",
-			"qualifiedName": "ComponentMetadataV2Schema"
+			"qualifiedName": "ComponentMetadataSchema"
 		},
 		"59": {
 			"packageName": "@anvilkit/schema",
@@ -14834,7 +17314,7 @@
 		"64": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/editor/appearance.ts",
-			"qualifiedName": "StyleTargetCapabilityV2Schema"
+			"qualifiedName": "StyleTargetCapabilitySchema"
 		},
 		"65": {
 			"packageName": "zod",
