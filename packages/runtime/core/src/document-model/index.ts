@@ -22,6 +22,7 @@ export {
 	type MaterializeResult,
 	materializeInstance,
 	readComponentInstanceProp,
+	writeComponentInstanceProp,
 	runtimeNodeId,
 } from "./materialize.js";
 export { readDocument } from "./read-document.js";

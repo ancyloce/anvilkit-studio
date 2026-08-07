@@ -21,26 +21,23 @@ import type {
 	DesignSystem,
 	DocumentComponentLibrary,
 	InlineTextTarget,
+	EditorAnnotations,
 	Interaction,
 } from "@anvilkit/contracts/editor";
 import type { Config } from "@puckeditor/core";
 import type { ResolvedStyleTarget } from "../puck/component-metadata.js";
 
 /**
- * One node's editor annotation (ADR 0007 decision 1).
- *
- * The shape is **permanently closed** — `name` and `locked`, nothing
- * else. A map that accepts arbitrary keys is the sidecar again under a
- * new name, which is the exact thing this program exists to delete;
- * widening it requires the same scrutiny as adding a root prop.
+ * Re-exported from `@anvilkit/contracts/editor`, where `p3-006` moved
+ * the canonical declaration when `editorAnnotations` became a declared
+ * root prop. One definition, so the read model and the write path
+ * cannot disagree about what a closed annotation is.
  */
-export interface EditorAnnotation {
-	readonly name?: string;
-	readonly locked?: boolean;
-}
-
-/** Node id → annotation, from the declared `editorAnnotations` root prop. */
-export type DocumentAnnotations = Readonly<Record<string, EditorAnnotation>>;
+export type {
+	EditorAnnotation,
+	/** Node id → annotation, from the declared `editorAnnotations` root prop. */
+	EditorAnnotations as DocumentAnnotations,
+} from "@anvilkit/contracts/editor";
 
 /** One node's projected editor-visible state. */
 export interface DocumentNode {
@@ -74,7 +71,7 @@ export interface DocumentModel {
 	readonly nodes: ReadonlyMap<string, DocumentNode>;
 	readonly designSystem: DesignSystem | undefined;
 	readonly componentLibrary: DocumentComponentLibrary | undefined;
-	readonly annotations: DocumentAnnotations;
+	readonly annotations: EditorAnnotations;
 	/**
 	 * The `Config` this model was projected from.
 	 *

@@ -16,12 +16,15 @@
  * cases the spec does not, which is exactly why it is not re-derived.
  */
 
+import { makeEditorError } from "../editor/diagnostics.js";
 import type {
 	ComponentDefinitionId,
 	ComponentDefinition,
 	ComponentInstanceState,
 	ComponentPropDefinition,
 	ComponentVariant,
+	EditorError,
+	VariantAxis,
 	JsonValue,
 	NodeOverridePatch,
 	SerializablePuckNode,
@@ -64,6 +67,26 @@ export const CANONICAL_COMPONENT_INSTANCE_PROP = "anvilComponentInstance";
  * Canonical wins when both are present, so a migrated document is
  * never re-interpreted through the legacy key.
  */
+/**
+ * Write the instance link, emitting **only** the canonical key.
+ *
+ * `p3-003` executes PLAN-0026 §2's last document-visible rename: from
+ * this task onward every write emits
+ * {@link CANONICAL_COMPONENT_INSTANCE_PROP} and **deletes** the legacy
+ * key from the node it touches. Reads stay tolerant of both spellings
+ * until `p7-002` migrates the store, so a document mid-migration keeps
+ * working — but nothing re-introduces the old key, and a node that any
+ * write touches is upgraded in place rather than left carrying two
+ * spellings of one concept.
+ */
+export function writeComponentInstanceProp(
+	props: Readonly<Record<string, unknown>>,
+	instance: unknown,
+): Record<string, unknown> {
+	const { [COMPONENT_INSTANCE_PROP]: _legacy, ...rest } = props;
+	return { ...rest, [CANONICAL_COMPONENT_INSTANCE_PROP]: instance };
+}
+
 export function readComponentInstanceProp(
 	props: Readonly<Record<string, unknown>>,
 ): unknown {
@@ -449,3 +472,226 @@ export function collectDefinitionNodeIds(
 	walk(definition.root);
 	return ids;
 }
+
+/* -------------------------------------------------------------------------
+ * Variant model algebra — moved here from `editor/components/variants.ts`
+ * by `p3-002`, for the same reason `matchVariant` moved in `p2-004`: these
+ * are pure functions of a `ComponentDefinition` (they never touched the
+ * sidecar), and `p3-009` deletes the directory they lived in. `variants.ts`
+ * now re-exports them and is a pure shim.
+ * ---------------------------------------------------------------------- */
+
+/** A stable key for one axis selection, independent of key order. */
+export function variantCombinationKey(
+	selection: Readonly<Record<string, string>>,
+): string {
+	return Object.keys(selection)
+		.sort()
+		.map((axisId) => `${axisId}=${selection[axisId]}`)
+		.join("&");
+}
+
+/** How many combinations the declared axes can express. */
+export function variantCombinationCount(axes: readonly VariantAxis[]): number {
+	return axes.reduce((total, axis) => total * axis.options.length, 1);
+}
+
+/**
+ * Validate a component's variant model. Returns every violation; an
+ * empty array means the model is unambiguous and within caps.
+ */
+export function validateVariantModel(
+	definition: ComponentDefinition,
+): readonly EditorError[] {
+	const errors: EditorError[] = [];
+	const definitionId = definition.id;
+
+	if (
+		definition.variantAxes.length > EDITOR_COUNT_LIMITS.variantAxesPerComponent
+	) {
+		errors.push(
+			makeEditorError(
+				"EDITOR_LIMIT_EXCEEDED",
+				`components allow at most ${EDITOR_COUNT_LIMITS.variantAxesPerComponent} variant axes`,
+				{
+					details: {
+						limitKey: "variantAxesPerComponent",
+						limit: EDITOR_COUNT_LIMITS.variantAxesPerComponent,
+						actual: definition.variantAxes.length,
+						definitionId,
+					},
+				},
+			),
+		);
+	}
+	if (definition.variants.length > EDITOR_COUNT_LIMITS.variantsPerComponent) {
+		errors.push(
+			makeEditorError(
+				"EDITOR_LIMIT_EXCEEDED",
+				`components allow at most ${EDITOR_COUNT_LIMITS.variantsPerComponent} variants`,
+				{
+					details: {
+						limitKey: "variantsPerComponent",
+						limit: EDITOR_COUNT_LIMITS.variantsPerComponent,
+						actual: definition.variants.length,
+						definitionId,
+					},
+				},
+			),
+		);
+	}
+
+	// Axis identity.
+	const axisIds = new Set<string>();
+	const optionsByAxis = new Map<string, Set<string>>();
+	for (const axis of definition.variantAxes) {
+		if (axisIds.has(axis.id)) {
+			errors.push(
+				makeEditorError(
+					"EDITOR_COMMAND_CONFLICT",
+					`duplicate variant axis id "${axis.id}"`,
+					{
+						details: {
+							kind: "variantAxis",
+							definitionId,
+							axisId: axis.id,
+							reason: "duplicate-id",
+						},
+					},
+				),
+			);
+		}
+		axisIds.add(axis.id);
+
+		const optionIds = new Set<string>();
+		for (const option of axis.options) {
+			if (optionIds.has(option.id)) {
+				errors.push(
+					makeEditorError(
+						"EDITOR_COMMAND_CONFLICT",
+						`duplicate option id "${option.id}" on axis "${axis.id}"`,
+						{
+							details: {
+								kind: "variantAxisOption",
+								definitionId,
+								axisId: axis.id,
+								optionId: option.id,
+								reason: "duplicate-id",
+							},
+						},
+					),
+				);
+			}
+			optionIds.add(option.id);
+		}
+		optionsByAxis.set(axis.id, optionIds);
+	}
+
+	// Variant identity and selection completeness.
+	const variantIds = new Set<string>();
+	const combinations = new Map<string, string>();
+	for (const variant of definition.variants) {
+		if (variantIds.has(variant.id)) {
+			errors.push(
+				makeEditorError(
+					"EDITOR_COMMAND_CONFLICT",
+					`duplicate variant id "${variant.id}"`,
+					{
+						details: {
+							kind: "componentVariant",
+							definitionId,
+							variantId: variant.id,
+							reason: "duplicate-id",
+						},
+					},
+				),
+			);
+		}
+		variantIds.add(variant.id);
+
+		for (const [axisId, optionId] of Object.entries(variant.selection)) {
+			const options = optionsByAxis.get(axisId);
+			if (options === undefined) {
+				errors.push(
+					makeEditorError(
+						"EDITOR_NODE_NOT_FOUND",
+						`variant "${variant.id}" selects unknown axis "${axisId}"`,
+						{
+							details: {
+								kind: "variantAxis",
+								definitionId,
+								variantId: variant.id,
+								axisId,
+							},
+						},
+					),
+				);
+				continue;
+			}
+			if (!options.has(optionId)) {
+				errors.push(
+					makeEditorError(
+						"EDITOR_NODE_NOT_FOUND",
+						`variant "${variant.id}" selects unknown option "${optionId}" on axis "${axisId}"`,
+						{
+							details: {
+								kind: "variantAxisOption",
+								definitionId,
+								variantId: variant.id,
+								axisId,
+								optionId,
+							},
+						},
+					),
+				);
+			}
+		}
+
+		const missing = definition.variantAxes
+			.map((axis) => axis.id)
+			.filter((axisId) => variant.selection[axisId] === undefined);
+		if (missing.length > 0) {
+			errors.push(
+				makeEditorError(
+					"EDITOR_CAPABILITY_UNSUPPORTED",
+					`variant "${variant.id}" must select every axis; missing ${missing.join(", ")}`,
+					{
+						details: {
+							kind: "componentVariant",
+							definitionId,
+							variantId: variant.id,
+							reason: "incomplete-selection",
+							missingAxisIds: missing,
+						},
+					},
+				),
+			);
+			continue;
+		}
+
+		const key = variantCombinationKey(variant.selection);
+		const existing = combinations.get(key);
+		if (existing !== undefined) {
+			errors.push(
+				makeEditorError(
+					"EDITOR_COMMAND_CONFLICT",
+					`variants "${existing}" and "${variant.id}" declare the same combination`,
+					{
+						details: {
+							kind: "componentVariant",
+							definitionId,
+							variantId: variant.id,
+							conflictsWith: existing,
+							reason: "duplicate-combination",
+						},
+					},
+				),
+			);
+			continue;
+		}
+		combinations.set(key, variant.id);
+	}
+
+	return errors;
+}
+
