@@ -144,11 +144,58 @@ export function authorablePropertyForSpecKey(
  * that must distinguish "v2 with zero targets" from "no v2 at all" use
  * {@link readEditorMetadataFor} first.
  */
+const STYLE_TARGET_CACHE = new WeakMap<
+	Config,
+	Map<string, readonly ResolvedStyleTarget[]>
+>();
+
 export function resolveStyleTargets(
 	config: Config,
 	type: string,
 ): readonly ResolvedStyleTarget[] {
-	const editor = readEditorMetadataFor(config, type);
+	// Memoized per (config, type) by `p2-005`. Resolution is a pure
+	// function of those two — it Zod-validates each declared target —
+	// and the inspector now calls it once per field control per render
+	// through `useNodeField`. Without this, a 20-control panel over a
+	// 5-node selection re-parsed 200 capability declarations every
+	// keystroke. Keyed by `Config` identity in a `WeakMap`, so one
+	// config can never serve another's targets and entries die with the
+	// config. The returned arrays are `readonly` and never mutated by
+	// any consumer (compiler, read model, inspector), so sharing them
+	// is safe — and it strengthens the per-type sharing `p2-001`
+	// already relied on.
+	let byType = STYLE_TARGET_CACHE.get(config);
+	if (byType === undefined) {
+		byType = new Map();
+		STYLE_TARGET_CACHE.set(config, byType);
+	}
+	const cached = byType.get(type);
+	if (cached !== undefined) return cached;
+	const resolved = resolveStyleTargetsUncached(config, type);
+	byType.set(type, resolved);
+	return resolved;
+}
+
+function resolveStyleTargetsUncached(
+	config: Config,
+	type: string,
+): readonly ResolvedStyleTarget[] {
+	return resolveStyleTargetsFor(readEditorMetadataFor(config, type));
+}
+
+/**
+ * {@link resolveStyleTargets} for a metadata declaration already in
+ * hand, rather than a `(config, type)` pair.
+ *
+ * One validation implementation, two entry points — added by `p2-006`
+ * so a caller holding metadata (the inspector, when the React `<Puck>`
+ * provider is not reachable) validates targets exactly the way the
+ * compiler does, instead of reading the raw `styleTargets` record and
+ * silently trusting a malformed declaration.
+ */
+export function resolveStyleTargetsFor(
+	editor: AnvilComponentMetadata | undefined,
+): readonly ResolvedStyleTarget[] {
 	if (editor === undefined) return [];
 	const targets: ResolvedStyleTarget[] = [];
 	for (const [id, capability] of Object.entries(editor.styleTargets ?? {})) {

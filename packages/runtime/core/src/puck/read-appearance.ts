@@ -17,16 +17,30 @@
 import type {
 	AnvilAppearance,
 	AuthorableStyleProperty,
+	Binding,
 	BreakpointDefinition,
+	ComponentInstanceState,
+	DesignSystem,
+	DocumentComponentLibrary,
+	Interaction,
 	ResolvedValue,
 	ResponsiveLayerRef,
 	ResponsiveValue,
 	TargetAppearance,
 } from "@anvilkit/contracts/editor";
 import {
+	BindingSchema,
+	ComponentInstanceStateSchema,
+	DocumentComponentLibrarySchema,
+	InteractionSchema,
 	safeParseAppearance,
 	safeParseDesignSystem,
 } from "@anvilkit/schema/editor";
+
+/** Shared empty carriers, so an absent carrier is reference-stable. */
+const EMPTY_INTERACTIONS: readonly Interaction[] = Object.freeze([]);
+const EMPTY_BINDINGS: readonly Binding[] = Object.freeze([]);
+
 import type { Config, Data } from "@puckeditor/core";
 import { walkTree } from "@puckeditor/core";
 import { deepEqualJson } from "../editor/patch.js";
@@ -82,27 +96,110 @@ export function collectAppearanceNodes(
 			};
 			const nodeId = typeof props.id === "string" ? props.id : undefined;
 			if (nodeId === undefined) continue;
-			let appearance: AnvilAppearance | undefined;
-			if (props.appearance !== undefined) {
-				const parsed = safeParseAppearance(props.appearance);
-				appearance = parsed.success ? parsed.data : undefined;
-			}
-			nodes.set(nodeId, { nodeId, type: item.type as string, appearance });
+			nodes.set(nodeId, {
+				nodeId,
+				type: item.type as string,
+				appearance: parseNodeAppearance(props.appearance),
+			});
 		}
 		return content;
 	});
 	return nodes;
 }
 
+/**
+ * Tolerantly parse one node's declared `appearance` prop. Invalid
+ * content reads as `undefined` rather than throwing — a read surface
+ * never destroys or rejects stored data, it just declines to project
+ * what it cannot understand.
+ *
+ * Exported because `src/document-model/` needs it and **may not import
+ * `@anvilkit/schema` itself**: `check:no-headless-import` allows the
+ * foundation validation packages only under `src/editor/`, so every
+ * other consumer reaches Zod through a helper in an already-importing
+ * module. Adding a new schema-importing file under `src/puck/` would
+ * add a seventh offender to a gate that is already red.
+ */
+export function parseNodeAppearance(raw: unknown): AnvilAppearance | undefined {
+	if (raw === undefined) return undefined;
+	const parsed = safeParseAppearance(raw);
+	return parsed.success ? parsed.data : undefined;
+}
+
+/**
+ * The declared `interactions` carrier, entry-validated. A malformed
+ * entry is dropped; it never invalidates its siblings.
+ */
+export function parseNodeInteractions(raw: unknown): readonly Interaction[] {
+	if (!Array.isArray(raw)) return EMPTY_INTERACTIONS;
+	const kept: Interaction[] = [];
+	for (const entry of raw) {
+		const parsed = InteractionSchema.safeParse(entry);
+		if (parsed.success) kept.push(parsed.data);
+	}
+	return kept.length === 0 ? EMPTY_INTERACTIONS : kept;
+}
+
+/** The declared `bindings` carrier, entry-validated. */
+export function parseNodeBindings(raw: unknown): readonly Binding[] {
+	if (!Array.isArray(raw)) return EMPTY_BINDINGS;
+	const kept: Binding[] = [];
+	for (const entry of raw) {
+		const parsed = BindingSchema.safeParse(entry);
+		if (parsed.success) kept.push(parsed.data);
+	}
+	return kept.length === 0 ? EMPTY_BINDINGS : kept;
+}
+
+/** The node's component-instance link, or `undefined`. */
+export function parseComponentInstance(
+	raw: unknown,
+): ComponentInstanceState | undefined {
+	if (raw === undefined) return undefined;
+	const parsed = ComponentInstanceStateSchema.safeParse(raw);
+	return parsed.success ? (parsed.data as ComponentInstanceState) : undefined;
+}
+
+/** The document's validated design system, or `undefined`. */
+export function documentDesignSystem(data: Data): DesignSystem | undefined {
+	const raw = (data.root?.props as { designSystem?: unknown } | undefined)
+		?.designSystem;
+	if (raw === undefined) return undefined;
+	const parsed = safeParseDesignSystem(raw);
+	return parsed.success ? parsed.data : undefined;
+}
+
+/**
+ * Validate a candidate component library (`p3-001` write path).
+ *
+ * Exported for the same reason as the parsers above: `src/puck/` may
+ * not gain another `@anvilkit/schema` importer without adding a
+ * seventh offender to `check:no-headless-import`, so the write path
+ * reaches Zod through this module.
+ */
+export function parseComponentLibrary(
+	raw: unknown,
+): DocumentComponentLibrary | undefined {
+	const parsed = DocumentComponentLibrarySchema.safeParse(raw);
+	return parsed.success ? parsed.data : undefined;
+}
+
+/** The document's validated component library, or `undefined`. */
+export function documentComponentLibrary(
+	data: Data,
+): DocumentComponentLibrary | undefined {
+	const raw = (data.root?.props as { componentLibrary?: unknown } | undefined)
+		?.componentLibrary;
+	if (raw === undefined) return undefined;
+	const parsed = DocumentComponentLibrarySchema.safeParse(raw);
+	return parsed.success ? parsed.data : undefined;
+}
+
 /** The document's validated breakpoints (empty when absent/invalid). */
 export function documentBreakpoints(
 	data: Data,
 ): readonly BreakpointDefinition[] {
-	const raw = (data.root?.props as { designSystem?: unknown } | undefined)
-		?.designSystem;
-	if (raw === undefined) return [];
-	const parsed = safeParseDesignSystem(raw);
-	return parsed.success ? parsed.data.breakpoints : [];
+	return documentDesignSystem(data)?.breakpoints ?? [];
 }
 
 /** Shared input of every read function. */

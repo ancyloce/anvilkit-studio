@@ -13,10 +13,20 @@
  * tests without a DOM.
  */
 
+/**
+ * The id of a component's implicit root style target.
+ *
+ * Named rather than repeated as a literal because three layers address
+ * it: the DOM attribute below, the stored carrier
+ * (`props.appearance.targets.root`), and the read/write address
+ * (`p2-003`'s `readNodeField`, where an omitted `targetId` means this).
+ */
+export const ROOT_STYLE_TARGET_ID = "root";
+
 /** Attribute set for a component's root target (selection + styling). */
 export function anvilRootAttrs(
 	id: string,
-	target = "root",
+	target: string = ROOT_STYLE_TARGET_ID,
 ): Readonly<Record<string, string>> {
 	return {
 		"data-ak-node": id,
