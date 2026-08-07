@@ -28,35 +28,10 @@ import type {
 import { makeEditorError } from "../diagnostics.js";
 import { withRecord } from "../node-records.js";
 
-/** Every node id declared inside a definition's root subtree. */
-export function collectDefinitionNodeIds(
-	definition: ComponentDefinition,
-): ReadonlySet<string> {
-	const ids = new Set<string>();
-	const walk = (node: SerializablePuckNode): void => {
-		const id = node.props.id;
-		if (typeof id === "string" && id.length > 0) {
-			ids.add(id);
-		}
-		for (const value of Object.values(node.props)) {
-			if (!Array.isArray(value)) {
-				continue;
-			}
-			for (const entry of value) {
-				if (
-					typeof entry === "object" &&
-					entry !== null &&
-					!Array.isArray(entry) &&
-					typeof (entry as { type?: unknown }).type === "string"
-				) {
-					walk(entry as unknown as SerializablePuckNode);
-				}
-			}
-		}
-	};
-	walk(definition.root);
-	return ids;
-}
+/** Re-exported from its new home (moved by `p2-004`); also used below. */
+import { collectDefinitionNodeIds } from "../../document-model/materialize.js";
+
+export { collectDefinitionNodeIds };
 
 function instanceOf(
 	state: AuthoringStateV1,

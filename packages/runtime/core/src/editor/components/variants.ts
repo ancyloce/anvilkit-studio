@@ -245,26 +245,9 @@ export function validateVariantModel(
 }
 
 /**
- * The variant matching `selection`, or `undefined` for none
- * (§24.4 step 1).
- *
- * Matching is **exact over every declared axis**: an instance whose
- * selection is partial or names an option no variant declares matches
- * nothing and renders the definition base. Because a valid model has
- * no duplicate combinations, at most one variant can match, so the
- * result does not depend on array order — the determinism property
- * ED-VARIANT-001 requires.
+ * Re-exported from `document-model/materialize.ts`, where `p2-004`
+ * moved it so the matcher survives this directory's deletion. One
+ * definition only — "which variant is active" must not be able to mean
+ * two different things.
  */
-export function matchVariant(
-	definition: ComponentDefinition,
-	selection: Readonly<Record<string, string>>,
-): ComponentVariant | undefined {
-	if (definition.variantAxes.length === 0) {
-		return undefined;
-	}
-	return definition.variants.find((variant) =>
-		definition.variantAxes.every(
-			(axis) => variant.selection[axis.id] === selection[axis.id],
-		),
-	);
-}
+export { matchVariant } from "../../document-model/materialize.js";

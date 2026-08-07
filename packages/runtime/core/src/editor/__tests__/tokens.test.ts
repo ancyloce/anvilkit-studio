@@ -4,15 +4,7 @@
  * §24.5).
  */
 
-import type {
-	DesignToken,
-} from "@anvilkit/contracts/editor";
-import type {
-	EditorCommandBase,
-} from "../legacy/index.js";
-import type {
-	AuthoringStateV1,
-} from "../legacy/index.js";
+import type { DesignToken } from "@anvilkit/contracts/editor";
 import { describe, expect, it } from "vitest";
 import {
 	aliasDependents,
@@ -23,11 +15,13 @@ import {
 	mapAuthoringTokens,
 	planTokenDeletion,
 	resolveAuthoringStyle,
-	resolveNodeAuthoring,
+	resolveTargetAppearance,
 	resolveToken,
 	tokenUsageSites,
 	validateAtomicCommand,
 } from "../index.js";
+import type { AuthoringStateV1, EditorCommandBase } from "../legacy/index.js";
+import { targetFromRecord } from "../style/export-stylesheet.js";
 
 let commandCounter = 0;
 function base(expectedRevision: number): EditorCommandBase {
@@ -222,7 +216,7 @@ describe("resolveToken — modes and alias compatibility (§15.1)", () => {
 
 describe("token substitution by declared type (regression)", () => {
 	const context = (state: AuthoringStateV1) => ({
-		authoring: state,
+		designSystem: state,
 		breakpoints: state.breakpoints,
 		viewportWidth: 1400,
 		tokenMode: "light",
@@ -234,7 +228,10 @@ describe("token substitution by declared type (regression)", () => {
 		// `serializeCssLength` fell through its switch and the property
 		// was dropped from the emitted style with no diagnostic.
 		const state = documentWithTokenRefs();
-		const resolved = resolveNodeAuthoring("node-a", context(state));
+		const resolved = resolveTargetAppearance(
+			targetFromRecord(state.nodes["node-a"]),
+			context(state),
+		);
 		expect(resolved.layout.gap).toEqual(px(16));
 		const style = resolveAuthoringStyle({
 			nodeId: "node-a",
@@ -245,7 +242,10 @@ describe("token substitution by declared type (regression)", () => {
 
 	it("keeps the literal wrapper for TokenOrLiteral slots", () => {
 		const state = documentWithTokenRefs();
-		const resolved = resolveNodeAuthoring("node-a", context(state));
+		const resolved = resolveTargetAppearance(
+			targetFromRecord(state.nodes["node-a"]),
+			context(state),
+		);
 		expect(resolved.typography.color).toEqual({
 			kind: "literal",
 			value: hex("#123456"),
@@ -264,7 +264,10 @@ describe("token substitution by declared type (regression)", () => {
 			tokens: { ...state.tokens, space: undefined as unknown as DesignToken },
 		};
 		delete (missing.tokens as Record<string, unknown>).space;
-		const resolved = resolveNodeAuthoring("node-a", context(missing));
+		const resolved = resolveTargetAppearance(
+			targetFromRecord(missing.nodes["node-a"]),
+			context(missing),
+		);
 		expect(resolved.layout.gap).toEqual({ kind: "token", tokenId: "space" });
 		expect(
 			resolved.diagnostics.some(

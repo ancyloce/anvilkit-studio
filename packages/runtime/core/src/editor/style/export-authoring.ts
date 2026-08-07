@@ -10,7 +10,7 @@
  * component instances through `materializeInstance` (§24.4
  * precedence, variants included), then materialize per-node CSS
  * through the single style-materialization path
- * (`buildExportStylesheet` → `resolveNodeAuthoring` →
+ * (`buildExportStylesheet` → `resolveTargetAppearance` →
  * `resolveAuthoringStyle`). Formats wrap styled nodes in a
  * `data-ak-node` element — the same wrapper `styleTarget` boundary
  * the editor preview applies, so preview and export bind styles to

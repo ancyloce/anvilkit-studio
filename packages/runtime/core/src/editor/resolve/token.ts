@@ -62,7 +62,7 @@ const LENGTH_VALUED_TOKEN_TYPES: ReadonlySet<TokenType> = new Set([
 
 /**
  * The substituted node form of a resolved token value — the single
- * rule shared by preview substitution (`resolveNodeAuthoring`) and
+ * rule shared by preview substitution (`resolveTargetAppearance`) and
  * deletion materialization (`applyTokenDeletion`).
  *
  * Getting this wrong is silent: `CssLength` has no `"literal"`

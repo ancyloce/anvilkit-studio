@@ -302,8 +302,9 @@ export { mergePropertyWise } from "./resolve/merge.js";
 export {
 	type NodeComponentDefaults,
 	type ResolveContext,
+	type ResolveDesignSystem,
 	type ResolvedNodeAuthoring,
-	resolveNodeAuthoring,
+	resolveTargetAppearance,
 	substituteTokens,
 	type TokenSubstitutionContext,
 } from "./resolve/node.js";

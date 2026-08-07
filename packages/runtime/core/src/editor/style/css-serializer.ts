@@ -7,7 +7,7 @@
  * AST-built `calc`/`min`/`max`/`clamp` — and never emits
  * `!important`. Unresolved token references serialize to `null`
  * (callers skip the property and surface a diagnostic): tokens are
- * resolved by `resolveNodeAuthoring` *before* serialization.
+ * resolved by `resolveTargetAppearance` *before* serialization.
  */
 
 import type {

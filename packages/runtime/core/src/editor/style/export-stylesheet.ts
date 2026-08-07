@@ -20,7 +20,7 @@
  * definitions in list order, node base, style-definition breakpoint
  * overrides, node breakpoint overrides — with tokens substituted to
  * literals in a fixed mode, through the single materialization
- * implementation (`resolveNodeAuthoring` → `resolveAuthoringStyle`).
+ * implementation (`resolveTargetAppearance` → `resolveAuthoringStyle`).
  *
  * ### Determinism (§12.4 shape, restated for export)
  *
@@ -44,15 +44,78 @@
  */
 
 import type {
+	AuthorStyle,
 	EditorError,
 	NodeAuthoringStateV1,
 	NodeOverridePatch,
+	TargetAppearance,
 } from "@anvilkit/contracts/editor";
-import type {
-	AuthoringStateV1,
-} from "../legacy/index.js";
-import { resolveNodeAuthoring } from "../resolve/node.js";
+import type { AuthoringStateV1 } from "../legacy/index.js";
+import { resolveTargetAppearance } from "../resolve/node.js";
 import { resolveAuthoringStyle } from "./resolve-authoring-style.js";
+
+/**
+ * Adapt one sidecar node record to the `TargetAppearance` the shared
+ * resolver now takes (`p2-002`).
+ *
+ * This is the **inverse** of the projection the style compiler used to
+ * perform, and it lives here — in a module PLAN-0026 §3.1 deletes
+ * wholesale at `p3-009` — rather than in the resolve layer, precisely
+ * so the resolve layer keeps no sidecar shape. It dies with this file.
+ *
+ * Semantics are preserved exactly: the sidecar carried `layout`,
+ * `style` and `typography` as three independent `ResponsiveValue`s;
+ * `AuthorStyle` nests the same three under one. A `null` override
+ * meant "no contribution at this layer" and was already skipped by the
+ * old `overrideAt`, so omitting it here is equivalent.
+ */
+export function targetFromRecord(
+	record: NodeAuthoringStateV1 | undefined,
+): TargetAppearance | undefined {
+	if (record === undefined) return undefined;
+	const base: Record<string, unknown> = {};
+	if (record.layout?.base !== undefined) base.layout = record.layout.base;
+	if (record.style?.base !== undefined) base.visual = record.style.base;
+	if (record.typography?.base !== undefined) {
+		base.typography = record.typography.base;
+	}
+
+	const breakpointIds = new Set<string>([
+		...Object.keys(record.layout?.overrides ?? {}),
+		...Object.keys(record.style?.overrides ?? {}),
+		...Object.keys(record.typography?.overrides ?? {}),
+	]);
+	const overrides: Record<string, AuthorStyle> = {};
+	for (const id of breakpointIds) {
+		const layer: Record<string, unknown> = {};
+		const layout = record.layout?.overrides?.[id];
+		const visual = record.style?.overrides?.[id];
+		const typography = record.typography?.overrides?.[id];
+		if (layout !== undefined && layout !== null) layer.layout = layout;
+		if (visual !== undefined && visual !== null) layer.visual = visual;
+		if (typography !== undefined && typography !== null) {
+			layer.typography = typography;
+		}
+		if (Object.keys(layer).length > 0) {
+			overrides[id] = layer as AuthorStyle;
+		}
+	}
+
+	const hasBase = Object.keys(base).length > 0;
+	const hasOverrides = Object.keys(overrides).length > 0;
+	return {
+		...(hasBase || hasOverrides
+			? {
+					style: {
+						...(hasBase ? { base: base as AuthorStyle } : {}),
+						...(hasOverrides ? { overrides } : {}),
+					},
+				}
+			: {}),
+		...(record.styleRefs !== undefined ? { styleRefs: record.styleRefs } : {}),
+		...(record.hidden !== undefined ? { hidden: record.hidden } : {}),
+	};
+}
 
 /**
  * Authoring families for nodes that exist only in materialized
@@ -167,15 +230,18 @@ export function buildExportStylesheet(
 		let lastEmittedBody: string | undefined;
 		let lastEmittedHidden = false;
 		for (const layer of layers) {
-			const resolved = resolveNodeAuthoring(nodeId, {
-				authoring,
-				breakpoints: authoring.breakpoints,
-				viewportWidth: layer.width,
-				tokenMode: input.tokenMode ?? "default",
-				...(input.defaultTokenMode !== undefined
-					? { defaultTokenMode: input.defaultTokenMode }
-					: {}),
-			});
+			const resolved = resolveTargetAppearance(
+				targetFromRecord(authoring.nodes[nodeId]),
+				{
+					designSystem: authoring,
+					breakpoints: authoring.breakpoints,
+					viewportWidth: layer.width,
+					tokenMode: input.tokenMode ?? "default",
+					...(input.defaultTokenMode !== undefined
+						? { defaultTokenMode: input.defaultTokenMode }
+						: {}),
+				},
+			);
 			addDiagnostics(resolved.diagnostics);
 			const materialized = resolveAuthoringStyle({
 				nodeId,

@@ -5,12 +5,6 @@
  * patch recursion edges, invariant helper, serializer fallbacks.
  */
 
-import type {
-	EditorCommandBase,
-} from "../legacy/index.js";
-import type {
-	AuthoringStateV1,
-} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	applyEditorCommand,
@@ -23,8 +17,8 @@ import {
 	makeEditorError,
 	mergePropertyWise,
 	reduceValidatedCommand,
-	resolveNodeAuthoring,
 	resolveResponsiveValue,
+	resolveTargetAppearance,
 	serializeBorderEdge,
 	serializeCssLength,
 	serializeFilter,
@@ -33,6 +27,8 @@ import {
 	stripPatchNulls,
 	validateEditorCommand,
 } from "../index.js";
+import type { AuthoringStateV1, EditorCommandBase } from "../legacy/index.js";
+import { targetFromRecord } from "../style/export-stylesheet.js";
 
 let counter = 0;
 function base(expectedRevision: number): EditorCommandBase {
@@ -417,7 +413,7 @@ describe("residual reachable branches", () => {
 
 describe("node resolution edges", () => {
 	it("skips null styleRef override entries and walks arrays for tokens", async () => {
-		const { resolveNodeAuthoring } = await import("../index.js");
+		const { resolveTargetAppearance } = await import("../index.js");
 		const state: AuthoringStateV1 = {
 			...withTablet(),
 			nodes: {
@@ -466,8 +462,8 @@ describe("node resolution edges", () => {
 				},
 			},
 		};
-		const resolved = resolveNodeAuthoring("n1", {
-			authoring: state,
+		const resolved = resolveTargetAppearance(targetFromRecord(state.nodes.n1), {
+			designSystem: state,
 			breakpoints: state.breakpoints,
 			viewportWidth: 900,
 			tokenMode: "light",
@@ -510,9 +506,7 @@ describe("byte-limit defaults and tighten-only clamp (CORE-P0-014)", () => {
 		);
 		expect(resolved.errors).toHaveLength(2);
 		expect(
-			resolved.errors.every(
-				(error) => error.code === "EDITOR_LIMIT_EXCEEDED",
-			),
+			resolved.errors.every((error) => error.code === "EDITOR_LIMIT_EXCEEDED"),
 		).toBe(true);
 	});
 });
@@ -1030,7 +1024,13 @@ describe("breakpoint validation rejects malformed sets", () => {
 	it("accepts a well-formed set", () => {
 		expect(
 			reject([
-				{ id: "tablet", label: "Tablet", maxWidth: 991, order: 0, enabled: true },
+				{
+					id: "tablet",
+					label: "Tablet",
+					maxWidth: 991,
+					order: 0,
+					enabled: true,
+				},
 			]),
 		).toEqual([]);
 	});
@@ -1062,8 +1062,8 @@ describe("resolver precedence and diagnostic edges (§24.3)", () => {
 				} as never,
 			},
 		};
-		const resolved = resolveNodeAuthoring("n1", {
-			authoring: state,
+		const resolved = resolveTargetAppearance(targetFromRecord(state.nodes.n1), {
+			designSystem: state,
 			breakpoints: BPS,
 			viewportWidth: 800,
 			tokenMode: "light",
@@ -1081,8 +1081,8 @@ describe("resolver precedence and diagnostic edges (§24.3)", () => {
 				n1: { styleRefs: { overrides: { tablet: ["sd-a"] } } } as never,
 			},
 		};
-		const resolved = resolveNodeAuthoring("n1", {
-			authoring: state,
+		const resolved = resolveTargetAppearance(targetFromRecord(state.nodes.n1), {
+			designSystem: state,
 			breakpoints: BPS,
 			// Wider than the tablet ceiling, so the override does not match.
 			viewportWidth: 1400,
@@ -1096,8 +1096,14 @@ describe("resolver precedence and diagnostic edges (§24.3)", () => {
 		const state: AuthoringStateV1 = {
 			...createEmptyAuthoringState(),
 			tokens: {
-				a: tokenOf({ id: "a", values: { light: { kind: "alias", tokenId: "b" } } }),
-				b: tokenOf({ id: "b", values: { light: { kind: "alias", tokenId: "a" } } }),
+				a: tokenOf({
+					id: "a",
+					values: { light: { kind: "alias", tokenId: "b" } },
+				}),
+				b: tokenOf({
+					id: "b",
+					values: { light: { kind: "alias", tokenId: "a" } },
+				}),
 			},
 			tokenModes: { light: { id: "light", name: "Light" } } as never,
 			nodes: {
@@ -1106,8 +1112,8 @@ describe("resolver precedence and diagnostic edges (§24.3)", () => {
 				} as never,
 			},
 		};
-		const resolved = resolveNodeAuthoring("n1", {
-			authoring: state,
+		const resolved = resolveTargetAppearance(targetFromRecord(state.nodes.n1), {
+			designSystem: state,
 			breakpoints: [],
 			viewportWidth: 1200,
 			tokenMode: "light",
@@ -1145,8 +1151,8 @@ describe("resolver precedence and diagnostic edges (§24.3)", () => {
 				} as never,
 			},
 		};
-		const resolved = resolveNodeAuthoring("n1", {
-			authoring: state,
+		const resolved = resolveTargetAppearance(targetFromRecord(state.nodes.n1), {
+			designSystem: state,
 			breakpoints: [],
 			viewportWidth: 1200,
 			tokenMode: "light",

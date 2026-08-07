@@ -5,7 +5,7 @@
  * Style definitions are an **ordered multi-attach list, not an
  * inheritance graph**: a node holds `styleRefs` (itself responsive),
  * later refs win over earlier ones, and the node's own values win over
- * all of them (§24.3 precedence, implemented in `resolveNodeAuthoring`).
+ * all of them (§24.3 precedence, implemented in `resolveTargetAppearance`).
  *
  * Because nodes reference definitions by id and never copy them,
  * `styleDefinition.update` propagates for free (ED-STYLEDEF-002) —

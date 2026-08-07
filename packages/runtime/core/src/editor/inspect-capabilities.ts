@@ -11,7 +11,8 @@
  * component comes from what its author **declared** — and a component
  * that declared nothing looks, from the outside, exactly like one that
  * is broken. This turns "the inspector is empty for my component" into
- * "you are at Level 1; add `capabilities.visualStyle` to reach Level 2".
+ * "you are at Level 1; declare a style target granting a visual
+ * property to reach Level 2".
  *
  * Pure and React-free on purpose: an author should be able to run this
  * from a unit test or a Node script over their `componentConfig`

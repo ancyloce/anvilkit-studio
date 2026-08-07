@@ -6,25 +6,19 @@
  * exporter CSS variable names.
  */
 
-import type {
-	StyleDefinition,
-} from "@anvilkit/contracts/editor";
-import type {
-	EditorCommandBase,
-} from "../legacy/index.js";
-import type {
-	AuthoringStateV1,
-} from "../legacy/index.js";
+import type { StyleDefinition } from "@anvilkit/contracts/editor";
 import { describe, expect, it } from "vitest";
 import {
 	applyEditorCommand,
 	createEmptyAuthoringState,
-	resolveNodeAuthoring,
+	resolveTargetAppearance,
 	stableIdHash,
 	styleDefinitionCssVariableName,
 	tokenCssVariableName,
 	validateAtomicCommand,
 } from "../index.js";
+import type { AuthoringStateV1, EditorCommandBase } from "../legacy/index.js";
+import { targetFromRecord } from "../style/export-stylesheet.js";
 
 let commandCounter = 0;
 function base(expectedRevision: number): EditorCommandBase {
@@ -78,8 +72,8 @@ function docWith(
 }
 
 const resolveAt = (state: AuthoringStateV1, nodeId: string, width = 1400) =>
-	resolveNodeAuthoring(nodeId, {
-		authoring: state,
+	resolveTargetAppearance(targetFromRecord(state.nodes[nodeId]), {
+		designSystem: state,
 		breakpoints: state.breakpoints,
 		viewportWidth: width,
 		tokenMode: "light",

@@ -8,18 +8,17 @@ import type {
 	DesignToken,
 	ResponsiveValue,
 } from "@anvilkit/contracts/editor";
-import type {
-	AuthoringStateV1,
-} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	createEmptyAuthoringState,
 	getMatchingBreakpoints,
 	mergePropertyWise,
-	resolveNodeAuthoring,
 	resolveResponsiveValue,
+	resolveTargetAppearance,
 	resolveToken,
 } from "../index.js";
+import type { AuthoringStateV1 } from "../legacy/index.js";
+import { targetFromRecord } from "../style/export-stylesheet.js";
 
 const breakpoints: readonly BreakpointDefinition[] = [
 	{ id: "tablet", label: "Tablet", maxWidth: 991, order: 0, enabled: true },
@@ -262,7 +261,7 @@ describe("resolveToken (§24.5)", () => {
 	});
 });
 
-describe("resolveNodeAuthoring (§24.3 precedence)", () => {
+describe("resolveTargetAppearance (§24.3 precedence)", () => {
 	function makeState(): AuthoringStateV1 {
 		return {
 			...createEmptyAuthoringState(),
@@ -314,14 +313,13 @@ describe("resolveNodeAuthoring (§24.3 precedence)", () => {
 	}
 
 	it("applies default < styleDef < node base < styleDef bp < node bp", () => {
-		const resolved = resolveNodeAuthoring("n1", {
-			authoring: makeState(),
+		const state = makeState();
+		const resolved = resolveTargetAppearance(targetFromRecord(state.nodes.n1), {
+			designSystem: state,
 			breakpoints,
 			viewportWidth: 900,
 			tokenMode: "light",
-			componentDefaults: {
-				n1: { layout: { gap: px(99), minWidth: px(10) } },
-			},
+			componentDefaults: { layout: { gap: px(99), minWidth: px(10) } },
 		});
 		expect(resolved.layout).toEqual({
 			display: "flex",
@@ -334,8 +332,9 @@ describe("resolveNodeAuthoring (§24.3 precedence)", () => {
 	});
 
 	it("substitutes tokens after precedence selection", () => {
-		const resolved = resolveNodeAuthoring("n1", {
-			authoring: makeState(),
+		const state = makeState();
+		const resolved = resolveTargetAppearance(targetFromRecord(state.nodes.n1), {
+			designSystem: state,
 			breakpoints,
 			viewportWidth: 1200,
 			tokenMode: "light",
@@ -349,12 +348,15 @@ describe("resolveNodeAuthoring (§24.3 precedence)", () => {
 	it("keeps unresolved token refs and reports diagnostics", () => {
 		const state = makeState();
 		const broken: AuthoringStateV1 = { ...state, tokens: {} };
-		const resolved = resolveNodeAuthoring("n1", {
-			authoring: broken,
-			breakpoints,
-			viewportWidth: 1200,
-			tokenMode: "light",
-		});
+		const resolved = resolveTargetAppearance(
+			targetFromRecord(broken.nodes.n1),
+			{
+				designSystem: broken,
+				breakpoints,
+				viewportWidth: 1200,
+				tokenMode: "light",
+			},
+		);
 		expect(resolved.typography.color).toEqual({
 			kind: "token",
 			tokenId: "text",
@@ -366,8 +368,8 @@ describe("resolveNodeAuthoring (§24.3 precedence)", () => {
 
 	it("resolves hidden responsively and flags missing style definitions", () => {
 		const state = makeState();
-		const resolved = resolveNodeAuthoring("n1", {
-			authoring: state,
+		const resolved = resolveTargetAppearance(targetFromRecord(state.nodes.n1), {
+			designSystem: state,
 			breakpoints,
 			viewportWidth: 700,
 			tokenMode: "light",
@@ -384,22 +386,29 @@ describe("resolveNodeAuthoring (§24.3 precedence)", () => {
 				},
 			},
 		};
-		const flagged = resolveNodeAuthoring("n1", {
-			authoring: withGhostRef,
-			breakpoints,
-			viewportWidth: 700,
-			tokenMode: "light",
-		});
+		const flagged = resolveTargetAppearance(
+			targetFromRecord(withGhostRef.nodes.n1),
+			{
+				designSystem: withGhostRef,
+				breakpoints,
+				viewportWidth: 700,
+				tokenMode: "light",
+			},
+		);
 		expect(flagged.diagnostics[0]?.details?.kind).toBe("styleDefinition");
 	});
 
 	it("resolves an unknown node to pure defaults", () => {
-		const resolved = resolveNodeAuthoring("ghost", {
-			authoring: makeState(),
-			breakpoints,
-			viewportWidth: 1200,
-			tokenMode: "light",
-		});
+		const state = makeState();
+		const resolved = resolveTargetAppearance(
+			targetFromRecord(state.nodes.ghost),
+			{
+				designSystem: state,
+				breakpoints,
+				viewportWidth: 1200,
+				tokenMode: "light",
+			},
+		);
 		expect(resolved.layout).toEqual({});
 		expect(resolved.hidden).toBe(false);
 	});

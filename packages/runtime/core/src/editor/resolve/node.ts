@@ -1,44 +1,72 @@
 /**
- * @file Full node authoring resolution (PLAN-0020 CORE-P0-010;
- * DD-0019 §11.3, §24.3).
+ * @file Full style-target resolution (PLAN-0020 CORE-P0-010; DD-0019
+ * §11.3, §24.3).
  *
  * Precedence, lowest to highest: component default → attached style
- * definitions in list order → node base → style-definition
- * breakpoint override → node breakpoint override. Gesture preview is
+ * definitions in list order → target base → style-definition
+ * breakpoint override → target breakpoint override. Gesture preview is
  * layered by callers (DD §11.3 layer 6). Merging is property-wise;
  * tokens resolve **after** each winning value is selected and never
  * change precedence.
+ *
+ * ---
+ *
+ * **Re-signatured by `p2-002` (PLAN-0026 §3.2).** PLAN-0025 §11.4's
+ * rule governs: *reuse the algorithms, never the old data source.* The
+ * cascade below is unchanged — what changed is what it reads.
+ *
+ * It used to take the whole `AuthoringStateV1` sidecar and index it by
+ * node id. The style compiler, which has consumed this module on
+ * carrier documents for some time, therefore had to **synthesize a
+ * sidecar** on every compile: it projected each `TargetAppearance`
+ * into a fake node record keyed `nodeId␟targetId` and wrapped the
+ * whole lot in a fake `AuthoringStateV1` just to call in. That adapter
+ * is deleted; the cascade now reads `TargetAppearance` directly.
+ *
+ * Consequently nothing in the resolve layer references the sidecar, and
+ * the read model (`src/document-model/`) can reuse this maths on the
+ * same shapes the inspector and compiler already hold — which is the
+ * whole point of doing it before `p2-003`.
  */
 
 import type {
+	AuthorStyle,
 	BreakpointDefinition,
+	DesignSystem,
 	EditorError,
 	LayoutSpec,
-	NodeAuthoringStateV1,
 	ResponsiveValue,
 	StyleDefinition,
+	TargetAppearance,
 	TypographySpec,
 	VisualStyleSpec,
 } from "@anvilkit/contracts/editor";
-import type {
-	AuthoringStateV1,
-} from "../legacy/index.js";
 import { makeEditorError } from "../diagnostics.js";
 import { isTokenRef } from "../tokens/walk.js";
 import { mergePropertyWise } from "./merge.js";
 import { getMatchingBreakpoints } from "./responsive.js";
 import { materializeTokenLiteral, resolveToken } from "./token.js";
 
-/** Per-node component defaults supplied by the capability layer. */
+/** Per-target component defaults supplied by the capability layer. */
 export interface NodeComponentDefaults {
 	readonly layout?: Partial<LayoutSpec>;
 	readonly style?: Partial<VisualStyleSpec>;
 	readonly typography?: Partial<TypographySpec>;
 }
 
-/** Everything node resolution needs, supplied by the caller. */
+/**
+ * The design-system slice resolution reads. Narrowed to the three
+ * collections actually consulted, so a caller holding only a partial
+ * design system need not fabricate the rest.
+ */
+export type ResolveDesignSystem = Pick<
+	DesignSystem,
+	"styleDefinitions" | "tokens" | "tokenModes"
+>;
+
+/** Everything target resolution needs, supplied by the caller. */
 export interface ResolveContext {
-	readonly authoring: AuthoringStateV1;
+	readonly designSystem: ResolveDesignSystem;
 	readonly breakpoints: readonly BreakpointDefinition[];
 	readonly viewportWidth: number;
 	readonly tokenMode: string;
@@ -48,7 +76,12 @@ export interface ResolveContext {
 	 * `StudioEditorConfig.defaultTokenMode`.
 	 */
 	readonly defaultTokenMode?: string;
-	readonly componentDefaults?: Readonly<Record<string, NodeComponentDefaults>>;
+	/**
+	 * Defaults for **this target**. Previously a `Record<nodeId, …>`
+	 * that every caller indexed with the id it had just passed in;
+	 * target addressing makes the indirection pointless.
+	 */
+	readonly componentDefaults?: NodeComponentDefaults;
 }
 
 /** The resolved (post-token) authoring values for one node. */
@@ -61,6 +94,19 @@ export interface ResolvedNodeAuthoring {
 }
 
 type FamilyKey = "layout" | "style" | "typography";
+
+/**
+ * `StyleDefinition` names the visual family `style`; `AuthorStyle`
+ * names it `visual`. Both carry a `VisualStyleSpec`, so the cascade
+ * reads one key on definitions and the other on the target's authored
+ * style. Keeping the mapping in one table is what stops that rename
+ * turning into a silently-dropped family.
+ */
+const AUTHOR_FAMILY_KEY: Readonly<Record<FamilyKey, keyof AuthorStyle>> = {
+	layout: "layout",
+	style: "visual",
+	typography: "typography",
+};
 
 function familyOf(
 	definition: StyleDefinition | undefined,
@@ -78,19 +124,50 @@ function overrideAt(
 }
 
 /**
+ * One family's authored base value on a target.
+ *
+ * Replaces the `projectFamily` projection the style compiler used to
+ * run before calling in (`style-compiler/compile.ts`): rather than
+ * rebuilding a per-family `ResponsiveValue` for every target, the
+ * cascade now reads the family out of the authored `AuthorStyle`
+ * in place. Semantics are unchanged — an absent family and a `null`
+ * layer both read as "no contribution at this layer".
+ */
+function authorBaseAt(
+	style: ResponsiveValue<AuthorStyle> | undefined,
+	family: FamilyKey,
+): object | undefined {
+	return style?.base?.[AUTHOR_FAMILY_KEY[family]] as object | undefined;
+}
+
+/** One family's authored override at a breakpoint, `null` = absent. */
+function authorOverrideAt(
+	style: ResponsiveValue<AuthorStyle> | undefined,
+	family: FamilyKey,
+	breakpointId: string,
+): object | undefined {
+	const layer = style?.overrides?.[breakpointId];
+	if (layer === undefined || layer === null) {
+		return undefined;
+	}
+	const value = layer[AUTHOR_FAMILY_KEY[family]];
+	return value === undefined || value === null ? undefined : (value as object);
+}
+
+/**
  * Resolve the attached style definitions for a node at the current
  * viewport: the `styleRefs` list itself is responsive (narrowest
  * matching layer wins wholesale — reference lists replace, they do
  * not merge).
  */
 function resolveStyleRefs(
-	node: NodeAuthoringStateV1 | undefined,
+	target: TargetAppearance | undefined,
 	context: ResolveContext,
 ): {
 	readonly definitions: readonly StyleDefinition[];
 	readonly diagnostics: readonly EditorError[];
 } {
-	const refs = node?.styleRefs;
+	const refs = target?.styleRefs;
 	if (refs === undefined) {
 		return { definitions: [], diagnostics: [] };
 	}
@@ -107,7 +184,7 @@ function resolveStyleRefs(
 	const diagnostics: EditorError[] = [];
 	const definitions: StyleDefinition[] = [];
 	for (const id of active ?? []) {
-		const definition = context.authoring.styleDefinitions[id];
+		const definition = context.designSystem.styleDefinitions[id];
 		if (definition === undefined) {
 			diagnostics.push(
 				makeEditorError(
@@ -125,19 +202,18 @@ function resolveStyleRefs(
 
 function resolveFamily(
 	family: FamilyKey,
-	node: NodeAuthoringStateV1 | undefined,
+	target: TargetAppearance | undefined,
 	definitions: readonly StyleDefinition[],
 	context: ResolveContext,
-	nodeId: string,
 ): object {
-	const defaults = context.componentDefaults?.[nodeId]?.[family] as
+	const defaults = context.componentDefaults?.[family] as
 		| Partial<object>
 		| undefined;
-	const nodeFamily = node?.[family] as ResponsiveValue<object> | undefined;
+	const authored = target?.style;
 	const base = mergePropertyWise<object>(
 		defaults,
 		...definitions.map((definition) => familyOf(definition, family)?.base),
-		nodeFamily?.base,
+		authorBaseAt(authored, family),
 	);
 	return getMatchingBreakpoints(
 		context.breakpoints,
@@ -149,7 +225,7 @@ function resolveFamily(
 				...definitions.map((definition) =>
 					overrideAt(familyOf(definition, family), breakpoint.id),
 				),
-				overrideAt(nodeFamily, breakpoint.id),
+				authorOverrideAt(authored, family, breakpoint.id),
 			),
 		base,
 	);
@@ -162,7 +238,7 @@ function resolveFamily(
  * for one width — can substitute without inventing a `viewportWidth`.
  */
 export interface TokenSubstitutionContext {
-	readonly authoring: Pick<AuthoringStateV1, "tokens" | "tokenModes">;
+	readonly designSystem: Pick<DesignSystem, "tokens" | "tokenModes">;
 	readonly tokenMode: string;
 	/** §15.1 mode fallback; typically `StudioEditorConfig.defaultTokenMode`. */
 	readonly defaultTokenMode?: string;
@@ -188,8 +264,8 @@ export function substituteTokens(
 		const resolution = resolveToken(
 			value.tokenId,
 			context.tokenMode,
-			context.authoring.tokens,
-			context.authoring.tokenModes,
+			context.designSystem.tokens,
+			context.designSystem.tokenModes,
 			{ defaultModeId: context.defaultTokenMode },
 		);
 		if (resolution.status === "resolved") {
@@ -241,42 +317,49 @@ export function substituteTokens(
 }
 
 /**
- * Resolve everything the preview and export pipelines need for one
- * node (DD-0019 §24.3, verbatim structure).
+ * Resolve everything the preview, canvas and export pipelines need for
+ * one **style target** (DD-0019 §24.3 — cascade order unchanged).
+ *
+ * Renamed from `resolveNodeAuthoring` by `p2-002`. The old name became
+ * actively misleading once the input became a `TargetAppearance`: a
+ * node has many targets, and a node-addressed name is exactly the
+ * confusion report 0021 recorded when node-addressed reads stranded
+ * per-target state. Addressing here now matches
+ * `puck/read-appearance.ts`'s `TargetReadInput` and `p2-003`'s field
+ * reads by construction.
  */
-export function resolveNodeAuthoring(
-	nodeId: string,
+export function resolveTargetAppearance(
+	target: TargetAppearance | undefined,
 	context: ResolveContext,
 ): ResolvedNodeAuthoring {
-	const node = context.authoring.nodes[nodeId];
 	const { definitions, diagnostics: refDiagnostics } = resolveStyleRefs(
-		node,
+		target,
 		context,
 	);
 	const diagnostics: EditorError[] = [...refDiagnostics];
 
 	const layout = substituteTokens(
-		resolveFamily("layout", node, definitions, context, nodeId),
+		resolveFamily("layout", target, definitions, context),
 		context,
 		diagnostics,
 	) as Partial<LayoutSpec>;
 	const style = substituteTokens(
-		resolveFamily("style", node, definitions, context, nodeId),
+		resolveFamily("style", target, definitions, context),
 		context,
 		diagnostics,
 	) as Partial<VisualStyleSpec>;
 	const typography = substituteTokens(
-		resolveFamily("typography", node, definitions, context, nodeId),
+		resolveFamily("typography", target, definitions, context),
 		context,
 		diagnostics,
 	) as Partial<TypographySpec>;
 
-	let hidden = node?.hidden?.base === true;
+	let hidden = target?.hidden?.base === true;
 	for (const breakpoint of getMatchingBreakpoints(
 		context.breakpoints,
 		context.viewportWidth,
 	)) {
-		const entry = node?.hidden?.overrides?.[breakpoint.id];
+		const entry = target?.hidden?.overrides?.[breakpoint.id];
 		if (entry !== undefined && entry !== null) {
 			hidden = entry;
 		}
