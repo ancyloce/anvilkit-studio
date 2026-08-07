@@ -12,12 +12,12 @@
  * Two behaviours here exist because the spec calls for them
  * explicitly, and both are easy to get silently wrong:
  *
- * - **Compatible overrides survive a variant switch.** The engine's
- *   `switchInstanceVariant` keeps every override that still addresses
- *   a live node/property under the new selection and *reports* the
- *   rest. This hook surfaces that report as diagnostics rather than
- *   discarding it, so a dropped override is visible instead of being
- *   a mystery (ED-VARIANT-002).
+ * - **Compatible overrides survive a variant switch.**
+ *   `updateInstanceSelectionInData` keeps every override that still
+ *   addresses a live node/property under the new selection and
+ *   *reports* the rest as warnings. This hook surfaces that report as
+ *   diagnostics rather than discarding it, so a dropped override is
+ *   visible instead of being a mystery (ED-VARIANT-002).
  * - **An unresolvable definition retains its instance data.** Nothing
  *   here deletes `componentInstance` when a definition is missing;
  *   the instance keeps its overrides and re-resolves when the
@@ -31,9 +31,7 @@ import type {
 	EditorError,
 	ResponsiveLayerRef,
 } from "@anvilkit/contracts/editor";
-import type {
-	EditorCommandResult,
-} from "../../../editor/legacy/index.js";
+import type { EditorCommandResult } from "../../../editor/legacy/index.js";
 import {
 	use,
 	useCallback,
@@ -215,43 +213,45 @@ export function useComponentInstance(): ComponentInstanceModel | null {
 	 * Switch the instance's variant (ED-VARIANT-002).
 	 *
 	 * Overrides that still apply under the new combination survive;
-	 * the rest are dropped **with a visible diagnostic**. Producing
-	 * that diagnostic is this layer's job by design: `applyEditorCommand`
-	 * reduces `AuthoringStateV1` and returns only the next state, so
-	 * `switchInstanceVariant`'s `dropped` report is discarded by the
-	 * reducer — which left the "never silently" half of ED-VARIANT-002
-	 * unreachable. Re-running the pure switch against the pre-command
-	 * snapshot recovers it without changing the frozen reducer
-	 * signature; it is a pure function over a bounded object, and the
-	 * result is byte-identical to what the reducer computes.
+	 * the rest are dropped **with a visible diagnostic**.
+	 *
+	 * That diagnostic used to be unreachable: the sidecar reducer
+	 * returned only the next state, so the switch's `dropped` report
+	 * was discarded, and this hook had to re-run the pure switch
+	 * against the pre-command snapshot to recover it. The carrier
+	 * commit returns the warnings directly, so the shadow computation
+	 * is gone — the report now comes from the write that produced it
+	 * rather than from a replay that has to be kept in agreement.
 	 */
 	const setVariant = useCallback(
 		async (
 			selection: Readonly<Record<string, string>>,
 		): Promise<EditorCommandResult | null> => {
 			if (resolved === null || bridge == null || port == null) return null;
-			const before = port.getSnapshot().authoring;
-			const { droppedOverrideDiagnostics, switchInstanceVariant } =
-				await import("../../../editor/index.js");
-			const preview = switchInstanceVariant(
-				before,
+			const api = port.tryGetPuckApi?.() ?? null;
+			if (api === null) return null;
+			const { commitInstanceSelection } = await import(
+				"../../../puck/update-variants.js"
+			);
+			const result = commitInstanceSelection(
+				{ getPuckApi: () => api },
 				[resolved.nodeId],
 				selection,
 			);
-			const result = await dispatch(() => ({
-				type: "component.instance.variant.set",
-				instanceNodeIds: [resolved.nodeId],
-				selection,
-			}));
-			if (result !== null && result.status === "committed") {
-				bridge.diagnostics.setDiagnostics(DIAGNOSTIC_CHANNEL, [
-					...droppedOverrideDiagnostics(preview.dropped),
-					...result.errors.filter((error) => error.severity !== "error"),
-				]);
+			if (result.status === "committed") {
+				bridge.diagnostics.setDiagnostics(
+					DIAGNOSTIC_CHANNEL,
+					result.errors.filter((error) => error.severity !== "error"),
+				);
 			}
-			return result;
+			return {
+				status: result.status === "committed" ? "committed" : result.status,
+				revision: port.getSnapshot().revision,
+				changedNodeIds: result.resolvedNodeIds,
+				errors: result.errors,
+			};
 		},
-		[resolved, dispatch, bridge, port],
+		[resolved, bridge, port],
 	);
 
 	const resetOverride = useCallback(

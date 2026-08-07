@@ -1,20 +1,28 @@
 "use client";
 
 /**
- * @file `useCreateComponent` — create-component-from-selection wired
- * to the port (PLAN-0020 CORE-P2-004; ED-COMP-001; DD-0019 §14.3).
+ * @file `useCreateComponent` — create-component-from-selection
+ * (ED-COMP-001; DD-0019 §14.3).
  *
- * The whole creation — definition written to the sidecar, selected
- * nodes replaced by one instance node, selection moved to it — is a
- * single `commitNative` and therefore **one** history-recording
- * dispatch, so one undo restores the exact pre-creation document
- * (freeze D-3; CFX-C06).
+ * The whole creation — definition written to the `componentLibrary`
+ * root prop, selected nodes replaced by one instance node, selection
+ * moved to it — is a single history-recording `setData` dispatch, so
+ * one undo restores the exact pre-creation document (freeze D-3;
+ * CFX-C06).
  *
- * Entry-chunk safe: the engine loads through a dynamic `import()`
+ * **Repointed off the sidecar** onto `puck/create-component.ts`: the
+ * definition now lands on a declared root prop and the instance
+ * carrier on the instance node's own props, so `p3-009` can delete
+ * `editor/components/create.ts` without taking this behaviour with it.
+ * The public shape of {@link CreateComponentAction} is unchanged, so
+ * the toolbar and the naming dialog did not move.
+ *
+ * Entry-chunk safe: the reducer loads through a dynamic `import()`
  * inside the handler, matching `useEditorNativeActions`.
  */
 
 import type { EditorError } from "@anvilkit/contracts/editor";
+import type { PuckApi } from "@puckeditor/core";
 import { use, useCallback, useMemo, useSyncExternalStore } from "react";
 import type { InternalEditorCommandPort } from "../command-port.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
@@ -70,20 +78,23 @@ export function useCreateComponent(): CreateComponentAction | null {
 			if (bridge == null || port == null) {
 				return { status: "rejected", errors: [] };
 			}
-			const { buildCreateComponentPlan, validateCreateComponentSelection } =
-				await import("../../../editor/index.js");
+			// No mounted store means no document to commit against; refuse
+			// rather than report a no-op that reads as success.
+			const api = port.tryGetPuckApi?.() ?? null;
+			if (api === null) {
+				return { status: "rejected", errors: [] };
+			}
+			const getPuck = (): PuckApi => api;
+			const { commitCreateComponent, validateCreateComponentSelection } =
+				await import("../../../puck/create-component.js");
 			// Explicit ids win; they are still re-validated below against the
 			// CURRENT document, so a node deleted since the request was filed
 			// rejects with a message rather than capturing a stale set.
 			const selection = nodeIds ?? port.getSnapshot().selection.selectedIds;
-			const data = port.readData();
-			const authoring = port.getSnapshot().authoring;
+			const data = api.appState.data;
+			const config = api.config;
 
-			const errors = validateCreateComponentSelection(
-				data,
-				authoring,
-				selection,
-			);
+			const errors = validateCreateComponentSelection(data, config, selection);
 			if (errors.some((error) => error.severity === "error")) {
 				return { status: "rejected", errors };
 			}
@@ -92,25 +103,29 @@ export function useCreateComponent(): CreateComponentAction | null {
 			const instanceNodeId = crypto.randomUUID();
 			const timestamp = new Date().toISOString();
 
-			const result = port.commitNative((currentData, currentAuthoring) => {
-				const plan = buildCreateComponentPlan(currentData, currentAuthoring, {
+			const result = commitCreateComponent(
+				{ getPuckApi: getPuck },
+				{
 					nodeIds: selection,
 					name,
 					definitionId,
 					instanceNodeId,
 					timestamp,
-				});
-				return plan === null
-					? null
-					: { data: plan.data, authoring: plan.authoring };
-			});
+				},
+			);
 
-			if (result === "committed") {
+			if (result.status === "committed") {
 				// Freeze §7 selection mapping: the new instance is selected.
 				bridge.selection?.select(instanceNodeId);
 				return { status: "committed", errors, instanceNodeId };
 			}
-			return { status: result === "noop" ? "noop" : "rejected", errors };
+			return {
+				status: result.status === "noop" ? "noop" : "rejected",
+				// The commit re-validates against the document that actually
+				// arrived, so its verdict supersedes the pre-flight one when
+				// they disagree.
+				errors: result.errors.length > 0 ? result.errors : errors,
+			};
 		},
 		[bridge, port],
 	);
