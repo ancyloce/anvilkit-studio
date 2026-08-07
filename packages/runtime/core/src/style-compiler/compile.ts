@@ -30,24 +30,14 @@
 
 import type {
 	AnvilAppearance,
-	AuthorStyle,
 	DesignSystem,
 	EditorError,
-	LayoutSpec,
-	NodeAuthoringStateV1,
-	ResponsiveValue,
-	TargetAppearance,
-	TypographySpec,
-	VisualStyleSpec,
 } from "@anvilkit/contracts/editor";
-import type {
-	AuthoringStateV1,
-} from "../editor/legacy/index.js";
 import { safeParseDesignSystem } from "@anvilkit/schema/editor";
 import type { Config, Data } from "@puckeditor/core";
 import { walkTree } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
-import { resolveNodeAuthoring } from "../editor/resolve/node.js";
+import { resolveTargetAppearance } from "../editor/resolve/node.js";
 import { resolveAuthoringStyle } from "../editor/style/resolve-authoring-style.js";
 import {
 	type AuthorablePropertyLocation,
@@ -124,55 +114,6 @@ function readMetadataV2(config: Config): MetadataByType {
 		byType.set(type, targets);
 	}
 	return byType;
-}
-
-/** Project one family out of a `ResponsiveValue<AuthorStyle>`. */
-function projectFamily<K extends keyof AuthorStyle>(
-	style: ResponsiveValue<AuthorStyle> | undefined,
-	family: K,
-): ResponsiveValue<NonNullable<AuthorStyle[K]>> | undefined {
-	if (style === undefined) return undefined;
-	const base = style.base?.[family];
-	const overrides: Record<string, NonNullable<AuthorStyle[K]> | null> = {};
-	for (const [breakpointId, layer] of Object.entries(style.overrides ?? {})) {
-		if (layer === null) {
-			overrides[breakpointId] = null;
-			continue;
-		}
-		const projected = layer?.[family];
-		if (projected !== undefined && projected !== null) {
-			overrides[breakpointId] = projected as NonNullable<AuthorStyle[K]>;
-		}
-	}
-	const hasOverrides = Object.keys(overrides).length > 0;
-	if (base === undefined && !hasOverrides) return undefined;
-	return {
-		...(base !== undefined
-			? { base: base as NonNullable<AuthorStyle[K]> }
-			: {}),
-		...(hasOverrides ? { overrides } : {}),
-	};
-}
-
-/** Synthesize a v1 node record from one target's v2 appearance. */
-function syntheticRecord(target: TargetAppearance): NodeAuthoringStateV1 {
-	const layout = projectFamily(target.style, "layout") as
-		| ResponsiveValue<LayoutSpec>
-		| undefined;
-	const visual = projectFamily(target.style, "visual") as
-		| ResponsiveValue<VisualStyleSpec>
-		| undefined;
-	const typography = projectFamily(target.style, "typography") as
-		| ResponsiveValue<TypographySpec>
-		| undefined;
-	return {
-		version: "1",
-		...(layout !== undefined ? { layout } : {}),
-		...(visual !== undefined ? { style: visual } : {}),
-		...(typography !== undefined ? { typography } : {}),
-		...(target.styleRefs !== undefined ? { styleRefs: target.styleRefs } : {}),
-		...(target.hidden !== undefined ? { hidden: target.hidden } : {}),
-	};
 }
 
 /**
@@ -278,16 +219,14 @@ export function compileDocumentAppearance(
 	const tokenMode = input.tokenMode ?? designSystem.defaultTokenMode;
 
 	// 3. Synthetic v1 state per (node, target): the shared resolvers
-	// operate on AuthoringStateV1, so the design system becomes the
-	// document collections and each target becomes one node record.
 	// NUL is schema-invalid in every id, so the composite key can never
 	// collide with a real id (repo \u0000 convention).
 	const NODE_TARGET_SEP = "\u0000";
-	const syntheticNodes: Record<string, NodeAuthoringStateV1> = {};
+	const compositeIds: string[] = [];
 	const targetsByNode = new Map<string, string[]>();
 	for (const node of collected) {
 		const declared = metadata.get(node.type);
-		for (const [targetId, target] of Object.entries(
+		for (const [targetId] of Object.entries(
 			node.appearance.targets ?? {},
 		).sort(([a], [b]) => (a < b ? -1 : 1))) {
 			if (declared === undefined || !declared.has(targetId)) {
@@ -306,26 +245,12 @@ export function compileDocumentAppearance(
 				]);
 				continue;
 			}
-			syntheticNodes[`${node.nodeId}${NODE_TARGET_SEP}${targetId}`] =
-				syntheticRecord(target);
+			compositeIds.push(`${node.nodeId}${NODE_TARGET_SEP}${targetId}`);
 			const list = targetsByNode.get(node.nodeId) ?? [];
 			list.push(targetId);
 			targetsByNode.set(node.nodeId, list);
 		}
 	}
-
-	const authoring: AuthoringStateV1 = {
-		version: "1",
-		revision: 0,
-		breakpoints: designSystem.breakpoints,
-		nodes: syntheticNodes,
-		tokens: designSystem.tokens,
-		tokenModes: designSystem.tokenModes,
-		styleDefinitions: designSystem.styleDefinitions,
-		componentDefinitions: {},
-		interactions: {},
-		bindings: {},
-	};
 
 	// 4. Desktop-first layered emission — mirrors the export pipeline.
 	const enabled = [...designSystem.breakpoints]
@@ -344,7 +269,7 @@ export function compileDocumentAppearance(
 	const styledNodeIds = new Set<string>();
 	const targetManifest: Record<string, string[]> = {};
 
-	const syntheticIds = Object.keys(syntheticNodes).sort();
+	const syntheticIds = [...compositeIds].sort();
 	for (const syntheticId of syntheticIds) {
 		const [nodeId, targetId] = syntheticId.split(NODE_TARGET_SEP) as [
 			string,
@@ -381,8 +306,8 @@ export function compileDocumentAppearance(
 		let lastEmittedBody: string | undefined;
 		let lastEmittedHidden = false;
 		for (const layer of layers) {
-			const resolved = resolveNodeAuthoring(syntheticId, {
-				authoring,
+			const resolved = resolveTargetAppearance(targetValue, {
+				designSystem,
 				breakpoints: designSystem.breakpoints,
 				viewportWidth: layer.width,
 				tokenMode,
