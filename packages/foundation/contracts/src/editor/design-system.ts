@@ -34,11 +34,40 @@ export interface DocumentComponentLibrary {
 }
 
 /**
- * The root-prop surface a host page declares. Both members must be
- * declared as Puck root fields — the contract never relies on Puck
+ * One node's editor annotation (PLAN-0026 §3.6, ADR 0007 decision 1).
+ *
+ * **This shape is permanently closed: `name` and `locked`, nothing
+ * else.** Widening it requires the same scrutiny as adding a new root
+ * prop, and the reason is not stylistic — an annotations map that
+ * accepts arbitrary keys is the sidecar again under a new name, which
+ * is the exact thing this program exists to delete. The Zod mirror
+ * uses `strictObject` so an unknown key inside an entry is a
+ * validation error rather than silently-preserved freight, which is
+ * what makes "closed" enforceable instead of aspirational.
+ *
+ * Annotations are editor state *about* a node, not render state *of*
+ * it, which is why they live in a root prop rather than in component
+ * props. They are render-neutral and stripped at the IR boundary, so
+ * the four consumers see identical output with or without them.
+ */
+export interface EditorAnnotation {
+	readonly name?: string;
+	readonly locked?: boolean;
+}
+
+/** Node id → annotation. The one document-state addition of the rewrite. */
+export type EditorAnnotations = Readonly<Record<string, EditorAnnotation>>;
+
+/** The declared root prop key annotations live under. */
+export const EDITOR_ANNOTATIONS_PROP = "editorAnnotations";
+
+/**
+ * The root-prop surface a host page declares. Every member must be
+ * declared as a Puck root field — the contract never relies on Puck
  * incidentally preserving unknown root props.
  */
 export interface AnvilRootProps {
 	readonly designSystem?: DesignSystem;
 	readonly componentLibrary?: DocumentComponentLibrary;
+	readonly editorAnnotations?: EditorAnnotations;
 }

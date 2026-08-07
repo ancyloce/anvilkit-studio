@@ -77,10 +77,13 @@ export type {
 	VariantAxis,
 	VariantAxisOption,
 } from "./components.js";
+export { EDITOR_ANNOTATIONS_PROP } from "./design-system.js";
 export type {
 	AnvilRootProps,
 	DesignSystem,
 	DocumentComponentLibrary,
+	EditorAnnotation,
+	EditorAnnotations,
 } from "./design-system.js";
 export type { EditorError, EditorErrorCode } from "./errors.js";
 export type { EditorDiagnosticPort, EditorEvent } from "./events.js";
