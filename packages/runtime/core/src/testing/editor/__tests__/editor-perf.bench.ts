@@ -46,16 +46,15 @@ import { arch, platform } from "node:os";
 import { dirname, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import { fileURLToPath } from "node:url";
-import type {
-	EditorCommand,
-} from "../../../editor/legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	applyEditorCommand,
 	readAuthoringState,
-	resolveNodeAuthoring,
+	resolveTargetAppearance,
 	writeAuthoringState,
 } from "../../../editor/index.js";
+import type { EditorCommand } from "../../../editor/legacy/index.js";
+import { targetFromRecord } from "../../../editor/style/export-stylesheet.js";
 import { evaluateContractRules } from "../../../react/editor/a11y/contract-rules.js";
 import { filterLayerTree } from "../../../studio/layout/sidebar/modules/layer/hooks/layer-search.js";
 import type {
@@ -187,8 +186,8 @@ function measure(
 function fullResolve(profile: PerfProfile): number {
 	let resolved = 0;
 	for (const nodeId of Object.keys(profile.authoring.nodes)) {
-		resolveNodeAuthoring(nodeId, {
-			authoring: profile.authoring,
+		resolveTargetAppearance(targetFromRecord(profile.authoring.nodes[nodeId]), {
+			designSystem: profile.authoring,
 			breakpoints: profile.breakpoints,
 			viewportWidth: 900,
 			tokenMode: "light",

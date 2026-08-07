@@ -124,3 +124,10 @@ export type {
 	StudioSeoPanel,
 	StudioSidebarUnregister,
 } from "./sidebar.js";
+export type {
+	EditorApi,
+	EditorCommitApi,
+	EditorCommitOutcome,
+	EditorIntent,
+	EditorIntentOutcome,
+} from "./editor-api-v2.js";

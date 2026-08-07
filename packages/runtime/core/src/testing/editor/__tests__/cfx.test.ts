@@ -19,12 +19,6 @@ import type {
 	DesignToken,
 	SerializablePuckNode,
 } from "@anvilkit/contracts/editor";
-import type {
-	EditorCommandBase,
-} from "../../../editor/legacy/index.js";
-import type {
-	AuthoringStateV1,
-} from "../../../editor/legacy/index.js";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
 import {
 	ComponentInstanceStateSchema,
@@ -44,13 +38,18 @@ import {
 	isDetachFailure,
 	materializeInstance,
 	orphanOverrideDiagnostics,
-	resolveNodeAuthoring,
+	resolveTargetAppearance,
 	resolveToken,
 	runtimeNodeId,
 	switchInstanceVariant,
 	unresolvedInstanceDiagnostics,
 	validateAtomicCommand,
 } from "../../../editor/index.js";
+import type {
+	AuthoringStateV1,
+	EditorCommandBase,
+} from "../../../editor/legacy/index.js";
+import { targetFromRecord } from "../../../editor/style/export-stylesheet.js";
 import {
 	CFX_IDS,
 	certify,
@@ -318,13 +317,14 @@ describe("ADR 0005 Appendix A — component fixtures", () => {
 			},
 		};
 		const ctx = (width: number) => ({
-			authoring: responsive,
+			designSystem: responsive,
 			breakpoints: responsive.breakpoints,
 			viewportWidth: width,
 			tokenMode: "light",
 		});
-		expect(resolveNodeAuthoring("n1", ctx(1400)).layout.gap).toEqual(px(2));
-		expect(resolveNodeAuthoring("n1", ctx(800)).layout.gap).toEqual(px(9));
+		const n1 = targetFromRecord(responsive.nodes.n1);
+		expect(resolveTargetAppearance(n1, ctx(1400)).layout.gap).toEqual(px(2));
+		expect(resolveTargetAppearance(n1, ctx(800)).layout.gap).toEqual(px(9));
 		certify("CFX-C05");
 	});
 
