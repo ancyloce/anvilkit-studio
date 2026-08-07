@@ -23,7 +23,6 @@
  * an editor with no adapter has nothing to offer.
  */
 
-import type { BindingTarget, Binding } from "@anvilkit/contracts/editor";
 import { type ReactNode, useMemo, useState } from "react";
 import { Button } from "@/primitives/button";
 import { Input } from "@/primitives/input";
@@ -36,50 +35,17 @@ import {
 	SelectValue,
 } from "@/primitives/select";
 import { useMsg } from "@/state/editor-i18n-context";
-import {
-	evaluateExpression,
-	type PreviewDataResult,
-} from "../../../editor/index.js";
+import { evaluateExpression } from "../../../editor/index.js";
 import type { InspectorSectionProps } from "../inspector/sections-registry.js";
+import {
+	BindingPreviewStatus,
+	buildBindingTarget,
+	splitPath,
+	summarizeBinding as summarize,
+	TARGET_KINDS,
+	type TargetKind,
+} from "./binding-form.js";
 import { useBindingEditor } from "./use-binding-editor.js";
-
-/** What a binding can drive (`BindingTarget` minus its payloads). */
-const TARGET_KINDS = ["prop", "visibility", "repeat"] as const;
-type TargetKind = (typeof TARGET_KINDS)[number];
-
-/** Build a `BindingTarget` from the form's fields. */
-function buildTarget(
-	kind: TargetKind,
-	propPath: string,
-	itemName: string,
-): BindingTarget {
-	if (kind === "visibility") return { type: "visibility" };
-	if (kind === "repeat") {
-		return { type: "repeat", itemName: itemName.trim() || "item" };
-	}
-	return {
-		type: "prop",
-		path: propPath
-			.split(".")
-			.map((segment) => segment.trim())
-			.filter((segment) => segment !== ""),
-	};
-}
-
-/** One-line summary of an existing binding. */
-function summarize(binding: Binding): string {
-	const target =
-		binding.target.type === "prop"
-			? `prop ${binding.target.path.join(".")}`
-			: binding.target.type === "repeat"
-				? `repeat as ${binding.target.itemName}`
-				: "visibility";
-	const expression =
-		binding.expression.type === "path"
-			? `${binding.expression.root}.${binding.expression.path.join(".")}`
-			: binding.expression.type;
-	return `${target} ← ${expression}`;
-}
 
 /** The §19 bindings editor; `null` when the host has no adapter. */
 export function BindingsSection({ context }: InspectorSectionProps): ReactNode {
@@ -102,14 +68,7 @@ export function BindingsSection({ context }: InspectorSectionProps): ReactNode {
 	const resolved = useMemo(() => {
 		if (preview?.status !== "data") return null;
 		return evaluateExpression(
-			{
-				type: "path",
-				root: "data",
-				path: dataPath
-					.split(".")
-					.map((segment) => segment.trim())
-					.filter((segment) => segment !== ""),
-			},
+			{ type: "path", root: "data", path: splitPath(dataPath) },
 			{ data: preview.value },
 		);
 	}, [preview, dataPath]);
@@ -121,11 +80,8 @@ export function BindingsSection({ context }: InspectorSectionProps): ReactNode {
 		setBusy(true);
 		try {
 			await editor.saveBinding({
-				target: buildTarget(kind, propPath, itemName),
-				dataPath: dataPath
-					.split(".")
-					.map((segment) => segment.trim())
-					.filter((segment) => segment !== ""),
+				target: buildBindingTarget(kind, propPath, itemName),
+				dataPath: splitPath(dataPath),
 			});
 		} finally {
 			setBusy(false);
@@ -241,7 +197,7 @@ export function BindingsSection({ context }: InspectorSectionProps): ReactNode {
 				data-testid="ak-binding-path"
 			/>
 
-			<PreviewStatus preview={preview} resolved={resolved} />
+			<BindingPreviewStatus preview={preview} resolved={resolved} />
 
 			<Button
 				type="button"
@@ -268,63 +224,5 @@ export function BindingsSection({ context }: InspectorSectionProps): ReactNode {
 				</ul>
 			) : null}
 		</div>
-	);
-}
-
-/**
- * Preview + path resolution feedback.
- *
- * Every §19 containment failure gets a distinct message: an author who
- * hit the 2 MiB cap must not be told their data is empty.
- */
-function PreviewStatus({
-	preview,
-	resolved,
-}: {
-	readonly preview: PreviewDataResult | null;
-	readonly resolved: ReturnType<typeof evaluateExpression> | null;
-}): ReactNode {
-	const msg = useMsg();
-	if (preview === null) return null;
-
-	if (preview.status === "failed") {
-		return (
-			<p
-				className="text-[11px] text-[var(--ak-studio-danger-fg,#b42318)]"
-				data-testid="ak-binding-preview-failed"
-				data-reason={preview.reason}
-			>
-				{msg(`studio.editor.binding.preview.${preview.reason}`)}
-			</p>
-		);
-	}
-
-	if (resolved === null) return null;
-
-	if (resolved.status === "value") {
-		return (
-			<p
-				className="truncate text-[11px] text-[var(--ak-studio-muted-fg)]"
-				data-testid="ak-binding-preview-value"
-			>
-				{JSON.stringify(resolved.value).slice(0, 120)}
-			</p>
-		);
-	}
-
-	// `missing` and `rejected` are different problems: a path that is not
-	// there yet vs one the evaluator refused to walk.
-	return (
-		<p
-			className="text-[11px] text-[var(--ak-studio-danger-fg,#b42318)]"
-			data-testid="ak-binding-preview-unresolved"
-			data-status={resolved.status}
-		>
-			{msg(
-				resolved.status === "missing"
-					? "studio.editor.binding.preview.missingPath"
-					: "studio.editor.binding.preview.rejectedPath",
-			)}
-		</p>
 	);
 }
