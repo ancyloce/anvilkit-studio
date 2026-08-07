@@ -261,6 +261,25 @@ export function listUsedEditorFeatures(
 	const used: EditorFeatureId[] = [];
 	const records = Object.values(authoring.nodes);
 
+	// Carrier signals, collected once (`p2-007`). Every check below is
+	// `sidecar || carrier`: BOTH document forms exist until the store
+	// migration in `p7-002`, so detecting from only one of them is how
+	// the gate went blind. Dropping the sidecar half now would move the
+	// silent failure rather than fix it.
+	const carrier: CarrierSignals = {
+		responsive: false,
+		tokens: false,
+		styleDefinitions: false,
+		localComponents: false,
+		variants: false,
+		interactions: false,
+		bindings: false,
+	};
+	if (document != null) {
+		collectCarrierSignals(document, carrier);
+		if (referencesToken(document)) carrier.tokens = true;
+	}
+
 	const hasResponsiveOverride = records.some((record) =>
 		(["hidden", "layout", "style", "typography", "styleRefs"] as const).some(
 			(family) => {
@@ -274,14 +293,19 @@ export function listUsedEditorFeatures(
 			},
 		),
 	);
-	if (authoring.breakpoints.length > 0 || hasResponsiveOverride) {
+	if (
+		authoring.breakpoints.length > 0 ||
+		hasResponsiveOverride ||
+		carrier.responsive
+	) {
 		used.push("responsive");
 	}
 
 	if (
 		Object.keys(authoring.tokens).length > 0 ||
 		Object.keys(authoring.tokenModes).length > 0 ||
-		records.some(referencesToken)
+		records.some(referencesToken) ||
+		carrier.tokens
 	) {
 		used.push("tokens");
 	}
@@ -296,7 +320,11 @@ export function listUsedEditorFeatures(
 			)
 		);
 	});
-	if (Object.keys(authoring.styleDefinitions).length > 0 || hasStyleRefs) {
+	if (
+		Object.keys(authoring.styleDefinitions).length > 0 ||
+		hasStyleRefs ||
+		carrier.styleDefinitions
+	) {
 		used.push("styleDefinitions");
 	}
 
@@ -305,7 +333,8 @@ export function listUsedEditorFeatures(
 		.filter((instance) => instance !== undefined);
 	if (
 		Object.keys(authoring.componentDefinitions).length > 0 ||
-		instances.length > 0
+		instances.length > 0 ||
+		carrier.localComponents
 	) {
 		used.push("localComponents");
 	}
@@ -317,21 +346,24 @@ export function listUsedEditorFeatures(
 		) ||
 		instances.some(
 			(instance) => Object.keys(instance.variantSelection).length > 0,
-		)
+		) ||
+		carrier.variants
 	) {
 		used.push("variants");
 	}
 
 	if (
 		Object.keys(authoring.interactions).length > 0 ||
-		records.some((record) => (record.interactionRefs?.length ?? 0) > 0)
+		records.some((record) => (record.interactionRefs?.length ?? 0) > 0) ||
+		carrier.interactions
 	) {
 		used.push("interactions");
 	}
 
 	if (
 		Object.keys(authoring.bindings).length > 0 ||
-		records.some((record) => (record.bindingRefs?.length ?? 0) > 0)
+		records.some((record) => (record.bindingRefs?.length ?? 0) > 0) ||
+		carrier.bindings
 	) {
 		used.push("bindings");
 	}
@@ -344,6 +376,202 @@ export function listUsedEditorFeatures(
 	}
 
 	return used;
+}
+
+/** The carrier signals a feature scan needs, collected in one walk. */
+interface CarrierSignals {
+	responsive: boolean;
+	tokens: boolean;
+	styleDefinitions: boolean;
+	localComponents: boolean;
+	variants: boolean;
+	interactions: boolean;
+	bindings: boolean;
+}
+
+function hasOverrides(value: unknown): boolean {
+	if (typeof value !== "object" || value === null) return false;
+	const overrides = (value as { overrides?: unknown }).overrides;
+	return (
+		typeof overrides === "object" &&
+		overrides !== null &&
+		Object.keys(overrides as object).length > 0
+	);
+}
+
+function nonEmptyRecord(value: unknown): boolean {
+	return (
+		typeof value === "object" &&
+		value !== null &&
+		!Array.isArray(value) &&
+		Object.keys(value as object).length > 0
+	);
+}
+
+/**
+ * Collect every feature signal a **carrier** document carries
+ * (`p2-007`).
+ *
+ * This is the half that did not exist. Before it, every feature except
+ * `richText` was derived from the sidecar — which is permanently empty
+ * on a carrier document — so the export preflight saw no features and
+ * **passed silently where it should block** (PLAN-0026 §3.8.6 blocker
+ * 2, DD-0019 `ED-FA-017`).
+ *
+ * Read locations are the declared carriers exactly as
+ * `DocumentModel` projects them: node props `appearance`,
+ * `interactions`, `bindings` and the component-instance link, and root
+ * props `designSystem` / `componentLibrary`.
+ *
+ * It cannot consume `DocumentModel` itself — that lives in
+ * `@anvilkit/core`, and `ir` is a foundation package that must not
+ * import runtime (this file's own header states the rule, and
+ * `check-no-headless-import` enforces it). So it reads the same
+ * declared locations, generically: one depth-capped walk of the whole
+ * object rather than a fixed field list, matching
+ * {@link containsTiptapDocument} and {@link referencesToken}. A
+ * container shape this walk does not know — Puck `Data`, `PageIR`, or
+ * a future one — therefore cannot hide a feature from the gate.
+ */
+function collectCarrierSignals(
+	value: unknown,
+	signals: CarrierSignals,
+	depth = 0,
+): void {
+	if (depth > 64 || typeof value !== "object" || value === null) return;
+	if (Array.isArray(value)) {
+		for (const entry of value) collectCarrierSignals(entry, signals, depth + 1);
+		return;
+	}
+	const record = value as Record<string, unknown>;
+
+	// Root prop: the design system.
+	const designSystem = record.designSystem;
+	if (typeof designSystem === "object" && designSystem !== null) {
+		const ds = designSystem as Record<string, unknown>;
+		if (Array.isArray(ds.breakpoints) && ds.breakpoints.length > 0) {
+			signals.responsive = true;
+		}
+		if (nonEmptyRecord(ds.tokens) || nonEmptyRecord(ds.tokenModes)) {
+			signals.tokens = true;
+		}
+		if (nonEmptyRecord(ds.styleDefinitions)) signals.styleDefinitions = true;
+	}
+
+	// Root prop: the component library.
+	const library = record.componentLibrary;
+	if (typeof library === "object" && library !== null) {
+		const definitions = (library as { definitions?: unknown }).definitions;
+		if (nonEmptyRecord(definitions)) {
+			signals.localComponents = true;
+			for (const definition of Object.values(
+				definitions as Record<string, unknown>,
+			)) {
+				const def = definition as Record<string, unknown> | null;
+				if (
+					(Array.isArray(def?.variantAxes) && def.variantAxes.length > 0) ||
+					(Array.isArray(def?.variants) && def.variants.length > 0)
+				) {
+					signals.variants = true;
+				}
+			}
+		}
+	}
+
+	// Node prop: the appearance carrier.
+	const appearance = record.appearance;
+	if (typeof appearance === "object" && appearance !== null) {
+		const targets = (appearance as { targets?: unknown }).targets;
+		if (typeof targets === "object" && targets !== null) {
+			for (const target of Object.values(targets as Record<string, unknown>)) {
+				if (typeof target !== "object" || target === null) continue;
+				const t = target as Record<string, unknown>;
+				if (
+					hasOverrides(t.style) ||
+					hasOverrides(t.hidden) ||
+					hasOverrides(t.styleRefs)
+				) {
+					signals.responsive = true;
+				}
+				const refs = t.styleRefs as
+					| { base?: unknown; overrides?: Record<string, unknown> }
+					| undefined;
+				if (
+					(Array.isArray(refs?.base) && refs.base.length > 0) ||
+					Object.values(refs?.overrides ?? {}).some(
+						(entry) => Array.isArray(entry) && entry.length > 0,
+					)
+				) {
+					signals.styleDefinitions = true;
+				}
+			}
+		}
+	}
+
+	// Node props: the interaction and binding carriers.
+	if (Array.isArray(record.interactions) && record.interactions.length > 0) {
+		signals.interactions = true;
+	}
+	if (Array.isArray(record.bindings) && record.bindings.length > 0) {
+		signals.bindings = true;
+	}
+
+	// Node prop: the component-instance link. Both spellings are read
+	// while the `p7-002` rename is in flight (time-boxed, see
+	// `@anvilkit/core`'s `document-model/materialize.ts`).
+	for (const key of ["anvilComponentInstance", "__anvilkitInstance"]) {
+		const instance = record[key];
+		if (typeof instance === "object" && instance !== null) {
+			const link = instance as Record<string, unknown>;
+			if (typeof link.definitionId === "string") {
+				signals.localComponents = true;
+				if (nonEmptyRecord(link.variantSelection)) signals.variants = true;
+			}
+		}
+	}
+
+	for (const entry of Object.values(record)) {
+		collectCarrierSignals(entry, signals, depth + 1);
+	}
+}
+
+/**
+ * The empty sidecar a canonical carrier document has.
+ *
+ * Frozen and module-scoped so {@link listUsedDocumentFeatures} costs
+ * no allocation per call.
+ */
+const NO_SIDECAR: AuthoringStateV1 = Object.freeze({
+	version: "1",
+	revision: 0,
+	breakpoints: Object.freeze([]),
+	nodes: Object.freeze({}),
+	tokens: Object.freeze({}),
+	tokenModes: Object.freeze({}),
+	styleDefinitions: Object.freeze({}),
+	componentDefinitions: Object.freeze({}),
+	interactions: Object.freeze({}),
+	bindings: Object.freeze({}),
+}) as AuthoringStateV1;
+
+/**
+ * Feature scan for a **canonical carrier document** — the entry point
+ * a caller uses when there is no sidecar to read (`p2-007`).
+ *
+ * Added so consumers stop parsing a sidecar purely to satisfy an
+ * argument. The studio editor page did exactly that: it called
+ * `readAuthoringState(publishedData).state` on every export click, on
+ * documents that have no sidecar, to feed a scan that then reported
+ * nothing.
+ *
+ * Additive on purpose — {@link listUsedEditorFeatures} keeps its
+ * signature, so pre-finalization callers that genuinely hold a sidecar
+ * are unaffected until `p7-002` retires that form.
+ */
+export function listUsedDocumentFeatures(
+	document: EditorFeatureScanDocument | null | undefined,
+): readonly EditorFeatureId[] {
+	return listUsedEditorFeatures(NO_SIDECAR, document);
 }
 
 /**

@@ -1,3 +1,4 @@
+import { EDITOR_ANNOTATIONS_PROP } from "@anvilkit/contracts/editor";
 import type {
 	ExportWarning,
 	PageIR,
@@ -323,6 +324,14 @@ export function puckDataToIR(
 				root.props as Record<string, unknown>,
 			)) {
 				if (key === "id") continue;
+				// `editorAnnotations` is editor state ABOUT nodes, not render
+				// state OF them, so it is stripped here — at the ONE IR
+				// boundary every export format crosses (`p3-006`, PLAN-0026
+				// §3.6). Doing it per format would work until someone adds
+				// the thirteenth format and forgets; doing it here means a
+				// format cannot emit annotations even if it tries, because
+				// the IR it renders from never carried them.
+				if (key === EDITOR_ANNOTATIONS_PROP) continue;
 				rootRawProps[key] = value;
 			}
 		}
