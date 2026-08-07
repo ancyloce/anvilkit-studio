@@ -38,6 +38,7 @@
 import type { EditorError } from "@anvilkit/contracts/editor";
 import type { Data, PuckApi } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
+import { isNodeLocked } from "./update-annotations.js";
 import { duplicateNode, removeNode } from "../react/editor/native-tree.js";
 
 /** Puck's root zone, in the only form `dispatch` honours. */
@@ -270,6 +271,20 @@ function permits(
 	}
 }
 
+/**
+ * The locked nodes among `nodeIds` (`p3-006`).
+ *
+ * `p3-005` deliberately left this unwired: nothing wrote
+ * `editorAnnotations` then, so a lock check would have read `undefined`
+ * for every node and passed everything — support that looks present and
+ * isn't. Now that the carrier exists, a locked node cannot be moved or
+ * deleted through this surface.
+ */
+function lockedAmong(api: PuckApi, nodeIds: readonly string[]): string[] {
+	const data = api.appState.data as Data;
+	return nodeIds.filter((id) => isNodeLocked(data, id));
+}
+
 function commit(
 	deps: TreeCommitDeps,
 	run: (data: Data) => UpdateTreeResult,
@@ -317,6 +332,8 @@ export function commitDeleteNodes(
 	nodeIds: readonly string[],
 ): TreeCommitResult {
 	const api = deps.getPuckApi();
+	const locked = lockedAmong(api, nodeIds);
+	if (locked.length > 0) return denied(locked, "delete");
 	const blocked = nodeIds.filter((id) => !permits(api, id, "delete"));
 	if (blocked.length > 0) return denied(blocked, "delete");
 	return commit(deps, (data) => deleteNodesInData(data, nodeIds));
@@ -328,6 +345,9 @@ export function commitDuplicateNodes(
 	nodeIds: readonly string[],
 ): TreeCommitResult {
 	const api = deps.getPuckApi();
+	// A locked node may be duplicated (the COPY is not locked), but the
+	// source must not be mutated — duplication does not mutate it, so
+	// only the Puck-level permission applies here.
 	const blocked = nodeIds.filter((id) => !permits(api, id, "duplicate"));
 	if (blocked.length > 0) return denied(blocked, "duplicate");
 	return commit(deps, (data) => duplicateNodesInData(data, nodeIds));
@@ -339,6 +359,9 @@ export function commitReorderNode(
 	input: Omit<ReorderNodeInput, "data">,
 ): TreeCommitResult {
 	const api = deps.getPuckApi();
+	if (lockedAmong(api, [input.nodeId]).length > 0) {
+		return denied([input.nodeId], "reorder");
+	}
 	if (!permits(api, input.nodeId, "drag")) {
 		return denied([input.nodeId], "reorder");
 	}

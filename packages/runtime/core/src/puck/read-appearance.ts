@@ -22,6 +22,7 @@ import type {
 	ComponentInstanceState,
 	DesignSystem,
 	DocumentComponentLibrary,
+	EditorAnnotations,
 	Interaction,
 	ResolvedValue,
 	ResponsiveLayerRef,
@@ -35,6 +36,7 @@ import {
 	InteractionSchema,
 	safeParseAppearance,
 	safeParseDesignSystem,
+	safeParseEditorAnnotations,
 } from "@anvilkit/schema/editor";
 
 /** Shared empty carriers, so an absent carrier is reference-stable. */
@@ -166,6 +168,18 @@ export function documentDesignSystem(data: Data): DesignSystem | undefined {
 		?.designSystem;
 	if (raw === undefined) return undefined;
 	const parsed = safeParseDesignSystem(raw);
+	return parsed.success ? parsed.data : undefined;
+}
+
+/**
+ * Validate an annotations map (`p3-006`). Reached through this module
+ * for the same `check:no-headless-import` reason as the parsers above.
+ */
+export function parseEditorAnnotations(
+	raw: unknown,
+): EditorAnnotations | undefined {
+	if (raw === undefined) return undefined;
+	const parsed = safeParseEditorAnnotations(raw);
 	return parsed.success ? parsed.data : undefined;
 }
 
