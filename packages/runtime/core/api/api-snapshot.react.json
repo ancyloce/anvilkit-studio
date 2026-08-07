@@ -9799,9 +9799,9 @@
 			"sources": [
 				{
 					"fileName": "packages/runtime/core/src/react/components/Studio.tsx",
-					"line": 479,
+					"line": 474,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L479"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L474"
 				}
 			],
 			"signatures": [
@@ -9814,9 +9814,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/Studio.tsx",
-							"line": 479,
+							"line": 474,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L479"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L474"
 						}
 					],
 					"typeParameters": [

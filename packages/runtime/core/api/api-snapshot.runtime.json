@@ -2205,11 +2205,11 @@
 						"types": [
 							{
 								"type": "literal",
-								"value": "secondary"
+								"value": "overflow"
 							},
 							{
 								"type": "literal",
-								"value": "overflow"
+								"value": "secondary"
 							},
 							{
 								"type": "literal",
@@ -2615,11 +2615,11 @@
 						"types": [
 							{
 								"type": "literal",
-								"value": "secondary"
+								"value": "overflow"
 							},
 							{
 								"type": "literal",
-								"value": "overflow"
+								"value": "secondary"
 							},
 							{
 								"type": "literal",

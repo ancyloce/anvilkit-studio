@@ -1679,12 +1679,12 @@
 					"type": {
 						"type": "reference",
 						"target": {
-							"packageName": "@anvilkit/contracts",
-							"packagePath": "src/editor/authoring-state.ts",
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/editor/legacy/authoring-state.ts",
 							"qualifiedName": "AuthoringStateV1"
 						},
 						"name": "AuthoringStateV1",
-						"package": "@anvilkit/contracts"
+						"package": "@anvilkit/core"
 					}
 				},
 				{
@@ -2894,12 +2894,12 @@
 					"type": {
 						"type": "reference",
 						"target": {
-							"packageName": "@anvilkit/contracts",
-							"packagePath": "src/editor/authoring-state.ts",
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/editor/legacy/authoring-state.ts",
 							"qualifiedName": "AuthoringStateV1"
 						},
 						"name": "AuthoringStateV1",
-						"package": "@anvilkit/contracts"
+						"package": "@anvilkit/core"
 					}
 				}
 			]
