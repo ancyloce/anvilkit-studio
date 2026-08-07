@@ -171,6 +171,17 @@ jobs:
       - name: Validate retained-submodule contracts
         run: node scripts/check-submodule-contracts.mjs
 
+      # PLAN-0026 §6 / PLAN-0028 `p0-002`: the canonical-rewrite tombstone
+      # gate. ADVISORY until `p8-011` flips it to blocking — it reports the
+      # countdown of surviving sidecar/version vocabulary without failing
+      # the build, so the rewrite's progress is visible on every PR. It is a
+      # pure source scan (no build needed), so it runs before `pnpm build`
+      # and costs seconds. Blocking mode is the same command without the
+      # flag; `p8-011` also prunes the list to empty, which the script's own
+      # shrink rule then asserts.
+      - name: Banned-identifier tombstone gate (advisory)
+        run: node scripts/check-banned-identifiers.mjs --advisory
+
       # `check:all` and the size budgets inspect `dist/`, so build first.
       - name: Build workspace
         run: pnpm build
