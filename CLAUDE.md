@@ -129,7 +129,7 @@ Non-negotiable. A violation is **architecture-blocking**: stop and resolve it be
 1. **Puck is the sole editor contract.** `Config` + `Data` + the public `PuckApi` + `Render` are the only underlying contract. Nothing else may define what a document is or how it renders.
 2. **Render state lives in declared fields.** Node-level render state must live in declared component props/fields; document-level state must live in declared root props/fields. No state that affects rendering may live anywhere else.
 3. **One pipeline, four consumers.** Editor, preview, production rendering, and export must use the same `Config`, the same `Data`, the same migrations, and the same pure rendering/style pipeline. A behavioural difference between them is a bug, not a feature.
-4. **Use the public surface.** Puck public APIs, Composition, `walkTree`, and `transformProps` — all four are present in `@puckeditor/core@0.22.4`'s published types.
+4. **Use the public surface.** Puck public APIs, Composition, `walkTree`, and `transformProps` — all four are present in `@puckeditor/core@0.23.0`'s published types.
 5. **Never introduce** a parallel IR, an opaque root sidecar, a duplicated render pipeline, a dependency on undocumented Puck internals, or experimental Overrides as core architecture.
 6. **Compliance must be explicit.** Every PRD, technical design, implementation plan, and code change must state how it satisfies this contract. Silence is not compliance.
 7. **On conflict, stop.** If a requirement cannot be met within this contract, do not implement it — propose a Puck-native alternative or a migration path first, and get agreement before writing code.
