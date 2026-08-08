@@ -17,13 +17,22 @@
  * then see a one-node selection instead of throwing, and every read
  * address stays plural either way.
  *
+ * The **other** degraded direction matters too, and `p5-006` added it:
+ * a caller can also have the bridge and *not* be inside `<Puck>` —
+ * `StudioEditorMount` WRAPS `<Puck>` (`react/components/Studio.tsx:360`),
+ * so everything `EditorRoot` renders (the canvas overlay, the
+ * component naming dialog) sits outside the provider. Reading Puck's
+ * fallback selection through {@link useOptionalReactivePuck} means
+ * those surfaces read the controller normally and simply have no
+ * fallback, instead of crashing on a provider they were never inside.
+ *
  * **Editor state, not document state.** Selection never enters `Data`
  * and never records history, the same rule as {@link useWriteLayer}.
  */
 
 import type { EditorSelectionState } from "@anvilkit/contracts/editor";
 import { useCallback, useSyncExternalStore } from "react";
-import { useReactivePuck } from "../../overrides/utils/use-reactive-puck.js";
+import { useOptionalReactivePuck } from "../../utils/use-reactive-puck.js";
 import { useOptionalStudioEditor } from "../use-studio-editor.js";
 
 /** The selection as the composition panels consume it. */
@@ -72,12 +81,12 @@ export function useShellSelection(): ShellSelection {
 
 	// Puck's own selection: the fallback when no controller is installed,
 	// and read unconditionally so the hook order never varies.
-	const puckSelectedId = useReactivePuck((snapshot) => {
+	const puckSelectedId = useOptionalReactivePuck((snapshot) => {
 		const props = snapshot.selectedItem?.props as
 			| { readonly id?: string }
 			| undefined;
 		return typeof props?.id === "string" ? props.id : null;
-	});
+	}, null);
 
 	if (state === null) {
 		return {

@@ -25,7 +25,7 @@ import type { AppearanceCompilerCache } from "../../../style-compiler/cache.js";
 import { createAppearanceCompilerCache } from "../../../style-compiler/cache.js";
 import type { CompiledAppearance } from "../../../style-compiler/compile.js";
 import { compileDocumentAppearance } from "../../../style-compiler/compile.js";
-import { useReactivePuck } from "../../overrides/utils/use-reactive-puck.js";
+import { useReactivePuck } from "../../utils/use-reactive-puck.js";
 
 export interface UseCompiledAppearanceOptions {
 	/** Active token mode; defaults to the design system's default. */

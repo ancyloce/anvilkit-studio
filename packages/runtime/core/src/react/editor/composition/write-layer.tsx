@@ -24,7 +24,16 @@
  */
 
 import type { ResponsiveLayerRef } from "@anvilkit/contracts/editor";
-import { createContext, type ReactNode, use, useMemo, useState } from "react";
+import {
+	createContext,
+	type ReactNode,
+	use,
+	useCallback,
+	useMemo,
+	useState,
+	useSyncExternalStore,
+} from "react";
+import { useOptionalStudioEditor } from "../use-studio-editor.js";
 
 /** The shell's active write layer plus its setter. */
 export interface ShellWriteLayer {
@@ -40,7 +49,9 @@ export interface ShellWriteLayer {
  */
 const BASE_ONLY: ShellWriteLayer = Object.freeze({
 	layer: "base" as const,
-	setLayer: () => {},
+	setLayer: () => {
+		// Intentionally empty: with no provider there is no layer to move.
+	},
 });
 
 const WriteLayerContext = createContext<ShellWriteLayer>(BASE_ONLY);
@@ -96,4 +107,63 @@ export function WriteLayerProvider({
  */
 export function useWriteLayer(): ShellWriteLayer {
 	return use(WriteLayerContext);
+}
+
+/**
+ * Bind the shell's write layer to the **viewport controller**, which is
+ * the editor's pre-existing owner of "which layer am I authoring into"
+ * (`ResponsiveEditorState.activeBreakpoint`).
+ *
+ * ### Why this exists, and why a plain context was not enough
+ *
+ * The canvas overlay renders *outside* `<Puck>` — `StudioEditorMount`
+ * mounts `EditorRoot` as a sibling of the Puck subtree, and
+ * `createPortal` keeps React context at the point of render, so no
+ * canvas component can read a context provided inside the shell. The
+ * canvas therefore reads the layer through the bridge
+ * (`bridge.responsive.getActiveLayer()`), as do
+ * `inspector/use-inspector.ts` and `tokens/use-design-system.ts`.
+ *
+ * A shell-local `useState` would have made the composition panels a
+ * *second* source: the Style panel could write `md` while the canvas
+ * handles wrote `base`. That is precisely the defect `p4-004` exists to
+ * prevent, and a context alone cannot prevent it across a portal
+ * boundary. So the provider is driven as a **controlled** value off the
+ * one controller both sides already see — the panels and the canvas
+ * then read the same state through two different transports rather than
+ * holding two states.
+ *
+ * Degrades honestly: with no editor bridge (a bare `<Puck>`) the layer
+ * is `undefined` here, which leaves {@link WriteLayerProvider}
+ * uncontrolled and authoring goes to `base`.
+ */
+export function useViewportWriteLayer(): {
+	readonly layer: ResponsiveLayerRef | undefined;
+	readonly setLayer: (next: ResponsiveLayerRef) => void;
+} {
+	const viewport = useOptionalStudioEditor()?.viewport ?? null;
+	const subscribe = useCallback(
+		(onChange: () => void) =>
+			viewport === null ? noopUnsubscribe : viewport.subscribe(onChange),
+		[viewport],
+	);
+	const getSnapshot = useCallback(
+		() => viewport?.getState().activeBreakpoint,
+		[viewport],
+	);
+	const layer = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+	const setLayer = useCallback(
+		(next: ResponsiveLayerRef) => {
+			// An explicit choice pins the target (the controller disables
+			// follow mode itself) — the toolbar and the panels agree because
+			// they are the same call.
+			viewport?.setWriteTarget(next);
+		},
+		[viewport],
+	);
+	return { layer, setLayer };
+}
+
+function noopUnsubscribe(): void {
+	// Intentionally empty: with no controller there is nothing to unsubscribe.
 }
