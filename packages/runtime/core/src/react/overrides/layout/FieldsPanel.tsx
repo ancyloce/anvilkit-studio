@@ -49,9 +49,9 @@ import {
 	readFieldPresentation,
 } from "@/overrides/fields/field-presentation";
 import { InspectorSection } from "@/overrides/layout/InspectorSection";
-import { useBreadcrumbs } from "@/overrides/utils/breadcrumbs";
-import { readComponentPresentation } from "@/overrides/utils/component-presentation";
-import { useReactivePuck } from "@/overrides/utils/use-reactive-puck";
+import { useBreadcrumbs } from "@/utils/breadcrumbs";
+import { readComponentPresentation } from "@/utils/component-presentation";
+import { useReactivePuck } from "@/utils/use-reactive-puck";
 import { Button } from "@/primitives/button";
 import {
 	DropdownMenu,

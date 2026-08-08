@@ -23,7 +23,7 @@
 import { type ReactNode, useLayoutEffect, useRef, useState } from "react";
 
 import { cn } from "@/shared/cn";
-import { useReactivePuck } from "../utils/use-reactive-puck";
+import { useReactivePuck } from "../../utils/use-reactive-puck";
 
 /** Approx. label height (11px text + padding) plus a small clearance margin. */
 const LABEL_CLEARANCE_PX = 28;

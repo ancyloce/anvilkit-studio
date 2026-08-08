@@ -20,7 +20,7 @@
  * they are not available").
  */
 
-import { useOptionalReactivePuck } from "@/overrides/utils/use-reactive-puck";
+import { useOptionalReactivePuck } from "@/utils/use-reactive-puck";
 
 /** Sentinel: the field has no reliable configured default. */
 export const NO_DEFAULT: unique symbol = Symbol("anvilkit.field.no-default");

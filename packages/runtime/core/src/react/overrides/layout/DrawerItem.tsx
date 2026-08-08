@@ -24,8 +24,8 @@ import { Component as GenericComponentIcon } from "lucide-react";
 import { type ReactNode, useMemo, useState } from "react";
 
 import { StudioErrorBoundary } from "@/components/StudioErrorBoundary";
-import { readComponentPresentation } from "@/overrides/utils/component-presentation";
-import { useReactivePuck } from "@/overrides/utils/use-reactive-puck";
+import { readComponentPresentation } from "@/utils/component-presentation";
+import { useReactivePuck } from "@/utils/use-reactive-puck";
 import { Item, ItemContent, ItemHeader, ItemTitle } from "@/primitives";
 import { useComponentViewMode } from "@/state/slices/editor-ui-selectors";
 

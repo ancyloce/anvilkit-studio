@@ -30,7 +30,7 @@
 import { type ReactNode, useLayoutEffect, useRef } from "react";
 
 import { cn } from "@/shared/cn";
-import { clampRectIntoViewport } from "../utils/action-bar-position";
+import { clampRectIntoViewport } from "../../utils/action-bar-position";
 
 export interface ActionBarOverrideProps {
 	readonly label?: string;
