@@ -1,38 +1,41 @@
 "use client";
 
 /**
- * @file Align + distribute over the multi-selection (PLAN-0020
- * CORE-P1B-013, re-phased from Phase 2; ED-CANVAS-006; DD-0019
- * §13.6).
+ * @file Align + distribute over the multi-selection (PLAN-0028
+ * `p4-006`; originally PLAN-0020 CORE-P1B-013).
  *
- * Semantics:
- * - **flow siblings sharing one parent prefer PARENT-layout
- *   changes**: align maps to the parent's `justifyContent` (main
- *   axis) or `alignItems` (cross axis) given its flex direction;
- *   distribute maps to an equalized parent `gap`. One parent patch =
- *   one command;
+ * Pure geometry → appearance ops. No commands, no revision, no port:
+ * the builders return {@link CanvasAppearanceOp}s and the toolbar hands
+ * the whole list to `commitCanvasAppearance`, which folds them into ONE
+ * history-recording dispatch. Aligning five nodes is therefore one undo,
+ * exactly as the batch command it replaces was.
+ *
+ * Semantics (unchanged):
+ * - **flow siblings sharing one parent prefer PARENT-layout changes**:
+ *   align maps to the parent's `justifyContent` (main axis) or
+ *   `alignItems` (cross axis) given its flex direction; distribute maps
+ *   to an equalized parent `gap`. One parent op;
  * - **absolute nodes** align/distribute geometrically via per-node
  *   `inset` writes — cross-parent alignment is allowed ONLY here;
- * - every operation is ONE intent: a single command or one atomic
- *   batch (freeze §5);
  * - mixed flow/absolute selections resolve the flow group through the
- *   parent and the absolute group geometrically, in the same batch.
+ *   parent and the absolute group geometrically, in the same intent.
  *
- * The multi-select duplicate/delete/lock/hide bulk ops on canvas
- * reuse the CORE-P1A-017 command set verbatim (same keymap, canvas
- * selection); create-component-from-multi-select stays in Phase 2.
+ * `inset` is a compound `CssBoxEdges` value, so each geometric op merges
+ * onto the node's CURRENT authored inset ({@link AlignNode.inset},
+ * read through the read model by the caller). Writing `{left}` alone
+ * would erase an authored `top`.
  */
 
 import type {
+	CssAlignment,
+	CssBoxEdges,
+	CssJustification,
 	CssLength,
 } from "@anvilkit/contracts/editor";
-import type {
-	AtomicEditorCommand,
-	EditorCommand,
-} from "../../../editor/legacy/index.js";
+import type { CanvasAppearanceOp } from "./appearance.js";
 import type { CanvasRect } from "./geometry.js";
 
-/** Alignment edges (§13.6). */
+/** Alignment edges. */
 export type AlignEdge =
 	| "left"
 	| "center"
@@ -50,17 +53,20 @@ export interface AlignNode {
 	readonly parentId: string | null;
 	/** The parent's rect (absolute inset math). */
 	readonly parentRect?: CanvasRect;
+	/** The node's effective authored `inset`, so a write preserves edges. */
+	readonly inset?: CssBoxEdges;
 }
 
 /** Inputs shared by both builders. */
 export interface AlignInput {
 	readonly nodes: readonly AlignNode[];
-	readonly revision: number;
 	/** The flow group's parent flex direction (when known). */
 	readonly parentDirection?: "row" | "column";
 	/** The flow group's parent node id. */
 	readonly flowParentId?: string | null;
 }
+
+const NO_OPS: readonly CanvasAppearanceOp[] = Object.freeze([]);
 
 const px = (value: number): CssLength => ({
 	kind: "unit",
@@ -68,14 +74,14 @@ const px = (value: number): CssLength => ({
 	unit: "px",
 });
 
-let alignSeq = 0;
-function base(revision: number) {
-	alignSeq += 1;
+function insetOp(node: AlignNode, edges: CssBoxEdges): CanvasAppearanceOp {
 	return {
-		id: `align-${alignSeq}-${crypto.randomUUID().slice(0, 8)}`,
-		expectedRevision: revision,
-		source: "canvas" as const,
-		timestamp: Date.now(),
+		nodeIds: [node.nodeId],
+		patch: {
+			kind: "set-property",
+			property: "inset",
+			value: { ...(node.inset ?? {}), ...edges },
+		},
 	};
 }
 
@@ -97,11 +103,11 @@ function isHorizontal(edge: AlignEdge): boolean {
 	return edge === "left" || edge === "center" || edge === "right";
 }
 
-function absoluteInsetPatch(
+function absoluteInsetOp(
 	node: AlignNode,
 	edge: AlignEdge,
 	bounds: CanvasRect,
-): AtomicEditorCommand | null {
+): CanvasAppearanceOp {
 	const parent = node.parentRect ?? { x: 0, y: 0, width: 0, height: 0 };
 	if (isHorizontal(edge)) {
 		const target =
@@ -110,16 +116,7 @@ function absoluteInsetPatch(
 				: edge === "center"
 					? bounds.x + bounds.width / 2 - node.rect.width / 2
 					: bounds.x + bounds.width - node.rect.width;
-		return {
-			id: "",
-			expectedRevision: 0,
-			source: "canvas",
-			timestamp: 0,
-			type: "node.layout.set",
-			nodeIds: [node.nodeId],
-			breakpointId: "base",
-			patch: { inset: { left: px(target - parent.x) } },
-		};
+		return insetOp(node, { left: px(target - parent.x) });
 	}
 	const target =
 		edge === "top"
@@ -127,16 +124,7 @@ function absoluteInsetPatch(
 			: edge === "middle"
 				? bounds.y + bounds.height / 2 - node.rect.height / 2
 				: bounds.y + bounds.height - node.rect.height;
-	return {
-		id: "",
-		expectedRevision: 0,
-		source: "canvas",
-		timestamp: 0,
-		type: "node.layout.set",
-		nodeIds: [node.nodeId],
-		breakpointId: "base",
-		patch: { inset: { top: px(target - parent.y) } },
-	};
+	return insetOp(node, { top: px(target - parent.y) });
 }
 
 function boundsOf(nodes: readonly AlignNode[]): CanvasRect {
@@ -149,43 +137,38 @@ function boundsOf(nodes: readonly AlignNode[]): CanvasRect {
 	return { x: left, y: top, width: right - left, height: bottom - top };
 }
 
-/** Build the one-intent align command (`null` = nothing to do). */
-export function buildAlignCommand(
+/** Build the one-intent align ops (`[]` = nothing to do). */
+export function buildAlignOps(
 	edge: AlignEdge,
 	input: AlignInput,
-): EditorCommand | null {
+): readonly CanvasAppearanceOp[] {
 	if (input.nodes.length < 2) {
-		return null;
+		return NO_OPS;
 	}
-	const commands: AtomicEditorCommand[] = [];
+	const ops: CanvasAppearanceOp[] = [];
 	const flow = input.nodes.filter((node) => node.position === "flow");
 	const absolute = input.nodes.filter((node) => node.position === "absolute");
 
-	// Flow group: one parent-layout patch, and only when the group
-	// shares a single parent (cross-parent flow alignment is undefined
-	// — §13.6).
+	// Flow group: one parent-layout op, and only when the group shares a
+	// single parent (cross-parent flow alignment is undefined).
 	if (flow.length >= 2) {
 		const parents = new Set(flow.map((node) => node.parentId));
 		if (parents.size === 1 && input.flowParentId != null) {
 			const direction = input.parentDirection ?? "row";
 			const mainAxis = (direction === "row") === isHorizontal(edge);
-			commands.push({
-				id: "",
-				expectedRevision: 0,
-				source: "canvas",
-				timestamp: 0,
-				type: "node.layout.set",
+			const justify = flowJustify(edge);
+			ops.push({
 				nodeIds: [input.flowParentId],
-				breakpointId: "base",
 				patch: mainAxis
-					? { justifyContent: flowJustify(edge) }
+					? {
+							kind: "set-property",
+							property: "justifyContent",
+							value: justify satisfies CssJustification,
+						}
 					: {
-							alignItems:
-								flowJustify(edge) === "start"
-									? "start"
-									: flowJustify(edge) === "center"
-										? "center"
-										: "end",
+							kind: "set-property",
+							property: "alignItems",
+							value: justify satisfies CssAlignment,
 						},
 			});
 		}
@@ -195,41 +178,24 @@ export function buildAlignCommand(
 	if (absolute.length >= 2 || (absolute.length === 1 && flow.length >= 1)) {
 		const bounds = boundsOf(input.nodes);
 		for (const node of absolute) {
-			const patch = absoluteInsetPatch(node, edge, bounds);
-			if (patch !== null) {
-				commands.push(patch);
-			}
+			ops.push(absoluteInsetOp(node, edge, bounds));
 		}
 	}
 
-	if (commands.length === 0) {
-		return null;
-	}
-	if (commands.length === 1 && commands[0] !== undefined) {
-		return { ...commands[0], ...base(input.revision) };
-	}
-	return {
-		...base(input.revision),
-		type: "batch",
-		label: `align-${edge}`,
-		commands: commands.map((command, index) => ({
-			...command,
-			id: `align-member-${index}`,
-		})),
-	};
+	return ops.length === 0 ? NO_OPS : ops;
 }
 
-/** Build the one-intent distribute command (`null` = nothing). */
-export function buildDistributeCommand(
+/** Build the one-intent distribute ops (`[]` = nothing to do). */
+export function buildDistributeOps(
 	axis: "x" | "y",
 	input: AlignInput,
-): EditorCommand | null {
+): readonly CanvasAppearanceOp[] {
 	if (input.nodes.length < 3) {
-		return null;
+		return NO_OPS;
 	}
 	const flow = input.nodes.filter((node) => node.position === "flow");
 	const absolute = input.nodes.filter((node) => node.position === "absolute");
-	const commands: AtomicEditorCommand[] = [];
+	const ops: CanvasAppearanceOp[] = [];
 
 	// Flow: equalize the shared parent's gap.
 	if (flow.length >= 3) {
@@ -253,15 +219,9 @@ export function buildDistributeCommand(
 				0,
 				(span - content) / Math.max(1, sorted.length - 1),
 			);
-			commands.push({
-				id: "",
-				expectedRevision: 0,
-				source: "canvas",
-				timestamp: 0,
-				type: "node.layout.set",
+			ops.push({
 				nodeIds: [input.flowParentId],
-				breakpointId: "base",
-				patch: { gap: px(gap) },
+				patch: { kind: "set-property", property: "gap", value: px(gap) },
 			});
 		}
 	}
@@ -286,36 +246,17 @@ export function buildDistributeCommand(
 		let cursor = start;
 		for (const node of sorted) {
 			const parent = node.parentRect ?? { x: 0, y: 0, width: 0, height: 0 };
-			commands.push({
-				id: "",
-				expectedRevision: 0,
-				source: "canvas",
-				timestamp: 0,
-				type: "node.layout.set",
-				nodeIds: [node.nodeId],
-				breakpointId: "base",
-				patch:
+			ops.push(
+				insetOp(
+					node,
 					axis === "x"
-						? { inset: { left: px(cursor - parent.x) } }
-						: { inset: { top: px(cursor - parent.y) } },
-			});
+						? { left: px(cursor - parent.x) }
+						: { top: px(cursor - parent.y) },
+				),
+			);
 			cursor += (axis === "x" ? node.rect.width : node.rect.height) + spacing;
 		}
 	}
 
-	if (commands.length === 0) {
-		return null;
-	}
-	if (commands.length === 1 && commands[0] !== undefined) {
-		return { ...commands[0], ...base(input.revision) };
-	}
-	return {
-		...base(input.revision),
-		type: "batch",
-		label: `distribute-${axis}`,
-		commands: commands.map((command, index) => ({
-			...command,
-			id: `distribute-member-${index}`,
-		})),
-	};
+	return ops.length === 0 ? NO_OPS : ops;
 }

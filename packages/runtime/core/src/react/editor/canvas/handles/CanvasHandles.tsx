@@ -1,49 +1,70 @@
 "use client";
 
 /**
- * @file Canvas handles (PLAN-0020 CORE-P1B-005/-008; ED-CANVAS-002;
- * DD-0019 §13.4 handle table, §13.6 keyboard paragraph).
+ * @file Canvas handles (PLAN-0028 `p4-006`; originally PLAN-0020
+ * CORE-P1B-005/-008).
  *
- * Rendered inside the authoring overlay for the PRIMARY selected
- * node. Handle eligibility follows capability metadata and lock
- * state:
+ * Rendered inside the authoring overlay for the PRIMARY selected node.
  *
- * Eligibility is asked per GRANTED PROPERTY, from the component's
- * declared style targets — not from component-level booleans, which
- * the v1 contract used and which cannot express the widened
- * vocabulary (`p2-006`):
+ * ### Node-addressed, in page mode, on purpose
  *
- * - width / height / corner resize — grants `width` / `height`, unlocked;
+ * Every handle writes `nodeIds: [nodeId]` at the node's ROOT style
+ * target. Target-addressed handles are explicitly out of scope:
+ * PLAN-0026 §8 rules out structural editing inside a component, and
+ * `p5-003` gives component mode its affordances through the inspector
+ * plus outlines rather than resize handles on a `cardTitle`.
+ *
+ * ### Eligibility is asked per GRANTED PROPERTY, of the root target
+ *
+ * - width / height / corner resize — grants `width` / `height`;
  * - gap — grants `gap`, with a flex/grid display;
- * - padding (top edge shown; all four write per-edge) — grants `padding`;
+ * - padding (all four edges) — grants `padding`;
  * - radius — grants `borderRadius`.
  *
- * Flow nodes are NOT movable by x/y — reordering stays with Puck's
- * own drop semantics; `inset` handles exist only for
- * `position: absolute` nodes (Phase 1B ships resize/pad/gap/radius;
- * absolute-drag arrives with the §13.4 move-handle row).
+ * The question goes to the *target*, not to the component
+ * (`grantedTargetProperties`): a component granting `padding` only on
+ * `cardTitle` must not show a padding handle whose root-target commit
+ * would be rejected.
  *
- * Drags run the CORE-P1B-004 gesture controller: pointermove paints
- * **ephemeral inline styles** on the target element (cleared on
- * cancel), pointerup commits exactly one command at the active write
- * layer (breakpoint materialization included). Inside the iframe,
- * pointer coordinates are already content-space at every zoom (the
- * browser inverse-maps events through the parent transform), so
- * deltas need no zoom math.
+ * Flow nodes are NOT movable by x/y — reordering stays with Puck's own
+ * drop semantics; a move handle for `position: absolute` nodes is not
+ * shipped, so drag-to-move has no canvas surface yet (drag-to-resize and
+ * drag-to-space do).
  *
- * §13.6 accessibility (CORE-P1B-008): every handle is a real button
- * with an accessible name; arrow keys nudge ±1 (Shift ±10) — each
- * press one commit; a polite live region announces the final value
- * and the active breakpoint after every commit.
+ * ### Reads
+ *
+ * Pixel geometry comes from `getBoundingClientRect` / `getComputedStyle`
+ * on the live element — the SAME rendered DOM the compiled stylesheet
+ * styles, which is what makes "what the author drags" and "what
+ * production renders" the same thing (Puck contract rule 3). Authored
+ * state — capability, lock, and the merge base for per-edge properties —
+ * comes from the read model through `canvas/appearance.ts`.
+ *
+ * ### Writes, and drag coalescing
+ *
+ * Drags run the gesture controller: pointermove paints **ephemeral
+ * inline styles** on the target element (cleared on cancel) and writes
+ * nothing; pointerup makes exactly ONE `commitCanvasAppearance` call, so
+ * a resize gesture is one history entry and one undo restores the
+ * pre-drag size. The corner handle's width AND height ride that same
+ * single dispatch. Inside the iframe, pointer coordinates are already
+ * content-space at every zoom (the browser inverse-maps events through
+ * the parent transform), so deltas need no zoom math.
+ *
+ * ### Accessibility
+ *
+ * Every handle is a real button with an accessible name; arrow keys
+ * nudge ±1 (Shift ±10) — each press one commit; a polite live region
+ * announces the final value and the active breakpoint after every
+ * commit.
  */
 
 import type {
+	AuthorableStyleProperty,
+	CssBoxEdges,
 	CssLength,
-	ResponsiveLayerRef,
 } from "@anvilkit/contracts/editor";
-import type {
-	EditorCommand,
-} from "../../../../editor/legacy/index.js";
+import type { PuckApi } from "@puckeditor/core";
 import {
 	type KeyboardEvent as ReactKeyboardEvent,
 	type ReactNode,
@@ -57,10 +78,17 @@ import {
 	useSyncExternalStore,
 } from "react";
 import { useMsg } from "@/state/editor-i18n-context";
+import { ROOT_STYLE_TARGET_ID } from "../../../../puck/targets.js";
+import type { AppearancePatch } from "../../../../puck/update-appearance.js";
 import type { StudioEditorBridge } from "../../bridge.js";
-import { grantedProperties } from "../../../../puck/component-metadata.js";
 import type { InternalEditorCommandPort } from "../../command-port.js";
-import { withBreakpointMaterialization } from "../../responsive/materialize.js";
+import {
+	type CanvasCommitDeps,
+	commitCanvasAppearance,
+	grantedTargetProperties,
+	isCanvasNodeLocked,
+	readAuthoredProperty,
+} from "../appearance.js";
 import { isElementNode } from "../dom-registry.js";
 import type { CanvasRect } from "../geometry.js";
 import {
@@ -81,6 +109,19 @@ type HandleId =
 	| "padding-left"
 	| "radius";
 
+/** Everything a handle needs to turn a px value into appearance patches. */
+interface HandlePatchInput {
+	readonly value: number;
+	readonly secondary: number | undefined;
+	/** The root target's granted properties (the eligibility answer). */
+	readonly granted: ReadonlySet<AuthorableStyleProperty>;
+	/**
+	 * The effective authored value of {@link HandleDefinition.mergeProperty},
+	 * so a per-edge write preserves the edges it does not touch.
+	 */
+	readonly merge: unknown;
+}
+
 interface HandleDefinition {
 	readonly id: HandleId;
 	readonly labelKey: string;
@@ -91,21 +132,28 @@ interface HandleDefinition {
 	 * against the axis delta.
 	 */
 	readonly invert?: boolean;
+	/**
+	 * Properties this handle authors. Eligibility is "the root target
+	 * grants at least one of these"; the patch builder then emits only
+	 * the ones actually granted, so a partially-capable component gets a
+	 * partially-capable handle rather than a rejected commit.
+	 */
+	readonly properties: readonly AuthorableStyleProperty[];
+	/**
+	 * A property whose CURRENT authored value must be read before
+	 * writing, because the write is a partial update of a compound value
+	 * (per-edge `padding`). Absent for scalar and fully-replaced values.
+	 */
+	readonly mergeProperty?: AuthorableStyleProperty;
 	/** Base value reader (px) from the element's current geometry. */
 	readonly read: (element: HTMLElement) => number;
 	/**
 	 * Secondary-axis reader — only the corner resize sets it; the
-	 * secondary value rides the same command/paint calls.
+	 * secondary value rides the same patch/paint calls.
 	 */
 	readonly readSecondary?: (element: HTMLElement) => number;
-	/** Build the command patch for an absolute px value. */
-	readonly command: (
-		value: number,
-		nodeId: string,
-		layer: ResponsiveLayerRef,
-		revision: number,
-		secondary?: number,
-	) => EditorCommand;
+	/** Build the appearance patches for an absolute px value. */
+	readonly patches: (input: HandlePatchInput) => readonly AppearancePatch[];
 	/** Ephemeral preview painter. */
 	readonly paint: (
 		element: HTMLElement,
@@ -114,9 +162,9 @@ interface HandleDefinition {
 	) => void;
 	readonly clear: (element: HTMLElement) => void;
 	/**
-	 * Resize handles snap their moving edge (§13.5). Returns the
-	 * degenerate edge rect for a proposed value pair, in content
-	 * coordinates relative to the start rect.
+	 * Resize handles snap their moving edge. Returns the degenerate edge
+	 * rect for a proposed value pair, in content coordinates relative to
+	 * the start rect.
 	 */
 	readonly snapEdge?: (
 		start: { x: number; y: number; width: number; height: number },
@@ -136,15 +184,15 @@ function px(value: number): CssLength {
 	return { kind: "unit", value: Math.max(0, Math.round(value)), unit: "px" };
 }
 
-let handleCommandSeq = 0;
-function base(revision: number) {
-	handleCommandSeq += 1;
-	return {
-		id: `canvas-${handleCommandSeq}-${crypto.randomUUID().slice(0, 8)}`,
-		expectedRevision: revision,
-		source: "canvas" as const,
-		timestamp: Date.now(),
-	};
+/** One `set-property` patch, or nothing when the target does not grant it. */
+function setProperty(
+	granted: ReadonlySet<AuthorableStyleProperty>,
+	property: AuthorableStyleProperty,
+	value: unknown,
+): readonly AppearancePatch[] {
+	return granted.has(property)
+		? [{ kind: "set-property", property, value }]
+		: [];
 }
 
 const HANDLES: readonly HandleDefinition[] = [
@@ -152,14 +200,9 @@ const HANDLES: readonly HandleDefinition[] = [
 		id: "resize-e",
 		labelKey: "studio.editor.canvas.handle.width",
 		axis: "x",
+		properties: ["width"],
 		read: (element) => element.getBoundingClientRect().width,
-		command: (value, nodeId, layer, revision) => ({
-			...base(revision),
-			type: "node.layout.set",
-			nodeIds: [nodeId],
-			breakpointId: layer,
-			patch: { width: px(value) },
-		}),
+		patches: ({ value, granted }) => setProperty(granted, "width", px(value)),
 		paint: (element, value) => {
 			element.style.width = `${Math.max(0, value)}px`;
 		},
@@ -181,14 +224,9 @@ const HANDLES: readonly HandleDefinition[] = [
 		id: "resize-s",
 		labelKey: "studio.editor.canvas.handle.height",
 		axis: "y",
+		properties: ["height"],
 		read: (element) => element.getBoundingClientRect().height,
-		command: (value, nodeId, layer, revision) => ({
-			...base(revision),
-			type: "node.layout.set",
-			nodeIds: [nodeId],
-			breakpointId: layer,
-			patch: { height: px(value) },
-		}),
+		patches: ({ value, granted }) => setProperty(granted, "height", px(value)),
 		paint: (element, value) => {
 			element.style.height = `${Math.max(0, value)}px`;
 		},
@@ -210,18 +248,17 @@ const HANDLES: readonly HandleDefinition[] = [
 		id: "resize-se",
 		labelKey: "studio.editor.canvas.handle.resize",
 		axis: "x",
+		properties: ["width", "height"],
 		read: (element) => element.getBoundingClientRect().width,
 		readSecondary: (element) => element.getBoundingClientRect().height,
-		command: (value, nodeId, layer, revision, secondary) => ({
-			...base(revision),
-			type: "node.layout.set",
-			nodeIds: [nodeId],
-			breakpointId: layer,
-			patch: {
-				width: px(value),
-				...(secondary !== undefined ? { height: px(secondary) } : {}),
-			},
-		}),
+		// Width AND height in ONE intent — both ops ride a single
+		// history-recording dispatch, so a corner drag is one undo.
+		patches: ({ value, secondary, granted }) => [
+			...setProperty(granted, "width", px(value)),
+			...(secondary === undefined
+				? []
+				: setProperty(granted, "height", px(secondary))),
+		],
 		paint: (element, value, secondary) => {
 			element.style.width = `${Math.max(0, value)}px`;
 			if (secondary !== undefined) {
@@ -247,19 +284,14 @@ const HANDLES: readonly HandleDefinition[] = [
 		id: "gap",
 		labelKey: "studio.editor.canvas.handle.gap",
 		axis: "x",
+		properties: ["gap"],
 		read: (element) => {
 			const raw =
 				element.ownerDocument.defaultView?.getComputedStyle(element).columnGap;
 			const value = Number.parseFloat(raw ?? "0");
 			return Number.isFinite(value) ? value : 0;
 		},
-		command: (value, nodeId, layer, revision) => ({
-			...base(revision),
-			type: "node.layout.set",
-			nodeIds: [nodeId],
-			breakpointId: layer,
-			patch: { gap: px(value) },
-		}),
+		patches: ({ value, granted }) => setProperty(granted, "gap", px(value)),
 		paint: (element, value) => {
 			element.style.gap = `${Math.max(0, value)}px`;
 		},
@@ -355,6 +387,11 @@ const HANDLES: readonly HandleDefinition[] = [
 			labelKey: spec.labelKey,
 			axis: spec.axis,
 			invert: spec.invert,
+			properties: ["padding"],
+			// `padding` is ONE compound spec value, so writing an edge means
+			// rewriting the whole value: without the current value as a merge
+			// base, dragging the top edge would erase the other three.
+			mergeProperty: "padding",
 			read: (element) => {
 				const raw =
 					element.ownerDocument.defaultView?.getComputedStyle(element)[
@@ -363,13 +400,11 @@ const HANDLES: readonly HandleDefinition[] = [
 				const value = Number.parseFloat(raw ?? "0");
 				return Number.isFinite(value) ? value : 0;
 			},
-			command: (value, nodeId, layer, revision) => ({
-				...base(revision),
-				type: "node.layout.set",
-				nodeIds: [nodeId],
-				breakpointId: layer,
-				patch: { padding: { [spec.edge]: px(value) } },
-			}),
+			patches: ({ value, granted, merge }) =>
+				setProperty(granted, "padding", {
+					...((merge as CssBoxEdges | undefined) ?? {}),
+					[spec.edge]: px(value),
+				}),
 			paint: (element, value) => {
 				element.style[spec.cssProperty] = `${Math.max(0, value)}px`;
 			},
@@ -383,6 +418,7 @@ const HANDLES: readonly HandleDefinition[] = [
 		id: "radius",
 		labelKey: "studio.editor.canvas.handle.radius",
 		axis: "x",
+		properties: ["borderRadius"],
 		read: (element) => {
 			const raw =
 				element.ownerDocument.defaultView?.getComputedStyle(
@@ -391,22 +427,15 @@ const HANDLES: readonly HandleDefinition[] = [
 			const value = Number.parseFloat(raw ?? "0");
 			return Number.isFinite(value) ? value : 0;
 		},
-		command: (value, nodeId, layer, revision) => {
+		// All four corners are written, so there is nothing to merge.
+		patches: ({ value, granted }) => {
 			const radius = px(value);
-			return {
-				...base(revision),
-				type: "node.style.set",
-				nodeIds: [nodeId],
-				breakpointId: layer,
-				patch: {
-					radius: {
-						topLeft: radius,
-						topRight: radius,
-						bottomRight: radius,
-						bottomLeft: radius,
-					},
-				},
-			};
+			return setProperty(granted, "borderRadius", {
+				topLeft: radius,
+				topRight: radius,
+				bottomRight: radius,
+				bottomLeft: radius,
+			});
 		},
 		paint: (element, value) => {
 			element.style.borderRadius = `${Math.max(0, value)}px`;
@@ -429,7 +458,7 @@ function canvasZoomOf(doc: Document): number {
 	return layout > 0 && rect.width > 0 ? rect.width / layout : 1;
 }
 
-/** Snap candidate context captured once per gesture (§13.5 scan cap). */
+/** Snap candidate context captured once per gesture (scan cap applies). */
 function snapContextOf(
 	bridge: StudioEditorBridge,
 	element: HTMLElement,
@@ -482,6 +511,9 @@ function Handle({
 	element,
 	nodeId,
 	bridge,
+	commitDeps,
+	granted,
+	layer,
 	controller,
 	announce,
 	onSnap,
@@ -490,6 +522,11 @@ function Handle({
 	readonly element: HTMLElement;
 	readonly nodeId: string;
 	readonly bridge: StudioEditorBridge;
+	readonly commitDeps: CanvasCommitDeps;
+	readonly granted: ReadonlySet<AuthorableStyleProperty>;
+	readonly layer: ReturnType<
+		NonNullable<StudioEditorBridge["responsive"]>["getActiveLayer"]
+	>;
 	readonly controller: GestureController;
 	readonly announce: (text: string) => void;
 	readonly onSnap: (result: SnapResult | null) => void;
@@ -501,44 +538,68 @@ function Handle({
 		useMemo(() => ({ disableDrag: true }), []),
 	);
 
-	const port = bridge.port as InternalEditorCommandPort | null;
-	const layer = bridge.responsive?.getActiveLayer() ?? "base";
 	const layerLabel =
 		layer === "base" ? msg("studio.editor.responsive.base") : layer;
 
+	/**
+	 * The one write path of this handle: build the patches, commit them
+	 * as ONE history entry, announce the result. Called once per gesture
+	 * (on pointerup) and once per keyboard nudge — never per pointermove.
+	 */
 	const commitValue = useCallback(
-		(value: number): void => {
-			if (port === null) {
-				return;
+		(value: number, secondary?: number): boolean => {
+			const api = commitDeps.getPuckApi();
+			if (api === null) {
+				return false;
 			}
-			const snapshot = port.getSnapshot();
-			const command = definition.command(
-				value,
-				nodeId,
-				layer,
-				snapshot.revision,
-			);
-			const wrapped =
-				command.type === "batch"
-					? command
-					: withBreakpointMaterialization(
-							command as Parameters<typeof withBreakpointMaterialization>[0],
-							snapshot.authoring,
-							snapshot.breakpoints,
+			const merge =
+				definition.mergeProperty === undefined
+					? undefined
+					: readAuthoredProperty(
+							api,
+							nodeId,
+							ROOT_STYLE_TARGET_ID,
+							definition.mergeProperty,
+							layer,
 						);
-			void port.execute(wrapped);
+			const patches = definition.patches({
+				value,
+				secondary,
+				granted,
+				merge,
+			});
+			if (patches.length === 0) {
+				return false;
+			}
+			const result = commitCanvasAppearance(commitDeps, {
+				layer,
+				ops: patches.map((patch) => ({ nodeIds: [nodeId], patch })),
+			});
+			// A refused write must say so rather than look like a no-op.
+			bridge.diagnostics.setDiagnostics(
+				"canvas.appearance",
+				result.status === "rejected" ? result.errors : [],
+			);
 			announce(
 				`${msg(definition.labelKey)} ${Math.max(0, Math.round(value))}px (${layerLabel})`,
 			);
+			return result.status === "committed";
 		},
-		[port, definition, nodeId, layer, announce, msg, layerLabel],
+		[
+			commitDeps,
+			definition,
+			nodeId,
+			layer,
+			granted,
+			bridge,
+			announce,
+			msg,
+			layerLabel,
+		],
 	);
 
 	const onPointerDown = useCallback(
 		(event: ReactPointerEvent<HTMLButtonElement>): void => {
-			if (port === null) {
-				return;
-			}
 			event.preventDefault();
 			event.stopPropagation();
 			try {
@@ -557,8 +618,8 @@ function Handle({
 				width: startClientRect.width,
 				height: startClientRect.height,
 			};
-			// Candidate rects + zoom are captured once per gesture (§13.5:
-			// ≤500 scanned elements per calculation).
+			// Candidate rects + zoom are captured once per gesture (≤500
+			// scanned elements per calculation).
 			const snapContext =
 				definition.snapEdge === undefined
 					? null
@@ -577,9 +638,8 @@ function Handle({
 					startValue + (definition.axis === "x" ? delta.x : delta.y) * sign;
 				let secondary =
 					startSecondary === undefined ? undefined : startSecondary + delta.y;
-				// Shift on the corner handle locks the aspect ratio (§13.5
-				// "Shift locks axis/aspect"); single-axis handles are locked
-				// by construction.
+				// Shift on the corner handle locks the aspect ratio;
+				// single-axis handles are locked by construction.
 				if (modifiers.shift && secondary !== undefined) {
 					secondary =
 						startSecondary === undefined || startValue <= 0
@@ -628,31 +688,11 @@ function Handle({
 						definition.clear(element);
 						onSnap(null);
 					},
+					// ONE commit for the whole drag: every pointermove above
+					// only painted DOM.
 					commit: () => {
-						if (port === null) {
-							return null;
-						}
 						onSnap(null);
-						const snapshot = port.getSnapshot();
-						const command = definition.command(
-							lastValue,
-							nodeId,
-							layer,
-							snapshot.revision,
-							lastSecondary,
-						);
-						announce(
-							`${msg(definition.labelKey)} ${Math.max(0, Math.round(lastValue))}px (${layerLabel})`,
-						);
-						return command.type === "batch"
-							? command
-							: withBreakpointMaterialization(
-									command as Parameters<
-										typeof withBreakpointMaterialization
-									>[0],
-									snapshot.authoring,
-									snapshot.breakpoints,
-								);
+						return commitValue(lastValue, lastSecondary);
 					},
 				},
 				{ x: event.clientX, y: event.clientY },
@@ -691,23 +731,11 @@ function Handle({
 			doc.addEventListener("pointercancel", onCancel);
 			doc.addEventListener("keydown", onKey, true);
 		},
-		[
-			port,
-			definition,
-			element,
-			nodeId,
-			bridge,
-			controller,
-			announce,
-			onSnap,
-			msg,
-			layer,
-			layerLabel,
-		],
+		[definition, element, nodeId, bridge, controller, commitValue, onSnap],
 	);
 
-	// Keyboard equivalent (§13.6): arrows nudge the value directly,
-	// one commit per press.
+	// Keyboard equivalent: arrows nudge the value directly, one commit
+	// per press.
 	const onKeyDown = useCallback(
 		(event: ReactKeyboardEvent<HTMLButtonElement>): void => {
 			const growKeys =
@@ -728,6 +756,8 @@ function Handle({
 			}
 			event.preventDefault();
 			event.stopPropagation();
+			// No secondary: a keyboard nudge moves the handle's own axis, so
+			// the corner handle must not also re-write the unchanged height.
 			commitValue(definition.read(element) + step);
 		},
 		[definition, element, commitValue],
@@ -829,21 +859,33 @@ export interface CanvasHandlesProps {
 	readonly bridge: StudioEditorBridge;
 }
 
-/** The primary-selection handle set + §13.6 live region. */
+/** The primary-selection handle set + the live announcement region. */
 export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 	const msg = useMsg();
 	useSyncExternalStore(bridge.subscribe, bridge.getVersion, bridge.getVersion);
 	const [, bump] = useReducer((count: number) => count + 1, 0);
 	const [announcement, setAnnouncement] = useState("");
-	// Live snap guides + spacing labels of the active gesture (§13.5).
+	// Live snap guides + spacing labels of the active gesture.
 	const [snapState, setSnapState] = useState<SnapResult | null>(null);
+
+	const port = bridge.port as InternalEditorCommandPort | null;
+	// The canvas overlay renders OUTSIDE `<Puck>` (see `canvas/appearance.ts`),
+	// so the live api comes through the port's injection rather than
+	// `useGetPuck`.
+	const commitDeps = useMemo<CanvasCommitDeps>(
+		() => ({ getPuckApi: () => port?.tryGetPuckApi?.() ?? null }),
+		[port],
+	);
 
 	const controller = useMemo(
 		() =>
-			bridge.port === null
+			port === null
 				? null
 				: createGestureController({
-						port: bridge.port as InternalEditorCommandPort,
+						// Puck replaces `Data` on every dispatch, so its identity is
+						// the foreign-change signal.
+						getDocumentToken: () =>
+							port.tryGetPuckApi?.()?.appState.data ?? null,
 						onCompleted: (gesture, durationMs) => {
 							bridge.diagnostics.emit({
 								type: "gesture.completed",
@@ -852,7 +894,7 @@ export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 							});
 						},
 					}),
-		[bridge, bridge.port],
+		[bridge, port],
 	);
 
 	// Reposition on registry/scroll changes.
@@ -869,11 +911,10 @@ export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 
 	const selection = bridge.selection?.getState();
 	const primary = selection?.primaryId;
-	// Gesture suppression while an inline session is active (009B).
+	// Gesture suppression while an inline session is active.
 	if (bridge.inline?.getSession() != null) {
 		return null;
 	}
-	const port = bridge.port as InternalEditorCommandPort | null;
 	if (
 		primary === undefined ||
 		port === null ||
@@ -883,43 +924,33 @@ export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 	) {
 		return null;
 	}
+	const api: PuckApi | null = port.tryGetPuckApi?.() ?? null;
 	const element = bridge.canvasRegistry?.getPrimaryElement(primary) ?? null;
-	const metadata = bridge.capabilities?.forNode(primary);
-	const locked = port.getSnapshot().authoring.nodes[primary]?.locked === true;
-	if (element === null || metadata === undefined || locked) {
+	// A locked node refuses every mutating gesture: no handles at all, so
+	// there is nothing to drag, resize or nudge (`p3-006` annotations).
+	if (api === null || element === null || isCanvasNodeLocked(api, primary)) {
 		return null;
 	}
 
-	// Each handle is gated on the property it actually edits, read from
-	// the component's declared style targets. The v1 contract gated on
-	// two coarse booleans (`layoutItem` / `layoutContainer`); the
-	// canonical contract carries the granted property set, so a handle
-	// can ask the precise question — "may I author `padding` here?" —
-	// instead of inferring it from a component-level flag.
-	const granted = grantedProperties(metadata);
+	// Eligibility is asked of the ROOT TARGET's granted property set, not
+	// of the component: an affordance whose own commit would be rejected
+	// must never be offered.
+	const granted = grantedTargetProperties(api, primary, ROOT_STYLE_TARGET_ID);
+	if (granted.size === 0) {
+		return null;
+	}
+	const layer = bridge.responsive?.getActiveLayer() ?? "base";
 	// Inline-style fallback: detached documents (tests, pre-attach
 	// races) have no view to compute styles through.
 	const display =
 		element.ownerDocument.defaultView?.getComputedStyle(element).display ??
 		element.style.display;
 	const eligible = HANDLES.filter((definition) => {
-		switch (definition.id) {
-			case "resize-e":
-				return granted.has("width");
-			case "resize-s":
-				return granted.has("height");
-			case "resize-se":
-				return granted.has("width") || granted.has("height");
-			case "gap":
-				return granted.has("gap") && (display === "flex" || display === "grid");
-			case "padding-top":
-			case "padding-right":
-			case "padding-bottom":
-			case "padding-left":
-				return granted.has("padding");
-			case "radius":
-				return granted.has("borderRadius");
+		if (!definition.properties.some((property) => granted.has(property))) {
+			return false;
 		}
+		// The gap handle additionally needs a container that actually gaps.
+		return definition.id !== "gap" || display === "flex" || display === "grid";
 	});
 	if (eligible.length === 0) {
 		return null;
@@ -944,12 +975,15 @@ export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 					element={element}
 					nodeId={primary}
 					bridge={bridge}
+					commitDeps={commitDeps}
+					granted={granted}
+					layer={layer}
 					controller={controller}
 					announce={setAnnouncement}
 					onSnap={setSnapState}
 				/>
 			))}
-			{/* §13.5 snap guides: one winning line per axis. */}
+			{/* Snap guides: one winning line per axis. */}
 			{guides.map((guide) => (
 				<div
 					key={guide.axis}
@@ -966,7 +1000,7 @@ export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 					}}
 				/>
 			))}
-			{/* §13.5 spacing labels: post-snap gaps per axis. */}
+			{/* Spacing labels: post-snap gaps per axis. */}
 			{(snapState?.spacingLabels ?? []).map((label) => (
 				<div
 					key={`${label.axis}-${label.at}`}
@@ -994,7 +1028,7 @@ export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 					{Math.round(label.gap)}
 				</div>
 			))}
-			{/* §13.6 live region: final value + active breakpoint. */}
+			{/* Live region: final value + active breakpoint. */}
 			<div
 				aria-live="polite"
 				data-ak-handle-announcer

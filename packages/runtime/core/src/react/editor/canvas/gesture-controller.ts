@@ -1,33 +1,36 @@
 "use client";
 
 /**
- * @file The canvas gesture controller (PLAN-0020 CORE-P1B-004;
- * ED-CANVAS-004; DD-0019 §10.4, §13.4; DD-DEC-005).
+ * @file The canvas gesture controller (PLAN-0028 `p4-006`; originally
+ * PLAN-0020 CORE-P1B-004).
  *
  * One state machine for every drag gesture:
  * `idle → armed (pointerdown) → dragging (≥3 px) → idle` via commit
  * (pointerup), or cancel (Escape / pointercancel / blur / document
- * replacement / external revision).
+ * replacement / a foreign document change).
  *
  * Invariants:
  * - **Ephemeral preview**: pointermove produces a preview the caller
  *   paints straight onto DOM elements — never durable React state,
- *   never the sidecar; cancel simply clears it.
- * - **Single intent**: pointerup converts the total delta into exactly
- *   ONE command through the port (§10.5); an armed-but-never-dragged
- *   press commits nothing (it was a click).
- * - **External revision** observed mid-gesture cancels the gesture
- *   with a caller-visible notification — the preview is stale against
- *   a document that changed underneath it.
+ *   never a document write; cancel simply clears it.
+ * - **Drag coalescing**: N pointermoves produce ZERO writes. Pointerup
+ *   converts the total delta into exactly one commit-helper call, so a
+ *   resize gesture is ONE history entry and one undo restores the
+ *   pre-drag size. An armed-but-never-dragged press commits nothing (it
+ *   was a click).
+ * - **A foreign document change** observed mid-gesture cancels the
+ *   gesture with a caller-visible notification — the preview is stale
+ *   against a document that moved underneath it.
+ *
+ * The controller no longer knows what a command is. `GestureSpec.commit`
+ * calls a commit helper (`canvas/appearance.ts`) and reports whether it
+ * wrote anything; the controller only owns *when* that happens and
+ * guarantees it happens at most once per gesture.
  */
 
-import type {
-	EditorCommand,
-} from "../../../editor/legacy/index.js";
-import type { InternalEditorCommandPort } from "../command-port.js";
 import type { CanvasPoint } from "./geometry.js";
 
-/** Movement (client px) required to arm → drag (§13.4). */
+/** Movement (client px) required to arm → drag. */
 export const DRAG_THRESHOLD_PX = 3;
 
 /** Gesture lifecycle phase. */
@@ -39,27 +42,37 @@ export type GestureCancelReason =
 	| "pointercancel"
 	| "blur"
 	| "document-replaced"
-	| "external-revision";
+	| "external-change";
 
 /**
  * One gesture's behavior. `preview` paints the ephemeral state for a
- * delta; `commit` converts the final delta into the single command
- * (or `null` for a no-op drag).
+ * delta; `commit` turns the final delta into ONE commit-helper call and
+ * returns `true` when the document actually changed.
  */
 export interface GestureSpec {
 	/** Content-free gesture id for `gesture.completed` events. */
 	readonly gesture: string;
 	readonly preview: (delta: CanvasPoint) => void;
 	readonly clearPreview: () => void;
-	readonly commit: (delta: CanvasPoint) => EditorCommand | null;
+	readonly commit: (delta: CanvasPoint) => boolean;
 }
 
 /** Controller dependencies. */
 export interface GestureControllerDeps {
-	readonly port: InternalEditorCommandPort;
+	/**
+	 * Identity token for the live document, compared with `Object.is`.
+	 *
+	 * Puck `Data` is replaced (never mutated) by every dispatch, so its
+	 * reference IS the change signal — the canonical replacement for the
+	 * sidecar revision counter this used to read. A token change between
+	 * arm and release means someone else wrote while the pointer was
+	 * down, and the previewed delta no longer describes a document that
+	 * exists.
+	 */
+	readonly getDocumentToken: () => unknown;
 	/** Emit the content-free `gesture.completed` event. */
 	readonly onCompleted?: (gesture: string, durationMs: number) => void;
-	/** Surface a cancellation to the user (external revision etc.). */
+	/** Surface a cancellation to the user (foreign change etc.). */
 	readonly onCancelled?: (gesture: string, reason: GestureCancelReason) => void;
 }
 
@@ -69,12 +82,12 @@ export interface GestureController {
 	arm(spec: GestureSpec, startClient: CanvasPoint): void;
 	/** Pointermove: threshold-arm and paint previews while dragging. */
 	move(client: CanvasPoint): void;
-	/** Pointerup: commit the total delta as one command. */
+	/** Pointerup: commit the total delta as one intent. */
 	finish(): void;
 	/** Abort without committing; restores by clearing the preview. */
 	cancel(reason: GestureCancelReason): void;
-	/** A foreign commit landed — cancels any active gesture. */
-	handleExternalRevision(): void;
+	/** A foreign write landed — cancels any active gesture. */
+	handleExternalChange(): void;
 	phase(): GesturePhase;
 }
 
@@ -87,7 +100,7 @@ export function createGestureController(
 	let start: CanvasPoint = { x: 0, y: 0 };
 	let last: CanvasPoint = { x: 0, y: 0 };
 	let startedAt = 0;
-	let armedRevision = 0;
+	let armedToken: unknown;
 
 	const reset = (): void => {
 		phase = "idle";
@@ -105,15 +118,15 @@ export function createGestureController(
 			start = startClient;
 			last = startClient;
 			startedAt = performance.now();
-			armedRevision = deps.port.getSnapshot().revision;
+			armedToken = deps.getDocumentToken();
 		},
 
 		move(client) {
 			if (spec === null || phase === "idle") {
 				return;
 			}
-			if (deps.port.getSnapshot().revision !== armedRevision) {
-				controller.cancel("external-revision");
+			if (!Object.is(deps.getDocumentToken(), armedToken)) {
+				controller.cancel("external-change");
 				return;
 			}
 			last = client;
@@ -141,16 +154,14 @@ export function createGestureController(
 			active.clearPreview();
 			reset();
 			if (!wasDragging) {
-				return; // a plain click: no command, no history entry
+				return; // a plain click: no write, no history entry
 			}
-			if (deps.port.getSnapshot().revision !== armedRevision) {
-				deps.onCancelled?.(active.gesture, "external-revision");
+			if (!Object.is(deps.getDocumentToken(), armedToken)) {
+				deps.onCancelled?.(active.gesture, "external-change");
 				return;
 			}
-			const command = active.commit(delta);
-			if (command !== null) {
-				void deps.port.execute(command);
-			}
+			// The ONE write of the whole gesture.
+			active.commit(delta);
 			deps.onCompleted?.(active.gesture, performance.now() - startedAt);
 		},
 
@@ -165,9 +176,9 @@ export function createGestureController(
 			deps.onCancelled?.(active.gesture, reason);
 		},
 
-		handleExternalRevision() {
+		handleExternalChange() {
 			if (phase !== "idle") {
-				controller.cancel("external-revision");
+				controller.cancel("external-change");
 			}
 		},
 

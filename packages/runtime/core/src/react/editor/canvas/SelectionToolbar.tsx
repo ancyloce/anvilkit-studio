@@ -8,13 +8,20 @@
  * and is the UI entry point for:
  *
  * - **align** left/center/right/top/middle/bottom and **distribute**
- *   H/V (≥3 nodes) — built by `align.ts` (§13.6 semantics: flow
- *   siblings sharing a parent get ONE parent-layout patch; absolute
- *   nodes move geometrically, cross-parent allowed) and committed as
- *   one command or one atomic batch;
+ *   H/V (≥3 nodes) — built by `align.ts` (flow siblings sharing a
+ *   parent get ONE parent-layout patch; absolute nodes move
+ *   geometrically, cross-parent allowed) and committed through
+ *   `commitCanvasAppearance` as ONE history entry, however many nodes
+ *   move (PLAN-0028 `p4-006`: no command dispatch anywhere in `canvas/`);
  * - the **bulk ops** duplicate / delete / lock / hide /
- *   wrap-in-container, reusing the CORE-P1A-017 §18 command
- *   implementations verbatim through the shared `ShortcutContext`.
+ *   wrap-in-container, reusing the §18 shortcut implementations
+ *   verbatim through the shared `ShortcutContext` — those live in
+ *   `shortcuts/`, not here, and are rebased with that module.
+ *
+ * **Locked nodes are excluded from every mutating op** (`p3-006`
+ * annotations). They stay *selectable* — `selection.ts` fences mutation,
+ * not selection — so a marquee that swept one up cannot drag it along
+ * into an align.
  *
  * Create-component-from-multi-select is deliberately absent — it
  * lands with CORE-P2-004 (Phase 2, ADR-gated).
@@ -24,7 +31,11 @@
  * do not cross into the iframe document).
  */
 
-import type { Config as PuckConfig } from "@puckeditor/core";
+import type {
+	CssBoxEdges,
+	ResponsiveLayerRef,
+} from "@anvilkit/contracts/editor";
+import type { PuckApi, Config as PuckConfig } from "@puckeditor/core";
 import {
 	type ReactNode,
 	useEffect,
@@ -33,7 +44,7 @@ import {
 	useSyncExternalStore,
 } from "react";
 import { useMsg } from "@/state/editor-i18n-context";
-import type { EditorCommand } from "../../../editor/legacy/index.js";
+import { ROOT_STYLE_TARGET_ID } from "../../../puck/targets.js";
 import { useStudioPluginContext } from "../../../studio/context/plugin-context.js";
 import type { StudioEditorBridge } from "../bridge.js";
 import type { InternalEditorCommandPort } from "../command-port.js";
@@ -43,9 +54,15 @@ import {
 	type AlignEdge,
 	type AlignInput,
 	type AlignNode,
-	buildAlignCommand,
-	buildDistributeCommand,
+	buildAlignOps,
+	buildDistributeOps,
 } from "./align.js";
+import {
+	type CanvasAppearanceOp,
+	commitCanvasAppearance,
+	isCanvasNodeLocked,
+	readAuthoredProperty,
+} from "./appearance.js";
 import { isElementNode } from "./dom-registry.js";
 import type { CanvasRect } from "./geometry.js";
 import { useOverlayPortalRegistration } from "./overlay-root.js";
@@ -109,10 +126,18 @@ async function requestComponentCapture(
 	bridge.componentCapture.request(selectedIds);
 }
 
-/** Build the §13.6 align input over the live selection. */
+/**
+ * Build the align input over the live selection.
+ *
+ * Geometry comes from the rendered DOM (the same DOM the compiled
+ * stylesheet styles); the authored `inset` merge base comes from the
+ * read model. Locked nodes drop out here — before any op is built — so
+ * a mutating gesture can never carry one.
+ */
 export function alignInputOf(
 	bridge: StudioEditorBridge,
-	port: InternalEditorCommandPort,
+	api: PuckApi,
+	layer: ResponsiveLayerRef,
 ): AlignInput | null {
 	const registry = bridge.canvasRegistry;
 	const selection = bridge.selection?.getState();
@@ -122,7 +147,7 @@ export function alignInputOf(
 	const nodes: AlignNode[] = [];
 	for (const nodeId of selection.selectedIds) {
 		const element = registry.getPrimaryElement(nodeId);
-		if (element === null) {
+		if (element === null || isCanvasNodeLocked(api, nodeId)) {
 			continue;
 		}
 		const view = element.ownerDocument.defaultView;
@@ -144,6 +169,18 @@ export function alignInputOf(
 		const parentId =
 			parentHost === null ? null : (registry.getNodeId(parentHost) ?? null);
 		const parentRectSource = parentHost ?? element.parentElement;
+		// Only absolute nodes write `inset`; reading it for flow nodes
+		// would be a wasted projection per node per click.
+		const inset =
+			position === "absolute"
+				? readAuthoredProperty<CssBoxEdges>(
+						api,
+						nodeId,
+						ROOT_STYLE_TARGET_ID,
+						"inset",
+						layer,
+					)
+				: undefined;
 		nodes.push({
 			nodeId,
 			rect: toContent(element.getBoundingClientRect()),
@@ -152,6 +189,7 @@ export function alignInputOf(
 			...(parentRectSource === null
 				? {}
 				: { parentRect: toContent(parentRectSource.getBoundingClientRect()) }),
+			...(inset === undefined ? {} : { inset }),
 		});
 	}
 	if (nodes.length < 2) {
@@ -174,7 +212,6 @@ export function alignInputOf(
 	}
 	return {
 		nodes,
-		revision: port.getSnapshot().revision,
 		...(parentDirection !== undefined ? { parentDirection } : {}),
 		...(flowParentId !== undefined ? { flowParentId } : {}),
 	};
@@ -227,32 +264,39 @@ export function SelectionToolbar({ bridge }: SelectionToolbarProps): ReactNode {
 			if (port === null) {
 				return;
 			}
-			const executeAlign = (command: EditorCommand | null): void => {
-				if (command !== null) {
-					void port.execute(command);
+			const api = port.tryGetPuckApi?.() ?? null;
+			const layer = bridge.responsive?.getActiveLayer() ?? "base";
+			/** Every op of one align/distribute intent → ONE history entry. */
+			const commitOps = (ops: readonly CanvasAppearanceOp[]): void => {
+				if (api === null || ops.length === 0) {
+					return;
 				}
+				const result = commitCanvasAppearance(
+					{ getPuckApi: () => api },
+					{ layer, ops },
+				);
+				bridge.diagnostics.setDiagnostics(
+					"canvas.appearance",
+					result.status === "rejected" ? result.errors : [],
+				);
 			};
 			if ((ALIGN_EDGES as readonly string[]).includes(action)) {
-				const input = alignInputOf(bridge, port);
+				const input = api === null ? null : alignInputOf(bridge, api, layer);
 				if (input !== null) {
-					executeAlign(buildAlignCommand(action as AlignEdge, input));
+					commitOps(buildAlignOps(action as AlignEdge, input));
 				}
 				return;
 			}
 			if (action === "distribute-x" || action === "distribute-y") {
-				const input = alignInputOf(bridge, port);
+				const input = api === null ? null : alignInputOf(bridge, api, layer);
 				if (input !== null) {
-					executeAlign(
-						buildDistributeCommand(
-							action === "distribute-x" ? "x" : "y",
-							input,
-						),
+					commitOps(
+						buildDistributeOps(action === "distribute-x" ? "x" : "y", input),
 					);
 				}
 				return;
 			}
 			if (action === CREATE_COMPONENT_ACTION) {
-				const api = port.tryGetPuckApi?.() ?? null;
 				if (api !== null) {
 					void requestComponentCapture(bridge, port, api.config);
 				}

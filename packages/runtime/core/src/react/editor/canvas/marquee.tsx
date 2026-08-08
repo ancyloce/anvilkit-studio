@@ -1,8 +1,24 @@
 "use client";
 
 /**
- * @file Canvas multi-select: marquee + hierarchy drill-in (PLAN-0020
- * CORE-P1B-007; ED-CANVAS-001).
+ * @file The canvas pointer-gesture layer: marquee, hierarchy drill-in,
+ * and component mode (PLAN-0028 `p4-006` + `p5-002`; originally
+ * PLAN-0020 CORE-P1B-007).
+ *
+ * **One selection model.** Every read and every write goes through the
+ * selection controller (`react/editor/selection.ts`) that `p3-007` owns
+ * and `p4-004`'s `useShellSelection` binds the panels to. The marquee
+ * holds no selection state of its own — only the in-flight band — so the
+ * canvas, the Layers panel and the inspector cannot disagree about what
+ * is selected. Shift-marquee also preserves the existing PRIMARY rather
+ * than promoting the first hit, which is what makes an additive sweep
+ * agree with the panel's idea of the primary node.
+ *
+ * **Locked nodes stay selectable.** `selection.ts` states the rule —
+ * mutation is fenced at the write layer, not at selection — so the
+ * marquee sweeps them up and `canvas/appearance.ts`'s
+ * `isCanvasNodeLocked` keeps them out of every mutating gesture (handles
+ * hide entirely; align/distribute drop them from the input).
  *
  * - **Marquee**: a press on empty canvas (no node under the pointer,
  *   no handle) arms a marquee; ≥3 px of travel shows the rubber band
@@ -20,8 +36,31 @@
  * Interaction listens at document-capture level (the proven overlay
  * pattern for cross-document portals); visuals render into the
  * authoring overlay root.
+ *
+ * ### Component mode rides the SAME listener stack (`p5-002`)
+ *
+ * PLAN-0026 §3.7.2's gesture table is a second reading of the same four
+ * pointer events, not a second interaction layer — a competing document
+ * listener stack would have to re-derive suppression, inline-session
+ * fencing and handle avoidance, and would drift from them. So the
+ * handlers below branch on `selection.mode`:
+ *
+ * - **hover** — page mode: Puck's own node outline (untouched);
+ *   component mode: the declared target under the pointer, outlined on
+ *   **every** matched element (§3.7.4);
+ * - **click** — page mode: Puck selects the node (untouched); component
+ *   mode: selects `(nodeId, targetId)`;
+ * - **double-click** — page mode: drill one node deeper, and once the
+ *   deepest node is already selected, **into** the component at the
+ *   clicked target; component mode: descend to the clicked target;
+ * - **pointerdown** — component mode: node dragging must **not exist**
+ *   (§3.7.1 rule 3), see `suppressNodeDrag` below.
+ *
+ * The `Escape` ladder and `↑`/`↓` traversal are keyboard, and live with
+ * the rest of the keymap in `shortcuts/` rather than here.
  */
 
+import type { PuckApi } from "@puckeditor/core";
 import {
 	type ReactNode,
 	useEffect,
@@ -30,7 +69,14 @@ import {
 	useSyncExternalStore,
 } from "react";
 import type { StudioEditorBridge } from "../bridge.js";
-import { isElementNode } from "./dom-registry.js";
+import type { InternalEditorCommandPort } from "../command-port.js";
+import {
+	type CanvasPoint,
+	descendTargetId,
+	targetChainAt,
+} from "./component-mode.js";
+import { type CanvasStyleTargetRef, isElementNode } from "./dom-registry.js";
+import { ComponentTargetLayer } from "./target-outline.js";
 
 interface MarqueeRect {
 	readonly x: number;
@@ -115,6 +161,45 @@ export function drillInTarget(
 	return chain[Math.min(index + 1, chain.length - 1)];
 }
 
+/**
+ * The declared target chain under a pointer event, or `null` when the
+ * pointer is not over a component this registry knows.
+ *
+ * Geometric rather than `event.target`-based **because it has to be**:
+ * Puck sets `pointer-events: none` on every descendant of a component
+ * and re-enables it only on the root, so the event target inside a
+ * `blog-list` is always the `blog-list` root. See
+ * `canvas/component-mode.ts` for the full note. The `resolveTarget`
+ * fallback covers the case where rects are unavailable (a detached or
+ * not-yet-laid-out document): it still resolves the stamped ancestor,
+ * which for a component root is its `root` target.
+ */
+function targetChainUnder(
+	bridge: StudioEditorBridge,
+	api: PuckApi | null,
+	element: Element,
+	point: CanvasPoint,
+): { readonly nodeId: string; readonly chain: readonly string[] } | null {
+	const registry = bridge.canvasRegistry;
+	if (registry === null || registry === undefined || api === null) {
+		return null;
+	}
+	const nodeId = registry.getNodeId(element);
+	if (nodeId === null) {
+		return null;
+	}
+	const chain = targetChainAt(api, registry, nodeId, point);
+	if (chain.length > 0) {
+		return { nodeId, chain };
+	}
+	const stamped = registry.resolveTarget(element);
+	return {
+		nodeId,
+		chain:
+			stamped === null || stamped.nodeId !== nodeId ? [] : [stamped.targetId],
+	};
+}
+
 /** Props for {@link CanvasMarquee}. */
 export interface CanvasMarqueeProps {
 	readonly bridge: StudioEditorBridge;
@@ -124,10 +209,13 @@ export interface CanvasMarqueeProps {
 export function CanvasMarquee({ bridge }: CanvasMarqueeProps): ReactNode {
 	useSyncExternalStore(bridge.subscribe, bridge.getVersion, bridge.getVersion);
 	const [rect, setRect] = useState<MarqueeRect | null>(null);
+	const [hovered, setHovered] = useState<CanvasStyleTargetRef | null>(null);
 	const stateRef = useRef<{
 		start: { x: number; y: number };
 		additive: boolean;
 		baseSelection: readonly string[];
+		/** The primary an additive sweep must not steal. */
+		basePrimaryId: string | undefined;
 		active: boolean;
 	} | null>(null);
 
@@ -137,6 +225,20 @@ export function CanvasMarquee({ bridge }: CanvasMarqueeProps): ReactNode {
 		if (doc === null) {
 			return;
 		}
+		/** The live `PuckApi`, or `null` — the canvas renders outside `<Puck>`. */
+		const puckApi = (): PuckApi | null =>
+			(bridge.port as InternalEditorCommandPort | null)?.tryGetPuckApi?.() ??
+			null;
+		const modeOf = (): "page" | "component" =>
+			bridge.selection?.getState().mode ?? "page";
+		const chainUnder = (
+			element: Element,
+			event: MouseEvent,
+		): { readonly nodeId: string; readonly chain: readonly string[] } | null =>
+			targetChainUnder(bridge, puckApi(), element, {
+				x: event.clientX,
+				y: event.clientY,
+			});
 		const onDown = (event: Event): void => {
 			const pointer = event as PointerEvent;
 			const target = event.target;
@@ -151,17 +253,68 @@ export function CanvasMarquee({ bridge }: CanvasMarqueeProps): ReactNode {
 			if (target.closest("[data-ak-handle]") !== null) {
 				return;
 			}
+			// §3.7.1 rule 3 — in component mode the node-drag gesture must
+			// NOT EXIST rather than start and fail. Puck's sortable binds a
+			// BUBBLE-phase `pointerdown` on the component element itself
+			// (dnd-kit `PointerSensor.bind` → `source.handle ?? source.element`),
+			// so stopping propagation here, in the document CAPTURE phase,
+			// means `handlePointerDown` is never reached: no activation
+			// controller and therefore no half-started drag to clean up. It is
+			// the same mechanism Puck's own
+			// `registerOverlayPortal({ disableDrag })` uses, applied at the
+			// document rather than per overlay element. Overlay portals keep
+			// their presses — the selection toolbar and the handles live in
+			// them.
+			if (modeOf() === "component") {
+				if (target.closest("[data-puck-overlay-portal]") === null) {
+					event.stopPropagation();
+				}
+				// The marquee is node multi-select; component mode addresses a
+				// target inside ONE node, so it never arms here either.
+				return;
+			}
 			if (bridge.canvasRegistry?.getNodeId(target) !== null) {
 				return;
 			}
+			const selection = bridge.selection?.getState();
 			stateRef.current = {
 				start: toContent(doc, { x: pointer.clientX, y: pointer.clientY }),
 				additive: pointer.shiftKey,
-				baseSelection: bridge.selection?.getState().selectedIds ?? [],
+				baseSelection: selection?.selectedIds ?? [],
+				basePrimaryId: selection?.primaryId,
 				active: false,
 			};
 		};
+		/**
+		 * Component-mode hover, folded into the move handler rather than
+		 * given a `pointerover` listener of its own: with
+		 * `pointer-events: none` on every inner element, `pointerover`
+		 * fires once for the whole component and never again as the
+		 * pointer crosses between its targets — it would report the first
+		 * element hovered and then go stale.
+		 */
+		const updateHover = (event: MouseEvent): void => {
+			if (modeOf() !== "component") {
+				setHovered((previous) => (previous === null ? previous : null));
+				return;
+			}
+			const target = event.target;
+			const hit = !isElementNode(target) ? null : chainUnder(target, event);
+			const targetId =
+				hit === null ? undefined : hit.chain[hit.chain.length - 1];
+			setHovered((previous) => {
+				if (hit === null || targetId === undefined) {
+					return previous === null ? previous : null;
+				}
+				return previous !== null &&
+					previous.nodeId === hit.nodeId &&
+					previous.targetId === targetId
+					? previous
+					: { nodeId: hit.nodeId, targetId };
+			});
+		};
 		const onMove = (event: Event): void => {
+			updateHover(event as MouseEvent);
 			const state = stateRef.current;
 			if (state === null) {
 				return;
@@ -224,7 +377,14 @@ export function CanvasMarquee({ bridge }: CanvasMarqueeProps): ReactNode {
 				? [...new Set([...state.baseSelection, ...outermost])]
 				: outermost;
 			if (next.length > 0) {
-				bridge.selection?.selectMany(next);
+				// An additive sweep keeps the primary it started with, so the
+				// canvas and the Layers panel agree about which node the
+				// single-node affordances act on.
+				const primaryId =
+					state.additive && state.basePrimaryId !== undefined
+						? state.basePrimaryId
+						: undefined;
+				bridge.selection?.selectMany(next, primaryId);
 			} else if (!state.additive) {
 				bridge.selection?.clear();
 			}
@@ -232,6 +392,35 @@ export function CanvasMarquee({ bridge }: CanvasMarqueeProps): ReactNode {
 		const onUp = (): void => {
 			stateRef.current = null;
 			setRect(null);
+		};
+		/** Move the selection to one `(nodeId, targetId)` pair. */
+		const selectTarget = (nodeId: string, targetId: string): void => {
+			if (bridge.selection?.getState().primaryId !== nodeId) {
+				bridge.selection?.select(nodeId);
+			}
+			// `setTargetId` funnels through the selection controller's own
+			// declared-target guard, so a target the new primary does not
+			// declare is dropped there rather than checked again here.
+			bridge.selection?.setTargetId(targetId);
+		};
+		const onClick = (event: Event): void => {
+			if (modeOf() !== "component") {
+				return;
+			}
+			const target = event.target;
+			if (
+				!isElementNode(target) ||
+				target.closest("[data-ak-handle]") !== null
+			) {
+				return;
+			}
+			const hit = chainUnder(target, event as MouseEvent);
+			const targetId =
+				hit === null ? undefined : hit.chain[hit.chain.length - 1];
+			if (hit === null || targetId === undefined) {
+				return;
+			}
+			selectTarget(hit.nodeId, targetId);
 		};
 		const onDouble = (event: Event): void => {
 			const target = event.target;
@@ -243,8 +432,42 @@ export function CanvasMarquee({ bridge }: CanvasMarqueeProps): ReactNode {
 			if (bridge.inline?.tryEnterFromEvent(target) === true) {
 				return;
 			}
+			const selection = bridge.selection?.getState();
+			const hit = chainUnder(target, event as MouseEvent);
+			if (selection?.mode === "component") {
+				// Already inside: descend one level toward the clicked target.
+				if (hit === null || hit.chain.length === 0) {
+					return;
+				}
+				const next = descendTargetId(
+					hit.chain,
+					selection.primaryId === hit.nodeId ? selection.targetId : undefined,
+				);
+				if (next !== undefined) {
+					selectTarget(hit.nodeId, next);
+				}
+				return;
+			}
 			const chain = nodeChainOf(bridge, target);
-			const next = drillInTarget(chain, bridge.selection?.getState().primaryId);
+			const next = drillInTarget(chain, selection?.primaryId);
+			const innermost =
+				hit === null ? undefined : hit.chain[hit.chain.length - 1];
+			// The deepest node is already selected and the pointer is over a
+			// DECLARED element: the next step down is into the component
+			// (§3.7.2 "double-click **into** a component"). An element the
+			// component never declared has no entry — it is not addressable,
+			// so there is nothing to enter at.
+			if (
+				next !== undefined &&
+				next === selection?.primaryId &&
+				hit !== null &&
+				hit.nodeId === next &&
+				innermost !== undefined
+			) {
+				bridge.selection?.setMode("component");
+				bridge.selection?.setTargetId(innermost);
+				return;
+			}
 			if (next !== undefined) {
 				bridge.selection?.select(next);
 			}
@@ -254,33 +477,39 @@ export function CanvasMarquee({ bridge }: CanvasMarqueeProps): ReactNode {
 		doc.addEventListener("pointermove", onMove, true);
 		doc.addEventListener("pointerup", onUp, true);
 		doc.addEventListener("pointercancel", onUp, true);
+		doc.addEventListener("click", onClick, true);
 		doc.addEventListener("dblclick", onDouble, true);
 		return () => {
 			doc.removeEventListener("pointerdown", onDown, true);
 			doc.removeEventListener("pointermove", onMove, true);
 			doc.removeEventListener("pointerup", onUp, true);
 			doc.removeEventListener("pointercancel", onUp, true);
+			doc.removeEventListener("click", onClick, true);
 			doc.removeEventListener("dblclick", onDouble, true);
 		};
 	}, [doc, bridge]);
 
-	if (rect === null) {
-		return null;
-	}
 	return (
-		<div
-			data-ak-marquee
-			style={{
-				position: "absolute",
-				left: `${rect.x}px`,
-				top: `${rect.y}px`,
-				width: `${rect.width}px`,
-				height: `${rect.height}px`,
-				border: "1px solid var(--editor-selection, #3b82f6)",
-				background:
-					"color-mix(in srgb, var(--editor-selection, #3b82f6) 12%, transparent)",
-				pointerEvents: "none",
-			}}
-		/>
+		<>
+			{rect === null ? null : (
+				<div
+					data-ak-marquee
+					style={{
+						position: "absolute",
+						left: `${rect.x}px`,
+						top: `${rect.y}px`,
+						width: `${rect.width}px`,
+						height: `${rect.height}px`,
+						border: "1px solid var(--editor-selection, #3b82f6)",
+						background:
+							"color-mix(in srgb, var(--editor-selection, #3b82f6) 12%, transparent)",
+						pointerEvents: "none",
+					}}
+				/>
+			)}
+			{doc === null ? null : (
+				<ComponentTargetLayer bridge={bridge} doc={doc} hovered={hovered} />
+			)}
+		</>
 	);
 }
