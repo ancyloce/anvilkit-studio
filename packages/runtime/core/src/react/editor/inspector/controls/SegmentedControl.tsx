@@ -1,35 +1,23 @@
 "use client";
 
 /**
- * @file `SegmentedControl` — enum property editor for **small** option
- * sets, rendered as a segmented button row instead of a dropdown.
+ * @file `SegmentedControl` — the pre-canonical inspector's binding to
+ * the shared segmented enum control.
  *
- * Same contract as {@link SelectControl} (commit on pick, reset when
- * the active option is pressed again, invalid states handled by
- * {@link InspectorFieldShell}) — only the presentation differs. Use it
- * where the options are few and comparable at a glance (flex
- * direction, wrap, alignment); anything longer stays a select, where a
- * dropdown is genuinely easier to scan.
- *
- * `icon` turns an option into an icon button; the localized `label` is
- * still its accessible name, so an icon-only row is never unlabeled.
- * Options must carry pre-resolved labels — no catalog lookups here, so
- * a caller cannot accidentally ship an untranslated segment.
+ * The implementation moved to
+ * `composition/style/controls/SegmentedControl.tsx` with PLAN-0028
+ * `p4-001`; this file keeps the legacy prop shape and delegates.
+ * {@link SegmentedOption} is re-exported so the existing sections keep
+ * importing their option type from here.
  */
 
 import type { ReactNode } from "react";
-import { ToggleGroup, ToggleGroupItem } from "@/primitives/toggle-group";
-import { cn } from "@/shared/cn";
-import { InspectorFieldShell } from "../InspectorFieldShell.js";
+import { SegmentedControl as SharedSegmentedControl } from "../../composition/style/controls/SegmentedControl.js";
 import type { InspectorFieldHandle } from "../use-inspector.js";
 
-/** One segment. */
-export interface SegmentedOption<T extends string> {
-	readonly value: T;
-	/** Localized accessible name (and visible text when `icon` is unset). */
-	readonly label: string;
-	readonly icon?: ReactNode;
-}
+export type { SegmentedOption } from "../../composition/style/controls/SegmentedControl.js";
+
+import type { SegmentedOption } from "../../composition/style/controls/SegmentedControl.js";
 
 /** Props for {@link SegmentedControl}. */
 export interface SegmentedControlProps<T extends string> {
@@ -40,55 +28,8 @@ export interface SegmentedControlProps<T extends string> {
 }
 
 /** Segmented enum editor bound to one inspector field. */
-export function SegmentedControl<T extends string>({
-	label,
-	field,
-	options,
-	testId,
-}: SegmentedControlProps<T>): ReactNode {
-	const current = field.state.kind === "value" ? field.state.value : undefined;
-	const iconOnly = options.every((option) => option.icon !== undefined);
-
-	return (
-		<InspectorFieldShell
-			label={label}
-			state={field.state}
-			onReset={() => void field.reset()}
-		>
-			<ToggleGroup
-				variant="outline"
-				size="sm"
-				spacing={0}
-				value={current === undefined ? [] : [current]}
-				onValueChange={(next: readonly string[]) => {
-					const picked = next[0] as T | undefined;
-					// Pressing the active segment clears it — the same
-					// reset-at-layer the select's `unset` option performs, kept
-					// reachable without a dropdown.
-					if (picked === undefined) {
-						void field.reset();
-						return;
-					}
-					void field.commit(picked);
-				}}
-				aria-label={label}
-				className={cn("w-full", iconOnly ? null : "grid grid-flow-col")}
-				data-testid={testId}
-			>
-				{options.map((option) => (
-					<ToggleGroupItem
-						key={option.value}
-						value={option.value}
-						aria-label={option.icon !== undefined ? option.label : undefined}
-						className="h-7 min-w-7 flex-1 px-2 text-[11px]"
-						data-testid={
-							testId !== undefined ? `${testId}-${option.value}` : undefined
-						}
-					>
-						{option.icon ?? option.label}
-					</ToggleGroupItem>
-				))}
-			</ToggleGroup>
-		</InspectorFieldShell>
-	);
+export function SegmentedControl<T extends string>(
+	props: SegmentedControlProps<T>,
+): ReactNode {
+	return <SharedSegmentedControl {...props} />;
 }

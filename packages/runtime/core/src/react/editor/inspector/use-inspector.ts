@@ -31,7 +31,7 @@ import {
 	resolveStyleTargetsFor,
 } from "../../../puck/component-metadata.js";
 import { readDocument } from "../../../document-model/index.js";
-import { useOptionalReactivePuck } from "../../overrides/utils/use-reactive-puck.js";
+import { useOptionalReactivePuck } from "../../utils/use-reactive-puck.js";
 import { ROOT_STYLE_TARGET_ID } from "../../../puck/targets.js";
 import type { StudioEditorBridge } from "../bridge.js";
 import { withBreakpointMaterialization } from "../responsive/materialize.js";
