@@ -1,0 +1,167 @@
+{
+	"version": "3",
+	"id": "slide-thank-you",
+	"title": "Slide — 16:9 Thank You",
+	"pages": [
+		{
+			"id": "slide-thank-you-1",
+			"name": "Slide — 16:9 Thank You",
+			"size": {
+				"width": 1920,
+				"height": 1080,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"root": {
+				"id": "slide-thank-you-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1920,
+					"height": 1080
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "glow",
+						"name": "Glow",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1920,
+							"height": 1080
+						},
+						"fill": {
+							"kind": "radial",
+							"stops": [
+								{
+									"offset": 0,
+									"color": "#1e293b"
+								},
+								{
+									"offset": 1,
+									"color": "#0f172a"
+								}
+							],
+							"from": {
+								"x": 0.5,
+								"y": 0.42
+							},
+							"to": {
+								"x": 0.5,
+								"y": 0.42
+							}
+						},
+						"zIndex": 1
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 360,
+							"y": 420,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1200,
+							"height": 160
+						},
+						"text": "Thank you",
+						"fontFamily": "Inter",
+						"fontSize": 130,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 2
+					},
+					{
+						"id": "dot",
+						"name": "Dot",
+						"type": "ellipse",
+						"transform": {
+							"x": 936,
+							"y": 620,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 48,
+							"height": 48
+						},
+						"fill": "#f59e0b",
+						"zIndex": 3
+					},
+					{
+						"id": "sub",
+						"name": "Subtitle",
+						"type": "text",
+						"transform": {
+							"x": 360,
+							"y": 700,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1200,
+							"height": 60
+						},
+						"text": "Questions welcome",
+						"fontFamily": "Inter",
+						"fontSize": 44,
+						"fill": "#cbd5e1",
+						"align": "center",
+						"zIndex": 4
+					},
+					{
+						"id": "contact",
+						"name": "Contact",
+						"type": "text",
+						"transform": {
+							"x": 360,
+							"y": 880,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1200,
+							"height": 48
+						},
+						"text": "hello@anvilkit.studio · anvilkit.studio",
+						"fontFamily": "Inter",
+						"fontSize": 30,
+						"fill": "#64748b",
+						"align": "center",
+						"zIndex": 5
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

@@ -1,0 +1,153 @@
+{
+	"version": "3",
+	"id": "slide-quote",
+	"title": "Slide — 16:9 Quote",
+	"pages": [
+		{
+			"id": "slide-quote-1",
+			"name": "Slide — 16:9 Quote",
+			"size": {
+				"width": 1920,
+				"height": 1080,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#f8fafc"
+			},
+			"root": {
+				"id": "slide-quote-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1920,
+					"height": 1080
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "mark",
+						"name": "Quote mark",
+						"type": "text",
+						"transform": {
+							"x": 760,
+							"y": 140,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 400,
+							"height": 220
+						},
+						"text": "“",
+						"fontFamily": "Inter",
+						"fontSize": 200,
+						"fill": "#cbd5e1",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 1
+					},
+					{
+						"id": "quote",
+						"name": "Quote",
+						"type": "text",
+						"transform": {
+							"x": 360,
+							"y": 330,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1200,
+							"height": 340
+						},
+						"text": "Design is not just what it\nlooks like. Design is\nhow it works.",
+						"fontFamily": "Inter",
+						"fontSize": 76,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 2
+					},
+					{
+						"id": "rule",
+						"name": "Rule",
+						"type": "rect",
+						"transform": {
+							"x": 910,
+							"y": 720,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 100,
+							"height": 4
+						},
+						"fill": "#f59e0b",
+						"zIndex": 3
+					},
+					{
+						"id": "author",
+						"name": "Author",
+						"type": "text",
+						"transform": {
+							"x": 360,
+							"y": 760,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1200,
+							"height": 52
+						},
+						"text": "STEVE JOBS",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 4
+					},
+					{
+						"id": "source",
+						"name": "Source",
+						"type": "text",
+						"transform": {
+							"x": 360,
+							"y": 815,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1200,
+							"height": 48
+						},
+						"text": "The New York Times, 2003",
+						"fontFamily": "Inter",
+						"fontSize": 28,
+						"fill": "#64748b",
+						"align": "center",
+						"zIndex": 5
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

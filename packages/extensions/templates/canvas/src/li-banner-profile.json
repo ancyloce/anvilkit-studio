@@ -1,0 +1,144 @@
+{
+	"version": "3",
+	"id": "li-banner-profile",
+	"title": "LinkedIn Banner — Profile",
+	"pages": [
+		{
+			"id": "li-banner-profile-1",
+			"name": "LinkedIn Banner — Profile",
+			"size": {
+				"width": 1584,
+				"height": 396,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"root": {
+				"id": "li-banner-profile-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1584,
+					"height": 396
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "accent",
+						"name": "Accent bar",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 12,
+							"height": 396
+						},
+						"fill": "#2563eb",
+						"zIndex": 1
+					},
+					{
+						"id": "name",
+						"name": "Name",
+						"type": "text",
+						"transform": {
+							"x": 440,
+							"y": 110,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1000,
+							"height": 90
+						},
+						"text": "Amara Osei",
+						"fontFamily": "Inter",
+						"fontSize": 72,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 2
+					},
+					{
+						"id": "role",
+						"name": "Role",
+						"type": "text",
+						"transform": {
+							"x": 440,
+							"y": 210,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1000,
+							"height": 56
+						},
+						"text": "Design Systems Lead · Bristol, UK",
+						"fontFamily": "Inter",
+						"fontSize": 38,
+						"fill": "#94a3b8",
+						"zIndex": 3
+					},
+					{
+						"id": "dot",
+						"name": "Dot",
+						"type": "ellipse",
+						"transform": {
+							"x": 440,
+							"y": 296,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 14,
+							"height": 14
+						},
+						"fill": "#2563eb",
+						"zIndex": 4
+					},
+					{
+						"id": "site",
+						"name": "Site",
+						"type": "text",
+						"transform": {
+							"x": 470,
+							"y": 286,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 600,
+							"height": 40
+						},
+						"text": "anvilkit.studio",
+						"fontFamily": "Inter",
+						"fontSize": 28,
+						"fill": "#cbd5e1",
+						"zIndex": 5
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

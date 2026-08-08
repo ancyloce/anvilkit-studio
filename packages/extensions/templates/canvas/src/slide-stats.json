@@ -1,0 +1,352 @@
+{
+	"version": "3",
+	"id": "slide-stats",
+	"title": "Slide — 16:9 Metrics",
+	"pages": [
+		{
+			"id": "slide-stats-1",
+			"name": "Slide — 16:9 Metrics",
+			"size": {
+				"width": 1920,
+				"height": 1080,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"root": {
+				"id": "slide-stats-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1920,
+					"height": 1080
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 110,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1000,
+							"height": 48
+						},
+						"text": "Q3 IN NUMBERS",
+						"fontFamily": "Inter",
+						"fontSize": 30,
+						"fill": "#f59e0b",
+						"fontWeight": "700",
+						"zIndex": 1
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 170,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1200,
+							"height": 100
+						},
+						"text": "The quarter, measured",
+						"fontFamily": "Inter",
+						"fontSize": 76,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 2
+					},
+					{
+						"id": "card-1",
+						"name": "Card 1",
+						"type": "rect",
+						"transform": {
+							"x": 120,
+							"y": 360,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 520,
+							"height": 420
+						},
+						"fill": "#1e293b",
+						"radius": 32,
+						"zIndex": 3
+					},
+					{
+						"id": "hex-1",
+						"name": "Hex 1",
+						"type": "polygon",
+						"transform": {
+							"x": 170,
+							"y": 410,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 80,
+							"height": 80
+						},
+						"sides": 6,
+						"fill": "#f59e0b",
+						"zIndex": 4
+					},
+					{
+						"id": "stat-1",
+						"name": "Stat 1",
+						"type": "text",
+						"transform": {
+							"x": 170,
+							"y": 520,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 420,
+							"height": 130
+						},
+						"text": "64%",
+						"fontFamily": "Inter",
+						"fontSize": 110,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 5
+					},
+					{
+						"id": "label-1",
+						"name": "Label 1",
+						"type": "text",
+						"transform": {
+							"x": 170,
+							"y": 670,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 420,
+							"height": 80
+						},
+						"text": "of releases shipped on the first review",
+						"fontFamily": "Inter",
+						"fontSize": 28,
+						"fill": "#94a3b8",
+						"zIndex": 6
+					},
+					{
+						"id": "card-2",
+						"name": "Card 2",
+						"type": "rect",
+						"transform": {
+							"x": 700,
+							"y": 360,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 520,
+							"height": 420
+						},
+						"fill": "#1e293b",
+						"radius": 32,
+						"zIndex": 7
+					},
+					{
+						"id": "hex-2",
+						"name": "Hex 2",
+						"type": "polygon",
+						"transform": {
+							"x": 750,
+							"y": 410,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 80,
+							"height": 80
+						},
+						"sides": 6,
+						"fill": "#38bdf8",
+						"zIndex": 8
+					},
+					{
+						"id": "stat-2",
+						"name": "Stat 2",
+						"type": "text",
+						"transform": {
+							"x": 750,
+							"y": 520,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 420,
+							"height": 130
+						},
+						"text": "3.2x",
+						"fontFamily": "Inter",
+						"fontSize": 110,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 9
+					},
+					{
+						"id": "label-2",
+						"name": "Label 2",
+						"type": "text",
+						"transform": {
+							"x": 750,
+							"y": 670,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 420,
+							"height": 80
+						},
+						"text": "faster hand-off with shared tokens",
+						"fontFamily": "Inter",
+						"fontSize": 28,
+						"fill": "#94a3b8",
+						"zIndex": 10
+					},
+					{
+						"id": "card-3",
+						"name": "Card 3",
+						"type": "rect",
+						"transform": {
+							"x": 1280,
+							"y": 360,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 520,
+							"height": 420
+						},
+						"fill": "#1e293b",
+						"radius": 32,
+						"zIndex": 11
+					},
+					{
+						"id": "hex-3",
+						"name": "Hex 3",
+						"type": "polygon",
+						"transform": {
+							"x": 1330,
+							"y": 410,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 80,
+							"height": 80
+						},
+						"sides": 6,
+						"fill": "#a78bfa",
+						"zIndex": 12
+					},
+					{
+						"id": "stat-3",
+						"name": "Stat 3",
+						"type": "text",
+						"transform": {
+							"x": 1330,
+							"y": 520,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 420,
+							"height": 130
+						},
+						"text": "18%",
+						"fontFamily": "Inter",
+						"fontSize": 110,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 13
+					},
+					{
+						"id": "label-3",
+						"name": "Label 3",
+						"type": "text",
+						"transform": {
+							"x": 1330,
+							"y": 670,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 420,
+							"height": 80
+						},
+						"text": "still measure adoption by hand",
+						"fontFamily": "Inter",
+						"fontSize": 28,
+						"fill": "#94a3b8",
+						"zIndex": 14
+					},
+					{
+						"id": "footer",
+						"name": "Footer",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 900,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1200,
+							"height": 44
+						},
+						"text": "Source: internal delivery dashboard",
+						"fontFamily": "Inter",
+						"fontSize": 26,
+						"fill": "#64748b",
+						"zIndex": 15
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

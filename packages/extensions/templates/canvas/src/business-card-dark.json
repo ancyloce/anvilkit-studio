@@ -1,0 +1,214 @@
+{
+	"version": "3",
+	"id": "business-card-dark",
+	"title": "Business Card — 85×55mm dark",
+	"pages": [
+		{
+			"id": "business-card-dark-1",
+			"name": "Business Card — 85×55mm dark",
+			"size": {
+				"width": 85,
+				"height": 55,
+				"unit": "mm",
+				"dpi": 300
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0b1120"
+			},
+			"layoutAids": {
+				"margin": {
+					"top": 5,
+					"right": 5,
+					"bottom": 5,
+					"left": 5
+				}
+			},
+			"root": {
+				"id": "business-card-dark-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 85,
+					"height": 55
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "accent",
+						"name": "Accent bar",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 3,
+							"height": 55
+						},
+						"fill": "#f59e0b",
+						"zIndex": 1
+					},
+					{
+						"id": "logo",
+						"name": "Logo mark",
+						"type": "polygon",
+						"transform": {
+							"x": 69,
+							"y": 8,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 8,
+							"height": 8
+						},
+						"sides": 6,
+						"fill": "#f59e0b",
+						"zIndex": 2
+					},
+					{
+						"id": "name",
+						"name": "Name",
+						"type": "text",
+						"transform": {
+							"x": 10,
+							"y": 15,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 55,
+							"height": 9
+						},
+						"text": "Amara Osei",
+						"fontFamily": "Inter",
+						"fontSize": 6.5,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 3
+					},
+					{
+						"id": "role",
+						"name": "Role",
+						"type": "text",
+						"transform": {
+							"x": 10,
+							"y": 25,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 55,
+							"height": 6
+						},
+						"text": "Design Systems Lead",
+						"fontFamily": "Inter",
+						"fontSize": 3.8,
+						"fill": "#94a3b8",
+						"zIndex": 4
+					},
+					{
+						"id": "rule",
+						"name": "Rule",
+						"type": "rect",
+						"transform": {
+							"x": 10,
+							"y": 32.5,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 30,
+							"height": 0.4
+						},
+						"fill": "#f59e0b",
+						"zIndex": 5
+					},
+					{
+						"id": "email",
+						"name": "Email",
+						"type": "text",
+						"transform": {
+							"x": 10,
+							"y": 36.5,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 60,
+							"height": 4.5
+						},
+						"text": "amara@anvilkit.studio",
+						"fontFamily": "Inter",
+						"fontSize": 3.4,
+						"fill": "#cbd5e1",
+						"zIndex": 6
+					},
+					{
+						"id": "phone",
+						"name": "Phone",
+						"type": "text",
+						"transform": {
+							"x": 10,
+							"y": 41,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 60,
+							"height": 4.5
+						},
+						"text": "+44 7700 900 123",
+						"fontFamily": "Inter",
+						"fontSize": 3.4,
+						"fill": "#cbd5e1",
+						"zIndex": 7
+					},
+					{
+						"id": "site",
+						"name": "Site",
+						"type": "text",
+						"transform": {
+							"x": 10,
+							"y": 45.5,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 60,
+							"height": 4.5
+						},
+						"text": "anvilkit.studio",
+						"fontFamily": "Inter",
+						"fontSize": 3.4,
+						"fill": "#64748b",
+						"zIndex": 8
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

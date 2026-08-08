@@ -1,0 +1,165 @@
+{
+	"version": "3",
+	"id": "yt-thumb-podcast",
+	"title": "YouTube Thumbnail — Podcast",
+	"pages": [
+		{
+			"id": "yt-thumb-podcast-1",
+			"name": "YouTube Thumbnail — Podcast",
+			"size": {
+				"width": 1280,
+				"height": 720,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#1e1b4b"
+			},
+			"root": {
+				"id": "yt-thumb-podcast-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1280,
+					"height": 720
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "hex-outer",
+						"name": "Hex outer",
+						"type": "polygon",
+						"transform": {
+							"x": 80,
+							"y": 180,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 360,
+							"height": 360
+						},
+						"sides": 6,
+						"fill": "#4338ca",
+						"zIndex": 1
+					},
+					{
+						"id": "hex-inner",
+						"name": "Hex inner",
+						"type": "polygon",
+						"transform": {
+							"x": 140,
+							"y": 240,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 240,
+							"height": 240
+						},
+						"sides": 6,
+						"fill": "#818cf8",
+						"zIndex": 2
+					},
+					{
+						"id": "dot",
+						"name": "Dot",
+						"type": "ellipse",
+						"transform": {
+							"x": 230,
+							"y": 330,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 60,
+							"height": 60
+						},
+						"fill": "#ffffff",
+						"zIndex": 3
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 520,
+							"y": 150,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 680,
+							"height": 52
+						},
+						"text": "EPISODE 42",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#a5b4fc",
+						"fontWeight": "700",
+						"zIndex": 4
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 520,
+							"y": 220,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 680,
+							"height": 280
+						},
+						"text": "The cost of\ngood taste",
+						"fontFamily": "Inter",
+						"fontSize": 92,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 5
+					},
+					{
+						"id": "guest",
+						"name": "Guest",
+						"type": "text",
+						"transform": {
+							"x": 520,
+							"y": 520,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 680,
+							"height": 56
+						},
+						"text": "with Amara Osei",
+						"fontFamily": "Inter",
+						"fontSize": 38,
+						"fill": "#c7d2fe",
+						"zIndex": 6
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

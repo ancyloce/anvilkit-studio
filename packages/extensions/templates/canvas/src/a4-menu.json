@@ -1,0 +1,643 @@
+{
+	"version": "3",
+	"id": "a4-menu",
+	"title": "Menu — A4 (print)",
+	"pages": [
+		{
+			"id": "a4-menu-1",
+			"name": "Menu — A4 (print)",
+			"size": {
+				"width": 210,
+				"height": 297,
+				"unit": "mm",
+				"dpi": 300
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#fffbeb"
+			},
+			"layoutAids": {
+				"margin": {
+					"top": 15,
+					"right": 15,
+					"bottom": 15,
+					"left": 15
+				}
+			},
+			"root": {
+				"id": "a4-menu-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 210,
+					"height": 297
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "rule-top",
+						"name": "Top rule",
+						"type": "rect",
+						"transform": {
+							"x": 15,
+							"y": 15,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 180,
+							"height": 1.5
+						},
+						"fill": "#92400e",
+						"zIndex": 1
+					},
+					{
+						"id": "brand",
+						"name": "Brand",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 24,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 180,
+							"height": 10
+						},
+						"text": "TRATTORIA VERDE",
+						"fontFamily": "Inter",
+						"fontSize": 7,
+						"fill": "#92400e",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 2
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 40,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 180,
+							"height": 20
+						},
+						"text": "Autumn Menu",
+						"fontFamily": "Inter",
+						"fontSize": 17,
+						"fill": "#1c1917",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 3
+					},
+					{
+						"id": "sub",
+						"name": "Subtitle",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 63,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 180,
+							"height": 8
+						},
+						"text": "Served Thursday to Sunday",
+						"fontFamily": "Inter",
+						"fontSize": 5.5,
+						"fill": "#78716c",
+						"align": "center",
+						"zIndex": 4
+					},
+					{
+						"id": "sec-1",
+						"name": "Section 1",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 86,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 180,
+							"height": 9
+						},
+						"text": "SMALL PLATES",
+						"fontFamily": "Inter",
+						"fontSize": 6.5,
+						"fill": "#92400e",
+						"fontWeight": "700",
+						"zIndex": 5
+					},
+					{
+						"id": "sec-1-rule",
+						"name": "Section 1 rule",
+						"type": "rect",
+						"transform": {
+							"x": 15,
+							"y": 97,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 180,
+							"height": 0.4
+						},
+						"fill": "#d6d3d1",
+						"zIndex": 6
+					},
+					{
+						"id": "item-1",
+						"name": "Item 1",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 102,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 150,
+							"height": 7
+						},
+						"text": "Charred leeks, hazelnut, pecorino",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"zIndex": 7
+					},
+					{
+						"id": "price-1",
+						"name": "Price 1",
+						"type": "text",
+						"transform": {
+							"x": 165,
+							"y": 102,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 30,
+							"height": 7
+						},
+						"text": "9",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"align": "right",
+						"zIndex": 8
+					},
+					{
+						"id": "item-2",
+						"name": "Item 2",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 112,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 150,
+							"height": 7
+						},
+						"text": "Fried olives, wild fennel",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"zIndex": 9
+					},
+					{
+						"id": "price-2",
+						"name": "Price 2",
+						"type": "text",
+						"transform": {
+							"x": 165,
+							"y": 112,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 30,
+							"height": 7
+						},
+						"text": "7",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"align": "right",
+						"zIndex": 10
+					},
+					{
+						"id": "item-3",
+						"name": "Item 3",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 122,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 150,
+							"height": 7
+						},
+						"text": "Bread, cultured butter, sea salt",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"zIndex": 11
+					},
+					{
+						"id": "price-3",
+						"name": "Price 3",
+						"type": "text",
+						"transform": {
+							"x": 165,
+							"y": 122,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 30,
+							"height": 7
+						},
+						"text": "5",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"align": "right",
+						"zIndex": 12
+					},
+					{
+						"id": "sec-2",
+						"name": "Section 2",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 145,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 180,
+							"height": 9
+						},
+						"text": "PASTA",
+						"fontFamily": "Inter",
+						"fontSize": 6.5,
+						"fill": "#92400e",
+						"fontWeight": "700",
+						"zIndex": 13
+					},
+					{
+						"id": "sec-2-rule",
+						"name": "Section 2 rule",
+						"type": "rect",
+						"transform": {
+							"x": 15,
+							"y": 156,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 180,
+							"height": 0.4
+						},
+						"fill": "#d6d3d1",
+						"zIndex": 14
+					},
+					{
+						"id": "item-4",
+						"name": "Item 4",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 161,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 150,
+							"height": 7
+						},
+						"text": "Cacio e pepe, black pepper, pecorino",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"zIndex": 15
+					},
+					{
+						"id": "price-4",
+						"name": "Price 4",
+						"type": "text",
+						"transform": {
+							"x": 165,
+							"y": 161,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 30,
+							"height": 7
+						},
+						"text": "14",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"align": "right",
+						"zIndex": 16
+					},
+					{
+						"id": "item-5",
+						"name": "Item 5",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 171,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 150,
+							"height": 7
+						},
+						"text": "Orzo, charred lemon, courgette",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"zIndex": 17
+					},
+					{
+						"id": "price-5",
+						"name": "Price 5",
+						"type": "text",
+						"transform": {
+							"x": 165,
+							"y": 171,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 30,
+							"height": 7
+						},
+						"text": "15",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"align": "right",
+						"zIndex": 18
+					},
+					{
+						"id": "item-6",
+						"name": "Item 6",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 181,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 150,
+							"height": 7
+						},
+						"text": "Rigatoni, slow beef ragù",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"zIndex": 19
+					},
+					{
+						"id": "price-6",
+						"name": "Price 6",
+						"type": "text",
+						"transform": {
+							"x": 165,
+							"y": 181,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 30,
+							"height": 7
+						},
+						"text": "17",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"align": "right",
+						"zIndex": 20
+					},
+					{
+						"id": "sec-3",
+						"name": "Section 3",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 204,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 180,
+							"height": 9
+						},
+						"text": "DOLCI",
+						"fontFamily": "Inter",
+						"fontSize": 6.5,
+						"fill": "#92400e",
+						"fontWeight": "700",
+						"zIndex": 21
+					},
+					{
+						"id": "sec-3-rule",
+						"name": "Section 3 rule",
+						"type": "rect",
+						"transform": {
+							"x": 15,
+							"y": 215,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 180,
+							"height": 0.4
+						},
+						"fill": "#d6d3d1",
+						"zIndex": 22
+					},
+					{
+						"id": "item-7",
+						"name": "Item 7",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 220,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 150,
+							"height": 7
+						},
+						"text": "Olive oil cake, crème fraîche",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"zIndex": 23
+					},
+					{
+						"id": "price-7",
+						"name": "Price 7",
+						"type": "text",
+						"transform": {
+							"x": 165,
+							"y": 220,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 30,
+							"height": 7
+						},
+						"text": "7",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"align": "right",
+						"zIndex": 24
+					},
+					{
+						"id": "item-8",
+						"name": "Item 8",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 230,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 150,
+							"height": 7
+						},
+						"text": "Affogato, amaro",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"zIndex": 25
+					},
+					{
+						"id": "price-8",
+						"name": "Price 8",
+						"type": "text",
+						"transform": {
+							"x": 165,
+							"y": 230,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 30,
+							"height": 7
+						},
+						"text": "6",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#1c1917",
+						"align": "right",
+						"zIndex": 26
+					},
+					{
+						"id": "footer-rule",
+						"name": "Footer rule",
+						"type": "rect",
+						"transform": {
+							"x": 15,
+							"y": 266,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 180,
+							"height": 0.4
+						},
+						"fill": "#d6d3d1",
+						"zIndex": 27
+					},
+					{
+						"id": "footer",
+						"name": "Footer",
+						"type": "text",
+						"transform": {
+							"x": 15,
+							"y": 272,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 180,
+							"height": 8
+						},
+						"text": "12 Harbour Road · trattoriaverde.example",
+						"fontFamily": "Inter",
+						"fontSize": 4.5,
+						"fill": "#78716c",
+						"align": "center",
+						"zIndex": 28
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

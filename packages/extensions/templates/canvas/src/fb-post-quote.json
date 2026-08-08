@@ -1,0 +1,149 @@
+{
+	"version": "3",
+	"id": "fb-post-quote",
+	"title": "Facebook Post — Quote",
+	"pages": [
+		{
+			"id": "fb-post-quote-1",
+			"name": "Facebook Post — Quote",
+			"size": {
+				"width": 1200,
+				"height": 630,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#f8fafc"
+			},
+			"root": {
+				"id": "fb-post-quote-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1200,
+					"height": 630
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "mark",
+						"name": "Quote mark",
+						"type": "text",
+						"transform": {
+							"x": 80,
+							"y": 60,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 200,
+							"height": 220
+						},
+						"text": "“",
+						"fontFamily": "Inter",
+						"fontSize": 200,
+						"fill": "#cbd5e1",
+						"fontWeight": "700",
+						"zIndex": 1
+					},
+					{
+						"id": "quote",
+						"name": "Quote",
+						"type": "text",
+						"transform": {
+							"x": 200,
+							"y": 180,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 820,
+							"height": 240
+						},
+						"text": "Simplicity is the\nsoul of efficiency.",
+						"fontFamily": "Inter",
+						"fontSize": 68,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 2
+					},
+					{
+						"id": "rule",
+						"name": "Rule",
+						"type": "rect",
+						"transform": {
+							"x": 200,
+							"y": 450,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 80,
+							"height": 5
+						},
+						"fill": "#f59e0b",
+						"zIndex": 3
+					},
+					{
+						"id": "author",
+						"name": "Author",
+						"type": "text",
+						"transform": {
+							"x": 200,
+							"y": 490,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 820,
+							"height": 44
+						},
+						"text": "AUSTIN FREEMAN",
+						"fontFamily": "Inter",
+						"fontSize": 28,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 4
+					},
+					{
+						"id": "source",
+						"name": "Source",
+						"type": "text",
+						"transform": {
+							"x": 200,
+							"y": 534,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 820,
+							"height": 42
+						},
+						"text": "The Eye of Osiris, 1911",
+						"fontFamily": "Inter",
+						"fontSize": 26,
+						"fill": "#64748b",
+						"zIndex": 5
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

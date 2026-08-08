@@ -1,0 +1,243 @@
+{
+	"version": "3",
+	"id": "tiktok-cover-tips",
+	"title": "TikTok Cover — Tips",
+	"pages": [
+		{
+			"id": "tiktok-cover-tips-1",
+			"name": "TikTok Cover — Tips",
+			"size": {
+				"width": 1080,
+				"height": 1920,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#ffffff"
+			},
+			"layoutAids": {
+				"safeArea": {
+					"top": 150,
+					"right": 90,
+					"bottom": 290,
+					"left": 90
+				}
+			},
+			"root": {
+				"id": "tiktok-cover-tips-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1920
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "band",
+						"name": "Band",
+						"type": "rect",
+						"transform": {
+							"x": 90,
+							"y": 170,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 1000
+						},
+						"fill": "#0f172a",
+						"radius": 48,
+						"zIndex": 1
+					},
+					{
+						"id": "badge",
+						"name": "Badge",
+						"type": "rect",
+						"transform": {
+							"x": 150,
+							"y": 240,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 280,
+							"height": 80
+						},
+						"fill": "#f59e0b",
+						"radius": 40,
+						"zIndex": 2
+					},
+					{
+						"id": "badge-label",
+						"name": "Badge label",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 262,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 280,
+							"height": 40
+						},
+						"text": "3 TIPS",
+						"fontFamily": "Inter",
+						"fontSize": 30,
+						"fill": "#0f172a",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 3
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 380,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 520
+						},
+						"text": "Ship faster\nwithout\nshipping\njunk",
+						"fontFamily": "Inter",
+						"fontSize": 116,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 4
+					},
+					{
+						"id": "sub",
+						"name": "Subtitle",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 950,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 140
+						},
+						"text": "Three habits that cut our review time in half.",
+						"fontFamily": "Inter",
+						"fontSize": 42,
+						"fill": "#cbd5e1",
+						"zIndex": 5
+					},
+					{
+						"id": "step-1",
+						"name": "Step 1",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 1240,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 64
+						},
+						"text": "01  Write the test first",
+						"fontFamily": "Inter",
+						"fontSize": 44,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 6
+					},
+					{
+						"id": "step-2",
+						"name": "Step 2",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 1330,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 64
+						},
+						"text": "02  Cut scope, not polish",
+						"fontFamily": "Inter",
+						"fontSize": 44,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 7
+					},
+					{
+						"id": "step-3",
+						"name": "Step 3",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 1420,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 64
+						},
+						"text": "03  Review in one pass",
+						"fontFamily": "Inter",
+						"fontSize": 44,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 8
+					},
+					{
+						"id": "handle",
+						"name": "Handle",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 1540,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 50
+						},
+						"text": "@anvilkit.studio",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#64748b",
+						"zIndex": 9
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

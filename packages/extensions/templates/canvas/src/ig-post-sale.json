@@ -1,0 +1,232 @@
+{
+	"version": "3",
+	"id": "ig-post-sale",
+	"title": "Instagram Sale Post",
+	"pages": [
+		{
+			"id": "ig-post-sale-1",
+			"name": "Instagram Sale Post",
+			"size": {
+				"width": 1080,
+				"height": 1080,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#4c1d95"
+			},
+			"root": {
+				"id": "ig-post-sale-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1080
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "backdrop",
+						"name": "Backdrop",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1080,
+							"height": 1080
+						},
+						"fill": {
+							"kind": "linear",
+							"stops": [
+								{
+									"offset": 0,
+									"color": "#4c1d95"
+								},
+								{
+									"offset": 1,
+									"color": "#2563eb"
+								}
+							],
+							"from": {
+								"x": 0,
+								"y": 0
+							},
+							"to": {
+								"x": 1,
+								"y": 1
+							}
+						},
+						"zIndex": 1
+					},
+					{
+						"id": "burst",
+						"name": "Burst",
+						"type": "star",
+						"transform": {
+							"x": 700,
+							"y": 90,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 280,
+							"height": 280
+						},
+						"points": 12,
+						"innerRadiusRatio": 0.7,
+						"fill": "#f59e0b",
+						"zIndex": 2
+					},
+					{
+						"id": "burst-label",
+						"name": "Burst label",
+						"type": "text",
+						"transform": {
+							"x": 700,
+							"y": 190,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 280,
+							"height": 90
+						},
+						"text": "50%\nOFF",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#0f172a",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 3
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 420,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 840,
+							"height": 48
+						},
+						"text": "LIMITED TIME",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#c4b5fd",
+						"fontWeight": "600",
+						"zIndex": 4
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 480,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 840,
+							"height": 280
+						},
+						"text": "Mid-Season\nSale",
+						"fontFamily": "Inter",
+						"fontSize": 116,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 5
+					},
+					{
+						"id": "body",
+						"name": "Body",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 780,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 760,
+							"height": 60
+						},
+						"text": "Everything in the studio collection.",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#e2e8f0",
+						"zIndex": 6
+					},
+					{
+						"id": "cta",
+						"name": "CTA pill",
+						"type": "rect",
+						"transform": {
+							"x": 120,
+							"y": 870,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 380,
+							"height": 88
+						},
+						"fill": "#f59e0b",
+						"radius": 44,
+						"zIndex": 7
+					},
+					{
+						"id": "cta-label",
+						"name": "CTA label",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 898,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 380,
+							"height": 44
+						},
+						"text": "Shop the sale",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 8
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

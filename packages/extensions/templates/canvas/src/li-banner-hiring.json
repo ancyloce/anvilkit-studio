@@ -1,0 +1,145 @@
+{
+	"version": "3",
+	"id": "li-banner-hiring",
+	"title": "LinkedIn Banner — Hiring",
+	"pages": [
+		{
+			"id": "li-banner-hiring-1",
+			"name": "LinkedIn Banner — Hiring",
+			"size": {
+				"width": 1584,
+				"height": 396,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#f59e0b"
+			},
+			"root": {
+				"id": "li-banner-hiring-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1584,
+					"height": 396
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "block",
+						"name": "Block",
+						"type": "rect",
+						"transform": {
+							"x": 400,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1184,
+							"height": 396
+						},
+						"fill": "#0f172a",
+						"zIndex": 1
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 460,
+							"y": 90,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1000,
+							"height": 48
+						},
+						"text": "WE'RE HIRING",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#f59e0b",
+						"fontWeight": "700",
+						"zIndex": 2
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 460,
+							"y": 150,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1060,
+							"height": 90
+						},
+						"text": "Senior Product Designer",
+						"fontFamily": "Inter",
+						"fontSize": 62,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 3
+					},
+					{
+						"id": "meta",
+						"name": "Meta",
+						"type": "text",
+						"transform": {
+							"x": 460,
+							"y": 255,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1060,
+							"height": 52
+						},
+						"text": "Remote (UK/EU) · Full-time · Apply by 30 June",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#cbd5e1",
+						"zIndex": 4
+					},
+					{
+						"id": "tick",
+						"name": "Tick",
+						"type": "rect",
+						"transform": {
+							"x": 460,
+							"y": 330,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 64,
+							"height": 6
+						},
+						"fill": "#f59e0b",
+						"zIndex": 5
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

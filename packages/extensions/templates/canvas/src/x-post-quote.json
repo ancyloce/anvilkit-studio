@@ -1,0 +1,127 @@
+{
+	"version": "3",
+	"id": "x-post-quote",
+	"title": "X Post — Quote",
+	"pages": [
+		{
+			"id": "x-post-quote-1",
+			"name": "X Post — Quote",
+			"size": {
+				"width": 1600,
+				"height": 900,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#ffffff"
+			},
+			"root": {
+				"id": "x-post-quote-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1600,
+					"height": 900
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "rule",
+						"name": "Rule",
+						"type": "rect",
+						"transform": {
+							"x": 120,
+							"y": 120,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 8,
+							"height": 660
+						},
+						"fill": "#0f172a",
+						"zIndex": 1
+					},
+					{
+						"id": "quote",
+						"name": "Quote",
+						"type": "text",
+						"transform": {
+							"x": 190,
+							"y": 150,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1180,
+							"height": 420
+						},
+						"text": "The details are not\nthe details. They\nmake the design.",
+						"fontFamily": "Inter",
+						"fontSize": 92,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 2
+					},
+					{
+						"id": "author",
+						"name": "Author",
+						"type": "text",
+						"transform": {
+							"x": 190,
+							"y": 600,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1180,
+							"height": 54
+						},
+						"text": "CHARLES EAMES",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 3
+					},
+					{
+						"id": "handle",
+						"name": "Handle",
+						"type": "text",
+						"transform": {
+							"x": 190,
+							"y": 660,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1180,
+							"height": 48
+						},
+						"text": "@anvilkit",
+						"fontFamily": "Inter",
+						"fontSize": 30,
+						"fill": "#64748b",
+						"zIndex": 4
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

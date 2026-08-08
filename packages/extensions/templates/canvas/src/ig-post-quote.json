@@ -1,0 +1,149 @@
+{
+	"version": "3",
+	"id": "ig-post-quote",
+	"title": "Instagram Quote Card",
+	"pages": [
+		{
+			"id": "ig-post-quote-1",
+			"name": "Instagram Quote Card",
+			"size": {
+				"width": 1080,
+				"height": 1080,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#ffffff"
+			},
+			"root": {
+				"id": "ig-post-quote-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1080
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "quote-mark",
+						"name": "Quote mark",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 140,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 240,
+							"height": 280
+						},
+						"text": "“",
+						"fontFamily": "Inter",
+						"fontSize": 260,
+						"fill": "#e2e8f0",
+						"fontWeight": "700",
+						"zIndex": 1
+					},
+					{
+						"id": "quote",
+						"name": "Quote",
+						"type": "text",
+						"transform": {
+							"x": 140,
+							"y": 400,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 800,
+							"height": 340
+						},
+						"text": "Good design is\nobvious.\nGreat design is\ntransparent.",
+						"fontFamily": "Inter",
+						"fontSize": 72,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 2
+					},
+					{
+						"id": "rule",
+						"name": "Rule",
+						"type": "rect",
+						"transform": {
+							"x": 140,
+							"y": 790,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 88,
+							"height": 6
+						},
+						"fill": "#f59e0b",
+						"zIndex": 3
+					},
+					{
+						"id": "attribution",
+						"name": "Attribution",
+						"type": "text",
+						"transform": {
+							"x": 140,
+							"y": 840,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 800,
+							"height": 48
+						},
+						"text": "JOE SPARANO",
+						"fontFamily": "Inter",
+						"fontSize": 30,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 4
+					},
+					{
+						"id": "handle",
+						"name": "Handle",
+						"type": "text",
+						"transform": {
+							"x": 140,
+							"y": 892,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 800,
+							"height": 44
+						},
+						"text": "@anvilkit.studio",
+						"fontFamily": "Inter",
+						"fontSize": 28,
+						"fill": "#64748b",
+						"zIndex": 5
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

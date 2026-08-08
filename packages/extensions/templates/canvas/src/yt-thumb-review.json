@@ -1,0 +1,231 @@
+{
+	"version": "3",
+	"id": "yt-thumb-review",
+	"title": "YouTube Thumbnail — Review",
+	"pages": [
+		{
+			"id": "yt-thumb-review-1",
+			"name": "YouTube Thumbnail — Review",
+			"size": {
+				"width": 1280,
+				"height": 720,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#111827"
+			},
+			"root": {
+				"id": "yt-thumb-review-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1280,
+					"height": 720
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "product",
+						"name": "Product well",
+						"type": "frame",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 520,
+							"height": 720
+						},
+						"clip": true,
+						"placeholder": {
+							"kind": "image"
+						},
+						"children": [],
+						"zIndex": 1
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 600,
+							"y": 90,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 600,
+							"height": 56
+						},
+						"text": "HONEST REVIEW",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#f43f5e",
+						"fontWeight": "700",
+						"zIndex": 2
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 600,
+							"y": 170,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 600,
+							"height": 300
+						},
+						"text": "Is it worth\nthe hype?",
+						"fontFamily": "Inter",
+						"fontSize": 104,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 3
+					},
+					{
+						"id": "star-1",
+						"name": "Star 1",
+						"type": "star",
+						"transform": {
+							"x": 600,
+							"y": 500,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 72,
+							"height": 72
+						},
+						"points": 5,
+						"innerRadiusRatio": 0.5,
+						"fill": "#f59e0b",
+						"zIndex": 4
+					},
+					{
+						"id": "star-2",
+						"name": "Star 2",
+						"type": "star",
+						"transform": {
+							"x": 690,
+							"y": 500,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 72,
+							"height": 72
+						},
+						"points": 5,
+						"innerRadiusRatio": 0.5,
+						"fill": "#f59e0b",
+						"zIndex": 5
+					},
+					{
+						"id": "star-3",
+						"name": "Star 3",
+						"type": "star",
+						"transform": {
+							"x": 780,
+							"y": 500,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 72,
+							"height": 72
+						},
+						"points": 5,
+						"innerRadiusRatio": 0.5,
+						"fill": "#f59e0b",
+						"zIndex": 6
+					},
+					{
+						"id": "star-4",
+						"name": "Star 4",
+						"type": "star",
+						"transform": {
+							"x": 870,
+							"y": 500,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 72,
+							"height": 72
+						},
+						"points": 5,
+						"innerRadiusRatio": 0.5,
+						"fill": "#f59e0b",
+						"zIndex": 7
+					},
+					{
+						"id": "star-5",
+						"name": "Star 5",
+						"type": "star",
+						"transform": {
+							"x": 960,
+							"y": 500,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 72,
+							"height": 72
+						},
+						"points": 5,
+						"innerRadiusRatio": 0.5,
+						"fill": "#334155",
+						"zIndex": 8
+					},
+					{
+						"id": "verdict",
+						"name": "Verdict",
+						"type": "text",
+						"transform": {
+							"x": 600,
+							"y": 600,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 600,
+							"height": 60
+						},
+						"text": "4 out of 5 — with caveats",
+						"fontFamily": "Inter",
+						"fontSize": 36,
+						"fill": "#cbd5e1",
+						"zIndex": 9
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

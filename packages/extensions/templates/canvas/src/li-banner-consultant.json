@@ -1,0 +1,167 @@
+{
+	"version": "3",
+	"id": "li-banner-consultant",
+	"title": "LinkedIn Banner — Consultant",
+	"pages": [
+		{
+			"id": "li-banner-consultant-1",
+			"name": "LinkedIn Banner — Consultant",
+			"size": {
+				"width": 1584,
+				"height": 396,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#1e3a8a"
+			},
+			"root": {
+				"id": "li-banner-consultant-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1584,
+					"height": 396
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "backdrop",
+						"name": "Backdrop",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1584,
+							"height": 396
+						},
+						"fill": {
+							"kind": "linear",
+							"stops": [
+								{
+									"offset": 0,
+									"color": "#1e3a8a"
+								},
+								{
+									"offset": 1,
+									"color": "#0ea5e9"
+								}
+							],
+							"from": {
+								"x": 0,
+								"y": 0
+							},
+							"to": {
+								"x": 1,
+								"y": 0
+							}
+						},
+						"zIndex": 1
+					},
+					{
+						"id": "headline",
+						"name": "Headline",
+						"type": "text",
+						"transform": {
+							"x": 440,
+							"y": 110,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1050,
+							"height": 90
+						},
+						"text": "Fractional Design Leadership",
+						"fontFamily": "Inter",
+						"fontSize": 64,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 2
+					},
+					{
+						"id": "sub",
+						"name": "Subtitle",
+						"type": "text",
+						"transform": {
+							"x": 440,
+							"y": 215,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1050,
+							"height": 56
+						},
+						"text": "Systems, hiring, and delivery for product teams",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#dbeafe",
+						"zIndex": 3
+					},
+					{
+						"id": "pill",
+						"name": "Pill",
+						"type": "rect",
+						"transform": {
+							"x": 440,
+							"y": 290,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 300,
+							"height": 58
+						},
+						"fill": "#ffffff",
+						"radius": 29,
+						"zIndex": 4
+					},
+					{
+						"id": "pill-label",
+						"name": "Pill label",
+						"type": "text",
+						"transform": {
+							"x": 440,
+							"y": 305,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 300,
+							"height": 34
+						},
+						"text": "Book a call",
+						"fontFamily": "Inter",
+						"fontSize": 26,
+						"fill": "#0c4a6e",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 5
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

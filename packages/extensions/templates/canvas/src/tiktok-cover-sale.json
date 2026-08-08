@@ -1,0 +1,244 @@
+{
+	"version": "3",
+	"id": "tiktok-cover-sale",
+	"title": "TikTok Cover — Flash Sale",
+	"pages": [
+		{
+			"id": "tiktok-cover-sale-1",
+			"name": "TikTok Cover — Flash Sale",
+			"size": {
+				"width": 1080,
+				"height": 1920,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#f59e0b"
+			},
+			"layoutAids": {
+				"safeArea": {
+					"top": 150,
+					"right": 90,
+					"bottom": 290,
+					"left": 90
+				}
+			},
+			"root": {
+				"id": "tiktok-cover-sale-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1920
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "panel",
+						"name": "Panel",
+						"type": "rect",
+						"transform": {
+							"x": 90,
+							"y": 170,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 1460
+						},
+						"fill": "#0f172a",
+						"radius": 56,
+						"zIndex": 1
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 280,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 56
+						},
+						"text": "48 HOURS ONLY",
+						"fontFamily": "Inter",
+						"fontSize": 36,
+						"fill": "#f59e0b",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 2
+					},
+					{
+						"id": "pct",
+						"name": "Percentage",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 380,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 340
+						},
+						"text": "40%",
+						"fontFamily": "Inter",
+						"fontSize": 300,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 3
+					},
+					{
+						"id": "off",
+						"name": "Off",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 720,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 120
+						},
+						"text": "OFF EVERYTHING",
+						"fontFamily": "Inter",
+						"fontSize": 72,
+						"fill": "#f59e0b",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 4
+					},
+					{
+						"id": "divider",
+						"name": "Divider",
+						"type": "rect",
+						"transform": {
+							"x": 420,
+							"y": 900,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 240,
+							"height": 6
+						},
+						"fill": "#334155",
+						"zIndex": 5
+					},
+					{
+						"id": "body",
+						"name": "Body",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 960,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 180
+						},
+						"text": "Templates, brand kits and every add-on in the studio store.",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#cbd5e1",
+						"align": "center",
+						"zIndex": 6
+					},
+					{
+						"id": "cta",
+						"name": "CTA pill",
+						"type": "rect",
+						"transform": {
+							"x": 240,
+							"y": 1220,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 600,
+							"height": 130
+						},
+						"fill": "#f59e0b",
+						"radius": 65,
+						"zIndex": 7
+					},
+					{
+						"id": "cta-label",
+						"name": "CTA label",
+						"type": "text",
+						"transform": {
+							"x": 240,
+							"y": 1262,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 600,
+							"height": 56
+						},
+						"text": "Use code STUDIO40",
+						"fontFamily": "Inter",
+						"fontSize": 42,
+						"fill": "#0f172a",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 8
+					},
+					{
+						"id": "terms",
+						"name": "Terms",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 1450,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 50
+						},
+						"text": "Ends Sunday at midnight.",
+						"fontFamily": "Inter",
+						"fontSize": 30,
+						"fill": "#64748b",
+						"align": "center",
+						"zIndex": 9
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

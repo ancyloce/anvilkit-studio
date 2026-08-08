@@ -1,0 +1,320 @@
+{
+	"version": "3",
+	"id": "a4-certificate",
+	"title": "Certificate — A4 landscape (print)",
+	"pages": [
+		{
+			"id": "a4-certificate-1",
+			"name": "Certificate — A4 landscape (print)",
+			"size": {
+				"width": 297,
+				"height": 210,
+				"unit": "mm",
+				"dpi": 300
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#ffffff"
+			},
+			"layoutAids": {
+				"margin": {
+					"top": 18,
+					"right": 18,
+					"bottom": 18,
+					"left": 18
+				}
+			},
+			"root": {
+				"id": "a4-certificate-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 297,
+					"height": 210
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "border",
+						"name": "Outer border",
+						"type": "rect",
+						"transform": {
+							"x": 12,
+							"y": 12,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 273,
+							"height": 186
+						},
+						"stroke": "#0f172a",
+						"strokeWidth": 1.2,
+						"zIndex": 1
+					},
+					{
+						"id": "border-inner",
+						"name": "Inner border",
+						"type": "rect",
+						"transform": {
+							"x": 16,
+							"y": 16,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 265,
+							"height": 178
+						},
+						"stroke": "#cbd5e1",
+						"strokeWidth": 0.4,
+						"zIndex": 2
+					},
+					{
+						"id": "seal",
+						"name": "Seal",
+						"type": "star",
+						"transform": {
+							"x": 133.5,
+							"y": 30,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 30,
+							"height": 30
+						},
+						"points": 12,
+						"innerRadiusRatio": 0.75,
+						"fill": "#f59e0b",
+						"zIndex": 3
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 40,
+							"y": 68,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 217,
+							"height": 8
+						},
+						"text": "CERTIFICATE OF",
+						"fontFamily": "Inter",
+						"fontSize": 6,
+						"fill": "#64748b",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 4
+					},
+					{
+						"id": "award",
+						"name": "Award",
+						"type": "text",
+						"transform": {
+							"x": 40,
+							"y": 78,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 217,
+							"height": 18
+						},
+						"text": "Achievement",
+						"fontFamily": "Inter",
+						"fontSize": 15,
+						"fill": "#0f172a",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 5
+					},
+					{
+						"id": "presented",
+						"name": "Presented to",
+						"type": "text",
+						"transform": {
+							"x": 40,
+							"y": 104,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 217,
+							"height": 8
+						},
+						"text": "presented to",
+						"fontFamily": "Inter",
+						"fontSize": 5.5,
+						"fill": "#64748b",
+						"align": "center",
+						"zIndex": 6
+					},
+					{
+						"id": "name",
+						"name": "Name",
+						"type": "text",
+						"transform": {
+							"x": 40,
+							"y": 116,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 217,
+							"height": 16
+						},
+						"text": "Amara Osei",
+						"fontFamily": "Inter",
+						"fontSize": 13,
+						"fill": "#0f172a",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 7
+					},
+					{
+						"id": "name-rule",
+						"name": "Name rule",
+						"type": "rect",
+						"transform": {
+							"x": 88.5,
+							"y": 136,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 120,
+							"height": 0.4
+						},
+						"fill": "#cbd5e1",
+						"zIndex": 8
+					},
+					{
+						"id": "reason",
+						"name": "Reason",
+						"type": "text",
+						"transform": {
+							"x": 55,
+							"y": 144,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 187,
+							"height": 12
+						},
+						"text": "for outstanding contribution to the 2026 design systems programme",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#475569",
+						"align": "center",
+						"zIndex": 9
+					},
+					{
+						"id": "sig-rule-1",
+						"name": "Signature rule 1",
+						"type": "rect",
+						"transform": {
+							"x": 55,
+							"y": 172,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 70,
+							"height": 0.4
+						},
+						"fill": "#94a3b8",
+						"zIndex": 10
+					},
+					{
+						"id": "sig-1",
+						"name": "Signature 1",
+						"type": "text",
+						"transform": {
+							"x": 55,
+							"y": 175,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 70,
+							"height": 6
+						},
+						"text": "Programme Director",
+						"fontFamily": "Inter",
+						"fontSize": 4.5,
+						"fill": "#64748b",
+						"zIndex": 11
+					},
+					{
+						"id": "sig-rule-2",
+						"name": "Signature rule 2",
+						"type": "rect",
+						"transform": {
+							"x": 172,
+							"y": 172,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 70,
+							"height": 0.4
+						},
+						"fill": "#94a3b8",
+						"zIndex": 12
+					},
+					{
+						"id": "sig-2",
+						"name": "Signature 2",
+						"type": "text",
+						"transform": {
+							"x": 172,
+							"y": 175,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 70,
+							"height": 6
+						},
+						"text": "Date",
+						"fontFamily": "Inter",
+						"fontSize": 4.5,
+						"fill": "#64748b",
+						"zIndex": 13
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

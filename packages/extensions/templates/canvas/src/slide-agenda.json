@@ -1,0 +1,416 @@
+{
+	"version": "3",
+	"id": "slide-agenda",
+	"title": "Slide — 16:9 Agenda",
+	"pages": [
+		{
+			"id": "slide-agenda-1",
+			"name": "Slide — 16:9 Agenda",
+			"size": {
+				"width": 1920,
+				"height": 1080,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#ffffff"
+			},
+			"root": {
+				"id": "slide-agenda-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1920,
+					"height": 1080
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "side-panel",
+						"name": "Side panel",
+						"type": "rect",
+						"transform": {
+							"x": 1180,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 740,
+							"height": 1080
+						},
+						"fill": "#f1f5f9",
+						"zIndex": 1
+					},
+					{
+						"id": "bar",
+						"name": "Top bar",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1920,
+							"height": 10
+						},
+						"fill": "#2563eb",
+						"zIndex": 2
+					},
+					{
+						"id": "side-well",
+						"name": "Side well",
+						"type": "frame",
+						"transform": {
+							"x": 1240,
+							"y": 260,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 620,
+							"height": 560
+						},
+						"clip": true,
+						"placeholder": {
+							"kind": "image"
+						},
+						"children": [],
+						"radius": 24,
+						"zIndex": 3
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 120,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 800,
+							"height": 44
+						},
+						"text": "TODAY",
+						"fontFamily": "Inter",
+						"fontSize": 28,
+						"fill": "#2563eb",
+						"fontWeight": "600",
+						"zIndex": 4
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 175,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 100
+						},
+						"text": "Agenda",
+						"fontFamily": "Inter",
+						"fontSize": 80,
+						"fill": "#0f172a",
+						"fontWeight": "700",
+						"zIndex": 5
+					},
+					{
+						"id": "num-1",
+						"name": "Number 1",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 340,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 70,
+							"height": 48
+						},
+						"text": "01",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#2563eb",
+						"fontWeight": "700",
+						"zIndex": 6
+					},
+					{
+						"id": "item-1",
+						"name": "Item 1",
+						"type": "text",
+						"transform": {
+							"x": 210,
+							"y": 336,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 800,
+							"height": 54
+						},
+						"text": "Where we are",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 7
+					},
+					{
+						"id": "rule-1",
+						"name": "Rule 1",
+						"type": "rect",
+						"transform": {
+							"x": 120,
+							"y": 410,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 890,
+							"height": 2
+						},
+						"fill": "#e2e8f0",
+						"zIndex": 8
+					},
+					{
+						"id": "num-2",
+						"name": "Number 2",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 450,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 70,
+							"height": 48
+						},
+						"text": "02",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#2563eb",
+						"fontWeight": "700",
+						"zIndex": 9
+					},
+					{
+						"id": "item-2",
+						"name": "Item 2",
+						"type": "text",
+						"transform": {
+							"x": 210,
+							"y": 446,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 800,
+							"height": 54
+						},
+						"text": "What changed this quarter",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 10
+					},
+					{
+						"id": "rule-2",
+						"name": "Rule 2",
+						"type": "rect",
+						"transform": {
+							"x": 120,
+							"y": 520,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 890,
+							"height": 2
+						},
+						"fill": "#e2e8f0",
+						"zIndex": 11
+					},
+					{
+						"id": "num-3",
+						"name": "Number 3",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 560,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 70,
+							"height": 48
+						},
+						"text": "03",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#2563eb",
+						"fontWeight": "700",
+						"zIndex": 12
+					},
+					{
+						"id": "item-3",
+						"name": "Item 3",
+						"type": "text",
+						"transform": {
+							"x": 210,
+							"y": 556,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 800,
+							"height": 54
+						},
+						"text": "The three bets",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 13
+					},
+					{
+						"id": "rule-3",
+						"name": "Rule 3",
+						"type": "rect",
+						"transform": {
+							"x": 120,
+							"y": 630,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 890,
+							"height": 2
+						},
+						"fill": "#e2e8f0",
+						"zIndex": 14
+					},
+					{
+						"id": "num-4",
+						"name": "Number 4",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 670,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 70,
+							"height": 48
+						},
+						"text": "04",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#2563eb",
+						"fontWeight": "700",
+						"zIndex": 15
+					},
+					{
+						"id": "item-4",
+						"name": "Item 4",
+						"type": "text",
+						"transform": {
+							"x": 210,
+							"y": 666,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 800,
+							"height": 54
+						},
+						"text": "What we need from you",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 16
+					},
+					{
+						"id": "rule-4",
+						"name": "Rule 4",
+						"type": "rect",
+						"transform": {
+							"x": 120,
+							"y": 740,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 890,
+							"height": 2
+						},
+						"fill": "#e2e8f0",
+						"zIndex": 17
+					},
+					{
+						"id": "page-no",
+						"name": "Page number",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 940,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 200,
+							"height": 40
+						},
+						"text": "01",
+						"fontFamily": "Inter",
+						"fontSize": 26,
+						"fill": "#94a3b8",
+						"zIndex": 18
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

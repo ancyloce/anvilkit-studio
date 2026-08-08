@@ -1,0 +1,158 @@
+{
+	"version": "3",
+	"id": "reel-cover-recipe",
+	"title": "Reel Cover — Recipe",
+	"pages": [
+		{
+			"id": "reel-cover-recipe-1",
+			"name": "Reel Cover — Recipe",
+			"size": {
+				"width": 1080,
+				"height": 1920,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#fef7ed"
+			},
+			"layoutAids": {
+				"safeArea": {
+					"top": 250,
+					"right": 0,
+					"bottom": 250,
+					"left": 0
+				}
+			},
+			"root": {
+				"id": "reel-cover-recipe-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1920
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "photo",
+						"name": "Photo well",
+						"type": "frame",
+						"transform": {
+							"x": 90,
+							"y": 290,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 760
+						},
+						"clip": true,
+						"placeholder": {
+							"kind": "image"
+						},
+						"children": [],
+						"radius": 48,
+						"zIndex": 1
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 1100,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 52
+						},
+						"text": "15-MINUTE DINNER",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#c2410c",
+						"fontWeight": "600",
+						"zIndex": 2
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 1170,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 280
+						},
+						"text": "Charred\nLemon Orzo",
+						"fontFamily": "Inter",
+						"fontSize": 106,
+						"fill": "#1c1917",
+						"fontWeight": "700",
+						"zIndex": 3
+					},
+					{
+						"id": "rule",
+						"name": "Rule",
+						"type": "rect",
+						"transform": {
+							"x": 90,
+							"y": 1480,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 120,
+							"height": 6
+						},
+						"fill": "#c2410c",
+						"zIndex": 4
+					},
+					{
+						"id": "meta",
+						"name": "Meta",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 1530,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 56
+						},
+						"text": "Serves 2 · 15 min · One pan",
+						"fontFamily": "Inter",
+						"fontSize": 38,
+						"fill": "#78716c",
+						"zIndex": 5
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

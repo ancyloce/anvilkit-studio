@@ -1,0 +1,223 @@
+{
+	"version": "3",
+	"id": "ig-story-poll",
+	"title": "Instagram Poll Story",
+	"pages": [
+		{
+			"id": "ig-story-poll-1",
+			"name": "Instagram Poll Story",
+			"size": {
+				"width": 1080,
+				"height": 1920,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"layoutAids": {
+				"safeArea": {
+					"top": 250,
+					"right": 0,
+					"bottom": 250,
+					"left": 0
+				}
+			},
+			"root": {
+				"id": "ig-story-poll-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1920
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "panel",
+						"name": "Panel",
+						"type": "rect",
+						"transform": {
+							"x": 90,
+							"y": 430,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 1060
+						},
+						"fill": "#1e293b",
+						"radius": 56,
+						"zIndex": 1
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 500,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 48
+						},
+						"text": "QUICK QUESTION",
+						"fontFamily": "Inter",
+						"fontSize": 30,
+						"fill": "#f59e0b",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 2
+					},
+					{
+						"id": "question",
+						"name": "Question",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 580,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 300
+						},
+						"text": "Which one\nwould you\nship first?",
+						"fontFamily": "Inter",
+						"fontSize": 84,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 3
+					},
+					{
+						"id": "option-a",
+						"name": "Option A",
+						"type": "rect",
+						"transform": {
+							"x": 150,
+							"y": 940,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 140
+						},
+						"fill": "#2563eb",
+						"radius": 70,
+						"zIndex": 4
+					},
+					{
+						"id": "option-a-label",
+						"name": "Option A label",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 988,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 52
+						},
+						"text": "Option A",
+						"fontFamily": "Inter",
+						"fontSize": 44,
+						"fill": "#ffffff",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 5
+					},
+					{
+						"id": "option-b",
+						"name": "Option B",
+						"type": "rect",
+						"transform": {
+							"x": 150,
+							"y": 1110,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 140
+						},
+						"fill": "#ffffff",
+						"radius": 70,
+						"zIndex": 6
+					},
+					{
+						"id": "option-b-label",
+						"name": "Option B label",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 1158,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 52
+						},
+						"text": "Option B",
+						"fontFamily": "Inter",
+						"fontSize": 44,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 7
+					},
+					{
+						"id": "footer",
+						"name": "Footer",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 1330,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 48
+						},
+						"text": "Tap to vote",
+						"fontFamily": "Inter",
+						"fontSize": 30,
+						"fill": "#94a3b8",
+						"align": "center",
+						"zIndex": 8
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

@@ -1,0 +1,170 @@
+{
+	"version": "3",
+	"id": "yt-thumb-tutorial",
+	"title": "YouTube Thumbnail — Tutorial",
+	"pages": [
+		{
+			"id": "yt-thumb-tutorial-1",
+			"name": "YouTube Thumbnail — Tutorial",
+			"size": {
+				"width": 1280,
+				"height": 720,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"root": {
+				"id": "yt-thumb-tutorial-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1280,
+					"height": 720
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "bar",
+						"name": "Accent bar",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 20,
+							"height": 720
+						},
+						"fill": "#f59e0b",
+						"zIndex": 1
+					},
+					{
+						"id": "badge",
+						"name": "Badge",
+						"type": "rect",
+						"transform": {
+							"x": 72,
+							"y": 64,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 260,
+							"height": 68
+						},
+						"fill": "#f59e0b",
+						"radius": 34,
+						"zIndex": 2
+					},
+					{
+						"id": "badge-label",
+						"name": "Badge label",
+						"type": "text",
+						"transform": {
+							"x": 72,
+							"y": 82,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 260,
+							"height": 36
+						},
+						"text": "TUTORIAL",
+						"fontFamily": "Inter",
+						"fontSize": 28,
+						"fill": "#0f172a",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 3
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 72,
+							"y": 180,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 760,
+							"height": 340
+						},
+						"text": "Build a design\nsystem in\n20 minutes",
+						"fontFamily": "Inter",
+						"fontSize": 96,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 4
+					},
+					{
+						"id": "sub",
+						"name": "Subtitle",
+						"type": "text",
+						"transform": {
+							"x": 72,
+							"y": 560,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 760,
+							"height": 60
+						},
+						"text": "No plugins. No config.",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#94a3b8",
+						"zIndex": 5
+					},
+					{
+						"id": "portrait",
+						"name": "Portrait well",
+						"type": "frame",
+						"transform": {
+							"x": 900,
+							"y": 110,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 320,
+							"height": 500
+						},
+						"clip": true,
+						"placeholder": {
+							"kind": "image"
+						},
+						"children": [],
+						"radius": 32,
+						"zIndex": 6
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

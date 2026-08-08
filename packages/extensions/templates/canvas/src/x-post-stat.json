@@ -1,0 +1,252 @@
+{
+	"version": "3",
+	"id": "x-post-stat",
+	"title": "X Post — Stat Card",
+	"pages": [
+		{
+			"id": "x-post-stat-1",
+			"name": "X Post — Stat Card",
+			"size": {
+				"width": 1600,
+				"height": 900,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#f8fafc"
+			},
+			"root": {
+				"id": "x-post-stat-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1600,
+					"height": 900
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 120,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1360,
+							"height": 52
+						},
+						"text": "2026 STATE OF DESIGN OPS",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#64748b",
+						"fontWeight": "600",
+						"zIndex": 1
+					},
+					{
+						"id": "stat-1",
+						"name": "Stat 1",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 220,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 400,
+							"height": 180
+						},
+						"text": "64%",
+						"fontFamily": "Inter",
+						"fontSize": 150,
+						"fill": "#0f172a",
+						"fontWeight": "700",
+						"zIndex": 2
+					},
+					{
+						"id": "stat-1-label",
+						"name": "Stat 1 label",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 420,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 400,
+							"height": 110
+						},
+						"text": "ship a design system in year one",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#475569",
+						"zIndex": 3
+					},
+					{
+						"id": "divider-1",
+						"name": "Divider 1",
+						"type": "rect",
+						"transform": {
+							"x": 560,
+							"y": 230,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 3,
+							"height": 330
+						},
+						"fill": "#cbd5e1",
+						"zIndex": 4
+					},
+					{
+						"id": "stat-2",
+						"name": "Stat 2",
+						"type": "text",
+						"transform": {
+							"x": 640,
+							"y": 220,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 400,
+							"height": 180
+						},
+						"text": "3.2x",
+						"fontFamily": "Inter",
+						"fontSize": 150,
+						"fill": "#0f172a",
+						"fontWeight": "700",
+						"zIndex": 5
+					},
+					{
+						"id": "stat-2-label",
+						"name": "Stat 2 label",
+						"type": "text",
+						"transform": {
+							"x": 640,
+							"y": 420,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 400,
+							"height": 110
+						},
+						"text": "faster hand-off with shared tokens",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#475569",
+						"zIndex": 6
+					},
+					{
+						"id": "divider-2",
+						"name": "Divider 2",
+						"type": "rect",
+						"transform": {
+							"x": 1080,
+							"y": 230,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 3,
+							"height": 330
+						},
+						"fill": "#cbd5e1",
+						"zIndex": 7
+					},
+					{
+						"id": "stat-3",
+						"name": "Stat 3",
+						"type": "text",
+						"transform": {
+							"x": 1160,
+							"y": 220,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 380,
+							"height": 180
+						},
+						"text": "18%",
+						"fontFamily": "Inter",
+						"fontSize": 150,
+						"fill": "#0f172a",
+						"fontWeight": "700",
+						"zIndex": 8
+					},
+					{
+						"id": "stat-3-label",
+						"name": "Stat 3 label",
+						"type": "text",
+						"transform": {
+							"x": 1160,
+							"y": 420,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 380,
+							"height": 110
+						},
+						"text": "measure adoption at all",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#475569",
+						"zIndex": 9
+					},
+					{
+						"id": "footer",
+						"name": "Footer",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 720,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1360,
+							"height": 48
+						},
+						"text": "Source: AnvilKit annual survey, n = 1,240",
+						"fontFamily": "Inter",
+						"fontSize": 28,
+						"fill": "#94a3b8",
+						"zIndex": 10
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

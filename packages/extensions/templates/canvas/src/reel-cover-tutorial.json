@@ -1,0 +1,218 @@
+{
+	"version": "3",
+	"id": "reel-cover-tutorial",
+	"title": "Reel Cover — Tutorial",
+	"pages": [
+		{
+			"id": "reel-cover-tutorial-1",
+			"name": "Reel Cover — Tutorial",
+			"size": {
+				"width": 1080,
+				"height": 1920,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"layoutAids": {
+				"safeArea": {
+					"top": 250,
+					"right": 0,
+					"bottom": 250,
+					"left": 0
+				}
+			},
+			"root": {
+				"id": "reel-cover-tutorial-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1920
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "badge",
+						"name": "Badge",
+						"type": "rect",
+						"transform": {
+							"x": 90,
+							"y": 320,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 300,
+							"height": 90
+						},
+						"fill": "#f59e0b",
+						"radius": 45,
+						"zIndex": 1
+					},
+					{
+						"id": "badge-label",
+						"name": "Badge label",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 344,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 300,
+							"height": 44
+						},
+						"text": "TUTORIAL",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#0f172a",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 2
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 470,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 560
+						},
+						"text": "How to\nbuild a\nbrand kit\nin 60s",
+						"fontFamily": "Inter",
+						"fontSize": 122,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 3
+					},
+					{
+						"id": "rule",
+						"name": "Rule",
+						"type": "rect",
+						"transform": {
+							"x": 90,
+							"y": 1080,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 140,
+							"height": 8
+						},
+						"fill": "#f59e0b",
+						"zIndex": 4
+					},
+					{
+						"id": "step-1",
+						"name": "Step 1",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 1140,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 60
+						},
+						"text": "1 · Pick your palette",
+						"fontFamily": "Inter",
+						"fontSize": 46,
+						"fill": "#cbd5e1",
+						"zIndex": 5
+					},
+					{
+						"id": "step-2",
+						"name": "Step 2",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 1220,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 60
+						},
+						"text": "2 · Lock the type scale",
+						"fontFamily": "Inter",
+						"fontSize": 46,
+						"fill": "#cbd5e1",
+						"zIndex": 6
+					},
+					{
+						"id": "step-3",
+						"name": "Step 3",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 1300,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 60
+						},
+						"text": "3 · Save it as a template",
+						"fontFamily": "Inter",
+						"fontSize": 46,
+						"fill": "#cbd5e1",
+						"zIndex": 7
+					},
+					{
+						"id": "handle",
+						"name": "Handle",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 1560,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 54
+						},
+						"text": "@anvilkit.studio",
+						"fontFamily": "Inter",
+						"fontSize": 36,
+						"fill": "#64748b",
+						"zIndex": 8
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

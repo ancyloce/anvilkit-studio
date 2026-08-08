@@ -1,0 +1,180 @@
+{
+	"version": "3",
+	"id": "postcard-a6",
+	"title": "Postcard — A6 landscape (print)",
+	"pages": [
+		{
+			"id": "postcard-a6-1",
+			"name": "Postcard — A6 landscape (print)",
+			"size": {
+				"width": 148,
+				"height": 105,
+				"unit": "mm",
+				"dpi": 300
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#f0fdfa"
+			},
+			"layoutAids": {
+				"margin": {
+					"top": 10,
+					"right": 10,
+					"bottom": 10,
+					"left": 10
+				}
+			},
+			"root": {
+				"id": "postcard-a6-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 148,
+					"height": 105
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "photo",
+						"name": "Photo well",
+						"type": "frame",
+						"transform": {
+							"x": 10,
+							"y": 10,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 70,
+							"height": 85
+						},
+						"clip": true,
+						"placeholder": {
+							"kind": "image"
+						},
+						"children": [],
+						"radius": 3,
+						"zIndex": 1
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 88,
+							"y": 16,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 50,
+							"height": 6
+						},
+						"text": "HELLO FROM",
+						"fontFamily": "Inter",
+						"fontSize": 4.5,
+						"fill": "#0d9488",
+						"fontWeight": "600",
+						"zIndex": 2
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 88,
+							"y": 25,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 52,
+							"height": 22
+						},
+						"text": "Lisbon",
+						"fontFamily": "Inter",
+						"fontSize": 16,
+						"fill": "#134e4a",
+						"fontWeight": "700",
+						"zIndex": 3
+					},
+					{
+						"id": "body",
+						"name": "Body",
+						"type": "text",
+						"transform": {
+							"x": 88,
+							"y": 52,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 50,
+							"height": 24
+						},
+						"text": "Sun, custard tarts, and far too many hills.",
+						"fontFamily": "Inter",
+						"fontSize": 4.5,
+						"fill": "#115e59",
+						"zIndex": 4
+					},
+					{
+						"id": "rule",
+						"name": "Rule",
+						"type": "rect",
+						"transform": {
+							"x": 88,
+							"y": 82,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 20,
+							"height": 0.6
+						},
+						"fill": "#0d9488",
+						"zIndex": 5
+					},
+					{
+						"id": "sign",
+						"name": "Signature",
+						"type": "text",
+						"transform": {
+							"x": 88,
+							"y": 86,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 50,
+							"height": 8
+						},
+						"text": "— A.",
+						"fontFamily": "Inter",
+						"fontSize": 5,
+						"fill": "#115e59",
+						"zIndex": 6
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

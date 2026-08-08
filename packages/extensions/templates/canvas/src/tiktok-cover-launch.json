@@ -1,0 +1,237 @@
+{
+	"version": "3",
+	"id": "tiktok-cover-launch",
+	"title": "TikTok Cover — Launch",
+	"pages": [
+		{
+			"id": "tiktok-cover-launch-1",
+			"name": "TikTok Cover — Launch",
+			"size": {
+				"width": 1080,
+				"height": 1920,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"layoutAids": {
+				"safeArea": {
+					"top": 150,
+					"right": 90,
+					"bottom": 290,
+					"left": 90
+				}
+			},
+			"root": {
+				"id": "tiktok-cover-launch-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1920
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "backdrop",
+						"name": "Backdrop",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1080,
+							"height": 1920
+						},
+						"fill": {
+							"kind": "linear",
+							"stops": [
+								{
+									"offset": 0,
+									"color": "#0f172a"
+								},
+								{
+									"offset": 1,
+									"color": "#2563eb"
+								}
+							],
+							"from": {
+								"x": 0,
+								"y": 0
+							},
+							"to": {
+								"x": 0.4,
+								"y": 1
+							}
+						},
+						"zIndex": 1
+					},
+					{
+						"id": "ring",
+						"name": "Ring",
+						"type": "ellipse",
+						"transform": {
+							"x": 240,
+							"y": 260,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 600,
+							"height": 600
+						},
+						"fill": "#1d4ed8",
+						"opacity": 0.35,
+						"zIndex": 2
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 300,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 56
+						},
+						"text": "NOW LIVE",
+						"fontFamily": "Inter",
+						"fontSize": 36,
+						"fill": "#93c5fd",
+						"fontWeight": "700",
+						"zIndex": 3
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 380,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 540
+						},
+						"text": "Canvas\nStudio\n2.0",
+						"fontFamily": "Inter",
+						"fontSize": 160,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 4
+					},
+					{
+						"id": "body",
+						"name": "Body",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 980,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 200
+						},
+						"text": "Brand kits, auto layout, and a template catalog built for teams.",
+						"fontFamily": "Inter",
+						"fontSize": 44,
+						"fill": "#dbeafe",
+						"zIndex": 5
+					},
+					{
+						"id": "cta",
+						"name": "CTA pill",
+						"type": "rect",
+						"transform": {
+							"x": 150,
+							"y": 1260,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 560,
+							"height": 120
+						},
+						"fill": "#ffffff",
+						"radius": 60,
+						"zIndex": 6
+					},
+					{
+						"id": "cta-label",
+						"name": "CTA label",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 1298,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 560,
+							"height": 52
+						},
+						"text": "See what's new",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 7
+					},
+					{
+						"id": "handle",
+						"name": "Handle",
+						"type": "text",
+						"transform": {
+							"x": 150,
+							"y": 1520,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 52
+						},
+						"text": "anvilkit.studio",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#93c5fd",
+						"zIndex": 8
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

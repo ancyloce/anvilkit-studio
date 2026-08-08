@@ -1,0 +1,214 @@
+{
+	"version": "3",
+	"id": "fb-post-event",
+	"title": "Facebook Post — Event",
+	"pages": [
+		{
+			"id": "fb-post-event-1",
+			"name": "Facebook Post — Event",
+			"size": {
+				"width": 1200,
+				"height": 630,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#ffffff"
+			},
+			"root": {
+				"id": "fb-post-event-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1200,
+					"height": 630
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "accent",
+						"name": "Accent bar",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1200,
+							"height": 16
+						},
+						"fill": "#2563eb",
+						"zIndex": 1
+					},
+					{
+						"id": "date-block",
+						"name": "Date block",
+						"type": "rect",
+						"transform": {
+							"x": 80,
+							"y": 110,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 200,
+							"height": 220
+						},
+						"fill": "#2563eb",
+						"radius": 24,
+						"zIndex": 2
+					},
+					{
+						"id": "date-day",
+						"name": "Day",
+						"type": "text",
+						"transform": {
+							"x": 80,
+							"y": 140,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 200,
+							"height": 110
+						},
+						"text": "12",
+						"fontFamily": "Inter",
+						"fontSize": 104,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 3
+					},
+					{
+						"id": "date-month",
+						"name": "Month",
+						"type": "text",
+						"transform": {
+							"x": 80,
+							"y": 258,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 200,
+							"height": 50
+						},
+						"text": "JUNE",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#bfdbfe",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 4
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 330,
+							"y": 120,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 44
+						},
+						"text": "COMMUNITY MEETUP",
+						"fontFamily": "Inter",
+						"fontSize": 28,
+						"fill": "#2563eb",
+						"fontWeight": "600",
+						"zIndex": 5
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 330,
+							"y": 180,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 200
+						},
+						"text": "Design Systems\nafter Hours",
+						"fontFamily": "Inter",
+						"fontSize": 80,
+						"fill": "#0f172a",
+						"fontWeight": "700",
+						"zIndex": 6
+					},
+					{
+						"id": "where",
+						"name": "Where",
+						"type": "text",
+						"transform": {
+							"x": 330,
+							"y": 400,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 780,
+							"height": 48
+						},
+						"text": "The Foundry, Bristol · 7pm",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#475569",
+						"zIndex": 7
+					},
+					{
+						"id": "cta",
+						"name": "CTA",
+						"type": "text",
+						"transform": {
+							"x": 80,
+							"y": 510,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1040,
+							"height": 48
+						},
+						"text": "anvilkit.studio/events",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"zIndex": 8
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

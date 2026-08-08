@@ -1,0 +1,179 @@
+{
+	"version": "3",
+	"id": "reel-cover-episode",
+	"title": "Reel Cover — Podcast Episode",
+	"pages": [
+		{
+			"id": "reel-cover-episode-1",
+			"name": "Reel Cover — Podcast Episode",
+			"size": {
+				"width": 1080,
+				"height": 1920,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"layoutAids": {
+				"safeArea": {
+					"top": 250,
+					"right": 0,
+					"bottom": 250,
+					"left": 0
+				}
+			},
+			"root": {
+				"id": "reel-cover-episode-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1920
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "disc",
+						"name": "Disc",
+						"type": "ellipse",
+						"transform": {
+							"x": 340,
+							"y": 320,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 400,
+							"height": 400
+						},
+						"fill": "#1e293b",
+						"zIndex": 1
+					},
+					{
+						"id": "disc-inner",
+						"name": "Disc centre",
+						"type": "ellipse",
+						"transform": {
+							"x": 490,
+							"y": 470,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 100,
+							"height": 100
+						},
+						"fill": "#f59e0b",
+						"zIndex": 2
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 820,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 52
+						},
+						"text": "EPISODE 014",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#f59e0b",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 3
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 900,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 420
+						},
+						"text": "Designing\nfor the\nsmall screen",
+						"fontFamily": "Inter",
+						"fontSize": 96,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"align": "center",
+						"zIndex": 4
+					},
+					{
+						"id": "guest",
+						"name": "Guest",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 1350,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 60
+						},
+						"text": "with Amara Osei",
+						"fontFamily": "Inter",
+						"fontSize": 42,
+						"fill": "#cbd5e1",
+						"align": "center",
+						"zIndex": 5
+					},
+					{
+						"id": "show",
+						"name": "Show",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 1560,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 900,
+							"height": 54
+						},
+						"text": "THE STUDIO PODCAST",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#64748b",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 6
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

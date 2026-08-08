@@ -1,0 +1,236 @@
+{
+	"version": "3",
+	"id": "ig-story-countdown",
+	"title": "Instagram Save-the-Date Story",
+	"pages": [
+		{
+			"id": "ig-story-countdown-1",
+			"name": "Instagram Save-the-Date Story",
+			"size": {
+				"width": 1080,
+				"height": 1920,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"layoutAids": {
+				"safeArea": {
+					"top": 250,
+					"right": 0,
+					"bottom": 250,
+					"left": 0
+				}
+			},
+			"root": {
+				"id": "ig-story-countdown-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1920
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "glow",
+						"name": "Glow",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1080,
+							"height": 1920
+						},
+						"fill": {
+							"kind": "radial",
+							"stops": [
+								{
+									"offset": 0,
+									"color": "#1e293b"
+								},
+								{
+									"offset": 1,
+									"color": "#0f172a"
+								}
+							],
+							"from": {
+								"x": 0.4,
+								"y": 0.32
+							},
+							"to": {
+								"x": 0.4,
+								"y": 0.32
+							}
+						},
+						"zIndex": 1
+					},
+					{
+						"id": "eyebrow",
+						"name": "Eyebrow",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 420,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 840,
+							"height": 52
+						},
+						"text": "SAVE THE DATE",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#f59e0b",
+						"fontWeight": "600",
+						"zIndex": 2
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 500,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 840,
+							"height": 440
+						},
+						"text": "Studio\nLaunch\nParty",
+						"fontFamily": "Inter",
+						"fontSize": 130,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 3
+					},
+					{
+						"id": "divider",
+						"name": "Divider",
+						"type": "rect",
+						"transform": {
+							"x": 120,
+							"y": 990,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 120,
+							"height": 6
+						},
+						"fill": "#f59e0b",
+						"zIndex": 4
+					},
+					{
+						"id": "date",
+						"name": "Date",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 1040,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 840,
+							"height": 80
+						},
+						"text": "Friday, 12 June · 7pm",
+						"fontFamily": "Inter",
+						"fontSize": 44,
+						"fill": "#e2e8f0",
+						"zIndex": 5
+					},
+					{
+						"id": "venue",
+						"name": "Venue",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 1130,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 840,
+							"height": 70
+						},
+						"text": "The Foundry, Bristol",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#94a3b8",
+						"zIndex": 6
+					},
+					{
+						"id": "cta",
+						"name": "CTA pill",
+						"type": "rect",
+						"transform": {
+							"x": 120,
+							"y": 1300,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 520,
+							"height": 110
+						},
+						"fill": "#ffffff",
+						"radius": 55,
+						"zIndex": 7
+					},
+					{
+						"id": "cta-label",
+						"name": "CTA label",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 1334,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 520,
+							"height": 52
+						},
+						"text": "Reserve a place",
+						"fontFamily": "Inter",
+						"fontSize": 38,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 8
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

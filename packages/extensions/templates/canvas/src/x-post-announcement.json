@@ -1,0 +1,189 @@
+{
+	"version": "3",
+	"id": "x-post-announcement",
+	"title": "X Post — Announcement",
+	"pages": [
+		{
+			"id": "x-post-announcement-1",
+			"name": "X Post — Announcement",
+			"size": {
+				"width": 1600,
+				"height": 900,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"root": {
+				"id": "x-post-announcement-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1600,
+					"height": 900
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "backdrop",
+						"name": "Backdrop",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1600,
+							"height": 900
+						},
+						"fill": {
+							"kind": "linear",
+							"stops": [
+								{
+									"offset": 0,
+									"color": "#0f172a"
+								},
+								{
+									"offset": 1,
+									"color": "#4c1d95"
+								}
+							],
+							"from": {
+								"x": 0,
+								"y": 0
+							},
+							"to": {
+								"x": 1,
+								"y": 1
+							}
+						},
+						"zIndex": 1
+					},
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 140,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1200,
+							"height": 52
+						},
+						"text": "SHIPPED TODAY",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#c4b5fd",
+						"fontWeight": "700",
+						"zIndex": 2
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 220,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1240,
+							"height": 320
+						},
+						"text": "Templates,\nnow 40 strong",
+						"fontFamily": "Inter",
+						"fontSize": 116,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 3
+					},
+					{
+						"id": "body",
+						"name": "Body",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 580,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1100,
+							"height": 110
+						},
+						"text": "Every social size, every print staple, one catalog.",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#e9d5ff",
+						"zIndex": 4
+					},
+					{
+						"id": "chip",
+						"name": "Chip",
+						"type": "rect",
+						"transform": {
+							"x": 120,
+							"y": 720,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 360,
+							"height": 76
+						},
+						"fill": "#ffffff",
+						"radius": 38,
+						"zIndex": 5
+					},
+					{
+						"id": "chip-label",
+						"name": "Chip label",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 740,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 360,
+							"height": 40
+						},
+						"text": "Read the notes",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 6
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}

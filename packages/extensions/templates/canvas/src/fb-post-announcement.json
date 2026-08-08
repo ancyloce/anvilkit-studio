@@ -1,0 +1,151 @@
+{
+	"version": "3",
+	"id": "fb-post-announcement",
+	"title": "Facebook Post — Announcement",
+	"pages": [
+		{
+			"id": "fb-post-announcement-1",
+			"name": "Facebook Post — Announcement",
+			"size": {
+				"width": 1200,
+				"height": 630,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"root": {
+				"id": "fb-post-announcement-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1200,
+					"height": 630
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "kicker",
+						"name": "Kicker",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 90,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 880,
+							"height": 48
+						},
+						"text": "ANNOUNCEMENT",
+						"fontFamily": "Inter",
+						"fontSize": 30,
+						"fill": "#f59e0b",
+						"fontWeight": "700",
+						"zIndex": 1
+					},
+					{
+						"id": "title",
+						"name": "Title",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 150,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 880,
+							"height": 260
+						},
+						"text": "We're open\nfor bookings",
+						"fontFamily": "Inter",
+						"fontSize": 92,
+						"fill": "#ffffff",
+						"fontWeight": "700",
+						"zIndex": 2
+					},
+					{
+						"id": "body",
+						"name": "Body",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 420,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 760,
+							"height": 110
+						},
+						"text": "Studio slots for the autumn quarter are live from Monday.",
+						"fontFamily": "Inter",
+						"fontSize": 34,
+						"fill": "#cbd5e1",
+						"zIndex": 3
+					},
+					{
+						"id": "chip",
+						"name": "Chip",
+						"type": "rect",
+						"transform": {
+							"x": 90,
+							"y": 540,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 300,
+							"height": 64
+						},
+						"fill": "#f59e0b",
+						"radius": 32,
+						"zIndex": 4
+					},
+					{
+						"id": "chip-label",
+						"name": "Chip label",
+						"type": "text",
+						"transform": {
+							"x": 90,
+							"y": 556,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 300,
+							"height": 36
+						},
+						"text": "Book a slot",
+						"fontFamily": "Inter",
+						"fontSize": 28,
+						"fill": "#0f172a",
+						"fontWeight": "600",
+						"align": "center",
+						"zIndex": 5
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-08-07T00:00:00.000Z",
+		"updatedAt": "2026-08-07T00:00:00.000Z"
+	}
+}
