@@ -22,7 +22,7 @@
 
 import { type ComponentData as PuckComponentData } from "@puckeditor/core";
 
-import { useReactivePuck } from "@/overrides/utils/use-reactive-puck";
+import { useReactivePuck } from "@/utils/use-reactive-puck";
 
 /**
  * The currently-selected canvas item, or `null` when nothing is

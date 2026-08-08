@@ -21,7 +21,7 @@
  * Sorting is stable: equal ranks keep the library's original order.
  */
 
-import { readComponentPresentation } from "@/overrides/utils/component-presentation";
+import { readComponentPresentation } from "@/utils/component-presentation";
 
 export interface InsertSearchRecord {
 	readonly name: string;

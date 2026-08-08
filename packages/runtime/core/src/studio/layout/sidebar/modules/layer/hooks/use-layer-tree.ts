@@ -23,7 +23,7 @@ import {
 	useGetPuck,
 } from "@puckeditor/core";
 import { useMemo } from "react";
-import { useReactivePuck } from "@/overrides/utils/use-reactive-puck";
+import { useReactivePuck } from "@/utils/use-reactive-puck";
 
 /** Compound dispatch/selection key for the root content list. */
 export const ROOT_ZONE = "root:default-zone";
