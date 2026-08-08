@@ -30,18 +30,17 @@ import type {
 	DesignToken,
 	EditorError,
 	ResponsiveLayerRef,
-	StyleDefinitionDeletionDisposition,
 	StyleDefinition,
+	StyleDefinitionDeletionDisposition,
 	TokenDeletionDisposition,
 	TokenModeId,
 	TokenType,
 	TokenValue,
 } from "@anvilkit/contracts/editor";
-import type {
-	EditorCommandResult,
-} from "../../../editor/legacy/index.js";
 import { use, useCallback, useMemo, useSyncExternalStore } from "react";
+import type { EditorCommandResult } from "../../../editor/legacy/index.js";
 import type { InternalEditorCommandPort } from "../command-port.js";
+import { countTokenReferences } from "../composition/design-system/read-design-system.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
 import { activeTokenMode } from "./token-mode.js";
 
@@ -206,7 +205,18 @@ export function useDesignSystem(): DesignSystemModel | null {
 		const modeIds = Object.keys(authoring.tokenModes);
 		const effectiveModes = modeIds.length > 0 ? modeIds : [defaultMode];
 		// One usage pass for every token rather than per-token scans.
-		const usage = usageCounts(authoring);
+		// The counter itself is the canonical
+		// `composition/design-system/read-design-system.ts` one, consumed
+		// here so this surface and the canonical panel cannot report
+		// different reference counts while both exist.
+		const usage = countTokenReferences(
+			[
+				authoring.nodes,
+				authoring.styleDefinitions,
+				authoring.componentDefinitions,
+			],
+			authoring.tokens,
+		);
 		return Object.values(authoring.tokens)
 			.map((token) => {
 				const resolvedByMode: Record<TokenModeId, unknown> = {};
@@ -225,7 +235,7 @@ export function useDesignSystem(): DesignSystemModel | null {
 					token,
 					path: token.path.length > 0 ? token.path.join(".") : token.name,
 					usageCount: usage.counts.get(token.id) ?? 0,
-					aliasDependents: usage.aliases.get(token.id) ?? [],
+					aliasDependents: usage.aliasDependents.get(token.id) ?? [],
 					resolvedByMode,
 					unresolved: !anyResolved,
 				};
@@ -591,61 +601,6 @@ function conflict(
 		recoverable: true,
 		details,
 	};
-}
-
-/**
- * Reference counts and reverse alias edges in one traversal.
- *
- * Synchronous and dependency-free so the list can render without an
- * async engine import on every keystroke; the traversal itself is the
- * sidecar's own token walk, inlined to the two facts the list needs.
- */
-function usageCounts(authoring: {
-	readonly tokens: Readonly<Record<string, DesignToken>>;
-	readonly nodes: Readonly<Record<string, unknown>>;
-	readonly styleDefinitions: Readonly<Record<string, unknown>>;
-	readonly componentDefinitions: Readonly<Record<string, unknown>>;
-}): {
-	readonly counts: ReadonlyMap<string, number>;
-	readonly aliases: ReadonlyMap<string, readonly string[]>;
-} {
-	const counts = new Map<string, number>();
-	const aliases = new Map<string, string[]>();
-
-	const bump = (tokenId: string): void => {
-		counts.set(tokenId, (counts.get(tokenId) ?? 0) + 1);
-	};
-	const walk = (value: unknown, depth: number): void => {
-		if (depth > 64) return;
-		if (Array.isArray(value)) {
-			for (const entry of value) walk(entry, depth + 1);
-			return;
-		}
-		if (typeof value !== "object" || value === null) return;
-		const candidate = value as { kind?: unknown; tokenId?: unknown };
-		if (candidate.kind === "token" && typeof candidate.tokenId === "string") {
-			bump(candidate.tokenId);
-			return;
-		}
-		for (const entry of Object.values(value as Record<string, unknown>)) {
-			walk(entry, depth + 1);
-		}
-	};
-
-	walk(authoring.nodes, 0);
-	walk(authoring.styleDefinitions, 0);
-	walk(authoring.componentDefinitions, 0);
-
-	for (const token of Object.values(authoring.tokens)) {
-		for (const value of Object.values(token.values)) {
-			if (value.kind !== "alias") continue;
-			bump(value.tokenId);
-			const list = aliases.get(value.tokenId);
-			if (list === undefined) aliases.set(value.tokenId, [token.id]);
-			else list.push(token.id);
-		}
-	}
-	return { counts, aliases };
 }
 
 /**

@@ -41,7 +41,10 @@ import {
 	readDocument,
 	readNodeField,
 } from "../../document-model/index.js";
-import { useReactivePuck } from "../overrides/utils/use-reactive-puck.js";
+import {
+	useOptionalReactivePuck,
+	useReactivePuck,
+} from "../utils/use-reactive-puck.js";
 
 /**
  * The live document, projected.
@@ -65,6 +68,39 @@ export function useDocumentModel(): DocumentModel {
 	const deferredData = useDeferredValue(data);
 	return useMemo(
 		() => readDocument(deferredData, config),
+		[deferredData, config],
+	);
+}
+
+/**
+ * {@link useDocumentModel}, tolerant of rendering outside `<Puck>`
+ * (`p5-006`).
+ *
+ * Same projection, same deferral, same memo — the only difference is
+ * that an absent provider yields `null` instead of throwing. It exists
+ * for chrome that production **always** mounts inside `<Puck>` but
+ * that something else mounts bare: unit tests, hosts assembling their
+ * own panels, and — the case that forced it — `EditorRoot`, which
+ * `StudioEditorMount` renders *around* `<Puck>`
+ * (`react/components/Studio.tsx:360`).
+ *
+ * A consumer that reads `null` must degrade to "no document to show",
+ * never to a fabricated empty one: an editor surface that silently
+ * reports a document as empty is worse than one that does not render.
+ *
+ * `useDocumentModel` deliberately keeps throwing. A panel that assumes
+ * the provider should fail loudly when it is wrong rather than quietly
+ * rendering nothing.
+ */
+export function useOptionalDocumentModel(): DocumentModel | null {
+	const data = useOptionalReactivePuck((state) => state.appState.data, null);
+	const config = useOptionalReactivePuck((state) => state.config, null);
+	const deferredData = useDeferredValue(data);
+	return useMemo(
+		() =>
+			deferredData === null || config === null
+				? null
+				: readDocument(deferredData, config),
 		[deferredData, config],
 	);
 }

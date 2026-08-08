@@ -9,9 +9,9 @@
  * same one-dispatch `commitNative` path, same selection follow-ups.
  */
 
+import { readEditorMetadata } from "../../../puck/component-metadata.js";
 import type { StudioEditorBridge } from "../bridge.js";
 import type { InternalEditorCommandPort } from "../command-port.js";
-import { readEditorMetadata } from "../../../puck/component-metadata.js";
 import type { ShortcutContext } from "./registry.js";
 
 /** The plugin-context slice the command handlers need. */
@@ -147,15 +147,20 @@ export function buildShortcutContext(
 				const api = ctx.getPuckApi();
 				const primary = bridge.selection?.getState().primaryId;
 				if (primary === undefined) {
-					return;
+					return false;
 				}
 				const parent = api.getParentById(primary);
 				const parentId = (parent?.props as { id?: string } | undefined)?.id;
-				if (typeof parentId === "string") {
-					bridge.selection?.select(parentId);
+				if (typeof parentId !== "string") {
+					// Top of the tree: report the miss so the `Escape` ladder can
+					// take its terminal rung instead of stalling here.
+					return false;
 				}
+				bridge.selection?.select(parentId);
+				return true;
 			} catch {
 				// <Puck> not bound yet.
+				return false;
 			}
 		},
 		focusLayerSearch: () => {

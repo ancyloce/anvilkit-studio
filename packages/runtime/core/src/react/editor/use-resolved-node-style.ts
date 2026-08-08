@@ -26,7 +26,7 @@ import {
 } from "../../editor/index.js";
 import { readDocument } from "../../document-model/index.js";
 import { ROOT_STYLE_TARGET_ID } from "../../puck/targets.js";
-import { useOptionalReactivePuck } from "../overrides/utils/use-reactive-puck.js";
+import { useOptionalReactivePuck } from "../utils/use-reactive-puck.js";
 import { StudioEditorBridgeContext } from "./use-studio-editor.js";
 
 const DEFAULT_VIEWPORT_WIDTH = 1280;

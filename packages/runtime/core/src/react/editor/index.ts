@@ -32,11 +32,25 @@ export {
 	type EditorProposalInputs,
 	useEditorProposalInputs,
 } from "./ai/AiProposalReviewMount.js";
-export type { CanvasDomRegistry } from "./canvas/dom-registry.js";
+export type {
+	CanvasDomRegistry,
+	CanvasStyleTargetRef,
+} from "./canvas/dom-registry.js";
 export { ComponentCanvasPanel } from "./components/ComponentCanvasPanel.js";
 export { ComponentInstanceSection } from "./components/ComponentInstanceSection.js";
-export { ComponentsPanel } from "./components/ComponentsPanel.js";
+// `p5-006`: the Components and Variants panels each export their own
+// `StudioInspectorPanel` roster entry, the same contract `STYLE_PANEL`
+// and `DATA_PANEL` follow, so `StudioPuckLayout` wires them without
+// editing them.
+export {
+	COMPONENTS_PANEL,
+	ComponentsPanel,
+} from "./components/ComponentsPanel.js";
 export { CreateComponentDialog } from "./components/CreateComponentDialog.js";
+export {
+	type ComponentEditorRuntime,
+	useComponentEditorRuntime,
+} from "./components/editor-runtime.js";
 export {
 	componentScope,
 	createEditorScopeController,
@@ -47,11 +61,14 @@ export {
 } from "./components/scope.js";
 export {
 	type ComponentCanvas,
+	type ComponentCanvasCommitOutcome,
 	type ComponentCombination,
 	useComponentCanvas,
 } from "./components/use-component-canvas.js";
 export {
 	type ComponentInstanceModel,
+	type InstanceCommitOutcome,
+	type InstanceExposedProp,
 	type InstanceOverrideEntry,
 	useComponentInstance,
 } from "./components/use-component-instance.js";
@@ -59,6 +76,7 @@ export {
 	type ComponentLibrary,
 	type ComponentLibraryEntry,
 	type DeleteDefinitionOutcome,
+	type RenameDefinitionOutcome,
 	useComponentLibrary,
 } from "./components/use-component-library.js";
 export {
@@ -72,43 +90,90 @@ export {
 	type VariantAuthoring,
 	type VariantEditOutcome,
 } from "./components/use-variant-authoring.js";
-export { VariantAxisEditor } from "./components/VariantAxisEditor.js";
+export {
+	VARIANTS_PANEL,
+	VariantAxisEditor,
+	VariantsPanel,
+} from "./components/VariantAxisEditor.js";
 export {
 	AppearanceIframeOverride,
 	type AppearanceIframeOverrideProps,
 } from "./composition/AppearanceIframeOverride.js";
 export { CompiledAppearanceMount } from "./composition/CompiledAppearanceMount.js";
+export { CompositionCanvas } from "./composition/CompositionCanvas.js";
+// P4 inspector panels. Each module also exports a ready-made
+// `StudioInspectorPanel` roster entry (`DATA_PANEL`, `INTERACTIONS_PANEL`)
+// so `p4-009` can populate `StudioPuckLayout`'s roster without editing
+// the panels themselves.
+export { DATA_PANEL, DataPanel } from "./composition/DataPanel.js";
+export { DESIGN_SYSTEM_PANEL } from "./composition/DesignSystemPanel.js";
+export {
+	type NodeBindingsState,
+	useNodeBindings,
+} from "./composition/data/use-node-bindings.js";
+export {
+	INTERACTIONS_PANEL,
+	InteractionsPanel,
+} from "./composition/InteractionsPanel.js";
+export {
+	type InteractionTargetOption,
+	type NodeInteractionRow,
+	type NodeInteractionsState,
+	useNodeInteractions,
+} from "./composition/interactions/use-node-interactions.js";
 export {
 	type StudioInspectorPanel,
 	StudioPuckLayout,
 	type StudioPuckLayoutProps,
 } from "./composition/StudioPuckLayout.js";
-export { StylePanel } from "./composition/StylePanel.js";
+export { STYLE_PANEL, StylePanel } from "./composition/StylePanel.js";
+export {
+	type ReservedTokenModeId,
+	reservedTokenModeLabelKey,
+	type ShellTokenMode,
+	TokenModeProvider,
+	type TokenModeProviderProps,
+	useTokenMode,
+} from "./composition/token-mode.js";
+export { useAnnotationCommit } from "./composition/use-annotation-commit.js";
 export {
 	type AppearanceCommitInput,
 	useAppearanceCommit,
 } from "./composition/use-appearance-commit.js";
 export {
+	useBindingsCommit,
+	useInlineTextCommit,
+	useInteractionsCommit,
+} from "./composition/use-carrier-commits.js";
+export {
 	type UseCompiledAppearanceOptions,
 	useCompiledAppearance,
 } from "./composition/use-compiled-appearance.js";
+export { useComponentLibraryCommit } from "./composition/use-component-library-commit.js";
+export { useDesignSystemCommit } from "./composition/use-design-system-commit.js";
+export {
+	type ShellSelection,
+	useShellSelection,
+} from "./composition/use-shell-selection.js";
+export {
+	ViewportToolbar,
+	viewportWidthForLayer,
+} from "./composition/ViewportToolbar.js";
+export {
+	type ShellWriteLayer,
+	useWriteLayer,
+	WriteLayerProvider,
+	type WriteLayerProviderProps,
+} from "./composition/write-layer.js";
+export {
+	EditorSurfaceSlot,
+	type EditorSurfaceSlotProps,
+} from "./EditorSurfaceSlot.js";
 export {
 	createEditorApi,
 	type EditorApiDeps,
 	resolveEditorIntent,
 } from "./editor-api.js";
-export { useAnnotationCommit } from "./composition/use-annotation-commit.js";
-export {
-	useBindingsCommit,
-	useInlineTextCommit,
-	useInteractionsCommit,
-} from "./composition/use-carrier-commits.js";
-export { useComponentLibraryCommit } from "./composition/use-component-library-commit.js";
-export { useDesignSystemCommit } from "./composition/use-design-system-commit.js";
-export {
-	EditorSurfaceSlot,
-	type EditorSurfaceSlotProps,
-} from "./EditorSurfaceSlot.js";
 // Hosts render `EditorError`s themselves (Core ships no diagnostics UI),
 // so the code → catalog-key mapping is part of the public surface, not
 // an internal detail of Core's own dialogs.
@@ -129,6 +194,10 @@ export type {
 	InlineEditSession,
 } from "./inline/controller.js";
 export {
+	isInlineEditingFocused,
+	useInlineEditingFocused,
+} from "./inline/focus.js";
+export {
 	sanitizeTiptapDocument,
 	TIPTAP_ALLOWED_MARKS,
 	TIPTAP_ALLOWED_NODES,
@@ -147,6 +216,12 @@ export {
 	EDITOR_SHORTCUT_KEYMAP,
 	type EditorShortcutBinding,
 } from "./shortcuts/registry.js";
+// The canonical panel is `./composition/DesignSystemPanel.js`, which exports
+// the SAME name. `./tokens/DesignSystemPanel.js` is still what the overrides
+// shell mounts (`studio/layout/sidebar/modules/ComponentsModule.tsx:28,74`),
+// so re-pointing this line now would blank the Components rail's Tokens tab
+// before `p4-009` promotes the composition shell. `p4-009` re-points it —
+// one line, no public rename. Until then only the roster entry is published.
 export { DesignSystemPanel } from "./tokens/DesignSystemPanel.js";
 export {
 	type DesignSystemModel,
@@ -159,6 +234,7 @@ export {
 export {
 	useDocumentModel,
 	useNodeField,
+	useOptionalDocumentModel,
 } from "./use-document-model.js";
 export { useResolvedNodeStyle } from "./use-resolved-node-style.js";
 export {

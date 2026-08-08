@@ -22,10 +22,44 @@
  * parent, which only acts outside them anyway.
  *
  * `EDITOR_SHORTCUT_KEYMAP` is the data the §26.2/P4-006 docs render.
+ *
+ * ### Component mode (PLAN-0028 `p5-002`, PLAN-0026 §3.7.2)
+ *
+ * Two keyboard rows of the §3.7.2 gesture table land here rather than
+ * in the canvas, because this module is where focus scoping,
+ * typing-surface suppression and the trusted-event guard already live
+ * — a second keydown path would have to restate all three.
+ *
+ * - **`Escape` is a ladder**, one rung per press:
+ *   `target → node → page mode → parent → cleared`. The first two rungs
+ *   are new; the last two are the shipped `select-parent` behaviour with
+ *   its terminal made explicit. A press that would have done nothing
+ *   (no parent to escalate to) now clears the selection, which is the
+ *   §3.7.2 page-mode cell. Nothing was removed to add the rungs.
+ * - **`↑`/`↓` traverse declared targets** in declaration order while in
+ *   component mode, and are inert in page mode so Puck's own arrow
+ *   handling is untouched. They **stop at the ends**
+ *   ({@link TARGET_TRAVERSAL_WRAPS}).
+ *
+ * Neither is in {@link EDITOR_SHORTCUT_KEYMAP}: that array is the
+ * documented, labelled §18 productivity keymap and every row needs a
+ * `studio.editor.shortcuts.*` catalog entry. The three component-mode
+ * labels do not exist in the catalog yet, so rather than mislabel rows
+ * these are mode-scoped navigation, matched by
+ * {@link COMPONENT_MODE_KEYS}.
  */
 
+import type { PuckApi } from "@puckeditor/core";
 import type { StudioEditorBridge } from "../bridge.js";
+import {
+	declaredTargetIds,
+	stepTargetId,
+	TARGET_TRAVERSAL_WRAPS,
+} from "../canvas/component-mode.js";
+import { isElementNode } from "../canvas/dom-registry.js";
 import type { InternalEditorCommandPort } from "../command-port.js";
+
+export { TARGET_TRAVERSAL_WRAPS };
 
 /** One §18 productivity command id. */
 export type EditorShortcutCommandId =
@@ -37,6 +71,14 @@ export type EditorShortcutCommandId =
 	| "hide"
 	| "select-parent"
 	| "find-layer";
+
+/** The mode-scoped keys of the §3.7.2 gesture table. */
+export const COMPONENT_MODE_KEYS = {
+	/** Previous declared target. */
+	previousTarget: "arrowup",
+	/** Next declared target. */
+	nextTarget: "arrowdown",
+} as const;
 
 /** One keymap row (surfaced to the shortcut-reference docs). */
 export interface EditorShortcutBinding {
@@ -127,15 +169,24 @@ export function isTrustedEvent(event: Pick<Event, "isTrusted">): boolean {
 	return event.isTrusted === true || trustAllEventsForTests;
 }
 
-/** True when the event originates inside a typing surface. */
+/**
+ * True when the event originates inside a typing surface.
+ *
+ * Duck-typed rather than `instanceof HTMLElement`: `p5-002` binds this
+ * handler inside the canvas iframe as well, and the iframe is a
+ * separate JS realm where `instanceof` against the parent window's
+ * constructor is ALWAYS false — an in-canvas inline-editing session
+ * would have failed the check and had its keystrokes eaten.
+ */
 export function isTypingTarget(target: EventTarget | null): boolean {
-	if (!(target instanceof HTMLElement)) {
+	if (!isElementNode(target)) {
 		return false;
 	}
-	if (target.isContentEditable) {
+	const element = target as HTMLElement;
+	if (element.isContentEditable === true) {
 		return true;
 	}
-	const tag = target.tagName;
+	const tag = element.tagName;
 	return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
 }
 
@@ -148,8 +199,13 @@ export interface ShortcutContext {
 	readonly removeNodes: (nodeIds: readonly string[]) => Promise<void>;
 	readonly wrapNodes: (nodeIds: readonly string[]) => Promise<void>;
 	readonly unwrapNodes: (nodeIds: readonly string[]) => Promise<void>;
-	/** Select the primary node's parent (Puck parent lookup). */
-	readonly selectParent: () => void;
+	/**
+	 * Select the primary node's parent (Puck parent lookup). Returns
+	 * `false` when there was no parent to escalate to — that answer is
+	 * what lets the `Escape` ladder fall through to its terminal rung
+	 * instead of silently doing nothing at the top of the tree.
+	 */
+	readonly selectParent: () => boolean;
 	/** Focus the Layers search input (CORE-P1A-010's field). */
 	readonly focusLayerSearch: () => void;
 }
@@ -244,12 +300,75 @@ export function runShortcutCommand(
 			});
 			return true;
 		}
-		case "select-parent":
-			if (selection?.primaryId === undefined) return false;
-			context.selectParent();
+		case "select-parent": {
+			// The §3.7.2 `Escape` ladder — exactly ONE rung per press.
+			if (selection === undefined) return false;
+			// Rung 1: drop the target, staying on the node inside the mode.
+			if (selection.mode === "component" && selection.targetId !== undefined) {
+				bridge.selection?.setTargetId(undefined);
+				return true;
+			}
+			// Rung 2: leave component mode, keeping the node selected.
+			// `setMode` never records history — there is nothing to undo.
+			if (selection.mode === "component") {
+				bridge.selection?.setMode("page");
+				return true;
+			}
+			if (selection.primaryId === undefined) return false;
+			// Rung 3: the shipped page-mode escalation.
+			if (context.selectParent()) return true;
+			// Rung 4: nothing left above — clear the selection.
+			bridge.selection?.clear();
 			return true;
+		}
 		case "find-layer":
 			context.focusLayerSearch();
 			return true;
 	}
+}
+
+/**
+ * Component-mode keyboard traversal: `↑`/`↓` walk the primary node's
+ * declared style targets in **declaration order**, stopping at the ends.
+ *
+ * Returns `true` when the key was consumed. Inert in page mode, inert
+ * without a primary selection, and inert when the component declares no
+ * targets — in every one of those cases the key passes through
+ * untouched, which is what keeps Puck's own arrow handling working.
+ *
+ * This is the a11y half of component mode: without it the entire mode is
+ * mouse-only, because every other way into a target is a pointer
+ * gesture.
+ */
+export function runTargetTraversal(
+	event: Pick<
+		KeyboardEvent,
+		"key" | "metaKey" | "ctrlKey" | "shiftKey" | "altKey"
+	>,
+	bridge: StudioEditorBridge,
+	api: PuckApi | null,
+): boolean {
+	const selection = bridge.selection?.getState();
+	if (selection === undefined || selection.mode !== "component") return false;
+	const primaryId = selection.primaryId;
+	if (primaryId === undefined || api === null) return false;
+	const delta = matchesBinding(event, COMPONENT_MODE_KEYS.nextTarget)
+		? 1
+		: matchesBinding(event, COMPONENT_MODE_KEYS.previousTarget)
+			? -1
+			: 0;
+	if (delta === 0) return false;
+	const next = stepTargetId(
+		declaredTargetIds(api, primaryId),
+		selection.targetId,
+		delta,
+	);
+	if (next === undefined) return false;
+	// A press at either end is still CONSUMED even though nothing moves:
+	// letting it fall through would scroll the canvas out from under a
+	// keyboard user who has simply reached the last element.
+	if (next !== selection.targetId) {
+		bridge.selection?.setTargetId(next);
+	}
+	return true;
 }

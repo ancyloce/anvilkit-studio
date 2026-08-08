@@ -1,9 +1,14 @@
 /**
  * @file CORE-P1B-013 — the canvas multi-select toolbar: visibility
- * rules (≥2 nodes, writable, no inline session), §13.6 align through
- * ONE parent-layout command for flow siblings, distribute gating at
+ * rules (≥2 nodes, writable, no inline session), distribute gating at
  * three nodes, and the §18 bulk ops reused verbatim (delete through
  * the one-dispatch `commitNative` path).
+ *
+ * The align case was REMOVED by PLAN-0028 `p4-006` (ledger row
+ * `p4-006-04`): align/distribute no longer dispatch a command, so an
+ * assertion reading the sidecar's `authoring.nodes[*].layout` after a
+ * toolbar click can no longer observe the write. P8 restores it against
+ * `props.appearance`.
  */
 
 import { act, cleanup, render, waitFor } from "@testing-library/react";
@@ -109,29 +114,6 @@ describe("canvas selection toolbar (CORE-P1B-013)", () => {
 		await waitFor(() =>
 			expect(doc.querySelector("[data-ak-selection-toolbar]")).not.toBeNull(),
 		);
-	});
-
-	it("aligns flow siblings via ONE parent-layout command (§13.6)", async () => {
-		const { bridge, doc, port, recordedCount } = setup();
-		act(() => bridge.selection?.selectMany(["legacy-1", "legacy-2"]));
-		const button = await waitFor(() => {
-			const el = doc.querySelector('[data-ak-toolbar-action="top"]');
-			expect(el).not.toBeNull();
-			return el as HTMLElement;
-		});
-		act(() => {
-			button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-		});
-		await waitFor(() => expect(port.getSnapshot().revision).toBe(1));
-		expect(recordedCount()).toBe(1);
-		// Cross-axis align for a row container → alignItems on the PARENT.
-		expect(
-			port.getSnapshot().authoring.nodes["legacy-0"]?.layout?.base?.alignItems,
-		).toBe("start");
-		// The children themselves were not touched.
-		expect(
-			port.getSnapshot().authoring.nodes["legacy-1"]?.layout,
-		).toBeUndefined();
 	});
 
 	it("gates distribute below three nodes", async () => {

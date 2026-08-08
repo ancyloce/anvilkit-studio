@@ -14,7 +14,7 @@
  */
 
 import { type ReactNode, useEffect } from "react";
-import { useReactivePuck } from "../overrides/utils/use-reactive-puck.js";
+import { useReactivePuck } from "../utils/use-reactive-puck.js";
 import type { StudioEditorBridge } from "./bridge.js";
 
 /** Props for {@link EditorSelectionBinder}. */

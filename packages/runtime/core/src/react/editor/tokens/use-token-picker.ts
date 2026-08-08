@@ -20,64 +20,26 @@ import type {
 	TokenType,
 	TokenValue,
 } from "@anvilkit/contracts/editor";
-import type {
-	EditorCommandResult,
-} from "../../../editor/legacy/index.js";
-import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { resolveToken } from "../../../editor/index.js";
+import type { EditorCommandResult } from "../../../editor/legacy/index.js";
+import {
+	clearTokenRecents,
+	rememberToken,
+	useTokenRecents,
+} from "../composition/design-system/token-recents.js";
 import type { EditorInspectorContext } from "../inspector/use-inspector.js";
 import { activeTokenMode } from "./token-mode.js";
 
-/** How many recently-applied tokens the picker offers. */
-const RECENTS_LIMIT = 5;
-
 /**
- * Session-scoped most-recently-applied token ids, newest first.
+ * Test seam: clear the session recents.
  *
- * Deliberately module state, not the persisted UI store: recents are
- * a convenience that must not survive a reload as durable document
- * data, and adding a slice to the versioned `editor-ui-store` would
- * force a persist migration for throwaway state.
- *
- * Exposed as a `useSyncExternalStore` source rather than a bare
- * array — a mutated module array is invisible to React, so pickers
- * would keep rendering a stale recents list until some unrelated
- * state change happened to re-run their memo.
+ * Re-exported rather than owned. `p4-003` moved the store itself to
+ * `composition/design-system/token-recents.ts` so the bridge-bound
+ * picker and the canonical one share ONE list; this export keeps the
+ * existing import path working.
  */
-let recentTokenIds: readonly string[] = [];
-const recentListeners = new Set<() => void>();
-
-function subscribeRecents(listener: () => void): () => void {
-	recentListeners.add(listener);
-	return () => {
-		recentListeners.delete(listener);
-	};
-}
-
-function getRecents(): readonly string[] {
-	return recentTokenIds;
-}
-
-function setRecents(next: readonly string[]): void {
-	recentTokenIds = next;
-	for (const listener of recentListeners) {
-		listener();
-	}
-}
-
-function rememberToken(tokenId: string): void {
-	setRecents(
-		[tokenId, ...recentTokenIds.filter((id) => id !== tokenId)].slice(
-			0,
-			RECENTS_LIMIT,
-		),
-	);
-}
-
-/** Test seam: clear the session recents. */
-export function clearTokenRecents(): void {
-	setRecents([]);
-}
+export { clearTokenRecents };
 
 /**
  * The literal a referenced token resolves to in the active mode —
@@ -217,11 +179,7 @@ export function useTokenPicker(
 		);
 	}, [allEntries, search]);
 
-	const recentIds = useSyncExternalStore(
-		subscribeRecents,
-		getRecents,
-		getRecents,
-	);
+	const recentIds = useTokenRecents();
 	const recents = useMemo(
 		() =>
 			recentIds
