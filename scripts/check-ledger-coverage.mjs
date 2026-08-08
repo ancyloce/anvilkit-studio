@@ -136,7 +136,8 @@ function checkIntegrity(rows, index) {
 				`${at}: behaviours cell is too thin to be behaviour-level (rule 2 — name what it asserted, not the file)`,
 			);
 		}
-		if (!/^p[0-8]-\d+$/.test(r.removedBy)) {
+		// A task id, optionally followed by a note explaining the context.
+		if (!/^p[0-8]-\d+\b/.test(r.removedBy)) {
 			problems.push(
 				`${at}: "Removed by" = "${r.removedBy}" is not a phase task id`,
 			);
