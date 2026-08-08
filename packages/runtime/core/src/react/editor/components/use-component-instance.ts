@@ -2,62 +2,98 @@
 
 /**
  * @file `useComponentInstance` — the instance-mode model behind the
- * inspector's Component section (PLAN-0020 CORE-P2-009H;
+ * inspector's Component section (PLAN-0028 `p5-006`;
  * ED-COMP-003/-004/-007/-008, ED-VARIANT-002; DD-0019 §14.4, §14.5).
  *
  * Everything a user can do to a *placed* component: pick its variant,
- * see which overrides it carries, reset one or all of them, promote
- * one into the definition, and detach it into plain nodes.
+ * see which of its exposed properties are overridden and which are
+ * inherited, override or reset one, reset every override at once,
+ * promote a node override into the definition, and detach the instance
+ * into plain nodes.
  *
- * Two behaviours here exist because the spec calls for them
- * explicitly, and both are easy to get silently wrong:
+ * ### What `p5-006` changed
+ *
+ * The instance and its definition used to be read from
+ * `port.getSnapshot().authoring` — the sidecar. They are now read from
+ * `p2-004`'s projection: the instance from the node's **own declared
+ * prop** and the definition from `root.props.componentLibrary`
+ * (contract rule 2). Every write is a `p3-002`/`p3-003` carrier commit,
+ * one history-recording `setData` per intent.
+ *
+ * The override vocabulary follows the commit path rather than the old
+ * command union: `p3-003` resets and promotes a **whole definition
+ * node's** patch, so the UI addresses whole nodes too. Offering a
+ * per-family reset the writer cannot express would render controls
+ * guaranteed to fail — the same rule `StylePanel` follows for
+ * allowlisted properties.
+ *
+ * ### Two behaviours the spec calls for explicitly
  *
  * - **Compatible overrides survive a variant switch.**
  *   `updateInstanceSelectionInData` keeps every override that still
  *   addresses a live node/property under the new selection and
- *   *reports* the rest as warnings. This hook surfaces that report as
- *   diagnostics rather than discarding it, so a dropped override is
- *   visible instead of being a mystery (ED-VARIANT-002).
+ *   *reports* the rest as warnings. They surface as
+ *   {@link ComponentInstanceModel.diagnostics} rather than being
+ *   discarded, so a dropped override is visible (ED-VARIANT-002).
  * - **An unresolvable definition retains its instance data.** Nothing
- *   here deletes `componentInstance` when a definition is missing;
- *   the instance keeps its overrides and re-resolves when the
- *   definition returns (ED-COMP-007).
+ *   here clears the instance carrier when a definition is missing; the
+ *   instance keeps its overrides and re-resolves when the definition
+ *   returns (ED-COMP-007).
  */
 
 import type {
 	ComponentDefinition,
 	ComponentInstanceState,
-	ComponentOverrideTarget,
+	ComponentPropDefinition,
 	EditorError,
-	ResponsiveLayerRef,
+	JsonValue,
+	NodeOverridePatch,
 } from "@anvilkit/contracts/editor";
-import type { EditorCommandResult } from "../../../editor/legacy/index.js";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type { InstanceOverrideEdit } from "../../../puck/update-instance-overrides.js";
 import {
-	use,
-	useCallback,
-	useEffect,
-	useMemo,
-	useSyncExternalStore,
-} from "react";
-import type { InternalEditorCommandPort } from "../command-port.js";
-import { StudioEditorBridgeContext } from "../use-studio-editor.js";
-import { getEditorScopeController } from "./scope.js";
+	commitDetachInstance,
+	commitInstanceOverride,
+} from "../../../puck/update-instance-overrides.js";
+import { commitInstanceSelection } from "../../../puck/update-variants.js";
+import { useShellSelection } from "../composition/use-shell-selection.js";
+import { useOptionalDocumentModel } from "../use-document-model.js";
+import {
+	useComponentEditorRuntime,
+	usePuckApiGetter,
+} from "./editor-runtime.js";
 
-/** One override the instance carries, addressed for reset/promote. */
+/**
+ * One node override the instance carries, addressed for reset/promote.
+ *
+ * Addresses a whole definition node, because that is what `p3-003`'s
+ * `reset-node-override` and `promote` edits address. `fields` is the
+ * summary of what the patch actually carries, so the row says *what*
+ * is overridden without pretending each part is separately resettable.
+ */
 export interface InstanceOverrideEntry {
-	/**
-	 * `"node"` overrides address a definition node and reset through
-	 * `component.override.reset`; `"exposedProp"` overrides hang off the
-	 * instance and clear through `component.instance.propOverride.set`
-	 * with a `null` value. Promote applies to node overrides only.
-	 */
-	readonly kind: "node" | "exposedProp";
 	readonly definitionNodeId: string;
-	/** `title`, `layout`, … — display + last address segment. */
+	/** The node's display label — its id, which is its stable address. */
 	readonly label: string;
-	/** Set for `kind: "exposedProp"`. */
-	readonly propId?: string;
-	readonly target: ComponentOverrideTarget;
+	/** `title`, `layout`, `typography`, … in the patch. */
+	readonly fields: readonly string[];
+}
+
+/**
+ * One exposed property of the definition, as this instance sees it.
+ *
+ * `inherited` is the same flag `ResolvedValue` carries in `p2-003`'s
+ * field-state union — not a second provenance concept, the same one
+ * read at the instance layer of the §14.4 cascade. It is what makes an
+ * overridden field render differently from an inherited one
+ * (`ED-FA-008`'s minimum).
+ */
+export interface InstanceExposedProp {
+	readonly definition: ComponentPropDefinition;
+	/** False when this instance carries an override for the property. */
+	readonly inherited: boolean;
+	/** The override when present, else the definition's default. */
+	readonly value: JsonValue | undefined;
 }
 
 /** The instance-mode surface for one selected instance node. */
@@ -68,23 +104,33 @@ export interface ComponentInstanceModel {
 	readonly definition: ComponentDefinition | null;
 	/** True when the definition is missing — data retained (ED-COMP-007). */
 	readonly unresolved: boolean;
+	/** Every exposed property, overridden and inherited alike. */
+	readonly exposedProps: readonly InstanceExposedProp[];
+	/** The node overrides this instance carries. */
 	readonly overrides: readonly InstanceOverrideEntry[];
 	readonly canMutate: boolean;
-	/** Diagnostics from the last variant switch (dropped overrides). */
+	/** Warnings from the last commit (dropped overrides, refusals). */
 	readonly diagnostics: readonly EditorError[];
 	readonly setVariant: (
 		selection: Readonly<Record<string, string>>,
-	) => Promise<EditorCommandResult | null>;
+	) => InstanceCommitOutcome;
+	/** Override one exposed property on this instance. */
+	readonly setExposedProp: (
+		propId: string,
+		value: JsonValue,
+	) => InstanceCommitOutcome;
+	/** Clear one exposed-property override, restoring the inherited value. */
+	readonly resetExposedProp: (propId: string) => InstanceCommitOutcome;
+	/** Clear one definition node's override patch. */
 	readonly resetOverride: (
 		entry: InstanceOverrideEntry,
-		layer?: ResponsiveLayerRef,
-	) => Promise<EditorCommandResult | null>;
-	readonly resetAllOverrides: () => Promise<EditorCommandResult | null>;
+	) => InstanceCommitOutcome;
+	readonly resetAllOverrides: () => InstanceCommitOutcome;
+	/** Push one node override up into the shared definition. */
 	readonly promoteOverride: (
-		target: ComponentOverrideTarget,
-		layer?: ResponsiveLayerRef,
-	) => Promise<EditorCommandResult | null>;
-	readonly detach: () => Promise<DetachOutcome>;
+		entry: InstanceOverrideEntry,
+	) => InstanceCommitOutcome;
+	readonly detach: () => InstanceCommitOutcome;
 	/**
 	 * Open this instance's definition in isolated editing — the
 	 * selected-instance entry point (ED-COMP-005). Transient UI state:
@@ -93,342 +139,239 @@ export interface ComponentInstanceModel {
 	readonly editDefinition: () => void;
 }
 
-/** The outcome of a detach attempt. */
-export interface DetachOutcome {
-	readonly status: "committed" | "rejected";
+/** The outcome of any instance write. */
+export interface InstanceCommitOutcome {
+	readonly status: "committed" | "noop" | "rejected";
 	readonly errors: readonly EditorError[];
 }
 
-/** The diagnostic channel the variant switch reports through. */
-const DIAGNOSTIC_CHANNEL = "editor.component.instance";
+const NO_ERRORS: readonly EditorError[] = Object.freeze([]);
+const NO_PROPS: readonly InstanceExposedProp[] = Object.freeze([]);
+const NO_OVERRIDES: readonly InstanceOverrideEntry[] = Object.freeze([]);
 
-/**
- * Flatten one instance's overrides into addressable leaf entries.
- *
- * **Addressing rule (freeze §1.2):** `ComponentOverrideTarget.
- * propertyPath` is rooted at the definition node's `props`, and a
- * leading responsive-family segment (`layout` / `style` /
- * `typography` / `hidden`) switches it to that family. So a prop
- * override is `["title"]`, **not** `["props","title"]` — the second
- * form addresses a prop literally named `props` and silently resets
- * nothing.
- */
+/** Which parts of a node patch are actually set. */
+function patchFields(patch: NodeOverridePatch): readonly string[] {
+	const fields: string[] = [];
+	for (const [family, value] of Object.entries(patch)) {
+		if (value === undefined) continue;
+		if (family === "props") {
+			fields.push(...Object.keys(value as Readonly<Record<string, unknown>>));
+			continue;
+		}
+		fields.push(family);
+	}
+	return fields.sort();
+}
+
+/** Flatten one instance's node overrides into addressable rows. */
 function overrideEntries(
 	instance: ComponentInstanceState,
 ): readonly InstanceOverrideEntry[] {
-	const entries: InstanceOverrideEntry[] = [];
-	for (const [definitionNodeId, patch] of Object.entries(
-		instance.nodeOverrides,
-	)) {
-		for (const [family, value] of Object.entries(patch)) {
-			if (value === undefined) continue;
-			if (family === "props") {
-				for (const key of Object.keys(
-					value as Readonly<Record<string, unknown>>,
-				)) {
-					entries.push({
-						kind: "node",
-						definitionNodeId,
-						label: key,
-						target: { definitionNodeId, propertyPath: [key] },
-					});
-				}
-				continue;
-			}
-			// Responsive families address at the family level: the reset
-			// clears that family at the addressed layer.
-			entries.push({
-				kind: "node",
-				definitionNodeId,
-				label: family,
-				target: { definitionNodeId, propertyPath: [family] },
-			});
-		}
+	const entries = Object.entries(instance.nodeOverrides)
+		.map(([definitionNodeId, patch]) => ({
+			definitionNodeId,
+			label: definitionNodeId,
+			fields: patchFields(patch),
+		}))
+		.filter((entry) => entry.fields.length > 0)
+		.sort((a, b) => a.definitionNodeId.localeCompare(b.definitionNodeId));
+	return entries.length === 0 ? NO_OVERRIDES : entries;
+}
+
+/**
+ * Every exposed property, tagged with whether this instance overrides
+ * it. Both states are listed — an inherited property that is simply
+ * absent from the panel cannot be *shown* as inherited, and showing
+ * the difference is the whole point.
+ */
+function exposedPropRows(
+	definition: ComponentDefinition | null,
+	instance: ComponentInstanceState,
+): readonly InstanceExposedProp[] {
+	if (definition === null || definition.exposedProps.length === 0) {
+		return NO_PROPS;
 	}
-	// Exposed-prop overrides are a different address space — they hang
-	// off the instance, not a definition node — and are cleared by
-	// writing `null` through `component.instance.propOverride.set`
-	// rather than by `component.override.reset`.
-	for (const key of Object.keys(instance.propOverrides)) {
-		entries.push({
-			kind: "exposedProp",
-			definitionNodeId: "",
-			label: key,
-			propId: key,
-			target: { definitionNodeId: "", propertyPath: [key] },
-		});
-	}
-	return entries.sort(
-		(a, b) => a.kind.localeCompare(b.kind) || a.label.localeCompare(b.label),
-	);
+	return definition.exposedProps.map((prop) => {
+		const overridden = Object.hasOwn(instance.propOverrides, prop.id);
+		return {
+			definition: prop,
+			inherited: !overridden,
+			value: overridden ? instance.propOverrides[prop.id] : prop.defaultValue,
+		};
+	});
 }
 
 /**
  * The instance model for the primary selected node, or `null` when
  * nothing selected is a component instance.
+ *
+ * Degrades to `null` outside `<Puck>` rather than throwing — the
+ * section is mounted by chrome that production always renders inside
+ * the provider, but tests and hosts may not.
  */
 export function useComponentInstance(): ComponentInstanceModel | null {
-	const bridge = use(StudioEditorBridgeContext);
-	const version = useSyncExternalStore(
-		bridge === null ? noopSubscribe : bridge.subscribe,
-		bridge === null ? zero : bridge.getVersion,
-		bridge === null ? zero : bridge.getVersion,
-	);
-	const port = bridge?.port as InternalEditorCommandPort | null | undefined;
+	const model = useOptionalDocumentModel();
+	const selection = useShellSelection();
+	const runtime = useComponentEditorRuntime();
+	const getPuckApi = usePuckApiGetter();
+	const [diagnostics, setDiagnostics] =
+		useState<readonly EditorError[]>(NO_ERRORS);
 
-	const resolved = useMemo(() => {
-		void version;
-		if (port == null) return null;
-		const snapshot = port.getSnapshot();
-		const nodeId = snapshot.selection.primaryId;
-		if (nodeId === undefined) return null;
-		const instance = snapshot.authoring.nodes[nodeId]?.componentInstance;
-		if (instance === undefined) return null;
-		return {
-			nodeId,
-			instance,
-			definition:
-				snapshot.authoring.componentDefinitions[instance.definitionId] ?? null,
-		};
-	}, [port, version]);
+	const nodeId = selection.primaryId;
+	const instance =
+		nodeId === null || model === null
+			? undefined
+			: model.nodes.get(nodeId)?.componentInstance;
+	const definition =
+		instance === undefined || model === null
+			? null
+			: (model.componentLibrary?.definitions[instance.definitionId] ?? null);
 
-	const dispatch = useCallback(
-		async (
-			build: (revision: number) => Record<string, unknown>,
-		): Promise<EditorCommandResult | null> => {
-			if (port == null) return null;
-			const revision = port.getSnapshot().revision;
-			return port.execute({
-				id: crypto.randomUUID(),
-				expectedRevision: revision,
-				source: "inspector",
-				timestamp: Date.now(),
-				...build(revision),
-			} as never);
+	/*
+	 * Diagnostics describe ONE instance, so they are dropped the moment
+	 * the user selects a different one. Without this, switching instance
+	 * A's variant (say, two overrides dropped) and then clicking
+	 * instance B rendered A's drop report inside B's inspector as though
+	 * it described B.
+	 */
+	useEffect(() => {
+		// `nodeId` is the trigger, not an input — re-running when it
+		// changes is the entire point of this effect.
+		void nodeId;
+		setDiagnostics(NO_ERRORS);
+	}, [nodeId]);
+
+	const record = useCallback(
+		(result: InstanceCommitOutcome): InstanceCommitOutcome => {
+			setDiagnostics(result.errors.length === 0 ? NO_ERRORS : result.errors);
+			return result;
 		},
-		[port],
+		[],
+	);
+
+	const override = useCallback(
+		(edit: InstanceOverrideEdit): InstanceCommitOutcome => {
+			const api = getPuckApi();
+			if (nodeId === null || api === null) {
+				return { status: "rejected", errors: NO_ERRORS };
+			}
+			const result = commitInstanceOverride(
+				{ getPuckApi: () => api },
+				[nodeId],
+				edit,
+			);
+			return record({ status: result.status, errors: result.errors });
+		},
+		[nodeId, getPuckApi, record],
 	);
 
 	/**
 	 * Switch the instance's variant (ED-VARIANT-002).
 	 *
-	 * Overrides that still apply under the new combination survive;
-	 * the rest are dropped **with a visible diagnostic**.
-	 *
-	 * That diagnostic used to be unreachable: the sidecar reducer
-	 * returned only the next state, so the switch's `dropped` report
-	 * was discarded, and this hook had to re-run the pure switch
-	 * against the pre-command snapshot to recover it. The carrier
-	 * commit returns the warnings directly, so the shadow computation
-	 * is gone — the report now comes from the write that produced it
-	 * rather than from a replay that has to be kept in agreement.
+	 * Overrides that still apply under the new combination survive; the
+	 * rest are dropped **with a visible diagnostic**, which the commit
+	 * returns directly rather than this hook replaying the switch to
+	 * recover a report the writer already produced.
 	 */
 	const setVariant = useCallback(
-		async (
-			selection: Readonly<Record<string, string>>,
-		): Promise<EditorCommandResult | null> => {
-			if (resolved === null || bridge == null || port == null) return null;
-			const api = port.tryGetPuckApi?.() ?? null;
-			if (api === null) return null;
-			const { commitInstanceSelection } = await import(
-				"../../../puck/update-variants.js"
-			);
+		(
+			variantSelection: Readonly<Record<string, string>>,
+		): InstanceCommitOutcome => {
+			const api = getPuckApi();
+			if (nodeId === null || api === null) {
+				return { status: "rejected", errors: NO_ERRORS };
+			}
 			const result = commitInstanceSelection(
 				{ getPuckApi: () => api },
-				[resolved.nodeId],
-				selection,
+				[nodeId],
+				variantSelection,
 			);
-			if (result.status === "committed") {
-				bridge.diagnostics.setDiagnostics(
-					DIAGNOSTIC_CHANNEL,
-					result.errors.filter((error) => error.severity !== "error"),
-				);
-			}
-			return {
-				status: result.status === "committed" ? "committed" : result.status,
-				revision: port.getSnapshot().revision,
-				changedNodeIds: result.resolvedNodeIds,
-				errors: result.errors,
-			};
+			return record({ status: result.status, errors: result.errors });
 		},
-		[resolved, bridge, port],
+		[nodeId, getPuckApi, record],
+	);
+
+	const setExposedProp = useCallback(
+		(propId: string, value: JsonValue) =>
+			override({ kind: "set-exposed-prop", propId, value }),
+		[override],
+	);
+
+	/**
+	 * Reset restores the **inherited** value, not a control default:
+	 * removing the entry lets the §14.4 cascade resolve the property
+	 * from the layer below (variant patch, or the definition base).
+	 */
+	const resetExposedProp = useCallback(
+		(propId: string) => override({ kind: "reset-exposed-prop", propId }),
+		[override],
 	);
 
 	const resetOverride = useCallback(
-		async (
-			entry: InstanceOverrideEntry,
-			layer: ResponsiveLayerRef = "base",
-		) => {
-			if (resolved === null) return null;
-			if (entry.kind === "exposedProp") {
-				return dispatch(() => ({
-					type: "component.instance.propOverride.set",
-					instanceNodeId: resolved.nodeId,
-					propId: entry.propId,
-					value: null,
-				}));
-			}
-			return dispatch(() => ({
-				type: "component.override.reset",
-				instanceNodeId: resolved.nodeId,
-				target: entry.target,
-				layer,
-			}));
-		},
-		[resolved, dispatch],
+		(entry: InstanceOverrideEntry) =>
+			override({
+				kind: "reset-node-override",
+				definitionNodeId: entry.definitionNodeId,
+			}),
+		[override],
 	);
 
-	const resetAllOverrides = useCallback(async () => {
-		if (resolved === null) return null;
-		return dispatch(() => ({
-			type: "component.override.resetAll",
-			instanceNodeIds: [resolved.nodeId],
-		}));
-	}, [resolved, dispatch]);
+	const resetAllOverrides = useCallback(
+		() => override({ kind: "reset-all" }),
+		[override],
+	);
 
+	/**
+	 * Promote writes into the DEFINITION and removes the override from
+	 * the instance in the same commit, so the override becomes shared
+	 * rather than being redundantly re-stated in both places. Both
+	 * halves land in one `Data`, therefore one undo.
+	 */
 	const promoteOverride = useCallback(
-		async (
-			target: ComponentOverrideTarget,
-			layer: ResponsiveLayerRef = "base",
-		) => {
-			if (resolved === null || bridge == null) return null;
-			// Promote writes into the DEFINITION, so freeze §6 requires the
-			// component's own scope. Entering it around the dispatch keeps
-			// the affordance available from instance mode (where the user
-			// is looking at the override) without weakening the guard.
-			const selection = bridge.selection;
-			const previous = port?.getSnapshot().selection.definitionScope ?? "page";
-			const targetScope =
-				`component:${resolved.instance.definitionId}` as const;
-			const needsScope = previous !== targetScope && selection != null;
-			if (needsScope) {
-				selection?.setDefinitionScope(targetScope);
-			}
-			try {
-				return await dispatch(() => ({
-					type: "component.override.promote",
-					instanceNodeId: resolved.nodeId,
-					target,
-					layer,
-				}));
-			} finally {
-				if (needsScope) {
-					// Back to the scope the user was actually in — not a
-					// hardcoded "page". Promoting from inside another
-					// component's isolated scope used to eject the user to the
-					// page entirely. This does not route through
-					// `getEditorScopeController`, whose `exitScope()` always
-					// lands on "page" and so cannot express a transient
-					// round-trip back to the originating scope.
-					selection?.setDefinitionScope(previous);
-					selection?.select(resolved.nodeId);
-				}
-			}
-		},
-		[resolved, dispatch, bridge, port],
+		(entry: InstanceOverrideEntry) =>
+			override({ kind: "promote", definitionNodeId: entry.definitionNodeId }),
+		[override],
 	);
 
 	/**
 	 * Detach the instance into ordinary page nodes (ED-COMP-004).
 	 *
-	 * `component.instance.detach` is in the frozen command union but is
-	 * **not** a sidecar reduction: materializing an instance rewrites
-	 * the Puck tree, which `applyEditorCommand` cannot express (it
-	 * reduces `AuthoringStateV1` alone). So the detach runs through
-	 * `commitNative` — the same tier-(a) seam create-from-selection
-	 * uses — which lands the tree change and the sidecar reconciliation
-	 * in ONE history-recording dispatch.
-	 *
-	 * An unresolvable definition rejects rather than half-detaching:
-	 * the instance's data must survive (ED-COMP-007).
+	 * An unresolvable definition rejects rather than half-detaching: the
+	 * instance's data must survive (ED-COMP-007).
 	 */
-	const detach = useCallback(async (): Promise<DetachOutcome> => {
-		if (resolved === null || port == null || bridge == null) {
-			return { status: "rejected", errors: [] };
+	const detach = useCallback((): InstanceCommitOutcome => {
+		const api = getPuckApi();
+		if (nodeId === null || api === null) {
+			return { status: "rejected", errors: NO_ERRORS };
 		}
-		const { buildDetachPlan, isDetachFailure } = await import(
-			"../../../editor/index.js"
+		const result = commitDetachInstance(
+			{ getPuckApi: () => api },
+			[nodeId],
+			() => crypto.randomUUID(),
 		);
-		let failure: EditorError | null = null;
-		const committed = port.commitNative((data, authoring) => {
-			const plan = buildDetachPlan(data, authoring, [resolved.nodeId], () =>
-				crypto.randomUUID(),
-			);
-			if (plan === null) return null;
-			if (isDetachFailure(plan)) {
-				failure = {
-					code: "EDITOR_DEFINITION_UNAVAILABLE",
-					severity: "error",
-					message:
-						"this component cannot be detached because its definition is unavailable",
-					recoverable: true,
-					nodeIds: [plan.instanceNodeId],
-					details: { kind: "componentInstance", reason: plan.reason.status },
-				};
-				return null;
-			}
-			return { data: plan.data, authoring: plan.authoring };
-		});
-		if (failure !== null) {
-			bridge.diagnostics.setDiagnostics(DIAGNOSTIC_CHANNEL, [failure]);
-			return { status: "rejected", errors: [failure] };
-		}
-		// A successful detach clears whatever the previous attempt left
-		// behind, so a stale failure cannot outlive the condition it
-		// described.
-		bridge.diagnostics.setDiagnostics(DIAGNOSTIC_CHANNEL, []);
-		return {
-			status: committed === "committed" ? "committed" : "rejected",
-			errors: [],
-		};
-	}, [resolved, port, bridge]);
+		return record({ status: result.status, errors: result.errors });
+	}, [nodeId, getPuckApi, record]);
 
+	const definitionId = instance?.definitionId;
 	const editDefinition = useCallback(() => {
-		if (resolved === null || bridge?.selection == null) return;
-		const selection = bridge.selection;
-		// Route through the same controller the Components panel uses so
-		// exit restores the page selection identically (§10.6).
-		getEditorScopeController(selection).enterComponent(
-			resolved.instance.definitionId,
-		);
-	}, [resolved, bridge]);
-
-	/*
-	 * Diagnostics here describe ONE instance, so they are dropped the
-	 * moment the user selects a different one. Without this, switching
-	 * instance A's variant (say, two overrides dropped) and then clicking
-	 * instance B rendered A's drop report inside B's inspector as though
-	 * it described B.
-	 */
-	const instanceNodeId = resolved?.nodeId;
-	useEffect(() => {
-		// `instanceNodeId` is the trigger, not an input — re-running when
-		// it changes is the entire point of this effect.
-		void instanceNodeId;
-		bridge?.diagnostics.setDiagnostics(DIAGNOSTIC_CHANNEL, []);
-	}, [bridge, instanceNodeId]);
-
-	const diagnostics = useMemo(() => {
-		void version;
-		// This hook's OWN channel. The flattened `getDiagnostics()` view
-		// spans every source, so re-identifying entries by `details.kind`
-		// also picked up identically-shaped diagnostics published
-		// elsewhere — `validateCreateComponentSelection` emits
-		// `kind: "componentInstance"` errors onto the create channel.
-		return bridge?.diagnostics.getDiagnosticsFor(DIAGNOSTIC_CHANNEL) ?? [];
-	}, [bridge, version]);
+		if (definitionId === undefined) return;
+		runtime.enterComponent(definitionId);
+	}, [definitionId, runtime]);
 
 	return useMemo(() => {
-		if (resolved === null || port == null) return null;
+		if (nodeId === null || instance === undefined) return null;
 		return {
-			nodeId: resolved.nodeId,
-			instance: resolved.instance,
-			definition: resolved.definition,
-			unresolved: resolved.definition === null,
-			overrides: overrideEntries(resolved.instance),
-			canMutate: !port.isReadOnly() && !port.writersDisabled(),
+			nodeId,
+			instance,
+			definition,
+			unresolved: definition === null,
+			exposedProps: exposedPropRows(definition, instance),
+			overrides: overrideEntries(instance),
+			canMutate: runtime.canMutate,
 			diagnostics,
 			setVariant,
+			setExposedProp,
+			resetExposedProp,
 			resetOverride,
 			resetAllOverrides,
 			promoteOverride,
@@ -436,24 +379,18 @@ export function useComponentInstance(): ComponentInstanceModel | null {
 			editDefinition,
 		};
 	}, [
-		resolved,
-		port,
+		nodeId,
+		instance,
+		definition,
+		runtime.canMutate,
 		diagnostics,
 		setVariant,
+		setExposedProp,
+		resetExposedProp,
 		resetOverride,
 		resetAllOverrides,
 		promoteOverride,
 		detach,
 		editDefinition,
 	]);
-}
-
-function noopSubscribe(): () => void {
-	return noop;
-}
-function noop(): void {
-	// The no-bridge store never changes.
-}
-function zero(): number {
-	return 0;
 }

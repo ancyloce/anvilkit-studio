@@ -2,29 +2,49 @@
 
 /**
  * @file `useVariantAuthoring` — the variant-axis authoring model
- * (PLAN-0020 CORE-P2-009H; ED-VARIANT-001; DD-0019 §14.2, §14.4).
+ * (PLAN-0028 `p5-006`; ED-VARIANT-001; DD-0019 §14.2, §14.4).
  *
- * Axes and their options are part of the *definition*, so every
- * mutation here is a `component.definition.update` and therefore
- * requires the component's own isolated scope (freeze §6). The hook
- * is only usable while that scope is active — the panel that renders
- * it lives inside the isolated canvas, so this is a structural fact,
- * not a check the UI can forget.
+ * Axes and their options are part of the *definition*, so every edit
+ * here lands in the declared root prop `root.props.componentLibrary`
+ * (contract rule 2) and the hook is only live while a definition is
+ * open in isolated editing (freeze §6). The Components panel is the
+ * one surface that opens a definition, so "which component am I
+ * authoring axes for" has exactly one answer.
+ *
+ * ### What `p5-006` changed
+ *
+ * The definition used to be read from
+ * `port.getSnapshot().authoring.componentDefinitions` — the sidecar,
+ * which carrier documents never populate — and every edit was a
+ * whole-list `component.definition.update` through the command engine.
+ * Reads are now `p2-004`'s projection and writes are `p3-002`'s
+ * {@link commitVariantModelUpdate}, one granular `VariantModelEdit`
+ * per user intent, each exactly one history-recording `setData`.
+ *
+ * The whole-list patch is gone deliberately: it could not express
+ * "delete this axis **and** re-resolve every instance that selected
+ * it" in one `Data`, so the instance half used to be a second, separate
+ * concern. The commit path does both, which is why deleting an axis is
+ * one undo rather than one-plus-N.
  *
  * ### Which caps are enforced where
  *
- * The engine's `validateVariantModel` is the authority on the two
- * frozen caps: ≤`variantAxesPerComponent` (3) axes and
- * ≤`variantsPerComponent` (20) *declared* variants. This hook
- * additionally refuses an edit that would push the number of
- * **expressible** combinations (the product of every axis's option
- * count) past 20 — a model with 3 axes × 5 options declares only 0
- * variants but offers 125 combinations, which is unusable as a strip
- * and cannot ever be fully declared under the 20-variant cap. That
- * check lives here rather than in the reducer deliberately: adding a
- * new hard rejection to a frozen contract would change the meaning of
- * already-valid documents, whereas refusing to *author* one is a UI
- * policy that leaves existing data readable.
+ * `validateVariantModel` is the authority on the two frozen caps:
+ * ≤`variantAxesPerComponent` (3) axes and ≤`variantsPerComponent` (20)
+ * *declared* variants. The commit path additionally refuses an edit
+ * that would push the number of **expressible** combinations (the
+ * product of every axis's option count) past
+ * {@link MAX_EXPRESSIBLE_COMBINATIONS} — a model with 3 axes × 5
+ * options declares 0 variants but offers 125 combinations, which is
+ * unusable as a strip and can never be fully declared under the
+ * 20-variant cap.
+ *
+ * This hook's job is to surface both caps **before** they are hit:
+ * {@link VariantAuthoring.canAddAxis} and
+ * {@link VariantAuthoring.canAddOption} are false at the boundary, so
+ * the affordance disables rather than the submit failing. The
+ * write-time rejection stays as the backstop — a disabled button is
+ * UX, not enforcement.
  *
  * Errors are returned, never thrown, and never silently swallowed:
  * the panel renders them.
@@ -36,25 +56,25 @@ import type {
 	VariantAxis,
 } from "@anvilkit/contracts/editor";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
-import { use, useCallback, useMemo, useSyncExternalStore } from "react";
-import type { InternalEditorCommandPort } from "../command-port.js";
-import { StudioEditorBridgeContext } from "../use-studio-editor.js";
+import { useCallback, useMemo } from "react";
+import type { VariantModelEdit } from "../../../puck/update-variants.js";
+import {
+	commitVariantModelUpdate,
+	MAX_EXPRESSIBLE_COMBINATIONS,
+} from "../../../puck/update-variants.js";
+import { useShellSelection } from "../composition/use-shell-selection.js";
+import { useOptionalDocumentModel } from "../use-document-model.js";
+import {
+	useComponentEditorRuntime,
+	usePuckApiGetter,
+} from "./editor-runtime.js";
 import { scopedDefinitionId } from "./scope.js";
-
-/**
- * The maximum expressible combinations an authored model may offer.
- *
- * Re-exported from `puck/update-variants.ts`, where `p3-002` moved the
- * single declaration so the cap the commit path enforces and the cap
- * this hook displays cannot drift apart.
- */
-import { MAX_EXPRESSIBLE_COMBINATIONS } from "../../../puck/update-variants.js";
 
 export { MAX_EXPRESSIBLE_COMBINATIONS };
 
 /** Outcome of one axis-model edit. */
 export interface VariantEditOutcome {
-	readonly status: "committed" | "rejected";
+	readonly status: "committed" | "noop" | "rejected";
 	readonly errors: readonly EditorError[];
 }
 
@@ -68,25 +88,27 @@ export interface VariantAuthoring {
 	readonly maxCombinations: number;
 	/** True when another axis may be added right now. */
 	readonly canAddAxis: boolean;
-	readonly addAxis: (name: string) => Promise<VariantEditOutcome>;
-	readonly renameAxis: (
-		axisId: string,
-		name: string,
-	) => Promise<VariantEditOutcome>;
-	readonly removeAxis: (axisId: string) => Promise<VariantEditOutcome>;
-	readonly addOption: (
-		axisId: string,
-		name: string,
-	) => Promise<VariantEditOutcome>;
+	/**
+	 * True when another option may be added to `axisId` right now —
+	 * i.e. the resulting combination product still fits under
+	 * {@link MAX_EXPRESSIBLE_COMBINATIONS}. The cap is per-axis because
+	 * the product is: a third option on a 2×2 model is fine, a third on
+	 * a 4×5 model is not.
+	 */
+	readonly canAddOption: (axisId: string) => boolean;
+	readonly addAxis: (name: string) => VariantEditOutcome;
+	readonly renameAxis: (axisId: string, name: string) => VariantEditOutcome;
+	readonly removeAxis: (axisId: string) => VariantEditOutcome;
+	readonly addOption: (axisId: string, name: string) => VariantEditOutcome;
 	readonly renameOption: (
 		axisId: string,
 		optionId: string,
 		name: string,
-	) => Promise<VariantEditOutcome>;
+	) => VariantEditOutcome;
 	readonly removeOption: (
 		axisId: string,
 		optionId: string,
-	) => Promise<VariantEditOutcome>;
+	) => VariantEditOutcome;
 }
 
 function combinationsOf(axes: readonly VariantAxis[]): number {
@@ -98,63 +120,6 @@ function combinationsOf(axes: readonly VariantAxis[]): number {
 }
 
 /**
- * Report declared variants that an axis or option removal destroyed.
- *
- * Collapsing selections that are no longer distinct is *required* —
- * `validateVariantModel` rejects an ambiguous model, so leaving them
- * would make the removal read to the user as "remove failed". But the
- * variants that collapse take their per-variant node overrides and
- * content with them. §14.2 permits the loss; it does not permit the
- * loss to be silent, and this file's own contract is that errors are
- * "never silently swallowed".
- *
- * `warning`, not `error`: the edit committed, and this describes what
- * it cost rather than a reason to undo it.
- */
-function variantsDroppedWarning(
-	definitionId: string,
-	dropped: number,
-): EditorError | null {
-	if (dropped <= 0) return null;
-	return {
-		code: "EDITOR_COMMAND_CONFLICT",
-		severity: "warning",
-		message:
-			dropped === 1
-				? "1 declared variant was removed — it no longer addresses a distinct combination"
-				: `${dropped} declared variants were removed — they no longer address distinct combinations`,
-		recoverable: true,
-		details: {
-			kind: "variantOverride",
-			definitionId,
-			reason: "variants-dropped",
-			dropped,
-		},
-	};
-}
-
-/** Append a non-null warning to a committed result's error list. */
-function withWarning(
-	errors: readonly EditorError[],
-	warning: EditorError | null,
-): readonly EditorError[] {
-	return warning === null ? errors : [...errors, warning];
-}
-
-function limitError(
-	message: string,
-	details: Readonly<Record<string, unknown>>,
-): EditorError {
-	return {
-		code: "EDITOR_LIMIT_EXCEEDED",
-		severity: "error",
-		message,
-		recoverable: true,
-		details,
-	};
-}
-
-/**
  * A rejected authoring edit. `EDITOR_COMMAND_CONFLICT` is the frozen
  * code for "this command is not valid against the current model" —
  * there is no separate validation code in the §9.5 envelope.
@@ -162,359 +127,185 @@ function limitError(
 function validationError(
 	message: string,
 	details: Readonly<Record<string, unknown>>,
-): EditorError {
+): VariantEditOutcome {
 	return {
-		code: "EDITOR_COMMAND_CONFLICT",
-		severity: "error",
-		message,
-		recoverable: true,
-		details,
+		status: "rejected",
+		errors: [
+			{
+				code: "EDITOR_COMMAND_CONFLICT",
+				severity: "error",
+				message,
+				recoverable: true,
+				details,
+			},
+		],
 	};
 }
+
+const NOT_AUTHORABLE: VariantEditOutcome = Object.freeze({
+	status: "rejected",
+	errors: Object.freeze([]),
+});
 
 /**
  * Variant authoring for the definition in the active isolated scope,
  * or `null` outside one (or while writers are unavailable).
+ *
+ * Degrades to `null` outside `<Puck>` rather than throwing — the form
+ * is mounted by chrome that production always renders inside the
+ * provider, but tests and hosts may not.
  */
 export function useVariantAuthoring(): VariantAuthoring | null {
-	const bridge = use(StudioEditorBridgeContext);
-	const version = useSyncExternalStore(
-		bridge === null ? noopSubscribe : bridge.subscribe,
-		bridge === null ? zero : bridge.getVersion,
-		bridge === null ? zero : bridge.getVersion,
-	);
-	const port = bridge?.port as InternalEditorCommandPort | null | undefined;
+	const model = useOptionalDocumentModel();
+	const selection = useShellSelection();
+	const runtime = useComponentEditorRuntime();
+	const getPuckApi = usePuckApiGetter();
 
 	const definition = useMemo((): ComponentDefinition | null => {
-		void version;
-		if (port == null) return null;
-		const snapshot = port.getSnapshot();
-		const definitionId = scopedDefinitionId(snapshot.selection.definitionScope);
-		if (definitionId === undefined) return null;
-		return snapshot.authoring.componentDefinitions[definitionId] ?? null;
-	}, [port, version]);
+		const definitionId = scopedDefinitionId(selection.definitionScope);
+		if (definitionId === undefined || model === null) return null;
+		return model.componentLibrary?.definitions[definitionId] ?? null;
+	}, [model, selection.definitionScope]);
 
-	/**
-	 * Commit a whole replacement axis list. Axis edits are always
-	 * expressed as a full-list patch rather than a positional one: the
-	 * list is short, and a whole-list write is the only shape that
-	 * cannot desynchronize under concurrent edits.
-	 */
-	const commitAxes = useCallback(
-		async (
-			next: readonly VariantAxis[],
-			extraErrors: readonly EditorError[] = [],
-		): Promise<VariantEditOutcome> => {
-			if (port == null || definition === null) {
-				return { status: "rejected", errors: extraErrors };
-			}
-			if (extraErrors.length > 0) {
-				return { status: "rejected", errors: extraErrors };
-			}
-			const result = await port.execute({
-				id: crypto.randomUUID(),
-				expectedRevision: port.getSnapshot().revision,
-				source: "inspector",
-				timestamp: Date.now(),
-				type: "component.definition.update",
-				definitionId: definition.id,
-				patch: { variantAxes: next } as never,
-			});
-			return {
-				status: result.status === "committed" ? "committed" : "rejected",
-				errors: result.errors,
-			};
+	const commit = useCallback(
+		(edit: VariantModelEdit): VariantEditOutcome => {
+			const api = getPuckApi();
+			if (definition === null || api === null) return NOT_AUTHORABLE;
+			const result = commitVariantModelUpdate(
+				{ getPuckApi: () => api },
+				definition.id,
+				edit,
+			);
+			return { status: result.status, errors: result.errors };
 		},
-		[port, definition],
+		[definition, getPuckApi],
 	);
 
 	const addAxis = useCallback(
-		async (name: string): Promise<VariantEditOutcome> => {
-			if (definition === null) return { status: "rejected", errors: [] };
+		(name: string): VariantEditOutcome => {
 			const trimmed = name.trim();
 			if (trimmed.length === 0) {
-				return {
-					status: "rejected",
-					errors: [
-						validationError("a variant axis needs a name", {
-							kind: "variantAxis",
-							reason: "empty-name",
-						}),
-					],
-				};
+				return validationError("a variant axis needs a name", {
+					kind: "variantAxis",
+					reason: "empty-name",
+				});
 			}
-			if (
-				definition.variantAxes.length >=
-				EDITOR_COUNT_LIMITS.variantAxesPerComponent
-			) {
-				return {
-					status: "rejected",
-					errors: [
-						limitError(
-							`components allow at most ${EDITOR_COUNT_LIMITS.variantAxesPerComponent} variant axes`,
-							{
-								limitKey: "variantAxesPerComponent",
-								limit: EDITOR_COUNT_LIMITS.variantAxesPerComponent,
-								actual: definition.variantAxes.length + 1,
-								definitionId: definition.id,
-							},
-						),
-					],
-				};
-			}
-			// A new axis starts with one option so the model stays
-			// expressible: an axis with zero options would make the
-			// combination product collapse to nothing.
-			const axis: VariantAxis = {
-				id: crypto.randomUUID(),
-				name: trimmed,
-				options: [{ id: crypto.randomUUID(), name: "Default" }],
-			};
-			return commitAxes([...definition.variantAxes, axis]);
+			return commit({
+				kind: "add-axis",
+				axis: {
+					id: crypto.randomUUID(),
+					name: trimmed,
+					// A new axis starts with one option so the model stays
+					// expressible: an axis with zero options would collapse the
+					// combination product to nothing.
+					options: [{ id: crypto.randomUUID(), name: "Default" }],
+				},
+			});
 		},
-		[definition, commitAxes],
+		[commit],
 	);
 
 	const renameAxis = useCallback(
-		async (axisId: string, name: string): Promise<VariantEditOutcome> => {
-			if (definition === null) return { status: "rejected", errors: [] };
+		(axisId: string, name: string): VariantEditOutcome => {
 			const trimmed = name.trim();
 			if (trimmed.length === 0) {
-				return {
-					status: "rejected",
-					errors: [
-						validationError("a variant axis needs a name", {
-							kind: "variantAxis",
-							axisId,
-							reason: "empty-name",
-						}),
-					],
-				};
+				return validationError("a variant axis needs a name", {
+					kind: "variantAxis",
+					axisId,
+					reason: "empty-name",
+				});
 			}
-			return commitAxes(
-				definition.variantAxes.map((axis) =>
-					axis.id === axisId ? { ...axis, name: trimmed } : axis,
-				),
-			);
+			return commit({ kind: "rename-axis", axisId, name: trimmed });
 		},
-		[definition, commitAxes],
+		[commit],
 	);
 
 	const removeAxis = useCallback(
-		async (axisId: string): Promise<VariantEditOutcome> => {
-			if (definition === null) return { status: "rejected", errors: [] };
-			const nextAxes = definition.variantAxes.filter(
-				(axis) => axis.id !== axisId,
-			);
-			// Every declared variant selects every axis (§14.2). Dropping
-			// an axis must therefore drop that axis from each variant's
-			// selection, and collapse variants that become duplicates —
-			// otherwise `validateVariantModel` rejects the whole edit for
-			// ambiguity, which would read to the user as "remove failed".
-			if (port == null) return { status: "rejected", errors: [] };
-			const seen = new Set<string>();
-			const nextVariants = definition.variants
-				.map((variant) => {
-					const selection = { ...variant.selection };
-					delete selection[axisId];
-					return { ...variant, selection };
-				})
-				.filter((variant) => {
-					const key = Object.keys(variant.selection)
-						.sort()
-						.map((id) => `${id}=${variant.selection[id]}`)
-						.join("&");
-					if (seen.has(key)) return false;
-					seen.add(key);
-					return true;
-				});
-			const result = await port.execute({
-				id: crypto.randomUUID(),
-				expectedRevision: port.getSnapshot().revision,
-				source: "inspector",
-				timestamp: Date.now(),
-				type: "component.definition.update",
-				definitionId: definition.id,
-				// Axes and variants change together, in ONE dispatch: an
-				// intermediate state with a stale variant selection is not
-				// a valid model and must never be committed.
-				patch: {
-					variantAxes: nextAxes,
-					variants: nextAxes.length === 0 ? [] : nextVariants,
-				} as never,
-			});
-			const committed = result.status === "committed";
-			return {
-				status: committed ? "committed" : "rejected",
-				errors: committed
-					? withWarning(
-							result.errors,
-							variantsDroppedWarning(
-								definition.id,
-								definition.variants.length -
-									(nextAxes.length === 0 ? 0 : nextVariants.length),
-							),
-						)
-					: result.errors,
-			};
-		},
-		[definition, port],
+		(axisId: string): VariantEditOutcome =>
+			commit({ kind: "delete-axis", axisId }),
+		[commit],
 	);
 
 	const addOption = useCallback(
-		async (axisId: string, name: string): Promise<VariantEditOutcome> => {
-			if (definition === null) return { status: "rejected", errors: [] };
+		(axisId: string, name: string): VariantEditOutcome => {
 			const trimmed = name.trim();
 			if (trimmed.length === 0) {
-				return {
-					status: "rejected",
-					errors: [
-						validationError("a variant option needs a name", {
-							kind: "variantOption",
-							axisId,
-							reason: "empty-name",
-						}),
-					],
-				};
+				return validationError("a variant option needs a name", {
+					kind: "variantOption",
+					axisId,
+					reason: "empty-name",
+				});
 			}
-			const nextAxes = definition.variantAxes.map((axis) =>
-				axis.id === axisId
-					? {
-							...axis,
-							options: [
-								...axis.options,
-								{ id: crypto.randomUUID(), name: trimmed },
-							],
-						}
-					: axis,
-			);
-			const projected = combinationsOf(nextAxes);
-			if (projected > MAX_EXPRESSIBLE_COMBINATIONS) {
-				return {
-					status: "rejected",
-					errors: [
-						limitError(
-							`this option would make ${projected} variant combinations expressible; the limit is ${MAX_EXPRESSIBLE_COMBINATIONS}`,
-							{
-								limitKey: "variantsPerComponent",
-								limit: MAX_EXPRESSIBLE_COMBINATIONS,
-								actual: projected,
-								definitionId: definition.id,
-								axisId,
-							},
-						),
-					],
-				};
-			}
-			return commitAxes(nextAxes);
+			return commit({
+				kind: "add-option",
+				axisId,
+				option: { id: crypto.randomUUID(), name: trimmed },
+			});
 		},
-		[definition, commitAxes],
+		[commit],
 	);
 
 	const renameOption = useCallback(
-		async (
-			axisId: string,
-			optionId: string,
-			name: string,
-		): Promise<VariantEditOutcome> => {
-			if (definition === null) return { status: "rejected", errors: [] };
+		(axisId: string, optionId: string, name: string): VariantEditOutcome => {
 			const trimmed = name.trim();
 			if (trimmed.length === 0) {
-				return {
-					status: "rejected",
-					errors: [
-						validationError("a variant option needs a name", {
-							kind: "variantOption",
-							axisId,
-							optionId,
-							reason: "empty-name",
-						}),
-					],
-				};
+				return validationError("a variant option needs a name", {
+					kind: "variantOption",
+					axisId,
+					optionId,
+					reason: "empty-name",
+				});
 			}
-			return commitAxes(
+			return commit({
+				kind: "rename-option",
+				axisId,
+				optionId,
+				name: trimmed,
+			});
+		},
+		[commit],
+	);
+
+	const removeOption = useCallback(
+		(axisId: string, optionId: string): VariantEditOutcome => {
+			const axis = definition?.variantAxes.find((entry) => entry.id === axisId);
+			if (axis === undefined) return NOT_AUTHORABLE;
+			if (axis.options.length <= 1) {
+				return validationError(
+					"an axis must keep at least one option — remove the axis instead",
+					{
+						kind: "variantOption",
+						axisId,
+						optionId,
+						reason: "last-option",
+					},
+				);
+			}
+			return commit({ kind: "delete-option", axisId, optionId });
+		},
+		[commit, definition],
+	);
+
+	const canAddOption = useCallback(
+		(axisId: string): boolean => {
+			if (definition === null) return false;
+			const projected = combinationsOf(
 				definition.variantAxes.map((axis) =>
 					axis.id === axisId
 						? {
 								...axis,
-								options: axis.options.map((option) =>
-									option.id === optionId
-										? { ...option, name: trimmed }
-										: option,
-								),
+								options: [...axis.options, { id: "", name: "" }],
 							}
 						: axis,
 				),
 			);
+			return projected <= MAX_EXPRESSIBLE_COMBINATIONS;
 		},
-		[definition, commitAxes],
-	);
-
-	const removeOption = useCallback(
-		async (axisId: string, optionId: string): Promise<VariantEditOutcome> => {
-			if (definition === null || port == null) {
-				return { status: "rejected", errors: [] };
-			}
-			const axis = definition.variantAxes.find((entry) => entry.id === axisId);
-			if (axis === undefined) return { status: "rejected", errors: [] };
-			if (axis.options.length <= 1) {
-				return {
-					status: "rejected",
-					errors: [
-						validationError(
-							"an axis must keep at least one option — remove the axis instead",
-							{
-								kind: "variantOption",
-								axisId,
-								optionId,
-								reason: "last-option",
-							},
-						),
-					],
-				};
-			}
-			const nextAxes = definition.variantAxes.map((entry) =>
-				entry.id === axisId
-					? {
-							...entry,
-							options: entry.options.filter((option) => option.id !== optionId),
-						}
-					: entry,
-			);
-			// Variants selecting the removed option no longer address a
-			// valid combination; drop them in the same dispatch.
-			const nextVariants = definition.variants.filter(
-				(variant) => variant.selection[axisId] !== optionId,
-			);
-			const result = await port.execute({
-				id: crypto.randomUUID(),
-				expectedRevision: port.getSnapshot().revision,
-				source: "inspector",
-				timestamp: Date.now(),
-				type: "component.definition.update",
-				definitionId: definition.id,
-				patch: { variantAxes: nextAxes, variants: nextVariants } as never,
-			});
-			const committed = result.status === "committed";
-			return {
-				status: committed ? "committed" : "rejected",
-				errors: committed
-					? withWarning(
-							result.errors,
-							variantsDroppedWarning(
-								definition.id,
-								definition.variants.length - nextVariants.length,
-							),
-						)
-					: result.errors,
-			};
-		},
-		[definition, port],
+		[definition],
 	);
 
 	return useMemo(() => {
-		if (definition === null || port == null) return null;
-		if (port.isReadOnly() || port.writersDisabled()) return null;
+		if (definition === null || !runtime.canMutate) return null;
 		return {
 			definition,
 			axes: definition.variantAxes,
@@ -524,6 +315,7 @@ export function useVariantAuthoring(): VariantAuthoring | null {
 			canAddAxis:
 				definition.variantAxes.length <
 				EDITOR_COUNT_LIMITS.variantAxesPerComponent,
+			canAddOption,
 			addAxis,
 			renameAxis,
 			removeAxis,
@@ -533,7 +325,8 @@ export function useVariantAuthoring(): VariantAuthoring | null {
 		};
 	}, [
 		definition,
-		port,
+		runtime.canMutate,
+		canAddOption,
 		addAxis,
 		renameAxis,
 		removeAxis,
@@ -541,14 +334,4 @@ export function useVariantAuthoring(): VariantAuthoring | null {
 		renameOption,
 		removeOption,
 	]);
-}
-
-function noopSubscribe(): () => void {
-	return noop;
-}
-function noop(): void {
-	// The no-bridge store never changes.
-}
-function zero(): number {
-	return 0;
 }

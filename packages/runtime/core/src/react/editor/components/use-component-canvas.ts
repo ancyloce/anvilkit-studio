@@ -2,39 +2,52 @@
 
 /**
  * @file `useComponentCanvas` — the live model behind isolated
- * component editing (PLAN-0020 CORE-P2-009F/G; DD-DEC-010;
- * DD-0019 §14.4, §10.6).
+ * component editing (PLAN-0028 `p5-006`; DD-DEC-010; DD-0019 §14.4,
+ * §10.6).
  *
  * Exposes the active scope's definition, the combination strip, the
  * document projection the canvas renders, and the navigation actions.
- * Every mutation goes through the command port; scope and the active
- * combination are transient UI state and never enter history
- * (freeze §6).
+ * Scope and the active combination are transient UI state and never
+ * enter history (freeze §6).
+ *
+ * ### What `p5-006` changed
+ *
+ * The definition was read from
+ * `port.getSnapshot().authoring.componentDefinitions` and folded back
+ * through `port.execute`. Both are gone: the definition comes from
+ * `p2-004`'s projection of the declared `componentLibrary` root prop,
+ * and a fold commits through `p3-001`'s
+ * {@link useComponentLibraryCommit} (base edits) or `p3-002`'s
+ * {@link commitVariantModelUpdate} (variant-patch edits) — one
+ * history-recording `setData` either way.
+ *
+ * `componentDocument` / `foldComponentDocument` are unchanged. They
+ * were always pure functions of a `ComponentDefinition`, so the
+ * definition⇄document projection needed no rebase — only its source
+ * and its sink did.
  */
 
 import type {
 	ComponentDefinition,
+	EditorError,
 } from "@anvilkit/contracts/editor";
-import type {
-	EditorCommandResult,
-} from "../../../editor/legacy/index.js";
 import type { Data as PuckData } from "@puckeditor/core";
-import {
-	use,
-	useCallback,
-	useMemo,
-	useState,
-	useSyncExternalStore,
-} from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
 	componentDocument,
 	foldComponentDocument,
 	variantCombinationKey,
 	variantCombinations,
 } from "../../../editor/index.js";
-import type { InternalEditorCommandPort } from "../command-port.js";
-import { StudioEditorBridgeContext } from "../use-studio-editor.js";
-import { getEditorScopeController, scopedDefinitionId } from "./scope.js";
+import { commitComponentLibraryUpdate } from "../../../puck/update-component-library.js";
+import { commitVariantModelUpdate } from "../../../puck/update-variants.js";
+import { useShellSelection } from "../composition/use-shell-selection.js";
+import { useOptionalDocumentModel } from "../use-document-model.js";
+import {
+	useComponentEditorRuntime,
+	usePuckApiGetter,
+} from "./editor-runtime.js";
+import { scopedDefinitionId } from "./scope.js";
 
 /** One entry in the variant strip. */
 export interface ComponentCombination {
@@ -44,6 +57,12 @@ export interface ComponentCombination {
 	readonly label: string;
 	/** True when a variant declares this combination. */
 	readonly declared: boolean;
+}
+
+/** The outcome of folding an isolated-canvas edit back. */
+export interface ComponentCanvasCommitOutcome {
+	readonly status: "committed" | "noop" | "rejected";
+	readonly errors: readonly EditorError[];
 }
 
 /** The isolated component canvas surface. */
@@ -58,7 +77,7 @@ export interface ComponentCanvas {
 	/** Fold an edited document back into the definition. */
 	readonly commitDocument: (
 		data: PuckData,
-	) => Promise<EditorCommandResult | null>;
+	) => ComponentCanvasCommitOutcome | null;
 	/** Leave the isolated scope, restoring the page selection. */
 	readonly exit: () => void;
 }
@@ -80,39 +99,25 @@ function labelFor(
 }
 
 /**
- * The active isolated component canvas, or `null` when the editor is
- * off / loading / in page scope.
+ * The active isolated component canvas, or `null` in page scope (or
+ * when the scoped definition no longer exists).
+ *
+ * Degrades to `null` outside `<Puck>` rather than throwing — the panel
+ * is mounted by chrome that production always renders inside the
+ * provider, but tests and hosts may not.
  */
 export function useComponentCanvas(): ComponentCanvas | null {
-	const bridge = use(StudioEditorBridgeContext);
-	const version = useSyncExternalStore(
-		bridge === null ? noopSubscribe : bridge.subscribe,
-		bridge === null ? zero : bridge.getVersion,
-		bridge === null ? zero : bridge.getVersion,
-	);
+	const model = useOptionalDocumentModel();
+	const selection = useShellSelection();
+	const runtime = useComponentEditorRuntime();
+	const getPuckApi = usePuckApiGetter();
 	const [activeKey, setActive] = useState(MAIN_KEY);
 
-	const port = bridge?.port as InternalEditorCommandPort | null | undefined;
-	const selection = bridge?.selection;
-
-	const scopeController = useMemo(
-		() => (selection == null ? null : getEditorScopeController(selection)),
-		[selection],
-	);
-
 	const definition = useMemo((): ComponentDefinition | null => {
-		void version;
-		if (port == null) {
-			return null;
-		}
-		const definitionId = scopedDefinitionId(port.getSnapshot().selection.definitionScope);
-		if (definitionId === undefined) {
-			return null;
-		}
-		return (
-			port.getSnapshot().authoring.componentDefinitions[definitionId] ?? null
-		);
-	}, [port, version]);
+		const definitionId = scopedDefinitionId(selection.definitionScope);
+		if (definitionId === undefined || model === null) return null;
+		return model.componentLibrary?.definitions[definitionId] ?? null;
+	}, [model, selection.definitionScope]);
 
 	const combinations = useMemo((): readonly ComponentCombination[] => {
 		if (definition === null) {
@@ -159,40 +164,51 @@ export function useComponentCanvas(): ComponentCanvas | null {
 		[definition, activeSelection],
 	);
 
+	/**
+	 * Fold an edited isolated document back.
+	 *
+	 * The two sinks are genuinely different writes — "change this
+	 * component" edits the definition base, "change how it looks when
+	 * large" edits that combination's variant patch — so they go to the
+	 * two commit helpers that own those carriers rather than to one
+	 * generic definition patch. Both are one history entry.
+	 */
 	const commitDocument = useCallback(
-		async (data: PuckData): Promise<EditorCommandResult | null> => {
-			if (definition === null || port == null) {
-				return null;
-			}
+		(data: PuckData): ComponentCanvasCommitOutcome | null => {
+			const api = getPuckApi();
+			if (definition === null || api === null) return null;
 			const sink = foldComponentDocument(definition, data, activeSelection);
-			if (sink === null) {
-				return null;
+			if (sink === null) return null;
+			if (sink.kind === "definition") {
+				// `p3-001`'s definition commit, bound to whichever `PuckApi` is
+				// reachable — `useComponentLibraryCommit` with a null guard, the
+				// same pure function and not a second write path.
+				const result = commitComponentLibraryUpdate(
+					{ getPuckApi: () => api },
+					{
+						kind: "update",
+						definitionId: definition.id,
+						update: (current) => ({ ...current, root: sink.root }),
+					},
+				);
+				return { status: result.status, errors: result.errors };
 			}
-			const patch =
-				sink.kind === "definition"
-					? { root: sink.root }
-					: {
-							variants: definition.variants.map((variant) =>
-								variant.id === sink.variantId
-									? { ...variant, patch: sink.patch }
-									: variant,
-							),
-						};
-			return port.execute({
-				id: crypto.randomUUID(),
-				expectedRevision: port.getSnapshot().revision,
-				source: "canvas",
-				timestamp: Date.now(),
-				type: "component.definition.update",
-				definitionId: definition.id,
-				patch: patch as never,
-			});
+			const result = commitVariantModelUpdate(
+				{ getPuckApi: () => api },
+				definition.id,
+				{
+					kind: "set-variant-patch",
+					selection: activeSelection,
+					patch: sink.patch,
+				},
+			);
+			return { status: result.status, errors: result.errors };
 		},
-		[definition, port, activeSelection],
+		[definition, activeSelection, getPuckApi],
 	);
 
 	return useMemo(() => {
-		if (definition === null || scopeController === null) {
+		if (definition === null) {
 			return null;
 		}
 		return {
@@ -204,25 +220,8 @@ export function useComponentCanvas(): ComponentCanvas | null {
 			commitDocument,
 			exit: () => {
 				setActive(MAIN_KEY);
-				scopeController.exitScope();
+				runtime.exitComponent();
 			},
 		};
-	}, [
-		definition,
-		combinations,
-		activeKey,
-		document,
-		commitDocument,
-		scopeController,
-	]);
-}
-
-function noopSubscribe(): () => void {
-	return noop;
-}
-function noop(): void {
-	// The no-bridge store never changes.
-}
-function zero(): number {
-	return 0;
+	}, [definition, combinations, activeKey, document, commitDocument, runtime]);
 }

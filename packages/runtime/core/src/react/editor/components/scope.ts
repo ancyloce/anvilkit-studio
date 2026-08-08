@@ -7,9 +7,10 @@
  * Three rules, all of them freeze §6:
  *
  * 1. **Scope is transient UI state.** It lives on
- *    `EditorSelectionState.scope`, never in `AuthoringStateV1`, so
- *    entering or leaving a component creates **no** history entry and
- *    survives no reload. The pure reducer stays scope-independent.
+ *    `EditorSelectionState.definitionScope` and never in the document,
+ *    so entering or leaving a component creates **no** history entry
+ *    and survives no reload. Nothing in `Data` records which component
+ *    is open, which is exactly why it cannot be undone into.
  * 2. **Selections never span scopes** (§10.6) — enforced by the
  *    selection store, which clears on every scope change.
  * 3. **Definition edits are routed through main-component mode by the
@@ -23,10 +24,8 @@ import type {
 	EditorError,
 	EditorSelectionState,
 } from "@anvilkit/contracts/editor";
-import type {
-	EditorCommand,
-} from "../../../editor/legacy/index.js";
 import { makeEditorError } from "../../../editor/index.js";
+import type { EditorCommand } from "../../../editor/legacy/index.js";
 import type { EditorSelectionController } from "../selection.js";
 
 /** The commands that edit a definition and so require its scope. */
@@ -103,7 +102,9 @@ export interface EditorScopeController {
 /** What the controller needs from the selection store. */
 export interface ScopeControllerDeps {
 	readonly getSelection: () => EditorSelectionState;
-	readonly setDefinitionScope: (scope: EditorSelectionState["definitionScope"]) => void;
+	readonly setDefinitionScope: (
+		scope: EditorSelectionState["definitionScope"],
+	) => void;
 	readonly selectMany: (nodeIds: readonly string[]) => void;
 }
 
@@ -169,7 +170,8 @@ export function createEditorScopeController(
 
 	return {
 		getScope: () => deps.getSelection().definitionScope,
-		getDefinitionId: () => scopedDefinitionId(deps.getSelection().definitionScope),
+		getDefinitionId: () =>
+			scopedDefinitionId(deps.getSelection().definitionScope),
 
 		enterComponent(definitionId) {
 			const current = deps.getSelection();

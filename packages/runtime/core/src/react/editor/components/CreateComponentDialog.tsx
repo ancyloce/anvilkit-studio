@@ -17,8 +17,11 @@
  * files a request on the bridge and this component — mounted in the
  * main document beside the rest of the editor chrome — picks it up.
  *
- * The capture itself is unchanged: one `commitNative`, therefore one
- * history-recording dispatch, therefore one undo (§10.5).
+ * The capture itself is one `commitCreateComponent`, therefore one
+ * history-recording `setData`, therefore one undo (§10.5). `p5-006`
+ * made it synchronous — the carrier commit needs no dynamically
+ * imported engine chunk, so there is no longer an await to hold the
+ * dialog open across.
  */
 
 import type { EditorError } from "@anvilkit/contracts/editor";
@@ -77,7 +80,7 @@ export function CreateComponentDialog(): ReactNode {
 		bridge?.componentCapture.clear();
 	}, [bridge]);
 
-	const confirm = useCallback(async () => {
+	const confirm = useCallback(() => {
 		if (create === null || pending === null) {
 			close();
 			return;
@@ -90,17 +93,17 @@ export function CreateComponentDialog(): ReactNode {
 		try {
 			// The nodes the toolbar validated and filed — NOT whatever is
 			// selected by the time the user finishes typing.
-			const outcome = await create.create(trimmed, pending);
+			const outcome = create.create(trimmed, pending);
 			if (outcome.status === "committed") {
 				close();
 				return;
 			}
 			setErrors(outcome.errors);
 		} finally {
-			// Always clears. Without it a rejected capture (a failed chunk
-			// fetch, an unavailable `crypto.randomUUID` on an insecure
-			// origin) left every control in this modal disabled, and the
-			// dialog renders no close button.
+			// Always clears. Without it a rejected capture (an unavailable
+			// `crypto.randomUUID` on an insecure origin, a throwing commit)
+			// left every control in this modal disabled, and the dialog
+			// renders no close button.
 			setBusy(false);
 		}
 	}, [create, name, close, pending]);
@@ -135,7 +138,7 @@ export function CreateComponentDialog(): ReactNode {
 					onKeyDown={(event) => {
 						if (event.key === "Enter") {
 							event.preventDefault();
-							void confirm();
+							confirm();
 						}
 					}}
 				/>
@@ -165,7 +168,7 @@ export function CreateComponentDialog(): ReactNode {
 					<Button
 						type="button"
 						disabled={busy || name.trim().length === 0}
-						onClick={() => void confirm()}
+						onClick={confirm}
 						data-testid="ak-create-component-confirm"
 					>
 						{msg("studio.editor.component.createFromSelection")}

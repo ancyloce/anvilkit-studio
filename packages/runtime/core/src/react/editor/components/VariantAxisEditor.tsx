@@ -2,18 +2,32 @@
 
 /**
  * @file `VariantAxisEditor` — variant axis/option authoring
- * (PLAN-0020 CORE-P2-009H; ED-VARIANT-001; DD-0019 §14.2).
+ * (PLAN-0028 `p5-006`; ED-VARIANT-001; DD-0019 §14.2).
  *
- * The form the `variants.spec.ts` header used to say "does not ship
- * yet". It renders inside the isolated component canvas, because
- * axes belong to the definition and definition edits require the
- * component's own scope (freeze §6) — placing it anywhere else would
- * produce a form whose every submit is rejected.
+ * The Variants tab of the promoted composition inspector, and the same
+ * form the isolated component canvas renders. Axes belong to the
+ * definition and definition edits address the `componentLibrary` root
+ * prop, so the form is live only while a definition is open in
+ * isolated editing (freeze §6) — open one from the Components tab and
+ * this fills in.
  *
- * Limits are surfaced *before* they are hit (the add-axis control
- * disables at 3, the combination counter shows the running total) and
- * again as an explicit error if a submit crosses one, so the user
- * never has to guess why an edit refused.
+ * ### Limits are surfaced before they are hit
+ *
+ * `p5-006`'s acceptance criterion is that
+ * `MAX_EXPRESSIBLE_COMBINATIONS` reaches the author *before* an edit
+ * is refused, not as an error afterwards. Three things do that, in
+ * increasing order of directness:
+ *
+ * - the running `{axes}/{maxAxes} · {combinations}/{maxCombinations}`
+ *   counter, always visible;
+ * - **add axis** disables at the 3-axis cap;
+ * - **add option** disables per axis the moment one more option would
+ *   push the combination product past the cap — which is the case a
+ *   global counter cannot express, because whether an option fits
+ *   depends on which axis it lands on.
+ *
+ * The write-time rejection stays as the backstop. A disabled control
+ * is a courtesy; `updateVariantModelInData` is the enforcement.
  */
 
 import type { EditorError } from "@anvilkit/contracts/editor";
@@ -22,6 +36,9 @@ import { useCallback, useState } from "react";
 import { Button } from "@/primitives/button";
 import { Input } from "@/primitives/input";
 import { useMsg } from "@/state/editor-i18n-context";
+import type { StudioInspectorPanel } from "../composition/inspector-panel.js";
+import { useShellSelection } from "../composition/use-shell-selection.js";
+import { scopedDefinitionId } from "./scope.js";
 import {
 	useVariantAuthoring,
 	type VariantAuthoring,
@@ -73,18 +90,19 @@ function AddForm({
 	readonly label: string;
 	readonly testId: string;
 	readonly disabled: boolean;
-	readonly onSubmit: (name: string) => Promise<VariantEditOutcome>;
+	readonly onSubmit: (name: string) => VariantEditOutcome;
 }): ReactNode {
 	const [value, setValue] = useState("");
 	const [errors, setErrors] = useState<readonly EditorError[]>([]);
 
-	const submit = useCallback(async () => {
-		const outcome = await onSubmit(value);
+	const submit = useCallback(() => {
+		if (disabled) return;
+		const outcome = onSubmit(value);
 		setErrors(outcome.errors);
 		if (outcome.status === "committed") {
 			setValue("");
 		}
-	}, [onSubmit, value]);
+	}, [disabled, onSubmit, value]);
 
 	return (
 		<div className="flex flex-col gap-1">
@@ -100,7 +118,7 @@ function AddForm({
 					onKeyDown={(event) => {
 						if (event.key === "Enter") {
 							event.preventDefault();
-							void submit();
+							submit();
 						}
 					}}
 				/>
@@ -110,7 +128,7 @@ function AddForm({
 					size="sm"
 					className="h-6 px-2 text-[10px]"
 					disabled={disabled}
-					onClick={() => void submit()}
+					onClick={submit}
 					data-testid={`${testId}-submit`}
 				>
 					{label}
@@ -135,17 +153,19 @@ function AxisRow({ authoring, axisId }: AxisRowProps): ReactNode {
 
 	if (axis === undefined) return null;
 
-	const commitRename = async () => {
+	const commitRename = () => {
 		setRenaming(false);
 		if (draft.trim() === axis.name) return;
-		setErrors((await authoring.renameAxis(axis.id, draft)).errors);
+		setErrors(authoring.renameAxis(axis.id, draft).errors);
 	};
+	const canAddOption = authoring.canAddOption(axis.id);
 
 	return (
 		<li
 			className="flex flex-col gap-1 rounded border border-[var(--ak-studio-border)] p-1.5"
 			data-testid="ak-variant-axis"
 			data-axis-id={axis.id}
+			data-can-add-option={canAddOption ? "true" : "false"}
 		>
 			<div className="flex items-center gap-1">
 				{renaming ? (
@@ -156,11 +176,11 @@ function AxisRow({ authoring, axisId }: AxisRowProps): ReactNode {
 						className="h-6 flex-1 text-[11px]"
 						data-testid="ak-variant-axis-rename-input"
 						onChange={(event) => setDraft(event.target.value)}
-						onBlur={() => void commitRename()}
+						onBlur={commitRename}
 						onKeyDown={(event) => {
 							if (event.key === "Enter") {
 								event.preventDefault();
-								void commitRename();
+								commitRename();
 							}
 							if (event.key === "Escape") {
 								event.preventDefault();
@@ -192,9 +212,7 @@ function AxisRow({ authoring, axisId }: AxisRowProps): ReactNode {
 					variant="ghost"
 					size="sm"
 					className="h-5 px-1.5 text-[10px]"
-					onClick={async () =>
-						setErrors((await authoring.removeAxis(axis.id)).errors)
-					}
+					onClick={() => setErrors(authoring.removeAxis(axis.id).errors)}
 					data-testid="ak-variant-axis-remove"
 				>
 					{msg("studio.editor.variant.axis.remove")}
@@ -213,10 +231,8 @@ function AxisRow({ authoring, axisId }: AxisRowProps): ReactNode {
 							type="button"
 							aria-label={`${msg("studio.editor.variant.option.remove")} ${option.name}`}
 							className="text-[10px] text-[var(--ak-studio-muted-fg)]"
-							onClick={async () =>
-								setErrors(
-									(await authoring.removeOption(axis.id, option.id)).errors,
-								)
+							onClick={() =>
+								setErrors(authoring.removeOption(axis.id, option.id).errors)
 							}
 							data-testid="ak-variant-option-remove"
 						>
@@ -228,7 +244,11 @@ function AxisRow({ authoring, axisId }: AxisRowProps): ReactNode {
 			<AddForm
 				label={msg("studio.editor.variant.option.add")}
 				testId={`ak-variant-option-add-${axis.id}`}
-				disabled={false}
+				// The per-axis half of the combination cap: one more option
+				// on THIS axis multiplies the product by more than one more
+				// option on a shorter one, so the affordance is judged per
+				// axis rather than against the global counter.
+				disabled={!canAddOption}
 				onSubmit={(name) => authoring.addOption(axis.id, name)}
 			/>
 			<ErrorList errors={errors} testId="ak-variant-axis-errors" />
@@ -239,6 +259,8 @@ function AxisRow({ authoring, axisId }: AxisRowProps): ReactNode {
 /**
  * The variant-axis authoring form, or `null` outside an isolated
  * component scope (or while writers are unavailable).
+ *
+ * Must render inside `<Puck>`.
  */
 export function VariantAxisEditor(): ReactNode {
 	const msg = useMsg();
@@ -251,6 +273,8 @@ export function VariantAxisEditor(): ReactNode {
 			className="flex flex-col gap-1.5"
 			aria-label={msg("studio.editor.variant.axes")}
 			data-testid="ak-variant-editor"
+			data-combinations={authoring.expressibleCombinations}
+			data-max-combinations={authoring.maxCombinations}
 		>
 			<div className="flex items-baseline justify-between">
 				<h3 className="text-[11px] font-medium">
@@ -284,3 +308,44 @@ export function VariantAxisEditor(): ReactNode {
 		</section>
 	);
 }
+
+/**
+ * The Variants tab body: the axis editor when a definition is open,
+ * and an honest empty state when none is.
+ *
+ * The empty state matters. The tab is always in the roster, so without
+ * it the panel would render blank and read as broken rather than as
+ * "open a component first" — the same §8.5 honesty rule the Style and
+ * Data tabs follow for undeclared capabilities.
+ *
+ * The scope check is done **here**, on the selection alone, rather
+ * than by letting {@link useVariantAuthoring} return `null`: that hook
+ * projects the whole document, and the tab must not pay for a
+ * projection to discover that no component is open.
+ */
+export function VariantsPanel(): ReactNode {
+	const msg = useMsg();
+	const selection = useShellSelection();
+	if (scopedDefinitionId(selection.definitionScope) === undefined) {
+		return (
+			<p
+				className="px-3 py-6 text-center text-[11px] text-[var(--ak-studio-muted-fg)]"
+				data-testid="ak-variants-panel-empty"
+			>
+				{msg("studio.editor.component.empty")}
+			</p>
+		);
+	}
+	return <VariantAxisEditor />;
+}
+
+/**
+ * The roster entry `StudioPuckLayout` registers. Exported from this
+ * file so the shell wires the panel without editing it — the same
+ * contract `STYLE_PANEL` and `DATA_PANEL` follow.
+ */
+export const VARIANTS_PANEL: StudioInspectorPanel = {
+	id: "variants",
+	labelKey: "studio.editor.component.variants",
+	render: () => <VariantsPanel />,
+};
