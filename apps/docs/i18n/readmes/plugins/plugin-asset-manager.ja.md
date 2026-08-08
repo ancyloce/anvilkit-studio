@@ -10,7 +10,7 @@ Anvilkit Studio 向けのヘッドレスなアセット管理プラグインで�
 pnpm add @anvilkit/plugin-asset-manager @anvilkit/core react react-dom @puckeditor/core
 ```
 
-任意でない peer：`react >=19.2.0`、`react-dom >=19.2.0`、`@puckeditor/core ^0.22.4`。
+任意でない peer：`react >=19.2.0`、`react-dom >=19.2.0`、`@puckeditor/core ^0.23.0`。
 
 サブパスのインポート：
 

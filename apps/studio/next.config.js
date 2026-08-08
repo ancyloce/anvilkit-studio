@@ -33,7 +33,7 @@ const nextConfig = {
 	},
 	// `pnpm typecheck` (`tsc --noEmit`) is the authoritative type-check gate
 	// (CLAUDE.md Verification/Definition of Done); `next build`'s own internal
-	// TypeScript pass is redundant and, on this Next 16.2.12 + Turbopack combo,
+	// TypeScript pass is redundant and, on this Next 16.3.0 + Turbopack combo,
 	// crashes with "The 'id' argument must be of type string. Received
 	// undefined" partway through — unrelated to any real type error (`pnpm
 	// typecheck` passes clean on the exact same source).

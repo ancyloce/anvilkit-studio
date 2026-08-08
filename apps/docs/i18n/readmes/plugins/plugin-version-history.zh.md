@@ -10,7 +10,7 @@ Anvilkit Studio 的无界面版本历史插件。快照持久化被委托给宿�
 pnpm add @anvilkit/plugin-version-history react react-dom @puckeditor/core
 ```
 
-非可选对等依赖：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.22.4`。无传输层或存储依赖 —— 宿主端到端地掌控持久化。
+非可选对等依赖：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.23.0`。无传输层或存储依赖 —— 宿主端到端地掌控持久化。
 
 子路径导入：
 

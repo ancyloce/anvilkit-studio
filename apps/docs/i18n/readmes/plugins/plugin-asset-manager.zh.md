@@ -10,7 +10,7 @@
 pnpm add @anvilkit/plugin-asset-manager @anvilkit/core react react-dom @puckeditor/core
 ```
 
-非可选的 peer：`react >=19.2.0`、`react-dom >=19.2.0`、`@puckeditor/core ^0.22.4`。
+非可选的 peer：`react >=19.2.0`、`react-dom >=19.2.0`、`@puckeditor/core ^0.23.0`。
 
 子路径导入：
 

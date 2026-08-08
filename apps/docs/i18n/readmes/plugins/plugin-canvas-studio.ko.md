@@ -10,7 +10,7 @@ Puck 기반 `<Studio>` 셸 내부에 전체 화면 **Canvas Studio** 편집 표�
 pnpm add @anvilkit/plugin-canvas-studio @anvilkit/canvas-core @anvilkit/canvas-editor react react-dom @puckeditor/core
 ```
 
-peer 의존성: `@anvilkit/canvas-core`, `@anvilkit/canvas-editor`, `@puckeditor/core ^0.22.4`, `react >=19.0.0`, `react-dom >=19.0.0`. (`@anvilkit/core`, `@anvilkit/design-block`, `@anvilkit/plugin-asset-manager`는 직접 의존성으로 동봉됩니다.)
+peer 의존성: `@anvilkit/canvas-core`, `@anvilkit/canvas-editor`, `@puckeditor/core ^0.23.0`, `react >=19.0.0`, `react-dom >=19.0.0`. (`@anvilkit/core`, `@anvilkit/design-block`, `@anvilkit/plugin-asset-manager`는 직접 의존성으로 동봉됩니다.)
 
 캔버스 오버레이는 컴파일된 에디터 스타일시트로 렌더링됩니다 —— 호스트는 그것을 한 번 가져와야 합니다. 예를 들어 앱 진입점에서:
 

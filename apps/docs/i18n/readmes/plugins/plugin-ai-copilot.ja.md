@@ -10,7 +10,7 @@ Anvilkit Studio 向けのヘッドレス AI Copilot。このプラグインは�
 pnpm add @anvilkit/plugin-ai-copilot @anvilkit/core react react-dom @puckeditor/core
 ```
 
-非オプションの peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.22.4`。`@anvilkit/ui` はオプションの peer です。React コンポーネントを使う場合はインストールしてください。
+非オプションの peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.23.0`。`@anvilkit/ui` はオプションの peer です。React コンポーネントを使う場合はインストールしてください。
 
 サブパスインポート：
 
