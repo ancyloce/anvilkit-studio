@@ -12,7 +12,7 @@
 	"engines": {
 		"node": ">=20"
 	},
-	"packageManager": "pnpm@11.18.0",
+	"packageManager": "pnpm@11.20.0",
 	"dependencies": {
 		"@hocuspocus/extension-database": "4.4.0",
 		"@hocuspocus/extension-logger": "4.4.0",
@@ -20,6 +20,6 @@
 		"@hocuspocus/server": "4.4.0",
 		"ioredis": "^5.4.1",
 		"y-protocols": "^1.0.7",
-		"yjs": "^13.6.31"
+		"yjs": "^13.6.32"
 	}
 }

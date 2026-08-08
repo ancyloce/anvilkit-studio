@@ -16,7 +16,7 @@ npm.
 
 ```json
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.3/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.7/schema.json",
   "extends": ["@anvilkit/biome-config/react-internal"]
 }
 ```
