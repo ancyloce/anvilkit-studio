@@ -3,5 +3,10 @@
 	"extends": ["../../../typedoc.base.json"],
 	"entryPoints": ["./src/index.ts"],
 	"tsconfig": "./tsconfig.json",
-	"name": "@anvilkit/validator"
+	"name": "@anvilkit/validator",
+	"externalSymbolLinkMappings": {
+		"@anvilkit/schema": {
+			"PageRootSchema": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts"
+		}
+	}
 }

@@ -526,7 +526,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -677,11 +677,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "PageRootSchema",
-								"target": {
-									"packageName": "@anvilkit/schema",
-									"packagePath": "src/page-root-schema.ts",
-									"qualifiedName": "PageRootSchema"
-								}
+								"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts"
 							},
 							{
 								"kind": "text",
@@ -827,11 +823,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "PageRootSchema",
-								"target": {
-									"packageName": "@anvilkit/schema",
-									"packagePath": "src/page-root-schema.ts",
-									"qualifiedName": "PageRootSchema"
-								}
+								"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts"
 							},
 							{
 								"kind": "text",
