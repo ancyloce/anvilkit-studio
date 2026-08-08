@@ -1,48 +1,34 @@
 "use client";
 
 /**
- * @file Editable-target metadata resolution (PLAN-0020
- * CORE-P1B-009A; ED-TEXT-001; DD-0019 §17, §26.1 precedence row).
+ * @file Editable-target resolution (PLAN-0028 `p4-007`; rebased from
+ * PLAN-0020 CORE-P1B-009A).
  *
- * `InlineTextTarget` declarations live on `metadata.editor.
- * capabilities.inlineText`. Resolution maps a declared target to its
- * DOM element inside a node's rendered subtree: an element stamped
- * `data-ak-text-target="<target id>"` when the component marks its
- * text regions, else the node's primary element (single-target
- * components need no extra markup).
+ * Resolution maps a **declared** `InlineTextTarget` to its DOM element
+ * inside a node's rendered subtree: an element stamped
+ * `data-ak-text-target="<target id>"` when the component marks its text
+ * regions, else the node's primary element (single-target components
+ * need no extra markup).
  *
- * **Precedence (§26.1)**: explicit metadata beats the legacy
- * text-drop heuristic — a component that declares ANY inline text
- * target opts out of heuristic hit-testing entirely; undeclared
- * components keep today's heuristic behavior (the fallback is never
- * removed).
+ * **The declaration is no longer read here.** It arrives as
+ * `DocumentNode.inlineText` from the read model — one projection of
+ * `(appState.data, config)` shared with every other editor surface —
+ * instead of being re-derived from an `AnvilComponentMetadata` handed in
+ * by the capability registry. Two modules reading the declaration two
+ * ways is exactly how an editor comes to offer an affordance whose
+ * commit is rejected, so there is now one reader.
+ *
+ * An empty target list means the component declares no inline text.
+ * Callers must then offer **no** affordance at all, not a disabled one:
+ * `targetFromElement` returns `null` and double-click falls through to
+ * drill-in, the same as on any non-text component.
  */
 
-import type {
-	AnvilComponentMetadata,
-	InlineTextTarget,
-} from "@anvilkit/contracts/editor";
+import type { InlineTextTarget } from "@anvilkit/contracts/editor";
 import type { CanvasDomRegistry } from "../canvas/dom-registry.js";
 
 /** The explicit text-region attribute components may stamp. */
 export const TEXT_TARGET_ATTRIBUTE = "data-ak-text-target";
-
-/** Declared inline-text targets of a component (empty when none). */
-export function declaredTextTargets(
-	metadata: AnvilComponentMetadata | undefined,
-): readonly InlineTextTarget[] {
-	return metadata?.inlineText ?? [];
-}
-
-/**
- * §26.1 precedence gate: true when explicit metadata suppresses the
- * legacy text-drop heuristic for this component.
- */
-export function hasDeclaredTextTargets(
-	metadata: AnvilComponentMetadata | undefined,
-): boolean {
-	return declaredTextTargets(metadata).length > 0;
-}
 
 /** A declared target resolved to its live DOM element. */
 export interface ResolvedTextTarget {
@@ -51,17 +37,16 @@ export interface ResolvedTextTarget {
 }
 
 /**
- * Resolve a node's declared targets to elements. Targets whose
- * element is unmounted resolve away (Layers/inspector editing remains
- * available); a single declared target falls back to the node's
- * primary element when no explicit region is stamped.
+ * Resolve a node's declared targets to elements. Targets whose element
+ * is unmounted resolve away (inspector editing remains available); a
+ * single declared target falls back to the node's primary element when
+ * no explicit region is stamped.
  */
 export function resolveTextTargets(
 	nodeId: string,
-	metadata: AnvilComponentMetadata | undefined,
+	targets: readonly InlineTextTarget[],
 	registry: CanvasDomRegistry,
 ): readonly ResolvedTextTarget[] {
-	const targets = declaredTextTargets(metadata);
 	if (targets.length === 0) {
 		return [];
 	}
@@ -86,16 +71,15 @@ export function resolveTextTargets(
 }
 
 /**
- * The target under a pointer/double-click, if any: the closest
- * stamped region wins, else the node's single declared target.
+ * The target under a pointer/double-click, if any: the closest stamped
+ * region wins, else the node's single declared target.
  */
 export function targetFromElement(
 	element: Element,
 	nodeId: string,
-	metadata: AnvilComponentMetadata | undefined,
+	targets: readonly InlineTextTarget[],
 	registry: CanvasDomRegistry,
 ): ResolvedTextTarget | null {
-	const targets = declaredTextTargets(metadata);
 	if (targets.length === 0) {
 		return null;
 	}
@@ -105,6 +89,6 @@ export function targetFromElement(
 		const target = targets.find((entry) => entry.id === id);
 		return target === undefined ? null : { target, element: stamped };
 	}
-	const resolved = resolveTextTargets(nodeId, metadata, registry);
+	const resolved = resolveTextTargets(nodeId, targets, registry);
 	return resolved[0] ?? null;
 }

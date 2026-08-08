@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * @file The canvas rich-text surface (PLAN-0020 CORE-P1B-009E;
- * ED-TEXT-001 rich targets; DD-DEC-012).
+ * @file The canvas rich-text surface (PLAN-0028 `p4-007`; PLAN-0020
+ * CORE-P1B-009E; ED-TEXT-001 rich targets; DD-DEC-012).
  *
  * Mounts a Tiptap editor over the target element (overlay-positioned
  * at the node rect) whenever the inline controller holds a
@@ -12,10 +12,25 @@
  * `sanitizeTiptapDocument`, so canvas output is structurally
  * identical to field output for the same input.
  *
+ * ### The session seeds from the declared prop, not from the DOM
+ *
+ * Phase 1B seeded the editing session from the target element's
+ * rendered `textContent`. That is lossy in exactly the way that
+ * matters: every heading, list, blockquote and mark in a stored
+ * `TiptapDocument` collapsed to a flat run of paragraphs the moment an
+ * author opened it, and the next commit wrote that flattening back.
+ * `p4-007` seeds from the value stored at the target's **declared**
+ * prop path instead, so edit → save → reload preserves structure. The
+ * rendered text remains the seed for a target that has never been
+ * authored, so a component rendering a default still opens with its
+ * text rather than an empty surface.
+ *
  * The Tiptap bundle loads lazily through `RichTextSurfaceMount`
  * (bundle rule: no Tiptap bytes until a rich session actually
  * starts). Iframe styling rides an inline minimal style block —
- * canvas-iframe styles do not inherit parent CSS (repo rule).
+ * canvas-iframe styles do not inherit parent CSS (repo rule), and this
+ * surface deliberately shares no stylesheet with the `richtext` field
+ * editor (whose `.ak-richtext*` CSS lives with that field).
  * Browser-matrix certification of the full IME/paste/undo chain in
  * this surface belongs to CORE-P1B-012.
  */
@@ -31,7 +46,8 @@ import {
 } from "react";
 import type { StudioEditorBridge } from "../bridge.js";
 import { useOverlayPortalRegistration } from "../canvas/overlay-root.js";
-import { INLINE_PASTE_LIMIT_BYTES } from "./controller.js";
+import { INLINE_PASTE_LIMIT_BYTES, readInlineTextValue } from "./controller.js";
+import type { InlineEditSession } from "./controller-types.js";
 import {
 	createTiptapExtensions,
 	emptyTiptapDocument,
@@ -45,19 +61,34 @@ export interface RichTextSurfaceProps {
 }
 
 /**
- * Seed the editing session's initial document. Phase 1B seeds from
- * the rendered text (a total, host-independent contract); reading a
- * `TiptapDocument` prop verbatim joins the Phase 3 binding pass.
+ * Seed the editing session's initial document from the value stored at
+ * the target's declared prop path.
+ *
+ * Total by construction: `sanitizeTiptapDocument` never throws and
+ * canonicalizes anything document-shaped, a `plain` string wraps into a
+ * minimal document, and a target that has never been authored falls
+ * back to the rendered text so the surface is not blank.
  */
-function currentValue(
+function seedDocument(
 	bridge: StudioEditorBridge,
-	nodeId: string,
+	session: InlineEditSession,
 ): TiptapDocument {
-	const element = bridge.canvasRegistry?.getPrimaryElement(nodeId) ?? null;
-	if (element === null) {
-		return emptyTiptapDocument();
+	const stored = readInlineTextValue(
+		bridge,
+		session.nodeId,
+		session.target.propPath,
+	);
+	if (typeof stored === "string") {
+		return tiptapFromPlainText(stored);
 	}
-	return tiptapFromPlainText(element.textContent ?? "");
+	if (stored !== undefined && stored !== null) {
+		return sanitizeTiptapDocument(stored);
+	}
+	const element =
+		bridge.canvasRegistry?.getPrimaryElement(session.nodeId) ?? null;
+	return element === null
+		? emptyTiptapDocument()
+		: tiptapFromPlainText(element.textContent ?? "");
 }
 
 /** The mounted rich editor for the active tiptap session. */
@@ -77,9 +108,7 @@ export default function RichTextSurface({
 
 	const initial = useMemo(
 		() =>
-			active === null
-				? emptyTiptapDocument()
-				: currentValue(bridge, active.nodeId),
+			active === null ? emptyTiptapDocument() : seedDocument(bridge, active),
 		[bridge, active],
 	);
 

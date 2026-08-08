@@ -7,7 +7,10 @@
  * `studio-controller-types.ts` precedent).
  */
 
-import type { InlineTextTarget } from "@anvilkit/contracts/editor";
+import type {
+	InlineTextTarget,
+	TiptapDocument,
+} from "@anvilkit/contracts/editor";
 
 /** The active session descriptor (public projection). */
 export interface InlineEditSession {
@@ -35,8 +38,15 @@ export interface InternalInlineEditController extends InlineEditController {
 	 * in-place contenteditable surface immediately.
 	 */
 	readonly tryEnterFromEvent: (target: Element) => boolean;
-	/** Rich-surface commit path (sanitized document from Tiptap). */
-	readonly commitValue: (value: unknown) => void;
+	/**
+	 * Rich-surface commit path (sanitized document from Tiptap).
+	 *
+	 * Typed as the declaration's own value union rather than `unknown`
+	 * (`p4-007`): `updateInlineTextInData` rejects a `tiptap` value
+	 * committed to a `plain` target and vice versa *before* dispatch, and
+	 * a caller holding an `unknown` cannot see that constraint at all.
+	 */
+	readonly commitValue: (value: string | TiptapDocument) => void;
 	/** Foreign commit / document replacement interrupt. */
 	readonly handleExternalInterrupt: () => void;
 }

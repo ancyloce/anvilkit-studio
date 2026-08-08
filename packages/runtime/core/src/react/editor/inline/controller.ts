@@ -1,23 +1,53 @@
 "use client";
 
 /**
- * @file `InlineEditController` (PLAN-0020 CORE-P1B-009B, with the
- * plain-text surface 009C, IME guards 009F, paste sanitation 009G,
- * and the commit/cancel/undo integration 009H; ED-TEXT-001/003;
- * §13.2 — snapshot-gated public element).
+ * @file `InlineEditController` — the canvas inline-text session
+ * (PLAN-0028 `p4-007`; PLAN-0026 §3.4/§3.5).
  *
- * Session rules:
- * - exactly ONE active session (§17); a second `enter` exits the
- *   first via commit;
+ * **A rebase of the shipped CORE-P1B-009B..H controller, not a
+ * rewrite.** The session rules, the plain contenteditable surface, the
+ * IME fencing, the paste sanitation and the idle/blur coalescing are
+ * the code that shipped; what changed is the two ends it is bolted to.
+ *
+ * - **Reads** come from `document-model`'s {@link readDocument} — the
+ *   same projection of `(appState.data, config)` that `useDocumentModel`
+ *   binds for the composition panels. The declared targets are
+ *   `DocumentNode.inlineText` (empty means the component declares none)
+ *   and the lock is the declared `editorAnnotations` root prop. The
+ *   sidecar reads this controller used to make — `capabilities.forNode`
+ *   for the declaration, `port.getSnapshot().authoring.nodes[id].locked`
+ *   for the lock — are **gone**: neither answers for a carrier document.
+ * - **Writes** go through `commitInlineTextUpdate` (`p3-004`) — the same
+ *   pure helper `useInlineTextCommit` wraps. One committed edit is one
+ *   functional `setData` with `recordHistory: true`, so one edit is one
+ *   undo. The old `port.commitNative` path, which carried a sidecar
+ *   reconciliation alongside the prop write, is gone with it.
+ *
+ * ### Why the pure helper and not the `useInlineTextCommit` hook
+ *
+ * `useInlineTextCommit` is a `useGetPuck` adapter and therefore only
+ * usable **inside** `<Puck>`. This controller is built by `EditorRoot`,
+ * which `StudioEditorMount` renders as a *sibling* of the `<Puck>`
+ * subtree, so no component in this chunk can call a Puck hook at all —
+ * every editor-runtime surface reaches the store through the port's
+ * injected `getPuckApi` instead (`InternalEditorCommandPort.
+ * tryGetPuckApi`, added for exactly this class of caller). The hook and
+ * this call site therefore share one implementation and one
+ * single-dispatch guarantee; only the binding differs.
+ *
+ * ### Session rules (unchanged)
+ *
+ * - exactly ONE active session; a second `enter` exits the first via
+ *   commit;
  * - the draft lives in the DOM surface only — never a durable store;
  *   interrupted sessions (Escape, external revision, document
  *   replacement) restore the pre-edit DOM exactly and commit nothing;
  * - canvas gestures, marquee, and drill-in are suppressed while a
- *   session is active (surfaces consult {@link getSession});
+ *   session is active (surfaces consult {@link InlineEditController.getSession});
  * - **commit** fires at 750 ms typing idle or on blur — ONE
- *   history-recording dispatch per committed edit through the port's
- *   native-mutation path (`commitNative` prop write); a value-equal
- *   draft commits nothing;
+ *   history-recording dispatch per committed edit; a value-equal draft
+ *   commits nothing (the carrier helper's own `deepEqualJson` is the
+ *   authority, so a no-op cannot slip into history);
  * - **IME**: commits and idle timers are fenced during composition —
  *   nothing converts drafts to commands between `compositionstart`
  *   and `compositionend`;
@@ -26,12 +56,26 @@
  *   blocked with a visible diagnostic;
  * - browser-undo works freely IN-SESSION (native contenteditable
  *   history); once committed, undo is Puck history only.
+ *
+ * ### Puck contract
+ *
+ * Rule 2: the value lands at the component's **declared** inline-text
+ * prop path, validated against that declaration before dispatch. Rule
+ * 3: it is the same prop the preview, the production render and the
+ * HTML exporter's `richText` capability read — one value, four
+ * consumers, no editor-only copy anywhere.
  */
 
-import type { InlineTextTarget } from "@anvilkit/contracts/editor";
+import type {
+	InlineTextTarget,
+	TiptapDocument,
+} from "@anvilkit/contracts/editor";
+import type { Config, Data, PuckApi } from "@puckeditor/core";
+import { walkTree } from "@puckeditor/core";
+import { readDocument } from "../../../document-model/index.js";
+import { commitInlineTextUpdate } from "../../../puck/update-carriers.js";
 import type { StudioEditorBridge } from "../bridge.js";
 import type { InternalEditorCommandPort } from "../command-port.js";
-import { setNodeProp } from "../native-tree.js";
 import type {
 	InlineEditSession,
 	InternalInlineEditController,
@@ -49,10 +93,17 @@ export const INLINE_IDLE_COMMIT_MS = 750;
 /** Paste hard cap (§17). */
 export const INLINE_PASTE_LIMIT_BYTES = 1024 * 1024;
 
+/** Diagnostic slice for a rejected inline commit (cleared per session). */
+const INLINE_COMMIT_DIAGNOSTICS = "inline-commit";
+/** Diagnostic slice for an oversized paste (cleared per session). */
+const INLINE_PASTE_DIAGNOSTICS = "inline-paste";
+
+const NO_PROPS: Record<string, unknown> = Object.freeze({});
+
 /** Plain-target normalization (§17): newline + whitespace cleanup. */
 export function normalizePlainText(raw: string): string {
 	return raw
-		.replace(/ /g, " ")
+		.replace(/ /g, " ")
 		.replace(/\r\n?/g, "\n")
 		.split("\n")
 		.map((line) => line.replace(/[ \t]+$/g, ""))
@@ -60,10 +111,93 @@ export function normalizePlainText(raw: string): string {
 		.replace(/\n+$/g, "");
 }
 
-function pathOf(target: InlineTextTarget): readonly (string | number)[] {
-	return target.propPath
-		.split(".")
-		.map((segment) => (/^\d+$/.test(segment) ? Number(segment) : segment));
+/**
+ * The live `PuckApi`, or `null` when `<Puck>` is not mounted (or the
+ * port predates `tryGetPuckApi`, as older test doubles do).
+ */
+function puckApiOf(bridge: StudioEditorBridge): PuckApi | null {
+	const port = bridge.port as InternalEditorCommandPort | null;
+	return port?.tryGetPuckApi?.() ?? null;
+}
+
+/**
+ * One node's raw props from the live tree.
+ *
+ * Traversal is official `walkTree` — the *identical* traversal
+ * `updateInlineTextInData` runs to locate the same node — so the value
+ * read here and the value written there can never be addressed
+ * differently. A hand-rolled walk over `data.content` would miss slots
+ * and legacy zones, which `document-model/read-document.ts` calls out
+ * as precisely the bug class the Puck contract exists to prevent.
+ */
+function nodePropsOf(
+	data: Data,
+	config: Config,
+	nodeId: string,
+): Record<string, unknown> {
+	let found: Record<string, unknown> = NO_PROPS;
+	walkTree(data, config, (content) => {
+		for (const item of content) {
+			const props = item.props as Record<string, unknown>;
+			if (props.id === nodeId) {
+				found = props;
+			}
+		}
+		return content;
+	});
+	return found;
+}
+
+/** Everything the inline layer needs to know about one node. */
+interface InlineNodeRead {
+	/** Declared inline-text targets; empty means "declares none". */
+	readonly targets: readonly InlineTextTarget[];
+	/** From the declared `editorAnnotations` root prop, never a sidecar. */
+	readonly locked: boolean;
+	/** The node's raw props, for reading a declared target's value. */
+	readonly props: Record<string, unknown>;
+}
+
+function readInlineNode(
+	bridge: StudioEditorBridge,
+	nodeId: string,
+): InlineNodeRead | null {
+	const api = puckApiOf(bridge);
+	if (api === null) {
+		return null;
+	}
+	const data = api.appState.data as Data;
+	const config = api.config as Config;
+	// `readDocument` is memoized on `(config, data)` identity, so an
+	// entry probe costs a `WeakMap` hit once the model has been projected
+	// for the current document — which the inspector has already done.
+	const model = readDocument(data, config);
+	const node = model.nodes.get(nodeId);
+	if (node === undefined) {
+		return null;
+	}
+	return {
+		targets: node.inlineText,
+		locked: model.annotations[nodeId]?.locked === true,
+		props: nodePropsOf(data, config, nodeId),
+	};
+}
+
+/**
+ * The current value stored at a node's declared inline-text prop, or
+ * `undefined` when nothing has been authored there.
+ *
+ * The rich surface seeds its editing session from this so a `tiptap`
+ * document round-trips edit → save → reload with its structure intact;
+ * seeding from rendered `textContent` (what shipped) flattened every
+ * document to a paragraph list on the first edit.
+ */
+export function readInlineTextValue(
+	bridge: StudioEditorBridge,
+	nodeId: string,
+	propPath: string,
+): unknown {
+	return readInlineNode(bridge, nodeId)?.props[propPath];
 }
 
 /** Create the per-`<Studio>` inline edit controller. */
@@ -120,27 +254,43 @@ export function createInlineEditController(
 		session = null;
 		composing = false;
 		pendingBlurCommit = false;
-		bridge.diagnostics.setDiagnostics("inline-paste", []);
+		bridge.diagnostics.setDiagnostics(INLINE_PASTE_DIAGNOSTICS, []);
+		bridge.diagnostics.setDiagnostics(INLINE_COMMIT_DIAGNOSTICS, []);
 		notify();
 	};
 
-	const writeProp = (value: unknown): void => {
+	/**
+	 * Commit one authored value as ONE history entry.
+	 *
+	 * The declaration check, the `plain` / `tiptap` format check and the
+	 * value-equality check all live in `updateInlineTextInData`, before
+	 * any dispatch — so a rejected commit leaves the document untouched
+	 * and surfaces as a diagnostic rather than as a silent no-op that
+	 * reads as success.
+	 */
+	const commitInline = (value: string | TiptapDocument): void => {
 		const active = session;
-		const activePort = port();
-		if (active === null || activePort === null) {
+		const api = puckApiOf(bridge);
+		if (active === null || api === null) {
 			return;
 		}
 		committing = true;
 		try {
-			activePort.commitNative((data, authoring) => {
-				const next = setNodeProp(
-					data,
-					active.nodeId,
-					pathOf(active.target),
+			// `api` is the live store handle, read once and used
+			// immediately: the helper calls this thunk and reads
+			// `appState.data` synchronously on the next line.
+			const result = commitInlineTextUpdate(
+				{ getPuckApi: () => api },
+				{
+					nodeId: active.nodeId,
+					targetId: active.target.id,
 					value,
-				);
-				return next === null ? null : { data: next, authoring };
-			});
+				},
+			);
+			bridge.diagnostics.setDiagnostics(
+				INLINE_COMMIT_DIAGNOSTICS,
+				result.status === "rejected" ? result.errors : [],
+			);
 		} finally {
 			committing = false;
 		}
@@ -161,7 +311,12 @@ export function createInlineEditController(
 			scheduleIdleCommit();
 		};
 		const onKeyDown = (event: KeyboardEvent): void => {
-			event.stopPropagation(); // suppress editor shortcuts while typing
+			// Belt-and-braces for listeners bound inside the canvas document.
+			// The canonical suppression seam for editor shortcuts is
+			// `isInlineEditingFocused` in `./focus.ts` — a keydown in the
+			// canvas iframe never reaches a listener on the host document,
+			// so propagation alone cannot be the whole answer.
+			event.stopPropagation();
 			if (event.key === "Escape") {
 				event.preventDefault();
 				controller.cancel();
@@ -195,7 +350,7 @@ export function createInlineEditController(
 			event.preventDefault(); // never let HTML through (009G)
 			const text = clipboard.getData("text/plain");
 			if (text.length > INLINE_PASTE_LIMIT_BYTES) {
-				bridge.diagnostics.setDiagnostics("inline-paste", [
+				bridge.diagnostics.setDiagnostics(INLINE_PASTE_DIAGNOSTICS, [
 					{
 						code: "EDITOR_LIMIT_EXCEEDED",
 						severity: "warning",
@@ -265,13 +420,24 @@ export function createInlineEditController(
 			if (nodeId === null) {
 				return false;
 			}
-			const metadata = bridge.capabilities?.forNode(nodeId);
-			const resolved = targetFromElement(target, nodeId, metadata, registry);
-			if (resolved === null) {
+			const read = readInlineNode(bridge, nodeId);
+			// A component that declares no inline-text target offers NO
+			// inline affordance — double-click falls through to drill-in
+			// exactly as it does on a non-text component.
+			if (read === null || read.targets.length === 0) {
 				return false;
 			}
 			// Locked nodes are selectable-not-mutable.
-			if (activePort.getSnapshot().authoring.nodes[nodeId]?.locked === true) {
+			if (read.locked) {
+				return false;
+			}
+			const resolved = targetFromElement(
+				target,
+				nodeId,
+				read.targets,
+				registry,
+			);
+			if (resolved === null) {
 				return false;
 			}
 			if (session !== null) {
@@ -282,8 +448,8 @@ export function createInlineEditController(
 			if (resolved.target.format === "plain") {
 				bindPlainSurface(resolved.element);
 			}
-			// `tiptap` targets: the rich overlay (009E) observes the
-			// session and mounts the shared-schema editor.
+			// `tiptap` targets: the rich overlay observes the session and
+			// mounts the shared-schema editor, seeded from the declared prop.
 			notify();
 			return true;
 		},
@@ -299,9 +465,11 @@ export function createInlineEditController(
 			}
 			if (active.target.format === "plain" && element !== null) {
 				const draft = normalizePlainText(element.textContent ?? "");
-				// Value-equal drafts commit nothing (no history entry).
+				// Cheap pre-check so an untouched session does not walk the
+				// tree at all; the carrier helper re-checks against the stored
+				// value and is the authority on "nothing changed".
 				if (draft !== normalizePlainText(originalText)) {
-					writeProp(draft);
+					commitInline(draft);
 				}
 			}
 			teardown();
@@ -311,7 +479,7 @@ export function createInlineEditController(
 			if (session === null) {
 				return;
 			}
-			writeProp(value);
+			commitInline(value);
 			teardown();
 		},
 
