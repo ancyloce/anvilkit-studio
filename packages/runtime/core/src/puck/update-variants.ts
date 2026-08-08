@@ -170,18 +170,39 @@ function applyEdit(
 			};
 		case "reorder-axes":
 			return { ...definition, variantAxes: reorder(axes, edit.axisIds) };
-		case "delete-axis":
+		case "delete-axis": {
+			const remainingAxes = axes.filter((axis) => axis.id !== edit.axisId);
+			// A variant's selection is keyed by axis; dropping the axis
+			// drops that key from every variant so no variant keeps a
+			// dangling reference.
+			const rekeyed = definition.variants.map((variant) => {
+				const { [edit.axisId]: _gone, ...selection } = variant.selection;
+				return { ...variant, selection };
+			});
+			// Re-keying can make two variants address the SAME combination,
+			// which `validateVariantModel` rejects as ambiguous — so without
+			// this the removal would refuse and read to the user as "remove
+			// failed". Collapsing to the first is the same rule
+			// `delete-option` already applies when a variant stops being
+			// selectable; the loss is reported as a warning by
+			// {@link updateVariantModelInData} rather than being silent.
+			// With no axes left nothing addresses a distinct combination at
+			// all, so the whole list goes.
+			const seen = new Set<string>();
 			return {
 				...definition,
-				variantAxes: axes.filter((axis) => axis.id !== edit.axisId),
-				// A variant's selection is keyed by axis; dropping the axis
-				// drops that key from every variant so no variant keeps a
-				// dangling reference.
-				variants: definition.variants.map((variant) => {
-					const { [edit.axisId]: _gone, ...selection } = variant.selection;
-					return { ...variant, selection };
-				}),
+				variantAxes: remainingAxes,
+				variants:
+					remainingAxes.length === 0
+						? []
+						: rekeyed.filter((variant) => {
+								const key = variantCombinationKey(variant.selection);
+								if (seen.has(key)) return false;
+								seen.add(key);
+								return true;
+							}),
 			};
+		}
 		case "add-option":
 			return {
 				...definition,
@@ -439,7 +460,40 @@ export function updateVariantModelInData(
 			errors: [],
 		};
 	}
-	return { data: nextData, status: "updated", resolvedNodeIds, errors: [] };
+	// Declared variants an axis/option removal destroyed. Collapsing
+	// them is *required* — an ambiguous model is rejected outright — but
+	// they take their per-variant patches with them, and §14.2 permits
+	// the loss without permitting it to be silent. A `warning`, not an
+	// error: the edit committed, and this describes what it cost rather
+	// than a reason to undo it.
+	const droppedVariants =
+		current.variants.length - nextDefinition.variants.length;
+	const warnings: readonly EditorError[] =
+		droppedVariants > 0
+			? [
+					makeEditorError(
+						"EDITOR_COMMAND_CONFLICT",
+						droppedVariants === 1
+							? "1 declared variant was removed — it no longer addresses a distinct combination"
+							: `${droppedVariants} declared variants were removed — they no longer address distinct combinations`,
+						{
+							severity: "warning",
+							details: {
+								kind: "componentVariant",
+								definitionId: input.definitionId,
+								reason: "variants-dropped",
+								dropped: droppedVariants,
+							},
+						},
+					),
+				]
+			: [];
+	return {
+		data: nextData,
+		status: "updated",
+		resolvedNodeIds,
+		errors: warnings,
+	};
 }
 
 /**

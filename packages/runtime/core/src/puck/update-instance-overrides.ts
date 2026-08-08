@@ -38,7 +38,11 @@ import {
 import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
 import { parseComponentLibrary } from "./read-appearance.js";
-import { withComponentLibrary } from "./update-component-library.js";
+import {
+	countDefinitionInstances,
+	updateComponentLibraryInData,
+	withComponentLibrary,
+} from "./update-component-library.js";
 
 /** One override/reset/promote intent against an instance. */
 export type InstanceOverrideEdit =
@@ -477,5 +481,138 @@ export function commitDetachInstance(
 ): InstanceCommitResult {
 	return commit(deps, (data, config) =>
 		detachInstanceInData({ data, config, nodeIds, generateId }),
+	);
+}
+
+/** Input to {@link detachAllAndDeleteDefinitionInData}. */
+export interface DeleteDefinitionWithDetachInput {
+	readonly data: Data;
+	readonly config: Config;
+	readonly definitionId: string;
+	/** Fresh id factory for the detached nodes; never derived here. */
+	readonly generateId: (type: string) => string;
+}
+
+/**
+ * A hard ceiling on detach passes, so a `detachInstanceInData` that
+ * unexpectedly stops making progress cannot spin. Each pass clears up
+ * to the §14.6 report cap (50), so this covers 5 000 instances —
+ * three orders of magnitude past anything the editor produces.
+ */
+const MAX_DETACH_PASSES = 100;
+
+/**
+ * Detach every live instance of a definition and remove the
+ * definition, in ONE `Data` (DD-0019 §14.6).
+ *
+ * The §14.6 lifecycle is "prompt, offer detach-all, never silently
+ * orphan". `updateComponentLibraryInData` supplies the refusal half —
+ * a referenced definition cannot be deleted — and this supplies the
+ * accepted half. Both halves must land in a single `Data` so the whole
+ * thing is one undo: a document where the instances were detached but
+ * the definition survived (or worse, the reverse) is a state the user
+ * never asked for and cannot get out of with one Ctrl+Z.
+ *
+ * **Why a loop.** `countDefinitionInstances` caps its id list at 50
+ * (§14.6's report cap) while its `count` does not, so a document with
+ * more than 50 instances needs more than one pass. A single capped
+ * pass would delete the definition while instances still referenced
+ * it — precisely the silent orphaning the section forbids.
+ *
+ * A detach that cannot be performed (unresolvable definition, cycle,
+ * depth) **rejects and deletes nothing**, so `ED-COMP-007`'s retention
+ * guarantee survives a failed lifecycle operation.
+ */
+export function detachAllAndDeleteDefinitionInData(
+	input: DeleteDefinitionWithDetachInput,
+): DetachInstanceResult {
+	const replacements: Record<string, string> = {};
+	const assignedIds: string[] = [];
+	const changedNodeIds: string[] = [];
+	let data = input.data;
+
+	const refuse = (errors: readonly EditorError[]): DetachInstanceResult => ({
+		data: input.data,
+		status: "rejected",
+		changedNodeIds: NO_IDS,
+		errors,
+		replacements: {},
+		assignedIds: NO_IDS,
+	});
+
+	for (let pass = 0; pass < MAX_DETACH_PASSES; pass += 1) {
+		const usage = countDefinitionInstances(
+			data,
+			input.config,
+			input.definitionId,
+		);
+		if (usage.count === 0) break;
+		const detached = detachInstanceInData({
+			data,
+			config: input.config,
+			nodeIds: usage.instanceNodeIds,
+			generateId: input.generateId,
+		});
+		// `noop` here would mean instances exist that the detach declined
+		// to touch — no progress, so stop rather than loop.
+		if (detached.status !== "updated") {
+			return refuse(detached.errors);
+		}
+		data = detached.data;
+		Object.assign(replacements, detached.replacements);
+		assignedIds.push(...detached.assignedIds);
+		changedNodeIds.push(...detached.changedNodeIds);
+	}
+
+	const dropped = updateComponentLibraryInData({
+		data,
+		config: input.config,
+		edit: {
+			kind: "delete",
+			definitionId: input.definitionId,
+			// The detach above is what this policy authorises; the delete
+			// itself now sees zero instances either way.
+			policy: "confirm-detach-all",
+		},
+	});
+	if (dropped.status === "rejected") {
+		return refuse(dropped.errors);
+	}
+	if (dropped.status === "noop" && changedNodeIds.length === 0) {
+		return {
+			data: input.data,
+			status: "noop",
+			changedNodeIds: NO_IDS,
+			errors: [],
+			replacements: {},
+			assignedIds: NO_IDS,
+		};
+	}
+	return {
+		data: dropped.data,
+		status: "updated",
+		changedNodeIds: changedNodeIds.sort(),
+		errors: [],
+		replacements,
+		assignedIds,
+	};
+}
+
+/**
+ * Commit detach-all-and-delete as ONE history entry, so a single undo
+ * restores the definition *and* every instance's reference (§14.6).
+ */
+export function commitDetachAllAndDeleteDefinition(
+	deps: InstanceCommitDeps,
+	definitionId: string,
+	generateId: (type: string) => string,
+): InstanceCommitResult {
+	return commit(deps, (data, config) =>
+		detachAllAndDeleteDefinitionInData({
+			data,
+			config,
+			definitionId,
+			generateId,
+		}),
 	);
 }

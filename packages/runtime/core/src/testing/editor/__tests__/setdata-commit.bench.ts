@@ -2,7 +2,7 @@
 
 /**
  * @file PLAN-0025 P2-00 — the `setData` spike that gates Phase 2
- * (§8.3, §14.6). Mounts the real `<Puck>` (0.22.4) in composition
+ * (§8.3, §14.6). Mounts the real `<Puck>` (0.23.0) in composition
  * mode — `Puck.Preview`, iframe disabled — over the shared §14.6 bench
  * document, then measures what the v2 write path will actually pay per
  * style commit: a functional-updater `setData` dispatch with

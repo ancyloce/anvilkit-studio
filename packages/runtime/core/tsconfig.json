@@ -29,7 +29,7 @@
 			"@/overrides/*": ["./src/react/overrides/*"],
 			"@/shared": ["./src/shared"],
 			"@/shared/*": ["./src/shared/*"],
-			"@/utils/*": ["./src/react/overrides/utils/*"],
+			"@/utils/*": ["./src/react/utils/*"],
 			"@/compat": ["./src/compat"],
 			"@/compat/*": ["./src/compat/*"],
 			"@/config": ["./src/config"],

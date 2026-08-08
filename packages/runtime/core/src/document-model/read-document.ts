@@ -27,7 +27,7 @@
  * **Why memoization is structural and not identity-based.**
  *
  * `walkTree` **rebuilds the tree it visits**. Measured 2026-08-07
- * against `@puckeditor/core@0.22.4`: the items handed to the mapper
+ * against `@puckeditor/core@0.23.0`: the items handed to the mapper
  * are not the items in `data`, `item.props` is not the source props
  * object, nested values like `props.appearance` are fresh objects
  * too — and two consecutive walks over the *same* `data` produce

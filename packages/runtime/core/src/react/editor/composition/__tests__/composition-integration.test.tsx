@@ -1,6 +1,6 @@
 /**
  * @file P2-07 — Phase 2 integration tests over a real `<Puck>`
- * (0.22.4, jsdom): one commit = one history entry; undo/redo restores
+ * (0.23.0, jsdom): one commit = one history entry; undo/redo restores
  * appearance AND root design system exactly; duplication carries
  * appearance under a regenerated id with matching compiled targets;
  * movement and slot reordering preserve appearance and leave the
@@ -144,7 +144,7 @@ afterEach(() => {
 });
 
 /**
- * Puck 0.22.4 records history through a ~300 ms trailing debounce
+ * Puck 0.23.0 records history through a ~300 ms trailing debounce
  * (`record = debounce(fn, 300)` in the app store), so entries land
  * shortly AFTER a commit, and commits inside one debounce window
  * coalesce into one entry — which is Puck natively providing the §8.3

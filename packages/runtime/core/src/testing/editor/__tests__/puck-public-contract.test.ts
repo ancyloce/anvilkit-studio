@@ -1,7 +1,7 @@
 /**
  * @file PLAN-0025 P0-02 — public Puck API contract tests.
  *
- * Locks the exact `@puckeditor/core@0.22.4` public surface the
+ * Locks the exact `@puckeditor/core@0.23.0` public surface the
  * Puck-native refactor (docs/plans/0025-puck-native-full-refactor-
  * development-plan.md §12 Phase 0) builds on: `walkTree` slot
  * traversal, `transformProps` with a Config third argument, `migrate`,
@@ -68,7 +68,7 @@ const contractData = {
 	zones: {},
 } as Data;
 
-describe("puck public contract (0.22.4): tree functions", () => {
+describe("puck public contract (0.23.0): tree functions", () => {
 	it("walkTree(data, config, cb) visits content AND slot children", () => {
 		const visited: string[] = [];
 		walkTree(contractData, contractConfig, (content) => {
@@ -119,7 +119,7 @@ describe("puck public contract (0.22.4): tree functions", () => {
 	});
 });
 
-describe("puck public contract (0.22.4): actions", () => {
+describe("puck public contract (0.23.0): actions", () => {
 	it("setData accepts a functional updater and recordHistory", () => {
 		const action: PuckAction = {
 			type: "setData",
@@ -141,7 +141,7 @@ describe("puck public contract (0.22.4): actions", () => {
 	});
 });
 
-describe("puck public contract (0.22.4): fields", () => {
+describe("puck public contract (0.23.0): fields", () => {
 	it("CustomField supports visible: false hidden authoring fields", () => {
 		const hidden: CustomField<string | undefined> = {
 			type: "custom",
@@ -153,7 +153,7 @@ describe("puck public contract (0.22.4): fields", () => {
 	});
 });
 
-describe("puck public contract (0.22.4): composition and hooks", () => {
+describe("puck public contract (0.23.0): composition and hooks", () => {
 	it("exposes Puck.Components, Puck.Fields, Puck.Outline, Puck.Preview", () => {
 		expect(Puck.Components).toBeDefined();
 		expect(Puck.Fields).toBeDefined();
@@ -168,7 +168,7 @@ describe("puck public contract (0.22.4): composition and hooks", () => {
 	});
 });
 
-describe("puck public contract (0.22.4): iframe styling seam", () => {
+describe("puck public contract (0.23.0): iframe styling seam", () => {
 	it("Overrides.iframe is a render boundary receiving children", () => {
 		const overrides: Partial<Overrides> = {
 			iframe: ({ children }) => createElement("div", null, children),

@@ -1,8 +1,8 @@
 /**
  * @file P2-06 — appearance bridge contract tests, locked to
- * `@puckeditor/core@0.22.4`.
+ * `@puckeditor/core@0.23.0`.
  *
- * Verified against the installed 0.22.4 source: `overrides.iframe`
+ * Verified against the installed 0.23.0 source: `overrides.iframe`
  * renders ONLY inside the enabled-iframe `AutoFrame` branch, and
  * AutoFrame never reaches ready under jsdom — so the override's
  * runtime invocation belongs to the true-browser (Playwright) pass.
@@ -96,7 +96,7 @@ afterEach(() => {
 	getPuck = null;
 });
 
-describe("appearance bridge (P2-06, Puck 0.22.4 contract)", () => {
+describe("appearance bridge (P2-06, Puck 0.23.0 contract)", () => {
 	it("renders exactly one appearance stylesheet carrying compiled CSS ahead of the canvas", () => {
 		const { container } = mountHostWiring();
 		const styles = appearanceStyles(container);

@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import {
 	matchesPresentationQuery,
 	readComponentPresentation,
-} from "@/overrides/utils/component-presentation";
+} from "@/utils/component-presentation";
 
 describe("readComponentPresentation", () => {
 	it("falls back to the raw component name when there is no config at all", () => {

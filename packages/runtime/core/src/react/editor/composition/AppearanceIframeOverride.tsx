@@ -12,7 +12,7 @@
  *   iframe override —
  *   `overrides={{ iframe: ({ children }) => (<AppearanceIframeOverride nonce={n}>{children}</AppearanceIframeOverride>) }}`
  *   — the style element then lands inside the frame document.
- *   Verified against the 0.22.4 source: the override renders ONLY in
+ *   Verified against the 0.23.0 source: the override renders ONLY in
  *   the enabled-iframe `AutoFrame` branch (`autoFrameContext`
  *   consumer), so this wiring is inert when `iframe.enabled` is
  *   false, and AutoFrame never reaches ready under jsdom — its

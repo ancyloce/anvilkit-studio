@@ -18,7 +18,7 @@
  * the canvas document and re-enables it only on the component root
  * (`[data-puck-component] { pointer-events: auto !important }`) and on
  * registered overlay portals — verified in
- * `@puckeditor/core@0.22.4`'s `iframeInteractionStyles`. So a press
+ * `@puckeditor/core@0.23.0`'s `iframeInteractionStyles`. So a press
  * anywhere inside a component reports the **component root** as
  * `event.target`, and `document.elementFromPoint` skips the inner
  * elements for the same reason. Element-level hit-testing therefore

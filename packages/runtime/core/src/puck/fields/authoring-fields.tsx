@@ -7,7 +7,7 @@
  * preserve. `visible: false` keeps them out of the Properties tab;
  * StylePanel and friends write them through PuckApi `setData`.
  *
- * Known erratum vs the plan sketch (locked by P0-02): Puck 0.22.4's
+ * Known erratum vs the plan sketch (locked by P0-02): Puck 0.23.0's
  * `CustomFieldRender` must return a `ReactElement`, so the hidden
  * fields render an empty element, not `null`.
  */

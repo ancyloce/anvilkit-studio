@@ -57,7 +57,7 @@ import {
  *
  * That guarantee is structural, not incidental, and it is not props
  * identity: `walkTree` rebuilds every object it visits (measured in
- * `p2-001` against `@puckeditor/core@0.22.4`), so a cache keyed on a
+ * `p2-001` against `@puckeditor/core@0.23.0`), so a cache keyed on a
  * walked props object would never hit. `readDocument` keys by node id
  * and validates with `deepEqualJson` over the raw carriers instead —
  * which also survives Puck reallocating a node it did not change.

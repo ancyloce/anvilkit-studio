@@ -6,7 +6,7 @@
  * component props clean, lets node IDs act as stable indices, makes
  * tree and metadata changes part of one Puck history entry, preserves
  * the existing `<Studio data>` contract, and passes through PageIR v1
- * as opaque root props. Puck 0.22.4 preserves unknown root props
+ * as opaque root props. Puck 0.23.0 preserves unknown root props
  * through every reducer action, history restore, and `onChange`
  * emission (verified against the installed dist; regression-netted by
  * the `testing/editor` fixture pack).

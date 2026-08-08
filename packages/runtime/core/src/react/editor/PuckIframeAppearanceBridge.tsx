@@ -13,7 +13,7 @@
  * - it does not parse selection, modify component props, or wrap
  *   individual components;
  * - its behavior is locked by contract tests against
- *   `@puckeditor/core@0.22.4` — a Puck upgrade retests or replaces
+ *   `@puckeditor/core@0.23.0` — a Puck upgrade retests or replaces
  *   THIS adapter and nothing else.
  *
  * The style element carries `data-anvilkit-appearance` so parity

@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 import {
 	clampRectIntoViewport,
 	computeActionBarPosition,
-} from "@/overrides/utils/action-bar-position";
+} from "@/utils/action-bar-position";
 
 const VIEWPORT = { x: 0, y: 0, width: 1000, height: 600 };
 const BAR = { width: 80, height: 24 };
