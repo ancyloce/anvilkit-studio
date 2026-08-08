@@ -395,7 +395,7 @@ and its sources now sit under `src/utils/` rather than at `src/` root.
   (`packages/extensions/plugins/plugin-version-history/src/types/types.ts`).
 - `@anvilkit/core/types` — `PageIR`, `PageIRNode`, `PageIRNodeMeta`.
 - Yjs docs — [https://docs.yjs.dev/](https://docs.yjs.dev/) for
-  general CRDT semantics. The plugin pins `yjs@^13.6.31` and
+  general CRDT semantics. The plugin pins `yjs@^13.6.32` and
   `y-protocols@^1.0.7` as dependencies, and declares
   `y-websocket@^3.0.0` plus `@hocuspocus/provider@^4.4.0` as peers.
 - y-protocols Awareness —
