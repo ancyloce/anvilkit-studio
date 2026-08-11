@@ -36,7 +36,7 @@ import {
 	useState,
 	useSyncExternalStore,
 } from "react";
-import { DemoAiProposal } from "@/components/demo-ai-proposal";
+import { demoAiProposalOverrides } from "@/components/demo-ai-proposal";
 import { useDemoIdentity } from "@/lib/collab-identity";
 import { resolveCollabRelayUrl } from "@/lib/collab-relay-url";
 import { createCopilotSidebarPlugin } from "@/lib/copilot-sidebar-plugin";
@@ -911,14 +911,15 @@ export default function PuckEditorPage() {
 		const { listUsedDocumentFeatures, runExportPreflight } = await import(
 			"@anvilkit/core/editor"
 		);
-		// Scanned straight off the document (`p2-007`). This used to parse
-		// a sidecar first — `readAuthoringState(publishedData).state` — on
-		// documents that have no sidecar, so every feature except
-		// `richText` came back unused and a page using responsive styles,
-		// tokens, local components, interactions or bindings could slip
-		// past the production export block entirely (DD-0019 `ED-FA-017`,
-		// PLAN-0026 §3.8.6 blocker 2). Features are now read from the
-		// declared carriers the document actually uses.
+		// Scanned straight off the document (`p2-007`). The scan reads the
+		// declared carriers the document actually uses; there is no
+		// separate authoring state to parse first, and no call here reads
+		// one. The blocker this closed (DD-0019 `ED-FA-017`, PLAN-0026
+		// §3.8.6 blocker 2) was that the previous scan looked only at a
+		// document form these documents never carried, so every feature
+		// except `richText` came back unused and a page using responsive
+		// styles, tokens, local components, interactions or bindings could
+		// slip past the production export block entirely.
 		const usedFeatures = listUsedDocumentFeatures(publishedData);
 		if (usedFeatures.length === 0) return undefined;
 		return runExportPreflight({
@@ -1172,11 +1173,16 @@ export default function PuckEditorPage() {
 								}
 							: undefined
 					}
-					// §21.2's proposal flow needs a slot that outlives a
-					// popover: `editorSlot` mounts inside the editor's
-					// provider tree beside <Puck>, so the review dialog is
-					// not destroyed mid-flow (CORE-P3-008).
-					editorSlot={visualEditorMode ? <DemoAiProposal /> : undefined}
+					// The AI proposal surface writes through `EditorApi`,
+					// which is built from the live `PuckApi` — so it has to
+					// render INSIDE the Puck subtree. `editorSlot` mounts
+					// beside it (`StudioEditorMount` wraps `<Puck>`), so the
+					// consumer `puck` override is the seam that reaches the
+					// API: composed around the chrome, and persistent for the
+					// life of the subtree (`p6-004`; see the component doc).
+					// The object is module-scope — `mergedOverrides` memoizes
+					// on its identity.
+					overrides={visualEditorMode ? demoAiProposalOverrides : undefined}
 				/>
 			</section>
 

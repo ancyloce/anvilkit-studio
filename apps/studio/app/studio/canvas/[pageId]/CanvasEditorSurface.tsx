@@ -7,13 +7,15 @@ import {
 	type CanvasHeaderPlugin,
 	type CanvasPersistenceAdapter,
 	type CanvasRecoveryAdapter,
+	type CanvasStudioStableValue,
 	CanvasWorkspace,
+	useCanvasStores,
 	useCanvasStudio,
 } from "@anvilkit/canvas-editor";
 // Private workspace catalog consumed as plain data (canvas-m0-009). This file
 // is a client-only dynamic chunk, so the JSON stays out of the eager bundle.
 import { canvasTemplates } from "@anvilkit/canvas-templates";
-import { useSyncExternalStore } from "react";
+import { type RefObject, useEffect, useSyncExternalStore } from "react";
 
 const DEMO_TEMPLATES = Object.values(canvasTemplates);
 
@@ -22,6 +24,21 @@ export interface CanvasEditorSurfaceProps {
 	initialActivePageId: string;
 	brandKit: BrandKit;
 	onActivePageChange: (pageId: string) => void;
+	/**
+	 * cp5-R03: the editor's single-selection seam, mirrored out so the AI panel
+	 * — which the route mounts OUTSIDE this surface — can name the node an
+	 * `image.replace` should target. `null` for no selection or a
+	 * multi-selection; see `CanvasStudioProps.onSelectionChange`.
+	 */
+	onSelectionChange: (nodeId: string | null) => void;
+	/**
+	 * cp5-R03: filled with the editor's stable command API while this surface is
+	 * mounted, and nulled on unmount. The AI panel lives outside the
+	 * `<CanvasStudio>` provider and so cannot call `useCanvasStudio()` itself;
+	 * this is the sanctioned way across that boundary — the `children` slot is
+	 * documented as host UI rendered *inside* the provider.
+	 */
+	editorApiRef: RefObject<CanvasStudioStableValue | null>;
 	/** Required by the `image` tool — resolves the asset id to place. */
 	onPickAsset: () => Promise<string>;
 	/**
@@ -78,6 +95,11 @@ function HostSceneReadout() {
 			height: n.bounds.height,
 			rotation: n.transform.rotation,
 			text: n.type === "text" ? n.text : undefined,
+			// cp5-R03: the AI round-trip's observable effect is an assetId swap
+			// that leaves geometry alone, so the readout has to carry both
+			// halves for the E2E to tell "replaced" from "re-created".
+			assetId: n.type === "image" ? n.assetId : undefined,
+			crop: n.type === "image" ? n.crop : undefined,
 		})),
 	});
 
@@ -133,6 +155,29 @@ function HostSceneReadout() {
 }
 
 /**
+ * cp5-R03: publish the editor's STABLE command API up to the route.
+ *
+ * `useCanvasStores()` deliberately, not `useCanvasStudio()`: the stable half
+ * carries `getIR`/`commit`/`commitBatch` and never changes identity, so this
+ * bridge neither re-renders nor re-runs its effect on every edit. Renders
+ * nothing — it exists purely to cross the provider boundary.
+ */
+function HostAiCommitBridge({
+	apiRef,
+}: {
+	apiRef: RefObject<CanvasStudioStableValue | null>;
+}): null {
+	const stores = useCanvasStores();
+	useEffect(() => {
+		apiRef.current = stores;
+		return () => {
+			apiRef.current = null;
+		};
+	}, [stores, apiRef]);
+	return null;
+}
+
+/**
  * The reference editor, mounted behind the route's `ssr:false` dynamic
  * boundary. Renders the Canva-style `<CanvasWorkspace>` shell — the editor's
  * single supported layout. Export now ships *inside* the editor as a header
@@ -145,6 +190,8 @@ export default function CanvasEditorSurface({
 	initialActivePageId,
 	brandKit,
 	onActivePageChange,
+	onSelectionChange,
+	editorApiRef,
 	onPickAsset,
 	headerPlugins,
 	persistenceAdapter,
@@ -160,11 +207,13 @@ export default function CanvasEditorSurface({
 			templates={DEMO_TEMPLATES}
 			onPickAsset={onPickAsset}
 			onActivePageChange={onActivePageChange}
+			onSelectionChange={onSelectionChange}
 			headerPlugins={headerPlugins}
 			persistenceAdapter={persistenceAdapter}
 			{...(recoveryAdapter ? { recoveryAdapter } : {})}
 			assetUploader={assetUploader}
 		>
+			<HostAiCommitBridge apiRef={editorApiRef} />
 			<div className="sr-only">
 				<HostSceneReadout />
 			</div>

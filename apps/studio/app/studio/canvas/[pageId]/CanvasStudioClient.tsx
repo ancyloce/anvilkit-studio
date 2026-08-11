@@ -10,11 +10,15 @@ import {
 	type BrandKit,
 	type CanvasAssetUploader,
 	type CanvasRecoveryAdapter,
+	type CanvasStudioStableValue,
 	createCanvasExportPlugin,
 	createIndexedDbRecoveryAdapter,
 	type CanvasPersistenceAdapter as EditorPersistenceAdapter,
 } from "@anvilkit/canvas-editor";
-import type { PostProcessUpload } from "@anvilkit/plugin-ai-image";
+import type {
+	CommitCanvasCommandFn,
+	PostProcessUpload,
+} from "@anvilkit/plugin-ai-image";
 import { createAiJobClient } from "@anvilkit/plugin-ai-image";
 import { AiImagePanel } from "@anvilkit/plugin-ai-image/react";
 import {
@@ -29,7 +33,14 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import "@anvilkit/canvas-editor/styles.css";
-import { selectAiImageProvider } from "@/lib/ai-image/provider-selection";
+import {
+	AI_REPLACE_BATCH_LABEL,
+	buildAiImageReplaceCommands,
+} from "@/lib/ai-image/ai-image-commit";
+import {
+	isRealAiImageEnabled,
+	selectAiImageProvider,
+} from "@/lib/ai-image/provider-selection";
 import { createDataUrlCanvasUploader } from "@/lib/canvas-asset-uploader";
 
 // The whole editor surface (CanvasStudio + Konva + the host toolbar/panels)
@@ -62,6 +73,21 @@ const DEMO_BRAND_KIT: BrandKit = {
 const HOST_IMAGE_ASSET_ID = "demo-host-image";
 const HOST_IMAGE_DATA_URL =
 	"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+
+// cp5-R03: stand-in pixels for the OFFLINE MOCK provider's results.
+//
+// `createMockAiImageProvider` returns an asset id (`mock-asset-<kind>-<n>`)
+// that names no bytes anywhere — it never touches the host registry. Committing
+// that id alone would point the node at an asset the document has never heard
+// of, so the editor would draw its "Missing image" placeholder and fire the
+// FR-170 missing-asset toast: a working round-trip that looks like a failure.
+// The demo therefore materialises the mock's result as a visibly-synthetic
+// 2×2 indigo swatch, exactly as it seeds `HOST_IMAGE_DATA_URL` above so a
+// placed image resolves to something. NEVER used on the real provider path
+// (`isRealAiImageEnabled()`), which assetizes its own output — there, an
+// unresolvable result id is a genuine error and is surfaced as one.
+const MOCK_AI_RESULT_DATA_URL =
+	"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAEklEQVR42mNITvuYnPaRAUIBAC4uBunjGwSLAAAAAElFTkSuQmCC";
 
 function makeBlankIR(pageId: string): CanvasIR {
 	const ir = createCanvasIR({
@@ -115,21 +141,68 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 		return createAiJobClient({ provider });
 	}, [getAssetUrl, upload]);
 
-	// The active artboard, mirrored out of `<CanvasStudio onActivePageChange>`.
-	// `<CanvasStudio>` exposes no selection callback, so `selectedNodeId` is
-	// unavailable from this mount — the panel surfaces results but the optional
-	// `image.replace` commit (which needs a selected node) does not fire here.
-	// See plan I1-11 "Known limitation"; wiring it needs an `onSelectionChange`
-	// prop on the canvas-editor submodule.
 	// The image tool's asset picker. Returns the seeded host image asset id so
 	// placing an image needs no UI picker in the demo (PRD §9.2 #1/#2).
 	const onPickAsset = useCallback(async () => HOST_IMAGE_ASSET_ID, []);
 
+	// The active artboard, mirrored out of `<CanvasStudio onActivePageChange>`.
 	const activePageRef = useRef<string>(pageId);
-	const getLayerContext = useCallback<() => AiLayerContext | null>(
-		() =>
-			activePageRef.current ? { artboardId: activePageRef.current } : null,
-		[],
+	// cp5-R03: the selected node, mirrored out of `<CanvasStudio
+	// onSelectionChange>`. Both a ref and state, for two different readers: the
+	// ref feeds `getLayerContext`, which is read at job time and must be current
+	// without re-creating its closure; the state drives the visible commit-target
+	// line below, which is how a user with nothing selected learns that a result
+	// will not land on a node.
+	const selectedNodeIdRef = useRef<string | null>(null);
+	const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+	const onSelectionChange = useCallback((nodeId: string | null) => {
+		selectedNodeIdRef.current = nodeId;
+		setSelectedNodeId(nodeId);
+	}, []);
+
+	const getLayerContext = useCallback<() => AiLayerContext | null>(() => {
+		const artboardId = activePageRef.current;
+		if (!artboardId) return null;
+		const nodeId = selectedNodeIdRef.current;
+		return { artboardId, ...(nodeId ? { selectedNodeId: nodeId } : {}) };
+	}, []);
+
+	// cp5-R03: the AI result → canvas commit, i.e. the last mile.
+	//
+	// `useAiImage` builds the `image.replace` itself (`commitImageReplace`) when
+	// a non-`text-to-image` job completes against the selected node, and hands
+	// it to this injected `commit`. The host's only job is to land it on the
+	// document — through the editor's OWN command pipeline, so the result is the
+	// same transaction FR-093 drag-to-replace commits: `image.replace` touches
+	// only `assetId` (bounds, transform and crop survive untouched), and the
+	// `asset.put` that registers the produced bytes rides in the same batch, so
+	// one undo reverts the whole thing.
+	//
+	// Throwing is deliberate: `useAiImage` catches whatever `commit` throws and
+	// renders it in the panel's error line, so a commit that cannot happen is
+	// visible rather than a silent no-op.
+	const editorApiRef = useRef<CanvasStudioStableValue | null>(null);
+	const commitAiResult = useCallback<CommitCanvasCommandFn<void>>(
+		(replace) => {
+			const editor = editorApiRef.current;
+			if (!editor) {
+				throw new Error(
+					"Canvas editor is not mounted — the AI result was not committed.",
+				);
+			}
+			const uri =
+				getAssetUrl(replace.toAssetId) ??
+				(isRealAiImageEnabled() ? undefined : MOCK_AI_RESULT_DATA_URL);
+			const commands = buildAiImageReplaceCommands({
+				ir: editor.getIR(),
+				replace,
+				asset: uri ? { id: replace.toAssetId, uri } : undefined,
+			});
+			const only = commands.length === 1 ? commands[0] : undefined;
+			if (only) editor.commit(only);
+			else editor.commitBatch(commands, AI_REPLACE_BATCH_LABEL);
+		},
+		[getAssetUrl],
 	);
 
 	// PRD 0012 §15.16: hand persistence to the editor's built-in save pipeline
@@ -213,15 +286,35 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 						onActivePageChange={(id) => {
 							activePageRef.current = id;
 						}}
+						onSelectionChange={onSelectionChange}
+						editorApiRef={editorApiRef}
 					/>
 				</div>
 				<aside
 					data-testid="ai-image-panel-host"
 					className="w-[340px] shrink-0 overflow-y-auto border-l border-[#e2e8f0] pl-4"
 				>
+					{/*
+					 * cp5-R03: where an AI result will land, stated up front.
+					 * Editing ops (everything but text-to-image) replace the
+					 * SELECTED image node, so with nothing selected the panel
+					 * still surfaces the result and commits nothing — correct,
+					 * but indistinguishable from a failure unless it is said out
+					 * loud. This line says it before the user presses Run.
+					 */}
+					<p
+						data-testid="ai-commit-target"
+						data-selected-node-id={selectedNodeId ?? ""}
+						className="mb-2 text-[0.75rem] [color:var(--demo-muted-text)]"
+					>
+						{selectedNodeId
+							? `Editing ops will replace the selected node (${selectedNodeId}).`
+							: "No node selected — results are shown here but not applied to the canvas. Select an image node first."}
+					</p>
 					<AiImagePanel
 						jobClient={jobClient}
 						getLayerContext={getLayerContext}
+						commit={commitAiResult}
 					/>
 				</aside>
 			</div>
