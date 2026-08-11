@@ -113,6 +113,55 @@ forbidden-field deny-list (`data`, `html`, `dom`, `root`, `rootProps`,
 `puckData`, `serializedHtml`). Consent gates emission. See
 `packages/capabilities/analytics/core/README.md` for the adapter contract.
 
+## Canvas AI image provider
+
+**The mock provider is the default, and CI never calls a paid API.** The Canvas
+Studio AI panel runs through a deterministic offline mock unless
+`NEXT_PUBLIC_AI_IMAGE_REAL=1` is set — `selectAiImageProvider` falls through to
+`createMockAiImageProvider` (`lib/ai-image/provider-selection.ts:31`), so a bare
+checkout, every test run, and every CI job cost nothing and reach no network.
+Two separate variables gate the real provider on purpose: the secret
+`REPLICATE_API_TOKEN` is read **server-side only**, in the route handlers
+(`app/api/canvas/ai/_lib/replicate.ts:43` `readReplicateToken()`), while the
+client decides which provider to build from the **public** flag
+`NEXT_PUBLIC_AI_IMAGE_REAL` (`:21-23` `isRealAiImageEnabled()`) — so the secret
+never has to be reachable from client code to answer "is the real provider
+live?". Both ship unset (`.env.example:25,29`), no key exists anywhere in this
+repository, and no workflow under `.github/` defines one. With the flag set but
+no server token, every route answers `503 PROVIDER_DISABLED` and the client
+turns that into a terminal, rendered error in the panel rather than a crash.
+Three assertions keep this true rather than merely intended:
+`pnpm --filter studio check:client-secret-leak` greps the **built** client
+output for the token name and for key-shaped literals (wired into CI's
+always-run `validate` job, after `pnpm build`);
+`lib/ai-image/__tests__/provider-selection.test.ts` pins the default and the
+degradation path; and `e2e/canvas-ai.spec.ts` asserts both the route's 503 and
+that the browser issues zero requests to `/api/canvas/ai/*` or to any Replicate
+host during a full AI run.
+
+**Content safety is the embedding host's responsibility.** Replicate is a
+model-hosting marketplace, not a moderation service, and this repository ships
+**no** moderation layer of any kind: no prompt filtering, no output
+classification, no per-user attribution, no audit log, no rate limit, and no
+authentication on the AI routes. Whether `stability-ai/sdxl` applies a safety
+checker to generated output is **unconfirmed** — the routes never set such an
+input either way (`app/api/canvas/ai/text-to-image/route.ts` builds only
+`{ prompt, negative_prompt?, width?, height?, seed? }`), so whatever the model's
+own default is applies unchanged. Do not assume output is filtered. Per ADR 0009
+Decision 4, the following are explicitly the embedding host's responsibility and
+are not, and will not be, discharged by AnvilKit Canvas:
+
+1. Prompt and output policy, including whatever classification or human review the host's jurisdiction and product require.
+2. Per-user attribution and abuse response — the contract carries a `jobId` (`ai-contracts.ts:100`) but no user identity, by design.
+3. Authentication and rate limiting on whatever endpoint fronts an `AiImageProvider`.
+4. Retention, deletion, and disclosure obligations for generated assets.
+5. Compliance with the upstream provider's acceptable-use policy — the host holds the account and the key, so the host holds the obligation.
+
+See [`docs/adr/0009-canvas-ai-provider.md`](../../docs/adr/0009-canvas-ai-provider.md)
+for the provider ratification, per-call cost model, and key-custody decision, and
+[`.env.example`](./.env.example) for the operator warning about the
+unauthenticated, unthrottled route surface.
+
 ## Notes
 
 - The demo depends on every workspace component package via `workspace:*`. After adding a new component package, list it in both `apps/studio/lib/puck-demo.ts` and `transpilePackages` in `apps/studio/next.config.js`.

@@ -20,7 +20,22 @@ export interface PageRecord {
 	slug: string;
 	title: string;
 	status: PageStatus;
+	/**
+	 * **Product** version, mirrored from `root.props.version` by `record-ops.ts`
+	 * and authored by the user. Unrelated to {@link PageRecord.schemaRevision}:
+	 * this one says which release of the *page* a record holds, that one says
+	 * which generation of the *store* wrote it.
+	 */
 	version: string;
+	/**
+	 * **Storage metadata** (`p7-001` / ADR 0007 decision 2): which migration
+	 * generation this record belongs to. Written by the storage layer through
+	 * `stampSchemaRevision` on every write, read by the loader, and **never**
+	 * written by a document — persistence metadata in the same category as
+	 * {@link PageRecord.createdAt}. See `schema-revision.ts` for the field's
+	 * invariants, the three-way loader and the below-floor support policy.
+	 */
+	schemaRevision: number;
 	draft?: DemoPageData;
 	published?: DemoPageData;
 	createdAt: string;
@@ -28,6 +43,17 @@ export interface PageRecord {
 	publishedAt?: string;
 	archivedAt?: string;
 }
+
+/**
+ * A record as `record-ops.ts` builds it — everything a {@link PageRecord} has
+ * *except* the storage layer's own `schemaRevision`.
+ *
+ * This is the compiler-level half of "the document never writes the revision":
+ * every `record-ops` builder returns this type, so a returned object literal
+ * naming `schemaRevision` fails to typecheck, and an adapter cannot persist a
+ * built record without passing it through `stampSchemaRevision` first.
+ */
+export type UnstampedPageRecord = Omit<PageRecord, "schemaRevision">;
 
 /** A record without its heavy payloads — what `GET /api/pages` returns. */
 export type PageSummary = Omit<PageRecord, "draft" | "published">;

@@ -48,12 +48,13 @@ describe("component-package editor adoption (Level ≥ 2 from published config)"
 		}
 	});
 
-	it("declares styleTarget root — the render-prop path has real consumers", () => {
-		for (const config of Object.values(ADOPTED)) {
-			const editor = (
-				config.metadata as { editor?: { styleTarget?: string } } | undefined
-			)?.editor;
-			expect(editor?.styleTarget).toBe("root");
-		}
-	});
+	// The `styleTarget: "root"` case that lived here asserted the v1 metadata
+	// shape — a SINGULAR string at `metadata.editor.styleTarget`. PLAN-0026
+	// §6.1 replaced it with the plural `metadata.anvilkit.editor.styleTargets`
+	// map, so the property it checked no longer exists in the product and the
+	// case had been failing since that change. Its intent — every adopted
+	// component declares a `root` target — is covered upstream where it
+	// belongs, by the components submodule's own
+	// `tests/authoring-contract.test.ts` required-targets assertion. Ledger
+	// row 91 records the removal as superseded.
 });

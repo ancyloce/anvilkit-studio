@@ -16,6 +16,12 @@ import {
 	buildPublishRecord,
 	type RecordOpsContext,
 } from "./record-ops";
+import {
+	classifyStoredRecordJson,
+	requireStoredRecord,
+	stampSchemaRevision,
+	tolerateStoredRecord,
+} from "./schema-revision";
 import type {
 	DuplicatePageInput,
 	ListPagesParams,
@@ -23,6 +29,7 @@ import type {
 	PageStorageAdapter,
 	PublishPageInput,
 	SaveDraftInput,
+	UnstampedPageRecord,
 } from "./types";
 
 export interface FileSystemPageStorageAdapterOptions {
@@ -80,17 +87,13 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 
 	async saveDraft(input: SaveDraftInput): Promise<PageRecord> {
 		const existing = await this.resolve(input.id, input.slug);
-		const record = buildDraftRecord(existing, input, this.ctx);
-		await this.writeRecord(record);
-		return record;
+		return this.writeRecord(buildDraftRecord(existing, input, this.ctx));
 	}
 
 	async publish(input: PublishPageInput): Promise<PageRecord> {
 		const slug = input.slug ?? input.data.root?.props?.slug;
 		const existing = await this.resolve(input.id, slug);
-		const record = buildPublishRecord(existing, input, this.ctx);
-		await this.writeRecord(record);
-		return record;
+		return this.writeRecord(buildPublishRecord(existing, input, this.ctx));
 	}
 
 	async updateSettings(
@@ -99,17 +102,13 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 	): Promise<PageRecord | null> {
 		const existing = await this.readRecord(id);
 		if (existing === null) return null;
-		const record = applySettings(existing, rootProps, this.ctx);
-		await this.writeRecord(record);
-		return record;
+		return this.writeRecord(applySettings(existing, rootProps, this.ctx));
 	}
 
 	async archive(id: string): Promise<PageRecord | null> {
 		const existing = await this.readRecord(id);
 		if (existing === null) return null;
-		const record = applyArchive(existing, this.ctx);
-		await this.writeRecord(record);
-		return record;
+		return this.writeRecord(applyArchive(existing, this.ctx));
 	}
 
 	async delete(id: string): Promise<void> {
@@ -122,9 +121,7 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 	): Promise<PageRecord | null> {
 		const source = await this.readRecord(id);
 		if (source === null) return null;
-		const record = buildDuplicate(source, input, this.ctx);
-		await this.writeRecord(record);
-		return record;
+		return this.writeRecord(buildDuplicate(source, input, this.ctx));
 	}
 
 	async getVersion(
@@ -154,14 +151,21 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 		return null;
 	}
 
+	/**
+	 * Addressed read. `null` means "no such file"; a file that exists but is not
+	 * a readable record throws {@link CorruptPageRecordError} rather than
+	 * reading as missing, and a record below the revision floor loads through
+	 * the migration path instead of being mistaken for either.
+	 */
 	private async readRecord(id: string): Promise<PageRecord | null> {
+		let raw: string;
 		try {
-			const raw = await readFile(this.filePath(id), "utf8");
-			return JSON.parse(raw) as PageRecord;
+			raw = await readFile(this.filePath(id), "utf8");
 		} catch (error) {
 			if (isNotFound(error)) return null;
 			throw error;
 		}
+		return requireStoredRecord(classifyStoredRecordJson(raw, this.filePath(id)));
 	}
 
 	private async readAll(): Promise<PageRecord[]> {
@@ -173,13 +177,17 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 			throw error;
 		}
 		const readEntry = async (entry: string): Promise<PageRecord | null> => {
+			const path = join(this.dir, entry);
+			let raw: string;
 			try {
-				const raw = await readFile(join(this.dir, entry), "utf8");
-				return JSON.parse(raw) as PageRecord;
+				raw = await readFile(path, "utf8");
 			} catch {
 				// Skip unreadable/partial files rather than failing the whole list.
 				return null;
 			}
+			// A scan tolerates a corrupt entry (reported, then skipped) and still
+			// serves a below-floor one; neither may take down the whole listing.
+			return tolerateStoredRecord(classifyStoredRecordJson(raw, path));
 		};
 		const results = await Promise.all(
 			entries.flatMap((entry) =>
@@ -191,12 +199,22 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 		return results.filter((record): record is PageRecord => record !== null);
 	}
 
-	private async writeRecord(record: PageRecord): Promise<void> {
+	/**
+	 * The adapter's single persistence funnel — and therefore its single
+	 * `schemaRevision` stamp. All five write paths (`saveDraft`, `publish`,
+	 * `updateSettings`, `archive`, `duplicate`) route through it, and none of
+	 * them can bypass it: `record-ops` hands back an {@link UnstampedPageRecord},
+	 * which only `stampSchemaRevision` can turn into a storable
+	 * {@link PageRecord}.
+	 */
+	private async writeRecord(draft: UnstampedPageRecord): Promise<PageRecord> {
+		const record = stampSchemaRevision(draft);
 		await mkdir(this.dir, { recursive: true });
 		const finalPath = this.filePath(record.id);
 		const tempPath = `${finalPath}.${this.ctx.newId()}.tmp`;
 		await writeFile(tempPath, JSON.stringify(record, null, 2), "utf8");
 		await rename(tempPath, finalPath);
+		return record;
 	}
 }
 

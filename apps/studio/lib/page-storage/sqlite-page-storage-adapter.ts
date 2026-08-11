@@ -10,6 +10,12 @@ import {
 	buildPublishRecord,
 	type RecordOpsContext,
 } from "./record-ops";
+import {
+	classifyStoredRecordJson,
+	requireStoredRecord,
+	stampSchemaRevision,
+	tolerateStoredRecord,
+} from "./schema-revision";
 import type {
 	DuplicatePageInput,
 	ListPagesParams,
@@ -17,6 +23,7 @@ import type {
 	PageStorageAdapter,
 	PublishPageInput,
 	SaveDraftInput,
+	UnstampedPageRecord,
 } from "./types";
 
 export interface SqlitePageStorageAdapterOptions {
@@ -54,7 +61,7 @@ export class SqlitePageStorageAdapter implements PageStorageAdapter {
 			.from(pages)
 			.where(eq(pages.id, id))
 			.get();
-		return row ? deserialize(row.data) : null;
+		return row ? deserialize(row.data, `pages.id=${id}`) : null;
 	}
 
 	async getBySlug(slug: string): Promise<PageRecord | null> {
@@ -63,7 +70,7 @@ export class SqlitePageStorageAdapter implements PageStorageAdapter {
 			.from(pages)
 			.where(eq(pages.slug, slug))
 			.get();
-		return row ? deserialize(row.data) : null;
+		return row ? deserialize(row.data, `pages.slug=${slug}`) : null;
 	}
 
 	async list(params?: ListPagesParams): Promise<PageRecord[]> {
@@ -72,7 +79,12 @@ export class SqlitePageStorageAdapter implements PageStorageAdapter {
 			.from(pages)
 			.all()
 			.flatMap((row) => {
-				const record = deserialize(row.data);
+				// A scan tolerates a corrupt row (reported, then skipped) and still
+				// serves a below-floor one; neither may take down the whole listing.
+				const record = tolerateStoredRecord(
+					classifyStoredRecordJson(row.data, "pages.data"),
+				);
+				if (record === null) return [];
 				if (params?.status !== undefined && record.status !== params.status) {
 					return [];
 				}
@@ -89,17 +101,13 @@ export class SqlitePageStorageAdapter implements PageStorageAdapter {
 
 	async saveDraft(input: SaveDraftInput): Promise<PageRecord> {
 		const existing = await this.resolve(input.id, input.slug);
-		const record = buildDraftRecord(existing, input, this.ctx);
-		this.writeRecord(record);
-		return record;
+		return this.writeRecord(buildDraftRecord(existing, input, this.ctx));
 	}
 
 	async publish(input: PublishPageInput): Promise<PageRecord> {
 		const slug = input.slug ?? input.data.root?.props?.slug;
 		const existing = await this.resolve(input.id, slug);
-		const record = buildPublishRecord(existing, input, this.ctx);
-		this.writeRecord(record);
-		return record;
+		return this.writeRecord(buildPublishRecord(existing, input, this.ctx));
 	}
 
 	async updateSettings(
@@ -108,17 +116,13 @@ export class SqlitePageStorageAdapter implements PageStorageAdapter {
 	): Promise<PageRecord | null> {
 		const existing = await this.getById(id);
 		if (existing === null) return null;
-		const record = applySettings(existing, rootProps, this.ctx);
-		this.writeRecord(record);
-		return record;
+		return this.writeRecord(applySettings(existing, rootProps, this.ctx));
 	}
 
 	async archive(id: string): Promise<PageRecord | null> {
 		const existing = await this.getById(id);
 		if (existing === null) return null;
-		const record = applyArchive(existing, this.ctx);
-		this.writeRecord(record);
-		return record;
+		return this.writeRecord(applyArchive(existing, this.ctx));
 	}
 
 	async delete(id: string): Promise<void> {
@@ -131,9 +135,7 @@ export class SqlitePageStorageAdapter implements PageStorageAdapter {
 	): Promise<PageRecord | null> {
 		const source = await this.getById(id);
 		if (source === null) return null;
-		const record = buildDuplicate(source, input, this.ctx);
-		this.writeRecord(record);
-		return record;
+		return this.writeRecord(buildDuplicate(source, input, this.ctx));
 	}
 
 	async getVersion(
@@ -159,7 +161,16 @@ export class SqlitePageStorageAdapter implements PageStorageAdapter {
 		return null;
 	}
 
-	private writeRecord(record: PageRecord): void {
+	/**
+	 * The adapter's single persistence funnel — and therefore its single
+	 * `schemaRevision` stamp. All five write paths (`saveDraft`, `publish`,
+	 * `updateSettings`, `archive`, `duplicate`) route through it, and none of
+	 * them can bypass it: `record-ops` hands back an {@link UnstampedPageRecord},
+	 * which only `stampSchemaRevision` can turn into a storable
+	 * {@link PageRecord}.
+	 */
+	private writeRecord(draft: UnstampedPageRecord): PageRecord {
+		const record = stampSchemaRevision(draft);
 		const row = {
 			id: record.id,
 			slug: record.slug,
@@ -180,11 +191,17 @@ export class SqlitePageStorageAdapter implements PageStorageAdapter {
 				},
 			})
 			.run();
+		return record;
 	}
 }
 
-function deserialize(data: string): PageRecord {
-	return JSON.parse(data) as PageRecord;
+/**
+ * Addressed read of one row's serialized record: a row that is not a readable
+ * record throws {@link CorruptPageRecordError} rather than reading as missing,
+ * and one below the revision floor loads through the migration path.
+ */
+function deserialize(data: string, source: string): PageRecord {
+	return requireStoredRecord(classifyStoredRecordJson(data, source));
 }
 
 function parentFolderOf(record: PageRecord): string | undefined {

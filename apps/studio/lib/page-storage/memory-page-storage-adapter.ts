@@ -8,6 +8,11 @@ import {
 	cloneRecordValue as clone,
 	type RecordOpsContext,
 } from "./record-ops";
+import {
+	classifyStoredRecord,
+	requireStoredRecord,
+	stampSchemaRevision,
+} from "./schema-revision";
 import type {
 	DuplicatePageInput,
 	ListPagesParams,
@@ -15,11 +20,18 @@ import type {
 	PageStorageAdapter,
 	PublishPageInput,
 	SaveDraftInput,
+	UnstampedPageRecord,
 } from "./types";
 
 export interface MemoryPageStorageAdapterOptions {
-	/** Seed records (cloned on construction). */
-	seed?: readonly PageRecord[];
+	/**
+	 * Seed records (cloned on construction). Seeds arrive from **outside** the
+	 * store — a test fixture, a restored dump — so each one is classified on
+	 * ingest exactly as a file or a row would be: an unstamped seed reads as
+	 * below-floor (loaded, diagnosed, promoted on its next write), and a seed
+	 * that is not a record at all throws rather than poisoning the map.
+	 */
+	seed?: readonly UnstampedPageRecord[];
 	/** Injectable clock for deterministic timestamps in tests. */
 	now?: () => Date;
 	/** Injectable id factory for deterministic ids in tests. */
@@ -44,7 +56,13 @@ export class MemoryPageStorageAdapter implements PageStorageAdapter {
 			nowIso: () => now().toISOString(),
 			newId: idFactory,
 		};
-		for (const record of options.seed ?? []) {
+		const seeds = options.seed ?? [];
+		for (const [index, seed] of seeds.entries()) {
+			// Indexed, not id-keyed: a seed that is not a record has no usable id,
+			// and "seed:undefined" names nothing the caller can go and look at.
+			const record = requireStoredRecord(
+				classifyStoredRecord(seed, `seed[${index}]`),
+			);
 			this.records.set(record.id, clone(record));
 		}
 	}
@@ -80,17 +98,13 @@ export class MemoryPageStorageAdapter implements PageStorageAdapter {
 
 	async saveDraft(input: SaveDraftInput): Promise<PageRecord> {
 		const existing = await this.resolve(input.id, input.slug);
-		const record = buildDraftRecord(existing, input, this.ctx);
-		this.records.set(record.id, clone(record));
-		return record;
+		return this.put(buildDraftRecord(existing, input, this.ctx));
 	}
 
 	async publish(input: PublishPageInput): Promise<PageRecord> {
 		const slug = input.slug ?? input.data.root?.props?.slug;
 		const existing = await this.resolve(input.id, slug);
-		const record = buildPublishRecord(existing, input, this.ctx);
-		this.records.set(record.id, clone(record));
-		return record;
+		return this.put(buildPublishRecord(existing, input, this.ctx));
 	}
 
 	async updateSettings(
@@ -99,17 +113,13 @@ export class MemoryPageStorageAdapter implements PageStorageAdapter {
 	): Promise<PageRecord | null> {
 		const existing = this.records.get(id);
 		if (existing === undefined) return null;
-		const record = applySettings(existing, rootProps, this.ctx);
-		this.records.set(record.id, clone(record));
-		return record;
+		return this.put(applySettings(existing, rootProps, this.ctx));
 	}
 
 	async archive(id: string): Promise<PageRecord | null> {
 		const existing = this.records.get(id);
 		if (existing === undefined) return null;
-		const record = applyArchive(existing, this.ctx);
-		this.records.set(record.id, clone(record));
-		return record;
+		return this.put(applyArchive(existing, this.ctx));
 	}
 
 	async delete(id: string): Promise<void> {
@@ -122,9 +132,7 @@ export class MemoryPageStorageAdapter implements PageStorageAdapter {
 	): Promise<PageRecord | null> {
 		const source = this.records.get(id);
 		if (source === undefined) return null;
-		const record = buildDuplicate(source, input, this.ctx);
-		this.records.set(record.id, clone(record));
-		return record;
+		return this.put(buildDuplicate(source, input, this.ctx));
 	}
 
 	async getVersion(
@@ -134,6 +142,20 @@ export class MemoryPageStorageAdapter implements PageStorageAdapter {
 		const record = this.records.get(pageId);
 		if (record === undefined || record.version !== version) return null;
 		return clone(record);
+	}
+
+	/**
+	 * The adapter's single persistence funnel — and therefore its single
+	 * `schemaRevision` stamp. All five write paths (`saveDraft`, `publish`,
+	 * `updateSettings`, `archive`, `duplicate`) route through it, and none of
+	 * them can bypass it: `record-ops` hands back an {@link UnstampedPageRecord},
+	 * which only `stampSchemaRevision` can turn into a storable
+	 * {@link PageRecord}.
+	 */
+	private put(draft: UnstampedPageRecord): PageRecord {
+		const record = stampSchemaRevision(draft);
+		this.records.set(record.id, clone(record));
+		return record;
 	}
 
 	private async resolve(

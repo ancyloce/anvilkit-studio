@@ -5,6 +5,7 @@ import type {
 	PageRecord,
 	PublishPageInput,
 	SaveDraftInput,
+	UnstampedPageRecord,
 } from "./types";
 
 /**
@@ -13,6 +14,16 @@ import type {
  * draft/publish/archive/version semantics. Each helper takes the current record
  * (or `null`) plus a clock/id context and returns the *next* record; the adapter
  * only owns persistence.
+ *
+ * ## This module cannot write `schemaRevision` — by construction
+ *
+ * `record-ops` is the one place a `DemoPageData` is read and rebuilt, so it is
+ * the one place a store-level revision could plausibly leak into a document.
+ * Every builder below therefore returns an {@link UnstampedPageRecord}: naming
+ * `schemaRevision` in any of these object literals is a type error, and an
+ * adapter cannot persist what these return without `stampSchemaRevision`
+ * (`schema-revision.ts`) turning it into a {@link PageRecord} first. The
+ * separation is enforced by the compiler, not by convention.
  */
 export interface RecordOpsContext {
 	nowIso(): string;
@@ -47,7 +58,7 @@ export function buildDraftRecord(
 	existing: PageRecord | null,
 	input: SaveDraftInput,
 	ctx: RecordOpsContext,
-): PageRecord {
+): UnstampedPageRecord {
 	const data = clone(input.data);
 	const props = rootPropsOf(data);
 	const now = ctx.nowIso();
@@ -78,7 +89,7 @@ export function buildPublishRecord(
 	existing: PageRecord | null,
 	input: PublishPageInput,
 	ctx: RecordOpsContext,
-): PageRecord {
+): UnstampedPageRecord {
 	const data = clone(input.data);
 	const props = rootPropsOf(data);
 	const now = ctx.nowIso();
@@ -123,9 +134,9 @@ export function applySettings(
 	existing: PageRecord,
 	rootProps: PageRootProps,
 	ctx: RecordOpsContext,
-): PageRecord {
+): UnstampedPageRecord {
 	const now = ctx.nowIso();
-	const next: PageRecord = {
+	const next: UnstampedPageRecord = {
 		...existing,
 		slug: rootProps.slug,
 		title: rootProps.title,
@@ -153,7 +164,7 @@ export function applySettings(
 export function applyArchive(
 	existing: PageRecord,
 	ctx: RecordOpsContext,
-): PageRecord {
+): UnstampedPageRecord {
 	const now = ctx.nowIso();
 	return { ...existing, status: "archived", archivedAt: now, updatedAt: now };
 }
@@ -163,7 +174,7 @@ export function buildDuplicate(
 	source: PageRecord,
 	input: DuplicatePageInput | undefined,
 	ctx: RecordOpsContext,
-): PageRecord {
+): UnstampedPageRecord {
 	const now = ctx.nowIso();
 	const slug = input?.slug ?? `${source.slug}-copy`;
 	const title = input?.title ?? `${source.title} (Copy)`;

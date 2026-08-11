@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { MemoryPageStorageAdapter } from "../memory-page-storage-adapter";
+import { STORE_SCHEMA_REVISION } from "../schema-revision";
 import type { PageRecord } from "../types";
 import { pageData, runAdapterContractTests } from "./adapter-contract";
 
@@ -16,6 +17,7 @@ describe("MemoryPageStorageAdapter — seeding", () => {
 			title: "Seeded",
 			status: "published",
 			version: "1.0.0",
+			schemaRevision: STORE_SCHEMA_REVISION,
 			published: pageData("seeded", "Seeded", "published"),
 			draft: pageData("seeded", "Seeded", "published"),
 			createdAt: "2026-01-01T00:00:00.000Z",
@@ -34,6 +36,7 @@ describe("MemoryPageStorageAdapter — seeding", () => {
 			title: "Seeded",
 			status: "draft",
 			version: "1.0.0",
+			schemaRevision: STORE_SCHEMA_REVISION,
 			draft: pageData("seeded", "Seeded"),
 			createdAt: "2026-01-01T00:00:00.000Z",
 			updatedAt: "2026-01-01T00:00:00.000Z",
