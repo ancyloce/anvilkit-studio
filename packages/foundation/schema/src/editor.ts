@@ -37,8 +37,25 @@
  * vocabulary someone forgot.
  *
  * GROUP 1 — the legacy `__anvilkit` sidecar, not the canonical
- * document. Retained until `p3-009` deletes their last production
- * consumer, `packages/runtime/core/src/editor/read-write.ts`:
+ * document.
+ *
+ * `p3-009` deleted `packages/runtime/core/src/editor/read-write.ts`
+ * and re-ran `p1-006`'s consumer check. The prediction that this would
+ * free `envelope.ts` and `compact.ts` did **not** hold, for two
+ * independent reasons, so all four modules are RETAINED:
+ *
+ * 1. `compact.ts` is imported by `canonical-serialize.ts:20`, which
+ *    `p8-006` owns — it was never `read-write.ts`'s to free.
+ * 2. The sidecar reader itself survives, re-homed as
+ *    `packages/runtime/core/src/migrations/legacy-sidecar.ts`. The
+ *    v1→v2 migration's whole job is to read a legacy sidecar, so it is
+ *    a second production consumer of `detectAuthoringVersion`,
+ *    `safeParseAuthoringState` and `normalizeAuthoringState`. `p7-004`
+ *    deletes it with the migration.
+ *
+ * Retiring this group is therefore one change, owned by `p8-006` /
+ * `p7-004`, and it is a **breaking** change to this published barrel
+ * needing its own changeset — not four independent prunes:
  *
  * - `envelope.ts` keeps its literal because `detectAuthoringVersion`
  *   is what classifies an `unsupported-major` sidecar into read-only
