@@ -24,12 +24,10 @@ import type {
 	AnvilComponentMetadata,
 	NodeAuthoringStateV1,
 } from "@anvilkit/contracts/editor";
-import type {
-	AuthoringStateV1,
-} from "../../editor/legacy/index.js";
 import {
 	ANVILKIT_AUTHORING_KEY,
-} from "../../editor/legacy/index.js";
+	type LegacyAuthoringState as AuthoringStateV1,
+} from "../../migrations/legacy-sidecar.js";
 import type { Data } from "@puckeditor/core";
 import type { EditorCapabilityRegistry } from "../../types/editor-api.js";
 

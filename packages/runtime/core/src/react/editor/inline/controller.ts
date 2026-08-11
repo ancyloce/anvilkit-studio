@@ -29,11 +29,11 @@
  * usable **inside** `<Puck>`. This controller is built by `EditorRoot`,
  * which `StudioEditorMount` renders as a *sibling* of the `<Puck>`
  * subtree, so no component in this chunk can call a Puck hook at all —
- * every editor-runtime surface reaches the store through the port's
- * injected `getPuckApi` instead (`InternalEditorCommandPort.
- * tryGetPuckApi`, added for exactly this class of caller). The hook and
- * this call site therefore share one implementation and one
- * single-dispatch guarantee; only the binding differs.
+ * every editor-runtime surface reaches the store through the bridge's
+ * `getPuckApi()` seam instead (`p3-009`; formerly the command port's
+ * `tryGetPuckApi`). The hook and this call site therefore share one
+ * implementation and one single-dispatch guarantee; only the binding
+ * differs.
  *
  * ### Session rules (unchanged)
  *
@@ -75,7 +75,6 @@ import { walkTree } from "@puckeditor/core";
 import { readDocument } from "../../../document-model/index.js";
 import { commitInlineTextUpdate } from "../../../puck/update-carriers.js";
 import type { StudioEditorBridge } from "../bridge.js";
-import type { InternalEditorCommandPort } from "../command-port.js";
 import type {
 	InlineEditSession,
 	InternalInlineEditController,
@@ -111,13 +110,9 @@ export function normalizePlainText(raw: string): string {
 		.replace(/\n+$/g, "");
 }
 
-/**
- * The live `PuckApi`, or `null` when `<Puck>` is not mounted (or the
- * port predates `tryGetPuckApi`, as older test doubles do).
- */
+/** The live `PuckApi`, or `null` when `<Puck>` is not mounted. */
 function puckApiOf(bridge: StudioEditorBridge): PuckApi | null {
-	const port = bridge.port as InternalEditorCommandPort | null;
-	return port?.tryGetPuckApi?.() ?? null;
+	return bridge.getPuckApi();
 }
 
 /**
@@ -206,7 +201,8 @@ export function createInlineEditController(
 ): InternalInlineEditController {
 	const listeners = new Set<() => void>();
 	let session: InlineEditSession | null = null;
-	let sessionRevision = 0;
+	/** The `Data` identity the session opened against (foreign-change token). */
+	let sessionDocument: unknown = null;
 	let composing = false;
 	let idleTimer: ReturnType<typeof setTimeout> | null = null;
 	let element: HTMLElement | null = null;
@@ -222,9 +218,6 @@ export function createInlineEditController(
 		}
 		bridge.notify();
 	};
-
-	const port = (): InternalEditorCommandPort | null =>
-		bridge.port as InternalEditorCommandPort | null;
 
 	const clearIdle = (): void => {
 		if (idleTimer !== null) {
@@ -405,14 +398,11 @@ export function createInlineEditController(
 		},
 
 		tryEnterFromEvent(target) {
-			const activePort = port();
 			const registry = bridge.canvasRegistry;
 			if (
-				activePort === null ||
 				registry === null ||
 				registry === undefined ||
-				activePort.isReadOnly() ||
-				activePort.writersDisabled()
+				bridge.getWriterGateError() !== null
 			) {
 				return false;
 			}
@@ -444,7 +434,13 @@ export function createInlineEditController(
 				controller.commit(); // single active session (009B)
 			}
 			session = { nodeId, target: resolved.target };
-			sessionRevision = activePort.getSnapshot().revision;
+			// `p3-009`: the sidecar revision counter is gone. Puck replaces
+			// `Data` by identity on every dispatch, so the document object
+			// IS the foreign-change token — the same signal
+			// `canvas/handles` already uses for gesture invalidation, and a
+			// strictly better one: it moves on EVERY write, not only on
+			// writes the sidecar engine performed.
+			sessionDocument = puckApiOf(bridge)?.appState.data ?? null;
 			if (resolved.target.format === "plain") {
 				bindPlainSurface(resolved.element);
 			}
@@ -500,11 +496,8 @@ export function createInlineEditController(
 			if (session === null || committing) {
 				return;
 			}
-			const activePort = port();
-			if (
-				activePort !== null &&
-				activePort.getSnapshot().revision !== sessionRevision
-			) {
+			const currentDocument = puckApiOf(bridge)?.appState.data ?? null;
+			if (currentDocument !== sessionDocument) {
 				controller.cancel();
 			}
 		},

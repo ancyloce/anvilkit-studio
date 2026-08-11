@@ -1902,7 +1902,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"name": "Data",
@@ -3731,7 +3731,7 @@
 										"type": "reference",
 										"target": {
 											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-Csn3gOP8.d.ts",
+											"packagePath": "dist/actions-DA1J5F56.d.ts",
 											"qualifiedName": "Overrides"
 										},
 										"name": "Overrides",
@@ -3926,7 +3926,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Plugin"
 								},
 								"name": "Plugin",
@@ -4009,7 +4009,7 @@
 										"type": "reference",
 										"target": {
 											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-Csn3gOP8.d.ts",
+											"packagePath": "dist/actions-DA1J5F56.d.ts",
 											"qualifiedName": "Config"
 										},
 										"name": "Config",
@@ -5273,7 +5273,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"name": "PuckData",
@@ -5360,7 +5360,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -5371,7 +5371,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -5684,7 +5684,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -5695,7 +5695,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -6088,7 +6088,7 @@
 														"type": "reference",
 														"target": {
 															"packageName": "@puckeditor/core",
-															"packagePath": "dist/actions-Csn3gOP8.d.ts",
+															"packagePath": "dist/actions-DA1J5F56.d.ts",
 															"qualifiedName": "Config"
 														},
 														"name": "Config",
@@ -6102,7 +6102,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Plugin"
 												},
 												"name": "Plugin",
@@ -6627,7 +6627,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Config"
 												},
 												"name": "Config",
@@ -6915,7 +6915,7 @@
 							"type": "reference",
 							"target": {
 								"packageName": "@puckeditor/core",
-								"packagePath": "dist/actions-Csn3gOP8.d.ts",
+								"packagePath": "dist/actions-DA1J5F56.d.ts",
 								"qualifiedName": "Plugin"
 							},
 							"name": "Plugin",
@@ -7055,7 +7055,7 @@
 									"type": "reference",
 									"target": {
 										"packageName": "@puckeditor/core",
-										"packagePath": "dist/actions-Csn3gOP8.d.ts",
+										"packagePath": "dist/actions-DA1J5F56.d.ts",
 										"qualifiedName": "Config"
 									},
 									"name": "Config",
@@ -7176,7 +7176,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -7186,7 +7186,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -7581,7 +7581,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -7591,7 +7591,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -7962,7 +7962,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -7972,7 +7972,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",

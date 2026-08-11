@@ -14,25 +14,16 @@
  * 2. **Selections never span scopes** (§10.6) — enforced by the
  *    selection store, which clears on every scope change.
  * 3. **Definition edits are routed through main-component mode by the
- *    UI**, not by the reducer. This module supplies the guard the
- *    command port applies, so a definition edit dispatched while the
- *    page scope is active is rejected before it can commit rather
- *    than relying on the affordance simply not being rendered.
+ *    UI.** `scopeGuardError` — the reducer-side half of this rule, and
+ *    the only consumer of the command vocabulary in this file — died
+ *    with the command IR in `p3-009`. The definition write path is now
+ *    `commitComponentLibraryUpdate`, reached only from inside a scope,
+ *    and every such surface addresses it through
+ *    {@link scopedDefinitionId}.
  */
 
-import type {
-	EditorError,
-	EditorSelectionState,
-} from "@anvilkit/contracts/editor";
-import { makeEditorError } from "../../../editor/index.js";
-import type { EditorCommand } from "../../../editor/legacy/index.js";
+import type { EditorSelectionState } from "@anvilkit/contracts/editor";
 import type { EditorSelectionController } from "../selection.js";
-
-/** The commands that edit a definition and so require its scope. */
-const DEFINITION_EDIT_TYPES = new Set<string>([
-	"component.definition.update",
-	"component.override.promote",
-]);
 
 /** `component:<definitionId>` for an isolated scope. */
 export function componentScope(definitionId: string): `component:${string}` {
@@ -44,45 +35,6 @@ export function scopedDefinitionId(
 	scope: EditorSelectionState["definitionScope"],
 ): string | undefined {
 	return scope === "page" ? undefined : scope.slice("component:".length);
-}
-
-/**
- * Reject a definition edit issued outside the matching
- * main-component scope (freeze §6).
- *
- * Returns `null` when the command is allowed. Batches are checked
- * member-wise: one out-of-scope member rejects the whole transaction,
- * which is what all-or-nothing batching requires.
- */
-export function scopeGuardError(
-	scope: EditorSelectionState["definitionScope"],
-	command: EditorCommand,
-	definitionIdOf: (command: EditorCommand) => string | undefined,
-): EditorError | null {
-	const members = command.type === "batch" ? command.commands : [command];
-	for (const member of members) {
-		if (!DEFINITION_EDIT_TYPES.has(member.type)) {
-			continue;
-		}
-		const targetId = definitionIdOf(member);
-		const active = scopedDefinitionId(scope);
-		if (targetId !== undefined && active === targetId) {
-			continue;
-		}
-		return makeEditorError(
-			"EDITOR_CAPABILITY_UNSUPPORTED",
-			`"${member.type}" edits a component definition and requires its isolated editing scope`,
-			{
-				details: {
-					reason: "definition-edit-outside-scope",
-					commandType: member.type,
-					definitionId: targetId,
-					activeScope: scope,
-				},
-			},
-		);
-	}
-	return null;
 }
 
 /** Enter/leave isolated component editing (DD-DEC-010). */

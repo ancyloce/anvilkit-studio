@@ -7,18 +7,26 @@
  *
  * The write target is always visible next to the viewport controls
  * (AC: "write target always visible"); switching it never enters
- * history. Breakpoint edits commit through `breakpoints.set` — one
- * intent per change — with the §12.2 deletion preview offering
+ * history. Breakpoint edits commit through `commitDesignSystemUpdate`
+ * (`p3-009`; formerly the `breakpoints.set` command) — one intent per
+ * change, one history entry — with the §12.2 deletion preview offering
  * merge-to-base or discard when overridden nodes would be affected.
+ *
+ * ### What the command carried that the helper does not
+ *
+ * `breakpoints.set` took a `removedOverrides` map and the reducer
+ * rewrote every node's layered carriers accordingly. The design-system
+ * helper writes ONE root prop, so the per-node half is performed here,
+ * over the same document, inside the same functional update — see
+ * {@link applyBreakpointRemoval}. Same two outcomes, same single undo.
  */
 
 import type {
+	AnvilAppearance,
 	BreakpointDefinition,
+	DesignSystem,
 } from "@anvilkit/contracts/editor";
-import type {
-	AuthoringStateV1,
-	EditorCommandPort,
-} from "../../../editor/legacy/index.js";
+import type { Data as PuckData } from "@puckeditor/core";
 import { ChevronDown, Eye, Link2, Plus, Trash2 } from "lucide-react";
 import { type ReactNode, useMemo, useState } from "react";
 import { Button } from "@/primitives/button";
@@ -33,29 +41,134 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/primitives/popover";
 import { Switch } from "@/primitives/switch";
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
+import { documentBreakpoints } from "../../../puck/read-appearance.js";
+import {
+	commitDesignSystemUpdate,
+	commitDesignSystemUpdateOver,
+	type DesignSystemCommitDeps,
+} from "../../../puck/update-design-system.js";
 import { useOptionalStudioEditorInternals } from "./toolbar-internals.js";
+
+/**
+ * Every node's `appearance` carrier in the live document, by node id.
+ *
+ * `p3-009`: the sidecar's flat `authoring.nodes` map is gone, so the
+ * §12.2 preview walks the document's own carriers — the same values
+ * the compiler reads, which is why the count and the rendering can no
+ * longer disagree.
+ */
+function appearanceNodes(data: PuckData): ReadonlyMap<string, AnvilAppearance> {
+	const found = new Map<string, AnvilAppearance>();
+	const visit = (value: unknown): void => {
+		if (Array.isArray(value)) {
+			for (const entry of value) visit(entry);
+			return;
+		}
+		if (value === null || typeof value !== "object") return;
+		const node = value as { props?: Record<string, unknown> };
+		const props = node.props;
+		if (props !== undefined) {
+			const id = props.id;
+			const appearance = props.appearance;
+			if (typeof id === "string" && appearance !== undefined) {
+				found.set(id, appearance as AnvilAppearance);
+			}
+			for (const entry of Object.values(props)) visit(entry);
+			return;
+		}
+		for (const entry of Object.values(value as Record<string, unknown>)) {
+			visit(entry);
+		}
+	};
+	visit(data.content ?? []);
+	visit((data as { zones?: unknown }).zones ?? {});
+	return found;
+}
 
 /** Count nodes carrying overrides at one breakpoint (§12.2 preview). */
 export function countOverriddenNodes(
-	authoring: AuthoringStateV1,
+	data: PuckData,
 	breakpointId: string,
 ): number {
 	let count = 0;
-	for (const record of Object.values(authoring.nodes)) {
-		const hasOverride = (
-			["layout", "style", "typography", "hidden", "styleRefs"] as const
-		).some((family) => {
-			const value = record[family] as
-				| { overrides?: Readonly<Record<string, unknown>> }
-				| undefined;
-			const entry = value?.overrides?.[breakpointId];
-			return entry !== undefined && entry !== null;
-		});
-		if (hasOverride) {
-			count += 1;
-		}
+	for (const appearance of appearanceNodes(data).values()) {
+		const targets = appearance.targets ?? {};
+		const hit = Object.values(targets).some((target) =>
+			(["style", "hidden", "styleRefs"] as const).some((family) => {
+				const value = target?.[family] as
+					| { overrides?: Readonly<Record<string, unknown>> }
+					| undefined;
+				const entry = value?.overrides?.[breakpointId];
+				return entry !== undefined && entry !== null;
+			}),
+		);
+		if (hit) count += 1;
 	}
 	return count;
+}
+
+/**
+ * Rewrite every node's layered carriers for a breakpoint that is being
+ * deleted (§12.2): `"merge-to-base"` promotes the override to the base
+ * layer, `"discard"` drops it. Pure; returns the input by reference
+ * when nothing carried that layer.
+ */
+export function applyBreakpointRemoval(
+	data: PuckData,
+	breakpointId: string,
+	mode: "merge-to-base" | "discard",
+): PuckData {
+	let changed = false;
+	const rewriteLayered = (value: unknown): unknown => {
+		if (value === null || typeof value !== "object") return value;
+		const layered = value as {
+			base?: unknown;
+			overrides?: Record<string, unknown>;
+		};
+		const override = layered.overrides?.[breakpointId];
+		if (override === undefined) return value;
+		changed = true;
+		const { [breakpointId]: _dropped, ...rest } = layered.overrides ?? {};
+		const next: Record<string, unknown> = { ...layered };
+		if (Object.keys(rest).length > 0) next.overrides = rest;
+		else delete next.overrides;
+		if (mode === "merge-to-base") next.base = override;
+		return next;
+	};
+	const rewriteAppearance = (appearance: unknown): unknown => {
+		if (appearance === null || typeof appearance !== "object") return appearance;
+		const parsed = appearance as {
+			targets?: Record<string, Record<string, unknown>>;
+		};
+		if (parsed.targets === undefined) return appearance;
+		const nextTargets: Record<string, Record<string, unknown>> = {};
+		for (const [targetId, target] of Object.entries(parsed.targets)) {
+			const nextTarget: Record<string, unknown> = { ...target };
+			for (const family of ["style", "hidden", "styleRefs"] as const) {
+				if (target[family] !== undefined) {
+					nextTarget[family] = rewriteLayered(target[family]);
+				}
+			}
+			nextTargets[targetId] = nextTarget;
+		}
+		return { ...parsed, targets: nextTargets };
+	};
+	const visit = (value: unknown): unknown => {
+		if (Array.isArray(value)) return value.map(visit);
+		if (value === null || typeof value !== "object") return value;
+		const node = value as { props?: Record<string, unknown> };
+		if (node.props === undefined) return value;
+		const nextProps: Record<string, unknown> = {};
+		for (const [key, entry] of Object.entries(node.props)) {
+			nextProps[key] =
+				key === "appearance" ? rewriteAppearance(entry) : visit(entry);
+		}
+		return { ...node, props: nextProps };
+	};
+	const nextContent = (data.content ?? []).map(visit);
+	return changed
+		? ({ ...data, content: nextContent } as PuckData)
+		: data;
 }
 
 let breakpointSeq = 0;
@@ -140,31 +253,59 @@ function DeleteRow({
 }
 
 function BreakpointEditor({
-	commands,
-	authoring,
+	commitDeps,
+	data,
 	breakpoints,
-	revision,
 }: {
-	readonly commands: EditorCommandPort;
-	readonly authoring: AuthoringStateV1;
+	readonly commitDeps: DesignSystemCommitDeps;
+	readonly data: PuckData;
 	readonly breakpoints: readonly BreakpointDefinition[];
-	readonly revision: number;
 }): ReactNode {
 	const msg = useMsg();
 
+	/**
+	 * One breakpoint intent → one history entry.
+	 *
+	 * A deletion additionally rewrites every node's layered carriers
+	 * (§12.2 merge-to-base / discard), which the design-system helper
+	 * cannot do for us — it writes one root prop. So the node rewrite is
+	 * dispatched first as its own `setData`… no: that would be TWO undo
+	 * steps for one intent. Instead the node rewrite is folded into the
+	 * SAME functional update by committing it through the design-system
+	 * helper's `update` closure over a document we have already
+	 * rewritten — see `commitSet`.
+	 */
 	const commitSet = (
 		next: readonly BreakpointDefinition[],
 		removedOverrides?: Readonly<Record<string, "merge-to-base" | "discard">>,
 	): void => {
-		void commands.execute({
-			id: crypto.randomUUID(),
-			expectedRevision: revision,
-			source: "inspector",
-			timestamp: Date.now(),
-			type: "breakpoints.set",
+		const api = commitDeps.getPuckApi();
+		if (api === null) return;
+		let document = api.appState.data as PuckData;
+		for (const [breakpointId, mode] of Object.entries(
+			removedOverrides ?? {},
+		)) {
+			document = applyBreakpointRemoval(document, breakpointId, mode);
+		}
+		const nextDesignSystem = (
+			current: DesignSystem | undefined,
+		): DesignSystem => ({
+			tokens: current?.tokens ?? {},
+			tokenModes: current?.tokenModes ?? {},
+			defaultTokenMode: current?.defaultTokenMode ?? "default",
+			styleDefinitions: current?.styleDefinitions ?? {},
 			breakpoints: next,
-			...(removedOverrides !== undefined ? { removedOverrides } : {}),
 		});
+		if (document !== (api.appState.data as PuckData)) {
+			// Node carriers changed too: write both halves in ONE dispatch by
+			// handing the helper a document that already carries the node
+			// rewrite. `commitDesignSystemUpdate` reads `api.appState.data`,
+			// so the rewrite is applied here and the root prop by the helper,
+			// against the same `setData`.
+			commitDesignSystemUpdateOver(commitDeps, document, nextDesignSystem);
+			return;
+		}
+		commitDesignSystemUpdate(commitDeps, nextDesignSystem);
 	};
 
 	return (
@@ -221,7 +362,7 @@ function BreakpointEditor({
 					/>
 					<DeleteRow
 						breakpoint={breakpoint}
-						overriddenCount={countOverriddenNodes(authoring, breakpoint.id)}
+						overriddenCount={countOverriddenNodes(data, breakpoint.id)}
 						onDelete={(mode) =>
 							commitSet(
 								breakpoints.filter((entry) => entry.id !== breakpoint.id),
@@ -253,11 +394,12 @@ function BreakpointEditor({
 export default function ResponsiveToolbar(): ReactNode {
 	const msg = useMsg();
 	const internals = useOptionalStudioEditorInternals();
-	const snapshot = internals?.port?.getSnapshot();
+	const api = internals?.api ?? null;
+	const data = (api?.appState.data ?? null) as PuckData | null;
 	const viewportState = internals?.viewport?.getState();
 
 	const active = viewportState?.activeBreakpoint ?? "base";
-	const breakpoints = snapshot?.breakpoints ?? [];
+	const breakpoints = data === null ? [] : documentBreakpoints(data);
 	const activeLabel = useMemo(() => {
 		if (active === "base") {
 			return msg("studio.editor.responsive.base");
@@ -268,14 +410,18 @@ export default function ResponsiveToolbar(): ReactNode {
 		);
 	}, [active, breakpoints, msg]);
 
-	if (
-		internals?.port == null ||
-		internals.viewport == null ||
-		snapshot == null
-	) {
+	if (internals == null || api === null || data === null) {
 		return null;
 	}
 	const viewport = internals.viewport;
+	if (viewport == null) {
+		return null;
+	}
+	const bridge = internals.bridge;
+	const commitDeps: DesignSystemCommitDeps = {
+		getPuckApi: () => api,
+		getWriterGateError: () => bridge.getWriterGateError(),
+	};
 
 	return (
 		<div
@@ -378,10 +524,9 @@ export default function ResponsiveToolbar(): ReactNode {
 				/>
 				<PopoverContent align="start" className="w-auto p-3">
 					<BreakpointEditor
-						commands={internals.port}
-						authoring={snapshot.authoring}
+						commitDeps={commitDeps}
+						data={data}
 						breakpoints={breakpoints}
-						revision={snapshot.revision}
 					/>
 				</PopoverContent>
 			</Popover>

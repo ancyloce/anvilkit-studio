@@ -50,6 +50,7 @@ import { materializeInstance } from "../document-model/materialize.js";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
 import { parseComponentLibrary } from "./read-appearance.js";
+import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 
 /** Referencing node ids carried on a diagnostic, capped (§14.6). */
 const INSTANCE_ID_REPORT_CAP = 50;
@@ -389,7 +390,7 @@ export function updateComponentLibraryInData(
 }
 
 /** Dependencies of {@link commitComponentLibraryUpdate}. */
-export interface ComponentLibraryCommitDeps {
+export interface ComponentLibraryCommitDeps extends WriterGateDep {
 	readonly getPuckApi: () => PuckApi;
 }
 
@@ -408,6 +409,10 @@ export function commitComponentLibraryUpdate(
 	deps: ComponentLibraryCommitDeps,
 	edit: ComponentLibraryEdit,
 ): ComponentLibraryCommitResult {
+	const gate = writerGateError(deps);
+	if (gate !== null) {
+		return { status: "rejected", errors: [gate] };
+	}
 	const api = deps.getPuckApi();
 	const current = api.appState.data as Data;
 	const config = api.config as Config;

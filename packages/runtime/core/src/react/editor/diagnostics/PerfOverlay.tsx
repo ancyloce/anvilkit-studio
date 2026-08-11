@@ -30,7 +30,6 @@ import {
 } from "react";
 import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioEditorBridge } from "../bridge.js";
-import type { InternalEditorCommandPort } from "../command-port.js";
 import type { EditorPerfMetrics, EditorPerfSnapshot } from "./perf-metrics.js";
 
 /**
@@ -71,12 +70,12 @@ export default function PerfOverlay({
 
 	useEffect(() => {
 		const sample = (): void => {
-			const port = bridge.port as InternalEditorCommandPort | null;
 			let nodeCount = 0;
 			try {
-				nodeCount = port === null ? 0 : countTreeNodes(port.readData());
+				const api = bridge.getPuckApi();
+				nodeCount = api === null ? 0 : countTreeNodes(api.appState.data);
 			} catch {
-				// A port mid-teardown must not crash a diagnostic overlay.
+				// A store mid-teardown must not crash a diagnostic overlay.
 				nodeCount = 0;
 			}
 			const registryCount = bridge.canvasRegistry?.listNodeIds().length ?? 0;

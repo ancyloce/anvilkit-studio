@@ -10,15 +10,11 @@ import type {
 } from "@anvilkit/contracts/editor";
 import { describe, expect, it } from "vitest";
 import {
-	createEmptyAuthoringState,
 	getMatchingBreakpoints,
 	mergePropertyWise,
 	resolveResponsiveValue,
-	resolveTargetAppearance,
 	resolveToken,
 } from "../index.js";
-import type { AuthoringStateV1 } from "../legacy/index.js";
-import { targetFromRecord } from "../style/export-stylesheet.js";
 
 const breakpoints: readonly BreakpointDefinition[] = [
 	{ id: "tablet", label: "Tablet", maxWidth: 991, order: 0, enabled: true },
@@ -258,158 +254,5 @@ describe("resolveToken (§24.5)", () => {
 		expect(resolveToken("direct", "dark", tokens, modes).status).toBe(
 			"missing-value",
 		);
-	});
-});
-
-describe("resolveTargetAppearance (§24.3 precedence)", () => {
-	function makeState(): AuthoringStateV1 {
-		return {
-			...createEmptyAuthoringState(),
-			breakpoints: [...breakpoints],
-			nodes: {
-				n1: {
-					version: "1",
-					layout: {
-						base: { gap: px(24), display: "flex" },
-						overrides: { tablet: { gap: px(12) } },
-					},
-					typography: {
-						base: { color: { kind: "token", tokenId: "text" } },
-					},
-					styleRefs: { base: ["sd"] },
-					hidden: { overrides: { mobile: true } },
-				},
-			},
-			tokens: {
-				text: {
-					id: "text",
-					path: ["c"],
-					name: "Text",
-					type: "color",
-					values: {
-						light: {
-							kind: "literal",
-							value: { kind: "hex", value: "#222222" },
-						},
-					},
-				},
-			},
-			tokenModes: { light: { id: "light", name: "Light" } },
-			styleDefinitions: {
-				sd: {
-					version: "1",
-					id: "sd",
-					name: "Card",
-					appliesTo: "any",
-					layout: {
-						base: { padding: { top: px(4) } },
-						overrides: { tablet: { padding: { top: px(2) } } },
-					},
-					createdAt: "2026-07-22T00:00:00.000Z",
-					updatedAt: "2026-07-22T00:00:00.000Z",
-				},
-			},
-		};
-	}
-
-	it("applies default < styleDef < node base < styleDef bp < node bp", () => {
-		const state = makeState();
-		const resolved = resolveTargetAppearance(targetFromRecord(state.nodes.n1), {
-			designSystem: state,
-			breakpoints,
-			viewportWidth: 900,
-			tokenMode: "light",
-			componentDefaults: { layout: { gap: px(99), minWidth: px(10) } },
-		});
-		expect(resolved.layout).toEqual({
-			display: "flex",
-			gap: px(12),
-			minWidth: px(10),
-			padding: { top: px(2) },
-		});
-		expect(resolved.hidden).toBe(false);
-		expect(resolved.diagnostics).toEqual([]);
-	});
-
-	it("substitutes tokens after precedence selection", () => {
-		const state = makeState();
-		const resolved = resolveTargetAppearance(targetFromRecord(state.nodes.n1), {
-			designSystem: state,
-			breakpoints,
-			viewportWidth: 1200,
-			tokenMode: "light",
-		});
-		expect(resolved.typography.color).toEqual({
-			kind: "literal",
-			value: { kind: "hex", value: "#222222" },
-		});
-	});
-
-	it("keeps unresolved token refs and reports diagnostics", () => {
-		const state = makeState();
-		const broken: AuthoringStateV1 = { ...state, tokens: {} };
-		const resolved = resolveTargetAppearance(
-			targetFromRecord(broken.nodes.n1),
-			{
-				designSystem: broken,
-				breakpoints,
-				viewportWidth: 1200,
-				tokenMode: "light",
-			},
-		);
-		expect(resolved.typography.color).toEqual({
-			kind: "token",
-			tokenId: "text",
-		});
-		expect(resolved.diagnostics.some((d) => d.severity === "warning")).toBe(
-			true,
-		);
-	});
-
-	it("resolves hidden responsively and flags missing style definitions", () => {
-		const state = makeState();
-		const resolved = resolveTargetAppearance(targetFromRecord(state.nodes.n1), {
-			designSystem: state,
-			breakpoints,
-			viewportWidth: 700,
-			tokenMode: "light",
-		});
-		expect(resolved.hidden).toBe(true);
-
-		const withGhostRef: AuthoringStateV1 = {
-			...state,
-			nodes: {
-				n1: {
-					...state.nodes.n1,
-					version: "1",
-					styleRefs: { base: ["ghost"] },
-				},
-			},
-		};
-		const flagged = resolveTargetAppearance(
-			targetFromRecord(withGhostRef.nodes.n1),
-			{
-				designSystem: withGhostRef,
-				breakpoints,
-				viewportWidth: 700,
-				tokenMode: "light",
-			},
-		);
-		expect(flagged.diagnostics[0]?.details?.kind).toBe("styleDefinition");
-	});
-
-	it("resolves an unknown node to pure defaults", () => {
-		const state = makeState();
-		const resolved = resolveTargetAppearance(
-			targetFromRecord(state.nodes.ghost),
-			{
-				designSystem: state,
-				breakpoints,
-				viewportWidth: 1200,
-				tokenMode: "light",
-			},
-		);
-		expect(resolved.layout).toEqual({});
-		expect(resolved.hidden).toBe(false);
 	});
 });

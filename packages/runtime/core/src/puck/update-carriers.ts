@@ -36,14 +36,17 @@
 import type {
 	Binding,
 	EditorError,
+	EditorPolicies,
 	Interaction,
 	TiptapDocument,
 } from "@anvilkit/contracts/editor";
 import type { Config, Data, PuckApi } from "@puckeditor/core";
 import { walkTree } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
+import { interactionsWriteErrors } from "../editor/interactions/validate.js";
 import { deepEqualJson } from "../editor/patch.js";
 import { readEditorMetadataFor } from "./component-metadata.js";
+import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 
 /** The two array-shaped node carriers this module writes. */
 export type NodeCarrier = "interactions" | "bindings";
@@ -130,11 +133,23 @@ export interface UpdateCarrierInput<T> {
 	readonly nodeId: string;
 	/** Pure edit over the current entries. */
 	readonly update: (current: readonly T[]) => readonly T[];
+	/**
+	 * Host policies (§22.4). Only `allowRawUrls` is consulted, by the
+	 * interactions writer's §16 URL validation.
+	 */
+	readonly policies?: EditorPolicies;
 }
 
 function updateArrayCarrier<T>(
 	input: UpdateCarrierInput<T>,
 	carrier: NodeCarrier,
+	/**
+	 * Optional write-time validation over the edit's RESULT. Runs after
+	 * the capability gate and before anything is stored, so a rejected
+	 * value never reaches the document and never creates a history
+	 * entry.
+	 */
+	validate?: (next: readonly unknown[]) => readonly EditorError[],
 ): UpdateCarrierResult {
 	const node = declarationFor(input.data, input.config, input.nodeId);
 	if (node === undefined) {
@@ -156,13 +171,25 @@ function updateArrayCarrier<T>(
 			),
 		]);
 	}
+	let validationErrors: readonly EditorError[] = [];
 	const applied = applyCarrier(
 		input.data,
 		input.config,
 		input.nodeId,
 		carrier,
-		input.update as (current: readonly unknown[]) => readonly unknown[],
+		(current) => {
+			const next = (
+				input.update as (value: readonly unknown[]) => readonly unknown[]
+			)(current);
+			if (validate !== undefined && validationErrors.length === 0) {
+				validationErrors = validate(next);
+			}
+			return next;
+		},
 	);
+	if (validationErrors.length > 0) {
+		return rejected(input.data, validationErrors);
+	}
 	if (!applied.changed) {
 		return {
 			data: input.data,
@@ -179,11 +206,23 @@ function updateArrayCarrier<T>(
 	};
 }
 
-/** Write a node's declared `interactions` carrier. */
+/**
+ * Write a node's declared `interactions` carrier.
+ *
+ * The §16 URL rules run here (`p3-009`). They used to live only in the
+ * command engine's `interactionCreateErrors`/`interactionUpdateErrors`,
+ * which this write path replaced without inheriting them — so a
+ * `javascript:` action could reach the document through the canonical
+ * writer while the deleted one refused it. Validation runs on the
+ * edit's RESULT, not on its input, because the edit is an arbitrary
+ * pure function and only its output is what would be stored.
+ */
 export function updateInteractionsInData(
 	input: UpdateCarrierInput<Interaction>,
 ): UpdateCarrierResult {
-	return updateArrayCarrier(input, "interactions");
+	return updateArrayCarrier(input, "interactions", (next) =>
+		interactionsWriteErrors(next as readonly Interaction[], input.policies),
+	);
 }
 
 /** Write a node's declared `bindings` carrier. */
@@ -286,7 +325,7 @@ export function updateInlineTextInData(
 }
 
 /** Dependencies of the carrier commit helpers. */
-export interface CarrierCommitDeps {
+export interface CarrierCommitDeps extends WriterGateDep {
 	readonly getPuckApi: () => PuckApi;
 }
 
@@ -301,6 +340,10 @@ function commit(
 	deps: CarrierCommitDeps,
 	run: (data: Data, config: Config) => UpdateCarrierResult,
 ): CarrierCommitResult {
+	const gate = writerGateError(deps);
+	if (gate !== null) {
+		return { status: "rejected", changedNodeIds: NO_IDS,  errors: [gate] };
+	}
 	const api = deps.getPuckApi();
 	const current = api.appState.data as Data;
 	const config = api.config as Config;

@@ -65,6 +65,7 @@ import {
 	parseComponentLibrary,
 } from "./read-appearance.js";
 import { withComponentLibrary } from "./update-component-library.js";
+import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 
 /**
  * The maximum expressible combinations an authored model may offer.
@@ -839,7 +840,7 @@ export function updateInstanceSelectionInData(
 }
 
 /** Dependencies of the variant commit helpers. */
-export interface VariantCommitDeps {
+export interface VariantCommitDeps extends WriterGateDep {
 	readonly getPuckApi: () => PuckApi;
 }
 
@@ -854,6 +855,10 @@ function commit(
 	deps: VariantCommitDeps,
 	run: (data: Data, config: Config) => UpdateVariantResult,
 ): VariantCommitResult {
+	const gate = writerGateError(deps);
+	if (gate !== null) {
+		return { status: "rejected", resolvedNodeIds: NO_IDS,  errors: [gate] };
+	}
 	const api = deps.getPuckApi();
 	const current = api.appState.data as Data;
 	const config = api.config as Config;

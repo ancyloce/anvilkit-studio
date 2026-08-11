@@ -65,6 +65,10 @@ import { ROOT_STYLE_TARGET_ID } from "../../../puck/targets.js";
 import { isNodeLocked } from "../../../puck/update-annotations.js";
 import type { AppearancePatch } from "../../../puck/update-appearance.js";
 import { updateAppearanceInData } from "../../../puck/update-appearance.js";
+import {
+	type WriterGateDep,
+	writerGateError,
+} from "../../../puck/writer-gate.js";
 
 /** One appearance write inside a single canvas intent. */
 export interface CanvasAppearanceOp {
@@ -82,8 +86,13 @@ export interface CanvasCommitResult {
 	readonly errors: readonly EditorError[];
 }
 
-/** The one dependency: the live `PuckApi`, or `null` when unmounted. */
-export interface CanvasCommitDeps {
+/**
+ * The live `PuckApi` (or `null` when unmounted), plus the collab
+ * writer gate — the canvas writes through `updateAppearanceInData`
+ * directly rather than through `commitAppearanceUpdate`, so it carries
+ * the gate itself (`p3-009`). Both come off the bridge.
+ */
+export interface CanvasCommitDeps extends WriterGateDep {
 	readonly getPuckApi: () => PuckApi | null;
 }
 
@@ -155,6 +164,10 @@ export function commitCanvasAppearance(
 	deps: CanvasCommitDeps,
 	input: CanvasCommitInput,
 ): CanvasCommitResult {
+	const gate = writerGateError(deps);
+	if (gate !== null) {
+		return { status: "rejected", changedNodeIds: NO_IDS, errors: [gate] };
+	}
 	const api = deps.getPuckApi();
 	if (api === null) {
 		return {

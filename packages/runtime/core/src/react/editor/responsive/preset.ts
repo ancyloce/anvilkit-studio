@@ -17,9 +17,6 @@ import type {
 	BreakpointDefinition,
 	StudioEditorConfig,
 } from "@anvilkit/contracts/editor";
-import type {
-	AuthoringStateV1,
-} from "../../../editor/legacy/index.js";
 
 /** OQ-002 default preset: base + 991 / 767 / 479. */
 export const DEFAULT_BREAKPOINT_PRESET: readonly BreakpointDefinition[] = [
@@ -37,13 +34,18 @@ export const DEFAULT_BREAKPOINT_PRESET: readonly BreakpointDefinition[] = [
 /**
  * The breakpoints the editor operates on: the document's own set once
  * any exists, else the host-configured set, else the default preset.
+ *
+ * `p3-009`: the document's set is `root.props.designSystem.breakpoints`
+ * (§4.1), read through `documentBreakpoints` by the caller — the
+ * sidecar's `authoring.breakpoints` is gone. The precedence rule is
+ * unchanged, and the empty case is still what hands the host its say.
  */
 export function effectiveBreakpoints(
-	authoring: AuthoringStateV1,
+	documentBreakpointSet: readonly BreakpointDefinition[],
 	editor: StudioEditorConfig,
 ): readonly BreakpointDefinition[] {
-	if (authoring.breakpoints.length > 0) {
-		return authoring.breakpoints;
+	if (documentBreakpointSet.length > 0) {
+		return documentBreakpointSet;
 	}
 	return editor.breakpoints ?? DEFAULT_BREAKPOINT_PRESET;
 }

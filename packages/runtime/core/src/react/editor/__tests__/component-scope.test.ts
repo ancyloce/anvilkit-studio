@@ -8,15 +8,11 @@
 import type {
 	EditorSelectionState,
 } from "@anvilkit/contracts/editor";
-import type {
-	EditorCommand,
-} from "../../../editor/legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
 	componentScope,
 	createEditorScopeController,
 	scopedDefinitionId,
-	scopeGuardError,
 } from "../components/scope.js";
 
 /** A minimal stand-in for the selection store's scope behaviour. */
@@ -44,20 +40,6 @@ function fakeSelection(
 		},
 	};
 }
-
-const base = {
-	id: "c1",
-	expectedRevision: 0,
-	source: "inspector" as const,
-	timestamp: 1_750_000_000_000,
-};
-
-const definitionIdOf = (command: EditorCommand): string | undefined =>
-	command.type === "component.definition.update"
-		? command.definitionId
-		: command.type === "component.override.promote"
-			? "def"
-			: undefined;
 
 describe("scope helpers", () => {
 	it("round-trips a definition id through the scope literal", () => {
@@ -127,77 +109,5 @@ describe("enter / exit (DD-DEC-010)", () => {
 		});
 		controller.enterComponent("def");
 		expect(calls).toEqual(["setDefinitionScope"]);
-	});
-});
-
-describe("definition edits are scope-gated (freeze §6)", () => {
-	const update: EditorCommand = {
-		...base,
-		type: "component.definition.update",
-		definitionId: "def",
-		patch: { name: "x" },
-	};
-
-	it("rejects a definition update issued from page scope", () => {
-		const error = scopeGuardError("page", update, definitionIdOf);
-		expect(error?.code).toBe("EDITOR_CAPABILITY_UNSUPPORTED");
-		expect(error?.details?.reason).toBe("definition-edit-outside-scope");
-	});
-
-	it("allows it inside the matching component scope", () => {
-		expect(
-			scopeGuardError(componentScope("def"), update, definitionIdOf),
-		).toBeNull();
-	});
-
-	it("rejects it inside a different component's scope", () => {
-		expect(
-			scopeGuardError(componentScope("other"), update, definitionIdOf),
-		).not.toBeNull();
-	});
-
-	it("gates promote the same way", () => {
-		const promote: EditorCommand = {
-			...base,
-			type: "component.override.promote",
-			instanceNodeId: "i1",
-			target: { definitionNodeId: "n", propertyPath: ["label"] },
-			layer: "base",
-		};
-		expect(scopeGuardError("page", promote, definitionIdOf)).not.toBeNull();
-		expect(
-			scopeGuardError(componentScope("def"), promote, definitionIdOf),
-		).toBeNull();
-	});
-
-	it("leaves non-definition commands alone in every scope", () => {
-		const rename: EditorCommand = {
-			...base,
-			type: "node.rename",
-			nodeId: "n1",
-			name: "Hero",
-		};
-		expect(scopeGuardError("page", rename, definitionIdOf)).toBeNull();
-		expect(
-			scopeGuardError(componentScope("def"), rename, definitionIdOf),
-		).toBeNull();
-	});
-
-	it("rejects the whole batch when one member is out of scope", () => {
-		// All-or-nothing batching means a single out-of-scope member
-		// must take the transaction down with it.
-		const batch: EditorCommand = {
-			...base,
-			type: "batch",
-			label: "mixed",
-			commands: [
-				{ ...base, type: "node.rename", nodeId: "n1", name: "Hero" },
-				update,
-			],
-		};
-		expect(scopeGuardError("page", batch, definitionIdOf)).not.toBeNull();
-		expect(
-			scopeGuardError(componentScope("def"), batch, definitionIdOf),
-		).toBeNull();
 	});
 });

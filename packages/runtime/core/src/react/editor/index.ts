@@ -26,12 +26,6 @@ export {
 	type AccessibilityIssuesApi,
 	useAccessibilityIssues,
 } from "./a11y/use-accessibility-issues.js";
-export {
-	AiProposalReviewMount,
-	type AiProposalReviewMountProps,
-	type EditorProposalInputs,
-	useEditorProposalInputs,
-} from "./ai/AiProposalReviewMount.js";
 export type {
 	CanvasDomRegistry,
 	CanvasStyleTargetRef,
@@ -57,7 +51,6 @@ export {
 	type EditorScopeController,
 	getEditorScopeController,
 	scopedDefinitionId,
-	scopeGuardError,
 } from "./components/scope.js";
 export {
 	type ComponentCanvas,
@@ -216,21 +209,13 @@ export {
 	EDITOR_SHORTCUT_KEYMAP,
 	type EditorShortcutBinding,
 } from "./shortcuts/registry.js";
-// The canonical panel is `./composition/DesignSystemPanel.js`, which exports
-// the SAME name. `./tokens/DesignSystemPanel.js` is still what the overrides
-// shell mounts (`studio/layout/sidebar/modules/ComponentsModule.tsx:28,74`),
-// so re-pointing this line now would blank the Components rail's Tokens tab
-// before `p4-009` promotes the composition shell. `p4-009` re-points it —
-// one line, no public rename. Until then only the roster entry is published.
-export { DesignSystemPanel } from "./tokens/DesignSystemPanel.js";
-export {
-	type DesignSystemModel,
-	type DesignSystemOutcome,
-	type DesignSystemStyle,
-	type DesignSystemToken,
-	type TokenDeletionPreview,
-	useDesignSystem,
-} from "./tokens/use-design-system.js";
+// `p3-009` performed the re-point this comment used to defer to
+// `p4-009`: the legacy `./tokens/DesignSystemPanel.js` was a pure
+// command-port consumer and died with the port, so the canonical
+// `./composition/DesignSystemPanel.js` — which exports the SAME name
+// and is what `studio/layout/sidebar/modules/ComponentsModule.tsx`
+// now mounts — is the only one left. No public rename.
+export { DesignSystemPanel } from "./composition/DesignSystemPanel.js";
 export {
 	useDocumentModel,
 	useNodeField,

@@ -39,13 +39,12 @@ import { use, useMemo, useSyncExternalStore } from "react";
 import {
 	type EditorFeatureScanDocument,
 	type ExportPreflightResult,
-	listUsedEditorFeatures,
+	listUsedDocumentFeatures,
 	type PreflightA11yIssue,
 	runExportPreflight,
 } from "../../editor/index.js";
 import type { AccessibilityIssue } from "./a11y/contract-rules.js";
 import { useAccessibilityIssues } from "./a11y/use-accessibility-issues.js";
-import type { InternalEditorCommandPort } from "./command-port.js";
 import { StudioEditorBridgeContext } from "./use-studio-editor.js";
 
 /** Inputs the caller supplies per export attempt. */
@@ -74,9 +73,6 @@ export function useExportPreflight(
 	input: UseExportPreflightInput,
 ): ExportPreflightResult | null {
 	const bridge = use(StudioEditorBridgeContext);
-	// `readData` is an internal seam, not part of the plugin-facing
-	// port — the same cast `useCreateComponent` uses.
-	const port = bridge?.port as InternalEditorCommandPort | null | undefined;
 	const policies = bridge?.editorConfig?.policies;
 	const { capabilities, a11yIssues, mode } = input;
 	const live = useAccessibilityIssues();
@@ -84,11 +80,11 @@ export function useExportPreflight(
 
 	/*
 	 * The verdict is derived from the live document, so it has to be
-	 * recomputed whenever the document moves — `port` is one stable object
-	 * for the editor's lifetime and never signals a change by identity.
-	 * Both counters are read because the feature scan spans both sources:
-	 * the sidecar (`getVersion`) and the Puck data that carries `richText`
-	 * in component props (`getDataVersion`, DD-DEC-018).
+	 * recomputed whenever the document moves. Both counters are read: the
+	 * general one covers editor-runtime transitions (mount, teardown) and
+	 * `getDataVersion` covers every Puck data change, which since
+	 * `p3-009` is the ONLY feature source — there is no sidecar left for
+	 * the scan to read.
 	 */
 	const version = useSyncExternalStore(
 		bridge === null ? noopSubscribe : bridge.subscribe,
@@ -113,14 +109,12 @@ export function useExportPreflight(
 	return useMemo(() => {
 		void version;
 		void dataVersion;
-		if (port == null) return null;
-		const authoring = port.getSnapshot().authoring;
-		// The document, not just the sidecar: `richText` lives in
-		// component props and is invisible to a sidecar-only scan
-		// (DD-DEC-018).
-		const usedFeatures: readonly EditorFeatureId[] = listUsedEditorFeatures(
-			authoring,
-			port.readData() as EditorFeatureScanDocument,
+		const api = bridge?.getPuckApi() ?? null;
+		if (api === null) return null;
+		// The document is the whole feature source: every carrier plus
+		// `richText`, which lives in component props (DD-DEC-018).
+		const usedFeatures: readonly EditorFeatureId[] = listUsedDocumentFeatures(
+			api.appState.data as EditorFeatureScanDocument,
 		);
 		return runExportPreflight({
 			usedFeatures,
@@ -130,7 +124,7 @@ export function useExportPreflight(
 			...(mode === undefined ? {} : { mode }),
 		});
 	}, [
-		port,
+		bridge,
 		capabilities,
 		effectiveIssues,
 		policies,

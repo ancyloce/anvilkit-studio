@@ -108,6 +108,23 @@ export interface TargetElementSource {
 }
 
 /**
+ * A {@link TargetElementSource} that can also say **when** it changed
+ * (PLAN-0028 `p5-004`).
+ *
+ * The count in §3.7.4 is worthless the moment it is stale — adding a
+ * fourth post has to move "3" to "4" — so anything rendering it needs
+ * the notification half of the index, not just the read half. Declared
+ * as an extension of the same structural interface rather than as a
+ * second one so there is still exactly ONE seam between the composition
+ * layer and the canvas registry, and `CanvasDomRegistry` still satisfies
+ * it by shape (`canvas/dom-registry.ts` `observe`).
+ */
+export interface ObservableTargetElementSource extends TargetElementSource {
+	/** Subscribe to structural changes. Returns an unsubscribe fn. */
+	observe(listener: () => void): () => void;
+}
+
+/**
  * Whether a declared target has an element in the current render.
  *
  * **`"unknown"` is a first-class answer, not a failure mode.** A Style
@@ -152,6 +169,41 @@ export function resolveTargetPresence(
 		}
 	}
 	return anyMounted ? "absent" : "unknown";
+}
+
+/**
+ * How many elements the next edit to this target will reach
+ * (PLAN-0026 §3.7.4, PLAN-0028 `p5-004`).
+ *
+ * **This is a fact about the compiler, not a defensive guess.** A
+ * repeated element stamps ONE target id on EVERY instance it renders —
+ * `blog-list` spreads `targetAttrs.card` once per post — and
+ * `style-compiler/compile.ts` emits ONE exact-pair selector per
+ * `(node, target)`. Styling `card` therefore styles every card of that
+ * node, and this number is exactly how many that is.
+ *
+ * Summed across the selection because a multi-selection write is one
+ * atomic update (`updateAppearanceInData`): styling `card` with two
+ * blog-lists selected reaches both lists' cards, so reporting only the
+ * primary's would understate what the author is about to do.
+ *
+ * `0` for no source and for an unmounted selection — the caller renders
+ * nothing at all below 2, so "I cannot see" and "there is one" collapse
+ * to the same (silent) treatment and neither can be mistaken for a
+ * claim. Presence, which *is* claimed, stays tri-state in
+ * {@link resolveTargetPresence}.
+ */
+export function countTargetElements(
+	source: TargetElementSource | null,
+	nodeIds: readonly string[],
+	targetId: string,
+): number {
+	if (source === null) return 0;
+	let total = 0;
+	for (const nodeId of nodeIds) {
+		total += source.getTargetElements(nodeId, targetId).length;
+	}
+	return total;
 }
 
 /** The authored-state summary the panel exposes as data attributes. */

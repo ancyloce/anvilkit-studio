@@ -25,7 +25,7 @@ import {
 } from "@/primitives/tabs";
 import { useMsg } from "@/state/editor-i18n-context";
 import { ComponentsPanel } from "../../../../react/editor/components/ComponentsPanel.js";
-import { DesignSystemPanel } from "../../../../react/editor/tokens/DesignSystemPanel.js";
+import { DesignSystemPanel } from "../../../../react/editor/composition/DesignSystemPanel.js";
 
 type LibraryTab = "components" | "design-system";
 

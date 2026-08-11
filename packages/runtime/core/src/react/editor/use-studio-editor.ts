@@ -6,18 +6,14 @@
  *
  * Entry-chunk safe: reads the per-instance {@link StudioEditorBridge}
  * from context and subscribes via `useSyncExternalStore`; the actual
- * command port arrives when the lazy editor chunk installs itself into
- * the bridge. Consumers therefore re-render when the port mounts,
- * when a command commits, and when a foreign data change (undo/redo,
- * plugin write) invalidates the parsed authoring state.
+ * `EditorApi` arrives when the lazy editor chunk installs itself into
+ * the bridge. Consumers therefore re-render when the runtime mounts
+ * and on every Puck data change (own commits, undo/redo, plugin
+ * writes).
  */
 
-import type {
-	EditorDiagnosticPort,
-} from "@anvilkit/contracts/editor";
-import type {
-	EditorCommandPort,
-} from "../../editor/legacy/index.js";
+import type { EditorDiagnosticPort } from "@anvilkit/contracts/editor";
+import type { EditorApi } from "../../types/editor-api-v2.js";
 import { createContext, use, useSyncExternalStore } from "react";
 import type { StudioEditorBridge } from "./bridge.js";
 import type { StudioViewportController } from "./responsive/viewport-controller.js";
@@ -32,15 +28,21 @@ export const StudioEditorBridgeContext =
 	createContext<StudioEditorBridge | null>(null);
 
 /**
- * What `useStudioEditor()` returns. `commands` and `selection` are
+ * What `useStudioEditor()` returns. `editor` and `selection` are
  * `null` while the lazy editor chunk is still loading
  * (`status: "loading"`); they are the live controllers once installed
- * (`status: "ready"`). Later Phase 1A tasks extend this handle
- * additively (viewport controller).
+ * (`status: "ready"`).
+ *
+ * `p3-009` replaced the `commands: EditorCommandPort` member with
+ * `editor: EditorApi` — the read projection plus the commit helpers
+ * (`p3-008`). There is no dispatch entry point and no command
+ * vocabulary on the handle any more, which is contract rule 1 becoming
+ * true for the public React surface.
  */
 export interface StudioEditorHandle {
 	readonly status: "loading" | "ready";
-	readonly commands: EditorCommandPort | null;
+	/** Read projection, change subscription and the commit helpers. */
+	readonly editor: EditorApi | null;
 	readonly selection: EditorSelectionController | null;
 	/** Viewport / write-target controller (§22.3); `null` while loading. */
 	readonly viewport: StudioViewportController | null;
@@ -89,18 +91,18 @@ export function useOptionalStudioEditor(): StudioEditorHandle | null {
 		return null;
 	}
 	void version;
-	const port = bridge.port;
-	return port === null
+	const api = bridge.api;
+	return api === null
 		? {
 				status: "loading",
-				commands: null,
+				editor: null,
 				selection: null,
 				viewport: null,
 				diagnostics: bridge.diagnostics,
 			}
 		: {
 				status: "ready",
-				commands: port,
+				editor: api,
 				selection: bridge.selection,
 				viewport: bridge.viewport,
 				diagnostics: bridge.diagnostics,

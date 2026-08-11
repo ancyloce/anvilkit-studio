@@ -25,6 +25,12 @@ export {
 	writeComponentInstanceProp,
 	runtimeNodeId,
 } from "./materialize.js";
+export {
+	type ComponentEditSink,
+	componentDocument,
+	foldComponentDocument,
+	variantCombinations,
+} from "./component-document.js";
 export { readDocument } from "./read-document.js";
 export {
 	type NodeFieldAddress,

@@ -36,9 +36,9 @@ import { useCallback, useMemo, useState } from "react";
 import {
 	componentDocument,
 	foldComponentDocument,
-	variantCombinationKey,
 	variantCombinations,
-} from "../../../editor/index.js";
+} from "../../../document-model/index.js";
+import { variantCombinationKey } from "../../../document-model/materialize.js";
 import { commitComponentLibraryUpdate } from "../../../puck/update-component-library.js";
 import { commitVariantModelUpdate } from "../../../puck/update-variants.js";
 import { useShellSelection } from "../composition/use-shell-selection.js";

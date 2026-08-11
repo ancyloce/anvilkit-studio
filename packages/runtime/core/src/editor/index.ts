@@ -5,12 +5,17 @@
  *
  * ### What lives here
  *
- * Sidecar read/write over `root.props.__anvilkit`, the pure command
- * pipeline (`applyEditorCommand`: revision gate → validate → reduce →
- * noop detection), the resolvers (responsive, property-wise merge,
- * tokens, node authoring), the single style-materialization
- * implementation (`resolveAuthoringStyle` + allowlisted serializer),
- * the reconciliation engine, and the shared dev-invariant helper.
+ * The pure commit helpers (`puck/update-*.ts`: validate → one
+ * functional-updater `setData` per intent), the resolvers (responsive,
+ * property-wise merge, tokens, node authoring), the single
+ * style-materialization implementation (`resolveAuthoringStyle` +
+ * allowlisted serializer), the compiled-appearance emitter
+ * (`style-compiler/`), and the shared dev-invariant helper.
+ *
+ * `p3-009` deleted the parallel command IR and the `__anvilkit`
+ * sidecar engine that used to live here. There is one document
+ * (Puck `Data`), one write path (the commit helpers) and one CSS
+ * emitter (`style-compiler/compile.ts`).
  *
  * ### Import rules (enforced by `check:no-headless-import` +
  * `check:react-free-runtime`)
@@ -37,9 +42,7 @@ export type {
 // `check:no-headless-import` gate allowlists for ir imports.
 export {
 	type EditorFeatureScanDocument,
-	listUsedAuthoringFeatures,
 	listUsedDocumentFeatures,
-	listUsedEditorFeatures,
 } from "@anvilkit/ir/editor";
 export {
 	legacyNodeToAppearance,
@@ -88,6 +91,7 @@ export {
 	type AnnotationEdit,
 	commitAnnotationUpdate,
 	isNodeLocked,
+	readEditorAnnotations,
 	type UpdateAnnotationsInput,
 	type UpdateAnnotationsResult,
 	updateAnnotationsInData,
@@ -162,6 +166,7 @@ export {
 } from "../puck/update-component-library.js";
 export {
 	commitDesignSystemUpdate,
+	commitDesignSystemUpdateOver,
 	type DesignSystemCommitDeps,
 	type DesignSystemCommitResult,
 	type UpdateDesignSystemInput,
@@ -177,16 +182,6 @@ export {
 	createAppearanceCompilerCache,
 	fingerprintOf,
 } from "../style-compiler/index.js";
-export {
-	AI_PROPOSAL_LIMITS,
-	assessProposal,
-	commandNodeIds,
-	type EditorCommandProposal,
-	type ProposalAssessment,
-	type ProposalRejection,
-	proposalAffectedNodeIds,
-	sanitizeProposalForDisplay,
-} from "./ai/proposal.js";
 export {
 	type BindingScope,
 	evaluateCondition,
@@ -215,87 +210,7 @@ export {
 	resolveVisibility,
 	type VisibilityResolution,
 } from "./bindings/repeat.js";
-export { bindingUpdateErrors } from "./bindings/validate.js";
 
-export {
-	type AuthoringChangeSet,
-	applyEditorCommand,
-	diffAuthoringState,
-	type EditorReduceResult,
-	EMPTY_CHANGE_SET,
-} from "./commands/apply.js";
-export { reduceValidatedCommand } from "./commands/reduce.js";
-export {
-	type ValidateCommandOptions,
-	validateAtomicCommand,
-	validateEditorCommand,
-} from "./commands/validate.js";
-export {
-	type ComponentEditSink,
-	componentDocument,
-	foldComponentDocument,
-	variantCombinations,
-} from "./components/component-document.js";
-export {
-	buildCreateComponentPlan,
-	COMPONENT_FRAME_TYPE,
-	type CreateComponentInput,
-	type CreateComponentPlan,
-	validateCreateComponentSelection,
-} from "./components/create.js";
-export {
-	buildDetachPlan,
-	type DetachFailure,
-	type DetachPlan,
-	isDetachFailure,
-} from "./components/detach.js";
-export {
-	buildInsertInstancePlan,
-	type InsertInstanceInput,
-	type InsertInstancePlan,
-} from "./components/insert.js";
-export {
-	collectDefinitionNodeIds,
-	collectOrphanOverrides,
-	type OrphanOverride,
-	orphanOverrideDiagnostics,
-	setNodeOverride,
-	setPropOverride,
-} from "./components/instances.js";
-export {
-	collectUnresolvedInstances,
-	countLiveInstances,
-	type DefinitionUsage,
-	deleteDefinition,
-	type UnresolvedInstance,
-	unresolvedInstanceDiagnostics,
-	validateDefinitionDelete,
-} from "./components/lifecycle.js";
-export {
-	COMPONENT_INSTANCE_PROP,
-	formatComponentPath,
-	type MaterializeResult,
-	materializeInstance,
-	runtimeNodeId,
-} from "./components/materialize.js";
-export {
-	promoteComponentOverride,
-	resetAllComponentOverrides,
-	resetComponentOverride,
-} from "./components/overrides.js";
-export { applyComponentDefinitionPatch } from "./components/patch.js";
-export {
-	type DroppedOverride,
-	droppedOverrideDiagnostics,
-	switchInstanceVariant,
-	type VariantSwitchResult,
-} from "./components/variant-switch.js";
-export {
-	matchVariant,
-	validateVariantModel,
-	variantCombinationCount,
-	variantCombinationKey,
-} from "./components/variants.js";
 export {
 	checkInvariant,
 	EditorInvariantError,
@@ -348,9 +263,8 @@ export {
 	type TimelineTrack,
 } from "./interactions/timeline.js";
 export {
-	interactionCreateErrors,
-	interactionDeleteErrors,
-	interactionUpdateErrors,
+	interactionsWriteErrors,
+	interactionWriteErrors,
 	urlScheme,
 } from "./interactions/validate.js";
 export {
@@ -363,20 +277,6 @@ export {
 	deepEqualJson,
 	stripPatchNulls,
 } from "./patch.js";
-export {
-	type AuthoringReadResult,
-	createEmptyAuthoringState,
-	readAuthoringState,
-	writeAuthoringState,
-} from "./read-write.js";
-export {
-	collectLiveNodeIds,
-	type DuplicateRemapResult,
-	type ReconcileChangeSet,
-	type ReconcileResult,
-	reconcileAuthoringState,
-	remapForDuplicate,
-} from "./reconcile.js";
 export { mergePropertyWise } from "./resolve/merge.js";
 export {
 	type NodeComponentDefaults,
@@ -409,16 +309,6 @@ export {
 	serializeTokenOrLiteral,
 } from "./style/css-serializer.js";
 export {
-	buildExportAuthoring,
-	type ExportAuthoring,
-} from "./style/export-authoring.js";
-export {
-	buildExportStylesheet,
-	type ExportInstanceAuthoring,
-	type ExportStylesheetInput,
-	type ExportStylesheetResult,
-} from "./style/export-stylesheet.js";
-export {
 	type ResolvedAuthoringStyle,
 	type ResolvedNodeStyleInput,
 	resolveAuthoringStyle,
@@ -429,32 +319,9 @@ export {
 	tokenCssVariableName,
 } from "./styles/css-variables.js";
 export { applyStyleDefinitionPatch } from "./styles/patch.js";
-export {
-	attachStyleDefinition,
-	deleteStyleDefinition,
-	detachStyleDefinition,
-} from "./styles/style-definitions.js";
-export {
-	applyTokenDeletion,
-	planTokenDeletion,
-	type TokenDeletionContext,
-	type TokenDeletionPlan,
-} from "./tokens/deletion.js";
 export { checkTokenAliasGraph } from "./tokens/graph.js";
 export { applyTokenPatch } from "./tokens/patch.js";
-export {
-	aliasDependents,
-	collectTokenUsage,
-	type TokenUsageIndex,
-	tokenUsageSites,
-} from "./tokens/usage.js";
-export {
-	isTokenRef,
-	mapAuthoringTokens,
-	type TokenReferenceFamily,
-	type TokenRefVisitor,
-	type TokenUsageSite,
-} from "./tokens/walk.js";
+export { isTokenRef, type TokenReferenceFamily } from "./tokens/walk.js";
 export {
 	cloneSubtree,
 	collectSubtreeIds,

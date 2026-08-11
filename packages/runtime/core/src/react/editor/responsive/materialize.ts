@@ -1,68 +1,82 @@
 "use client";
 
 /**
- * @file Breakpoint materialization (PLAN-0020 CORE-P1A-008).
+ * @file Breakpoint materialization (PLAN-0020 CORE-P1A-008; §12.1).
  *
- * The default/host preset exists only as **effective** state until a
- * user actually writes at a breakpoint layer. Switching the write
- * target must never enter history (§12.3), so materialization rides
- * the first breakpoint-layer write: the write is wrapped in a batch
- * whose first member is `breakpoints.set(effective)` — one intent,
- * one history entry, and undo removes both together.
+ * A document that declares no `designSystem.breakpoints` still offers
+ * the effective preset as write targets (`effectiveBreakpoints`), but
+ * `updateAppearanceInData` **rejects** a write at a layer the document
+ * does not declare (`puck/update-appearance.ts`, the
+ * `breakpoint "…" is not defined in the document design system` gate).
+ * So the first write into a not-yet-declared layer must persist the
+ * effective set first — and it must do so in the SAME history entry,
+ * or one author intent becomes two undos.
+ *
+ * ### `p3-009`
+ *
+ * The old shape was `withBreakpointMaterialization(command, authoring,
+ * effective)`: it wrapped an `AtomicEditorCommand` in a `batch`
+ * carrying a synthesized `breakpoints.set`. Both the command IR and
+ * the sidecar it read are gone. The behaviour survives as a
+ * *precondition* instead of a wrapper — the caller ensures the layer
+ * is declared, then performs its own single appearance commit — which
+ * is the only expression available once there is no batch vocabulary
+ * to fold two writes into one.
+ *
+ * The cost is honest and recorded: ensuring the layer and writing the
+ * value are now two history entries the first time an author touches a
+ * fresh breakpoint, where the batch made them one. Folding them back
+ * together needs a commit helper that writes a root prop and a node
+ * carrier in one `setData` — the same seam
+ * `commitDesignSystemUpdateOver` opened for §12.2 deletion.
  */
 
 import type {
 	BreakpointDefinition,
 	ResponsiveLayerRef,
 } from "@anvilkit/contracts/editor";
-import type {
-	AtomicEditorCommand,
-	EditorCommand,
-} from "../../../editor/legacy/index.js";
-import type {
-	AuthoringStateV1,
-} from "../../../editor/legacy/index.js";
+import type { Data } from "@puckeditor/core";
+import { documentBreakpoints } from "../../../puck/read-appearance.js";
+import {
+	commitDesignSystemUpdate,
+	type DesignSystemCommitDeps,
+} from "../../../puck/update-design-system.js";
+
+/** Whether `layer` is writable against `data` without materializing. */
+export function layerIsDeclared(data: Data, layer: ResponsiveLayerRef): boolean {
+	return (
+		layer === "base" ||
+		documentBreakpoints(data).some((breakpoint) => breakpoint.id === layer)
+	);
+}
 
 /**
- * Wrap `command` so that writing at a not-yet-materialized breakpoint
- * layer first persists the effective breakpoint set, atomically.
- * Returns `command` unchanged for base-layer writes and documents
- * whose sidecar already owns its breakpoints.
+ * Ensure the document declares `layer` before an appearance write.
+ *
+ * Returns `"ready"` when nothing was needed (base layer, or the
+ * document already declares it), `"materialized"` when the effective
+ * set was persisted, and `"unavailable"` when `layer` is not in the
+ * effective set either — an unknown layer is left for the write itself
+ * to reject rather than silently invented here.
  */
-export function withBreakpointMaterialization(
-	command: AtomicEditorCommand & { readonly breakpointId: ResponsiveLayerRef },
-	authoring: AuthoringStateV1,
+export function ensureBreakpointMaterialized(
+	deps: DesignSystemCommitDeps,
+	data: Data,
+	layer: ResponsiveLayerRef,
 	effective: readonly BreakpointDefinition[],
-): EditorCommand {
-	if (
-		command.breakpointId === "base" ||
-		authoring.breakpoints.some(
-			(breakpoint) => breakpoint.id === command.breakpointId,
-		)
-	) {
-		return command;
+): "ready" | "materialized" | "unavailable" {
+	if (layerIsDeclared(data, layer)) {
+		return "ready";
 	}
-	if (!effective.some((breakpoint) => breakpoint.id === command.breakpointId)) {
-		// Unknown layer: let validation reject it untouched.
-		return command;
+	if (!effective.some((breakpoint) => breakpoint.id === layer)) {
+		return "unavailable";
 	}
-	return {
-		id: command.id,
-		expectedRevision: command.expectedRevision,
-		source: command.source,
-		timestamp: command.timestamp,
-		type: "batch",
-		label: "materialize-breakpoints",
-		commands: [
-			{
-				id: `${command.id}:breakpoints`,
-				expectedRevision: command.expectedRevision,
-				source: command.source,
-				timestamp: command.timestamp,
-				type: "breakpoints.set",
-				breakpoints: effective,
-			},
-			command,
-		],
-	};
+	const result = commitDesignSystemUpdate(deps, (current) => ({
+		tokens: current?.tokens ?? {},
+		tokenModes: current?.tokenModes ?? {},
+		defaultTokenMode: current?.defaultTokenMode ?? "default",
+		styleDefinitions: current?.styleDefinitions ?? {},
+		breakpoints: effective,
+	}));
+	return result.status === "committed" ? "materialized" : "unavailable";
 }

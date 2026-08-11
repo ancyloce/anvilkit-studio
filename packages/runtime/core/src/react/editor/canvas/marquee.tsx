@@ -69,7 +69,6 @@ import {
 	useSyncExternalStore,
 } from "react";
 import type { StudioEditorBridge } from "../bridge.js";
-import type { InternalEditorCommandPort } from "../command-port.js";
 import {
 	type CanvasPoint,
 	descendTargetId,
@@ -226,9 +225,7 @@ export function CanvasMarquee({ bridge }: CanvasMarqueeProps): ReactNode {
 			return;
 		}
 		/** The live `PuckApi`, or `null` — the canvas renders outside `<Puck>`. */
-		const puckApi = (): PuckApi | null =>
-			(bridge.port as InternalEditorCommandPort | null)?.tryGetPuckApi?.() ??
-			null;
+		const puckApi = (): PuckApi | null => bridge.getPuckApi();
 		const modeOf = (): "page" | "component" =>
 			bridge.selection?.getState().mode ?? "page";
 		const chainUnder = (

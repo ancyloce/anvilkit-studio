@@ -3,15 +3,14 @@
 /**
  * @file The per-`<Studio>` editor bridge (PLAN-0020 CORE-P1A-001).
  *
- * The command port and every editor provider live in the lazily-loaded
- * editor chunk (`EditorRoot`), but three parties outside that chunk
- * need a rendezvous point with it:
+ * Every editor provider lives in the lazily-loaded editor chunk
+ * (`EditorRoot`), but three parties outside that chunk need a
+ * rendezvous point with it:
  *
  * - the controller's `handleChange`, which must tell the editor about
- *   every Puck data change (undo/redo, plugin `setData`, host writes)
- *   so foreign sidecar changes invalidate the parsed-state cache;
+ *   every Puck data change (undo/redo, plugin `setData`, host writes);
  * - chrome components inside Puck's subtree (`useStudioEditor()`),
- *   which need the live port without importing the editor chunk;
+ *   which need the live editor API without importing the editor chunk;
  * - the entry-side `StudioEditorMount`, which provides the
  *   `AuthoringStyleContext` lookup that decorated renders consume.
  *
@@ -22,18 +21,40 @@
  * Slots stay `null` until the lazy impl installs itself; every entry
  * point is null-tolerant, so the bridge is inert when the editor
  * feature flag is off or the chunk has not loaded yet.
+ *
+ * ### `getPuckApi` and `getWriterGateError` (`p3-009`)
+ *
+ * Both used to live on the deleted command port. They are per-instance
+ * seams, not command-engine concerns, so they belong beside
+ * `canvasRegistry` and `selection` rather than behind a port the
+ * canvas has to cast to reach:
+ *
+ * - `getPuckApi()` returns the live `PuckApi` or `null`. The canvas
+ *   overlay is portalled into the iframe from *outside* the `<Puck>`
+ *   subtree, so `useGetPuck` throws there; every canvas commit helper
+ *   (`canvas/appearance.ts`) already takes a nullable `getPuckApi`
+ *   dependency, and this is where it comes from. `null` means "no
+ *   document to commit against" — callers must refuse, never silently
+ *   no-op.
+ * - `getWriterGateError()` returns the collab authoring gate error, or
+ *   `null` when writers may run (CORE-P1A-013; freeze §3–§4). The
+ *   commit helpers consult it so the gate is *enforced* at the write,
+ *   not merely reflected in disabled affordances.
+ *
+ * Both default to inert implementations, so a bridge with no editor
+ * runtime installed reads as "not mounted, writers open" rather than
+ * throwing.
  */
 
 import type {
+	EditorError,
 	ResponsiveLayerRef,
 	StudioEditorConfig,
 	StudioPluginCollabCapability,
 } from "@anvilkit/contracts/editor";
-import type {
-	EditorCommandPort,
-} from "../../editor/legacy/index.js";
-import type { Data as PuckData } from "@puckeditor/core";
+import type { PuckApi, Data as PuckData } from "@puckeditor/core";
 import type { EditorCapabilityRegistry } from "../../types/editor-api.js";
+import type { EditorApi } from "../../types/editor-api-v2.js";
 import type { CanvasDomRegistry } from "./canvas/dom-registry.js";
 import {
 	createEditorDiagnosticCenter,
@@ -116,8 +137,25 @@ export interface StudioEditorBridge {
 		readonly clear: () => void;
 	};
 
-	/** The live command port; `null` until the lazy impl mounts. */
-	port: EditorCommandPort | null;
+	/**
+	 * The live `PuckApi`, or `null` when `<Puck>` is not mounted yet.
+	 * Installed by `EditorRoot`; inert (always `null`) before that.
+	 */
+	getPuckApi: () => PuckApi | null;
+	/**
+	 * The collab authoring gate (CORE-P1A-013): the blocking
+	 * `EDITOR_COLLAB_ENCODING_UNSUPPORTED` error, or `null` when
+	 * authoring writers may run. Installed by `EditorRoot`; inert
+	 * (always `null` — writers open) before that.
+	 */
+	getWriterGateError: () => EditorError | null;
+	/**
+	 * The canonical editor API (`p3-008`) — read projection, change
+	 * subscription and the commit helpers. `null` until the lazy impl
+	 * mounts; its presence is what `useStudioEditor()` reports as
+	 * `status: "ready"`.
+	 */
+	api: EditorApi | null;
 	/** The live selection controller (CORE-P1A-002); `null` until mounted. */
 	selection: EditorSelectionController | null;
 	/** The live capability registry (CORE-P1A-003); `null` until mounted. */
@@ -179,6 +217,16 @@ export interface StudioEditorBridge {
 	perf: EditorPerfMetrics | null;
 }
 
+/** Inert `getPuckApi`: no editor runtime, so no store to reach. */
+function nullPuckApi(): PuckApi | null {
+	return null;
+}
+
+/** Inert writer gate: with no runtime installed there is nothing to gate. */
+function writersOpen(): EditorError | null {
+	return null;
+}
+
 /** Create a fresh, inert bridge (one per `<Studio>` instance). */
 export function createStudioEditorBridge(): StudioEditorBridge {
 	const listeners = new Set<() => void>();
@@ -236,7 +284,9 @@ export function createStudioEditorBridge(): StudioEditorBridge {
 				bridge.notify();
 			},
 		},
-		port: null,
+		getPuckApi: nullPuckApi,
+		getWriterGateError: writersOpen,
+		api: null,
 		selection: null,
 		capabilities: null,
 		onDataChange: null,

@@ -79,7 +79,7 @@ import type { StudioConfig } from "@/types/config";
 import type { StudioPagesSource } from "@/types/pages";
 import type { StudioPlugin } from "@/types/plugin";
 import { createStudioEditorBridge } from "../editor/bridge.js";
-import { createPluginEditorApi } from "../editor/plugin-editor-api.js";
+import { createPluginEditorFacade } from "../editor/plugin-editor-facade.js";
 import { EditorSelectionBinder } from "../editor/selection-binder.js";
 import {
 	trackComponentDropped,
@@ -379,7 +379,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// flag in place (verified convention).
 	const [pluginEditorApi] = useState(() =>
 		isAnvilkit && props.editor?.features?.enabled === true
-			? createPluginEditorApi(editorBridge, props.editor)
+			? createPluginEditorFacade(editorBridge)
 			: undefined,
 	);
 

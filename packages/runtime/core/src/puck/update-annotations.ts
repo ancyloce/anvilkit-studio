@@ -37,6 +37,7 @@ import type { Data, PuckApi } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
 import { parseEditorAnnotations } from "./read-appearance.js";
+import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 
 /** One annotation intent. */
 export type AnnotationEdit =
@@ -159,14 +160,26 @@ export function updateAnnotationsInData(
 	};
 }
 
+/**
+ * The document's validated `editorAnnotations`, or `undefined`.
+ *
+ * Exported so read surfaces (the Layers rail's name column) go through
+ * the same parse the writer does, rather than reaching into
+ * `root.props` themselves — one reader, one validation rule.
+ */
+export function readEditorAnnotations(
+	data: Data,
+): EditorAnnotations | undefined {
+	return parseEditorAnnotations(rawAnnotationsOf(data));
+}
+
 /** Whether a node is locked, read from the declared root prop. */
 export function isNodeLocked(data: Data, nodeId: string): boolean {
-	const parsed = parseEditorAnnotations(rawAnnotationsOf(data));
-	return parsed?.[nodeId]?.locked === true;
+	return readEditorAnnotations(data)?.[nodeId]?.locked === true;
 }
 
 /** Dependencies of {@link commitAnnotationUpdate}. */
-export interface AnnotationCommitDeps {
+export interface AnnotationCommitDeps extends WriterGateDep {
 	readonly getPuckApi: () => PuckApi;
 }
 
@@ -181,6 +194,10 @@ export function commitAnnotationUpdate(
 	deps: AnnotationCommitDeps,
 	edit: AnnotationEdit,
 ): AnnotationCommitResult {
+	const gate = writerGateError(deps);
+	if (gate !== null) {
+		return { status: "rejected", errors: [gate] };
+	}
 	const api = deps.getPuckApi();
 	const current = api.appState.data as Data;
 	const result = updateAnnotationsInData({ data: current, edit });

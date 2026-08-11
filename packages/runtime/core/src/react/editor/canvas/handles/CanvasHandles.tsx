@@ -81,7 +81,6 @@ import { useMsg } from "@/state/editor-i18n-context";
 import { ROOT_STYLE_TARGET_ID } from "../../../../puck/targets.js";
 import type { AppearancePatch } from "../../../../puck/update-appearance.js";
 import type { StudioEditorBridge } from "../../bridge.js";
-import type { InternalEditorCommandPort } from "../../command-port.js";
 import {
 	type CanvasCommitDeps,
 	commitCanvasAppearance,
@@ -868,33 +867,34 @@ export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 	// Live snap guides + spacing labels of the active gesture.
 	const [snapState, setSnapState] = useState<SnapResult | null>(null);
 
-	const port = bridge.port as InternalEditorCommandPort | null;
 	// The canvas overlay renders OUTSIDE `<Puck>` (see `canvas/appearance.ts`),
-	// so the live api comes through the port's injection rather than
-	// `useGetPuck`.
+	// so the live api comes through the bridge's `getPuckApi` seam rather
+	// than `useGetPuck`. The collab writer gate rides along, so a gated
+	// session's drag commits are refused by the write itself, not only by
+	// the disabled affordance below (`p3-009`).
 	const commitDeps = useMemo<CanvasCommitDeps>(
-		() => ({ getPuckApi: () => port?.tryGetPuckApi?.() ?? null }),
-		[port],
+		() => ({
+			getPuckApi: () => bridge.getPuckApi(),
+			getWriterGateError: () => bridge.getWriterGateError(),
+		}),
+		[bridge],
 	);
 
 	const controller = useMemo(
 		() =>
-			port === null
-				? null
-				: createGestureController({
-						// Puck replaces `Data` on every dispatch, so its identity is
-						// the foreign-change signal.
-						getDocumentToken: () =>
-							port.tryGetPuckApi?.()?.appState.data ?? null,
-						onCompleted: (gesture, durationMs) => {
-							bridge.diagnostics.emit({
-								type: "gesture.completed",
-								gesture,
-								durationMs,
-							});
-						},
-					}),
-		[bridge, port],
+			createGestureController({
+				// Puck replaces `Data` on every dispatch, so its identity is
+				// the foreign-change signal.
+				getDocumentToken: () => bridge.getPuckApi()?.appState.data ?? null,
+				onCompleted: (gesture, durationMs) => {
+					bridge.diagnostics.emit({
+						type: "gesture.completed",
+						gesture,
+						durationMs,
+					});
+				},
+			}),
+		[bridge],
 	);
 
 	// Reposition on registry/scroll changes.
@@ -915,16 +915,10 @@ export function CanvasHandles({ bridge }: CanvasHandlesProps): ReactNode {
 	if (bridge.inline?.getSession() != null) {
 		return null;
 	}
-	if (
-		primary === undefined ||
-		port === null ||
-		controller === null ||
-		port.writersDisabled() ||
-		port.isReadOnly()
-	) {
+	if (primary === undefined || bridge.getWriterGateError() !== null) {
 		return null;
 	}
-	const api: PuckApi | null = port.tryGetPuckApi?.() ?? null;
+	const api: PuckApi | null = bridge.getPuckApi();
 	const element = bridge.canvasRegistry?.getPrimaryElement(primary) ?? null;
 	// A locked node refuses every mutating gesture: no handles at all, so
 	// there is nothing to drag, resize or nudge (`p3-006` annotations).

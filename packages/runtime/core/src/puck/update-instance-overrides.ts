@@ -43,6 +43,7 @@ import {
 	updateComponentLibraryInData,
 	withComponentLibrary,
 } from "./update-component-library.js";
+import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 
 /** One override/reset/promote intent against an instance. */
 export type InstanceOverrideEdit =
@@ -423,7 +424,7 @@ export function detachInstanceInData(
 }
 
 /** Dependencies of the instance commit helpers. */
-export interface InstanceCommitDeps {
+export interface InstanceCommitDeps extends WriterGateDep {
 	readonly getPuckApi: () => PuckApi;
 }
 
@@ -438,6 +439,10 @@ function commit(
 	deps: InstanceCommitDeps,
 	run: (data: Data, config: Config) => UpdateInstanceOverridesResult,
 ): InstanceCommitResult {
+	const gate = writerGateError(deps);
+	if (gate !== null) {
+		return { status: "rejected", changedNodeIds: NO_IDS,  errors: [gate] };
+	}
 	const api = deps.getPuckApi();
 	const current = api.appState.data as Data;
 	const config = api.config as Config;

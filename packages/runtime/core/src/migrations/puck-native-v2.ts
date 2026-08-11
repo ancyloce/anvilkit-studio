@@ -46,11 +46,10 @@ import type {
 } from "@anvilkit/contracts/editor";
 import {
 	ANVILKIT_AUTHORING_KEY,
-} from "../editor/legacy/index.js";
+	readLegacySidecar,
+} from "./legacy-sidecar.js";
 import type { Config, Data } from "@puckeditor/core";
 import { migrate, transformProps, walkTree } from "@puckeditor/core";
-import { readAuthoringState } from "../editor/read-write.js";
-import { buildExportStylesheet } from "../editor/style/export-stylesheet.js";
 import { readEditorMetadataFor } from "../puck/component-metadata.js";
 import { compileDocumentAppearance } from "../style-compiler/compile.js";
 
@@ -292,7 +291,7 @@ export function migrateToPuckNativeV2(
 	// Step 2 — strict sidecar parse via the ONE sanctioned reader.
 	const rootProps = (normalized.root?.props ?? {}) as Record<string, unknown>;
 	const sidecarPresent = rootProps[ANVILKIT_AUTHORING_KEY] !== undefined;
-	const read = readAuthoringState(normalized);
+	const read = readLegacySidecar(normalized);
 	if (sidecarPresent && read.readOnly) {
 		return blocked(diagnostics, emptyReport, {
 			code: "MIGRATION_SIDECAR_UNREADABLE",
@@ -526,48 +525,22 @@ export function migrateToPuckNativeV2(
 		},
 	} as Data;
 
-	// Step 11 — CSS parity: the legacy exporter and the unified
-	// compiler must agree, per (node, layer), under the SAME mode.
-	if (sidecarPresent) {
-		const legacyCss = buildExportStylesheet({
-			authoring: state,
-			tokenMode: defaultTokenMode,
-		}).css;
-		const compiled = compileDocumentAppearance({
-			data: migratedData,
-			config: baseConfig,
-			tokenMode: defaultTokenMode,
-		});
-		const legacyNormalized = normalizeCssForParity(legacyCss);
-		// The legacy sheet includes orphan node states the migration
-		// drops (recorded above); exclude them from the comparison.
-		for (const orphan of orphanNodeStates) {
-			delete legacyNormalized[orphan];
-		}
-		const modernNormalized = normalizeCssForParity(compiled.css);
-		if (!deepEqual(legacyNormalized, modernNormalized)) {
-			return blocked(
-				diagnostics,
-				{
-					visitedNodes,
-					migratedNodes: 0,
-					orphanNodeStates,
-					unknownComponentTypes,
-					unknownTargets,
-				},
-				{
-					code: "MIGRATION_PARITY_MISMATCH",
-					severity: "error",
-					message:
-						"Legacy exporter CSS and unified compiler CSS disagree for this document; migration refuses to change rendering.",
-					details: {
-						legacy: legacyNormalized,
-						modern: modernNormalized,
-					},
-				},
-			);
-		}
-	}
+	// Step 11 — CSS parity: REMOVED by `p3-009`.
+	//
+	// The check compared `buildExportStylesheet` (the legacy sidecar CSS
+	// emitter) against `compileDocumentAppearance` and refused the
+	// migration on disagreement. `buildExportStylesheet` was the second
+	// CSS emitter, and PLAN-0026 contract rule 3 requires exactly one —
+	// so the comparison has no second side left to compare against. The
+	// legacy emitter is gone; `style-compiler/compile.ts` is what the
+	// editor, the preview, production rendering and export all consume,
+	// which is the property the parity check existed to approximate.
+	//
+	// What is genuinely lost is the per-document, per-(node, layer)
+	// PROOF that a specific migrated document renders identically to its
+	// legacy self. That is a verification obligation, filed on the
+	// deferred-verification ledger against `p8-006`, not a behaviour the
+	// product still has.
 
 	// Step 12 — all clear: commit the pure result.
 	return {
@@ -598,31 +571,3 @@ function structuredCloneData(data: Data): Data {
 	return structuredClone(data);
 }
 
-function deepEqual(a: unknown, b: unknown): boolean {
-	if (Object.is(a, b)) return true;
-	if (
-		typeof a !== "object" ||
-		typeof b !== "object" ||
-		a === null ||
-		b === null
-	) {
-		return false;
-	}
-	if (Array.isArray(a) || Array.isArray(b)) {
-		if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) {
-			return false;
-		}
-		return a.every((entry, index) => deepEqual(entry, b[index]));
-	}
-	const aKeys = Object.keys(a as Record<string, unknown>).sort();
-	const bKeys = Object.keys(b as Record<string, unknown>).sort();
-	if (aKeys.length !== bKeys.length) return false;
-	return aKeys.every(
-		(key, index) =>
-			key === bKeys[index] &&
-			deepEqual(
-				(a as Record<string, unknown>)[key],
-				(b as Record<string, unknown>)[key],
-			),
-	);
-}

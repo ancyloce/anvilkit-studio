@@ -22,6 +22,7 @@ import { safeParseDesignSystem } from "@anvilkit/schema/editor";
 import type { Data, PuckApi } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
+import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 
 /** Input to {@link updateDesignSystemInData}. */
 export interface UpdateDesignSystemInput {
@@ -120,7 +121,7 @@ export function updateDesignSystemInData(
 }
 
 /** Dependencies of {@link commitDesignSystemUpdate}. */
-export interface DesignSystemCommitDeps {
+export interface DesignSystemCommitDeps extends WriterGateDep {
 	readonly getPuckApi: () => PuckApi;
 }
 
@@ -136,10 +137,58 @@ export interface DesignSystemCommitResult {
  * appearance commits, so undo/redo restores root design-system edits
  * exactly (§14.2). No dispatch on no-op or rejection.
  */
+/**
+ * Commit a design-system intent that ALSO carries node-level changes,
+ * in ONE history entry (`p3-009`).
+ *
+ * Deleting a breakpoint is the case that needs this: §12.2 says the
+ * breakpoint leaves `designSystem.breakpoints` *and* every node's
+ * layered override at that breakpoint is merged to base or discarded.
+ * Those are one author intent and must be one undo, but they touch a
+ * root prop and the content tree — so the caller pre-applies the node
+ * rewrite to a document and hands it in here, and the root-prop write
+ * lands on top of it inside the same `setData`.
+ *
+ * `base` MUST be derived from the live document by a pure rewrite; the
+ * functional updater re-derives nothing about it, so a caller that
+ * passes a stale document would clobber a concurrent edit. Callers
+ * that have no node-level half use {@link commitDesignSystemUpdate}.
+ */
+export function commitDesignSystemUpdateOver(
+	deps: DesignSystemCommitDeps,
+	base: Data,
+	update: UpdateDesignSystemInput["update"],
+): DesignSystemCommitResult {
+	const gate = writerGateError(deps);
+	if (gate !== null) {
+		return { status: "rejected", errors: [gate] };
+	}
+	const api = deps.getPuckApi();
+	const current = api.appState.data as Data;
+	const result = updateDesignSystemInData({ data: base, update });
+	if (result.status === "rejected") {
+		return { status: "rejected", errors: result.errors };
+	}
+	const next = result.status === "updated" ? result.data : base;
+	if (next === current) {
+		return { status: "noop", errors: [] };
+	}
+	api.dispatch({
+		type: "setData",
+		recordHistory: true,
+		data: next,
+	} as Parameters<PuckApi["dispatch"]>[0]);
+	return { status: "committed", errors: [] };
+}
+
 export function commitDesignSystemUpdate(
 	deps: DesignSystemCommitDeps,
 	update: UpdateDesignSystemInput["update"],
 ): DesignSystemCommitResult {
+	const gate = writerGateError(deps);
+	if (gate !== null) {
+		return { status: "rejected", errors: [gate] };
+	}
 	const api = deps.getPuckApi();
 	const current = api.appState.data as Data;
 	const result = updateDesignSystemInData({ data: current, update });

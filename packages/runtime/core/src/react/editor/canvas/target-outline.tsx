@@ -32,10 +32,9 @@
  * projection of the selection controller's ephemeral `mode`/`targetId`.
  */
 
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useReducer } from "react";
 import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioEditorBridge } from "../bridge.js";
-import type { InternalEditorCommandPort } from "../command-port.js";
 import { nodeTypeOf } from "./appearance.js";
 import { declaredTargetLabel } from "./component-mode.js";
 import type { CanvasStyleTargetRef } from "./dom-registry.js";
@@ -61,11 +60,21 @@ function TargetOutline({
 	const outlines = (
 		bridge.canvasRegistry?.getTargetElements(target.nodeId, target.targetId) ??
 		[]
-	).map((element) => {
+	).map((element, index) => {
 		const rect = element.getBoundingClientRect();
 		const x = rect.left + (view?.scrollX ?? 0);
 		const y = rect.top + (view?.scrollY ?? 0);
-		return { key: `${x}:${y}:${rect.width}:${rect.height}`, x, y, rect };
+		// Index first so the key is unique even when two instances share a
+		// rect — overlapping cards, and every element in a layout-free
+		// environment, where `getBoundingClientRect` is all zeros. Position
+		// still drives the remount; it just can no longer collide, and a
+		// collision would silently drop an outline the count still claims.
+		return {
+			key: `${index}:${x}:${y}:${rect.width}:${rect.height}`,
+			x,
+			y,
+			rect,
+		};
 	});
 	return (
 		<>
@@ -117,6 +126,24 @@ export function ComponentTargetLayer({
 	hovered,
 }: ComponentTargetLayerProps): ReactNode {
 	const msg = useMsg();
+	// Follow the canvas DOM, not just the bridge version (`p5-004`).
+	//
+	// The parent (`canvas/marquee.tsx`) re-renders on `bridge.getVersion`,
+	// and the overlay root's own registry subscription cannot reach here:
+	// it re-renders with an unchanged `children` element, which React
+	// bails out of. So without this, a document change that adds a card —
+	// the exact §3.7.4 case — would repaint on whichever of the two
+	// notifications happened to land last, and the outlines and the
+	// announced count would be one render behind whenever it was the
+	// MutationObserver's. Subscribing to the index that answers both
+	// questions makes the ordering irrelevant. Same seam
+	// `canvas/overlay-root.tsx:167` and `handles/CanvasHandles.tsx:903`
+	// use; the whole subtree is outlines and one live region, so a bump
+	// costs a handful of absolutely positioned divs.
+	const [, bump] = useReducer((count: number) => count + 1, 0);
+	const registry = bridge.canvasRegistry;
+	useEffect(() => registry?.observe(bump), [registry]);
+
 	const selection = bridge.selection?.getState();
 	if (selection === undefined || selection.mode !== "component") {
 		return null;
@@ -137,9 +164,7 @@ export function ComponentTargetLayer({
 			? null
 			: hovered;
 
-	const api = (
-		bridge.port as InternalEditorCommandPort | null
-	)?.tryGetPuckApi?.();
+	const api = bridge.getPuckApi();
 	const matchCount =
 		selected === null
 			? 0

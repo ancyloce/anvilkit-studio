@@ -20,6 +20,7 @@
 import type { Interaction } from "@anvilkit/contracts/editor";
 import { type ReactNode, use, useEffect, useSyncExternalStore } from "react";
 import { EditorUiStoreContext } from "@/state/slices/EditorUiStoreProvider";
+import { readDocument } from "../../../document-model/index.js";
 import {
 	interactionsEnabled,
 	resolveInteractions,
@@ -54,12 +55,17 @@ export function InteractionRuntimeMount({
 		if (!interactionsEnabled(mode)) return;
 		const registry = bridge.canvasRegistry;
 		const doc = bridge.canvasDocument;
-		const port = bridge.port;
-		if (registry == null || doc === null || port == null) return;
+		const api = bridge.getPuckApi();
+		if (registry == null || doc === null || api === null) return;
 
-		const interactions: readonly Interaction[] = Object.values(
-			port.getSnapshot().authoring.interactions,
-		);
+		// `p3-009`: interactions are a per-node §5.1 carrier, read from the
+		// document through the canonical read model. The sidecar's flat
+		// `authoring.interactions` map is gone, and with it the class of
+		// bug where a node was removed but its interaction record was not.
+		const model = readDocument(api.appState.data, api.config);
+		const interactions: readonly Interaction[] = [...model.nodes.values()]
+			.flatMap((node) => node.interactions ?? [])
+			.filter((interaction): interaction is Interaction => interaction != null);
 		if (interactions.length === 0) return;
 
 		// A dangling reference disables an interaction; binding one would

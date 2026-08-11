@@ -6,12 +6,34 @@
  * here and reused verbatim by both consumers: the keymap binder
  * (`EditorShortcuts`) and the canvas multi-select toolbar
  * (`SelectionToolbar`) — same duplicate/delete/wrap/unwrap semantics,
- * same one-dispatch `commitNative` path, same selection follow-ups.
+ * same one-dispatch path, same selection follow-ups.
+ *
+ * ### `p3-009`: off the command port, onto the commit helpers
+ *
+ * Duplicate and delete used to run through `port.commitNative`, which
+ * folded a tree change and a sidecar reconciliation into one dispatch.
+ * They now call `commitDuplicateNodes` / `commitDeleteNodes`
+ * (`puck/update-tree.ts`, `p3-005`), which are the *same* one-intent /
+ * one-`recordHistory` contract without the sidecar half — carriers
+ * live in the nodes' own props, so a duplicated subtree carries its
+ * own appearance and a deleted subtree takes its own with it. There is
+ * nothing left to reconcile, which is why `remapForDuplicate` died
+ * with the engine rather than being ported.
+ *
+ * Wrap and unwrap have no commit helper — they are structural
+ * transforms with no `Data`-level equivalent in `PuckApi` — so they
+ * keep `native-tree.ts`'s pure transforms and perform the identical
+ * single `setData` dispatch here, through the shared {@link commitTree}
+ * below. One intent, one history entry, no second write path.
  */
 
+import type { PuckApi, Data as PuckData } from "@puckeditor/core";
 import { readEditorMetadata } from "../../../puck/component-metadata.js";
+import {
+	commitDeleteNodes,
+	commitDuplicateNodes,
+} from "../../../puck/update-tree.js";
 import type { StudioEditorBridge } from "../bridge.js";
-import type { InternalEditorCommandPort } from "../command-port.js";
 import type { ShortcutContext } from "./registry.js";
 
 /** The plugin-context slice the command handlers need. */
@@ -49,59 +71,77 @@ function tryConfigComponents(
 	}
 }
 
-/** Build the §18 command context over the live bridge + port. */
+/**
+ * Apply one pure tree transform as exactly ONE history entry.
+ *
+ * The collab writer gate is consulted first, so a gated session's
+ * wrap/unwrap is refused by the write and not merely by a disabled
+ * affordance — the same rule `puck/writer-gate.ts` enforces for every
+ * commit helper. `null` from `transform` means "nothing to do": no
+ * dispatch, no history entry.
+ */
+function commitTree(
+	bridge: StudioEditorBridge,
+	transform: (data: PuckData) => PuckData | null,
+): void {
+	if (bridge.getWriterGateError() !== null) {
+		return;
+	}
+	const api: PuckApi | null = bridge.getPuckApi();
+	if (api === null) {
+		return;
+	}
+	const current = api.appState.data as PuckData;
+	const next = transform(current);
+	if (next === null || next === current) {
+		return;
+	}
+	api.dispatch({
+		type: "setData",
+		recordHistory: true,
+		// Functional updater: re-derive against a document that moved
+		// between read and reduce rather than clobbering it.
+		data: (previous: PuckData) =>
+			previous === current ? next : (transform(previous) ?? previous),
+	} as unknown as Parameters<PuckApi["dispatch"]>[0]);
+}
+
+/** Build the §18 command context over the live bridge. */
 export function buildShortcutContext(
 	bridge: StudioEditorBridge,
-	port: InternalEditorCommandPort,
 	ctx: ShortcutHostContext,
 ): ShortcutContext {
+	const commitDeps = {
+		getPuckApi: () => bridge.getPuckApi() as PuckApi,
+		getWriterGateError: () => bridge.getWriterGateError(),
+	};
 	return {
 		bridge,
-		port,
 		duplicateNodes: async (nodeIds) => {
-			const [{ duplicateNode }, { remapForDuplicate }] = await Promise.all([
-				import("../native-tree.js"),
-				import("../../../editor/index.js"),
-			]);
-			let lastCopyId: string | null = null;
-			port.commitNative((data, authoring) => {
-				let nextData = data;
-				let nextAuthoring = authoring;
-				let any = false;
-				for (const nodeId of nodeIds) {
-					const duplicated = duplicateNode(nextData, nodeId);
-					if (duplicated === null) {
-						continue;
-					}
-					any = true;
-					lastCopyId = duplicated.newRootId;
-					nextData = duplicated.data;
-					nextAuthoring = remapForDuplicate(
-						nextAuthoring,
-						duplicated.idMap,
-					).state;
-				}
-				return any ? { data: nextData, authoring: nextAuthoring } : null;
-			});
-			if (lastCopyId !== null) {
+			if (bridge.getPuckApi() === null) {
+				return;
+			}
+			const result = commitDuplicateNodes(commitDeps, nodeIds);
+			// Freeze §7: selection follows the new copy. `createdNodeIds` is
+			// in the order the helper duplicated them, so the LAST entry is
+			// the copy of the last selected node — the same node the old
+			// `commitNative` loop left selected.
+			const lastCopyId = result.createdNodeIds.at(-1);
+			if (result.status === "committed" && lastCopyId !== undefined) {
 				bridge.selection?.select(lastCopyId);
 			}
 		},
 		removeNodes: async (nodeIds) => {
-			const { removeNode } = await import("../native-tree.js");
-			port.commitNative((data, authoring) => {
-				let nextData = data;
-				let any = false;
-				for (const nodeId of nodeIds) {
-					const next = removeNode(nextData, nodeId);
-					if (next !== null) {
-						nextData = next;
-						any = true;
-					}
-				}
-				return any ? { data: nextData, authoring } : null;
-			});
-			bridge.selection?.clear();
+			if (bridge.getPuckApi() === null) {
+				return;
+			}
+			const result = commitDeleteNodes(commitDeps, nodeIds);
+			// A refused delete (locked node, Puck permission) must leave the
+			// selection alone — clearing it would tell the author the nodes
+			// went away.
+			if (result.status === "committed") {
+				bridge.selection?.clear();
+			}
 		},
 		wrapNodes: async (nodeIds) => {
 			const primary = nodeIds[0];
@@ -114,7 +154,7 @@ export function buildShortcutContext(
 			}
 			const { wrapNode } = await import("../native-tree.js");
 			let containerId: string | null = null;
-			port.commitNative((data, authoring) => {
+			commitTree(bridge, (data) => {
 				const wrapped = wrapNode(
 					data,
 					primary,
@@ -125,7 +165,7 @@ export function buildShortcutContext(
 					return null;
 				}
 				containerId = wrapped.containerId;
-				return { data: wrapped.data, authoring };
+				return wrapped.data;
 			});
 			if (containerId !== null) {
 				bridge.selection?.select(containerId);
@@ -137,10 +177,7 @@ export function buildShortcutContext(
 				return;
 			}
 			const { unwrapNode } = await import("../native-tree.js");
-			port.commitNative((data, authoring) => {
-				const next = unwrapNode(data, primary);
-				return next === null ? null : { data: next, authoring };
-			});
+			commitTree(bridge, (data) => unwrapNode(data, primary));
 		},
 		selectParent: () => {
 			try {

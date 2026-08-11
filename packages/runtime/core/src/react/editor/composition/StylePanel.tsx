@@ -54,6 +54,24 @@
  * traversal (`document-model/read-document.ts:131-141`). One ordering,
  * two surfaces, no second derivation to drift.
  *
+ * ### The multi-instance truth (`p5-004`, PLAN-0026 §3.7.4)
+ *
+ * A repeated target styles **every** instance it is stamped on, so each
+ * section states how many before the author edits it
+ * (`style/TargetSection.tsx`). Two things about the wiring: the count
+ * reads the same structural `TargetElementSource` seam the presence
+ * check does (`style/targets.ts`), so there is one path from this panel
+ * into the canvas index and not two; and it subscribes *inside* the
+ * count element, so a canvas mutation repaints that one line and leaves
+ * every property control untouched.
+ *
+ * Per-instance divergence is a non-goal (PLAN-0026 §8) and this panel
+ * offers nothing that implies otherwise — no "apply to this one" action
+ * and no disabled placeholder for a future one. The compiler emits one
+ * exact-pair selector per `(node, target)`; the only honest surface is
+ * an accurate count plus a pointer to where per-instance variation
+ * genuinely lives.
+ *
  * ### Capability honesty (§8.5)
  *
  * - nothing selected → `studio.fields.empty`;
@@ -235,6 +253,12 @@ function StylePanelBody(): ReactNode {
 					nodeIds={selection.nodeIds}
 					authored={summarizeAuthoredTarget(model, primary, target.id)}
 					definitions={definitions}
+					// The registry, not a count: the section's own count
+					// element subscribes, so the body never re-renders on a
+					// canvas mutation and the property controls stay off that
+					// path (`p5-004`). The registry reference is stable for the
+					// life of the bridge, so passing it changes nothing here.
+					source={bridge?.canvasRegistry ?? null}
 				/>
 			))}
 

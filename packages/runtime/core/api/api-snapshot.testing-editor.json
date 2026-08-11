@@ -1679,12 +1679,12 @@
 					"type": {
 						"type": "reference",
 						"target": {
-							"packageName": "@anvilkit/core",
-							"packagePath": "src/editor/legacy/authoring-state.ts",
+							"packageName": "@anvilkit/schema",
+							"packagePath": "src/editor/authoring-state.ts",
 							"qualifiedName": "AuthoringStateV1"
 						},
 						"name": "AuthoringStateV1",
-						"package": "@anvilkit/core"
+						"package": "@anvilkit/schema"
 					}
 				},
 				{
@@ -1707,7 +1707,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Data"
 						},
 						"name": "Data",
@@ -1805,7 +1805,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Data"
 						},
 						"name": "Data",
@@ -2894,12 +2894,12 @@
 					"type": {
 						"type": "reference",
 						"target": {
-							"packageName": "@anvilkit/core",
-							"packagePath": "src/editor/legacy/authoring-state.ts",
+							"packageName": "@anvilkit/schema",
+							"packagePath": "src/editor/authoring-state.ts",
 							"qualifiedName": "AuthoringStateV1"
 						},
 						"name": "AuthoringStateV1",
-						"package": "@anvilkit/core"
+						"package": "@anvilkit/schema"
 					}
 				}
 			]
@@ -2943,7 +2943,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Data"
 						},
 						"name": "Data",
@@ -3085,7 +3085,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Data"
 						},
 						"name": "Data",
@@ -3172,7 +3172,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "Config",

@@ -40,6 +40,7 @@ import type { Data, PuckApi } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { isNodeLocked } from "./update-annotations.js";
 import { duplicateNode, removeNode } from "../react/editor/native-tree.js";
+import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 
 /** Puck's root zone, in the only form `dispatch` honours. */
 export const ROOT_ZONE = "root:default-zone";
@@ -232,7 +233,7 @@ export function insertNodeInData(input: InsertNodeInput): UpdateTreeResult {
 }
 
 /** Dependencies of the tree commit helpers. */
-export interface TreeCommitDeps {
+export interface TreeCommitDeps extends WriterGateDep {
 	readonly getPuckApi: () => PuckApi;
 }
 
@@ -289,6 +290,10 @@ function commit(
 	deps: TreeCommitDeps,
 	run: (data: Data) => UpdateTreeResult,
 ): TreeCommitResult {
+	const gate = writerGateError(deps);
+	if (gate !== null) {
+		return { status: "rejected", createdNodeIds: NO_IDS,  errors: [gate] };
+	}
 	const api = deps.getPuckApi();
 	const current = api.appState.data as Data;
 	const result = run(current);

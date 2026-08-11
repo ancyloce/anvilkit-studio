@@ -7,18 +7,9 @@ import type {
 	Binding,
 	JsonValue,
 } from "@anvilkit/contracts/editor";
-import type {
-	EditorCommandBase,
-} from "../legacy/index.js";
-import type {
-	AuthoringStateV1,
-} from "../legacy/index.js";
 import { describe, expect, it } from "vitest";
 import {
-	applyEditorCommand,
-	bindingUpdateErrors,
 	buildRepeatContexts,
-	createEmptyAuthoringState,
 	isVisibleInPreview,
 	itemKeyOf,
 	type RepeatExpansion,
@@ -26,16 +17,6 @@ import {
 	resolveVisibility,
 } from "../index.js";
 
-let counter = 0;
-function base(expectedRevision: number): EditorCommandBase {
-	counter += 1;
-	return {
-		id: `bind-${counter}`,
-		expectedRevision,
-		source: "inspector",
-		timestamp: 1_750_000_000_000,
-	};
-}
 
 function binding(patch: Partial<Binding> = {}): Binding {
 	return {
@@ -189,56 +170,5 @@ describe("repeatExportBlockers", () => {
 			["b1", { contexts: [], indexKeyed: true }],
 		]);
 		expect(repeatExportBlockers({ b1: binding() }, expansions)).toEqual([]);
-	});
-});
-
-describe("binding.update command", () => {
-	it("commits a binding into the sidecar", () => {
-		const result = applyEditorCommand(createEmptyAuthoringState(), {
-			...base(0),
-			type: "binding.update",
-			binding: binding(),
-		});
-		expect(result.status).toBe("changed");
-		if (result.status !== "changed") return;
-		expect(result.state.bindings.b1?.nodeId).toBe("n1");
-	});
-
-	it("upserts rather than rejecting an existing id (freeze §2)", () => {
-		const state: AuthoringStateV1 = {
-			...createEmptyAuthoringState(),
-			bindings: { b1: binding() },
-		};
-		expect(
-			bindingUpdateErrors(
-				state,
-				binding({ expression: { type: "literal", value: false } }),
-			),
-		).toEqual([]);
-	});
-
-	it("rejects a repeat binding with an empty item name", () => {
-		const errors = bindingUpdateErrors(
-			createEmptyAuthoringState(),
-			binding({ target: { type: "repeat", itemName: "  " } }),
-		);
-		expect(errors.length).toBeGreaterThan(0);
-	});
-
-	it("rejects a non-positive repeat limit", () => {
-		const errors = bindingUpdateErrors(
-			createEmptyAuthoringState(),
-			binding({ target: { type: "repeat", itemName: "row", limit: 0 } }),
-		);
-		expect(errors.length).toBeGreaterThan(0);
-	});
-
-	it("aggregates structural issues into one error", () => {
-		const errors = bindingUpdateErrors(
-			createEmptyAuthoringState(),
-			binding({ expression: { type: "call" } as never }),
-		);
-		const shape = errors.filter((e) => e.details?.kind === "binding");
-		expect(shape).toHaveLength(1);
 	});
 });

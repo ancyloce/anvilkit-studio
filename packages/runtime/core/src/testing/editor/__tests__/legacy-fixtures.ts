@@ -17,12 +17,10 @@
 import type {
 	NodeAuthoringStateV1,
 } from "@anvilkit/contracts/editor";
-import type {
-	AuthoringStateV1,
-} from "../../../editor/legacy/index.js";
 import {
 	ANVILKIT_AUTHORING_KEY,
-} from "../../../editor/legacy/index.js";
+	type LegacyAuthoringState as AuthoringStateV1,
+} from "../../../migrations/legacy-sidecar.js";
 import type { Data, Config as PuckConfig } from "@puckeditor/core";
 import {
 	buildLegacyPuckData,

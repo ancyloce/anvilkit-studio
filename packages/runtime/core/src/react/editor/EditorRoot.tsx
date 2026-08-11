@@ -2,22 +2,29 @@
 
 /**
  * @file The lazily-loaded editor root (PLAN-0020 CORE-P0-012 mount
- * seam; CORE-P1A-001 command port installation).
+ * seam; CORE-P1A-001 runtime installation).
  *
  * This module is the code-split boundary for everything editor: it is
  * reached **only** through the dynamic `import()` in
- * `StudioEditorMount`, so no engine code enters the Studio entry
- * chunk while the feature flag is off. It renders `null` — its job is
- * to build the command port over the live plugin context and install
- * it into the per-instance bridge, where `useStudioEditor()`
- * consumers and the controller's data-change feed meet it. Later
- * Phase 1A tasks install the selection store, capability registry,
- * diagnostic port, and style pipeline through the same seam.
+ * `StudioEditorMount`, so no editor code enters the Studio entry chunk
+ * while the feature flag is off. It renders `null` — its job is to
+ * install the per-instance runtime into the bridge, where
+ * `useStudioEditor()` consumers and the controller's data-change feed
+ * meet it: the selection store, the scope/viewport controllers, the
+ * canvas DOM registry, the inline-edit controller, the capability
+ * registry, the diagnostic center, and — since `p3-009` — the
+ * canonical `EditorApi` plus the two seams the deleted command port
+ * used to own (`getPuckApi`, `getWriterGateError`).
  */
 
 import type { StudioEditorConfig } from "@anvilkit/contracts/editor";
 import { lazy, type ReactNode, Suspense, useEffect, useState } from "react";
-import type { EditorFeatureScanDocument } from "../../editor/index.js";
+import type { Data as PuckData } from "@puckeditor/core";
+import {
+	documentBreakpoints,
+	type EditorFeatureScanDocument,
+} from "../../editor/index.js";
+import { createEditorApi } from "./editor-api.js";
 import { useStudioPluginContext } from "../../studio/context/plugin-context.js";
 import { createDomAccessibilityScanner } from "./a11y/dom-rules/index.js";
 import type { StudioEditorBridge } from "./bridge.js";
@@ -28,7 +35,6 @@ import { AuthoringOverlayRoot } from "./canvas/overlay-root.js";
 import { SelectionToolbar } from "./canvas/SelectionToolbar.js";
 import { createEditorCapabilityRegistry } from "./capability-registry.js";
 import { computeCollabGateError } from "./collab-gate.js";
-import { createEditorCommandPort } from "./command-port.js";
 import { CreateComponentDialog } from "./components/CreateComponentDialog.js";
 import {
 	createEditorPerfMetrics,
@@ -111,63 +117,39 @@ export default function EditorRoot({
 			},
 			onChange: () => bridge.notify(),
 		});
-		const port = createEditorCommandPort({
-			getPuckApi: () => ctx.getPuckApi(),
-			getData: () => ctx.getData(),
-			editor,
-			getSelection: () => selection.getState(),
-			// Collab authoring gate (CORE-P1A-013): derived live from the
-			// compiled runtime's declarations, so a recompile that adds or
-			// removes a transport re-gates deterministically.
-			getWriterGateError: () =>
-				computeCollabGateError(bridge.collabCapabilities),
-			onStateChange: () => {
-				refreshSidecarDiagnostics();
-				refreshStyleSignal();
-				bridge.inline?.handleExternalInterrupt();
-			},
-			// Content-free operational events (CORE-P1A-004; DD-0019 §22.4):
-			// counts, types, and durations only — never text, URLs, prop
-			// values, token literals, or preview data.
-			onCommitted: (command, result, meta) => {
-				diagnostics.emit({
-					type: "command.committed",
-					commandType: command.type,
-					source: command.source,
-					durationMs: meta.durationMs,
-					changedNodeCount: result.changedNodeIds.length,
-				});
-			},
-			onRejected: (command, result) => {
-				diagnostics.emit({
-					type: "command.rejected",
-					commandType: command.type,
-					errorCodes: result.errors.map((error) => error.code),
-				});
-			},
-		});
-		const capabilities = createEditorCapabilityRegistry({
-			getPuckApi: () => ctx.getPuckApi(),
-			readAuthoring: () => port.readCurrent().state,
-			// Prop-level detection needs the document, not just the
-			// sidecar — `richText` lives in component props (DD-DEC-018).
-			readDocument: () => port.readData() as EditorFeatureScanDocument,
-		});
-		// Style signal (CORE-P1A-009): decorated canvas renders only need
-		// re-rendering when a node GAINS or LOSES authoring (attribute
-		// presence); value changes flow through the stylesheet channel.
-		let lastAuthoredSignature = "";
-		const authoredSignature = (): string =>
-			Object.keys(port.readCurrent().state.nodes).sort().join("\u0000");
-		const refreshStyleSignal = (): void => {
-			const signature = authoredSignature();
-			if (signature !== lastAuthoredSignature) {
-				lastAuthoredSignature = signature;
-				bridge.notifyStyles();
-			} else {
-				bridge.notify();
+		// `p3-009`: the command port is gone. The two seams it carried for
+		// the rest of the runtime — the live `PuckApi` and the collab
+		// writer gate — are installed directly on the bridge, beside
+		// `canvasRegistry` and `selection`, so the canvas reaches them
+		// without a cast and the commit helpers can ENFORCE the gate.
+		const tryGetPuckApi = (): ReturnType<typeof ctx.getPuckApi> | null => {
+			try {
+				return ctx.getPuckApi();
+			} catch {
+				// Documented on `getPuckApi`: it throws before `<Puck>` binds.
+				return null;
 			}
 		};
+		bridge.getPuckApi = tryGetPuckApi;
+		// Collab authoring gate (CORE-P1A-013): derived live from the
+		// compiled runtime's declarations, so a recompile that adds or
+		// removes a transport re-gates deterministically.
+		bridge.getWriterGateError = () =>
+			computeCollabGateError(bridge.collabCapabilities);
+		const capabilities = createEditorCapabilityRegistry({
+			getPuckApi: () => ctx.getPuckApi(),
+			// Every editor feature is a document carrier now, so the
+			// document is the whole feature source (DD-DEC-018).
+			readDocument: () =>
+				(tryGetPuckApi()?.appState.data ??
+					null) as EditorFeatureScanDocument | null,
+		});
+		// The canonical plugin/AI surface (`p3-008`), built over the same
+		// live store and the same commit helpers the UI writes through.
+		const api = createEditorApi({
+			getPuckApi: () => ctx.getPuckApi(),
+			subscribe: bridge.subscribe,
+		});
 		// Responsive editing state (CORE-P1A-008): transient, never
 		// undoable — switching the write target or viewport never
 		// dispatches to Puck.
@@ -175,17 +157,14 @@ export default function EditorRoot({
 			onChange: () => bridge.notify(),
 		});
 		const syncViewportBreakpoints = (): void => {
-			viewport.setBreakpoints(port.getSnapshot().breakpoints);
+			// Breakpoints are the document's own `designSystem` root prop
+			// (§4.1) since `p3-009`; `documentBreakpoints` falls back to the
+			// §12.1 defaults for a document that declares none.
+			const data = tryGetPuckApi()?.appState.data ?? ctx.getData();
+			viewport.setBreakpoints(documentBreakpoints(data as PuckData));
 		};
 		syncViewportBreakpoints();
 		const unsubscribeViewportSync = bridge.subscribe(syncViewportBreakpoints);
-		// Persistent read-only diagnostic (§24.1/§25): an invalid or
-		// unsupported-major sidecar surfaces visibly and keeps surfacing
-		// until a foreign change replaces the sidecar with a readable one.
-		const refreshSidecarDiagnostics = (): void => {
-			const read = port.readCurrent();
-			diagnostics.setDiagnostics("sidecar", read.readOnly ? read.errors : []);
-		};
 		// Persistent collab-gate diagnostic (§7.4: "neither system is
 		// silently disabled"): recomputed on every bridge change so a
 		// recompile's new capability list re-derives it; deduped by
@@ -207,9 +186,8 @@ export default function EditorRoot({
 			);
 		};
 
-		lastAuthoredSignature = authoredSignature();
 		bridge.editorConfig = editor;
-		bridge.port = port;
+		bridge.api = api;
 		bridge.selection = selection;
 		bridge.capabilities = capabilities;
 		bridge.viewport = viewport;
@@ -256,9 +234,15 @@ export default function EditorRoot({
 			getActiveLayer: () => viewport.getState().activeBreakpoint,
 			getViewportWidth: () => viewport.getState().viewportWidth,
 		};
-		bridge.onDataChange = port.handleDataChange;
+		// Every Puck data change wakes the runtime: the viewport's
+		// breakpoint list is document state now, and a live inline session
+		// must re-check whether the document moved under it.
+		bridge.onDataChange = () => {
+			syncViewportBreakpoints();
+			bridge.inline?.handleExternalInterrupt();
+			bridge.notifyStyles();
+		};
 		bridge.onPuckSelectedChange = selection.handlePuckSelectedChange;
-		refreshSidecarDiagnostics();
 		refreshCollabGate();
 		const unsubscribeGate = bridge.subscribe(refreshCollabGate);
 		bridge.notifyStyles();
@@ -266,9 +250,11 @@ export default function EditorRoot({
 			unsubscribeGate();
 			unsubscribeViewportSync();
 			// Guard on identity: a StrictMode re-run or a newer mount may
-			// already have installed its own port.
-			if (bridge.port === port) {
-				bridge.port = null;
+			// already have installed its own runtime.
+			if (bridge.api === api) {
+				bridge.api = null;
+				bridge.getPuckApi = () => null;
+				bridge.getWriterGateError = () => null;
 				bridge.selection = null;
 				bridge.capabilities = null;
 				bridge.viewport = null;
@@ -282,7 +268,6 @@ export default function EditorRoot({
 				bridge.onCanvasDocumentChange = null;
 				bridge.onDataChange = null;
 				bridge.onPuckSelectedChange = null;
-				diagnostics.setDiagnostics("sidecar", []);
 				diagnostics.setDiagnostics("collab-gate", []);
 				// Same style-channel rule on teardown: the lookup went away.
 				bridge.notifyStyles();

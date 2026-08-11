@@ -2122,7 +2122,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Data"
 						},
 						"name": "Data",
@@ -6296,6 +6296,214 @@
 			]
 		},
 		{
+			"id": 1452,
+			"name": "EditorApi",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The whole public editor surface for plugins and AI."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 1462,
+					"name": "commit",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 83,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L83"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 1463,
+						"name": "EditorCommitApi",
+						"package": "@anvilkit/core"
+					}
+				},
+				{
+					"id": 1453,
+					"name": "readDocument",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 80,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L80"
+						}
+					],
+					"signatures": [
+						{
+							"id": 1454,
+							"name": "readDocument",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "The current document projection. Never a mutable handle."
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "runtime/core/src/types/editor-api-v2.ts",
+									"line": 80,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L80"
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/document-model/types.ts",
+									"qualifiedName": "DocumentModel"
+								},
+								"name": "DocumentModel",
+								"package": "@anvilkit/core"
+							}
+						}
+					]
+				},
+				{
+					"id": 1455,
+					"name": "subscribe",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 82,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L82"
+						}
+					],
+					"signatures": [
+						{
+							"id": 1456,
+							"name": "subscribe",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Change notification. Returns an unsubscribe function."
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "runtime/core/src/types/editor-api-v2.ts",
+									"line": 82,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L82"
+								}
+							],
+							"parameters": [
+								{
+									"id": 1457,
+									"name": "listener",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reflection",
+										"declaration": {
+											"id": 1458,
+											"name": "__type",
+											"variant": "declaration",
+											"kind": 65536,
+											"flags": {},
+											"signatures": [
+												{
+													"id": 1459,
+													"name": "__type",
+													"variant": "signature",
+													"kind": 4096,
+													"flags": {},
+													"type": {
+														"type": "intrinsic",
+														"name": "void"
+													}
+												}
+											]
+										}
+									}
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 1460,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"signatures": [
+										{
+											"id": 1461,
+											"name": "__type",
+											"variant": "signature",
+											"kind": 4096,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "void"
+											}
+										}
+									]
+								}
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						1462
+					]
+				},
+				{
+					"title": "Methods",
+					"children": [
+						1453,
+						1455
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "runtime/core/src/types/editor-api-v2.ts",
+					"line": 78,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L78"
+				}
+			]
+		},
+		{
 			"id": 750,
 			"name": "EditorCapabilityRegistry",
 			"variant": "declaration",
@@ -6319,9 +6527,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
-							"line": 33,
+							"line": 31,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L33"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L31"
 						}
 					],
 					"signatures": [
@@ -6366,9 +6574,9 @@
 							"sources": [
 								{
 									"fileName": "runtime/core/src/types/editor-api.ts",
-									"line": 33,
+									"line": 31,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L33"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L31"
 								}
 							],
 							"parameters": [
@@ -6415,9 +6623,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
-							"line": 35,
+							"line": 33,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L35"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L33"
 						}
 					],
 					"signatures": [
@@ -6444,9 +6652,9 @@
 							"sources": [
 								{
 									"fileName": "runtime/core/src/types/editor-api.ts",
-									"line": 35,
+									"line": 33,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L35"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L33"
 								}
 							],
 							"parameters": [
@@ -6493,9 +6701,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
-							"line": 40,
+							"line": 38,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L40"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L38"
 						}
 					],
 					"signatures": [
@@ -6516,9 +6724,9 @@
 							"sources": [
 								{
 									"fileName": "runtime/core/src/types/editor-api.ts",
-									"line": 40,
+									"line": 38,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L40"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L38"
 								}
 							],
 							"type": {
@@ -6555,9 +6763,1126 @@
 			"sources": [
 				{
 					"fileName": "runtime/core/src/types/editor-api.ts",
-					"line": 28,
+					"line": 26,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L28"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L26"
+				}
+			]
+		},
+		{
+			"id": 1463,
+			"name": "EditorCommitApi",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The commit surface — one method per intent family, each resolving to\nexactly one history-recording "
+					},
+					{
+						"kind": "code",
+						"text": "`setData`"
+					},
+					{
+						"kind": "text",
+						"text": "."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 1507,
+					"name": "annotation",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 72,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L72"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 1508,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 1509,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1510,
+											"name": "edit",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/puck/update-annotations.ts",
+													"qualifiedName": "AnnotationEdit"
+												},
+												"name": "AnnotationEdit",
+												"package": "@anvilkit/core"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": 1519,
+										"name": "EditorCommitOutcome",
+										"package": "@anvilkit/core"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 1491,
+					"name": "bindings",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 63,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L63"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 1492,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 1493,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1494,
+											"name": "nodeId",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1495,
+											"name": "update",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reflection",
+												"declaration": {
+													"id": 1496,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"signatures": [
+														{
+															"id": 1497,
+															"name": "__type",
+															"variant": "signature",
+															"kind": 4096,
+															"flags": {},
+															"parameters": [
+																{
+																	"id": 1498,
+																	"name": "current",
+																	"variant": "param",
+																	"kind": 32768,
+																	"flags": {},
+																	"type": {
+																		"type": "typeOperator",
+																		"operator": "readonly",
+																		"target": {
+																			"type": "array",
+																			"elementType": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "@anvilkit/contracts",
+																					"packagePath": "src/editor/bindings.ts",
+																					"qualifiedName": "Binding"
+																				},
+																				"name": "Binding",
+																				"package": "@anvilkit/contracts"
+																			}
+																		}
+																	}
+																}
+															],
+															"type": {
+																"type": "typeOperator",
+																"operator": "readonly",
+																"target": {
+																	"type": "array",
+																	"elementType": {
+																		"type": "reference",
+																		"target": {
+																			"packageName": "@anvilkit/contracts",
+																			"packagePath": "src/editor/bindings.ts",
+																			"qualifiedName": "Binding"
+																		},
+																		"name": "Binding",
+																		"package": "@anvilkit/contracts"
+																	}
+																}
+															}
+														}
+													]
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/puck/update-carriers.ts",
+											"qualifiedName": "CarrierCommitResult"
+										},
+										"name": "CarrierCommitResult",
+										"package": "@anvilkit/core"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 1464,
+					"name": "componentLibrary",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 46,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L46"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 1465,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 1466,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1467,
+											"name": "edit",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/puck/update-component-library.ts",
+													"qualifiedName": "ComponentLibraryEdit"
+												},
+												"name": "ComponentLibraryEdit",
+												"package": "@anvilkit/core"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": 1519,
+										"name": "EditorCommitOutcome",
+										"package": "@anvilkit/core"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 1511,
+					"name": "deleteNodes",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 73,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L73"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 1512,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 1513,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1514,
+											"name": "nodeIds",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "typeOperator",
+												"operator": "readonly",
+												"target": {
+													"type": "array",
+													"elementType": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/puck/update-tree.ts",
+											"qualifiedName": "TreeCommitResult"
+										},
+										"name": "TreeCommitResult",
+										"package": "@anvilkit/core"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 1515,
+					"name": "duplicateNodes",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 74,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L74"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 1516,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 1517,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1518,
+											"name": "nodeIds",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "typeOperator",
+												"operator": "readonly",
+												"target": {
+													"type": "array",
+													"elementType": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/puck/update-tree.ts",
+											"qualifiedName": "TreeCommitResult"
+										},
+										"name": "TreeCommitResult",
+										"package": "@anvilkit/core"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 1499,
+					"name": "inlineText",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 67,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L67"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 1500,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 1501,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1502,
+											"name": "input",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reflection",
+												"declaration": {
+													"id": 1503,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 1504,
+															"name": "nodeId",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isReadonly": true
+															},
+															"sources": [
+																{
+																	"fileName": "runtime/core/src/types/editor-api-v2.ts",
+																	"line": 68,
+																	"character": 11,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L68"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															}
+														},
+														{
+															"id": 1505,
+															"name": "targetId",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isReadonly": true
+															},
+															"sources": [
+																{
+																	"fileName": "runtime/core/src/types/editor-api-v2.ts",
+																	"line": 69,
+																	"character": 11,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L69"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															}
+														},
+														{
+															"id": 1506,
+															"name": "value",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isReadonly": true
+															},
+															"sources": [
+																{
+																	"fileName": "runtime/core/src/types/editor-api-v2.ts",
+																	"line": 70,
+																	"character": 11,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L70"
+																}
+															],
+															"type": {
+																"type": "reference",
+																"target": 834,
+																"name": "JsonValue",
+																"package": "@anvilkit/contracts"
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																1504,
+																1505,
+																1506
+															]
+														}
+													]
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/puck/update-carriers.ts",
+											"qualifiedName": "CarrierCommitResult"
+										},
+										"name": "CarrierCommitResult",
+										"package": "@anvilkit/core"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 1478,
+					"name": "instanceOverride",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 55,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L55"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 1479,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 1480,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1481,
+											"name": "nodeIds",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "typeOperator",
+												"operator": "readonly",
+												"target": {
+													"type": "array",
+													"elementType": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												}
+											}
+										},
+										{
+											"id": 1482,
+											"name": "edit",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/puck/update-instance-overrides.ts",
+													"qualifiedName": "InstanceOverrideEdit"
+												},
+												"name": "InstanceOverrideEdit",
+												"package": "@anvilkit/core"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": 1519,
+										"name": "EditorCommitOutcome",
+										"package": "@anvilkit/core"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 1473,
+					"name": "instanceSelection",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 51,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L51"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 1474,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 1475,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1476,
+											"name": "nodeIds",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "typeOperator",
+												"operator": "readonly",
+												"target": {
+													"type": "array",
+													"elementType": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												}
+											}
+										},
+										{
+											"id": 1477,
+											"name": "selection",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "typescript",
+													"packagePath": "lib/lib.es5.d.ts",
+													"qualifiedName": "Readonly"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "typescript",
+															"packagePath": "lib/lib.es5.d.ts",
+															"qualifiedName": "Record"
+														},
+														"typeArguments": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "intrinsic",
+																"name": "string"
+															}
+														],
+														"name": "Record",
+														"package": "typescript"
+													}
+												],
+												"name": "Readonly",
+												"package": "typescript"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": 1519,
+										"name": "EditorCommitOutcome",
+										"package": "@anvilkit/core"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 1483,
+					"name": "interactions",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 59,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L59"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 1484,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 1485,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1486,
+											"name": "nodeId",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1487,
+											"name": "update",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reflection",
+												"declaration": {
+													"id": 1488,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"signatures": [
+														{
+															"id": 1489,
+															"name": "__type",
+															"variant": "signature",
+															"kind": 4096,
+															"flags": {},
+															"parameters": [
+																{
+																	"id": 1490,
+																	"name": "current",
+																	"variant": "param",
+																	"kind": 32768,
+																	"flags": {},
+																	"type": {
+																		"type": "typeOperator",
+																		"operator": "readonly",
+																		"target": {
+																			"type": "array",
+																			"elementType": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "@anvilkit/contracts",
+																					"packagePath": "src/editor/interactions.ts",
+																					"qualifiedName": "Interaction"
+																				},
+																				"name": "Interaction",
+																				"package": "@anvilkit/contracts"
+																			}
+																		}
+																	}
+																}
+															],
+															"type": {
+																"type": "typeOperator",
+																"operator": "readonly",
+																"target": {
+																	"type": "array",
+																	"elementType": {
+																		"type": "reference",
+																		"target": {
+																			"packageName": "@anvilkit/contracts",
+																			"packagePath": "src/editor/interactions.ts",
+																			"qualifiedName": "Interaction"
+																		},
+																		"name": "Interaction",
+																		"package": "@anvilkit/contracts"
+																	}
+																}
+															}
+														}
+													]
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/puck/update-carriers.ts",
+											"qualifiedName": "CarrierCommitResult"
+										},
+										"name": "CarrierCommitResult",
+										"package": "@anvilkit/core"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 1468,
+					"name": "variantModel",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 47,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L47"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 1469,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 1470,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1471,
+											"name": "definitionId",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1472,
+											"name": "edit",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/puck/update-variants.ts",
+													"qualifiedName": "VariantModelEdit"
+												},
+												"name": "VariantModelEdit",
+												"package": "@anvilkit/core"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": 1519,
+										"name": "EditorCommitOutcome",
+										"package": "@anvilkit/core"
+									}
+								}
+							]
+						}
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						1507,
+						1491,
+						1464,
+						1511,
+						1515,
+						1499,
+						1478,
+						1473,
+						1483,
+						1468
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "runtime/core/src/types/editor-api-v2.ts",
+					"line": 45,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L45"
+				}
+			]
+		},
+		{
+			"id": 1519,
+			"name": "EditorCommitOutcome",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Outcome shared by every "
+					},
+					{
+						"kind": "code",
+						"text": "`EditorApi.commit.*`"
+					},
+					{
+						"kind": "text",
+						"text": " call."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 1521,
+					"name": "errors",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 38,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L38"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reflection",
+								"declaration": {
+									"id": 1522,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 1523,
+											"name": "code",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"sources": [
+												{
+													"fileName": "runtime/core/src/types/editor-api-v2.ts",
+													"line": 38,
+													"character": 38,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L38"
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1524,
+											"name": "message",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"sources": [
+												{
+													"fileName": "runtime/core/src/types/editor-api-v2.ts",
+													"line": 38,
+													"character": 61,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L38"
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												1523,
+												1524
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				{
+					"id": 1520,
+					"name": "status",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 37,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L37"
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "literal",
+								"value": "noop"
+							},
+							{
+								"type": "literal",
+								"value": "rejected"
+							},
+							{
+								"type": "literal",
+								"value": "committed"
+							}
+						]
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						1521,
+						1520
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "runtime/core/src/types/editor-api-v2.ts",
+					"line": 36,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L36"
 				}
 			]
 		},
@@ -7016,6 +8341,161 @@
 					"fileName": "foundation/contracts/dist/editor/export-capabilities.d.ts",
 					"line": 17,
 					"character": 17
+				}
+			]
+		},
+		{
+			"id": 1550,
+			"name": "EditorIntentOutcome",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Outcome of resolving one intent."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 1552,
+					"name": "errors",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 128,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L128"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reflection",
+								"declaration": {
+									"id": 1553,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 1554,
+											"name": "code",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"sources": [
+												{
+													"fileName": "runtime/core/src/types/editor-api-v2.ts",
+													"line": 128,
+													"character": 38,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L128"
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1555,
+											"name": "message",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isReadonly": true
+											},
+											"sources": [
+												{
+													"fileName": "runtime/core/src/types/editor-api-v2.ts",
+													"line": 128,
+													"character": 61,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L128"
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												1554,
+												1555
+											]
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				{
+					"id": 1551,
+					"name": "status",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api-v2.ts",
+							"line": 127,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L127"
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "literal",
+								"value": "noop"
+							},
+							{
+								"type": "literal",
+								"value": "rejected"
+							},
+							{
+								"type": "literal",
+								"value": "committed"
+							}
+						]
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						1552,
+						1551
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "runtime/core/src/types/editor-api-v2.ts",
+					"line": 126,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L126"
 				}
 			]
 		},
@@ -7792,9 +9272,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
-							"line": 46,
+							"line": 44,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L46"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L44"
 						}
 					],
 					"signatures": [
@@ -7815,9 +9295,9 @@
 							"sources": [
 								{
 									"fileName": "runtime/core/src/types/editor-api.ts",
-									"line": 46,
+									"line": 44,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L46"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L44"
 								}
 							],
 							"type": {
@@ -7842,9 +9322,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
-							"line": 48,
+							"line": 46,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L48"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L46"
 						}
 					],
 					"signatures": [
@@ -7865,9 +9345,9 @@
 							"sources": [
 								{
 									"fileName": "runtime/core/src/types/editor-api.ts",
-									"line": 48,
+									"line": 46,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L48"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L46"
 								}
 							],
 							"parameters": [
@@ -7960,9 +9440,9 @@
 			"sources": [
 				{
 					"fileName": "runtime/core/src/types/editor-api.ts",
-					"line": 44,
+					"line": 42,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L44"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L42"
 				}
 			]
 		},
@@ -8353,7 +9833,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "Config",
@@ -8404,7 +9884,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Data"
 						},
 						"name": "Data",
@@ -9022,7 +10502,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"name": "Data",
@@ -12438,7 +13918,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"name": "Data",
@@ -14599,7 +16079,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "Config",
@@ -14644,7 +16124,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Data"
 						},
 						"name": "Data",
@@ -15180,7 +16660,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"name": "Data",
@@ -25231,7 +26711,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -25242,7 +26722,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -25712,7 +27192,7 @@
 										"type": "reference",
 										"target": {
 											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-Csn3gOP8.d.ts",
+											"packagePath": "dist/actions-DA1J5F56.d.ts",
 											"qualifiedName": "Data"
 										},
 										"name": "Data",
@@ -27752,7 +29232,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -27763,7 +29243,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -28036,7 +29516,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Config"
 												},
 												"name": "Config",
@@ -28059,7 +29539,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Config"
 												},
 												"name": "Config",
@@ -28085,7 +29565,7 @@
 														"type": "reference",
 														"target": {
 															"packageName": "@puckeditor/core",
-															"packagePath": "dist/actions-Csn3gOP8.d.ts",
+															"packagePath": "dist/actions-DA1J5F56.d.ts",
 															"qualifiedName": "Config"
 														},
 														"name": "Config",
@@ -28156,7 +29636,7 @@
 							"type": "reference",
 							"target": {
 								"packageName": "@puckeditor/core",
-								"packagePath": "dist/actions-Csn3gOP8.d.ts",
+								"packagePath": "dist/actions-DA1J5F56.d.ts",
 								"qualifiedName": "Config"
 							},
 							"name": "PuckConfig",
@@ -28203,23 +29683,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ").\nCommands issued here flow through the same single mutation path as\nthe UI ("
-					},
-					{
-						"kind": "code",
-						"text": "`source: \"plugin\"`"
-					},
-					{
-						"kind": "text",
-						"text": ", one history entry per intent); before\nthe lazily-loaded editor runtime finishes mounting, "
-					},
-					{
-						"kind": "code",
-						"text": "`commands`"
-					},
-					{
-						"kind": "text",
-						"text": "\nrejects writes deterministically instead of throwing."
+						"text": ").\nWrites issued here flow through the same commit helpers the UI uses\n(one history entry per intent); before the lazily-loaded editor\nruntime finishes mounting, every commit rejects deterministically\ninstead of throwing."
 					}
 				]
 			},
@@ -28243,50 +29707,15 @@
 					"sources": [
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
-							"line": 67,
+							"line": 71,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L67"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L71"
 						}
 					],
 					"type": {
 						"type": "reference",
 						"target": 750,
 						"name": "EditorCapabilityRegistry",
-						"package": "@anvilkit/core"
-					}
-				},
-				{
-					"id": 772,
-					"name": "commands",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isReadonly": true
-					},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "The typed command port — the single mutation entry point."
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "runtime/core/src/types/editor-api.ts",
-							"line": 63,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L63"
-						}
-					],
-					"type": {
-						"type": "reference",
-						"target": {
-							"packageName": "@anvilkit/core",
-							"packagePath": "src/editor/legacy/commands.ts",
-							"qualifiedName": "EditorCommandPort"
-						},
-						"name": "EditorCommandPort",
 						"package": "@anvilkit/core"
 					}
 				},
@@ -28309,9 +29738,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
-							"line": 69,
+							"line": 73,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L69"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L73"
 						}
 					],
 					"type": {
@@ -28323,6 +29752,61 @@
 						},
 						"name": "EditorDiagnosticPort",
 						"package": "@anvilkit/contracts"
+					}
+				},
+				{
+					"id": 772,
+					"name": "editor",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The canonical editor API ("
+							},
+							{
+								"kind": "code",
+								"text": "`p3-008`"
+							},
+							{
+								"kind": "text",
+								"text": "): a read projection, a change\nsubscription and the commit helpers. "
+							},
+							{
+								"kind": "code",
+								"text": "`p3-009`"
+							},
+							{
+								"kind": "text",
+								"text": " replaced the typed\ncommand port here — a plugin writing through "
+							},
+							{
+								"kind": "code",
+								"text": "`commit.*`"
+							},
+							{
+								"kind": "text",
+								"text": " takes\nexactly the path the UI takes, one intent per history entry, with\nno command vocabulary crossing the boundary."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/core/src/types/editor-api.ts",
+							"line": 67,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L67"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 1452,
+						"name": "EditorApi",
+						"package": "@anvilkit/core"
 					}
 				},
 				{
@@ -28344,9 +29828,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
-							"line": 65,
+							"line": 69,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L65"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L69"
 						}
 					],
 					"type": {
@@ -28367,9 +29851,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/core/src/types/editor-api.ts",
-							"line": 61,
+							"line": 59,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L61"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L59"
 						}
 					],
 					"type": {
@@ -28383,8 +29867,8 @@
 					"title": "Properties",
 					"children": [
 						774,
-						772,
 						775,
+						772,
 						773,
 						771
 					]
@@ -28393,9 +29877,9 @@
 			"sources": [
 				{
 					"fileName": "runtime/core/src/types/editor-api.ts",
-					"line": 60,
+					"line": 58,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L60"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L58"
 				}
 			]
 		},
@@ -28588,7 +30072,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"name": "Data",
@@ -28708,7 +30192,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"name": "Data",
@@ -28844,7 +30328,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"name": "Data",
@@ -29282,7 +30766,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -29293,7 +30777,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -31133,7 +32617,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Overrides"
 								},
 								"typeArguments": [
@@ -31354,7 +32838,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -31365,7 +32849,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -33800,7 +35284,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Data"
 						},
 						"typeArguments": [
@@ -33814,7 +35298,7 @@
 									"type": "reference",
 									"target": {
 										"packageName": "@puckeditor/core",
-										"packagePath": "dist/actions-Csn3gOP8.d.ts",
+										"packagePath": "dist/actions-DA1J5F56.d.ts",
 										"qualifiedName": "ExtractConfigParams"
 									},
 									"typeArguments": [
@@ -33841,7 +35325,7 @@
 									"type": "reference",
 									"target": {
 										"packageName": "@puckeditor/core",
-										"packagePath": "dist/actions-Csn3gOP8.d.ts",
+										"packagePath": "dist/actions-DA1J5F56.d.ts",
 										"qualifiedName": "ExtractConfigParams"
 									},
 									"typeArguments": [
@@ -34576,7 +36060,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "OnAction"
 						},
 						"typeArguments": [
@@ -34584,7 +36068,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Data"
 								},
 								"typeArguments": [
@@ -34598,7 +36082,7 @@
 											"type": "reference",
 											"target": {
 												"packageName": "@puckeditor/core",
-												"packagePath": "dist/actions-Csn3gOP8.d.ts",
+												"packagePath": "dist/actions-DA1J5F56.d.ts",
 												"qualifiedName": "ExtractConfigParams"
 											},
 											"typeArguments": [
@@ -34625,7 +36109,7 @@
 											"type": "reference",
 											"target": {
 												"packageName": "@puckeditor/core",
-												"packagePath": "dist/actions-Csn3gOP8.d.ts",
+												"packagePath": "dist/actions-DA1J5F56.d.ts",
 												"qualifiedName": "ExtractConfigParams"
 											},
 											"typeArguments": [
@@ -34767,7 +36251,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"typeArguments": [
@@ -34781,7 +36265,7 @@
 															"type": "reference",
 															"target": {
 																"packageName": "@puckeditor/core",
-																"packagePath": "dist/actions-Csn3gOP8.d.ts",
+																"packagePath": "dist/actions-DA1J5F56.d.ts",
 																"qualifiedName": "ExtractConfigParams"
 															},
 															"typeArguments": [
@@ -35153,7 +36637,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"name": "Data",
@@ -35237,7 +36721,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"typeArguments": [
@@ -35251,7 +36735,7 @@
 															"type": "reference",
 															"target": {
 																"packageName": "@puckeditor/core",
-																"packagePath": "dist/actions-Csn3gOP8.d.ts",
+																"packagePath": "dist/actions-DA1J5F56.d.ts",
 																"qualifiedName": "ExtractConfigParams"
 															},
 															"typeArguments": [
@@ -35371,7 +36855,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"name": "Data",
@@ -35495,7 +36979,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Overrides"
 								},
 								"typeArguments": [
@@ -35664,7 +37148,7 @@
 										"type": "reference",
 										"target": {
 											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-Csn3gOP8.d.ts",
+											"packagePath": "dist/actions-DA1J5F56.d.ts",
 											"qualifiedName": "Plugin"
 										},
 										"typeArguments": [
@@ -35988,7 +37472,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "UiState"
 								},
 								"name": "UiState",
@@ -36036,7 +37520,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Viewports"
 						},
 						"name": "Viewports",
@@ -36102,7 +37586,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -36113,7 +37597,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -36729,7 +38213,7 @@
 										"type": "reference",
 										"target": {
 											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-Csn3gOP8.d.ts",
+											"packagePath": "dist/actions-DA1J5F56.d.ts",
 											"qualifiedName": "Overrides"
 										},
 										"name": "Overrides",
@@ -36916,7 +38400,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Plugin"
 								},
 								"name": "Plugin",
@@ -36995,7 +38479,7 @@
 										"type": "reference",
 										"target": {
 											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-Csn3gOP8.d.ts",
+											"packagePath": "dist/actions-DA1J5F56.d.ts",
 											"qualifiedName": "Config"
 										},
 										"name": "Config",
@@ -38703,6 +40187,620 @@
 			}
 		},
 		{
+			"id": 1525,
+			"name": "EditorIntent",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "What an AI proposal can ask the host to do.\n\n**A request vocabulary, not an IR.** Every member resolves\nimmediately to exactly one commit-helper call. It has no Zod schema,\nno serializer and no persistence path — acquiring any of those would\nmake it a parallel IR and breach rule 5, which is precisely what\ndistinguishes it from the "
+					},
+					{
+						"kind": "code",
+						"text": "`EditorCommand`"
+					},
+					{
+						"kind": "text",
+						"text": " union being deleted.\nDocument state never round-trips through an intent."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "runtime/core/src/types/editor-api-v2.ts",
+					"line": 96,
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L96"
+				}
+			],
+			"type": {
+				"type": "union",
+				"types": [
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 1526,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 1527,
+									"name": "kind",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 98,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L98"
+										}
+									],
+									"type": {
+										"type": "literal",
+										"value": "set-inline-text"
+									}
+								},
+								{
+									"id": 1528,
+									"name": "nodeId",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 99,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L99"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 1529,
+									"name": "targetId",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 100,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L100"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 1530,
+									"name": "value",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 101,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L101"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										1527,
+										1528,
+										1529,
+										1530
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 1531,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 1534,
+									"name": "interactions",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 106,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L106"
+										}
+									],
+									"type": {
+										"type": "typeOperator",
+										"operator": "readonly",
+										"target": {
+											"type": "array",
+											"elementType": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/contracts",
+													"packagePath": "src/editor/interactions.ts",
+													"qualifiedName": "Interaction"
+												},
+												"name": "Interaction",
+												"package": "@anvilkit/contracts"
+											}
+										}
+									}
+								},
+								{
+									"id": 1532,
+									"name": "kind",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 104,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L104"
+										}
+									],
+									"type": {
+										"type": "literal",
+										"value": "set-interactions"
+									}
+								},
+								{
+									"id": 1533,
+									"name": "nodeId",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 105,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L105"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										1534,
+										1532,
+										1533
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 1535,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 1538,
+									"name": "bindings",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 111,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L111"
+										}
+									],
+									"type": {
+										"type": "typeOperator",
+										"operator": "readonly",
+										"target": {
+											"type": "array",
+											"elementType": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/contracts",
+													"packagePath": "src/editor/bindings.ts",
+													"qualifiedName": "Binding"
+												},
+												"name": "Binding",
+												"package": "@anvilkit/contracts"
+											}
+										}
+									}
+								},
+								{
+									"id": 1536,
+									"name": "kind",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 109,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L109"
+										}
+									],
+									"type": {
+										"type": "literal",
+										"value": "set-bindings"
+									}
+								},
+								{
+									"id": 1537,
+									"name": "nodeId",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 110,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L110"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										1538,
+										1536,
+										1537
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 1539,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 1540,
+									"name": "kind",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 114,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L114"
+										}
+									],
+									"type": {
+										"type": "literal",
+										"value": "set-instance-variant"
+									}
+								},
+								{
+									"id": 1541,
+									"name": "nodeIds",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 115,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L115"
+										}
+									],
+									"type": {
+										"type": "typeOperator",
+										"operator": "readonly",
+										"target": {
+											"type": "array",
+											"elementType": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									}
+								},
+								{
+									"id": 1542,
+									"name": "selection",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 116,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L116"
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Readonly"
+										},
+										"typeArguments": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "typescript",
+													"packagePath": "lib/lib.es5.d.ts",
+													"qualifiedName": "Record"
+												},
+												"typeArguments": [
+													{
+														"type": "intrinsic",
+														"name": "string"
+													},
+													{
+														"type": "intrinsic",
+														"name": "string"
+													}
+												],
+												"name": "Record",
+												"package": "typescript"
+											}
+										],
+										"name": "Readonly",
+										"package": "typescript"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										1540,
+										1541,
+										1542
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 1543,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 1544,
+									"name": "kind",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 119,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L119"
+										}
+									],
+									"type": {
+										"type": "literal",
+										"value": "rename-node"
+									}
+								},
+								{
+									"id": 1546,
+									"name": "name",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 121,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L121"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 1545,
+									"name": "nodeId",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 120,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L120"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										1544,
+										1546,
+										1545
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 1547,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 1548,
+									"name": "kind",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 123,
+											"character": 14,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L123"
+										}
+									],
+									"type": {
+										"type": "literal",
+										"value": "delete-nodes"
+									}
+								},
+								{
+									"id": 1549,
+									"name": "nodeIds",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/core/src/types/editor-api-v2.ts",
+											"line": 123,
+											"character": 45,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L123"
+										}
+									],
+									"type": {
+										"type": "typeOperator",
+										"operator": "readonly",
+										"target": {
+											"type": "array",
+											"elementType": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										1548,
+										1549
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
 			"id": 880,
 			"name": "ExportOptions",
 			"variant": "declaration",
@@ -39990,7 +42088,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Data"
 												},
 												"name": "PuckData",
@@ -40073,7 +42171,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -40084,7 +42182,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -40437,7 +42535,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -40448,7 +42546,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -40479,7 +42577,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Plugin"
 						},
 						"typeArguments": [
@@ -41772,7 +43870,7 @@
 																"type": "reference",
 																"target": {
 																	"packageName": "@puckeditor/core",
-																	"packagePath": "dist/actions-Csn3gOP8.d.ts",
+																	"packagePath": "dist/actions-DA1J5F56.d.ts",
 																	"qualifiedName": "ComponentData"
 																},
 																"name": "PuckComponentData",
@@ -42259,7 +44357,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -42270,7 +44368,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-Csn3gOP8.d.ts",
+							"packagePath": "dist/actions-DA1J5F56.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -45925,7 +48023,7 @@
 														"type": "reference",
 														"target": {
 															"packageName": "@puckeditor/core",
-															"packagePath": "dist/actions-Csn3gOP8.d.ts",
+															"packagePath": "dist/actions-DA1J5F56.d.ts",
 															"qualifiedName": "Config"
 														},
 														"name": "Config",
@@ -45939,7 +48037,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Plugin"
 												},
 												"name": "Plugin",
@@ -46640,7 +48738,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Config"
 												},
 												"name": "Config",
@@ -49173,7 +51271,7 @@
 										"type": "reference",
 										"target": {
 											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-Csn3gOP8.d.ts",
+											"packagePath": "dist/actions-DA1J5F56.d.ts",
 											"qualifiedName": "Config"
 										},
 										"name": "Config",
@@ -49856,7 +51954,7 @@
 							"type": "reference",
 							"target": {
 								"packageName": "@puckeditor/core",
-								"packagePath": "dist/actions-Csn3gOP8.d.ts",
+								"packagePath": "dist/actions-DA1J5F56.d.ts",
 								"qualifiedName": "Plugin"
 							},
 							"name": "Plugin",
@@ -49989,7 +52087,7 @@
 									"type": "reference",
 									"target": {
 										"packageName": "@puckeditor/core",
-										"packagePath": "dist/actions-Csn3gOP8.d.ts",
+										"packagePath": "dist/actions-DA1J5F56.d.ts",
 										"qualifiedName": "Config"
 									},
 									"name": "Config",
@@ -50110,7 +52208,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -50120,7 +52218,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -50507,7 +52605,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -50517,7 +52615,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -50884,7 +52982,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -50894,7 +52992,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -51151,7 +53249,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-Csn3gOP8.d.ts",
+													"packagePath": "dist/actions-DA1J5F56.d.ts",
 													"qualifiedName": "Overrides"
 												},
 												"name": "Overrides",
@@ -51178,7 +53276,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Overrides"
 								},
 								"name": "PuckOverrides",
@@ -54054,7 +56152,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -54064,7 +56162,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
+									"packagePath": "dist/actions-DA1J5F56.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -55928,9 +58026,13 @@
 				569,
 				776,
 				781,
+				1452,
 				750,
+				1463,
+				1519,
 				785,
 				857,
+				1550,
 				797,
 				813,
 				817,
@@ -56015,6 +58117,7 @@
 				700,
 				557,
 				706,
+				1525,
 				880,
 				600,
 				891,
@@ -59878,7 +61981,7 @@
 		"772": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/editor-api.ts",
-			"qualifiedName": "StudioPluginEditorApi.commands"
+			"qualifiedName": "StudioPluginEditorApi.editor"
 		},
 		"773": {
 			"packageName": "@anvilkit/core",
@@ -63269,6 +65372,526 @@
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
 			"qualifiedName": "__type"
+		},
+		"1452": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorApi"
+		},
+		"1453": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorApi.readDocument"
+		},
+		"1454": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorApi.readDocument"
+		},
+		"1455": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorApi.subscribe"
+		},
+		"1456": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorApi.subscribe"
+		},
+		"1457": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "listener"
+		},
+		"1458": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1459": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1460": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1461": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1462": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorApi.commit"
+		},
+		"1463": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitApi"
+		},
+		"1464": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitApi.componentLibrary"
+		},
+		"1465": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1466": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1467": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "edit"
+		},
+		"1468": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitApi.variantModel"
+		},
+		"1469": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1470": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1471": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "definitionId"
+		},
+		"1472": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "edit"
+		},
+		"1473": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitApi.instanceSelection"
+		},
+		"1474": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1475": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1476": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "nodeIds"
+		},
+		"1477": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "selection"
+		},
+		"1478": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitApi.instanceOverride"
+		},
+		"1479": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1480": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1481": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "nodeIds"
+		},
+		"1482": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "edit"
+		},
+		"1483": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitApi.interactions"
+		},
+		"1484": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1485": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1486": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "nodeId"
+		},
+		"1487": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "update"
+		},
+		"1488": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1489": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1490": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "current"
+		},
+		"1491": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitApi.bindings"
+		},
+		"1492": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1493": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1494": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "nodeId"
+		},
+		"1495": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "update"
+		},
+		"1496": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1497": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1498": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "current"
+		},
+		"1499": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitApi.inlineText"
+		},
+		"1500": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1501": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1502": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "input"
+		},
+		"1503": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1504": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.nodeId"
+		},
+		"1505": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.targetId"
+		},
+		"1506": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.value"
+		},
+		"1507": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitApi.annotation"
+		},
+		"1508": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1509": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1510": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "edit"
+		},
+		"1511": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitApi.deleteNodes"
+		},
+		"1512": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1513": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1514": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "nodeIds"
+		},
+		"1515": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitApi.duplicateNodes"
+		},
+		"1516": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1517": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1518": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "nodeIds"
+		},
+		"1519": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitOutcome"
+		},
+		"1520": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitOutcome.status"
+		},
+		"1521": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorCommitOutcome.errors"
+		},
+		"1522": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1523": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.code"
+		},
+		"1524": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.message"
+		},
+		"1525": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorIntent"
+		},
+		"1526": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1527": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.kind"
+		},
+		"1528": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.nodeId"
+		},
+		"1529": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.targetId"
+		},
+		"1530": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.value"
+		},
+		"1531": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1532": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.kind"
+		},
+		"1533": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.nodeId"
+		},
+		"1534": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.interactions"
+		},
+		"1535": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1536": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.kind"
+		},
+		"1537": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.nodeId"
+		},
+		"1538": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.bindings"
+		},
+		"1539": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1540": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.kind"
+		},
+		"1541": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.nodeIds"
+		},
+		"1542": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.selection"
+		},
+		"1543": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1544": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.kind"
+		},
+		"1545": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.nodeId"
+		},
+		"1546": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.name"
+		},
+		"1547": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1548": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.kind"
+		},
+		"1549": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.nodeIds"
+		},
+		"1550": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorIntentOutcome"
+		},
+		"1551": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorIntentOutcome.status"
+		},
+		"1552": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "EditorIntentOutcome.errors"
+		},
+		"1553": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type"
+		},
+		"1554": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.code"
+		},
+		"1555": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/editor-api-v2.ts",
+			"qualifiedName": "__type.message"
 		}
 	},
 	"files": {

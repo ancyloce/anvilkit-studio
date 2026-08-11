@@ -29,10 +29,17 @@
  * exists to close. Narrowing this set back to the letter of §16 is a
  * one-line change if review prefers the literal reading.
  *
- * Node-existence checks are absent on purpose — see this package's
- * `commands/validate.ts` header: `AuthoringStateV1` alone cannot tell
- * a missing node from a default-state one. Dangling references are a
- * *resolution* concern, handled by `resolveInteraction`.
+ * Node-existence checks are absent on purpose: a carrier document
+ * cannot tell a missing node from a default-state one from this
+ * vantage point. Dangling references are a *resolution* concern,
+ * handled by `resolveInteraction`.
+ *
+ * `p3-009` removed the three command-shaped validators
+ * (`interactionCreateErrors` / `interactionUpdateErrors` /
+ * `interactionDeleteErrors`) with the command IR; the structural and
+ * URL rules survive here because `urlScheme` and `structureErrors`
+ * are what the preview runtime and the HTML exporter's scheme filter
+ * are pinned against.
  */
 
 import type {
@@ -40,9 +47,6 @@ import type {
 	EditorPolicies,
 	Interaction,
 } from "@anvilkit/contracts/editor";
-import type {
-	AuthoringStateV1,
-} from "../legacy/index.js";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
 import { InteractionSchema } from "@anvilkit/schema/editor";
 import { makeEditorError } from "../diagnostics.js";
@@ -176,141 +180,76 @@ function structureErrors(
 }
 
 /**
- * Validate an `interaction.create` command against the document.
+ * Validate one interaction as it is about to be **written** to a
+ * node's declared `interactions` carrier (`p3-009`).
  *
- * Rejects: duplicate ids, the §7.3 per-document and per-interaction
- * caps, structural violations, and forbidden URL schemes. Deliberately
- * does **not** reject references to nodes that are absent from the
- * authoring state — see the file header.
+ * This is where the §16 URL rules survived the command engine's
+ * deletion. `interactionCreateErrors`/`interactionUpdateErrors` used
+ * to be the only callers of {@link forbiddenSchemeErrors} and
+ * {@link structureErrors}, and `updateInteractionsInData` — the
+ * canonical write since `p3-004` — validated neither, so deleting the
+ * command validators without this would have removed the
+ * "`javascript:` is always rejected" guarantee from the only write
+ * path that still exists.
+ *
+ * Identity checks (duplicate id on create, unknown id on update) are
+ * deliberately NOT reproduced: the carrier write replaces the whole
+ * array under one owner node, so "already exists" and "does not
+ * exist" are not questions the write can ask. The per-interaction
+ * action cap is, and is enforced.
  */
-export function interactionCreateErrors(
-	state: AuthoringStateV1,
+export function interactionWriteErrors(
 	interaction: Interaction,
 	policies: EditorPolicies = {},
 ): readonly EditorError[] {
 	const errors: EditorError[] = [];
-
-	if (Object.hasOwn(state.interactions, interaction.id)) {
+	if (interaction.actions.length > EDITOR_COUNT_LIMITS.actionsPerInteraction) {
 		errors.push(
 			makeEditorError(
-				"EDITOR_COMMAND_CONFLICT",
-				`interaction "${interaction.id}" already exists`,
+				"EDITOR_LIMIT_EXCEEDED",
+				`interaction "${interaction.id}" exceeds ${EDITOR_COUNT_LIMITS.actionsPerInteraction} actions`,
 				{
 					details: {
 						kind: "interaction",
-						reason: "duplicate-id",
-						interactionId: interaction.id,
+						limit: EDITOR_COUNT_LIMITS.actionsPerInteraction,
+						actual: interaction.actions.length,
 					},
 				},
 			),
 		);
 	}
+	errors.push(...forbiddenSchemeErrors(interaction));
+	errors.push(...structureErrors(interaction, policies));
+	return errors;
+}
 
-	if (
-		Object.keys(state.interactions).length >=
-			EDITOR_COUNT_LIMITS.interactions &&
-		!Object.hasOwn(state.interactions, interaction.id)
-	) {
+/**
+ * Validate a whole `interactions` carrier value, plus the §7.3
+ * per-document cap expressed per node (a single node may not carry
+ * more interactions than the document limit permits).
+ */
+export function interactionsWriteErrors(
+	interactions: readonly Interaction[],
+	policies: EditorPolicies = {},
+): readonly EditorError[] {
+	const errors: EditorError[] = [];
+	if (interactions.length > EDITOR_COUNT_LIMITS.interactions) {
 		errors.push(
 			makeEditorError(
 				"EDITOR_LIMIT_EXCEEDED",
-				`document already holds the maximum of ${EDITOR_COUNT_LIMITS.interactions} interactions`,
+				`a node may not carry more than ${EDITOR_COUNT_LIMITS.interactions} interactions`,
 				{
 					details: {
 						kind: "interaction",
 						limit: EDITOR_COUNT_LIMITS.interactions,
+						actual: interactions.length,
 					},
 				},
 			),
 		);
 	}
-
-	if (interaction.actions.length > EDITOR_COUNT_LIMITS.actionsPerInteraction) {
-		errors.push(
-			makeEditorError(
-				"EDITOR_LIMIT_EXCEEDED",
-				`interaction "${interaction.id}" exceeds ${EDITOR_COUNT_LIMITS.actionsPerInteraction} actions`,
-				{
-					details: {
-						kind: "interaction",
-						limit: EDITOR_COUNT_LIMITS.actionsPerInteraction,
-						actual: interaction.actions.length,
-					},
-				},
-			),
-		);
+	for (const interaction of interactions) {
+		errors.push(...interactionWriteErrors(interaction, policies));
 	}
-
-	// Absolute scheme bans run independently of the structural parse so
-	// a `javascript:` URL is reported as such, not as a generic shape
-	// error that a host might read as policy-relaxable.
-	errors.push(...forbiddenSchemeErrors(interaction));
-	errors.push(...structureErrors(interaction, policies));
 	return errors;
-}
-
-/**
- * Validate an `interaction.update` command.
- *
- * Mirrors create except for identity: the id **must already exist**.
- * Allowing update to create would make create's duplicate-id rejection
- * meaningless, and would let a typo silently add an interaction the
- * author never asked for. The per-document cap is not re-checked —
- * replacing an existing entry cannot grow the collection.
- */
-export function interactionUpdateErrors(
-	state: AuthoringStateV1,
-	interaction: Interaction,
-	policies: EditorPolicies = {},
-): readonly EditorError[] {
-	const errors: EditorError[] = [];
-
-	if (!Object.hasOwn(state.interactions, interaction.id)) {
-		errors.push(
-			makeEditorError(
-				"EDITOR_COMMAND_CONFLICT",
-				`interaction "${interaction.id}" does not exist`,
-				{
-					details: {
-						kind: "interaction",
-						reason: "unknown-id",
-						interactionId: interaction.id,
-					},
-				},
-			),
-		);
-	}
-
-	if (interaction.actions.length > EDITOR_COUNT_LIMITS.actionsPerInteraction) {
-		errors.push(
-			makeEditorError(
-				"EDITOR_LIMIT_EXCEEDED",
-				`interaction "${interaction.id}" exceeds ${EDITOR_COUNT_LIMITS.actionsPerInteraction} actions`,
-				{
-					details: {
-						kind: "interaction",
-						limit: EDITOR_COUNT_LIMITS.actionsPerInteraction,
-						actual: interaction.actions.length,
-					},
-				},
-			),
-		);
-	}
-
-	errors.push(...forbiddenSchemeErrors(interaction));
-	errors.push(...structureErrors(interaction, policies));
-	return errors;
-}
-
-/**
- * Validate an `interaction.delete` command.
- *
- * Deleting an absent interaction is a **noop, not an error**: the
- * author's intent ("this should not exist") is already satisfied, and
- * rejecting would make a double-click or a concurrent delete surface a
- * failure for a state the user wanted. The reducer's noop detection
- * then avoids a pointless history entry.
- */
-export function interactionDeleteErrors(): readonly EditorError[] {
-	return [];
 }

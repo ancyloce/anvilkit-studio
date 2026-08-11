@@ -61,8 +61,7 @@ import {
 } from "@/primitives/dropdown-menu";
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
-import { EditorInspectorMount } from "../../editor/inspector/EditorInspectorMount.js";
-import { useEditorNativeActions } from "../../editor/native-actions.js";
+import { useEditorTreeActions } from "../../editor/tree-actions.js";
 
 interface ItemSelector {
 	readonly index: number;
@@ -176,7 +175,13 @@ function ComponentActionsMenu({
 	const selectedId = useReactivePuck(
 		(s) => (s.selectedItem?.props as { id?: string } | undefined)?.id ?? null,
 	);
-	const nativeActions = useEditorNativeActions();
+	// `p3-009`: `useEditorNativeActions` (the command port's
+	// `commitNative` pair) is gone; the canonical equivalent is
+	// `commitDuplicateNodes` / `commitDeleteNodes` (`p3-005`), reached
+	// through the bridge. The two-tier structure is unchanged — the
+	// editor-aware path when a store is live, Puck's own reducer action
+	// when it is not.
+	const treeActions = useEditorTreeActions();
 	const zone = itemSelector.zone ?? "root:default-zone";
 
 	return (
@@ -196,8 +201,8 @@ function ComponentActionsMenu({
 			<DropdownMenuContent align="end" sideOffset={4}>
 				<DropdownMenuItem
 					onClick={() => {
-						if (nativeActions !== null && selectedId !== null) {
-							void nativeActions.duplicate(selectedId);
+						if (treeActions !== null && selectedId !== null) {
+							treeActions.duplicate(selectedId);
 							return;
 						}
 						dispatch({
@@ -213,8 +218,8 @@ function ComponentActionsMenu({
 				<DropdownMenuItem
 					variant="destructive"
 					onClick={() => {
-						if (nativeActions !== null && selectedId !== null) {
-							void nativeActions.remove(selectedId);
+						if (treeActions !== null && selectedId !== null) {
+							treeActions.remove(selectedId);
 							return;
 						}
 						dispatch({ type: "remove", index: itemSelector.index, zone });
@@ -347,16 +352,27 @@ export function FieldsPanel({
 				</div>
 			</header>
 			{/*
-			 * The native field tree is built ONCE here and handed to the
-			 * mount, which decides where it lands: under the `properties`
-			 * tab of the visual editor's four-tab inspector, or — with the
-			 * editor off — alone in the single scroll body this panel has
-			 * always rendered (ED-INSPECT-002 coexistence rule). Either way
-			 * grouping, ordering and the loading treatment below are
-			 * untouched by the editor.
+			 * The native field tree, in the single scroll body this panel
+			 * has always rendered (ED-INSPECT-002 coexistence rule).
+			 *
+			 * `p3-009`: `EditorInspectorMount` used to branch here —
+			 * editor-ready got the four-tab inspector (Style / Data /
+			 * Interactions / Properties) and editor-off got exactly this
+			 * shape. Those four tabs were the command-era inspector
+			 * (`react/editor/inspector/**`, `tokens/use-design-system.ts`,
+			 * `interactions/use-interactions.ts`, `bindings/use-binding-editor.ts`),
+			 * every one of them a `port.execute` consumer, and they are
+			 * deleted. Their canonical replacements exist and are complete —
+			 * `composition/{StylePanel,DataPanel,InteractionsPanel,DesignSystemPanel}`
+			 * (`p4-001`…`p4-003`, `p5-003`…`p5-005`) — but they are mounted
+			 * by `StudioPuckLayout`, which `p4-009` has not yet swapped in
+			 * (`Studio.tsx` still passes `overrides`). So this shell renders
+			 * the degraded branch, which is the branch it always rendered
+			 * with the editor off. Recorded on the deferred-verification
+			 * ledger; `p4-009` closes the window.
 			 */}
-			<EditorInspectorMount
-				properties={
+			<div className="min-h-0 flex-1 overflow-auto">
+				{
 					<div
 						className={cn(
 							// Dim-and-settle, not `animate-pulse`: these are the REAL fields,
@@ -393,7 +409,7 @@ export function FieldsPanel({
 						)}
 					</div>
 				}
-			/>
+			</div>
 		</div>
 	);
 }

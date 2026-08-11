@@ -12,9 +12,6 @@ import type {
 	EditorDiagnosticPort,
 	EditorEvent,
 } from "@anvilkit/contracts/editor";
-import type {
-	AuthoringStateV1,
-} from "../../../editor/legacy/index.js";
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { EditorI18nProvider } from "@/state/editor-i18n-context";
@@ -27,7 +24,6 @@ import {
 	LONG_TASK_THRESHOLD_MS,
 	perfOverlayEnabled,
 } from "../diagnostics/perf-metrics.js";
-import { buildAuthoringStylesheet } from "../responsive/stylesheet.js";
 
 afterEach(() => {
 	cleanup();
@@ -171,17 +167,6 @@ describe("editor perf metrics", () => {
 });
 
 describe("producer instrumentation", () => {
-	it("counts stylesheet cache hits and misses", () => {
-		const state = authoringWithNodes(3);
-		const cache = new Map();
-		const stats = { hits: 0, misses: 0 };
-		buildAuthoringStylesheet(state, [], cache, stats);
-		expect(stats).toEqual({ hits: 0, misses: 3 });
-		// Same state object → every node record is reference-identical.
-		buildAuthoringStylesheet(state, [], cache, stats);
-		expect(stats).toEqual({ hits: 3, misses: 3 });
-	});
-
 	it("reports the MutationObserver batch size to the registry hook", async () => {
 		const batches: number[] = [];
 		const registry = createCanvasDomRegistry({
@@ -221,7 +206,7 @@ describe("PerfOverlay", () => {
 		render(
 			<EditorI18nProvider>
 				<PerfOverlay
-					bridge={{ port: null, canvasRegistry: null } as never}
+					bridge={{ getPuckApi: () => null, canvasRegistry: null } as never}
 					metrics={metrics}
 				/>
 			</EditorI18nProvider>,
@@ -250,7 +235,7 @@ describe("PerfOverlay", () => {
 		render(
 			<EditorI18nProvider>
 				<PerfOverlay
-					bridge={{ port: null, canvasRegistry: null } as never}
+					bridge={{ getPuckApi: () => null, canvasRegistry: null } as never}
 					metrics={metrics}
 				/>
 			</EditorI18nProvider>,
@@ -260,30 +245,3 @@ describe("PerfOverlay", () => {
 		metrics.dispose();
 	});
 });
-
-function authoringWithNodes(count: number): AuthoringStateV1 {
-	return {
-		version: "1",
-		revision: 1,
-		breakpoints: [],
-		nodes: Object.fromEntries(
-			Array.from({ length: count }, (_, index) => [
-				`n-${index}`,
-				{
-					version: "1" as const,
-					layout: {
-						base: {
-							gap: { kind: "unit" as const, value: index, unit: "px" as const },
-						},
-					},
-				},
-			]),
-		),
-		tokens: {},
-		tokenModes: {},
-		styleDefinitions: {},
-		componentDefinitions: {},
-		interactions: {},
-		bindings: {},
-	};
-}

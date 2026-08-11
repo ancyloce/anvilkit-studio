@@ -30,7 +30,6 @@ import { type ReactNode, useEffect, useSyncExternalStore } from "react";
 import { useStudioPluginContext } from "../../../studio/context/plugin-context.js";
 import type { StudioEditorBridge } from "../bridge.js";
 import { isElementNode } from "../canvas/dom-registry.js";
-import type { InternalEditorCommandPort } from "../command-port.js";
 import { buildShortcutContext } from "./context.js";
 import {
 	EDITOR_SHORTCUT_KEYMAP,
@@ -81,15 +80,10 @@ export default function EditorShortcuts({
 			if (isTypingTarget(target)) {
 				return;
 			}
-			const port = bridge.port as InternalEditorCommandPort | null;
-			if (port === null) {
-				return;
-			}
-
 			// Component-mode traversal first: it consumes `↑`/`↓` only while
 			// the mode is on, so Puck's arrow handling is untouched in page
 			// mode and no keymap row can shadow it in component mode.
-			if (runTargetTraversal(event, bridge, port.tryGetPuckApi?.() ?? null)) {
+			if (runTargetTraversal(event, bridge, bridge.getPuckApi())) {
 				event.preventDefault();
 				event.stopPropagation();
 				return;
@@ -112,7 +106,7 @@ export default function EditorShortcuts({
 				return;
 			}
 
-			const context = buildShortcutContext(bridge, port, ctx);
+			const context = buildShortcutContext(bridge, ctx);
 
 			if (runShortcutCommand(binding.command, context)) {
 				event.preventDefault();

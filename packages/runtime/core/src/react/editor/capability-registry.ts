@@ -12,24 +12,27 @@
  * `@anvilkit/ir/editor` projection — the same set exporter preflight
  * consumes, so the two can never disagree.
  *
- * `readDocument` is optional so existing callers keep compiling, but
- * every in-repo construction site supplies it: without the document
- * the scan cannot see `richText` (which lives in component props),
- * and a registry that under-reports used features would let a
- * document slip past the production export block (DD-DEC-018).
+ * `readDocument` is required: the scan reads `richText` (which lives
+ * in component props) and every §5.1 carrier from the document itself,
+ * and a registry that under-reports used features would let a document
+ * slip past the production export block (DD-DEC-018).
+ *
+ * `p3-009` note: this module was on PLAN-0026 §3.1's delete list as
+ * "the v1 reader", but `p2-006` had already merged the readers — it
+ * reads `readEditorMetadata`, the single canonical one. Its surviving
+ * consumer is the a11y contract scanner
+ * (`a11y/use-accessibility-issues.ts`), so it stays, minus the sidecar
+ * dependency it no longer has anything to read.
  */
 
 import type {
 	AnvilComponentMetadata,
 	EditorFeatureId,
 } from "@anvilkit/contracts/editor";
-import type {
-	AuthoringStateV1,
-} from "../../editor/legacy/index.js";
 import type { PuckApi } from "@puckeditor/core";
 import {
 	type EditorFeatureScanDocument,
-	listUsedEditorFeatures,
+	listUsedDocumentFeatures,
 } from "../../editor/index.js";
 import type { EditorCapabilityRegistry } from "../../types/editor-api.js";
 import { readEditorMetadata } from "../../puck/component-metadata.js";
@@ -38,13 +41,12 @@ import { readEditorMetadata } from "../../puck/component-metadata.js";
 export interface CapabilityRegistryDeps {
 	/** Live Puck API; may throw before `<Puck>` binds. */
 	readonly getPuckApi: () => PuckApi;
-	/** Current parsed authoring state (the command port's read side). */
-	readonly readAuthoring: () => AuthoringStateV1;
 	/**
-	 * Current document, for prop-level feature detection. Omitting it
-	 * limits `listUsedFeatures` to sidecar-visible features.
+	 * The live document. `p3-009` made this the ONLY feature source:
+	 * with the sidecar gone every editor feature is a carrier in the
+	 * document, so a document-only scan is complete rather than partial.
 	 */
-	readonly readDocument?: () => EditorFeatureScanDocument | null;
+	readonly readDocument: () => EditorFeatureScanDocument | null;
 }
 
 /** Build the per-`<Studio>` capability registry. */
@@ -94,10 +96,7 @@ export function createEditorCapabilityRegistry(
 			}
 		},
 		listUsedFeatures(): readonly EditorFeatureId[] {
-			return listUsedEditorFeatures(
-				deps.readAuthoring(),
-				deps.readDocument?.() ?? null,
-			);
+			return listUsedDocumentFeatures(deps.readDocument() ?? undefined);
 		},
 	};
 }

@@ -2,6 +2,15 @@
  * @file Definition ⇄ document projection for the isolated component
  * canvas (PLAN-0020 CORE-P2-009F; DD-DEC-010; DD-0019 §14.4).
  *
+ * Relocated here from `editor/components/component-document.ts` by
+ * `p3-009`. The module was on PLAN-0026 §3.1's delete list as part of
+ * the sidecar component engine, but it never read the sidecar: it is a
+ * pure projection over `ComponentDefinition`, which is a *canonical*
+ * contract type carried by the `componentLibrary` root prop. Its live
+ * consumer (`react/editor/components/use-component-canvas.ts`,
+ * `p5-006`/`p5-007`) survives, so the code moves to the read model
+ * beside `matchVariant` rather than dying with the engine.
+ *
  * Main-component mode edits a *definition*, but the canvas can only
  * render a `PuckData` document. These two pure functions are that
  * bridge:
@@ -29,7 +38,7 @@ import type {
 	SerializablePuckNode,
 } from "@anvilkit/contracts/editor";
 import type { Data as PuckData } from "@puckeditor/core";
-import { matchVariant } from "./variants.js";
+import { matchVariant } from "./materialize.js";
 
 function isNode(value: unknown): value is SerializablePuckNode {
 	return (

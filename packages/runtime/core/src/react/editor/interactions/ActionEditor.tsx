@@ -44,7 +44,7 @@ import {
 	SelectValue,
 } from "@/primitives/select";
 import { useMsg } from "@/state/editor-i18n-context";
-import type { InteractionTargetOption } from "./use-interactions.js";
+import type { InteractionTargetOption } from "../composition/interactions/use-node-interactions.js";
 
 /** The action families offered, in §16's declaration order. */
 export const ACTION_KINDS = [

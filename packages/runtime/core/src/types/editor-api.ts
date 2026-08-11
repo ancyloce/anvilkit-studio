@@ -6,8 +6,8 @@
  * sibling: the shapes here are implemented by
  * `src/react/editor/` (capability registry, plugin facade) and
  * referenced type-only from the plugin contract. Plugins receive the
- * typed command port and read-only projections — never raw store
- * handles (the store-isolation invariant in `plugin-context.ts`).
+ * commit helpers and read-only projections — never raw store handles
+ * (the store-isolation invariant in `plugin-context.ts`).
  */
 
 import type {
@@ -16,9 +16,7 @@ import type {
 	EditorFeatureId,
 	EditorSelectionState,
 } from "@anvilkit/contracts/editor";
-import type {
-	EditorCommandPort,
-} from "../editor/legacy/index.js";
+import type { EditorApi } from "./editor-api-v2.js";
 
 /**
  * Capability lookup over the live document and config
@@ -52,15 +50,21 @@ export interface EditorSelectionReader {
  * The optional `editor` member of `StudioPluginContext`
  * (DD-0019 §21.1, verbatim): present exactly when the host enabled
  * the visual editor (`StudioProps.editor.features.enabled === true`).
- * Commands issued here flow through the same single mutation path as
- * the UI (`source: "plugin"`, one history entry per intent); before
- * the lazily-loaded editor runtime finishes mounting, `commands`
- * rejects writes deterministically instead of throwing.
+ * Writes issued here flow through the same commit helpers the UI uses
+ * (one history entry per intent); before the lazily-loaded editor
+ * runtime finishes mounting, every commit rejects deterministically
+ * instead of throwing.
  */
 export interface StudioPluginEditorApi {
 	readonly version: "1";
-	/** The typed command port — the single mutation entry point. */
-	readonly commands: EditorCommandPort;
+	/**
+	 * The canonical editor API (`p3-008`): a read projection, a change
+	 * subscription and the commit helpers. `p3-009` replaced the typed
+	 * command port here — a plugin writing through `commit.*` takes
+	 * exactly the path the UI takes, one intent per history entry, with
+	 * no command vocabulary crossing the boundary.
+	 */
+	readonly editor: EditorApi;
 	/** Read-only multi-selection state. */
 	readonly selection: EditorSelectionReader;
 	/** Capability metadata lookup. */

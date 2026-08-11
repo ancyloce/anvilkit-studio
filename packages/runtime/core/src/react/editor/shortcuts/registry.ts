@@ -49,7 +49,19 @@
  * {@link COMPONENT_MODE_KEYS}.
  */
 
-import type { PuckApi } from "@puckeditor/core";
+import type {
+	Config as PuckConfig,
+	Data as PuckData,
+	PuckApi,
+} from "@puckeditor/core";
+import {
+	collectAppearanceNodes,
+	documentBreakpoints,
+	readTargetHidden,
+} from "../../../puck/read-appearance.js";
+import { ROOT_STYLE_TARGET_ID } from "../../../puck/targets.js";
+import { commitAnnotationUpdate, isNodeLocked } from "../../../puck/update-annotations.js";
+import { commitAppearanceUpdate } from "../../../puck/update-appearance.js";
 import type { StudioEditorBridge } from "../bridge.js";
 import {
 	declaredTargetIds,
@@ -57,7 +69,6 @@ import {
 	TARGET_TRAVERSAL_WRAPS,
 } from "../canvas/component-mode.js";
 import { isElementNode } from "../canvas/dom-registry.js";
-import type { InternalEditorCommandPort } from "../command-port.js";
 
 export { TARGET_TRAVERSAL_WRAPS };
 
@@ -193,8 +204,7 @@ export function isTypingTarget(target: EventTarget | null): boolean {
 /** Everything the command handlers operate over. */
 export interface ShortcutContext {
 	readonly bridge: StudioEditorBridge;
-	readonly port: InternalEditorCommandPort;
-	/** Duplicate/remove through the CORE-P1A-016 one-dispatch path. */
+	/** Duplicate/remove through the `p3-005` one-dispatch commit helpers. */
 	readonly duplicateNodes: (nodeIds: readonly string[]) => Promise<void>;
 	readonly removeNodes: (nodeIds: readonly string[]) => Promise<void>;
 	readonly wrapNodes: (nodeIds: readonly string[]) => Promise<void>;
@@ -218,10 +228,14 @@ export function runShortcutCommand(
 	commandId: EditorShortcutCommandId,
 	context: ShortcutContext,
 ): boolean {
-	const { bridge, port } = context;
+	const { bridge } = context;
 	const selection = bridge.selection?.getState();
 	const selectedIds = selection?.selectedIds ?? [];
-	const writable = !port.isReadOnly() && !port.writersDisabled();
+	// `p3-009`: the sidecar's read-only safe mode is gone with the
+	// sidecar, so writability is exactly the collab writer gate — and it
+	// is the same gate the commit helpers enforce, so a shortcut that
+	// renders as available is a shortcut whose write will be accepted.
+	const writable = bridge.getWriterGateError() === null;
 
 	/**
 	 * Fire-and-forget guard for the async tree commands: a rejected
@@ -248,14 +262,11 @@ export function runShortcutCommand(
 		});
 	};
 
-	const execute = (payload: Record<string, unknown>): void => {
-		void port.execute({
-			id: crypto.randomUUID(),
-			expectedRevision: port.getSnapshot().revision,
-			source: "shortcut",
-			timestamp: Date.now(),
-			...payload,
-		} as never);
+	/** The live `PuckApi`, or `null` before `<Puck>` mounts. */
+	const puckApi = (): PuckApi | null => bridge.getPuckApi();
+	const commitDeps = {
+		getPuckApi: () => bridge.getPuckApi() as PuckApi,
+		getWriterGateError: () => bridge.getWriterGateError(),
 	};
 
 	switch (commandId) {
@@ -276,27 +287,59 @@ export function runShortcutCommand(
 			run("unwrap", context.unwrapNodes(selectedIds));
 			return true;
 		case "lock": {
+			// `p3-006`'s `editorAnnotations` root prop is where `locked`
+			// lives now, so the read is `isNodeLocked` over the live `Data`
+			// and the write is one `commitAnnotationUpdate` per node. The
+			// deleted `node.lock.set` command took a node LIST and produced
+			// one history entry for the whole selection; the annotation
+			// helper is per-node, so a multi-select lock is currently N undo
+			// steps rather than one. Recorded rather than papered over — the
+			// fix is a plural `AnnotationEdit`, which is a contract change.
 			if (selectedIds.length === 0 || !writable) return false;
-			const anyUnlocked = selectedIds.some(
-				(id) => port.getSnapshot().authoring.nodes[id]?.locked !== true,
-			);
-			execute({
-				type: "node.lock.set",
-				nodeIds: selectedIds,
-				locked: anyUnlocked,
-			});
+			const api = puckApi();
+			if (api === null) return false;
+			const data = api.appState.data as PuckData;
+			const locked = selectedIds.some((id) => !isNodeLocked(data, id));
+			for (const nodeId of selectedIds) {
+				commitAnnotationUpdate(commitDeps, {
+					kind: "set-locked",
+					nodeId,
+					locked,
+				});
+			}
 			return true;
 		}
 		case "hide": {
+			// Visibility is the per-target `hidden` carrier at the base
+			// layer (§5.1), written through the one appearance commit path.
+			// `undefined` REMOVES the entry — the canonical spelling of the
+			// deleted command's `hidden: null`.
 			if (selectedIds.length === 0 || !writable) return false;
-			const anyVisible = selectedIds.some(
-				(id) => port.getSnapshot().authoring.nodes[id]?.hidden?.base !== true,
-			);
-			execute({
-				type: "node.visibility.set",
+			const api = puckApi();
+			if (api === null) return false;
+			const config = api.config as PuckConfig;
+			const data = api.appState.data as PuckData;
+			const hiddenState = readTargetHidden({
+				nodes: collectAppearanceNodes(data, config),
+				config,
+				breakpoints: documentBreakpoints(data),
 				nodeIds: selectedIds,
-				breakpointId: "base",
-				hidden: anyVisible ? true : null,
+				targetId: ROOT_STYLE_TARGET_ID,
+				layer: "base",
+			});
+			// "Any visible" — a mixed selection hides rather than reveals,
+			// matching the deleted command's `anyVisible` rule.
+			const anyVisible =
+				hiddenState.kind !== "value" || hiddenState.value !== true;
+			commitAppearanceUpdate(commitDeps, {
+				config,
+				nodeIds: selectedIds,
+				targetId: ROOT_STYLE_TARGET_ID,
+				layer: "base",
+				patch: {
+					kind: "set-hidden",
+					value: anyVisible ? true : undefined,
+				},
 			});
 			return true;
 		}

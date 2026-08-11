@@ -10,7 +10,7 @@
 
 import { migrate, walkTree } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
-import { readAuthoringState } from "../../../editor/index.js";
+import { readLegacySidecar } from "../../../migrations/legacy-sidecar.js";
 import {
 	buildFullLegacyDocument,
 	buildLegacyFixtureConfig,
@@ -27,7 +27,7 @@ describe("legacy fixture pack (P0-04)", () => {
 
 	it("every fixture reads with the expected read-only classification", () => {
 		for (const fixture of buildLegacyFixturePack()) {
-			const result = readAuthoringState(fixture.data);
+			const result = readLegacySidecar(fixture.data);
 			expect(result.readOnly, fixture.name).toBe(fixture.expectReadOnly);
 			if (!fixture.expectReadOnly) {
 				expect(result.errors, fixture.name).toHaveLength(0);
@@ -36,7 +36,7 @@ describe("legacy fixture pack (P0-04)", () => {
 	});
 
 	it("the full sidecar is schema-valid and covers every category", () => {
-		const result = readAuthoringState(buildFullLegacyDocument());
+		const result = readLegacySidecar(buildFullLegacyDocument());
 		expect(result.readOnly).toBe(false);
 		const state = result.state;
 		expect(Object.keys(state.nodes)).toEqual(
@@ -52,7 +52,7 @@ describe("legacy fixture pack (P0-04)", () => {
 	});
 
 	it("exercises hidden state, styleRefs, token alias, and cross-refs", () => {
-		const { state } = readAuthoringState(buildFullLegacyDocument());
+		const { state } = readLegacySidecar(buildFullLegacyDocument());
 		expect(state.nodes["hero-1"]?.hidden?.overrides?.["bp-tablet"]).toBe(true);
 		expect(state.nodes["zone-child-1"]?.hidden?.base).toBe(true);
 		const refs = state.nodes["card-1"]?.styleRefs?.base ?? [];

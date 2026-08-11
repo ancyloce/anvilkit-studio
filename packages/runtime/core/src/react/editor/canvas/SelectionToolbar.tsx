@@ -35,7 +35,11 @@ import type {
 	CssBoxEdges,
 	ResponsiveLayerRef,
 } from "@anvilkit/contracts/editor";
-import type { PuckApi, Config as PuckConfig } from "@puckeditor/core";
+import type {
+	Data as PuckDataType,
+	PuckApi,
+	Config as PuckConfig,
+} from "@puckeditor/core";
 import {
 	type ReactNode,
 	useEffect,
@@ -47,7 +51,6 @@ import { useMsg } from "@/state/editor-i18n-context";
 import { ROOT_STYLE_TARGET_ID } from "../../../puck/targets.js";
 import { useStudioPluginContext } from "../../../studio/context/plugin-context.js";
 import type { StudioEditorBridge } from "../bridge.js";
-import type { InternalEditorCommandPort } from "../command-port.js";
 import { buildShortcutContext } from "../shortcuts/context.js";
 import { runShortcutCommand } from "../shortcuts/registry.js";
 import {
@@ -96,12 +99,12 @@ const CREATE_COMPONENT_ACTION = "create-component";
  *
  * The capture itself runs in `CreateComponentDialog` (main document —
  * this toolbar renders inside the canvas iframe, where a modal cannot
- * live) and is still ONE `commitNative`, so one undo restores the
- * exact pre-capture document.
+ * live) and is still ONE `commitCreateComponent`, so one undo restores
+ * the exact pre-capture document.
  */
 async function requestComponentCapture(
 	bridge: StudioEditorBridge,
-	port: InternalEditorCommandPort,
+	api: PuckApi,
 	config: PuckConfig,
 ): Promise<void> {
 	const selectedIds = bridge.selection?.getState().selectedIds ?? [];
@@ -112,7 +115,7 @@ async function requestComponentCapture(
 		"../../../puck/create-component.js"
 	);
 	const errors = validateCreateComponentSelection(
-		port.readData(),
+		api.appState.data as PuckDataType,
 		config,
 		selectedIds,
 	);
@@ -260,11 +263,7 @@ export function SelectionToolbar({ bridge }: SelectionToolbarProps): ReactNode {
 			event.preventDefault();
 			event.stopPropagation();
 			const action = button.getAttribute("data-ak-toolbar-action") ?? "";
-			const port = bridge.port as InternalEditorCommandPort | null;
-			if (port === null) {
-				return;
-			}
-			const api = port.tryGetPuckApi?.() ?? null;
+			const api = bridge.getPuckApi();
 			const layer = bridge.responsive?.getActiveLayer() ?? "base";
 			/** Every op of one align/distribute intent → ONE history entry. */
 			const commitOps = (ops: readonly CanvasAppearanceOp[]): void => {
@@ -298,14 +297,14 @@ export function SelectionToolbar({ bridge }: SelectionToolbarProps): ReactNode {
 			}
 			if (action === CREATE_COMPONENT_ACTION) {
 				if (api !== null) {
-					void requestComponentCapture(bridge, port, api.config);
+					void requestComponentCapture(bridge, api, api.config as PuckConfig);
 				}
 				return;
 			}
 			if ((BULK_COMMANDS as readonly string[]).includes(action)) {
 				runShortcutCommand(
 					action as (typeof BULK_COMMANDS)[number],
-					buildShortcutContext(bridge, port, ctx),
+					buildShortcutContext(bridge, ctx),
 				);
 			}
 		};
@@ -315,12 +314,9 @@ export function SelectionToolbar({ bridge }: SelectionToolbarProps): ReactNode {
 
 	const selection = bridge.selection?.getState();
 	const selectedIds = selection?.selectedIds ?? [];
-	const port = bridge.port as InternalEditorCommandPort | null;
 	if (
 		selectedIds.length < 2 ||
-		port === null ||
-		port.isReadOnly() ||
-		port.writersDisabled() ||
+		bridge.getWriterGateError() !== null ||
 		bridge.inline?.getSession() != null
 	) {
 		return null;

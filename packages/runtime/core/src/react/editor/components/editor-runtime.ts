@@ -10,11 +10,20 @@
  * state rather than document state, and both live here so there is
  * exactly one file to change when `p3-009` deletes the command port:
  *
- * 1. **The write gate.** Read-only documents and the collab writer
- *    gate are editor-runtime facts, not carriers — nothing in
- *    `Data` says "this session may not write". Dropping the gate
- *    would let a read-only or collab-gated session render enabled
- *    affordances whose commits silently reject.
+ * 1. **The write gate.** The collab writer gate is an editor-runtime
+ *    fact, not a carrier — nothing in `Data` says "this session may
+ *    not write". Dropping it would let a collab-gated session render
+ *    enabled affordances whose commits reject.
+ *
+ *    `p3-009` narrowed this from two conditions to one. The other was
+ *    the sidecar's read-only safe mode (`unsupported-major` envelope →
+ *    refuse every write), which no longer exists: there is no sidecar
+ *    to fail to parse, so there is no document a canonical session
+ *    cannot write. The gate itself moved from the deleted command
+ *    port onto `StudioEditorBridge.getWriterGateError`, and — this is
+ *    the part that matters — it is now ENFORCED inside the commit
+ *    helpers (`puck/writer-gate.ts`), so this hook disables the
+ *    affordance while the write path independently refuses it.
  * 2. **Scope and selection.** `definitionScope` and the selected node
  *    set are editor pointers (freeze §6, §10.6): they never enter
  *    `Data` and never record history. Reads come from
@@ -30,7 +39,6 @@
 import type { PuckApi } from "@puckeditor/core";
 import { useGetPuck } from "@puckeditor/core";
 import { use, useCallback, useMemo, useSyncExternalStore } from "react";
-import type { InternalEditorCommandPort } from "../command-port.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
 import { getEditorScopeController } from "./scope.js";
 
@@ -66,7 +74,6 @@ export function useComponentEditorRuntime(): ComponentEditorRuntime {
 		bridge === null ? zero : bridge.getVersion,
 		bridge === null ? zero : bridge.getVersion,
 	);
-	const port = bridge?.port as InternalEditorCommandPort | null | undefined;
 	const selection = bridge?.selection ?? null;
 
 	return useMemo((): ComponentEditorRuntime => {
@@ -75,17 +82,16 @@ export function useComponentEditorRuntime(): ComponentEditorRuntime {
 		const scope =
 			selection === null ? null : getEditorScopeController(selection);
 		return {
-			// No port yet means the lazy runtime is still loading; treat that
-			// as writable so the affordances do not flicker disabled on every
-			// mount. A commit issued in that window has no port to reject it
-			// either — it goes straight to `PuckApi`.
-			canMutate:
-				port == null ? true : !port.isReadOnly() && !port.writersDisabled(),
+			// An un-installed gate reads as open, so affordances do not
+			// flicker disabled while the lazy runtime loads — and a commit
+			// issued in that window consults the same inert gate, so the
+			// two agree by construction.
+			canMutate: bridge.getWriterGateError() === null,
 			enterComponent: (definitionId) => scope?.enterComponent(definitionId),
 			exitComponent: () => scope?.exitScope(),
 			select: (nodeId) => selection?.select(nodeId),
 		};
-	}, [bridge, port, selection, version]);
+	}, [bridge, selection, version]);
 }
 
 /**
@@ -96,10 +102,10 @@ export function useComponentEditorRuntime(): ComponentEditorRuntime {
  * `StudioEditorMount` WRAPS `<Puck>` (`react/components/Studio.tsx:360`),
  * so `CreateComponentDialog` — which `EditorRoot` mounts in the main
  * document precisely because the toolbar that triggers it lives inside
- * the canvas iframe — renders *outside* the provider. It has always
- * reached Puck through the port's documented `tryGetPuckApi()` escape
- * hatch; this keeps that true while every other caller stays on the
- * provider.
+ * the canvas iframe — renders *outside* the provider. It reaches Puck
+ * through the bridge's `getPuckApi()` seam (`p3-009`; formerly the
+ * command port's `tryGetPuckApi()`), while every other caller stays on
+ * the provider.
  *
  * Returns `null` rather than throwing when neither source is
  * available, so a caller refuses an edit instead of crashing the
@@ -118,7 +124,6 @@ export function usePuckApiGetter(): () => PuckApi | null {
 	} catch {
 		getPuck = null;
 	}
-	const port = bridge?.port as InternalEditorCommandPort | null | undefined;
 	return useCallback((): PuckApi | null => {
 		if (getPuck !== null) {
 			try {
@@ -128,8 +133,8 @@ export function usePuckApiGetter(): () => PuckApi | null {
 				return null;
 			}
 		}
-		return port?.tryGetPuckApi?.() ?? null;
-	}, [getPuck, port]);
+		return bridge?.getPuckApi() ?? null;
+	}, [getPuck, bridge]);
 }
 
 function noopSubscribe(): () => void {

@@ -45,6 +45,7 @@ import {
 	resolveStyleTargets,
 } from "./component-metadata.js";
 import { documentBreakpoints } from "./read-appearance.js";
+import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 
 /** One appearance mutation applied at the active layer. */
 export type AppearancePatch =
@@ -415,7 +416,7 @@ export function updateAppearanceInData(
 }
 
 /** Dependencies of {@link commitAppearanceUpdate} (thunk = testable). */
-export interface AppearanceCommitDeps {
+export interface AppearanceCommitDeps extends WriterGateDep {
 	readonly getPuckApi: () => PuckApi;
 }
 
@@ -438,6 +439,10 @@ export function commitAppearanceUpdate(
 	deps: AppearanceCommitDeps,
 	input: Omit<UpdateAppearanceInput, "data">,
 ): AppearanceCommitResult {
+	const gate = writerGateError(deps);
+	if (gate !== null) {
+		return { status: "rejected", changedNodeIds: [],  errors: [gate] };
+	}
 	const api = deps.getPuckApi();
 	const current = api.appState.data as Data;
 	const result = updateAppearanceInData({ ...input, data: current });
