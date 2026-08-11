@@ -42,8 +42,14 @@ function atStage(
 
 /** Draw one rectangle on the currently-open canvas overlay's stage. */
 async function drawRectOnOverlay(page: Page): Promise<void> {
-	await page.getByTestId("panel-dock-elements").click();
-	await page.getByTestId("elements-tool-rect").click();
+	// cp3-009: the rect tool is in the floating ToolStrip the overlay's
+	// `<CanvasWorkspace>` mounts, not in a dock panel that has to be opened.
+	await expect(page.getByTestId("tool-strip-rect")).toBeVisible();
+	await page.getByTestId("tool-strip-rect").click();
+	await expect(page.getByTestId("tool-strip-rect")).toHaveAttribute(
+		"data-active",
+		"true",
+	);
 	const canvas = page
 		.locator(
 			'[data-testid="canvas-mode-overlay"] [data-testid="pages-canvas"] canvas',

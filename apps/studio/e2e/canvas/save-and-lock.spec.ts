@@ -43,12 +43,25 @@ async function gotoCanvas(page: Page, pageId: string): Promise<void> {
 	await expect(
 		page.locator('[data-testid="pages-canvas"] canvas').first(),
 	).toBeAttached({ timeout: 60_000 });
-	await page.getByTestId("panel-dock-elements").click();
+	// cp3-009: the tools live in the floating ToolStrip that `<CanvasWorkspace>`
+	// mounts over the canvas (`toolStrip` defaults to true), so no dock panel has
+	// to be opened to reach them any more.
+	//
+	// The click is NOT navigation — it is the focus step the old
+	// `panel-dock-elements` click was silently providing.
+	// `WorkspaceShortcutLayer` attaches its keydown listener to the workspace
+	// ROOT element, so a keystroke only reaches the shortcut registry once focus
+	// is already inside it. Clicking Select does that explicitly, asserts the
+	// strip really mounted, and leaves the default tool active.
+	const selectTool_ = page.getByTestId("tool-strip-select");
+	await expect(selectTool_).toBeVisible();
+	await selectTool_.click();
+	await expect(selectTool_).toHaveAttribute("data-active", "true");
 }
 
 async function selectTool(page: Page, tool: string): Promise<void> {
-	await page.getByTestId(`elements-tool-${tool}`).click();
-	await expect(page.getByTestId(`elements-tool-${tool}`)).toHaveAttribute(
+	await page.getByTestId(`tool-strip-${tool}`).click();
+	await expect(page.getByTestId(`tool-strip-${tool}`)).toHaveAttribute(
 		"data-active",
 		"true",
 	);
@@ -165,7 +178,9 @@ test.describe("Canvas Studio — save and lock enforcement", () => {
 		await selectTool(page, "select");
 		await page.getByTestId("panel-dock-layers").click();
 		await page.getByTestId(`layer-row-${lockedTargetId}-lock`).click();
-		await page.getByTestId("panel-dock-elements").click();
+		// cp3-009: no "switch back to the Elements panel" step any more — the
+		// tool surface is the always-mounted ToolStrip, and `host-select-all`
+		// lives outside the dock entirely.
 		await page.getByTestId("host-select-all").dispatchEvent("click");
 
 		await page.keyboard.press(

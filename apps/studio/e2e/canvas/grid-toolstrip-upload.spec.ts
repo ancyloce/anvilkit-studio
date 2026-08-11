@@ -118,6 +118,61 @@ test.describe("PRD 0012 — grid, tool strip, uploads (FR-112/FR-010/FR-091..093
 		await expect(page.getByTestId("tool-strip-more")).toHaveCount(0);
 	});
 
+	test("tool strip: every built-in tool activates from the rail (cp3-009)", async ({
+		page,
+	}) => {
+		// cp3-009 deleted the Elements panel's drawing-tool grid, which is where
+		// eight specs used to reach the tools. The rail is now the ONLY built-in
+		// tool surface, so "all 14 are reachable and activatable from it" has to
+		// be asserted somewhere — this is that assertion. The id list mirrors
+		// `BuiltinToolId` (canvas-editor `src/stores/tool-store.ts`) in rail order
+		// (`TOOL_RAIL_ITEMS`, `src/chrome/icons.ts`); a tool added there without a
+		// rail entry fails the count check below.
+		await gotoCanvas(page, "e2e-strip-all-tools");
+		const strip = page.getByTestId("tool-strip");
+		await expect(strip).toBeVisible();
+
+		const builtinToolIds = [
+			"select",
+			"text",
+			"rich-text",
+			"frame",
+			"rect",
+			"ellipse",
+			"polygon",
+			"star",
+			"line",
+			"path",
+			"image",
+			"hand",
+			"ai-image",
+			"ai-brush",
+		] as const;
+
+		// The rail renders exactly the built-ins — no more, no fewer.
+		await expect(strip.locator("[data-testid^='tool-strip-']")).toHaveCount(
+			builtinToolIds.length,
+		);
+
+		for (const id of builtinToolIds) {
+			const button = page.getByTestId(`tool-strip-${id}`);
+			await expect(button).toBeVisible();
+			// The image tool is gated on picker availability; this route wires
+			// `onPickAsset`, so every rail button must be enabled here.
+			await expect(button).toBeEnabled();
+			await button.click();
+			await expect(button).toHaveAttribute("data-active", "true");
+			await expect(button).toHaveAttribute("aria-pressed", "true");
+		}
+
+		// Leave the mount on Select so the serial file's later tests start clean.
+		await page.getByTestId("tool-strip-select").click();
+		await expect(page.getByTestId("tool-strip-select")).toHaveAttribute(
+			"data-active",
+			"true",
+		);
+	});
+
 	test("grid: context-menu toggles + settings dialog write viewport state (FR-112)", async ({
 		page,
 	}) => {

@@ -75,14 +75,25 @@ async function gotoCanvas(page: Page, pageId: string): Promise<void> {
 	await expect(
 		page.locator('[data-testid="pages-canvas"] canvas').first(),
 	).toBeAttached({ timeout: 60_000 });
-	// The drawing tools live in the workspace shell's Elements panel; open it
-	// once so `selectTool` can reach the `elements-tool-*` buttons.
-	await page.getByTestId("panel-dock-elements").click();
+	// cp3-009: the drawing tools live in the floating ToolStrip, which
+	// `<CanvasWorkspace>` mounts over the canvas unconditionally (`toolStrip`
+	// defaults to true) — no dock panel has to be opened to reach them.
+	//
+	// The click is NOT navigation — it is the focus step the old
+	// `panel-dock-elements` click was silently providing.
+	// `WorkspaceShortcutLayer` attaches its keydown listener to the workspace
+	// ROOT element, so a keystroke only reaches the shortcut registry once focus
+	// is already inside it. Clicking Select does that explicitly, asserts the
+	// strip really mounted, and leaves the default tool active.
+	const selectToolButton = page.getByTestId("tool-strip-select");
+	await expect(selectToolButton).toBeVisible();
+	await selectToolButton.click();
+	await expect(selectToolButton).toHaveAttribute("data-active", "true");
 }
 
 async function selectTool(page: Page, tool: string): Promise<void> {
-	await page.getByTestId(`elements-tool-${tool}`).click();
-	await expect(page.getByTestId(`elements-tool-${tool}`)).toHaveAttribute(
+	await page.getByTestId(`tool-strip-${tool}`).click();
+	await expect(page.getByTestId(`tool-strip-${tool}`)).toHaveAttribute(
 		"data-active",
 		"true",
 	);

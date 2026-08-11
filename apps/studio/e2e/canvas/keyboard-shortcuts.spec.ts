@@ -33,12 +33,25 @@ async function gotoCanvas(page: Page, pageId: string): Promise<void> {
 	await expect(
 		page.locator('[data-testid="pages-canvas"] canvas').first(),
 	).toBeAttached({ timeout: 60_000 });
-	await page.getByTestId("panel-dock-elements").click();
+	// cp3-009: the tools live in the floating ToolStrip that `<CanvasWorkspace>`
+	// mounts over the canvas (`toolStrip` defaults to true), so no dock panel has
+	// to be opened to reach them any more.
+	//
+	// The click is NOT navigation — it is the focus step the old
+	// `panel-dock-elements` click was silently providing.
+	// `WorkspaceShortcutLayer` attaches its keydown listener to the workspace
+	// ROOT element, so a keystroke only reaches the shortcut registry once focus
+	// is already inside it. Clicking Select does that explicitly, asserts the
+	// strip really mounted, and leaves the default tool active.
+	const selectTool_ = page.getByTestId("tool-strip-select");
+	await expect(selectTool_).toBeVisible();
+	await selectTool_.click();
+	await expect(selectTool_).toHaveAttribute("data-active", "true");
 }
 
 async function selectTool(page: Page, tool: string): Promise<void> {
-	await page.getByTestId(`elements-tool-${tool}`).click();
-	await expect(page.getByTestId(`elements-tool-${tool}`)).toHaveAttribute(
+	await page.getByTestId(`tool-strip-${tool}`).click();
+	await expect(page.getByTestId(`tool-strip-${tool}`)).toHaveAttribute(
 		"data-active",
 		"true",
 	);
@@ -101,17 +114,17 @@ test.describe("Canvas Studio — keyboard shortcuts (PRD 0012 FR-040)", () => {
 		await canvas.click();
 
 		await page.keyboard.press("r");
-		await expect(page.getByTestId("elements-tool-rect")).toHaveAttribute(
+		await expect(page.getByTestId("tool-strip-rect")).toHaveAttribute(
 			"data-active",
 			"true",
 		);
 		await page.keyboard.press("h");
-		await expect(page.getByTestId("elements-tool-hand")).toHaveAttribute(
+		await expect(page.getByTestId("tool-strip-hand")).toHaveAttribute(
 			"data-active",
 			"true",
 		);
 		await page.keyboard.press("v");
-		await expect(page.getByTestId("elements-tool-select")).toHaveAttribute(
+		await expect(page.getByTestId("tool-strip-select")).toHaveAttribute(
 			"data-active",
 			"true",
 		);
@@ -176,7 +189,9 @@ test.describe("Canvas Studio — keyboard shortcuts (PRD 0012 FR-040)", () => {
 		const nodeId = scene.nodes[0]?.id;
 		if (!nodeId) throw new Error("expected the locked rect to still exist");
 		await page.getByTestId(`layer-row-${nodeId}-lock`).click();
-		await page.getByTestId("panel-dock-elements").click();
+		// cp3-009: no "switch back to the Elements panel" step any more — the
+		// ToolStrip never left, and the docked Tab Panel column is the same width
+		// whichever tab is active, so `box` stays valid across the panel switch.
 		await page.mouse.click(box.x + box.width * 0.3, box.y + box.height * 0.25);
 		await expect(page.getByTestId("canvas-selected-count")).toHaveText("1");
 	});
@@ -209,13 +224,13 @@ test.describe("Canvas Studio — keyboard shortcuts (PRD 0012 FR-040)", () => {
 
 		// Step 1 of the precedence stack: a non-select tool reverts to Select.
 		await page.keyboard.press("r");
-		await expect(page.getByTestId("elements-tool-rect")).toHaveAttribute(
+		await expect(page.getByTestId("tool-strip-rect")).toHaveAttribute(
 			"data-active",
 			"true",
 		);
 		await canvas.click();
 		await page.keyboard.press("Escape");
-		await expect(page.getByTestId("elements-tool-select")).toHaveAttribute(
+		await expect(page.getByTestId("tool-strip-select")).toHaveAttribute(
 			"data-active",
 			"true",
 		);
@@ -239,7 +254,7 @@ test.describe("Canvas Studio — keyboard shortcuts (PRD 0012 FR-040)", () => {
 		// `shouldReturnToSelect`) reverts ANY creation tool — text included —
 		// to Select the moment its `node.create` commits, so by the time the
 		// overlay is open the active tool is already back to "select" (verified
-		// empirically: asserting `elements-tool-text` stays active here fails —
+		// empirically: asserting `tool-strip-text` stays active here fails —
 		// it's "select" already). The node stays selected while editing either
 		// way, which is what this test actually needs.
 		await selectTool(page, "text");
@@ -249,7 +264,7 @@ test.describe("Canvas Studio — keyboard shortcuts (PRD 0012 FR-040)", () => {
 		const overlay = page.getByTestId("text-editor-overlay");
 		await expect(overlay).toBeVisible();
 		await expect(overlay).toBeFocused();
-		await expect(page.getByTestId("elements-tool-select")).toHaveAttribute(
+		await expect(page.getByTestId("tool-strip-select")).toHaveAttribute(
 			"data-active",
 			"true",
 		);
@@ -269,7 +284,7 @@ test.describe("Canvas Studio — keyboard shortcuts (PRD 0012 FR-040)", () => {
 
 		await expect(overlay).toBeHidden();
 		await expect(page.getByTestId("canvas-selected-count")).toHaveText("1");
-		await expect(page.getByTestId("elements-tool-select")).toHaveAttribute(
+		await expect(page.getByTestId("tool-strip-select")).toHaveAttribute(
 			"data-active",
 			"true",
 		);
