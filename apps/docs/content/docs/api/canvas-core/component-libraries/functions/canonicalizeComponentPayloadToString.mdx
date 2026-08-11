@@ -1,0 +1,27 @@
+---
+title: "canonicalizeComponentPayloadToString"
+description: "@anvilkit/canvas-core · canonicalizeComponentPayloadToString"
+---
+
+```ts
+function canonicalizeComponentPayloadToString(value): string;
+```
+
+Defined in: [component-libraries/canonicalize.ts:77](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/canonicalize.ts#L77)
+
+The canonical form as a JS string.
+
+Exposed alongside the byte form because goldens and cross-runtime comparisons
+are far more readable as text, and because the byte form is a pure
+`TextEncoder` application of it. Digest callers should use
+[canonicalizeComponentPayload](canonicalizeComponentPayload.md).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `unknown` |
+
+## Returns
+
+`string`

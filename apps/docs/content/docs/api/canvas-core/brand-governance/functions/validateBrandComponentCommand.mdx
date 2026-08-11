@@ -1,0 +1,28 @@
+---
+title: "validateBrandComponentCommand"
+description: "@anvilkit/canvas-core · validateBrandComponentCommand"
+---
+
+```ts
+function validateBrandComponentCommand(__namedParameters): CanvasPolicyDecision;
+```
+
+Defined in: [brand-governance/command-policy.ts:166](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/command-policy.ts#L166)
+
+The whole §15 pipeline: capability -> path policies -> intersection ->
+enforcement mode.
+
+Pure and synchronous. Returns a decision; it never mutates and never throws.
+`assertBrandComponentCommand` is what turns a `deny` into a thrown
+`CanvasCommandError`, so a caller that wants to *report* rather than *block*
+can use the same evaluation.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `__namedParameters` | [`ValidateBrandComponentCommandInput`](../interfaces/ValidateBrandComponentCommandInput) |
+
+## Returns
+
+[`CanvasPolicyDecision`](../interfaces/CanvasPolicyDecision)

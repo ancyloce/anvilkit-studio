@@ -1,0 +1,40 @@
+---
+title: "useExternalComponent"
+description: "@anvilkit/canvas-editor · useExternalComponent"
+---
+
+```ts
+function useExternalComponent(): {
+  available: boolean;
+  insert: (entry, placement?) => Promise<InsertExternalComponentResult>;
+  recover: (ref) => Promise<
+     | {
+     ok: true;
+   }
+    | { ok: false; } & ExternalComponentFailure>;
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/use-external-component.ts:272](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-external-component.ts#L272)
+
+React binding: the same two operations, with `ctx` and the provider bound.
+
+## Returns
+
+```ts
+{
+  available: boolean;
+  insert: (entry, placement?) => Promise<InsertExternalComponentResult>;
+  recover: (ref) => Promise<
+     | {
+     ok: true;
+   }
+    | { ok: false; } & ExternalComponentFailure>;
+}
+```
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `available` | `boolean` | [packages/capabilities/canvas/editor/src/component-libraries/use-external-component.ts:280](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-external-component.ts#L280) |
+| `insert()` | (`entry`, `placement?`) =&gt; `Promise`\&lt;[`InsertExternalComponentResult`](../type-aliases/InsertExternalComponentResult)\&gt; | [packages/capabilities/canvas/editor/src/component-libraries/use-external-component.ts:273](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-external-component.ts#L273) |
+| `recover()` | (`ref`) =&gt; `Promise`\&lt; \| \{ `ok`: `true`; \} \| \{ ok: false; \} & ExternalComponentFailure\&gt; | [packages/capabilities/canvas/editor/src/component-libraries/use-external-component.ts:277](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-external-component.ts#L277) |

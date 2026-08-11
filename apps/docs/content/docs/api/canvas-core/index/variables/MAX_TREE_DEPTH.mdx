@@ -1,0 +1,16 @@
+---
+title: "MAX_TREE_DEPTH"
+description: "@anvilkit/canvas-core · MAX_TREE_DEPTH"
+---
+
+```ts
+const MAX_TREE_DEPTH: 64 = 64;
+```
+
+Defined in: [limits.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L26)
+
+Maximum node nesting depth accepted by the IR walkers.
+
+Enforced by `ir/walkers.ts`, which throws `CanvasIRDepthError` past this
+depth — the guard against a hostile or corrupt document driving unbounded
+recursion.

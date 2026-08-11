@@ -1,0 +1,46 @@
+---
+title: "CanvasElementProvider"
+description: "@anvilkit/canvas-editor · CanvasElementProvider"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-provider.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-provider.ts#L50)
+
+## Methods
+
+### getById()
+
+```ts
+getById(id): Promise<CanvasElementEntry | null>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-provider.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-provider.ts#L52)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+
+#### Returns
+
+`Promise`\&lt;[`CanvasElementEntry`](CanvasElementEntry.md) \| `null`\&gt;
+
+***
+
+### search()
+
+```ts
+search(query): Promise<CanvasElementSearchResult>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-provider.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-provider.ts#L51)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `query` | [`CanvasElementSearchQuery`](CanvasElementSearchQuery.md) |
+
+#### Returns
+
+`Promise`\<[`CanvasElementSearchResult`](CanvasElementSearchResult.md)\>

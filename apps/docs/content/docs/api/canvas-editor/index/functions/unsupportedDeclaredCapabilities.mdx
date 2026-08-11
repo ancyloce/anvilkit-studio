@@ -1,0 +1,36 @@
+---
+title: "unsupportedDeclaredCapabilities"
+description: "@anvilkit/canvas-editor · unsupportedDeclaredCapabilities"
+---
+
+```ts
+function unsupportedDeclaredCapabilities(payload): readonly string[];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/load-pipeline.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/load-pipeline.ts#L96)
+
+Capabilities a payload declares that this build does not implement — read
+BEFORE any schema parse (plan 0023 M6-06, decision D-7, LC-COMPAT-002,
+INV-14).
+
+The problem this exists to solve: `CanvasNodeSchema` is a
+`discriminatedUnion`, so a document using a node kind this build lacks fails
+validation OUTRIGHT and [loadCanvasDocument](loadCanvasDocument.md) throws — and on the collab
+path that means the entire remote document is discarded, not degraded. A peer
+with a newer build could therefore lose work to an older one. Reading the
+declared capabilities from the RAW payload first gives the caller the
+information it needs to route to read-only preview instead of discarding.
+
+Deliberately total and allocation-light: it never parses, never validates, and
+treats any unexpected shape as "nothing declared" — its job is to answer one
+question about untrusted input without becoming a second validator.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `payload` | `unknown` |
+
+## Returns
+
+readonly `string`[]

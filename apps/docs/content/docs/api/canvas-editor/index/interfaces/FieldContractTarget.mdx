@@ -3,7 +3,7 @@ title: "FieldContractTarget"
 description: "@anvilkit/canvas-editor · FieldContractTarget"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/panels/fields.tsx:100](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L100)
+Defined in: [packages/capabilities/canvas/editor/src/context/field-contract.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/field-contract.ts#L38)
 
 §10 field-input contract target (B-12): the node(s) a field edits and the
 `node.update` patch a given value maps to. Multi-selection passes every
@@ -19,7 +19,8 @@ component wires preview/commit/revert internally.
 
 ## Properties
 
-| Property | Type | Defined in |
-| ------ | ------ | ------ |
-| &lt;a id="buildpatch"&gt;&lt;/a&gt; `buildPatch` | (`node`, `value`) =&gt; `Record`\&lt;`string`, `unknown`\&gt; | [packages/capabilities/canvas/editor/src/panels/fields.tsx:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L102) |
-| &lt;a id="nodes"&gt;&lt;/a&gt; `nodes` | readonly `CanvasNode`[] | [packages/capabilities/canvas/editor/src/panels/fields.tsx:101](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L101) |
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="buildcommand"&gt;&lt;/a&gt; `buildCommand?` | (`node`, `value`) =&gt; `CanvasCommand` | Command-builder seam (T-M4-02): when present, commit dispatches this command per node instead of wrapping `buildPatch` in a `node.update` — the vehicle for `frame.set-layout` Inspector fields. Preview always flows through `buildPatch` + the preview store regardless, and commit still runs through the same coalescing pipeline; this hook only swaps what command is built. | [packages/capabilities/canvas/editor/src/context/field-contract.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/field-contract.ts#L49) |
+| &lt;a id="buildpatch"&gt;&lt;/a&gt; `buildPatch` | (`node`, `value`) =&gt; `Record`\&lt;`string`, `unknown`\&gt; | - | [packages/capabilities/canvas/editor/src/context/field-contract.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/field-contract.ts#L40) |
+| &lt;a id="nodes"&gt;&lt;/a&gt; `nodes` | readonly `CanvasNode`[] | - | [packages/capabilities/canvas/editor/src/context/field-contract.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/field-contract.ts#L39) |

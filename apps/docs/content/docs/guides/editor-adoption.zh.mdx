@@ -1,60 +1,273 @@
 ---
 title: "可视化编辑器接入"
-description: "逐级将组件接入 AnvilKit 可视化编辑器——可选中、可设样式、可行内编辑、可组合——并使用 inspectEditorCapabilities 查看当前所处的级别。"
+description: "接入规范的 Puck 原生创作模型：在 metadata 中声明具名样式目标，在渲染中打上稳定的目标属性，并以普通组件 props 承载 appearance / interactions / bindings。"
 ---
 
-The visual editor never guesses at your component's structure. **Core
-does not change a component's DOM automatically**, so everything the
-editor can do for your component comes from what you *declare* in
-`metadata.editor`.
+可视化编辑器从不猜测组件的结构。它能为你的组件做的每一件事，
+都来自你**声明**过的内容；而这些声明只存在于三个位置，
+它们全都是普通的 Puck 概念：
 
-That has one consequence worth stating up front: a component that
-declares nothing is not broken — it is at **Level 0**, and it keeps
-working exactly as it always has. Adoption is opt-in, incremental, and
-reversible.
+1. **`metadata.anvilkit.editor`** —— 组件的具名样式目标，
+   以及每个目标各自的属性白名单。
+2. **你的渲染** —— 每个已声明的目标都要在**所有**模式
+   （编辑、预览、生产、导出）中打上稳定的属性对。
+3. **你的 props** —— 创作状态以可序列化的组件 props
+   （`appearance`、`interactions`、`bindings`）送达。
 
-## 五个级别
+什么都不声明的组件并没有坏掉 —— 它继续以原生 Puck 字段工作。
+接入是可选的，也是可逆的。
 
-| 级别 | 名称 | 作者获得的能力 |
-|---|---|---|
-| 0 | Legacy | Native Puck fields only. Nothing changes. |
-| 1 | Selectable | The node can be selected and appears in Layers with a stable identity. |
-| 2 | Styleable | The layout / visual / typography inspector sections apply to it. |
-| 3 | Inline editable | Text and images are editable directly on the canvas. |
-| 4 | Composable | Slots, interactions, and component composition. |
+<Callout type="info" title="文档只有一种形态">
+	没有 sidecar，没有 config 装饰，没有仅供编辑器使用的渲染路径，
+	也**没有版本标记**。`metadata.anvilkit.editor` 没有 `version`
+	成员，appearance 载体没有 `version` 成员，文档根 props 同样没有。
+	声明了 `styleTargets` 的组件就是在声明该契约；没有声明的则不是。
+	重命名之前写入的文档可能仍带有陈旧的 `version` 键 —— schema
+	会保留未知键，但没有任何代码读取它。
+</Callout>
 
-You do not have to reach Level 4. Most content components are useful at
-Level 2, and many should stop there.
-
-仓库内的真实示例：`@anvilkit/section` 与 `@anvilkit/hero` 以
-`styleTarget: "root"` 声明并带有行内文本目标（级别 3），
-`@anvilkit/bento-grid` 声明了布局容器（级别 2）——具体写法见
-各包的 `src/config.ts`。
-
-## 我现在处于哪一级？
+## 1. 声明你的样式目标
 
 ```ts
-import { inspectEditorCapabilities, formatEditorCapabilityReport } from "@anvilkit/core/editor";
+// src/config.ts
+export const componentConfig = {
+	fields: { /* your native Puck fields */ },
+	metadata: {
+		anvilkit: {
+			editor: {
+				styleTargets: {
+					root: {
+						label: "Card",
+						responsive: true,
+						properties: ["display", "padding", "background", "opacity"],
+					},
+					cardTitle: {
+						label: "Card title",
+						properties: ["color", "fontSize", "fontWeight", "textAlign"],
+					},
+					cardImage: {
+						label: "Card image",
+						properties: ["borderRadius", "filter", "blendMode"],
+					},
+				},
+			},
+		},
+	},
+	render: CardView,
+};
+```
+
+- `styleTargets` 的**键**属于你的**数据契约**：重命名一个已发布的
+  目标需要做 prop 迁移。而 label 只是展示文本，可以自由更改
+  （见第 4 步）。
+- `responsive: true` 让该目标支持按断点覆盖。未声明它的目标会固定在
+  base 层，而不是提供一个根本落不了地的覆盖。
+- 只授予你的 DOM 真正能生效的属性。白名单是唯一事实来源：Inspector
+  **只**为被授予的属性渲染控件，appearance 编译器也会丢弃白名单之外
+  的一切。授予了却不生效的属性是一个 bug —— 它让作者看到一个
+  看似无效的控件。
+
+### 创作词汇表共 40 个属性
+
+以下是全部可授予的属性，拼写与创作规范完全一致。词汇表与规范词汇表
+相等，所以不存在"为什么少了这一个"的疑问 —— 具体授予哪些，完全是
+每个目标自己的决定。
+
+| 家族 | 属性 |
+|---|---|
+| 布局（22） | `display`、`position`、`width`、`minWidth`、`maxWidth`、`height`、`minHeight`、`maxHeight`、`margin`、`padding`、`gap`、`rowGap`、`columnGap`、`columns`、`rows`、`alignItems`、`justifyContent`、`direction`、`wrap`、`inset`、`overflow`、`zIndex` |
+| 视觉（8） | `background`、`border`、`borderRadius`、`boxShadow`、`opacity`、`filter`、`blendMode`、`cursor` |
+| 排版（10） | `color`、`fontFamily`、`fontSize`、`fontWeight`、`lineHeight`、`letterSpacing`、`textAlign`、`textDecoration`、`textTransform`、`textWrap` |
+
+有两个名称与它们最终产出的 CSS 声明不同：`direction` 产出
+`flex-direction`，`wrap` 产出 `flex-wrap`。`inset` 产出四条独立的
+边声明，而不是简写。
+
+<Callout type="warn" title="zIndex 是唯一应当保守授予的属性">
+	集合中的其他属性效果都是局部的。而抬高一个节点的层叠顺序，会改变
+	它与作者既看不到、也没有选中的元素之间的关系，从而逃出作者正在
+	编辑的那个盒子。在十二个内置组件包中，它只被授予在恰好**两个**
+	目标上，而这两个目标本身就建立了层叠上下文。只有当容器元素确实
+	建立了层叠上下文时才授予它。
+</Callout>
+
+## 2. 打上目标属性
+
+```tsx
+// src/CardView.tsx
+import { anvilRootAttrs, anvilTargetAttrs } from "@anvilkit/core/editor";
+
+export function CardView({ id, image, title, children }: CardProps) {
+	return (
+		<section {...anvilRootAttrs(id, "root")} className="ak-card">
+			<img {...anvilTargetAttrs(id, "cardImage")} src={image} alt="" />
+			<h3 {...anvilTargetAttrs(id, "cardTitle")}>{title}</h3>
+			{children}
+		</section>
+	);
+}
+```
+
+`data-ak-style-node` + `data-ak-style-target` 这一属性对，是编译器
+唯一会用来生成选择器的表面，并且始终是精确的属性对 —— 绝不使用后代
+选择器，因为那可能意外命中嵌套组件的目标。
+
+要在**每一个**渲染分支中一致地打上它：编辑画布、`Render` 以及两个
+导出器看到的必须是同样的盒子。只在部分分支中出现的目标是诚实的
+——只要它被声明了，编辑器就会把它报告为*当前渲染中不存在*，而不是
+画出一个幻影框 —— 但一个在分支之间*移动*的目标是 bug。请把它重新
+安置到一个稳定的容器上。
+
+重复出现的目标是完全正常的：一个为每篇文章打上一次 `card` 的列表，
+会解析出全部匹配元素，写在那里的样式会一次性作用于它们全部。
+
+## 3. 承载创作 props
+
+```ts
+import {
+	appearanceField,
+	bindingsField,
+	interactionsField,
+} from "@anvilkit/core/react/editor";
+
+export const fields = {
+	...nativeFields,
+	appearance: appearanceField,
+	interactions: interactionsField,
+	bindings: bindingsField,
+};
+```
+
+它们是被声明的 Puck 字段，而不是 Puck 碰巧保留下来的意外数据。它们
+是隐藏的（`visible: false`），因此永远不会出现在"属性"标签页中；
+样式面板通过 Puck API 写入它们。
+
+创作状态就是**你自己的数据**：
+
+- `props.appearance.targets[targetId]` 保存该目标的分层样式 ——
+  `style`（base 加断点覆盖）、`styleRefs` 和 `hidden`。没有有效内容
+  的 appearance 会规范化为 `undefined`；空壳永远不会被存储。
+- `props.interactions` 归属于触发节点。
+- `props.bindings` 归属于被绑定的节点。
+
+一切都是可序列化的。渲染 props 绝不暴露函数或 ref。
+
+## 4. 本地化你的目标标签
+
+目标 **id** 属于数据契约，永不改变。label 是展示文本，组件包通过它
+自己的 `createComponentConfig` 工厂来本地化：
+
+```ts
+import { createComponentConfig } from "@anvilkit/blog-list";
+
+const config = createComponentConfig({ locale: "ja" });
+```
+
+静态的 `componentConfig` 导出保持英文且逐字节不变，因此任何导入它的
+代码都不会受影响。十二个内置包和三个 `gen:component` 脚手架模板
+都遵循这一模式。
+
+## 元素模式：为组件内部的元素设置样式
+
+编辑器有两种模式。在**页面**模式下，作者选中并移动整个节点。在
+**元素**模式下，作者选中所选组件*内部*的某一个已声明目标并就地设置
+样式 —— 样式标签页会收窄到该目标，画布则会为该目标解析出的每一个
+元素描边。
+
+让这一切安全的规则和其他地方完全一致：**只有已声明的目标才可寻址。**
+你的 metadata 从未命名过的元素不在索引中，点击命中不了它，键盘遍历
+到不了它，Inspector 里也没有任何控件对应它。编辑器无法凭空造出一个
+你的组件没有授予的样式表面。
+
+有两个后果值得在设计时纳入考虑：
+
+- **重复目标是作为一个集合来设置样式的，而不是逐实例。** 当一个目标
+  解析出多个元素时，面板会用计数明确告知，写入会作用于它们全部。
+  编辑器中没有任何东西能只为重复目标的某一个实例设置样式 —— 如果
+  作者确实需要，答案是拆出一个独立目标或一个逐实例 prop，而不是
+  一个隐藏的逐元素覆盖。
+- **遍历遵循声明顺序。** 目标选择器和键盘顺序读取的都是你书写的
+  `styleTargets` 顺序，所以请按作者会走查组件的顺序来声明它们。
+
+## 文档级状态
+
+节点级状态存放在该节点自己的 props 中。文档级状态则存放在**被声明的
+根 props** 中：
+
+| 根 prop | 承载内容 |
+|---|---|
+| `root.props.designSystem` | 断点、令牌、令牌模式、默认令牌模式，以及样式定义 |
+| `root.props.componentLibrary` | 文档的本地组件定义，按 id 索引 —— 包含变体、暴露属性等全部内容 |
+| `root.props.editorAnnotations` | 每个节点的 `name` 与 `locked`，除此之外别无他物 —— 这是一个永久封闭的形状，并在 IR 边界被剥离，因此它永远不会进入已渲染或已导出的页面 |
+
+一个本地组件**实例**就是一个携带自身实例 prop 的普通节点；它的定义在
+渲染时从 `root.props.componentLibrary` 解析得到。不存在第二份文档，
+也不存在副本。
+
+## 集成方式：`EditorApi`
+
+插件与 AI 功能通过 `EditorApi` 触达文档，并且只通过它：
+
+```ts
+const model = editorApi.readDocument();      // a projection, never a handle
+const stop = editorApi.subscribe(onChange);  // change notification
+editorApi.commit.inlineText({ nodeId, targetId, value });
+```
+
+三个表面 —— 读取、订阅、提交 —— 并且刻意**没有 dispatch 入口**，
+因为第四个表面正是命令端口重新长回来的方式。插件通过编辑器 UI 所用
+的同一批提交助手来写入，每次 `commit.*` 调用都恰好解析为一次记入
+历史的写入，所以作者的一次操作就是一次撤销。
+
+`EditorApi` 上同样刻意没有能力查询接口：已声明的样式目标本身就是
+文档投影的一部分（`readDocument().nodes`），并且经由那一个规范的
+metadata 读取器读出，因此第二个能力表面只会是同一个问题的第二个答案。
+
+<Callout type="warn" title="命令端口正在退役">
+	早于 `EditorApi` 的那个带类型的命令端口，以及围绕它的命令派发
+	表面，正在退出；参考应用已经运行在 `EditorApi` 和一个带类型的
+	意图联合类型之上。请在 `EditorApi` 上构建新的集成。如果你仍在从
+	已安装的包中导入命令类型，请把它们视为已排期删除，而不是受支持的
+	表面。
+</Callout>
+
+## 一条管线，四个消费者
+
+你声明的一切都由同一个编译器（`compileDocumentAppearance`）编译成
+同一份产物，而这份产物同时供给编辑器画布、预览路由、生产渲染以及两个
+导出器。如果你的组件在其中任何一个表面上看起来不同，那就是 bug ——
+请提交它；绝不要为某个表面另立一条样式路径。
+
+导出格式会声明自己能够承载哪些编辑器特性，预检会拦截那些会静默丢失
+特性的导出：
+
+| 格式 | 目前已认证 |
+|---|---|
+| HTML | `responsive`、`tokens`、`styleDefinitions`、`richText` |
+| React | `responsive`、`tokens`、`styleDefinitions`，外加**已声明但尚未重新认证**的 `localComponents` 与 `variants` |
+
+在 React 格式的 `localComponents` 与 `variants` 针对规范文档完成认证
+之前，请把它们当作未经证实的声明。HTML 格式正是因为同样的原因撤回了
+这两项。
+
+## 检查你声明了什么
+
+`inspectEditorCapabilities` 会报告编辑器实际能用你的 config 做什么，
+于是"我的组件的 inspector 是空的"就变成了一个可执行的答案：
+
+```ts
+import {
+	formatEditorCapabilityReport,
+	inspectEditorCapabilities,
+} from "@anvilkit/core/editor";
 import { componentConfig } from "./config";
 
 const report = inspectEditorCapabilities({ components: { MyCard: componentConfig } });
 console.log(formatEditorCapabilityReport(report));
 ```
 
-```text
-Editor capability adoption (DD-0019 §26.2)
-
-  MyCard — Level 1 (Selectable)
-    declared: responsive
-    to reach Level 2: at least one of capabilities.layoutContainer / layoutItem / visualStyle / typography
-    warning: capabilities.responsive is declared but no layout/style/typography capability is — there is nothing for a breakpoint override to change
-
-  L0 Legacy: 0 · L1 Selectable: 1 · L2 Styleable: 0 · L3 Inline editable: 0 · L4 Composable: 0
-```
-
-The function is pure and React-free, so it runs in a unit test or a
-plain Node script — no `<Studio>` mount required. Use it as an assertion
-to stop a package from regressing:
+它是纯函数且不依赖 React，因此无需挂载 Studio 就能在单元测试或普通
+Node 脚本中运行 —— 这也让它可以直接用作回归断言：
 
 ```ts
 it("stays at least Level 2", () => {
@@ -63,144 +276,79 @@ it("stays at least Level 2", () => {
 });
 ```
 
-## 级别 1 — 可选中
+它还会标出那些能解析、却什么也做不了的声明 —— 例如一个没有任何可覆盖
+属性的 `responsive` 目标，或一个缺少 `altPropPath` 的图片目标。
 
-Declare the metadata block and give the editor a **stable root target**:
-one element that is always rendered and always the same element.
+## 证明一致性
 
-```ts
-export const componentConfig = {
-	label: "Card",
-	fields,
-	defaultProps,
-	render: MyCard,
-	metadata: {
-		editor: {
-			version: "1",
-			styleTarget: "root",
-			capabilities: {},
-		},
-	},
-};
-```
-
-`styleTarget` picks who owns the stamped element:
-
-- `"root"` — **your** root element carries the editor's attributes. You
-  must spread the props Core passes into it (see below).
-- `"wrapper"` — Core wraps your component in an element it owns. Nothing
-  to change in your render, at the cost of one extra DOM node.
-- `"none"` — an explicit opt-out. Reads as Level 0.
-
-For `styleTarget: "root"`, spread the editor attributes onto your root:
-
-```tsx
-function MyCard({ editorDataAttributes, ...props }) {
-	return (
-		<article {...editorDataAttributes} className="card">
-			{props.children}
-		</article>
-	);
-}
-```
-
-<Callout type="warn" title="One root, always">
-	A component that renders a fragment, or a different root element
-	depending on props, has no stable target. Selection, handles, and the
-	accessibility rules all key off that element — if it moves, they
-	follow the wrong node. Use `styleTarget: "wrapper"` instead.
-</Callout>
-
-## 级别 2 — 可设样式
-
-Declare what the inspector may edit. Each flag turns on one section.
+每个已接入的组件都要带两项检查：声明格式正确，以及它打出的目标在编辑
+态与生产态**完全一致**。
 
 ```ts
-capabilities: {
-	layoutItem: true,      // margin, alignment, flex/grid child placement
-	layoutContainer: true, // display, gap, padding, direction — for components with children
-	visualStyle: true,     // fill, radius, border, shadow, opacity
-	typography: true,      // font, size, weight, line height, alignment
-	responsive: true,      // per-breakpoint overrides for the above
-}
+import { resolveStyleTargets } from "@anvilkit/core/editor";
+
+it("declares well-formed style targets", () => {
+	const config = { components: { MyCard: componentConfig } };
+	expect(resolveStyleTargets(config, "MyCard").map((t) => t.id)).toContain("root");
+});
+
+it("emits identical targets in editing and production", () => {
+	expect(targetPairsOf(editingMarkup)).toEqual(targetPairsOf(productionMarkup));
+});
 ```
 
-Declare only what your component actually honours. `typography: true` on
-a component that hard-codes its own font produces an inspector control
-that appears to do nothing — worse than an absent control.
+`packages/extensions/components/tests/` 中的工作区套件为每个内置包都
+强制执行这两项 —— 新建包时请照搬它的模式
+（`authoring-contract.test.ts`、`authoring-parity.test.ts`）。
 
-`responsive: true` alone does nothing; it needs at least one of the
-other four to have something to override. The inspector reports that as
-a warning.
+## 行内文本与图片
 
-## 级别 3 — 可行内编辑
-
-Point at the props that hold editable content. These are **explicit
-targets**, and they take precedence over the editor's drop heuristics.
-
-```ts
-capabilities: {
-	visualStyle: true,
-	inlineText: [
-		{ id: "headline", propPath: "headline", format: "plain" },
-		{ id: "body", propPath: "body", format: "tiptap" },
-	],
-	imageAdjust: [
-		{ id: "media", srcPropPath: "image.src", altPropPath: "image.alt", cropPropPath: "image.crop" },
-	],
-}
-```
-
-- `propPath` is dot-notated, so nested props work (`image.src`).
-- `format: "plain"` edits a string; `"tiptap"` edits a rich-text
-  document.
-- **Always declare `altPropPath`.** Without it the accessibility rules
-  cannot detect *or* fix missing alt text on your component, which is a
-  silent hole in the author's accessibility panel.
-
-For inline text to work on the canvas, the element rendering that prop
-needs `data-ak-text-target="<id>"`:
+承载行内可编辑内容的元素要声明一个 `inlineText` 目标，并在渲染中打上
+文本属性：
 
 ```tsx
 <h1 data-ak-text-target="headline">{props.headline}</h1>
 ```
 
-## 级别 4 — 可组合
+务必在 `images` 声明中把图片的 `src` 与它的 alt prop 路径配对 ——
+否则可访问性规则既无法检测、也无法修复你组件上缺失的替代文本。
 
-For components that contain other components.
+## 本计划刻意没有构建的部分
 
-```ts
-capabilities: {
-	layoutContainer: true,
-	visualStyle: true,
-	interactions: true,
-	inlineText: [{ id: "title", propPath: "title", format: "plain" }],
-},
-slotMap: {
-	content: { allowedTypes: ["Card", "Text"], reorder: true },
-},
-```
+在此明确列出，免得你需要自行推断它们是否存在。它们并不存在，而且这种
+缺席是排期决定，不是疏漏：
 
-- `slotMap` is keyed by your **slot field name**, and constrains what
-  can be dropped into it. Omit `allowedTypes` to accept anything.
-- `interactions: true` lets authors attach triggers and actions to the
-  component.
+- **插槽创作。** `slots` 是 metadata 契约的一部分，但目前没有任何
+  编辑器表面能替换或约束插槽内容，也没有任何内置包声明插槽。内置组件
+  *是否应该*暴露插槽还是一个开放的产品问题 —— 真正的 children 插槽
+  会带来布局、导出与可访问性上的连锁后果。
+- **图片裁剪与焦点。** `images` 同样属于契约，但没有任何内置包声明
+  图片目标，因此替换 / 裁剪 / 焦点没有可用表面。`altPropPath` 是其中
+  纯声明的那一半，而且是一项可访问性要求 —— 请现在就为带图片的组件
+  声明它。
+- **HTML 导出的渲染保真度。** HTML 导出器**不会**服务端渲染你的组件。
+  它按组件类型运行手写的 emitter：十二个内置包中九个有，三个没有；
+  而且逐元素目标、创作的 class 名与动画预设都到不了它的输出。React
+  导出器与生产渲染没有这一限制。这是对"一条管线"规则的已知违反，
+  已作为独立项目单独跟踪；接入本指南的模型并不能修复它。
 
-A `slotMap` without `layoutContainer: true` is reported as a warning:
-children can be placed, but the container holding them cannot be laid
-out, which is rarely what the author wanted.
+## 关于协同编辑
+
+并发合并的粒度是**按节点、按 prop 键，不会更细。** 两位作者为两个
+不同节点设置样式，双方的工作都会保留。两位作者编辑同一节点的两个
+不同 prop，双方的工作也都会保留。但两位作者为**同一节点的两个不同
+目标**设置样式就会冲突 —— 一个节点的全部 appearance 是一个被声明的
+prop，因此其中一位作者对整个目标的编辑会被丢弃，而且谁能胜出并不由
+挂钟顺序决定。请围绕节点、而不是围绕节点内的目标来设计协同流程。
 
 ## 哪些行为不会改变
 
-- **Legacy components keep working.** A config with no `metadata.editor`
-  is returned by identity when authoring is off, and gets no decorated
-  render when it is on.
-- **Your own `metadata` is untouched.** Component packages already set
-  `metadata` for their own purposes (`componentName`, `packageName`,
-  `schemaVersion`…). The editor reads only `metadata.editor` and ignores
-  the rest.
-- **A malformed declaration is ignored, not fatal.** If `version` is not
-  `"1"` or `styleTarget` is not one of the three allowed values, the
-  whole block reads as absent. `inspectEditorCapabilities` calls that out
-  specifically, because "declared but thrown away" and "never declared"
-  look identical from the outside and need opposite fixes.
+- **旧组件继续可用。** 没有 `metadata.anvilkit.editor` 的 config
+  只是拿不到样式目标 —— 原生 Puck 字段的行为与以前完全一样。
+- **你自己的 `metadata` 不会被动。** 编辑器只读取
+  `metadata.anvilkit.editor`，会忽略你在那里存放的其他一切。
+- **格式错误的声明会被忽略，而不是致命错误。** 任何不是格式正确的
+  声明都会被读作"没有声明目标"，样式标签页会展示它的未声明状态，
+  而不是伪造出支持。`inspectEditorCapabilities` 会专门指出这种情况，
+  因为"声明了但被丢弃"和"从未声明"从外部看完全一样，却需要相反的
+  修复方式。

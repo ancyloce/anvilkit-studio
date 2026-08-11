@@ -1,0 +1,25 @@
+---
+title: "ComponentPropDefinitionSchema"
+description: "@anvilkit/schema · ComponentPropDefinitionSchema"
+---
+
+```ts
+const ComponentPropDefinitionSchema: ZodObject<{
+  defaultValue: ZodOptional<ZodType<JsonValue, unknown, $ZodTypeInternals<JsonValue, unknown>>>;
+  id: ZodString;
+  name: ZodString;
+  sourcePath: ZodArray<ZodUnion<readonly [ZodString, ZodNumber]>>;
+  type: ZodEnum<{
+     boolean: "boolean";
+     enum: "enum";
+     image: "image";
+     number: "number";
+     slot: "slot";
+     text: "text";
+  }>;
+}, $loose>;
+```
+
+Defined in: [editor/components.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/components.ts#L43)
+
+One exposed component property (DD-0019 §14.2, verbatim shape).

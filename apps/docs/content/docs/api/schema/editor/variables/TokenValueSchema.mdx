@@ -1,0 +1,18 @@
+---
+title: "TokenValueSchema"
+description: "@anvilkit/schema · TokenValueSchema"
+---
+
+```ts
+const TokenValueSchema: ZodDiscriminatedUnion<[ZodObject<{
+  kind: ZodLiteral<"literal">;
+  value: ZodUnknown;
+}, $loose>, ZodObject<{
+  kind: ZodLiteral<"alias">;
+  tokenId: ZodString;
+}, $loose>], "kind">;
+```
+
+Defined in: [editor/tokens.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/tokens.ts#L27)
+
+A token value for one mode: literal or alias.

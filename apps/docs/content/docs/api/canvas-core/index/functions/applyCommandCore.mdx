@@ -1,0 +1,33 @@
+---
+title: "applyCommandCore"
+description: "@anvilkit/canvas-core · applyCommandCore"
+---
+
+```ts
+function applyCommandCore(
+   ir, 
+   cmd, 
+   options?): CommandApplyResult;
+```
+
+Defined in: [commands/runtime.ts:2995](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/runtime.ts#L2995)
+
+The non-settling application primitive: applies `cmd` and returns the
+inverse WITHOUT the once-per-application Source-revision settle. Every
+composition wrapper (`batch` sub-commands here, `applyCommands` in
+`transaction.ts`) folds over THIS and settles once at its own boundary —
+calling the settling `applyCommand` per sub-command would bump a Source
+once per sub-command instead of once per undoable unit. Use
+`applyCommand` unless you are building such a wrapper.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `cmd` | [`CanvasCommand`](../type-aliases/CanvasCommand) |
+| `options` | [`CommandApplyOptions`](../interfaces/CommandApplyOptions) |
+
+## Returns
+
+[`CommandApplyResult`](../interfaces/CommandApplyResult)

@@ -1,0 +1,31 @@
+---
+title: "applyComponentOverrides"
+description: "@anvilkit/canvas-core · applyComponentOverrides"
+---
+
+```ts
+function applyComponentOverrides(
+   definition, 
+   overrides, 
+   options?): CanvasAppliedOverrides;
+```
+
+Defined in: [components/overrides.ts:183](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/overrides.ts#L183)
+
+Apply an override map to runtime views of `definition`'s nodes
+(TD §10.2, in order): look up the property by ID → verify the target node
+still exists → verify type compatibility → patch a runtime view — or emit
+the orphan/type diagnostic and skip.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `definition` | [`CanvasComponentDefinition`](../interfaces/CanvasComponentDefinition) |
+| `overrides` | \| `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasComponentOverride`](../type-aliases/CanvasComponentOverride)\&gt;\&gt; \| `undefined` |
+| `options` | \{ `instanceId?`: `string`; \} |
+| `options.instanceId?` | `string` |
+
+## Returns
+
+[`CanvasAppliedOverrides`](../interfaces/CanvasAppliedOverrides)

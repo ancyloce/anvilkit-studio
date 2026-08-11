@@ -1,0 +1,73 @@
+---
+title: "EditorDataSourceAdapter"
+description: "@anvilkit/core · EditorDataSourceAdapter"
+---
+
+Defined in: foundation/contracts/dist/editor/bindings.d.ts:99
+
+Host adapter that supplies data sources to the binding editor
+(DD-0019 §19, verbatim; follows the `plugin-asset-manager`
+host-adapter idiom). Preview requests time out after five seconds
+and accept at most 2 MiB.
+
+## Methods
+
+### getPreviewData()
+
+```ts
+getPreviewData(request, signal): Promise<JsonValue>;
+```
+
+Defined in: foundation/contracts/dist/editor/bindings.d.ts:102
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `request` | [`PreviewDataRequest`](PreviewDataRequest.md) |
+| `signal` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<[`JsonValue`](../type-aliases/JsonValue)\>
+
+***
+
+### getSchema()
+
+```ts
+getSchema(sourceId, signal): Promise<DataSchema>;
+```
+
+Defined in: foundation/contracts/dist/editor/bindings.d.ts:101
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `sourceId` | `string` |
+| `signal` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<[`DataSchema`](DataSchema.md)\>
+
+***
+
+### listSources()
+
+```ts
+listSources(signal): Promise<readonly DataSourceDescriptor[]>;
+```
+
+Defined in: foundation/contracts/dist/editor/bindings.d.ts:100
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `signal` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<readonly [`DataSourceDescriptor`](DataSourceDescriptor.md)[]\>

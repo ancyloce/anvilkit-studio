@@ -1,0 +1,17 @@
+---
+title: "CANVAS_COMPONENTS_VARIANTS_CAPABILITY"
+description: "@anvilkit/canvas-core · CANVAS_COMPONENTS_VARIANTS_CAPABILITY"
+---
+
+```ts
+const CANVAS_COMPONENTS_VARIANTS_CAPABILITY: "components.variants.v1" = "components.variants.v1";
+```
+
+Defined in: [ir/capabilities.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/capabilities.ts#L50)
+
+A document persists a variant selection on an instance
+(`components.variants.v1`).
+
+Emitted from M3/T-026, when `CanvasComponentInstanceNode.variantSelection`
+became the field that carries one. (Declared in M1 ahead of that field so the
+contract was fixed; see [computeRequiredCapabilities](../functions/computeRequiredCapabilities).)

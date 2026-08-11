@@ -1,0 +1,26 @@
+---
+title: "validateBrandComponentPolicy"
+description: "@anvilkit/canvas-core · validateBrandComponentPolicy"
+---
+
+```ts
+function validateBrandComponentPolicy(policy, knownPropertyIds?): readonly CanvasBrandPolicyIssue[];
+```
+
+Defined in: [brand-governance/types.ts:170](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L170)
+
+Validate a policy against the definition that carries it.
+
+Reports every issue rather than throwing on the first — a policy is authored
+once and its author wants the whole list.
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `policy` | [`CanvasBrandComponentPolicy`](../../index/interfaces/CanvasBrandComponentPolicy) | `undefined` |
+| `knownPropertyIds` | readonly `string`[] | `[]` |
+
+## Returns
+
+readonly [`CanvasBrandPolicyIssue`](../interfaces/CanvasBrandPolicyIssue)[]

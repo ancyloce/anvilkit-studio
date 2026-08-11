@@ -1,0 +1,14 @@
+---
+title: "PersistedNodeIdSchema"
+description: "@anvilkit/schema · PersistedNodeIdSchema"
+---
+
+```ts
+const PersistedNodeIdSchema: ZodString;
+```
+
+Defined in: [editor/primitives.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/primitives.ts#L55)
+
+A persisted node/definition-node id: non-empty and never the
+runtime composite `${instanceNodeId}::${definitionNodeId}` form,
+which must never be persisted (contract freeze CORE-P0-001 §1.1).

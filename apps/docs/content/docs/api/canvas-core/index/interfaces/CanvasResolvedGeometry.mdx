@@ -1,0 +1,23 @@
+---
+title: "CanvasResolvedGeometry"
+description: "@anvilkit/canvas-core · CanvasResolvedGeometry"
+---
+
+Defined in: [layout/types.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L56)
+
+Where a node ended up, in every space a consumer needs.
+
+`localTransform` and `bounds` are what materialization writes back into the
+document; `worldTransform`/`worldAabb` are what hit-testing, snapping,
+marquee selection and export bounds read; `layoutFootprint` is what the
+solver itself did arithmetic on.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | `readonly` | [`CanvasBounds`](CanvasBounds.md) | Local box size. Prior scale on a layout-controlled axis is folded in here. | [layout/types.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L60) |
+| &lt;a id="layoutfootprint"&gt;&lt;/a&gt; `layoutFootprint` | `readonly` | [`BoundsExtent`](BoundsExtent.md) | Axis-aligned extent of this node in its **parent's** coordinate space — the box the solver allocated space for. An `Aabb`, not a `CanvasBounds`, because `CanvasBounds` is `{width, height}` only and a rotated child's footprint carries an offset from the local origin: a 100×40 box rotated 45° starts at a negative x relative to its own transform. Placement has to add that offset back, so the origin cannot be dropped (TD §5.4, §7.7). | [layout/types.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L75) |
+| &lt;a id="localtransform"&gt;&lt;/a&gt; `localTransform` | `readonly` | [`CanvasTransform`](CanvasTransform.md) | Local transform relative to the parent. Scale is 1 on any axis layout controls (TD §7.7). | [layout/types.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L58) |
+| &lt;a id="worldaabb"&gt;&lt;/a&gt; `worldAabb` | `readonly` | [`BoundsExtent`](BoundsExtent.md) | Axis-aligned bounding box in world space. | [layout/types.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L64) |
+| &lt;a id="worldtransform"&gt;&lt;/a&gt; `worldTransform` | `readonly` | [`AffineMatrix`](../type-aliases/AffineMatrix) | `parentWorld × local`, in the same convention as `toAffineMatrix`. | [layout/types.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L62) |

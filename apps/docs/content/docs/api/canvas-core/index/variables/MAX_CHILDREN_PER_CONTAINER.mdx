@@ -1,0 +1,16 @@
+---
+title: "MAX_CHILDREN_PER_CONTAINER"
+description: "@anvilkit/canvas-core · MAX_CHILDREN_PER_CONTAINER"
+---
+
+```ts
+const MAX_CHILDREN_PER_CONTAINER: 1000 = 1_000;
+```
+
+Defined in: [limits.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L68)
+
+Ceiling on direct children of a single container.
+
+A layout pass over one container is O(children) with a small constant, so
+this bounds the per-frame cost independently of `MAX_DOCUMENT_NODES` — a
+single frame holding every node in a document is the pathological shape.

@@ -1,0 +1,31 @@
+---
+title: "insertElementAtViewportCenter"
+description: "@anvilkit/canvas-editor · insertElementAtViewportCenter"
+---
+
+```ts
+function insertElementAtViewportCenter(ctx, entry): string | null;
+```
+
+Defined in: packages/capabilities/canvas/editor/src/actions/element-insert-actions.ts:208
+
+Click / Enter / Space path: insert `entry` centred on what the user is
+currently looking at.
+
+Centred rather than top-left-anchored because there is no pointer to anchor
+to — `cp3-001`'s handoff states the rule as `at = viewportCentre −
+defaultSize / 2`, and `insertComponentInstanceImpl` uses the same
+"insert lands in the middle, selected, one undo step" convention. Falls back
+to the page centre when the stage is unmeasurable (headless, pre-paint,
+jsdom), which is `insertCanvasElement`'s own default.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`CanvasStudioContextValue`](../interfaces/CanvasStudioContextValue) |
+| `entry` | [`CanvasElementEntry`](../interfaces/CanvasElementEntry) |
+
+## Returns
+
+`string` \| `null`

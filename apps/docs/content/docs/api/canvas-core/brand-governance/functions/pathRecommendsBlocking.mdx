@@ -1,0 +1,27 @@
+---
+title: "pathRecommendsBlocking"
+description: "@anvilkit/canvas-core · pathRecommendsBlocking"
+---
+
+```ts
+function pathRecommendsBlocking(path): boolean;
+```
+
+Defined in: [brand-governance/command-policy.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/command-policy.ts#L145)
+
+Does any policy on the path recommend blocking?
+
+Exported rather than used here: severity is decided by `effectiveSeverity` in
+the compliance scanner (T-042), and this is the path-level input it needs.
+The gateway itself never reads it — a component's recommendation cannot
+change whether a COMMAND is refused, only how an ISSUE is reported.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `path` | readonly [`CanvasBrandComponentPolicy`](../../index/interfaces/CanvasBrandComponentPolicy)[] |
+
+## Returns
+
+`boolean`

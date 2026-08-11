@@ -1,0 +1,49 @@
+---
+title: "EditorDiagnosticPort"
+description: "@anvilkit/contracts · EditorDiagnosticPort"
+---
+
+Defined in: [editor/events.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/events.ts#L48)
+
+Read-side diagnostic surface exposed to plugins and hosts: current
+persistent diagnostics plus an event subscription. Emission happens
+after commit or rejection (DD-0019 §10.3 rule 7); payloads are
+content-free by contract.
+
+## Methods
+
+### getDiagnostics()
+
+```ts
+getDiagnostics(): readonly EditorError[];
+```
+
+Defined in: [editor/events.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/events.ts#L50)
+
+Current persistent diagnostics (e.g. collab gating, limit warnings).
+
+#### Returns
+
+readonly [`EditorError`](EditorError.md)[]
+
+***
+
+### subscribe()
+
+```ts
+subscribe(listener): () => void;
+```
+
+Defined in: [editor/events.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/events.ts#L52)
+
+Subscribe to operational events. Returns an unsubscribe callback.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `listener` | (`event`) =&gt; `void` |
+
+#### Returns
+
+() => `void`

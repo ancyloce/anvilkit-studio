@@ -1,0 +1,25 @@
+---
+title: "CanvasPolicyDenyReason"
+description: "@anvilkit/canvas-core · CanvasPolicyDenyReason"
+---
+
+```ts
+type CanvasPolicyDenyReason = 
+  | "capability-denied"
+  | "property-not-editable"
+  | "structure-locked"
+  | "detach-denied"
+  | "flatten-denied"
+  | "variant-change-denied"
+  | "source-update-denied"
+  | "source-swap-denied"
+  | "token-not-allowed";
+```
+
+Defined in: [policy-contracts.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L43)
+
+Why a mutation was refused, as a stable code.
+
+Deliberately small and closed. These reach a user through localized copy, so
+a new reason is a deliberate contract change rather than a free-form string
+a call site can invent.

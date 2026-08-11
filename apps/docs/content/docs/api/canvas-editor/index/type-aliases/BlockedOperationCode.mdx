@@ -1,0 +1,15 @@
+---
+title: "BlockedOperationCode"
+description: "@anvilkit/canvas-editor · BlockedOperationCode"
+---
+
+```ts
+type BlockedOperationCode = CanvasPolicyDenyReason | "unknown";
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand-governance/effective-policy-context.ts:106](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/effective-policy-context.ts#L106)
+
+The stable code the Blocked dialog localizes.
+
+`"unknown"` covers a denial with no reason attached, which the copy renders
+as the generic policy-violation string rather than as nothing.

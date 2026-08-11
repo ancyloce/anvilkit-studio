@@ -1,0 +1,27 @@
+---
+title: "canonicalizeComponentPayload"
+description: "@anvilkit/canvas-core · canonicalizeComponentPayload"
+---
+
+```ts
+function canonicalizeComponentPayload(value): Uint8Array;
+```
+
+Defined in: [component-libraries/canonicalize.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/canonicalize.ts#L65)
+
+Canonical UTF-8 bytes for `value`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `unknown` |
+
+## Returns
+
+`Uint8Array`
+
+## Throws
+
+for non-finite numbers, non-JSON types,
+cycles, excessive depth, or keys that collide after NFC normalization.

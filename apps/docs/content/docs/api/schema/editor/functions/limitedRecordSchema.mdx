@@ -1,0 +1,30 @@
+---
+title: "limitedRecordSchema"
+description: "@anvilkit/schema · limitedRecordSchema"
+---
+
+```ts
+function limitedRecordSchema<T>(value, limitKey): ZodRecord<ZodString, T>;
+```
+
+Defined in: [editor/primitives.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/primitives.ts#L118)
+
+Build a record schema whose size is capped by a frozen §7.3 limit
+and whose keys are validated as identifiers.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* `ZodType`\&lt;`unknown`, `unknown`, `$ZodTypeInternals`\&lt;`unknown`, `unknown`\&gt;\&gt; |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `T` |
+| `limitKey` | \| `"breakpoints"` \| `"nodeRecords"` \| `"tokens"` \| `"tokenAliasDepth"` \| `"styleDefinitions"` \| `"componentDefinitions"` \| `"componentNestingDepth"` \| `"variantsPerComponent"` \| `"variantAxesPerComponent"` \| `"interactions"` \| `"actionsPerInteraction"` \| `"bindingAstDepth"` \| `"bindingAstNodeCount"` \| `"commandsPerBatch"` |
+
+## Returns
+
+`ZodRecord`\<`ZodString`, `T`\>

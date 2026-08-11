@@ -4,10 +4,18 @@ description: "@anvilkit/canvas-editor · WORKSPACE_UI_STORE_PERSIST_VERSION"
 ---
 
 ```ts
-const WORKSPACE_UI_STORE_PERSIST_VERSION: 3 = 3;
+const WORKSPACE_UI_STORE_PERSIST_VERSION: 5 = 5;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:103](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L103)
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:134](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L134)
 
 v2 (B-14): adds `panelWidth`; v1 payloads migrate with the default.
 v3 (C-06): adds `recentTemplateIds`; older payloads migrate with `[]`.
+v4 (plan 0023 M5-01): the `components` dock id joins the closed union. The
+  persisted SHAPE is unchanged, so the bump carries no new field — it exists
+  because `activeDockId` is a validated closed union and its legal value set
+  moved. Bumping re-runs `migrate` over every stored payload rather than
+  letting `merge` alone sanitize it, which keeps the "stale selection lands on
+  a valid tab" guarantee explicit at the version boundary instead of implicit.
+v5 (`cp2-005`): adds `recentFontFamilies`; older payloads migrate with `[]`,
+  exactly as v3 did for `recentTemplateIds`.

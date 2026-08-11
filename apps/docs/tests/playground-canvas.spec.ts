@@ -70,8 +70,14 @@ test.describe("Docs playground — canvas overlay (F5)", () => {
 		await waitForStage(page);
 
 		// Draw a rectangle so there is real content to commit and preview.
-		await page.getByTestId("panel-dock-elements").click();
-		await page.getByTestId("elements-tool-rect").click();
+		// cp3-009: the rect tool is in the floating ToolStrip the overlay's
+		// `<CanvasWorkspace>` mounts, not in a dock panel that has to be opened.
+		await expect(page.getByTestId("tool-strip-rect")).toBeVisible();
+		await page.getByTestId("tool-strip-rect").click();
+		await expect(page.getByTestId("tool-strip-rect")).toHaveAttribute(
+			"data-active",
+			"true",
+		);
 		const canvas = page
 			.locator(`${OVERLAY} [data-testid="pages-canvas"] canvas`)
 			.first();

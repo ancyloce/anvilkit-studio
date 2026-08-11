@@ -1,0 +1,27 @@
+---
+title: "CanvasComponentReturnSelection"
+description: "@anvilkit/canvas-editor · CanvasComponentReturnSelection"
+---
+
+```ts
+type CanvasComponentReturnSelection = 
+  | {
+  kind: "page";
+  pageId: string;
+  selectedIds: readonly string[];
+}
+  | {
+  componentId: string;
+  kind: "component";
+  selectedIds: readonly string[];
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/stores/component-scope-store.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/component-scope-store.ts#L30)
+
+Where exiting a frame should put the user back.
+
+A frame can be entered from a page OR from another component's Source, so the
+return address is a discriminated union rather than a page id — that is what
+makes arbitrary-depth nesting exit correctly instead of always dumping the
+user back on a page.

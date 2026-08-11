@@ -1,0 +1,22 @@
+---
+title: "boundedProviderUrl"
+description: "@anvilkit/canvas-core · boundedProviderUrl"
+---
+
+```ts
+function boundedProviderUrl(): ZodOptional<ZodPipe<ZodString, ZodTransform<string | undefined, string>>>;
+```
+
+Defined in: [component-libraries/schema-utils.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/schema-utils.ts#L85)
+
+A Provider-supplied URL: length-bounded, then scheme-checked.
+
+Transforms to `undefined` when the URL is unsafe rather than failing the whole
+envelope. That is deliberate: a `javascript:` thumbnail is a reason to render no
+thumbnail, not a reason to refuse an otherwise valid, integrity-verified
+component. Callers must treat `undefined` as "render nothing" — which is why
+[sanitizeProviderUrl](sanitizeProviderUrl.md) never returns its input on rejection.
+
+## Returns
+
+`ZodOptional`\&lt;`ZodPipe`\&lt;`ZodString`, `ZodTransform`\&lt;`string` \| `undefined`, `string`\&gt;\&gt;\&gt;

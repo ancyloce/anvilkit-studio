@@ -1,0 +1,24 @@
+---
+title: "MoveNodeOptions"
+description: "@anvilkit/canvas-core · MoveNodeOptions"
+---
+
+Defined in: [ir/mutations.ts:562](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L562)
+
+Restricts a mutation to one tree — a page's, or a Component Source's
+(plan 0023 M3-01, LC-CMD). Absent = every page, the pre-component
+behavior, so every existing call site keeps its exact semantics.
+
+## Extends
+
+- [`ScopedMutationOptions`](ScopedMutationOptions.md)
+
+## Properties
+
+| Property | Type | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | - | [ir/mutations.ts:563](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L563) |
+| &lt;a id="index"&gt;&lt;/a&gt; `index?` | `number` | - | [ir/mutations.ts:565](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L565) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [`ScopedMutationOptions`](ScopedMutationOptions.md).[`location`](ScopedMutationOptions.md#location) | [ir/mutations.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L96) |
+| &lt;a id="newparentid"&gt;&lt;/a&gt; `newParentId` | `string` | - | [ir/mutations.ts:564](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L564) |
+| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | [`ScopedMutationOptions`](ScopedMutationOptions.md).[`now`](ScopedMutationOptions.md#now) | [ir/mutations.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L44) |

@@ -1,0 +1,27 @@
+---
+title: "CanvasNodeResizeCommand"
+description: "@anvilkit/canvas-core · CanvasNodeResizeCommand"
+---
+
+Defined in: [commands/types.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L64)
+
+Targets a node command at one tree: a page's (the default when absent —
+every pre-component call site keeps its exact semantics) or a Component
+Source's (plan 0023 M3-02, LC-CMD/LC-CREATE-002). A command's inverse
+carries the same `location`, so undo edits the same tree. One successful
+command (or one `batch`/transaction) against a Source increments that
+definition's `revision` exactly once — see `applyCommand`.
+
+## Extends
+
+- [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md)
+
+## Properties
+
+| Property | Type | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="from"&gt;&lt;/a&gt; `from` | [`CanvasRect`](CanvasRect.md) | - | [commands/types.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L67) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md).[`location`](CanvasCommandLocationOptions.md#location) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | [commands/types.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L66) |
+| &lt;a id="to"&gt;&lt;/a&gt; `to` | [`CanvasRect`](CanvasRect.md) | - | [commands/types.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L68) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"node.resize"` | - | [commands/types.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L65) |

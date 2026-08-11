@@ -1,0 +1,19 @@
+---
+title: "CanvasComponentDeleteCommand"
+description: "@anvilkit/canvas-core · CanvasComponentDeleteCommand"
+---
+
+Defined in: [commands/types.ts:372](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L372)
+
+Delete a definition with ZERO references (LC-DELETE). Any remaining page
+instance or dependent definition rejects the command — "detach all and
+delete" is a `component-ops` orchestration that builds one atomic batch.
+Deleting the last definition drops the `components` key entirely; the
+inverse (`component.create` restore) brings the key back (INV-10).
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="componentid"&gt;&lt;/a&gt; `componentId` | `string` | [commands/types.ts:374](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L374) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"component.delete"` | [commands/types.ts:373](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L373) |

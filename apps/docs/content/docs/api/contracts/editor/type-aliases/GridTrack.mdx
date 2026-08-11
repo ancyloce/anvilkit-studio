@@ -1,0 +1,23 @@
+---
+title: "GridTrack"
+description: "@anvilkit/contracts · GridTrack"
+---
+
+```ts
+type GridTrack = 
+  | {
+  kind: "fixed";
+  length: CssLength;
+}
+  | {
+  kind: "fr";
+  value: number;
+}
+  | {
+  kind: "auto";
+};
+```
+
+Defined in: [editor/values.ts:99](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L99)
+
+A single grid track (P0 set: fixed, fr, auto — DD-0019 §11.5).

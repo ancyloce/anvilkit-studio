@@ -1,0 +1,37 @@
+---
+title: "CanvasFontCatalog"
+description: "@anvilkit/canvas-editor · CanvasFontCatalog"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/text/font-catalog.ts:196](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L196)
+
+A resolved catalog: entries ordered by descending precedence, plus a
+case-insensitive family lookup so `cp2-004`/`cp2-006` never scan.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="entries"&gt;&lt;/a&gt; `entries` | `readonly` | readonly [`CanvasFontCatalogRecord`](CanvasFontCatalogRecord.md)[] | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:197](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L197) |
+
+## Methods
+
+### get()
+
+```ts
+get(family): CanvasFontCatalogRecord | undefined;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/text/font-catalog.ts:199](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L199)
+
+Case-insensitive; see fontFamilyKey.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `family` | `string` |
+
+#### Returns
+
+[`CanvasFontCatalogRecord`](CanvasFontCatalogRecord.md) \| `undefined`

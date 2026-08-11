@@ -1,0 +1,37 @@
+---
+title: "CanvasResolvedDocument"
+description: "@anvilkit/canvas-core · CanvasResolvedDocument"
+---
+
+Defined in: [layout/types.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L118)
+
+One immutable resolution of one document.
+
+### Incremental resolution contract (TD §5.4)
+
+Re-resolving must not mean rebuilding from scratch: a 1,000-node document
+allocating 1,000 fresh records per pointer move cannot meet the ≤16 ms warm
+target. So a resolution that dirties a subtree returns a **new**
+`CanvasResolvedDocument` whose `records` **structurally shares** every record
+object that did not change — untouched records are reference-identical
+between consecutive resolutions, which is also what lets renderers memoise
+on record identity.
+
+Consumers must treat record identity as a valid change signal and must not
+deep-compare geometry.
+
+## Extended by
+
+- [`CanvasResolvedComponentDocument`](CanvasResolvedComponentDocument.md)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="diagnostics"&gt;&lt;/a&gt; `diagnostics` | `readonly` | readonly [`CanvasLayoutIssue`](CanvasLayoutIssue.md)[] | Ordered per TD §14; byte-stable across repeated resolutions of one document. Bounded by `MAX_RETAINED_DIAGNOSTICS` — see [CanvasResolvedDocument.truncatedDiagnostics](CanvasResolvedComponentDocument.md#truncateddiagnostics). | [layout/types.ts:129](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L129) |
+| &lt;a id="engineversion"&gt;&lt;/a&gt; `engineVersion` | `readonly` | `1` | Resolver engine identity — matches `CanvasLayoutMaterialization.engineVersion`. | [layout/types.ts:151](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L151) |
+| &lt;a id="inputhash"&gt;&lt;/a&gt; `inputHash` | `readonly` | `string` | Hash of the resolver inputs, for the materialization freshness stamp. | [layout/types.ts:153](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L153) |
+| &lt;a id="pageroots"&gt;&lt;/a&gt; `pageRoots` | `readonly` | `ReadonlyMap`\&lt;`string`, readonly [`CanvasResolvedNodeId`](../type-aliases/CanvasResolvedNodeId)[]\&gt; | Page id → that page's root record ids, in document order. | [layout/types.ts:123](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L123) |
+| &lt;a id="records"&gt;&lt;/a&gt; `records` | `readonly` | `ReadonlyMap`\&lt;[`CanvasResolvedNodeId`](../type-aliases/CanvasResolvedNodeId), [`CanvasResolvedNodeRecord`](CanvasResolvedNodeRecord.md)\&gt; | - | [layout/types.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L121) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source` | `readonly` | [`CanvasIR`](CanvasIR.md) | The exact IR this resolution was produced from. | [layout/types.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L120) |
+| &lt;a id="truncateddiagnostics"&gt;&lt;/a&gt; `truncatedDiagnostics` | `readonly` | `number` | How many diagnostics were dropped past the retention cap; `0` when the list above is complete. Diagnostics are emitted per offending node, so a systematically broken document can produce one per node — `limits.ts` caps the retained list to keep a report reviewable and its byte size bounded for hosts that persist or transmit it. This field is what stops that from being a silent lie: a caller seeing a full list and a zero here knows it has the whole story. Not in TD §5.4's published shape; added because `limits.ts` requires the dropped count be "reported alongside", and there is nowhere else to put it — the `CanvasLayoutIssueCode` union is frozen at 11 members, so a synthetic "…and N more" diagnostic is not available either. The retained entries are the **prefix in TD §14 order**, not the most severe ones: that order is normative and re-sorting by severity would make the array depend on something other than the specified key. | [layout/types.ts:149](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L149) |

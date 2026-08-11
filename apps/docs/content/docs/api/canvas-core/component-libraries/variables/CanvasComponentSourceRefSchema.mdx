@@ -1,0 +1,16 @@
+---
+title: "CanvasComponentSourceRefSchema"
+description: "@anvilkit/canvas-core · CanvasComponentSourceRefSchema"
+---
+
+```ts
+const CanvasComponentSourceRefSchema: z.ZodType<CanvasComponentSourceRef>;
+```
+
+Defined in: [component-libraries/schema.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/schema.ts#L85)
+
+Either source kind, discriminated on `kind`.
+
+`discriminatedUnion` rather than a plain union so a wrong `kind` reports one
+precise issue on that field instead of the union's full cross-product of
+failures — which matters because this error text reaches a host integrator.

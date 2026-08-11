@@ -1,0 +1,31 @@
+---
+title: "isPropertyEditable"
+description: "@anvilkit/canvas-editor · isPropertyEditable"
+---
+
+```ts
+function isPropertyEditable(
+   context, 
+   instanceId, 
+   propertyId): boolean;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand-governance/effective-policy-context.ts:86](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/effective-policy-context.ts#L86)
+
+Per-instance editable-property narrowing (OD-08).
+
+Absent means "no narrowing"; an empty array means "nothing editable". Those
+two must not collapse into each other, which is why this returns a tri-state
+rather than a boolean over a defaulted array.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `context` | `CanvasBrandPolicyContext` |
+| `instanceId` | `string` |
+| `propertyId` | `string` |
+
+## Returns
+
+`boolean`

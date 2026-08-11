@@ -1,0 +1,55 @@
+---
+title: "CanvasLayoutIssueCode"
+description: "@anvilkit/canvas-core · CanvasLayoutIssueCode"
+---
+
+```ts
+type CanvasLayoutIssueCode = 
+  | "layout-invalid-number"
+  | "layout-negative-gap"
+  | "layout-negative-padding"
+  | "layout-hug-unsupported"
+  | "layout-fill-without-parent"
+  | "layout-circular-sizing"
+  | "layout-insufficient-space"
+  | "layout-measurement-missing"
+  | "layout-depth-exceeded"
+  | "layout-materialization-stale"
+  | "layout-capability-unsupported";
+```
+
+Defined in: [layout/validate.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/validate.ts#L51)
+
+## File
+
+Layout invariants (TD §14) — the level-3 half of Auto Layout
+validation.
+
+Deliberately parallel to `ir/invariants.ts`: a plain readonly record, never
+thrown, with a throwing `assert*` wrapper alongside. It is **additive** to
+`CanvasInvariantIssueCode`, not a replacement — that union keeps owning
+document-wide facts (duplicate ids, dangling assets, `excessive-tree-depth`,
+and now `missing-required-capability`), while this one owns layout
+semantics.
+
+**Scope of this module in M1.** The 11-code union below is the complete,
+frozen taxonomy (TD §14) and nothing may be added to it. Eight codes are
+decidable from the IR alone and are emitted here. Three are inherently
+resolution-time facts — they cannot be known without running the solver —
+and are emitted by the resolver in M2 (T-M2-06):
+
+- `layout-insufficient-space` — needs resolved extents.
+- `layout-measurement-missing` — needs the measurement port.
+- `layout-materialization-stale` — needs the engine's `inputHash`.
+
+They are declared here so the contract is complete from M1 onward and M2
+adds behaviour, never taxonomy.
+
+**On the "only Frame may carry `autoLayout`" rule (TD §6.2).** It is
+enforced structurally rather than diagnostically: `autoLayout` exists only
+on `CanvasFrameNodeShape`, so on any other kind it is an unknown key that
+`z.looseObject` preserves and every consumer ignores. TD §14's union has no
+member for "layout intent on the wrong kind", and inventing a 12th code
+would create exactly the parallel taxonomy this design forbids — so a
+misplaced `autoLayout` is inert data, and that is asserted by test rather
+than reported as an issue.

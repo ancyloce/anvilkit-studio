@@ -1,0 +1,27 @@
+---
+title: "CanvasResolvedComponentDocument"
+description: "@anvilkit/canvas-core · CanvasResolvedComponentDocument"
+---
+
+Defined in: [layout/resolve-document.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/resolve-document.ts#L58)
+
+`CanvasResolvedDocument` plus the component diagnostics of the expansion
+pass. Additive subtype: every existing consumer of the base type keeps
+working unchanged.
+
+## Extends
+
+- [`CanvasResolvedDocument`](CanvasResolvedDocument.md)
+
+## Properties
+
+| Property | Modifier | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="componentissues"&gt;&lt;/a&gt; `componentIssues` | `readonly` | readonly [`CanvasComponentIssue`](CanvasComponentIssue.md)[] | - | - | [layout/resolve-document.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/resolve-document.ts#L60) |
+| &lt;a id="diagnostics"&gt;&lt;/a&gt; `diagnostics` | `readonly` | readonly [`CanvasLayoutIssue`](CanvasLayoutIssue.md)[] | Ordered per TD §14; byte-stable across repeated resolutions of one document. Bounded by `MAX_RETAINED_DIAGNOSTICS` — see [CanvasResolvedDocument.truncatedDiagnostics](#truncateddiagnostics). | [`CanvasResolvedDocument`](CanvasResolvedDocument.md).[`diagnostics`](CanvasResolvedDocument.md#diagnostics) | [layout/types.ts:129](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L129) |
+| &lt;a id="engineversion"&gt;&lt;/a&gt; `engineVersion` | `readonly` | `1` | Resolver engine identity — matches `CanvasLayoutMaterialization.engineVersion`. | [`CanvasResolvedDocument`](CanvasResolvedDocument.md).[`engineVersion`](CanvasResolvedDocument.md#engineversion) | [layout/types.ts:151](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L151) |
+| &lt;a id="inputhash"&gt;&lt;/a&gt; `inputHash` | `readonly` | `string` | Hash of the resolver inputs, for the materialization freshness stamp. | [`CanvasResolvedDocument`](CanvasResolvedDocument.md).[`inputHash`](CanvasResolvedDocument.md#inputhash) | [layout/types.ts:153](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L153) |
+| &lt;a id="pageroots"&gt;&lt;/a&gt; `pageRoots` | `readonly` | `ReadonlyMap`\&lt;`string`, readonly [`CanvasResolvedNodeId`](../type-aliases/CanvasResolvedNodeId)[]\&gt; | Page id → that page's root record ids, in document order. | [`CanvasResolvedDocument`](CanvasResolvedDocument.md).[`pageRoots`](CanvasResolvedDocument.md#pageroots) | [layout/types.ts:123](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L123) |
+| &lt;a id="records"&gt;&lt;/a&gt; `records` | `readonly` | `ReadonlyMap`\&lt;[`CanvasResolvedNodeId`](../type-aliases/CanvasResolvedNodeId), [`CanvasResolvedNodeRecord`](CanvasResolvedNodeRecord.md)\&gt; | - | [`CanvasResolvedDocument`](CanvasResolvedDocument.md).[`records`](CanvasResolvedDocument.md#records) | [layout/types.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L121) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source` | `readonly` | [`CanvasIR`](CanvasIR.md) | The exact IR this resolution was produced from. | [`CanvasResolvedDocument`](CanvasResolvedDocument.md).[`source`](CanvasResolvedDocument.md#source) | [layout/types.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L120) |
+| &lt;a id="truncateddiagnostics"&gt;&lt;/a&gt; `truncatedDiagnostics` | `readonly` | `number` | How many diagnostics were dropped past the retention cap; `0` when the list above is complete. Diagnostics are emitted per offending node, so a systematically broken document can produce one per node — `limits.ts` caps the retained list to keep a report reviewable and its byte size bounded for hosts that persist or transmit it. This field is what stops that from being a silent lie: a caller seeing a full list and a zero here knows it has the whole story. Not in TD §5.4's published shape; added because `limits.ts` requires the dropped count be "reported alongside", and there is nowhere else to put it — the `CanvasLayoutIssueCode` union is frozen at 11 members, so a synthetic "…and N more" diagnostic is not available either. The retained entries are the **prefix in TD §14 order**, not the most severe ones: that order is normative and re-sorting by severity would make the array depend on something other than the specified key. | [`CanvasResolvedDocument`](CanvasResolvedDocument.md).[`truncatedDiagnostics`](CanvasResolvedDocument.md#truncateddiagnostics) | [layout/types.ts:149](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L149) |

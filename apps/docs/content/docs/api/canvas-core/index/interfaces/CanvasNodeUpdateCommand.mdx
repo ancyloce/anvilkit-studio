@@ -1,0 +1,33 @@
+---
+title: "CanvasNodeUpdateCommand"
+description: "@anvilkit/canvas-core · CanvasNodeUpdateCommand"
+---
+
+Defined in: [commands/types.ts:109](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L109)
+
+Targets a node command at one tree: a page's (the default when absent —
+every pre-component call site keeps its exact semantics) or a Component
+Source's (plan 0023 M3-02, LC-CMD/LC-CREATE-002). A command's inverse
+carries the same `location`, so undo edits the same tree. One successful
+command (or one `batch`/transaction) against a Source increments that
+definition's `revision` exactly once — see `applyCommand`.
+
+## Extends
+
+- [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md)
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* [`CanvasNodeKind`](../type-aliases/CanvasNodeKind) |
+
+## Properties
+
+| Property | Type | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `K` | - | [commands/types.ts:113](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L113) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md).[`location`](CanvasCommandLocationOptions.md#location) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | [commands/types.ts:112](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L112) |
+| &lt;a id="patch"&gt;&lt;/a&gt; `patch` | `Partial`\&lt;`Omit`\&lt;[`CanvasNodeByKind`](../type-aliases/CanvasNodeByKind)\&lt;`K`\&gt;, `"id"` \| `"type"`\&gt;\&gt; | - | [commands/types.ts:114](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L114) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"node.update"` | - | [commands/types.ts:111](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L111) |

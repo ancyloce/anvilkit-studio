@@ -1,0 +1,29 @@
+---
+title: "createStaticComponentProvider"
+description: "@anvilkit/canvas-editor · createStaticComponentProvider"
+---
+
+```ts
+function createStaticComponentProvider(entries, options?): CanvasComponentProvider;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/component-provider.ts:188](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/component-provider.ts#L188)
+
+Wrap a static component array in the Provider protocol.
+
+Synchronous filtering with offset-cursor pagination, mirroring
+`createStaticTemplateProvider`. This is the fixture backend for tests and
+demos, and the reference a hosted provider is checked against: the panel
+cannot tell the two apart.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `entries` | readonly [`CanvasStaticComponentEntry`](../interfaces/CanvasStaticComponentEntry)[] |
+| `options` | \{ `pageSize?`: `number`; \} |
+| `options.pageSize?` | `number` |
+
+## Returns
+
+[`CanvasComponentProvider`](../interfaces/CanvasComponentProvider)

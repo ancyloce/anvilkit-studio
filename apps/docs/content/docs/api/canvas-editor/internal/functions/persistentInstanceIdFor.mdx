@@ -1,0 +1,36 @@
+---
+title: "persistentInstanceIdFor"
+description: "@anvilkit/canvas-editor · persistentInstanceIdFor"
+---
+
+```ts
+function persistentInstanceIdFor(view, resolvedNodeId): string | null;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/selection/component-selection-policy.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/component-selection-policy.ts#L60)
+
+The OUTERMOST persistent instance node that owns a resolved record, or `null`
+for a plain node.
+
+Necessary because `CanvasResolvedComponentOrigin.instanceId` is the record's
+IMMEDIATE owner, which is only a persistent document id at depth 1: inside a
+NESTED instance it is the nested instance's own VIRTUAL id (the resolver
+threads the virtual id down as the child expansion's `instanceRecordId`). So
+a node two levels deep reports an owner like
+`akv1:6:inst-112:outer-nested` — a codec product that addresses no document
+node. Following the owner chain to its fixed point is what keeps a virtual id
+from ever reaching `selectedIds` or a command payload.
+
+Bounded by the resolver's own nesting cap plus one, so a hostile or corrupt
+resolution cannot spin here.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `view` | `CanvasResolvedView` |
+| `resolvedNodeId` | `string` \| `CanvasResolvedNodeId` |
+
+## Returns
+
+`string` \| `null`

@@ -1,0 +1,23 @@
+---
+title: "CanvasUpdateCheckResult"
+description: "@anvilkit/canvas-editor · CanvasUpdateCheckResult"
+---
+
+```ts
+type CanvasUpdateCheckResult = 
+  | {
+  ok: true;
+  updates: readonly CanvasComponentUpdateInfo[];
+}
+  | {
+  ok: false;
+  reason: "aborted";
+}
+  | {
+  code: string;
+  ok: false;
+  reason: "provider";
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/use-update-check.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-update-check.ts#L43)

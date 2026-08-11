@@ -1,0 +1,21 @@
+---
+title: "index"
+description: "@anvilkit/ir · index"
+---
+
+## Interfaces
+
+| Interface | Description |
+| ------ | ------ |
+| [EditorFeatureScanDocument](interfaces/EditorFeatureScanDocument.md) | A structural view of an authored document, sufficient for prop-level feature detection. |
+| [ValidateExportCapabilitiesOptions](interfaces/ValidateExportCapabilitiesOptions.md) | Options for [validateExportCapabilities](functions/validateExportCapabilities.md). |
+
+## Functions
+
+| Function | Description |
+| ------ | ------ |
+| [~~listUsedAuthoringFeatures~~](functions/listUsedAuthoringFeatures.md) | Scan a parsed sidecar for used editor features (DD-0019 §23.2). |
+| [listUsedDocumentFeatures](functions/listUsedDocumentFeatures.md) | Feature scan for a **canonical carrier document** — the entry point a caller uses when there is no sidecar to read (`p2-007`). |
+| [listUsedEditorFeatures](functions/listUsedEditorFeatures.md) | Scan a document and its sidecar for every used editor feature (DD-0019 §23.2; DD-DEC-018). |
+| [projectAuthoringToIR](functions/projectAuthoringToIR.md) | Project sidecar-owned authoring facts into an already-converted PageIR (DD-DEC-020): `locked` → `meta.locked`, one-way. Everything else in the sidecar is either materialized upstream (styles, components — by core/editor via the export pipeline) or carries no IR representation. Pure; documents with no locked records return the input IR **by reference** (legacy byte-identity). |
+| [validateExportCapabilities](functions/validateExportCapabilities.md) | Compare used features against a format's declared capabilities (DD-0019 §23.2; DD-DEC-018). A format without a declaration declares **no** editor features: any used feature blocks production export through it. |

@@ -1,0 +1,42 @@
+---
+title: "SafeExpression"
+description: "@anvilkit/contracts · SafeExpression"
+---
+
+```ts
+type SafeExpression = 
+  | {
+  type: "literal";
+  value: JsonValue;
+}
+  | {
+  path: readonly string[];
+  root: "data" | "item" | "index" | "page";
+  type: "path";
+}
+  | {
+  type: "coalesce";
+  values: readonly SafeExpression[];
+}
+  | {
+  left: SafeExpression;
+  operator: "eq" | "neq" | "gt" | "gte" | "lt" | "lte";
+  right: SafeExpression;
+  type: "compare";
+}
+  | {
+  operator: "and" | "or";
+  type: "boolean";
+  values: readonly SafeExpression[];
+}
+  | {
+  type: "not";
+  value: SafeExpression;
+};
+```
+
+Defined in: [editor/bindings.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/bindings.ts#L20)
+
+The safe expression AST (DD-0019 §19, verbatim). Function calls,
+member access on functions, and getter traversal are structurally
+unrepresentable.

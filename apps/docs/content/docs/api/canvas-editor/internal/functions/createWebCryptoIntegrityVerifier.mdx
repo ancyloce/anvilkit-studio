@@ -1,0 +1,27 @@
+---
+title: "createWebCryptoIntegrityVerifier"
+description: "@anvilkit/canvas-editor · createWebCryptoIntegrityVerifier"
+---
+
+```ts
+function createWebCryptoIntegrityVerifier(subtle?): CanvasIntegrityVerifier;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/web-crypto-verifier.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/web-crypto-verifier.ts#L87)
+
+Create the default verifier over Web Crypto.
+
+Resolves `false` for a genuine mismatch and **rejects** only when the digest
+could not be computed at all (no `crypto.subtle` — e.g. a page served over plain
+HTTP, where Web Crypto is unavailable outside a secure context). Admission
+reports those two cases differently: "not authentic" versus "could not check".
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `subtle?` | `SubtleCrypto` |
+
+## Returns
+
+`CanvasIntegrityVerifier`

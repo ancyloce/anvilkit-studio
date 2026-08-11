@@ -1,0 +1,87 @@
+---
+title: "EditorPageAdapter"
+description: "@anvilkit/contracts · EditorPageAdapter"
+---
+
+Defined in: [editor/studio-config.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L46)
+
+Host page adapter (DD-0019 §18, verbatim). Without an adapter,
+page navigation is hidden. Core never persists page trees and page
+switches never enter Puck history.
+
+## Methods
+
+### create()?
+
+```ts
+optional create(input): Promise<string>;
+```
+
+Defined in: [editor/studio-config.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L49)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | \{ `name`: `string`; `parentId?`: `string`; \} |
+| `input.name` | `string` |
+| `input.parentId?` | `string` |
+
+#### Returns
+
+`Promise`\<`string`\>
+
+***
+
+### list()
+
+```ts
+list(): Promise<readonly EditorPageDescriptor[]>;
+```
+
+Defined in: [editor/studio-config.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L47)
+
+#### Returns
+
+`Promise`\<readonly [`EditorPageDescriptor`](EditorPageDescriptor.md)[]\>
+
+***
+
+### open()
+
+```ts
+open(pageId): Promise<void>;
+```
+
+Defined in: [editor/studio-config.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L48)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `pageId` | `string` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### rename()?
+
+```ts
+optional rename(pageId, name): Promise<void>;
+```
+
+Defined in: [editor/studio-config.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L50)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `pageId` | `string` |
+| `name` | `string` |
+
+#### Returns
+
+`Promise`\<`void`\>

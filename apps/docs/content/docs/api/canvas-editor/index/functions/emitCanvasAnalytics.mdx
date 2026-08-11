@@ -1,0 +1,37 @@
+---
+title: "emitCanvasAnalytics"
+description: "@anvilkit/canvas-editor · emitCanvasAnalytics"
+---
+
+```ts
+function emitCanvasAnalytics<K>(
+   sink, 
+   key, 
+   properties): void;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:180](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L180)
+
+Emit, tolerating a throwing sink.
+
+A host's analytics callback is third-party code on a user-interaction path.
+If it throws, the user's insert or update must still complete — losing a
+metric is an acceptable outcome, losing the edit is not.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* \| `"librarySearched"` \| `"libraryComponentInserted"` \| `"componentUpdateChecked"` \| `"componentUpdateApplied"` \| `"componentVariantChanged"` \| `"componentSwapped"` \| `"brandViolationDetected"` \| `"brandOperationBlocked"` \| `"brandComplianceRun"` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `sink` | \| [`CanvasAnalyticsSink`](../type-aliases/CanvasAnalyticsSink) \| `undefined` |
+| `key` | `K` |
+| `properties` | [`CanvasAnalyticsPayloads`](../interfaces/CanvasAnalyticsPayloads)\[`K`\] |
+
+## Returns
+
+`void`

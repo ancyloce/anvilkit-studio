@@ -1,0 +1,69 @@
+---
+title: "CanvasElementPreview"
+description: "@anvilkit/canvas-editor · CanvasElementPreview"
+---
+
+```ts
+type CanvasElementPreview = 
+  | {
+  d: string;
+  kind: "path";
+  viewBox?: string;
+}
+  | {
+  kind: "image";
+  src: string;
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-entry.ts:158](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L158)
+
+A catalog thumbnail.
+
+Deliberately NOT a raw SVG markup string. `canvas-core` refuses raw SVG in
+the IR because parsing and sanitizing it is an ingest-time host
+responsibility (`core/src/ir/types.ts:844-851`); a panel that rendered
+catalog markup through `dangerouslySetInnerHTML` would reintroduce exactly
+that risk one layer up, for 300-500 third-party entries. Both variants here
+are attribute-only, so nothing can break out of the element it is set on.
+
+- `"path"` — the common case for `cp3-002`'s single-path icons. `cp3-003`
+  renders `<svg viewBox={viewBox}><path d={d} /></svg>`, which costs no
+  `build()` call per grid cell and inherits `currentColor`, so the thumbnail
+  tracks the panel's theme instead of being baked light or dark.
+- `"image"` — a URL or data URI, for stickers and multi-part graphics that
+  no single path describes.
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  d: string;
+  kind: "path";
+  viewBox?: string;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `d` | `string` | SVG path data, as it would appear in a `<path d="…">`. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:162](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L162) |
+| `kind` | `"path"` | - | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:160](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L160) |
+| `viewBox?` | `string` | Defaults to `0 0 24 24` where omitted — the icon-set convention. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:164](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L164) |
+
+***
+
+### Type Literal
+
+```ts
+{
+  kind: "image";
+  src: string;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `kind` | `"image"` | - | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:167](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L167) |
+| `src` | `string` | URL or data URI for an `<img src>`. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:169](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L169) |

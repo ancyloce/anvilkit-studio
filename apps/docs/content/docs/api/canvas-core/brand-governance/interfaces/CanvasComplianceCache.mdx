@@ -1,0 +1,101 @@
+---
+title: "CanvasComplianceCache"
+description: "@anvilkit/canvas-core · CanvasComplianceCache"
+---
+
+Defined in: [brand-governance/compliance-cache.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance-cache.ts#L81)
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="size"&gt;&lt;/a&gt; `size` | `readonly` | `number` | [brand-governance/compliance-cache.ts:86](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance-cache.ts#L86) |
+
+## Methods
+
+### clear()
+
+```ts
+clear(): void;
+```
+
+Defined in: [brand-governance/compliance-cache.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance-cache.ts#L85)
+
+Drop everything — used when the Brand Kit or policy revision changes.
+
+#### Returns
+
+`void`
+
+***
+
+### get()
+
+```ts
+get(key): 
+  | readonly BrandComplianceIssue[]
+  | undefined;
+```
+
+Defined in: [brand-governance/compliance-cache.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance-cache.ts#L82)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `key` | `string` |
+
+#### Returns
+
+  \| readonly [`BrandComplianceIssue`](../../index/interfaces/BrandComplianceIssue)[]
+  \| `undefined`
+
+***
+
+### set()
+
+```ts
+set(key, issues): void;
+```
+
+Defined in: [brand-governance/compliance-cache.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance-cache.ts#L83)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `key` | `string` |
+| `issues` | readonly [`BrandComplianceIssue`](../../index/interfaces/BrandComplianceIssue)[] |
+
+#### Returns
+
+`void`
+
+***
+
+### stats()
+
+```ts
+stats(): {
+  hits: number;
+  misses: number;
+};
+```
+
+Defined in: [brand-governance/compliance-cache.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance-cache.ts#L88)
+
+Hit/miss counts, for the perf test and for diagnostics.
+
+#### Returns
+
+```ts
+{
+  hits: number;
+  misses: number;
+}
+```
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `hits` | `number` | [brand-governance/compliance-cache.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance-cache.ts#L88) |
+| `misses` | `number` | [brand-governance/compliance-cache.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance-cache.ts#L88) |

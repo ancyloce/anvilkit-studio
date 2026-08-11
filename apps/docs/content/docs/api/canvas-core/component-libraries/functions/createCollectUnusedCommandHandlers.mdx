@@ -1,0 +1,26 @@
+---
+title: "createCollectUnusedCommandHandlers"
+description: "@anvilkit/canvas-core · createCollectUnusedCommandHandlers"
+---
+
+```ts
+function createCollectUnusedCommandHandlers(): readonly [{
+  apply: (ir, cmd, _options) => CommandApplyResult<CanvasComponentRestoreCollectedCommand>;
+  type: "component-snapshot.collect-unused";
+}, {
+  apply: (ir, cmd, _options) => CommandApplyResult<CanvasComponentCollectUnusedCommand>;
+  type: "component-snapshot.restore-collected";
+}];
+```
+
+Defined in: [component-libraries/commands/collect-unused.ts:176](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/collect-unused.ts#L176)
+
+## Returns
+
+readonly \[\{
+  `apply`: (`ir`, `cmd`, `_options`) => [`CommandApplyResult`](../../index/interfaces/CommandApplyResult)\<[`CanvasComponentRestoreCollectedCommand`](../interfaces/CanvasComponentRestoreCollectedCommand)\>;
+  `type`: `"component-snapshot.collect-unused"`;
+\}, \{
+  `apply`: (`ir`, `cmd`, `_options`) => [`CommandApplyResult`](../../index/interfaces/CommandApplyResult)\<[`CanvasComponentCollectUnusedCommand`](../interfaces/CanvasComponentCollectUnusedCommand)\>;
+  `type`: `"component-snapshot.restore-collected"`;
+\}\]

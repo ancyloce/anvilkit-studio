@@ -1,0 +1,26 @@
+---
+title: "layoutIssuesToExportWarnings"
+description: "@anvilkit/canvas-core · layoutIssuesToExportWarnings"
+---
+
+```ts
+function layoutIssuesToExportWarnings(issues, options?): CanvasExportWarning[];
+```
+
+Defined in: [layout/export-warnings.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/export-warnings.ts#L40)
+
+Map layout diagnostics into the unified export-warning shape 1:1 — `code`
+carries the issue code verbatim (the same convention the SVG/PDF serializer
+warnings use), `severity` maps to `level`, and `nodeId`/`fallback` ride
+along when present.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `issues` | readonly [`CanvasLayoutIssue`](../interfaces/CanvasLayoutIssue)[] |
+| `options` | [`LayoutIssuesToExportWarningsOptions`](../interfaces/LayoutIssuesToExportWarningsOptions) |
+
+## Returns
+
+[`CanvasExportWarning`](../interfaces/CanvasExportWarning)[]

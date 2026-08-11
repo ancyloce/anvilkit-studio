@@ -1,0 +1,31 @@
+---
+title: "getDefinition"
+description: "@anvilkit/canvas-core · getDefinition"
+---
+
+```ts
+function getDefinition(
+   source, 
+   local, 
+   external): CanvasDefinitionLookup;
+```
+
+Defined in: [components/definition-lookup.ts:134](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L134)
+
+Resolve a Source to its definition, from the local Registry or the admitted
+snapshot registry (TD §10).
+
+Total: every failure is a described `unresolved` result, never a throw. The
+caller turns that into a selectable placeholder plus a diagnostic (INV-3).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `source` | [`CanvasComponentSourceRef`](../type-aliases/CanvasComponentSourceRef) |
+| `local` | \| `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasComponentDefinition`](../interfaces/CanvasComponentDefinition)\&gt;\&gt; \| `undefined` |
+| `external` | \| [`CanvasExternalSnapshotIndex`](../interfaces/CanvasExternalSnapshotIndex) \| `undefined` |
+
+## Returns
+
+[`CanvasDefinitionLookup`](../type-aliases/CanvasDefinitionLookup)

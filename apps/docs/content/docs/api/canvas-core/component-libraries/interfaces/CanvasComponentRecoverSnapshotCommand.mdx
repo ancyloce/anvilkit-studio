@@ -1,0 +1,15 @@
+---
+title: "CanvasComponentRecoverSnapshotCommand"
+description: "@anvilkit/canvas-core · CanvasComponentRecoverSnapshotCommand"
+---
+
+Defined in: [component-libraries/commands/recover-snapshot.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/recover-snapshot.ts#L49)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="candidate"&gt;&lt;/a&gt; `candidate` | `readonly` | [`CanvasValidatedExternalSnapshot`](../type-aliases/CanvasValidatedExternalSnapshot) | The verified snapshot to restore. | [component-libraries/commands/recover-snapshot.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/recover-snapshot.ts#L52) |
+| &lt;a id="dependencies"&gt;&lt;/a&gt; `dependencies?` | `readonly` | readonly [`CanvasValidatedExternalSnapshot`](../type-aliases/CanvasValidatedExternalSnapshot)[] | Verified snapshots for any dependencies that are also missing. | [component-libraries/commands/recover-snapshot.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/recover-snapshot.ts#L61) |
+| &lt;a id="expectedref"&gt;&lt;/a&gt; `expectedRef` | `readonly` | [`CanvasExternalComponentRef`](../../index/interfaces/CanvasExternalComponentRef) | The reference the document's instances are actually pointing at. Checked against `candidate.ref`, so recovery can never quietly substitute a different version for the one the document asked for. | [component-libraries/commands/recover-snapshot.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/recover-snapshot.ts#L59) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | `"component-snapshot.recover"` | - | [component-libraries/commands/recover-snapshot.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/recover-snapshot.ts#L50) |

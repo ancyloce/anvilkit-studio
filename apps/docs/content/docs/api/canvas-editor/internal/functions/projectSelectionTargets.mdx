@@ -1,0 +1,26 @@
+---
+title: "projectSelectionTargets"
+description: "@anvilkit/canvas-editor · projectSelectionTargets"
+---
+
+```ts
+function projectSelectionTargets(targets): string[];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/stores/selection-store.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L43)
+
+The PERSISTENT-NODE projection of a target list — the `selectedIds` contract
+every pre-component consumer reads (TD §13.1).
+
+Deduplicated: two virtual nodes selected inside ONE instance project to the
+same persistent id, and `selectedIds` has always been a unique list.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `targets` | readonly [`CanvasSelectionTarget`](../type-aliases/CanvasSelectionTarget)[] |
+
+## Returns
+
+`string`[]

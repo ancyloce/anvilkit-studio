@@ -1,0 +1,21 @@
+---
+title: "CanvasComponentUpdateSourceCommand"
+description: "@anvilkit/canvas-core · CanvasComponentUpdateSourceCommand"
+---
+
+Defined in: [component-libraries/commands/update-source.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/update-source.ts#L79)
+
+## Extends
+
+- `SourceChangeBase`
+
+## Properties
+
+| Property | Modifier | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="candidate"&gt;&lt;/a&gt; `candidate` | `readonly` | [`CanvasValidatedExternalSnapshot`](../type-aliases/CanvasValidatedExternalSnapshot) | The verified snapshot for the target version. | `SourceChangeBase.candidate` | [component-libraries/commands/update-source.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/update-source.ts#L74) |
+| &lt;a id="dependencies"&gt;&lt;/a&gt; `dependencies?` | `readonly` | readonly [`CanvasValidatedExternalSnapshot`](../type-aliases/CanvasValidatedExternalSnapshot)[] | - | `SourceChangeBase.dependencies` | [component-libraries/commands/update-source.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/update-source.ts#L75) |
+| &lt;a id="from"&gt;&lt;/a&gt; `from` | `readonly` | [`CanvasExternalComponentRef`](../../index/interfaces/CanvasExternalComponentRef) | The ref being replaced. Every named instance must currently carry it — a mismatch means the preview was computed against a different document state and the command is refused rather than partly applied. | - | [component-libraries/commands/update-source.ts:86](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/update-source.ts#L86) |
+| &lt;a id="instanceids"&gt;&lt;/a&gt; `instanceIds` | `readonly` | readonly `string`[] | The instances to change, named explicitly (§12.6). Never "every instance of X" computed at apply time: a replay on a document that has since gained instances would then affect more than the user previewed and approved. | `SourceChangeBase.instanceIds` | [component-libraries/commands/update-source.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/update-source.ts#L72) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | `readonly` | [`CanvasDocumentLocation`](../../index/interfaces/CanvasDocumentLocation) | - | `SourceChangeBase.location` | [component-libraries/commands/update-source.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/update-source.ts#L76) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | `"component-instance.update-source"` | - | - | [component-libraries/commands/update-source.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/update-source.ts#L80) |

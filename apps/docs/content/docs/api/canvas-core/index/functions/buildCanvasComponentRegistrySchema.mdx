@@ -1,0 +1,26 @@
+---
+title: "buildCanvasComponentRegistrySchema"
+description: "@anvilkit/canvas-core · buildCanvasComponentRegistrySchema"
+---
+
+```ts
+function buildCanvasComponentRegistrySchema(nodeSchema): ZodType<Readonly<Record<string, CanvasComponentDefinition>>>;
+```
+
+Defined in: [ir/validators.ts:1016](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L1016)
+
+Build the `ir.components` Registry schema against a node union — the
+static `CanvasNodeSchema` below, or the extended union
+`buildExtendedSchemas` assembles, so a custom node kind nested inside a
+Source tree validates exactly like one nested inside a page (DEV-M1-B).
+Enforces Registry key === `definition.id` (INV-1).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `nodeSchema` | `ZodType`\&lt;[`CanvasNode`](../type-aliases/CanvasNode)\&gt; |
+
+## Returns
+
+`ZodType`\<`Readonly`\<`Record`\<`string`, [`CanvasComponentDefinition`](../interfaces/CanvasComponentDefinition)\>\>\>

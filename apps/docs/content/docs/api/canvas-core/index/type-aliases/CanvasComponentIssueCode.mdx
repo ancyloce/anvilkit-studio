@@ -1,0 +1,28 @@
+---
+title: "CanvasComponentIssueCode"
+description: "@anvilkit/canvas-core · CanvasComponentIssueCode"
+---
+
+```ts
+type CanvasComponentIssueCode = 
+  | "component-source-missing"
+  | "component-cycle"
+  | "component-depth-exceeded"
+  | "component-expanded-node-limit"
+  | "component-duplicate-id"
+  | "component-property-target-missing"
+  | "component-property-type-invalid"
+  | "component-override-orphan"
+  | "component-override-type-invalid"
+  | "component-materialization-stale"
+  | "component-detach-incomplete"
+  | "component-capability-unsupported"
+  | "component-snapshot-missing"
+  | "component-integrity-mismatch";
+```
+
+Defined in: [components/types.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L32)
+
+The 12 stable diagnostic codes (PRD §9.12). GROW-ONLY once shipped: hosts
+switch on these to phrase user-facing messages, so a removed or renamed
+member is a breaking change.

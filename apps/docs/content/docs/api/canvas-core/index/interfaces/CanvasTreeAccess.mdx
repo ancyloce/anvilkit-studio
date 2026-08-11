@@ -1,0 +1,113 @@
+---
+title: "CanvasTreeAccess"
+description: "@anvilkit/canvas-core · CanvasTreeAccess"
+---
+
+Defined in: [components/location.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/location.ts#L33)
+
+Read/write access to ONE node tree — a page's or a Component Source's.
+
+`getRoot`/`findNode` return `undefined` when the location (or node) does
+not exist; the write methods instead throw a typed
+`CanvasIRMutationError` (`location-not-found`), because a silently
+dropped write would hide a real defect. Writes return the next document
+— access objects are snapshots, so create a fresh one per document value.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="location"&gt;&lt;/a&gt; `location` | `readonly` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [components/location.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/location.ts#L34) |
+
+## Methods
+
+### findNode()
+
+```ts
+findNode(id): FindNodeInSubtreeResult | undefined;
+```
+
+Defined in: [components/location.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/location.ts#L38)
+
+Find a node (with its in-scope parent) within this tree only.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+
+#### Returns
+
+[`FindNodeInSubtreeResult`](FindNodeInSubtreeResult.md) \| `undefined`
+
+***
+
+### getRoot()
+
+```ts
+getRoot(): CanvasNode | undefined;
+```
+
+Defined in: [components/location.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/location.ts#L36)
+
+The scope's root node — `undefined` when the page/definition is absent.
+
+#### Returns
+
+[`CanvasNode`](../type-aliases/CanvasNode) \| `undefined`
+
+***
+
+### replaceNode()
+
+```ts
+replaceNode(
+   id, 
+   node, 
+   options?): CanvasIR;
+```
+
+Defined in: [components/location.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/location.ts#L43)
+
+Replace the subtree rooted at `id` with `node` (id/kind may change) at
+the exact same position. See `ir/mutations.ts` `replaceNode`.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `node` | [`CanvasNode`](../type-aliases/CanvasNode) |
+| `options?` | [`TreeAccessWriteOptions`](TreeAccessWriteOptions.md) |
+
+#### Returns
+
+[`CanvasIR`](CanvasIR.md)
+
+***
+
+### updateChildren()
+
+```ts
+updateChildren(
+   parentId, 
+   replace, 
+   options?): CanvasIR;
+```
+
+Defined in: [components/location.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/location.ts#L49)
+
+Rewrite one container's children in a single immutable pass.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `parentId` | `string` |
+| `replace` | (`children`) =&gt; [`CanvasNode`](../type-aliases/CanvasNode)[] |
+| `options?` | [`TreeAccessWriteOptions`](TreeAccessWriteOptions.md) |
+
+#### Returns
+
+[`CanvasIR`](CanvasIR.md)

@@ -1,0 +1,25 @@
+---
+title: "CanvasLayoutGeometryWrite"
+description: "@anvilkit/canvas-core · CanvasLayoutGeometryWrite"
+---
+
+Defined in: [commands/types.ts:515](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L515)
+
+One node's caller-computed geometry, written atomically as part of a layout
+command.
+
+**The caller computes these, not `commands/`.** `commands/` is layering rank
+3 and `layout/` (the resolver) is rank 4, so a command handler cannot call
+the resolver — it would be an upward import. Passing resolved values in the
+payload is what keeps that boundary intact, and it also makes every layout
+command deterministic and replayable from its payload alone, with no
+dependence on which resolver version the replaying build happens to ship.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds?` | [`CanvasBounds`](CanvasBounds.md) | - | [commands/types.ts:518](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L518) |
+| &lt;a id="layoutitem"&gt;&lt;/a&gt; `layoutItem?` | [`CanvasLayoutItem`](CanvasLayoutItem.md) \| `null` | Replaces `layoutItem`; `null` clears it (the field is dropped entirely). | [commands/types.ts:520](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L520) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | [commands/types.ts:516](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L516) |
+| &lt;a id="transform"&gt;&lt;/a&gt; `transform?` | [`CanvasTransform`](CanvasTransform.md) | - | [commands/types.ts:517](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L517) |

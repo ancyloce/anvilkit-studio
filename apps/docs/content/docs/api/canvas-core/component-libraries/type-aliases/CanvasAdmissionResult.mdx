@@ -1,0 +1,57 @@
+---
+title: "CanvasAdmissionResult"
+description: "@anvilkit/canvas-core · CanvasAdmissionResult"
+---
+
+```ts
+type CanvasAdmissionResult<T> = 
+  | {
+  canonicalBytes: Uint8Array;
+  key: string;
+  ok: true;
+  snapshot: CanvasValidatedExternalSnapshot<T>;
+}
+  | {
+  diagnostic: CanvasComponentDiagnostic;
+  ok: false;
+};
+```
+
+Defined in: [component-libraries/admission.ts:217](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L217)
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` *extends* [`CanvasExternalComponentSnapshotLike`](CanvasExternalComponentSnapshotLike.md) | [`CanvasExternalComponentSnapshotLike`](CanvasExternalComponentSnapshotLike.md) |
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  canonicalBytes: Uint8Array;
+  key: string;
+  ok: true;
+  snapshot: CanvasValidatedExternalSnapshot<T>;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `canonicalBytes` | `Uint8Array` | The exact bytes that were hashed — useful for host-side caching. | [component-libraries/admission.ts:225](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L225) |
+| `key` | `string` | Registry key this snapshot must be stored under. | [component-libraries/admission.ts:227](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L227) |
+| `ok` | `true` | - | [component-libraries/admission.ts:222](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L222) |
+| `snapshot` | [`CanvasValidatedExternalSnapshot`](CanvasValidatedExternalSnapshot.md)\&lt;`T`\&gt; | - | [component-libraries/admission.ts:223](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L223) |
+
+***
+
+### Type Literal
+
+```ts
+{
+  diagnostic: CanvasComponentDiagnostic;
+  ok: false;
+}
+```

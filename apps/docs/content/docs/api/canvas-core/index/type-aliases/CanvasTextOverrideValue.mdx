@@ -1,0 +1,20 @@
+---
+title: "CanvasTextOverrideValue"
+description: "@anvilkit/canvas-core · CanvasTextOverrideValue"
+---
+
+```ts
+type CanvasTextOverrideValue = 
+  | {
+  kind: "plain";
+  text: string;
+}
+  | {
+  kind: "rich";
+  paragraphs: RichTextParagraph[];
+};
+```
+
+Defined in: [ir/types.ts:1183](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1183)
+
+Plain or rich replacement content for a text property (TD §5.4).

@@ -1,0 +1,27 @@
+---
+title: "CanvasProviderRequestStatus"
+description: "@anvilkit/canvas-editor · CanvasProviderRequestStatus"
+---
+
+```ts
+type CanvasProviderRequestStatus = 
+  | "idle"
+  | "loading"
+  | "ready"
+  | "empty"
+  | "offline"
+  | "unauthorized"
+  | "rate-limited"
+  | "error";
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/provider-errors.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/provider-errors.ts#L27)
+
+The eight presentation states of a provider request.
+
+`empty` is deliberately distinct from `ready`: "your search matched nothing"
+and "here are results" need different UI, and collapsing them makes the panel
+look broken on a zero-result query. `offline` / `unauthorized` /
+`rate-limited` are split out of `error` for the same reason — each has a
+different remedy (retry, re-authenticate, wait), and a single "something went
+wrong" hides which one applies.

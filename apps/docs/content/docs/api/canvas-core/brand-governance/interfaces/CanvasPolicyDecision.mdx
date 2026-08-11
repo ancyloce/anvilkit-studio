@@ -1,0 +1,22 @@
+---
+title: "CanvasPolicyDecision"
+description: "@anvilkit/canvas-core · CanvasPolicyDecision"
+---
+
+Defined in: [policy-contracts.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L70)
+
+The outcome of asking policy about one operation.
+
+Three states, not two: `warn` is what lets a host run in advisory mode, where
+an edit commits AND is reported. Collapsing `warn` into `allow` would lose
+the report; collapsing it into `deny` would make advisory mode block.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="detail"&gt;&lt;/a&gt; `detail?` | `readonly` | `string` | Non-localized detail for logs. Never rendered to a user. | [policy-contracts.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L74) |
+| &lt;a id="instanceid"&gt;&lt;/a&gt; `instanceId?` | `readonly` | `string` | The instance the decision was made about, when one applies. | [policy-contracts.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L76) |
+| &lt;a id="outcome"&gt;&lt;/a&gt; `outcome` | `readonly` | `"allow"` \| `"warn"` \| `"deny"` | - | [policy-contracts.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L71) |
+| &lt;a id="propertyid"&gt;&lt;/a&gt; `propertyId?` | `readonly` | `string` | - | [policy-contracts.ts:77](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L77) |
+| &lt;a id="reason"&gt;&lt;/a&gt; `reason?` | `readonly` | [`CanvasPolicyDenyReason`](../type-aliases/CanvasPolicyDenyReason) | - | [policy-contracts.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L72) |

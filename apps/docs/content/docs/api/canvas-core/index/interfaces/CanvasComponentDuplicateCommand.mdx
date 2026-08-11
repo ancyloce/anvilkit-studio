@@ -1,0 +1,21 @@
+---
+title: "CanvasComponentDuplicateCommand"
+description: "@anvilkit/canvas-core · CanvasComponentDuplicateCommand"
+---
+
+Defined in: [commands/types.ts:356](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L356)
+
+Copy a definition under a new id. Source node ids are remapped via
+`regenerateNodeIds` (INV-2: unique across Pages AND definitions) and
+property bindings follow the same id map; Property IDs are kept —
+cross-definition reuse is explicitly permitted (TD §5.5). The copy starts
+at `revision: 1` with no dependents.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="componentid"&gt;&lt;/a&gt; `componentId` | `string` | - | [commands/types.ts:358](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L358) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `string` | Default: `"<source name> copy"`. | [commands/types.ts:362](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L362) |
+| &lt;a id="newcomponentid"&gt;&lt;/a&gt; `newComponentId` | `string` | Caller-supplied, following the `node.group`/`page.duplicate` id convention. | [commands/types.ts:360](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L360) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"component.duplicate"` | - | [commands/types.ts:357](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L357) |

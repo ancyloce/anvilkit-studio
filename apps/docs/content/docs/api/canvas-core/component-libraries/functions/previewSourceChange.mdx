@@ -1,0 +1,34 @@
+---
+title: "previewSourceChange"
+description: "@anvilkit/canvas-core · previewSourceChange"
+---
+
+```ts
+function previewSourceChange(
+   ir, 
+   from, 
+   to): 
+  | CanvasComponentCompatibilityReport
+  | undefined;
+```
+
+Defined in: [component-libraries/commands/update-source.ts:130](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/update-source.ts#L130)
+
+Compare the current and target definitions.
+
+Exported so the Editor can build the preview from exactly the same call the
+command will make — a preview computed by different code is a preview that
+can disagree with the commit.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../../index/interfaces/CanvasIR) |
+| `from` | [`CanvasExternalComponentRef`](../../index/interfaces/CanvasExternalComponentRef) |
+| `to` | [`CanvasComponentDefinition`](../../index/interfaces/CanvasComponentDefinition) |
+
+## Returns
+
+  \| [`CanvasComponentCompatibilityReport`](../interfaces/CanvasComponentCompatibilityReport)
+  \| `undefined`

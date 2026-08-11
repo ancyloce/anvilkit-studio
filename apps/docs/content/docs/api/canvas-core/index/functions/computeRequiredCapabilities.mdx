@@ -1,0 +1,31 @@
+---
+title: "computeRequiredCapabilities"
+description: "@anvilkit/canvas-core · computeRequiredCapabilities"
+---
+
+```ts
+function computeRequiredCapabilities(ir): readonly string[];
+```
+
+Defined in: [ir/capabilities.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/capabilities.ts#L70)
+
+Derive the capability list this document's CONTENT requires.
+
+Returns a sorted, deduplicated list. Unrecognized capabilities already
+declared on the document are **preserved**, not dropped — that is the
+load-bearing behaviour here, not a nicety. The IR is CRDT-replicated and its
+schemas are loose, so a document may legitimately arrive from a newer peer
+carrying both a capability this build has never heard of and the content that
+requires it. Recomputing from scratch and writing the result would strip the
+declaration while keeping the content, producing exactly the silently-editable
+malformed document the capability mechanism exists to prevent.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+
+## Returns
+
+readonly `string`[]

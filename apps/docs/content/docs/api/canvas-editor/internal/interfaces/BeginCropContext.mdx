@@ -1,0 +1,23 @@
+---
+title: "BeginCropContext"
+description: "@anvilkit/canvas-editor · BeginCropContext"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/selection/crop-actions.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/crop-actions.ts#L87)
+
+The slice of the studio context [beginCrop](../functions/beginCrop) actually reads.
+
+Declared structurally (the same posture as core's `resolveFrameClipShape`,
+which takes a frame's clip fields rather than a whole node) so a `ToolContext`
+— which carries these two members but is NOT a `CanvasStudioContextValue` —
+can open the crop editor through this function instead of growing a second
+in-place transform gesture. cp4-004: repositioning an image inside a clipping
+frame IS cropping, and duplicating the pointer maths is the failure mode ADR
+0008 decision 1 exists to prevent.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="cropstore"&gt;&lt;/a&gt; `cropStore?` | [`CropStoreApi`](../type-aliases/CropStoreApi) | [packages/capabilities/canvas/editor/src/selection/crop-actions.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/crop-actions.ts#L89) |
+| &lt;a id="getir"&gt;&lt;/a&gt; `getIR` | () =&gt; [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) | [packages/capabilities/canvas/editor/src/selection/crop-actions.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/crop-actions.ts#L88) |

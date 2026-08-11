@@ -1,0 +1,15 @@
+---
+title: "CanvasLayoutAlign"
+description: "@anvilkit/canvas-core · CanvasLayoutAlign"
+---
+
+```ts
+type CanvasLayoutAlign = "start" | "center" | "end";
+```
+
+Defined in: [ir/types.ts:396](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L396)
+
+Alignment along either Auto Layout axis. Space-between, stretch, baseline
+and per-child `alignSelf` are deliberately excluded from v1 (PRD 0014 §7);
+adding a member here is a `layout.auto.v2` change, because an older reader
+rejects unknown enum values (see `CanvasDocumentCompatibility`).

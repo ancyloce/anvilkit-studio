@@ -1,0 +1,31 @@
+---
+title: "DEFAULT_JSON_INLINE_ASSET_BYTES"
+description: "@anvilkit/canvas-editor · DEFAULT_JSON_INLINE_ASSET_BYTES"
+---
+
+```ts
+const DEFAULT_JSON_INLINE_ASSET_BYTES: number;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/header/exporters.ts:163](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/exporters.ts#L163)
+
+Default ceiling on the browser-local bytes [createJsonExporter](../functions/createJsonExporter) will
+inline as `data:` URIs — **10 MiB of source bytes**, ~14 MB once base64
+inflates them by 4/3.
+
+The number is bounded from three directions and sits in the gap:
+
+- It must comfortably cover the ordinary case. PLAN-0035 §5 P1's own example
+  is a 4 MB photo becoming ~5.5 MB of base64; two of those still inline.
+- It must stay far below `cp1-001`'s 200 MiB store cap. That cap bounds
+  *disk*; this one bounds a JSON string materialised in memory and then
+  copied into a `Blob` for download, so the same figure would be a peak of
+  half a gigabyte for a file nobody can open.
+- It must leave the artifact something a host can actually move. A document
+  JSON is routinely POSTed to an API, and a ~14 MB body already exceeds
+  several common gateway limits; well past that the format stops being an
+  interchange format at all.
+
+Override it per host via `createCanvasExportPlugin({ exporters: { json:
+createJsonExporter({ maxInlineAssetBytes }) } })` — the existing exporter
+override IS the configuration channel; cp1-006 adds no second one.

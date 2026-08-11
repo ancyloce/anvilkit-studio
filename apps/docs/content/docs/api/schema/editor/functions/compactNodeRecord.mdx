@@ -1,0 +1,24 @@
+---
+title: "compactNodeRecord"
+description: "@anvilkit/schema · compactNodeRecord"
+---
+
+```ts
+function compactNodeRecord(record): NodeAuthoringStateV1 | undefined;
+```
+
+Defined in: [editor/compact.ts:135](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/compact.ts#L135)
+
+Compact one node record. Returns `undefined` when nothing but the
+`version` marker (and no unknown keys) remains — invariant 3 says
+such records must not exist.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `record` | `NodeAuthoringStateV1` |
+
+## Returns
+
+`NodeAuthoringStateV1` \| `undefined`

@@ -1,0 +1,29 @@
+---
+title: "getComplianceLookup"
+description: "@anvilkit/canvas-editor · getComplianceLookup"
+---
+
+```ts
+function getComplianceLookup(ir, brandKit): InstanceComplianceLookup;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand-governance/use-instance-compliance.ts:148](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-instance-compliance.ts#L148)
+
+The lookup for `(ir, brandKit)`, shared across every component that asks.
+
+Two surfaces now want it — the Inspector and the Components panel — and a
+plain `useMemo` in each would scan the document twice per change. Keyed on
+object identity, so a new document or a new kit is a miss by construction and
+a stale result is not representable; both keys are weak, so nothing here
+outlives the document it describes.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) |
+| `brandKit` | `BrandKitDefinition` \| `undefined` |
+
+## Returns
+
+[`InstanceComplianceLookup`](../interfaces/InstanceComplianceLookup)

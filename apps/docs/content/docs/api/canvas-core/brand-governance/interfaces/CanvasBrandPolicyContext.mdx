@@ -1,0 +1,21 @@
+---
+title: "CanvasBrandPolicyContext"
+description: "@anvilkit/canvas-core · CanvasBrandPolicyContext"
+---
+
+Defined in: [brand-governance/types.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L78)
+
+Everything the command layer needs to make a policy decision.
+
+Serializable end to end (T-037 DoD): no function-valued field, so the whole
+context can be persisted with an audit record, replayed, or shipped to a
+worker and produce identical decisions.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="capabilities"&gt;&lt;/a&gt; `capabilities` | `readonly` | [`CanvasBrandCapabilities`](CanvasBrandCapabilities.md) | - | [brand-governance/types.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L85) |
+| &lt;a id="enforcement"&gt;&lt;/a&gt; `enforcement` | `readonly` | `"warning"` \| `"blocking"` \| `"off"` | `off` — evaluate nothing. `warning` — report, never block. `blocking` — a violation of a policy whose `recommendedEnforcement` is `"blocking"` aborts the command. | [brand-governance/types.ts:84](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L84) |
+| &lt;a id="policyrevision"&gt;&lt;/a&gt; `policyRevision?` | `readonly` | `string` | Opaque host revision. When it changes, cached decisions and compliance results are stale — it participates in the compliance cache key (T-043) and lets the Editor refresh mid-session (T-040). | [brand-governance/types.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L96) |
+| &lt;a id="resolvedbrandkitid"&gt;&lt;/a&gt; `resolvedBrandKitId?` | `readonly` | `string` | The Brand Kit id this context was resolved against, when one applies. An id, not the kit: the kit itself is large and already in the document. | [brand-governance/types.ts:90](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L90) |

@@ -1,0 +1,16 @@
+---
+title: "CanvasComponentSetVariantCommand"
+description: "@anvilkit/canvas-core · CanvasComponentSetVariantCommand"
+---
+
+Defined in: [component-libraries/commands/set-variant.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/set-variant.ts#L42)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="discardorphans"&gt;&lt;/a&gt; `discardOrphans?` | `readonly` | `boolean` | Discard overrides that no longer apply instead of retaining them. Default `false`. Retention is the safe default because the alternative silently destroys user content on a reversible-looking UI action; a caller must ask for the destructive behaviour explicitly. | [component-libraries/commands/set-variant.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/set-variant.ts#L58) |
+| &lt;a id="instanceid"&gt;&lt;/a&gt; `instanceId` | `readonly` | `string` | - | [component-libraries/commands/set-variant.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/set-variant.ts#L44) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | `readonly` | [`CanvasDocumentLocation`](../../index/interfaces/CanvasDocumentLocation) | - | [component-libraries/commands/set-variant.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/set-variant.ts#L50) |
+| &lt;a id="selection"&gt;&lt;/a&gt; `selection` | `readonly` | [`CanvasComponentVariantSelection`](../../index/type-aliases/CanvasComponentVariantSelection) | The selection to store. Partial is fine and expected — unspecified axes resolve from their defaults. | [component-libraries/commands/set-variant.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/set-variant.ts#L49) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | `"component-instance.set-variant"` | - | [component-libraries/commands/set-variant.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/set-variant.ts#L43) |

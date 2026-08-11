@@ -1,0 +1,24 @@
+---
+title: "assertComponentGraph"
+description: "@anvilkit/canvas-core · assertComponentGraph"
+---
+
+```ts
+function assertComponentGraph(ir): void;
+```
+
+Defined in: [components/validate.ts:246](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/validate.ts#L246)
+
+Strict gate: throws [CanvasComponentGraphError](../classes/CanvasComponentGraphError) when any
+ERROR-severity issue is present. Warning-only documents pass — warnings
+never throw (TD §19).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+
+## Returns
+
+`void`

@@ -1,0 +1,14 @@
+---
+title: "ValidateExternalClosureOptions"
+description: "@anvilkit/canvas-core · ValidateExternalClosureOptions"
+---
+
+Defined in: [component-libraries/dependencies.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/dependencies.ts#L65)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="maxdepth"&gt;&lt;/a&gt; `maxDepth?` | `readonly` | `number` | - | [component-libraries/dependencies.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/dependencies.ts#L75) |
+| &lt;a id="maxexpandednodes"&gt;&lt;/a&gt; `maxExpandedNodes?` | `readonly` | `number` | - | [component-libraries/dependencies.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/dependencies.ts#L76) |
+| &lt;a id="pending"&gt;&lt;/a&gt; `pending?` | `readonly` | readonly [`CanvasExternalComponentSnapshot`](../../index/interfaces/CanvasExternalComponentSnapshot)[] | Snapshots admitted in the SAME transaction but not yet in the document. Without this, inserting a component together with its dependencies could never validate: each would be checked against a registry that does not yet contain the others, so a legal multi-snapshot insert would look like a partial closure. | [component-libraries/dependencies.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/dependencies.ts#L74) |

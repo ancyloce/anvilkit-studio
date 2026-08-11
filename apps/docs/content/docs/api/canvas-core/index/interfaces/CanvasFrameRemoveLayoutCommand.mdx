@@ -1,0 +1,25 @@
+---
+title: "CanvasFrameRemoveLayoutCommand"
+description: "@anvilkit/canvas-core · CanvasFrameRemoveLayoutCommand"
+---
+
+Defined in: [commands/types.ts:547](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L547)
+
+Remove a frame's Auto Layout intent, baking the caller-computed resolved
+geometry into its descendants so the document keeps its appearance.
+
+The inverse restores both the intent and every prior geometry value, so a
+remove/undo round-trip is exact.
+
+## Extends
+
+- [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md)
+
+## Properties
+
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="geometry"&gt;&lt;/a&gt; `geometry?` | readonly [`CanvasLayoutGeometryWrite`](CanvasLayoutGeometryWrite.md)[] | Resolved geometry to bake in as the descendants' new authoritative values. | - | [commands/types.ts:552](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L552) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | - | [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md).[`location`](CanvasCommandLocationOptions.md#location) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | - | [commands/types.ts:550](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L550) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"frame.remove-layout"` | - | - | [commands/types.ts:549](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L549) |

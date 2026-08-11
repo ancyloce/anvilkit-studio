@@ -1,0 +1,31 @@
+---
+title: "hashIdentifier"
+description: "@anvilkit/canvas-editor · hashIdentifier"
+---
+
+```ts
+function hashIdentifier(value): string;
+```
+
+Defined in: packages/capabilities/canvas/core/dist/brand-governance/audit.d.ts:54
+
+The one hashing primitive for governance identifiers.
+
+Exported so the Editor's analytics module uses the SAME function rather than
+a second one: two hashes of the same library id would break correlation
+between an audit record and the analytics event describing the same action,
+which is the main thing an operator wants to do with both streams.
+
+Not a cryptographic hash and not claimed to be. The requirement is that a
+pipeline does not receive private library and component names in the clear
+and that the same input yields the same token.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `string` |
+
+## Returns
+
+`string`

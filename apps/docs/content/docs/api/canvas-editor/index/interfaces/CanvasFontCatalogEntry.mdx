@@ -1,0 +1,32 @@
+---
+title: "CanvasFontCatalogEntry"
+description: "@anvilkit/canvas-editor · CanvasFontCatalogEntry"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/text/font-catalog.ts:166](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L166)
+
+A family as its author writes it.
+
+`license` is REQUIRED and is an SPDX identifier — `"OFL-1.1"`,
+`"Apache-2.0"`, `"CC0-1.0"`, or a `LicenseRef-…` for a private/commercial
+licence a host holds. It is deliberately not narrowed to a closed union: the
+*default* catalog is restricted to open licences and `cp2-002` enforces that
+set by test, but a host shipping a licensed corporate face must be able to
+record its real licence rather than the nearest open lie.
+
+## Extended by
+
+- [`CanvasFontCatalogRecord`](CanvasFontCatalogRecord.md)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="category"&gt;&lt;/a&gt; `category` | `readonly` | [`CanvasFontCategory`](../type-aliases/CanvasFontCategory) | - | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:168](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L168) |
+| &lt;a id="family"&gt;&lt;/a&gt; `family` | `readonly` | `string` | - | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:167](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L167) |
+| &lt;a id="italic"&gt;&lt;/a&gt; `italic?` | `readonly` | `boolean` | Whether the family ships an italic cut. Absent means unknown/none. | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:172](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L172) |
+| &lt;a id="license"&gt;&lt;/a&gt; `license` | `readonly` | `string` | SPDX identifier. Required — see the interface doc. | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:177](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L177) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source` | `readonly` | [`CanvasFontSource`](../type-aliases/CanvasFontSource) | - | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:173](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L173) |
+| &lt;a id="subsets"&gt;&lt;/a&gt; `subsets?` | `readonly` | readonly `string`[] | Script coverage, e.g. `["latin", "latin-ext", "japanese"]`. | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:175](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L175) |
+| &lt;a id="upstreamurl"&gt;&lt;/a&gt; `upstreamUrl?` | `readonly` | `string` | Where the family came from, for the `cp6-006` licensing audit. | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:179](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L179) |
+| &lt;a id="weights"&gt;&lt;/a&gt; `weights` | `readonly` | readonly [`CanvasFontWeight`](../type-aliases/CanvasFontWeight)[] | What the picker may offer. See [CanvasFontWeight](../type-aliases/CanvasFontWeight). | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:170](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L170) |

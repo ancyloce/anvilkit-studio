@@ -1,0 +1,31 @@
+---
+title: "CanvasComponentInstanceDetachCommand"
+description: "@anvilkit/canvas-core · CanvasComponentInstanceDetachCommand"
+---
+
+Defined in: [commands/types.ts:484](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L484)
+
+Materialize an instance into plain nodes at the exact same tree position
+(M3-07, LC-INSTANCE-005). Resolution runs fully first — overrides applied,
+nested instances expanded recursively (never "outer only") — and fails
+atomically when it cannot (missing Source, cycle/depth/budget degradation).
+The materialized root keeps the instance's persistent id, placement, and
+`layoutItem` (a Flow child keeps its slot); descendants take ids from
+`nodeIds` (keyed by the resolver's deterministic virtual ids) or a fresh
+factory. Component metadata, virtual ids, and override maps are gone from
+the result (INV-12: world-space appearance is preserved exactly). Build
+the payload with `component-ops` `buildDetachCommand` to get the complete
+id map back.
+
+## Extends
+
+- [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md)
+
+## Properties
+
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | - | [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md).[`location`](CanvasCommandLocationOptions.md#location) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | - | [commands/types.ts:487](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L487) |
+| &lt;a id="nodeids"&gt;&lt;/a&gt; `nodeIds?` | `Readonly`\&lt;`Record`\&lt;`string`, `string`\&gt;\&gt; | virtual node id → persistent id for the materialized descendants. | - | [commands/types.ts:489](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L489) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"component-instance.detach"` | - | - | [commands/types.ts:486](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L486) |

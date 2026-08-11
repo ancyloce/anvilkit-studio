@@ -1,0 +1,33 @@
+---
+title: "unsupportedCapabilitiesOf"
+description: "@anvilkit/canvas-editor · unsupportedCapabilitiesOf"
+---
+
+```ts
+function unsupportedCapabilitiesOf(raw): readonly string[];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/collab/encode.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/encode.ts#L59)
+
+A remote payload's unsupported capabilities, read WITHOUT parsing it
+(plan 0023 M6-06, decision D-7, LC-COMPAT-002, INV-14).
+
+Why this exists on the collab path specifically: [decodeCanvasIR](decodeCanvasIR.md) ends
+in a `discriminatedUnion` validation, so a peer on a NEWER build — one whose
+document uses a node kind or capability this build lacks — is rejected
+wholesale, and the local replica discards the entire remote document rather
+than degrading. An older peer could therefore destroy a newer peer's work.
+
+A binding calls this FIRST: a non-empty result means "do not decode, do not
+adopt, surface read-only preview". `decodeCanvasIR` stays unchanged for the
+supported case, so the fast path costs nothing.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `raw` | `string` |
+
+## Returns
+
+readonly `string`[]

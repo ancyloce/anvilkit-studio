@@ -1,0 +1,34 @@
+---
+title: "CanvasCommandErrorCode"
+description: "@anvilkit/canvas-core · CanvasCommandErrorCode"
+---
+
+```ts
+type CanvasCommandErrorCode = 
+  | "node-not-found"
+  | "parent-not-found"
+  | "parent-not-group"
+  | "page-not-found"
+  | "location-not-found"
+  | "kind-mismatch"
+  | "asset-mismatch"
+  | "asset-not-found"
+  | "index-out-of-range"
+  | "invariant-violated"
+  | "node-locked"
+  | "unknown-command"
+  | "component-library-capability-denied"
+  | "component-integrity-mismatch"
+  | "component-snapshot-missing"
+  | "component-dependency-missing"
+  | "brand-policy-denied";
+```
+
+Defined in: [commands/runtime.ts:122](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/runtime.ts#L122)
+
+Every reason a command refuses to apply.
+
+**Closed on purpose.** Commands throw rather than return, and this union is
+what makes a `catch` block able to switch exhaustively instead of matching on
+message text. Widening it is additive and safe; turning it into `string` would
+not be.

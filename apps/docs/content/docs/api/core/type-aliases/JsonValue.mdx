@@ -1,0 +1,21 @@
+---
+title: "JsonValue"
+description: "@anvilkit/core · JsonValue"
+---
+
+```ts
+type JsonValue = 
+  | string
+  | number
+  | boolean
+  | null
+  | readonly JsonValue[]
+  | {
+[key: string]: JsonValue;
+};
+```
+
+Defined in: foundation/contracts/dist/editor/values.d.ts:15
+
+A JSON-serializable value. The persistence baseline for everything
+that enters the authoring sidecar: props, overrides, fallbacks.

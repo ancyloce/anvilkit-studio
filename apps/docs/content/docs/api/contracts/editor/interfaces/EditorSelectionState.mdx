@@ -1,0 +1,20 @@
+---
+title: "EditorSelectionState"
+description: "@anvilkit/contracts · EditorSelectionState"
+---
+
+Defined in: [editor/selection.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/selection.ts#L19)
+
+The current selection. A selection can never span component editing
+scopes; changing scope clears it (§10.6).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="anchorid"&gt;&lt;/a&gt; `anchorId?` | `readonly` | `string` | - | [editor/selection.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/selection.ts#L22) |
+| &lt;a id="definitionscope"&gt;&lt;/a&gt; `definitionScope` | `readonly` | `"page"` \| `` `component:${string}` `` | Which component **definition** is being edited, or the page. Renamed from `scope` by `p3-007`. The rename is mandatory rather than cosmetic: this file now also carries `mode`, and "component scope" (editing a definition) and "component mode" (styling an instance's elements in place) are different concepts that would otherwise collide in every sentence written about this type. | [editor/selection.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/selection.ts#L32) |
+| &lt;a id="mode"&gt;&lt;/a&gt; `mode` | `readonly` | `"page"` \| `"component"` | The editing granularity (PLAN-0026 §3.7). `"page"` selects Puck nodes; `"component"` selects a declared style target *inside* a node. Both modes write the same carrier through the same commit helper — the mode adds **no document state at all**. | [editor/selection.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/selection.ts#L41) |
+| &lt;a id="primaryid"&gt;&lt;/a&gt; `primaryId?` | `readonly` | `string` | - | [editor/selection.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/selection.ts#L20) |
+| &lt;a id="selectedids"&gt;&lt;/a&gt; `selectedIds` | `readonly` | readonly `string`[] | - | [editor/selection.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/selection.ts#L21) |
+| &lt;a id="targetid"&gt;&lt;/a&gt; `targetId?` | `readonly` | `string` | The active style target in component mode. Meaningful only against `primaryId`'s component type. Selecting a node whose type does not declare it **clears** it rather than carrying a dangling address — the same rule `p3-002` applies to variant selections when an axis disappears. | [editor/selection.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/selection.ts#L50) |

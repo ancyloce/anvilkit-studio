@@ -1,0 +1,27 @@
+---
+title: "CanvasLayoutFlattenOptions"
+description: "@anvilkit/canvas-core · CanvasLayoutFlattenOptions"
+---
+
+Defined in: [layout/materialize.ts:137](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/materialize.ts#L137)
+
+Resolver options.
+
+PRD §9.3 writes `resolveCanvasLayout(ir, options)` with `options` required
+while TD §5.4 makes every field optional. The parameter is therefore
+required with all-optional fields, which satisfies both readings (plan §10.1).
+
+## Extends
+
+- [`CanvasLayoutResolveOptions`](CanvasLayoutResolveOptions.md)
+
+## Properties
+
+| Property | Modifier | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="clearcapability"&gt;&lt;/a&gt; `clearCapability?` | `readonly` | `boolean` | Also drop `layout.auto.v1` from `compatibility.requiredCapabilities`. Defaults to `true`. A flattened document carries no layout intent, so continuing to declare the capability would make an older reader refuse a document it can now read perfectly well — the opposite of what flattening is for. | - | [layout/materialize.ts:152](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/materialize.ts#L152) |
+| &lt;a id="measurement"&gt;&lt;/a&gt; `measurement?` | `readonly` | [`CanvasLayoutMeasurementProvider`](CanvasLayoutMeasurementProvider.md) | Omit for a document with no text/asset-driven Hug; missing inputs are diagnosed, not thrown. | [`CanvasLayoutResolveOptions`](CanvasLayoutResolveOptions.md).[`measurement`](CanvasLayoutResolveOptions.md#measurement) | [layout/types.ts:194](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L194) |
+| &lt;a id="pageids"&gt;&lt;/a&gt; `pageIds?` | `readonly` | readonly `string`[] | Restrict resolution to these pages; omit to resolve the whole document. | [`CanvasLayoutResolveOptions`](CanvasLayoutResolveOptions.md).[`pageIds`](CanvasLayoutResolveOptions.md#pageids) | [layout/types.ts:198](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L198) |
+| &lt;a id="previous"&gt;&lt;/a&gt; `previous?` | `readonly` | [`CanvasResolvedDocument`](CanvasResolvedDocument.md) | A previous resolution of the same document, used as the warm-path cache seed. Omit for a cold resolve. Passing it is what makes untouched records reference-identical across resolutions; the resolver validates it against the current IR rather than trusting it, so a stale or foreign document degrades to a cold pass instead of producing wrong geometry. | [`CanvasLayoutResolveOptions`](CanvasLayoutResolveOptions.md).[`previous`](CanvasLayoutResolveOptions.md#previous) | [layout/types.ts:208](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L208) |
+| &lt;a id="resolved"&gt;&lt;/a&gt; `resolved?` | `readonly` | [`CanvasResolvedDocument`](CanvasResolvedDocument.md) | Reuse an existing resolution instead of computing a fresh one. Pass the document the editor is already showing so the flattened result is pixel-identical to what the author was looking at. | - | [layout/materialize.ts:143](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/materialize.ts#L143) |
+| &lt;a id="richtextdefaults"&gt;&lt;/a&gt; `richTextDefaults?` | `readonly` | `Partial`\&lt;[`RichTextStyleDefaults`](RichTextStyleDefaults.md)\&gt; | Same fallback semantics as `SvgSerializeOptions.richTextDefaults`. | [`CanvasLayoutResolveOptions`](CanvasLayoutResolveOptions.md).[`richTextDefaults`](CanvasLayoutResolveOptions.md#richtextdefaults) | [layout/types.ts:196](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L196) |

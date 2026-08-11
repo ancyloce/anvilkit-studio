@@ -1,0 +1,35 @@
+---
+title: "listUsedAuthoringFeatures"
+description: "@anvilkit/ir · listUsedAuthoringFeatures"
+---
+
+```ts
+function listUsedAuthoringFeatures(authoring): readonly EditorFeatureId[];
+```
+
+Defined in: [editor/index.ts:624](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L624)
+
+Scan a parsed sidecar for used editor features (DD-0019 §23.2).
+
+**Partial by construction — not for production preflight.** This
+sees only what the sidecar holds, so `richText` (which lives in
+component props) is invisible to it. It is retained because it is
+public API and because sidecar-only callers exist that legitimately
+have no document in hand; every export gate uses
+[listUsedEditorFeatures](listUsedEditorFeatures.md) instead.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `authoring` | `AuthoringStateV1` |
+
+## Returns
+
+readonly `EditorFeatureId`[]
+
+## Deprecated
+
+Prefer [listUsedEditorFeatures](listUsedEditorFeatures.md), which takes the
+document as an optional second argument and detects every
+`EditorFeatureId`.

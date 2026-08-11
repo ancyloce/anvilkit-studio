@@ -1,0 +1,30 @@
+---
+title: "CanvasComponentOverride"
+description: "@anvilkit/canvas-core · CanvasComponentOverride"
+---
+
+```ts
+type CanvasComponentOverride = 
+  | {
+  kind: "text";
+  value: CanvasTextOverrideValue;
+}
+  | {
+  assetId: string;
+  kind: "image";
+}
+  | {
+  kind: "color";
+  value: CanvasFill;
+}
+  | {
+  kind: "visibility";
+  visible: boolean;
+};
+```
+
+Defined in: [ir/types.ts:1192](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1192)
+
+One typed per-instance override, discriminated to match its property kind.
+A value whose kind mismatches its property is an orphan: retained, never
+applied, never reassigned.

@@ -1,0 +1,23 @@
+---
+title: "createComponentIdFactories"
+description: "@anvilkit/canvas-core · createComponentIdFactories"
+---
+
+```ts
+function createComponentIdFactories(base?): CanvasComponentIdFactories;
+```
+
+Defined in: [components/identity.ts:151](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/identity.ts#L151)
+
+Build the factory set every component-creating operation (M3) receives.
+Pass `base` for deterministic ids in tests and replays.
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `base` | () =&gt; `string` | `defaultIdFactory` |
+
+## Returns
+
+[`CanvasComponentIdFactories`](../interfaces/CanvasComponentIdFactories)

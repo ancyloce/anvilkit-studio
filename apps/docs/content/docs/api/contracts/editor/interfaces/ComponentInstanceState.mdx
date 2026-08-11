@@ -1,0 +1,20 @@
+---
+title: "ComponentInstanceState"
+description: "@anvilkit/contracts · ComponentInstanceState"
+---
+
+Defined in: [editor/components.ts:105](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L105)
+
+Per-instance component state (DD-0019 §14.2, verbatim). Stored on
+the instance node's authoring record; retained unchanged while a
+referenced definition is unresolvable (ED-COMP-007).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="definitionid"&gt;&lt;/a&gt; `definitionId` | `readonly` | `string` | - | [editor/components.ts:106](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L106) |
+| &lt;a id="definitionrevision"&gt;&lt;/a&gt; `definitionRevision` | `readonly` | `number` | - | [editor/components.ts:107](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L107) |
+| &lt;a id="nodeoverrides"&gt;&lt;/a&gt; `nodeOverrides` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, [`NodeOverridePatch`](NodeOverridePatch.md)\&gt;\&gt; | Definition node id → override patch. Keys are bare definition node IDs — never the runtime composite form. | [editor/components.ts:114](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L114) |
+| &lt;a id="propoverrides"&gt;&lt;/a&gt; `propOverrides` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, [`JsonValue`](../type-aliases/JsonValue)\&gt;\&gt; | Exposed prop id → override value. | [editor/components.ts:111](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L111) |
+| &lt;a id="variantselection"&gt;&lt;/a&gt; `variantSelection` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `string`\&gt;\&gt; | Variant axis id → option id. | [editor/components.ts:109](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L109) |

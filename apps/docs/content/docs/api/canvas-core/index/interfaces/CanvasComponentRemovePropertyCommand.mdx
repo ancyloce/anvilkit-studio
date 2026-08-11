@@ -1,0 +1,20 @@
+---
+title: "CanvasComponentRemovePropertyCommand"
+description: "@anvilkit/canvas-core · CanvasComponentRemovePropertyCommand"
+---
+
+Defined in: [commands/types.ts:412](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L412)
+
+Remove a property. Existing instance overrides for the id are NOT touched
+— they become orphans, retained verbatim, and re-apply if the same
+Property ID is later restored compatibly (§10.3). The Editor owns the
+"overrides exist — confirm?" prompt; the command itself is unconditional.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="componentid"&gt;&lt;/a&gt; `componentId` | `string` | [commands/types.ts:414](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L414) |
+| &lt;a id="propertyid"&gt;&lt;/a&gt; `propertyId` | `string` | [commands/types.ts:415](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L415) |
+| &lt;a id="revision"&gt;&lt;/a&gt; `revision?` | `number` | [commands/types.ts:416](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L416) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"component.remove-property"` | [commands/types.ts:413](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L413) |

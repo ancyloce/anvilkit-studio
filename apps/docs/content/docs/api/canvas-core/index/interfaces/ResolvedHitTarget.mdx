@@ -1,0 +1,25 @@
+---
+title: "ResolvedHitTarget"
+description: "@anvilkit/canvas-core · ResolvedHitTarget"
+---
+
+Defined in: [geometry/hit-test.ts:159](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/hit-test.ts#L159)
+
+Minimal structural view of a resolved-layout record, for the resolved
+variants below.
+
+`geometry/` is rank 2 and `layout/` is rank 4, so the real
+`CanvasResolvedNodeRecord` cannot be imported here; it is structurally
+assignable to this shape instead. The variants consume the WORLD transform
+and AABB the resolver already computed — they compose no ancestor chain and
+re-derive no geometry, which is the whole point of the resolved tree.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="geometry"&gt;&lt;/a&gt; `geometry` | `readonly` | \{ `bounds`: [`CanvasBounds`](CanvasBounds.md); `worldAabb`: [`BoundsExtent`](BoundsExtent.md); `worldTransform`: [`AffineMatrix`](../type-aliases/AffineMatrix); \} | - | [geometry/hit-test.ts:162](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/hit-test.ts#L162) |
+| `geometry.bounds` | `readonly` | [`CanvasBounds`](CanvasBounds.md) | Resolved local box size. | [geometry/hit-test.ts:166](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/hit-test.ts#L166) |
+| `geometry.worldAabb` | `readonly` | [`BoundsExtent`](BoundsExtent.md) | Resolved world-space AABB. | [geometry/hit-test.ts:168](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/hit-test.ts#L168) |
+| `geometry.worldTransform` | `readonly` | [`AffineMatrix`](../type-aliases/AffineMatrix) | `parentWorld × local`, as produced by the layout resolver. | [geometry/hit-test.ts:164](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/hit-test.ts#L164) |
+| &lt;a id="node"&gt;&lt;/a&gt; `node` | `readonly` | [`CanvasNode`](../type-aliases/CanvasNode) | The source node — style/skip flags are read from here, geometry never is. | [geometry/hit-test.ts:161](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/hit-test.ts#L161) |

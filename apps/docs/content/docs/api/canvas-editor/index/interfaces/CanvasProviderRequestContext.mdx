@@ -1,0 +1,15 @@
+---
+title: "CanvasProviderRequestContext"
+description: "@anvilkit/canvas-editor · CanvasProviderRequestContext"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/component-provider.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/component-provider.ts#L31)
+
+Per-request context. Every Provider method receives one.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="requestid"&gt;&lt;/a&gt; `requestId?` | `readonly` | `string` | Opaque correlation id for host logging. Never rendered. | [packages/capabilities/canvas/editor/src/component-libraries/component-provider.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/component-provider.ts#L41) |
+| &lt;a id="signal"&gt;&lt;/a&gt; `signal` | `readonly` | `AbortSignal` | Aborts when the request is superseded or the user navigates away. Honoured even by the static adapter — a host that only ever tests against the static provider would otherwise never exercise its own cancellation path, and would ship a hosted provider that ignores the signal. | [packages/capabilities/canvas/editor/src/component-libraries/component-provider.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/component-provider.ts#L39) |

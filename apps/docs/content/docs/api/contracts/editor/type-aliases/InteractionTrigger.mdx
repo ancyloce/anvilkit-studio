@@ -1,0 +1,32 @@
+---
+title: "InteractionTrigger"
+description: "@anvilkit/contracts · InteractionTrigger"
+---
+
+```ts
+type InteractionTrigger = 
+  | {
+  type: "click";
+}
+  | {
+  phase: "enter" | "leave";
+  type: "hover";
+}
+  | {
+  phase: "in" | "out";
+  type: "focus";
+}
+  | {
+  phase: "enter" | "leave";
+  threshold: number;
+  type: "viewport";
+}
+  | {
+  delayMs?: number;
+  type: "pageLoad";
+};
+```
+
+Defined in: [editor/interactions.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L17)
+
+Interaction trigger (DD-0019 §16, verbatim).

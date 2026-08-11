@@ -1,0 +1,19 @@
+---
+title: "CanvasComponentExpansionOptions"
+description: "@anvilkit/canvas-core · CanvasComponentExpansionOptions"
+---
+
+Defined in: [components/resolve.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L50)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="assetintrinsicmanifesthash"&gt;&lt;/a&gt; `assetIntrinsicManifestHash?` | `readonly` | `string` | - | [components/resolve.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L69) |
+| &lt;a id="cache"&gt;&lt;/a&gt; `cache?` | `readonly` | [`CanvasComponentResolutionCache`](CanvasComponentResolutionCache.md) | Session cache; omit for a cold, cache-free expansion. | [components/resolve.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L60) |
+| &lt;a id="externalsnapshots"&gt;&lt;/a&gt; `externalSnapshots?` | `readonly` | [`CanvasExternalSnapshotIndex`](CanvasExternalSnapshotIndex.md) | Admitted external snapshots for this document (plan 0021 T-015/T-016). Omit for a local-only document. Omitting it does NOT make external instances fetch anything — they resolve to `snapshot-missing` and degrade to placeholders, exactly as they would offline. | [components/resolve.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L58) |
+| &lt;a id="graph"&gt;&lt;/a&gt; `graph?` | `readonly` | [`CanvasComponentGraph`](CanvasComponentGraph.md) | Prebuilt dependency graph; derived from the registry when absent. | [components/resolve.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L62) |
+| &lt;a id="layoutengineversion"&gt;&lt;/a&gt; `layoutEngineVersion?` | `readonly` | `number` | `CanvasResolvedDocument.engineVersion` (PRD 0014). | [components/resolve.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L67) |
+| &lt;a id="maxdepth"&gt;&lt;/a&gt; `maxDepth?` | `readonly` | `number` | - | [components/resolve.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L65) |
+| &lt;a id="maxexpandednodes"&gt;&lt;/a&gt; `maxExpandedNodes?` | `readonly` | `number` | Shared budget across one resolution pass. Defaults to the D-3 cap. | [components/resolve.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L64) |
+| &lt;a id="measurementmanifesthash"&gt;&lt;/a&gt; `measurementManifestHash?` | `readonly` | `string` | - | [components/resolve.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L68) |

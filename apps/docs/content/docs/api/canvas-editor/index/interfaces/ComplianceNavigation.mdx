@@ -1,0 +1,49 @@
+---
+title: "ComplianceNavigation"
+description: "@anvilkit/canvas-editor · ComplianceNavigation"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/brand-governance/use-compliance-navigation.ts:112](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-compliance-navigation.ts#L112)
+
+## Methods
+
+### navigate()
+
+```ts
+navigate(issue): ComplianceNavigationTarget;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand-governance/use-compliance-navigation.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-compliance-navigation.ts#L118)
+
+Perform the jump. Returns the target it acted on so a caller can move
+focus, or announce why it could not (A11Y requirement of T-044).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `issue` | `BrandComplianceIssue` |
+
+#### Returns
+
+[`ComplianceNavigationTarget`](../type-aliases/ComplianceNavigationTarget)
+
+***
+
+### resolve()
+
+```ts
+resolve(issue): ComplianceNavigationTarget;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand-governance/use-compliance-navigation.ts:113](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-compliance-navigation.ts#L113)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `issue` | `BrandComplianceIssue` |
+
+#### Returns
+
+[`ComplianceNavigationTarget`](../type-aliases/ComplianceNavigationTarget)

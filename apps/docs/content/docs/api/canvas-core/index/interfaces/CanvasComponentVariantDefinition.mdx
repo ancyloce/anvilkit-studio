@@ -1,0 +1,16 @@
+---
+title: "CanvasComponentVariantDefinition"
+description: "@anvilkit/canvas-core · CanvasComponentVariantDefinition"
+---
+
+Defined in: [ir/component-variants.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-variants.ts#L65)
+
+One stored variant — a selection plus the property mapping it implies.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | - | [ir/component-variants.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-variants.ts#L66) |
+| &lt;a id="propertytargetmap"&gt;&lt;/a&gt; `propertyTargetMap?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `string`\&gt;\&gt; | Property id → the node id that property binds to **in this variant** (TD §11.1 `propertyTargetMap`). This is what makes a variant more than a style swap: the same advertised Property can point at a different node per variant, so an override written against the property id keeps working across a variant change. | [ir/component-variants.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-variants.ts#L76) |
+| &lt;a id="selection"&gt;&lt;/a&gt; `selection` | `readonly` | [`CanvasComponentVariantSelection`](../type-aliases/CanvasComponentVariantSelection) | - | [ir/component-variants.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-variants.ts#L67) |

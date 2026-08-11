@@ -1,0 +1,19 @@
+---
+title: "CanvasElementInsertOptions"
+description: "@anvilkit/canvas-editor · CanvasElementInsertOptions"
+---
+
+Defined in: packages/capabilities/canvas/editor/src/actions/element-insert-actions.ts:60
+
+Where the insertion lands and how it is parented.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="at"&gt;&lt;/a&gt; `at?` | `readonly` | \{ `x`: `number`; `y`: `number`; \} | Page-space TOP-LEFT for the element, matching `CanvasElementBuildContext.at`. Absent centres it on the active page. | packages/capabilities/canvas/editor/src/actions/element-insert-actions.ts:65 |
+| `at.x` | `readonly` | `number` | - | packages/capabilities/canvas/editor/src/actions/element-insert-actions.ts:65 |
+| `at.y` | `readonly` | `number` | - | packages/capabilities/canvas/editor/src/actions/element-insert-actions.ts:65 |
+| &lt;a id="target"&gt;&lt;/a&gt; `target?` | `readonly` | \{ `x`: `number`; `y`: `number`; \} | Page-space point used to pick the parent frame — normally the pointer. Absent means "top level": the click path deliberately never nests, since a frame merely sitting under the viewport centre is not an expression of intent the way dropping onto one is. | packages/capabilities/canvas/editor/src/actions/element-insert-actions.ts:72 |
+| `target.x` | `readonly` | `number` | - | packages/capabilities/canvas/editor/src/actions/element-insert-actions.ts:72 |
+| `target.y` | `readonly` | `number` | - | packages/capabilities/canvas/editor/src/actions/element-insert-actions.ts:72 |

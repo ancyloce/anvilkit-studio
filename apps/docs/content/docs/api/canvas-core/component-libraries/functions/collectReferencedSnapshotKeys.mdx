@@ -1,0 +1,26 @@
+---
+title: "collectReferencedSnapshotKeys"
+description: "@anvilkit/canvas-core · collectReferencedSnapshotKeys"
+---
+
+```ts
+function collectReferencedSnapshotKeys(ir): ReadonlySet<string>;
+```
+
+Defined in: [component-libraries/reference-index.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/reference-index.ts#L67)
+
+Every snapshot key this document reaches.
+
+Pure, and bounded by the document: each snapshot is expanded at most once, so
+a cyclic or diamond dependency graph terminates and costs O(snapshots) rather
+than O(paths).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../../index/interfaces/CanvasIR) |
+
+## Returns
+
+`ReadonlySet`\<`string`\>

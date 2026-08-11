@@ -1,0 +1,18 @@
+---
+title: "FilterSpecSchema"
+description: "@anvilkit/schema · FilterSpecSchema"
+---
+
+```ts
+const FilterSpecSchema: ZodObject<{
+  blur: ZodOptional<ZodType<CssLength, unknown, $ZodTypeInternals<CssLength, unknown>>>;
+  brightness: ZodOptional<ZodNumber>;
+  contrast: ZodOptional<ZodNumber>;
+  grayscale: ZodOptional<ZodNumber>;
+  saturate: ZodOptional<ZodNumber>;
+}, $loose>;
+```
+
+Defined in: [editor/style.ts:100](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/style.ts#L100)
+
+Basic filter set (ratios are identity-1 numbers; grayscale 0–1).

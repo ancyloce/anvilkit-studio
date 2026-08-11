@@ -1,0 +1,27 @@
+---
+title: "componentSourceRefsEqual"
+description: "@anvilkit/canvas-core · componentSourceRefsEqual"
+---
+
+```ts
+function componentSourceRefsEqual(a, b): boolean;
+```
+
+Defined in: [ir/component-source.ts:133](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-source.ts#L133)
+
+Structural equality for two Sources.
+
+Field-wise rather than `JSON.stringify` because key order is not part of the
+value: two refs that differ only in property order are the same Source, and a
+stringify-based compare would call them different and duplicate a snapshot.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `a` | [`CanvasComponentSourceRef`](../type-aliases/CanvasComponentSourceRef) |
+| `b` | [`CanvasComponentSourceRef`](../type-aliases/CanvasComponentSourceRef) |
+
+## Returns
+
+`boolean`

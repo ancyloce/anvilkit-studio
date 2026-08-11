@@ -1,0 +1,23 @@
+---
+title: "CanvasDropShadowEffect"
+description: "@anvilkit/canvas-core · CanvasDropShadowEffect"
+---
+
+Defined in: [ir/types.ts:240](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L240)
+
+Drop shadow as an entry in the extensible effect list (C-03, PRD 0012
+§9.4/FR-077). Supersedes the legacy per-node `shadow` field — see
+[resolveNodeEffects](../functions/resolveNodeEffects) for the documented precedence — and adds
+`spread` over [CanvasShadow](CanvasShadow.md).
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="blur"&gt;&lt;/a&gt; `blur` | `number` | - | [ir/types.ts:243](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L243) |
+| &lt;a id="color"&gt;&lt;/a&gt; `color` | `string` | - | [ir/types.ts:242](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L242) |
+| &lt;a id="offsetx"&gt;&lt;/a&gt; `offsetX` | `number` | - | [ir/types.ts:244](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L244) |
+| &lt;a id="offsety"&gt;&lt;/a&gt; `offsetY` | `number` | - | [ir/types.ts:245](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L245) |
+| &lt;a id="opacity"&gt;&lt;/a&gt; `opacity?` | `number` | - | [ir/types.ts:248](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L248) |
+| &lt;a id="spread"&gt;&lt;/a&gt; `spread?` | `number` | Outward dilation of the shadow silhouette before blurring, in page units. Default 0. | [ir/types.ts:247](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L247) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"drop-shadow"` | - | [ir/types.ts:241](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L241) |

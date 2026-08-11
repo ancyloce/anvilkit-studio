@@ -1,0 +1,28 @@
+---
+title: "CanvasComponentColorProperty"
+description: "@anvilkit/canvas-core · CanvasComponentColorProperty"
+---
+
+Defined in: [ir/types.ts:1164](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1164)
+
+Binds one declared fill-bearing field on the target node.
+
+`stroke` is deliberately NOT a valid target: in the shipped IR
+`stroke?: string` on every stroke-bearing kind, not `CanvasFill`, so a
+`CanvasFill`-valued override has no stroke field it could legally write —
+the same reason `applyBrandColors` skips strokes (C-17).
+
+## Extends
+
+- [`CanvasComponentPropertyBase`](CanvasComponentPropertyBase.md)
+
+## Properties
+
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | Stable Property ID — the override-map key (INV-6). Unique within its definition; the SAME id may appear on other definitions (cross-definition reuse is explicitly permitted, TD §5.5) — never treat it as global. | [`CanvasComponentPropertyBase`](CanvasComponentPropertyBase.md).[`id`](CanvasComponentPropertyBase.md#id) | [ir/types.ts:1119](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1119) |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `"color"` | - | - | [ir/types.ts:1166](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1166) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `string` | - | [`CanvasComponentPropertyBase`](CanvasComponentPropertyBase.md).[`name`](CanvasComponentPropertyBase.md#name) | [ir/types.ts:1120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1120) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | Id of the node inside THIS definition's tree the property binds to. | [`CanvasComponentPropertyBase`](CanvasComponentPropertyBase.md).[`nodeId`](CanvasComponentPropertyBase.md#nodeid) | [ir/types.ts:1122](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1122) |
+| &lt;a id="semantickey"&gt;&lt;/a&gt; `semanticKey?` | `string` | Optional cross-component identity for this property (plan 0021 T-028, TD §12.1). Property `id` is unique only within one definition, so it cannot answer "is the `title` of component A the same slot as the `title` of component B?" — which is exactly the question an update or a swap must answer to carry an override across. `semanticKey` is that answer, supplied by the component author. Must be namespaced (`ns:name`) so it reads as an identifier rather than a label. That requirement is what stops a localized display string being used here, which would make override migration depend on the authoring UI's language. Validated by `validateSemanticKeys`. | [`CanvasComponentPropertyBase`](CanvasComponentPropertyBase.md).[`semanticKey`](CanvasComponentPropertyBase.md#semantickey) | [ir/types.ts:1138](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1138) |
+| &lt;a id="targetfield"&gt;&lt;/a&gt; `targetField` | `"fill"` \| `"background"` | - | - | [ir/types.ts:1167](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1167) |

@@ -1,0 +1,27 @@
+---
+title: "CanvasResolvedNodeId"
+description: "@anvilkit/canvas-core · CanvasResolvedNodeId"
+---
+
+```ts
+type CanvasResolvedNodeId = string & {
+  __brand: "CanvasResolvedNodeId";
+};
+```
+
+Defined in: [components/identity.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/identity.ts#L39)
+
+Identity of a node in the resolved tree.
+
+Branded rather than a bare `string` so a source node id and a resolved node
+id cannot be swapped at a call site. For plain nodes the two are 1:1; a
+virtual component node's id encodes its expansion path via the codec below.
+Declared HERE (rank 2) rather than in `layout/types.ts` (rank 4, which
+re-exports it unchanged) because the codec mints these ids and rank 2
+cannot import upward (plan 0023 M2-01).
+
+## Type Declaration
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `__brand` | `"CanvasResolvedNodeId"` | [components/identity.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/identity.ts#L40) |

@@ -1,0 +1,39 @@
+---
+title: "ClosureResolver"
+description: "@anvilkit/canvas-core · ClosureResolver"
+---
+
+Defined in: [component-libraries/dependencies.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/dependencies.ts#L58)
+
+How to look up a snapshot while walking a closure.
+
+Optional at the admission boundary: an envelope arrives before any document
+context, so admission can only run the checks that need no registry —
+declared-vs-actual references, fan-out, depth, expanded-node count, and the
+no-local-references rule. Presence of the closure is re-checked by the
+command that commits (T-021), which does have the document.
+
+## Methods
+
+### get()
+
+```ts
+get(ref): 
+  | CanvasExternalComponentSnapshot
+  | undefined;
+```
+
+Defined in: [component-libraries/dependencies.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/dependencies.ts#L60)
+
+Already-admitted snapshots (the document's registry).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ref` | [`CanvasExternalComponentRef`](../../index/interfaces/CanvasExternalComponentRef) |
+
+#### Returns
+
+  \| [`CanvasExternalComponentSnapshot`](../../index/interfaces/CanvasExternalComponentSnapshot)
+  \| `undefined`

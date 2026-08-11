@@ -1,0 +1,27 @@
+---
+title: "effectivePathSeverity"
+description: "@anvilkit/canvas-core · effectivePathSeverity"
+---
+
+```ts
+function effectivePathSeverity(path, context): "warning" | "blocking";
+```
+
+Defined in: [brand-governance/compliance.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance.ts#L62)
+
+Severity for an issue found under a whole instance PATH.
+
+The path form of the same rule: any policy on the path recommending blocking
+makes the issue blocking, which matches the intersection posture the command
+gateway takes.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `path` | readonly [`CanvasBrandComponentPolicy`](../../index/interfaces/CanvasBrandComponentPolicy)[] |
+| `context` | `Pick`\&lt;[`CanvasBrandPolicyContext`](../interfaces/CanvasBrandPolicyContext), `"enforcement"`\&gt; |
+
+## Returns
+
+`"warning"` \| `"blocking"`

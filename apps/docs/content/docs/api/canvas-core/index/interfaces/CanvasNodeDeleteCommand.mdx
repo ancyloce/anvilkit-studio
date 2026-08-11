@@ -1,0 +1,25 @@
+---
+title: "CanvasNodeDeleteCommand"
+description: "@anvilkit/canvas-core · CanvasNodeDeleteCommand"
+---
+
+Defined in: [commands/types.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L78)
+
+Targets a node command at one tree: a page's (the default when absent —
+every pre-component call site keeps its exact semantics) or a Component
+Source's (plan 0023 M3-02, LC-CMD/LC-CREATE-002). A command's inverse
+carries the same `location`, so undo edits the same tree. One successful
+command (or one `batch`/transaction) against a Source increments that
+definition's `revision` exactly once — see `applyCommand`.
+
+## Extends
+
+- [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md)
+
+## Properties
+
+| Property | Type | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md).[`location`](CanvasCommandLocationOptions.md#location) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | [commands/types.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L80) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"node.delete"` | - | [commands/types.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L79) |

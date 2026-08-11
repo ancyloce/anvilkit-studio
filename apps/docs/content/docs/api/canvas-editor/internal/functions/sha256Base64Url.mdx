@@ -1,0 +1,26 @@
+---
+title: "sha256Base64Url"
+description: "@anvilkit/canvas-editor · sha256Base64Url"
+---
+
+```ts
+function sha256Base64Url(bytes, subtle?): Promise<string>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/web-crypto-verifier.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/web-crypto-verifier.ts#L44)
+
+SHA-256 the bytes and return the base64url digest.
+
+Exported because it is the one piece a host integrating a different transport
+still needs: computing the digest it will publish alongside a component.
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `bytes` | `Uint8Array` | `undefined` |
+| `subtle` | `SubtleCrypto` | `globalThis.crypto.subtle` |
+
+## Returns
+
+`Promise`\<`string`\>

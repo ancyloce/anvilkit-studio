@@ -1,0 +1,16 @@
+---
+title: "CanvasComponentGraph"
+description: "@anvilkit/canvas-core · CanvasComponentGraph"
+---
+
+Defined in: [components/graph.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/graph.ts#L22)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="chaindepths"&gt;&lt;/a&gt; `chainDepths` | `readonly` | `ReadonlyMap`\&lt;`string`, `number`\&gt; | Longest nested chain rooted at each ACYCLIC registry member (1 = no nested components). Cycle members carry no depth. | [components/graph.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/graph.ts#L47) |
+| &lt;a id="cycles"&gt;&lt;/a&gt; `cycles` | `readonly` | readonly readonly `string`[][] | Each distinct cycle, deduped and rotation-normalized to start at its lexicographically smallest member, then sorted — so `[["a","b"]]` is THE representation of a↔b however the graph was entered. | [components/graph.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/graph.ts#L42) |
+| &lt;a id="dependencies"&gt;&lt;/a&gt; `dependencies` | `readonly` | `ReadonlyMap`\&lt;`string`, readonly `string`[]\&gt; | componentId → DIRECT nested component references (sorted, deduped). References to ids absent from the registry are KEPT — they are exactly what `component-source-missing` reports; consumers that need only registry members filter against `has`. | [components/graph.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/graph.ts#L29) |
+| &lt;a id="depthexceeded"&gt;&lt;/a&gt; `depthExceeded` | `readonly` | readonly `string`[] | Acyclic members whose chain depth exceeds `MAX_COMPONENT_NESTED_DEPTH`, sorted. | [components/graph.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/graph.ts#L49) |
+| &lt;a id="topologicalorder"&gt;&lt;/a&gt; `topologicalOrder` | `readonly` | readonly `string`[] | Registry members in dependency-first (topological) order, ties broken by id — a resolver processing in this order sees every nested definition before its containers. Cycle members are EXCLUDED: no valid order exists for them. | [components/graph.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/graph.ts#L36) |

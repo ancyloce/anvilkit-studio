@@ -1,0 +1,21 @@
+---
+title: "BindingTargetSchema"
+description: "@anvilkit/schema · BindingTargetSchema"
+---
+
+```ts
+const BindingTargetSchema: ZodDiscriminatedUnion<[ZodObject<{
+  path: ZodArray<ZodUnion<readonly [ZodString, ZodNumber]>>;
+  type: ZodLiteral<"prop">;
+}, $loose>, ZodObject<{
+  type: ZodLiteral<"visibility">;
+}, $loose>, ZodObject<{
+  itemName: ZodString;
+  limit: ZodOptional<ZodNumber>;
+  type: ZodLiteral<"repeat">;
+}, $loose>], "type">;
+```
+
+Defined in: [editor/bindings.ts:128](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/bindings.ts#L128)
+
+What a binding writes to (DD-0019 §19, verbatim shape).

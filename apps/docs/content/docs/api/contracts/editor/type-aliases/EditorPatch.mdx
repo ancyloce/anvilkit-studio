@@ -1,0 +1,22 @@
+---
+title: "EditorPatch"
+description: "@anvilkit/contracts · EditorPatch"
+---
+
+```ts
+type EditorPatch<T> = { readonly [K in keyof T]?: T[K] extends object ? EditorPatch<T[K]> | T[K] | null : T[K] | null };
+```
+
+Defined in: [editor/values.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L39)
+
+Recursive command patch. A property set to `null` means "remove this
+property at the addressed layer" (DD-0019 §9.1 `null` semantics
+applied property-wise). `null` is a **write-time signal only**:
+reducers translate it into key removal; persisted spec objects never
+store nulls. (Contract freeze CORE-P0-001 D-8.)
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` |

@@ -1,0 +1,29 @@
+---
+title: "parseSnapshotKey"
+description: "@anvilkit/canvas-core · parseSnapshotKey"
+---
+
+```ts
+function parseSnapshotKey(key): 
+  | CanvasExternalComponentRef
+  | null;
+```
+
+Defined in: [ir/snapshot-key.ts:166](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/snapshot-key.ts#L166)
+
+Parse a registry key back into its exact reference, or `null` when the key is
+not one this codec could have produced.
+
+Total and non-throwing by design — see the module note on direction of
+strictness.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `key` | `unknown` |
+
+## Returns
+
+  \| [`CanvasExternalComponentRef`](../../index/interfaces/CanvasExternalComponentRef)
+  \| `null`

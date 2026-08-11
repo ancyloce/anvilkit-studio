@@ -1,0 +1,26 @@
+---
+title: "createBrandPolicyEvaluator"
+description: "@anvilkit/canvas-core · createBrandPolicyEvaluator"
+---
+
+```ts
+function createBrandPolicyEvaluator(ir): CanvasPolicyEvaluator;
+```
+
+Defined in: [brand-governance/command-policy.ts:328](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/command-policy.ts#L328)
+
+The evaluator form, for `CommandApplyOptions.brandPolicy`.
+
+Binds a document so the port's `(query, context)` signature — which cannot
+mention `CanvasIR` without dragging brand vocabulary to rank 2 — can be
+satisfied.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../../index/interfaces/CanvasIR) |
+
+## Returns
+
+[`CanvasPolicyEvaluator`](../type-aliases/CanvasPolicyEvaluator)

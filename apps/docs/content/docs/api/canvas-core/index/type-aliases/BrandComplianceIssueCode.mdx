@@ -1,0 +1,35 @@
+---
+title: "BrandComplianceIssueCode"
+description: "@anvilkit/canvas-core · BrandComplianceIssueCode"
+---
+
+```ts
+type BrandComplianceIssueCode = 
+  | "unresolved-color-token"
+  | "unresolved-font-token"
+  | "forbidden-color"
+  | "forbidden-font"
+  | "off-brand-color"
+  | "off-brand-font"
+  | "brand-component-policy-violation"
+  | "brand-component-property-not-editable"
+  | "brand-component-structure-locked"
+  | "brand-component-detach-denied"
+  | "brand-component-flatten-denied"
+  | "brand-component-variant-denied"
+  | "brand-component-token-not-allowed"
+  | "brand-component-override-off-brand"
+  | "brand-component-snapshot-missing"
+  | "brand-component-source-deprecated"
+  | "brand-component-policy-unsatisfiable"
+  | "brand-component-capability-unsupported";
+```
+
+Defined in: [brand/compliance.ts:13](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L13)
+
+Stable compliance codes.
+
+The six original members keep their exact meaning (T-041 step 4); the twelve
+`brand-component-*` members are added for component-aware findings. GROW-ONLY:
+hosts switch on these to phrase user-facing copy, so removing or renaming one
+is a breaking change.

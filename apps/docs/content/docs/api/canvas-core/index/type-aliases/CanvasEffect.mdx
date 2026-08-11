@@ -1,0 +1,16 @@
+---
+title: "CanvasEffect"
+description: "@anvilkit/canvas-core · CanvasEffect"
+---
+
+```ts
+type CanvasEffect = 
+  | CanvasDropShadowEffect
+  | CanvasBlurEffect;
+```
+
+Defined in: [ir/types.ts:263](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L263)
+
+One visual effect on a node (§9.4). Serializable and renderer-independent;
+the list is ordered (shadows render bottom-up, a trailing blur applies to
+the composited result).

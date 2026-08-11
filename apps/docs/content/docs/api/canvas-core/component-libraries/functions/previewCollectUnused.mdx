@@ -1,0 +1,26 @@
+---
+title: "previewCollectUnused"
+description: "@anvilkit/canvas-core · previewCollectUnused"
+---
+
+```ts
+function previewCollectUnused(ir, retainedSnapshotKeys): CanvasCollectionPreview;
+```
+
+Defined in: [component-libraries/commands/collect-unused.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/collect-unused.ts#L76)
+
+Compute what a collection would remove, without removing it.
+
+Exported so the dialog and the command agree by construction rather than by
+two implementations that might drift.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../../index/interfaces/CanvasIR) |
+| `retainedSnapshotKeys` | `ReadonlySet`\&lt;`string`\&gt; |
+
+## Returns
+
+[`CanvasCollectionPreview`](../interfaces/CanvasCollectionPreview)

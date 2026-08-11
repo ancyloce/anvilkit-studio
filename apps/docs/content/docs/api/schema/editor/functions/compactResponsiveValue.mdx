@@ -1,0 +1,31 @@
+---
+title: "compactResponsiveValue"
+description: "@anvilkit/schema · compactResponsiveValue"
+---
+
+```ts
+function compactResponsiveValue<T>(value): ResponsiveValue<T> | undefined;
+```
+
+Defined in: [editor/compact.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/compact.ts#L62)
+
+Compact one `ResponsiveValue`: remove `undefined` base, remove
+`null` override entries (write-time removal signal), remove
+override values that compact to empty objects, and collapse to
+`undefined` when neither base nor overrides remain.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `ResponsiveValue`\&lt;`T`\&gt; \| `undefined` |
+
+## Returns
+
+`ResponsiveValue`\&lt;`T`\&gt; \| `undefined`

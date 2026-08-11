@@ -1,0 +1,18 @@
+---
+title: "MAX_DOCUMENT_NODES"
+description: "@anvilkit/canvas-core · MAX_DOCUMENT_NODES"
+---
+
+```ts
+const MAX_DOCUMENT_NODES: 10000 = 10_000;
+```
+
+Defined in: [limits.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L59)
+
+Ceiling on nodes in one document, above which whole-document passes
+(validation, resolution, materialization) are not expected to meet their
+performance targets.
+
+Anchored to the recorded performance workload, which is 1,000 nodes: this
+allows an order of magnitude beyond the profile that the cold/warm budgets
+were measured against, so exceeding it means the budgets no longer apply.

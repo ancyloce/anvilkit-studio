@@ -1,0 +1,27 @@
+---
+title: "toResolvedNodeId"
+description: "@anvilkit/canvas-core · toResolvedNodeId"
+---
+
+```ts
+function toResolvedNodeId(sourceNodeId): CanvasResolvedNodeId;
+```
+
+Defined in: [components/identity.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/identity.ts#L51)
+
+Brand a source node id as a resolved id.
+
+The only sanctioned way to produce a `CanvasResolvedNodeId` for a
+NON-virtual node, so the source→resolved mapping stays one function rather
+than a cast at every construction site. Virtual nodes use
+[encodeResolvedNodeId](encodeResolvedNodeId.md).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `sourceNodeId` | `string` |
+
+## Returns
+
+[`CanvasResolvedNodeId`](../type-aliases/CanvasResolvedNodeId)

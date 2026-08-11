@@ -1,0 +1,36 @@
+---
+title: "AuthoringVersionDetection"
+description: "@anvilkit/schema · AuthoringVersionDetection"
+---
+
+```ts
+type AuthoringVersionDetection = 
+  | {
+  kind: "absent";
+}
+  | {
+  kind: "v1";
+}
+  | {
+  kind: "unsupported-major";
+  version: string;
+}
+  | {
+  kind: "invalid";
+};
+```
+
+Defined in: [editor/envelope.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/envelope.ts#L47)
+
+Classification of a candidate sidecar value before deep parsing
+(DD-0019 §24.1 read semantics):
+
+- `"absent"` — no sidecar (`undefined`/`null`): readers substitute
+  an empty state.
+- `"v1"` — the supported major version; deep validation applies.
+- `"unsupported-major"` — a structurally plausible sidecar whose
+  `version` major is not `"1"`: read-only safe mode,
+  `EDITOR_CONTRACT_UNSUPPORTED_VERSION`, raw value preserved
+  verbatim and never overwritten (invariant 9).
+- `"invalid"` — not a plausible sidecar object: read-only failure
+  preserving the raw value.

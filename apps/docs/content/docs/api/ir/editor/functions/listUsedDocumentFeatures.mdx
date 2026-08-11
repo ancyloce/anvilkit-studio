@@ -1,0 +1,33 @@
+---
+title: "listUsedDocumentFeatures"
+description: "@anvilkit/ir · listUsedDocumentFeatures"
+---
+
+```ts
+function listUsedDocumentFeatures(document): readonly EditorFeatureId[];
+```
+
+Defined in: [editor/index.ts:571](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L571)
+
+Feature scan for a **canonical carrier document** — the entry point
+a caller uses when there is no sidecar to read (`p2-007`).
+
+Added so consumers stop parsing a sidecar purely to satisfy an
+argument. The studio editor page did exactly that: it called
+`readAuthoringState(publishedData).state` on every export click, on
+documents that have no sidecar, to feed a scan that then reported
+nothing.
+
+Additive on purpose — [listUsedEditorFeatures](listUsedEditorFeatures.md) keeps its
+signature, so pre-finalization callers that genuinely hold a sidecar
+are unaffected until `p7-002` retires that form.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `document` | \| [`EditorFeatureScanDocument`](../interfaces/EditorFeatureScanDocument) \| `null` \| `undefined` |
+
+## Returns
+
+readonly `EditorFeatureId`[]

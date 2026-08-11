@@ -1,0 +1,25 @@
+---
+title: "pointInResolvedNode"
+description: "@anvilkit/canvas-core · pointInResolvedNode"
+---
+
+```ts
+function pointInResolvedNode(target, world): boolean;
+```
+
+Defined in: [geometry/hit-test.ts:177](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/hit-test.ts#L177)
+
+Resolved-record variant of [pointInNode](pointInNode.md): containment against the
+record's world transform. Takes no parent matrix — `worldTransform` is
+already fully composed.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `target` | [`ResolvedHitTarget`](../interfaces/ResolvedHitTarget) |
+| `world` | `Point` |
+
+## Returns
+
+`boolean`

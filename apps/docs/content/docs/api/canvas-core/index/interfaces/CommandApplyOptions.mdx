@@ -1,0 +1,22 @@
+---
+title: "CommandApplyOptions"
+description: "@anvilkit/canvas-core · CommandApplyOptions"
+---
+
+Defined in: [commands/types.ts:637](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L637)
+
+## Extended by
+
+- [`ChangeRecordOptions`](ChangeRecordOptions.md)
+- [`ApplyCommandsOptions`](ApplyCommandsOptions.md)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="brandpolicy"&gt;&lt;/a&gt; `brandPolicy?` | `public` | \{ `context`: `unknown`; `evaluate`: [`CanvasPolicyEvaluator`](../../brand-governance/type-aliases/CanvasPolicyEvaluator); \} | Brand-policy context and the evaluator to consult (plan 0021 T-035 step 1, completed in M4 once T-036/T-037 defined the shapes). `context` is opaque here for the same reason it is opaque in `policy-contracts.ts`: the concrete `CanvasBrandPolicyContext` lives at rank 5 and `commands/` is rank 3. The evaluator supplied by the host (or by `brand-governance/`) casts it back. Absent = no policy evaluation, which is exactly today's behaviour — so every existing caller is unaffected. Like `enforceLocked`, it propagates into every sub-command of a `batch` and the batch stays all-or-nothing. | [commands/types.ts:683](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L683) |
+| `brandPolicy.context` | `readonly` | `unknown` | - | [commands/types.ts:685](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L685) |
+| `brandPolicy.evaluate` | `readonly` | [`CanvasPolicyEvaluator`](../../brand-governance/type-aliases/CanvasPolicyEvaluator) | - | [commands/types.ts:684](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L684) |
+| &lt;a id="enforcelocked"&gt;&lt;/a&gt; `enforceLocked?` | `public` | `boolean` | When true, commands that mutate a `locked` node throw a typed `node-locked` [CanvasCommandError](../classes/CanvasCommandError) instead of applying (A-02, PRD 0012 FR-024). Default OFF for backward compatibility — existing consumers (brand apply with its own `includeLocked` semantics, extensions, collab replay) are unaffected unless they opt in. The editor's action layer enables it for user-initiated operations. Exemption: a `node.update` whose patch touches `locked` always applies — that is how a locked node gets unlocked. Inside a `batch` the option propagates to every sub-command; the batch stays all-or-nothing. | [commands/types.ts:650](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L650) |
+| &lt;a id="idfactory"&gt;&lt;/a&gt; `idFactory?` | `public` | () =&gt; `string` | Id source for commands that mint node ids themselves (plan 0021 T-035). Exists so replay and collaborative application can be deterministic: a command that called a global uuid generator directly would produce different ids on every peer and on every replay. Added to THIS options object rather than to a parallel "command context" type — that is the T-035 DoD. `applyBatch` forwards the whole object to every sub-command, so anything added here propagates for free and stays all-or-nothing with the batch. NOTE: no built-in command mints an id today (every one takes its ids explicitly), so this currently has no in-tree consumer. It is declared now because M4's policy-aware mutation paths extend this same object, and discovering the seam then would have meant either a breaking change or the parallel type this DoD forbids. | [commands/types.ts:669](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L669) |
+| &lt;a id="now"&gt;&lt;/a&gt; `now?` | `public` | () =&gt; `string` | - | [commands/types.ts:638](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L638) |

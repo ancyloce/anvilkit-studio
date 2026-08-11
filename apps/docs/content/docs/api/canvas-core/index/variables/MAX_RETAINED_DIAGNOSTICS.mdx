@@ -1,0 +1,18 @@
+---
+title: "MAX_RETAINED_DIAGNOSTICS"
+description: "@anvilkit/canvas-core · MAX_RETAINED_DIAGNOSTICS"
+---
+
+```ts
+const MAX_RETAINED_DIAGNOSTICS: 1000 = 1_000;
+```
+
+Defined in: [limits.ts:177](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L177)
+
+Number of layout diagnostics retained before truncation.
+
+Diagnostics are emitted per offending node, so a systematically broken
+document can produce one per node. Retaining a bounded prefix keeps a
+diagnostic report reviewable — and keeps its byte size bounded for hosts
+that persist or transmit it — while the count of dropped entries is
+reported alongside, so truncation is never silent.

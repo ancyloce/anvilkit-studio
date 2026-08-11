@@ -1,0 +1,36 @@
+---
+title: "instanceScopeTargetAt"
+description: "@anvilkit/canvas-editor · instanceScopeTargetAt"
+---
+
+```ts
+function instanceScopeTargetAt(
+   view, 
+   target, 
+   instanceId): 
+  | CanvasSelectionTarget
+  | null;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/selection/component-selection-policy.ts:141](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/component-selection-policy.ts#L141)
+
+The deepest virtual node of `instanceId` on a stage-hit chain.
+
+The chain is walked deepest-first and the first hit that resolves to a record
+owned by this instance wins, so nested expansions naturally yield their
+innermost node. Falls back to `null` when the pointer produced no addressable
+virtual node (a degraded placeholder, or a resolution the caller does not
+have), which callers treat as "stay on the instance root".
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `view` | `CanvasResolvedView` |
+| `target` | [`HitNodeLike`](../interfaces/HitNodeLike) \| `null` \| `undefined` |
+| `instanceId` | `string` |
+
+## Returns
+
+  \| [`CanvasSelectionTarget`](../type-aliases/CanvasSelectionTarget)
+  \| `null`

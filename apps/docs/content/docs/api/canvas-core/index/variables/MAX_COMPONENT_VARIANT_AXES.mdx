@@ -1,0 +1,17 @@
+---
+title: "MAX_COMPONENT_VARIANT_AXES"
+description: "@anvilkit/canvas-core · MAX_COMPONENT_VARIANT_AXES"
+---
+
+```ts
+const MAX_COMPONENT_VARIANT_AXES: 8 = 8;
+```
+
+Defined in: [limits.ts:264](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L264)
+
+Ceiling on variant axes declared by one component (TD §11.1).
+
+Chosen for the shape real design systems use — size, tone, state, density,
+emphasis — where five or six axes is already unusual. The cap matters because
+axes multiply: the canonical selection key sorts and encodes every axis, so
+this also bounds key length.

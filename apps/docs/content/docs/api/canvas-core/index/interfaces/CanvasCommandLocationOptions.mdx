@@ -1,0 +1,41 @@
+---
+title: "CanvasCommandLocationOptions"
+description: "@anvilkit/canvas-core · CanvasCommandLocationOptions"
+---
+
+Defined in: [commands/types.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L44)
+
+Targets a node command at one tree: a page's (the default when absent —
+every pre-component call site keeps its exact semantics) or a Component
+Source's (plan 0023 M3-02, LC-CMD/LC-CREATE-002). A command's inverse
+carries the same `location`, so undo edits the same tree. One successful
+command (or one `batch`/transaction) against a Source increments that
+definition's `revision` exactly once — see `applyCommand`.
+
+## Extended by
+
+- [`CanvasNodeCreateCommand`](CanvasNodeCreateCommand.md)
+- [`CanvasNodeMoveCommand`](CanvasNodeMoveCommand.md)
+- [`CanvasNodeResizeCommand`](CanvasNodeResizeCommand.md)
+- [`CanvasNodeRotateCommand`](CanvasNodeRotateCommand.md)
+- [`CanvasNodeDeleteCommand`](CanvasNodeDeleteCommand.md)
+- [`CanvasNodeReorderCommand`](CanvasNodeReorderCommand.md)
+- [`CanvasNodeReparentCommand`](CanvasNodeReparentCommand.md)
+- [`CanvasNodeUpdateCommand`](CanvasNodeUpdateCommand.md)
+- [`CanvasImageReplaceCommand`](CanvasImageReplaceCommand.md)
+- [`CanvasNodeGroupCommand`](CanvasNodeGroupCommand.md)
+- [`CanvasNodeUngroupCommand`](CanvasNodeUngroupCommand.md)
+- [`CanvasNodeApplyStyleCommand`](CanvasNodeApplyStyleCommand.md)
+- [`CanvasComponentInstanceInsertCommand`](CanvasComponentInstanceInsertCommand.md)
+- [`CanvasComponentInstanceSetOverrideCommand`](CanvasComponentInstanceSetOverrideCommand.md)
+- [`CanvasComponentInstanceResetOverrideCommand`](CanvasComponentInstanceResetOverrideCommand.md)
+- [`CanvasComponentInstanceResetAllOverridesCommand`](CanvasComponentInstanceResetAllOverridesCommand.md)
+- [`CanvasComponentInstanceDetachCommand`](CanvasComponentInstanceDetachCommand.md)
+- [`CanvasFrameSetLayoutCommand`](CanvasFrameSetLayoutCommand.md)
+- [`CanvasFrameRemoveLayoutCommand`](CanvasFrameRemoveLayoutCommand.md)
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |

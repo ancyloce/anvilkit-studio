@@ -1,0 +1,18 @@
+---
+title: "ComponentVariant"
+description: "@anvilkit/contracts · ComponentVariant"
+---
+
+Defined in: [editor/components.ts:77](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L77)
+
+One variant: a full axis selection plus the definition-node patches
+it applies (≤20 combinations per component; caps schema-enforced).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | - | [editor/components.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L78) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `readonly` | `string` | - | [editor/components.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L79) |
+| &lt;a id="patch"&gt;&lt;/a&gt; `patch` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, [`NodeOverridePatch`](NodeOverridePatch.md)\&gt;\&gt; | Definition node id → patch applied when this variant is active. | [editor/components.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L83) |
+| &lt;a id="selection"&gt;&lt;/a&gt; `selection` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `string`\&gt;\&gt; | Variant axis id → option id; every axis must be selected. | [editor/components.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L81) |

@@ -1,0 +1,31 @@
+---
+title: "canonicalVariantKey"
+description: "@anvilkit/canvas-core · canonicalVariantKey"
+---
+
+```ts
+function canonicalVariantKey(selection): string;
+```
+
+Defined in: [ir/component-variants.ts:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-variants.ts#L102)
+
+Encode one selection as a stable string.
+
+Sorted by axis id and `encodeURIComponent`-escaped per field, joined with
+reserved separators — the same approach as the snapshot-key codec (T-005),
+for the same reason: `encodeURIComponent` escapes the separators, so no axis
+or value id can inject one and make two different selections collide.
+
+**No display name participates** (T-025 DoD). Names are localizable and
+editable; a key built from them would change when a translator edits a label,
+silently invalidating every persisted selection.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `selection` | [`CanvasComponentVariantSelection`](../type-aliases/CanvasComponentVariantSelection) |
+
+## Returns
+
+`string`

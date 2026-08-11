@@ -1,0 +1,30 @@
+---
+title: "validateExportCapabilities"
+description: "@anvilkit/ir · validateExportCapabilities"
+---
+
+```ts
+function validateExportCapabilities(
+   usedFeatures, 
+   capabilities, 
+   options?): ExportValidationResult;
+```
+
+Defined in: [editor/index.ts:646](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L646)
+
+Compare used features against a format's declared capabilities
+(DD-0019 §23.2; DD-DEC-018). A format without a declaration
+declares **no** editor features: any used feature blocks
+production export through it.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `usedFeatures` | readonly `EditorFeatureId`[] |
+| `capabilities` | `EditorExportCapabilities` \| `undefined` |
+| `options?` | [`ValidateExportCapabilitiesOptions`](../interfaces/ValidateExportCapabilitiesOptions) |
+
+## Returns
+
+`ExportValidationResult`

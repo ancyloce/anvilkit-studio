@@ -1,0 +1,56 @@
+---
+title: "ExternalComponentFailure"
+description: "@anvilkit/canvas-editor · ExternalComponentFailure"
+---
+
+```ts
+type ExternalComponentFailure = 
+  | {
+  reason: "aborted";
+}
+  | {
+  code?: string;
+  messageKey: string;
+  reason:   | "capability-denied"
+     | "version-unavailable"
+     | "provider"
+     | "admission"
+     | "command";
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/use-external-component.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-external-component.ts#L49)
+
+Why an insert or recovery did not happen. Never carries a raw error.
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  reason: "aborted";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  code?: string;
+  messageKey: string;
+  reason:   | "capability-denied"
+     | "version-unavailable"
+     | "provider"
+     | "admission"
+     | "command";
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `code?` | `string` | Diagnostic code or command-error code, for logs. Never rendered raw. | [packages/capabilities/canvas/editor/src/component-libraries/use-external-component.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-external-component.ts#L61) |
+| `messageKey` | `string` | i18n key — resolved by the caller, so no locale data lives here. | [packages/capabilities/canvas/editor/src/component-libraries/use-external-component.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-external-component.ts#L59) |
+| `reason` | \| `"capability-denied"` \| `"version-unavailable"` \| `"provider"` \| `"admission"` \| `"command"` | - | [packages/capabilities/canvas/editor/src/component-libraries/use-external-component.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-external-component.ts#L52) |

@@ -1,0 +1,55 @@
+---
+title: "CanvasLayoutEditorEvent"
+description: "@anvilkit/canvas-editor · CanvasLayoutEditorEvent"
+---
+
+```ts
+type CanvasLayoutEditorEvent = 
+  | {
+  childCount: number;
+  direction: CanvasLayoutDirection;
+  source: "frame" | "selection";
+  type: "canvas.layout.created";
+}
+  | {
+  nextMode?: string;
+  previousMode?: string;
+  property: string;
+  type: "canvas.layout.updated";
+}
+  | {
+  childCount: number;
+  fromIndex: number;
+  toIndex: number;
+  type: "canvas.layout.child_reordered";
+}
+  | {
+  childCount: number;
+  nestedDepth: number;
+  type: "canvas.layout.removed";
+}
+  | {
+  axis?: string;
+  code: string;
+  nodeId?: string;
+  operation: string;
+  severity: string;
+  type: "canvas.layout.diagnostic";
+}
+  | {
+  format: string;
+  nodeCount: number;
+  type: "canvas.layout.exported";
+  warningCount: number;
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/auto-layout/events.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/auto-layout/events.ts#L11)
+
+## File
+
+T-M4-11 — the six PRD §12 layout events, carried by ONE optional host
+callback (`onLayoutEvent`, name provisional under OQ-5/A-3). The editor has
+no analytics client and must not gain one: hosts observe, the editor emits.
+Payloads carry ids/enums/counts only — never copy content, asset URIs,
+font data, or document bodies.

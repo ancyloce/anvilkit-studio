@@ -1,0 +1,14 @@
+---
+title: "CanvasOverrideMigrationResult"
+description: "@anvilkit/canvas-core · CanvasOverrideMigrationResult"
+---
+
+Defined in: [component-libraries/compatibility.ts:336](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/compatibility.ts#L336)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="mappings"&gt;&lt;/a&gt; `mappings` | `readonly` | readonly [`CanvasPropertyMapping`](CanvasPropertyMapping.md)[] | - | [component-libraries/compatibility.ts:347](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/compatibility.ts#L347) |
+| &lt;a id="orphaned"&gt;&lt;/a&gt; `orphaned` | `readonly` | [`CanvasComponentOverrideMap`](../../index/type-aliases/CanvasComponentOverrideMap) | Overrides that did not transfer, keyed by their ORIGINAL property id. Retained verbatim, never dropped and never reassigned (INV-6): a user who undoes, or who swaps back, gets their data. Orphans are also what the preview counts. | [component-libraries/compatibility.ts:346](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/compatibility.ts#L346) |
+| &lt;a id="overrides"&gt;&lt;/a&gt; `overrides` | `readonly` | [`CanvasComponentOverrideMap`](../../index/type-aliases/CanvasComponentOverrideMap) | Overrides that transferred, keyed by TARGET property id. | [component-libraries/compatibility.ts:338](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/compatibility.ts#L338) |

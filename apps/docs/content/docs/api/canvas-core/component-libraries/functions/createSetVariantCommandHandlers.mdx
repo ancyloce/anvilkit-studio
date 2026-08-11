@@ -1,0 +1,22 @@
+---
+title: "createSetVariantCommandHandlers"
+description: "@anvilkit/canvas-core · createSetVariantCommandHandlers"
+---
+
+```ts
+function createSetVariantCommandHandlers(): readonly [{
+  apply: (ir, cmd, options) => CommandApplyResult<CanvasComponentRestoreVariantCommand>;
+  type: "component-instance.set-variant";
+}];
+```
+
+Defined in: [component-libraries/commands/set-variant.ts:269](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/set-variant.ts#L269)
+
+The handler, for registration through `createCanvasRuntime`.
+
+## Returns
+
+readonly \[\{
+  `apply`: (`ir`, `cmd`, `options`) => [`CommandApplyResult`](../../index/interfaces/CommandApplyResult)\<`CanvasComponentRestoreVariantCommand`\>;
+  `type`: `"component-instance.set-variant"`;
+\}\]

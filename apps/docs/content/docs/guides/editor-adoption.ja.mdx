@@ -1,60 +1,302 @@
 ---
-title: "ビジュアルエディターの導入"
-description: "コンポーネントを AnvilKit ビジュアルエディターへ段階的に対応させます——選択可能、スタイル可能、インライン編集可能、コンポーザブル——そして inspectEditorCapabilities で現在のレベルを確認できます。"
+title: "ビジュアルエディタへの適用"
+description: "正準な Puck ネイティブのオーサリングモデルを適用する：metadata に名前付きスタイルターゲットを宣言し、レンダーで安定したターゲット属性を刻み、appearance / interactions / bindings を通常のコンポーネント props として運ぶ。"
 ---
 
-The visual editor never guesses at your component's structure. **Core
-does not change a component's DOM automatically**, so everything the
-editor can do for your component comes from what you *declare* in
-`metadata.editor`.
+ビジュアルエディタがコンポーネントの構造を推測することはありません。
+エディタがそのコンポーネントに対してできることはすべて、あなたが
+**宣言**した内容から来ます。そしてその宣言が存在する場所はちょうど
+3 つ、いずれも通常の Puck の概念です。
 
-That has one consequence worth stating up front: a component that
-declares nothing is not broken — it is at **Level 0**, and it keeps
-working exactly as it always has. Adoption is opt-in, incremental, and
-reversible.
+1. **`metadata.anvilkit.editor`** — コンポーネントの名前付き
+   スタイルターゲットと、ターゲットごとのプロパティ許可リスト。
+2. **あなたのレンダー** — 宣言済みのターゲットはすべて、**あらゆる**
+   モード（編集・プレビュー・本番・エクスポート）で安定した属性ペアを
+   刻みます。
+3. **あなたの props** — オーサリング状態はシリアライズ可能な
+   コンポーネント props（`appearance`、`interactions`、`bindings`）
+   として届きます。
 
-## 5 つのレベル
+何も宣言しないコンポーネントは壊れているわけではありません。ネイティブ
+の Puck フィールドでそのまま動き続けます。適用は任意であり、可逆です。
 
-| レベル | 名称 | 作者が得られるもの |
-|---|---|---|
-| 0 | Legacy | Native Puck fields only. Nothing changes. |
-| 1 | Selectable | The node can be selected and appears in Layers with a stable identity. |
-| 2 | Styleable | The layout / visual / typography inspector sections apply to it. |
-| 3 | Inline editable | Text and images are editable directly on the canvas. |
-| 4 | Composable | Slots, interactions, and component composition. |
+<Callout type="info" title="ドキュメントの形は 1 つだけ">
+	サイドカーはなく、config の装飾もなく、エディタ専用のレンダー
+	パスもなく、そして**バージョンマーカーもありません**。
+	`metadata.anvilkit.editor` に `version` メンバーはなく、appearance
+	キャリアにもなく、ドキュメントのルート props にもありません。
+	`styleTargets` を宣言しているコンポーネントがこの契約を宣言して
+	いるのであり、宣言していないものはそうではありません。改名前に
+	書き込まれたドキュメントには古い `version` キーが残っていることが
+	ありますが、スキーマは未知のキーを保持するだけで、それを読むコード
+	はどこにもありません。
+</Callout>
 
-You do not have to reach Level 4. Most content components are useful at
-Level 2, and many should stop there.
-
-リポジトリ内の実例: `@anvilkit/section` と `@anvilkit/hero` は
-`styleTarget: "root"` とインラインテキストターゲットを宣言（レベル 3）、
-`@anvilkit/bento-grid` はレイアウトコンテナを宣言（レベル 2）——
-具体的な書き方は各パッケージの `src/config.ts` を参照。
-
-## 現在のレベルは？
+## 1. スタイルターゲットを宣言する
 
 ```ts
-import { inspectEditorCapabilities, formatEditorCapabilityReport } from "@anvilkit/core/editor";
+// src/config.ts
+export const componentConfig = {
+	fields: { /* your native Puck fields */ },
+	metadata: {
+		anvilkit: {
+			editor: {
+				styleTargets: {
+					root: {
+						label: "Card",
+						responsive: true,
+						properties: ["display", "padding", "background", "opacity"],
+					},
+					cardTitle: {
+						label: "Card title",
+						properties: ["color", "fontSize", "fontWeight", "textAlign"],
+					},
+					cardImage: {
+						label: "Card image",
+						properties: ["borderRadius", "filter", "blendMode"],
+					},
+				},
+			},
+		},
+	},
+	render: CardView,
+};
+```
+
+- `styleTargets` の**キー**は**データ契約**の一部です。公開済みの
+  ターゲットの改名には prop マイグレーションが必要になります。label は
+  表示テキストなので自由に変更できます（ステップ 4 を参照）。
+- `responsive: true` はそのターゲットをブレークポイントごとの
+  オーバーライドに参加させます。宣言しないターゲットは base レイヤーに
+  固定され、着地しようのないオーバーライドを提示しません。
+- DOM が実際に反映できるプロパティだけを許可してください。許可リストが
+  唯一の情報源です。Inspector は許可されたプロパティに**のみ**コント
+  ロールを描画し、appearance コンパイラもリスト外のものをすべて捨てます。
+  許可したのに効かないプロパティはバグです。作者には「何も起きない
+  コントロール」に見えます。
+
+### オーサリング語彙は 40 プロパティ
+
+許可可能なプロパティの全体を、オーサリング仕様と同じ綴りで示します。
+語彙は仕様の語彙と一致しているため「なぜこれだけ無いのか」という疑問は
+生じません。実際に何を許可するかは、あくまで各ターゲット自身の判断です。
+
+| ファミリー | プロパティ |
+|---|---|
+| レイアウト（22） | `display`、`position`、`width`、`minWidth`、`maxWidth`、`height`、`minHeight`、`maxHeight`、`margin`、`padding`、`gap`、`rowGap`、`columnGap`、`columns`、`rows`、`alignItems`、`justifyContent`、`direction`、`wrap`、`inset`、`overflow`、`zIndex` |
+| ビジュアル（8） | `background`、`border`、`borderRadius`、`boxShadow`、`opacity`、`filter`、`blendMode`、`cursor` |
+| タイポグラフィ（10） | `color`、`fontFamily`、`fontSize`、`fontWeight`、`lineHeight`、`letterSpacing`、`textAlign`、`textDecoration`、`textTransform`、`textWrap` |
+
+2 つだけ、出力される CSS 宣言と名前が異なります。`direction` は
+`flex-direction` に、`wrap` は `flex-wrap` になります。`inset` は
+ショートハンドではなく 4 辺それぞれの宣言を出力します。
+
+<Callout type="warn" title="zIndex だけは慎重に">
+	この集合の他のプロパティの効果はすべて局所的です。しかしノードの
+	重なり順を上げると、作者が見てもいない・選択してもいない要素との
+	関係が変わり、いま編集しているボックスの外へ効果が漏れ出します。
+	12 個の同梱コンポーネントパッケージ全体で、これが許可されている
+	ターゲットはちょうど**2 つ**だけで、どちらもそれ自体が重ね合わせ
+	コンテキストを作っています。コンテナ要素が実際に重ね合わせ
+	コンテキストを作っている場合にのみ許可してください。
+</Callout>
+
+## 2. ターゲット属性を刻む
+
+```tsx
+// src/CardView.tsx
+import { anvilRootAttrs, anvilTargetAttrs } from "@anvilkit/core/editor";
+
+export function CardView({ id, image, title, children }: CardProps) {
+	return (
+		<section {...anvilRootAttrs(id, "root")} className="ak-card">
+			<img {...anvilTargetAttrs(id, "cardImage")} src={image} alt="" />
+			<h3 {...anvilTargetAttrs(id, "cardTitle")}>{title}</h3>
+			{children}
+		</section>
+	);
+}
+```
+
+`data-ak-style-node` + `data-ak-style-target` のペアは、コンパイラが
+セレクタを生成する唯一の面であり、常に厳密な属性ペアです。子孫セレクタ
+は決して使いません。入れ子のコンポーネントのターゲットに誤って一致して
+しまうからです。
+
+**すべての**レンダー分岐で同一に刻んでください。編集キャンバス、
+`Render`、2 つのエクスポータが同じボックスを見る必要があります。一部の
+分岐にしか現れないターゲットは、宣言されている限り誠実です。エディタは
+それを*現在のレンダーには存在しません*と報告し、幻のボックスを描いたり
+はしません。しかし分岐のあいだで*移動する*ターゲットはバグです。安定した
+コンテナへ再配置してください。
+
+繰り返されるターゲットは想定内です。記事ごとに `card` を 1 回刻む
+リストは一致するすべての要素へ解決され、そこに書いたスタイルは一度に
+そのすべてへ届きます。
+
+## 3. オーサリング props を運ぶ
+
+```ts
+import {
+	appearanceField,
+	bindingsField,
+	interactionsField,
+} from "@anvilkit/core/react/editor";
+
+export const fields = {
+	...nativeFields,
+	appearance: appearanceField,
+	interactions: interactionsField,
+	bindings: bindingsField,
+};
+```
+
+これらは宣言された Puck フィールドであり、Puck がたまたま保持している
+偶然のデータではありません。非表示（`visible: false`）なのでプロパティ
+タブには現れず、スタイルパネルが Puck API 経由で書き込みます。
+
+オーサリング状態は**あなた自身のデータ**です。
+
+- `props.appearance.targets[targetId]` はそのターゲットのレイヤー化
+  されたスタイル（`style` = base とブレークポイントのオーバーライド、
+  `styleRefs`、`hidden`）を保持します。実効的な中身がない appearance は
+  `undefined` に正規化されます。空の殻が保存されることはありません。
+- `props.interactions` はトリガーノードに属します。
+- `props.bindings` はバインド先のノードに属します。
+
+すべてシリアライズ可能です。レンダー props が関数や ref を露出すること
+はありません。
+
+## 4. ターゲットラベルをローカライズする
+
+ターゲットの **id** はデータ契約であり、決して変わりません。label は
+表示テキストで、コンポーネントパッケージは自身の
+`createComponentConfig` ファクトリを通じてローカライズします。
+
+```ts
+import { createComponentConfig } from "@anvilkit/blog-list";
+
+const config = createComponentConfig({ locale: "ja" });
+```
+
+静的な `componentConfig` エクスポートは英語のままバイト単位で不変なので、
+それを import している側には何の影響もありません。12 個の同梱パッケージ
+と 3 つの `gen:component` テンプレートはすべてこのパターンに従います。
+
+## 要素モード：コンポーネント内部の要素にスタイルを当てる
+
+エディタには 2 つのモードがあります。**ページ**モードでは、作者はノード
+全体を選択して動かします。**要素**モードでは、作者は選択中の
+コンポーネント*内部*の宣言済みターゲットを 1 つ選び、その場でスタイルを
+当てます。スタイルタブはそのターゲットに絞り込まれ、キャンバスはその
+ターゲットが解決したすべての要素をアウトライン表示します。
+
+これを安全にしている規則は、他のどこでも同じです。**宣言された
+ターゲットだけがアドレス可能である。** metadata が名前を付けなかった
+要素はインデックスに存在せず、クリックでヒットせず、キーボード走査でも
+到達できず、Inspector のどこにもコントロールを持ちません。エディタが、
+あなたのコンポーネントが許可していないスタイリング面を勝手に作り出す
+ことはできません。
+
+設計上、意識しておく価値のある帰結が 2 つあります。
+
+- **繰り返しターゲットはインスタンスごとではなく、集合としてスタイル
+  されます。** ターゲットが複数の要素に解決されるとパネルが件数で明示し、
+  書き込みはそのすべてに届きます。繰り返しターゲットの 1 インスタンス
+  だけにスタイルを当てる手段はエディタのどこにもありません。作者が
+  それを必要とするなら、答えは別のターゲットかインスタンスごとの prop
+  であって、隠れた要素単位のオーバーライドではありません。
+- **走査は宣言順に従います。** ターゲットピッカーもキーボード順も、
+  あなたが書いた `styleTargets` の順序を読みます。作者がコンポーネントを
+  たどる順序で宣言してください。
+
+## ドキュメントレベルの状態
+
+ノードレベルの状態はそのノード自身の props に置かれます。ドキュメント
+レベルの状態は**宣言されたルート props** に置かれます。
+
+| ルート prop | 保持するもの |
+|---|---|
+| `root.props.designSystem` | ブレークポイント、トークン、トークンモード、既定のトークンモード、スタイル定義 |
+| `root.props.componentLibrary` | ドキュメントのローカルコンポーネント定義（id をキーとする）— バリアントや公開 prop も含めてすべて |
+| `root.props.editorAnnotations` | ノードごとの `name` と `locked`、それ以外は一切なし — 恒久的に閉じた形であり、IR 境界で取り除かれるため、レンダー済み／エクスポート済みのページには決して届きません |
+
+ローカルコンポーネントの**インスタンス**は、自分のインスタンス prop を
+持つ通常のノードにすぎません。その定義はレンダー時に
+`root.props.componentLibrary` から解決されます。2 つ目のドキュメントも、
+複製も存在しません。
+
+## 統合の窓口：`EditorApi`
+
+プラグインと AI 機能は `EditorApi` を通じて、そしてそれだけを通じて
+ドキュメントに触れます。
+
+```ts
+const model = editorApi.readDocument();      // a projection, never a handle
+const stop = editorApi.subscribe(onChange);  // change notification
+editorApi.commit.inlineText({ nodeId, targetId, value });
+```
+
+面は 3 つ（読み取り・購読・コミット）で、**dispatch の入口は意図的に
+ありません**。4 つ目の面こそがコマンドポートの再生経路だからです。
+プラグインはエディタ UI と同じコミットヘルパーを通じて書き込み、
+`commit.*` の各呼び出しは履歴に残る書き込みちょうど 1 回に解決されます。
+つまり作者の 1 操作は 1 回の取り消しに対応します。
+
+`EditorApi` にケーパビリティ照会が無いのも意図的です。宣言された
+スタイルターゲットはドキュメント投影の一部（`readDocument().nodes`）
+として、あの唯一の正準な metadata リーダー経由で読まれます。2 つ目の
+ケーパビリティ面は、同じ問いに対する 2 つ目の答えにしかなりません。
+
+<Callout type="warn" title="コマンドポートは退役へ向かっています">
+	`EditorApi` より前からある型付きコマンドポートと、その周辺の
+	コマンドディスパッチ面は撤去へ向かっています。リファレンス
+	アプリケーションはすでに `EditorApi` と型付きのインテント合併型の
+	上で動いています。新しい統合は `EditorApi` の上に構築してください。
+	インストール済みパッケージからコマンド型をまだ import している場合
+	は、サポートされた面ではなく削除予定として扱ってください。
+</Callout>
+
+## 1 つのパイプライン、4 つの消費者
+
+宣言した内容はすべて 1 つのコンパイラ（`compileDocumentAppearance`）で
+1 つの成果物にコンパイルされ、その同じ成果物がエディタキャンバス、
+プレビュールート、本番レンダリング、そして 2 つのエクスポータへ供給
+されます。いずれかの面でコンポーネントの見た目が違うなら、それはバグ
+です。報告してください。面ごとにスタイル経路を分岐させてはいけません。
+
+エクスポート形式は自分が運べるエディタ機能を宣言し、プリフライトが
+機能を黙って落とすエクスポートをブロックします。
+
+| 形式 | 現在の認証済み |
+|---|---|
+| HTML | `responsive`、`tokens`、`styleDefinitions`、`richText` |
+| React | `responsive`、`tokens`、`styleDefinitions`、加えて**宣言済みだが未再認証**の `localComponents` と `variants` |
+
+React 形式の `localComponents` と `variants` は、正準なドキュメントに
+対して認証されるまでは未証明の主張として扱ってください。HTML 形式が
+両方を撤回したのも同じ理由です。
+
+## 何を宣言したかを確認する
+
+`inspectEditorCapabilities` は、エディタがあなたの config で実際に何が
+できるかを報告します。「自分のコンポーネントの inspector が空だ」が、
+対処可能な答えに変わります。
+
+```ts
+import {
+	formatEditorCapabilityReport,
+	inspectEditorCapabilities,
+} from "@anvilkit/core/editor";
 import { componentConfig } from "./config";
 
 const report = inspectEditorCapabilities({ components: { MyCard: componentConfig } });
 console.log(formatEditorCapabilityReport(report));
 ```
 
-```text
-Editor capability adoption (DD-0019 §26.2)
-
-  MyCard — Level 1 (Selectable)
-    declared: responsive
-    to reach Level 2: at least one of capabilities.layoutContainer / layoutItem / visualStyle / typography
-    warning: capabilities.responsive is declared but no layout/style/typography capability is — there is nothing for a breakpoint override to change
-
-  L0 Legacy: 0 · L1 Selectable: 1 · L2 Styleable: 0 · L3 Inline editable: 0 · L4 Composable: 0
-```
-
-The function is pure and React-free, so it runs in a unit test or a
-plain Node script — no `<Studio>` mount required. Use it as an assertion
-to stop a package from regressing:
+純粋関数で React にも依存しないため、Studio をマウントせずにユニット
+テストや素の Node スクリプトから実行できます。そのままリグレッション
+アサーションとしても使えます。
 
 ```ts
 it("stays at least Level 2", () => {
@@ -63,144 +305,93 @@ it("stays at least Level 2", () => {
 });
 ```
 
-## レベル 1 — 選択可能
+パースは通るのに何もできない宣言も指摘します。上書きすべきプロパティを
+1 つも許可していない `responsive` ターゲットや、`altPropPath` の無い
+画像ターゲットなどです。
 
-Declare the metadata block and give the editor a **stable root target**:
-one element that is always rendered and always the same element.
+## 一致を証明する
 
-```ts
-export const componentConfig = {
-	label: "Card",
-	fields,
-	defaultProps,
-	render: MyCard,
-	metadata: {
-		editor: {
-			version: "1",
-			styleTarget: "root",
-			capabilities: {},
-		},
-	},
-};
-```
-
-`styleTarget` picks who owns the stamped element:
-
-- `"root"` — **your** root element carries the editor's attributes. You
-  must spread the props Core passes into it (see below).
-- `"wrapper"` — Core wraps your component in an element it owns. Nothing
-  to change in your render, at the cost of one extra DOM node.
-- `"none"` — an explicit opt-out. Reads as Level 0.
-
-For `styleTarget: "root"`, spread the editor attributes onto your root:
-
-```tsx
-function MyCard({ editorDataAttributes, ...props }) {
-	return (
-		<article {...editorDataAttributes} className="card">
-			{props.children}
-		</article>
-	);
-}
-```
-
-<Callout type="warn" title="One root, always">
-	A component that renders a fragment, or a different root element
-	depending on props, has no stable target. Selection, handles, and the
-	accessibility rules all key off that element — if it moves, they
-	follow the wrong node. Use `styleTarget: "wrapper"` instead.
-</Callout>
-
-## レベル 2 — スタイル可能
-
-Declare what the inspector may edit. Each flag turns on one section.
+適用済みのコンポーネントは 2 つのチェックを備えます。宣言が正しい形で
+あること、そして刻んだターゲットが編集時と本番で**同一**であること。
 
 ```ts
-capabilities: {
-	layoutItem: true,      // margin, alignment, flex/grid child placement
-	layoutContainer: true, // display, gap, padding, direction — for components with children
-	visualStyle: true,     // fill, radius, border, shadow, opacity
-	typography: true,      // font, size, weight, line height, alignment
-	responsive: true,      // per-breakpoint overrides for the above
-}
+import { resolveStyleTargets } from "@anvilkit/core/editor";
+
+it("declares well-formed style targets", () => {
+	const config = { components: { MyCard: componentConfig } };
+	expect(resolveStyleTargets(config, "MyCard").map((t) => t.id)).toContain("root");
+});
+
+it("emits identical targets in editing and production", () => {
+	expect(targetPairsOf(editingMarkup)).toEqual(targetPairsOf(productionMarkup));
+});
 ```
 
-Declare only what your component actually honours. `typography: true` on
-a component that hard-codes its own font produces an inspector control
-that appears to do nothing — worse than an absent control.
+`packages/extensions/components/tests/` のワークスペーススイートが同梱
+パッケージすべてに対してこの 2 つを強制します。新しいパッケージでは
+そのパターン（`authoring-contract.test.ts`、`authoring-parity.test.ts`）
+を写してください。
 
-`responsive: true` alone does nothing; it needs at least one of the
-other four to have something to override. The inspector reports that as
-a warning.
+## インラインテキストと画像
 
-## レベル 3 — インライン編集可能
-
-Point at the props that hold editable content. These are **explicit
-targets**, and they take precedence over the editor's drop heuristics.
-
-```ts
-capabilities: {
-	visualStyle: true,
-	inlineText: [
-		{ id: "headline", propPath: "headline", format: "plain" },
-		{ id: "body", propPath: "body", format: "tiptap" },
-	],
-	imageAdjust: [
-		{ id: "media", srcPropPath: "image.src", altPropPath: "image.alt", cropPropPath: "image.crop" },
-	],
-}
-```
-
-- `propPath` is dot-notated, so nested props work (`image.src`).
-- `format: "plain"` edits a string; `"tiptap"` edits a rich-text
-  document.
-- **Always declare `altPropPath`.** Without it the accessibility rules
-  cannot detect *or* fix missing alt text on your component, which is a
-  silent hole in the author's accessibility panel.
-
-For inline text to work on the canvas, the element rendering that prop
-needs `data-ak-text-target="<id>"`:
+インライン編集可能な内容を持つ要素は `inlineText` ターゲットを宣言し、
+レンダーでテキスト属性を刻みます。
 
 ```tsx
 <h1 data-ak-text-target="headline">{props.headline}</h1>
 ```
 
-## レベル 4 — コンポーザブル
+画像の `src` は必ず `images` 宣言でその alt prop パスと対にしてください。
+それが無いと、アクセシビリティ規則はあなたのコンポーネントの alt
+テキスト欠落を検出することも修正することもできません。
 
-For components that contain other components.
+## このプログラムが意図的に作らなかったもの
 
-```ts
-capabilities: {
-	layoutContainer: true,
-	visualStyle: true,
-	interactions: true,
-	inlineText: [{ id: "title", propPath: "title", format: "plain" }],
-},
-slotMap: {
-	content: { allowedTypes: ["Card", "Text"], reorder: true },
-},
-```
+存在するかどうかを推測せずに済むよう、ここで名指しします。これらは存在
+せず、その不在は見落としではなくスケジュール上の判断です。
 
-- `slotMap` is keyed by your **slot field name**, and constrains what
-  can be dropped into it. Omit `allowedTypes` to accept anything.
-- `interactions: true` lets authors attach triggers and actions to the
-  component.
+- **スロットのオーサリング。** `slots` は metadata 契約の一部ですが、
+  スロットの中身を差し替えたり制約したりするエディタ面は今のところ存在
+  せず、スロットを宣言している同梱パッケージもありません。同梱
+  コンポーネントがそもそもスロットを公開*すべきか*は未解決の
+  プロダクト課題です。本物の children スロットはレイアウト・
+  エクスポート・アクセシビリティに波及します。
+- **画像のクロップとフォーカルポイント。** `images` も同じく契約の一部
+  ですが、画像ターゲットを宣言している同梱パッケージが無いため、置換・
+  クロップ・フォーカルには実装面がありません。`altPropPath` は宣言だけ
+  で済む半分であり、かつアクセシビリティ要件です。画像を持つ
+  コンポーネントには今すぐ宣言してください。
+- **HTML エクスポートのレンダー忠実度。** HTML エクスポータはあなたの
+  コンポーネントをサーバーレンダリング**しません**。コンポーネント型
+  ごとに手書きの emitter を走らせます。12 個の同梱パッケージのうち 9 個
+  にはありますが 3 個にはなく、要素単位のターゲット、オーサリングした
+  クラス名、アニメーションプリセットはその出力に届きません。React
+  エクスポータと本番レンダリングにこの制約はありません。これは「1 つの
+  パイプライン」規則への既知の違反で、独立したプロジェクトとして追跡
+  されています。本ガイドのモデルを適用しても解消しません。
 
-A `slotMap` without `layoutContainer: true` is reported as a warning:
-children can be placed, but the container holding them cannot be laid
-out, which is rarely what the author wanted.
+## 共同編集についての注意
+
+並行マージの粒度は**ノード単位・prop キー単位で、それより細かくは
+なりません。** 2 人の作者が別々のノードにスタイルを当てた場合、双方の
+作業が残ります。2 人が同じノードの別々の prop を編集した場合も双方
+残ります。しかし 2 人が**同じノードの別々のターゲット**にスタイルを
+当てると衝突します。ノードの appearance 全体が 1 つの宣言された prop
+だからです。一方の作者のターゲット編集はまるごと破棄され、しかもどちらが
+残るかは実時間の順序では決まりません。共同編集のワークフローは、ノード内
+のターゲットではなくノードを単位に設計してください。
 
 ## 変わらないこと
 
-- **Legacy components keep working.** A config with no `metadata.editor`
-  is returned by identity when authoring is off, and gets no decorated
-  render when it is on.
-- **Your own `metadata` is untouched.** Component packages already set
-  `metadata` for their own purposes (`componentName`, `packageName`,
-  `schemaVersion`…). The editor reads only `metadata.editor` and ignores
-  the rest.
-- **A malformed declaration is ignored, not fatal.** If `version` is not
-  `"1"` or `styleTarget` is not one of the three allowed values, the
-  whole block reads as absent. `inspectEditorCapabilities` calls that out
-  specifically, because "declared but thrown away" and "never declared"
-  look identical from the outside and need opposite fixes.
+- **既存のコンポーネントはそのまま動きます。** `metadata.anvilkit.editor`
+  を持たない config はスタイルターゲットを得ないだけで、ネイティブの
+  Puck フィールドの挙動はこれまでと完全に同じです。
+- **あなた自身の `metadata` には手を触れません。** エディタが読むのは
+  `metadata.anvilkit.editor` だけで、そこに置いた他のものはすべて無視
+  します。
+- **不正な宣言は致命的エラーではなく、無視されます。** 正しい形でない
+  宣言はすべて「宣言されたターゲットは無い」と読まれ、スタイルタブは
+  サポートを捏造せず未宣言の状態を表示します。
+  `inspectEditorCapabilities` はこのケースを特に名指しします。
+  「宣言したが捨てられた」と「そもそも宣言していない」は外から見ると
+  同一なのに、必要な修正は正反対だからです。

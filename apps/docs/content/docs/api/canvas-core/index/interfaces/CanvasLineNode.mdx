@@ -1,0 +1,36 @@
+---
+title: "CanvasLineNode"
+description: "@anvilkit/canvas-core · CanvasLineNode"
+---
+
+Defined in: [ir/types.ts:654](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L654)
+
+## Extends
+
+- [`CanvasNodeBase`](CanvasNodeBase.md).[`CanvasStrokeStyle`](CanvasStrokeStyle.md)
+
+## Properties
+
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="arrowend"&gt;&lt;/a&gt; `arrowEnd?` | [`CanvasArrowHead`](../type-aliases/CanvasArrowHead) | - | - | [ir/types.ts:660](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L660) |
+| &lt;a id="arrowstart"&gt;&lt;/a&gt; `arrowStart?` | [`CanvasArrowHead`](../type-aliases/CanvasArrowHead) | - | - | [ir/types.ts:659](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L659) |
+| &lt;a id="blendmode"&gt;&lt;/a&gt; `blendMode?` | `string` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`blendMode`](CanvasNodeBase.md#blendmode) | [ir/types.ts:462](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L462) |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | [`CanvasBounds`](CanvasBounds.md) | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`bounds`](CanvasNodeBase.md#bounds) | [ir/types.ts:458](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L458) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`id`](CanvasNodeBase.md#id) | [ir/types.ts:455](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L455) |
+| &lt;a id="layoutitem"&gt;&lt;/a&gt; `layoutItem?` | [`CanvasLayoutItem`](CanvasLayoutItem.md) | How this node participates in its parent frame's Auto Layout, when that parent has `autoLayout`. Absent — or present but all-default — means the node is an ordinary Flow child at its stored Fixed size. A **non-default** value anywhere in a document makes `layout.auto.v1` a required capability (see `CanvasDocumentCompatibility`), enforced by the `missing-required-capability` invariant. | [`CanvasNodeBase`](CanvasNodeBase.md).[`layoutItem`](CanvasNodeBase.md#layoutitem) | [ir/types.ts:472](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L472) |
+| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `boolean` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`locked`](CanvasNodeBase.md#locked) | [ir/types.ts:461](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L461) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | [`CanvasNodeMeta`](CanvasNodeMeta.md) | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`meta`](CanvasNodeBase.md#meta) | [ir/types.ts:481](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L481) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `string` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`name`](CanvasNodeBase.md#name) | [ir/types.ts:456](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L456) |
+| &lt;a id="opacity"&gt;&lt;/a&gt; `opacity?` | `number` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`opacity`](CanvasNodeBase.md#opacity) | [ir/types.ts:459](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L459) |
+| &lt;a id="points"&gt;&lt;/a&gt; `points` | \[`number`, `number`, `number`, `number`\] | - | - | [ir/types.ts:656](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L656) |
+| &lt;a id="stroke"&gt;&lt;/a&gt; `stroke` | `string` | - | - | [ir/types.ts:657](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L657) |
+| &lt;a id="strokecap"&gt;&lt;/a&gt; `strokeCap?` | [`CanvasStrokeCap`](../type-aliases/CanvasStrokeCap) | - | [`CanvasStrokeStyle`](CanvasStrokeStyle.md).[`strokeCap`](CanvasStrokeStyle.md#strokecap) | [ir/types.ts:590](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L590) |
+| &lt;a id="strokedash"&gt;&lt;/a&gt; `strokeDash?` | `number`[] | SVG-style dash array, in local units. Empty/absent = solid. | [`CanvasStrokeStyle`](CanvasStrokeStyle.md).[`strokeDash`](CanvasStrokeStyle.md#strokedash) | [ir/types.ts:589](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L589) |
+| &lt;a id="strokejoin"&gt;&lt;/a&gt; `strokeJoin?` | [`CanvasStrokeJoin`](../type-aliases/CanvasStrokeJoin) | - | [`CanvasStrokeStyle`](CanvasStrokeStyle.md).[`strokeJoin`](CanvasStrokeStyle.md#strokejoin) | [ir/types.ts:591](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L591) |
+| &lt;a id="strokeopacity"&gt;&lt;/a&gt; `strokeOpacity?` | `number` | Stroke alpha 0..1, independent of node opacity. | [`CanvasStrokeStyle`](CanvasStrokeStyle.md).[`strokeOpacity`](CanvasStrokeStyle.md#strokeopacity) | [ir/types.ts:587](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L587) |
+| &lt;a id="strokewidth"&gt;&lt;/a&gt; `strokeWidth?` | `number` | - | - | [ir/types.ts:658](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L658) |
+| &lt;a id="transform"&gt;&lt;/a&gt; `transform` | [`CanvasTransform`](CanvasTransform.md) | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`transform`](CanvasNodeBase.md#transform) | [ir/types.ts:457](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L457) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"line"` | - | - | [ir/types.ts:655](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L655) |
+| &lt;a id="visible"&gt;&lt;/a&gt; `visible?` | `boolean` | - | [`CanvasNodeBase`](CanvasNodeBase.md).[`visible`](CanvasNodeBase.md#visible) | [ir/types.ts:460](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L460) |
+| &lt;a id="zindex"&gt;&lt;/a&gt; `zIndex?` | `number` | Reserved for future explicit paint-order control — currently unused (C-9). Paint order is entirely determined by each container's `children` array order; no code in `@anvilkit/canvas-core` or `@anvilkit/canvas-editor` reads this field. Optional so callers (including AI-generated payloads) aren't forced to supply a value that has no effect. | [`CanvasNodeBase`](CanvasNodeBase.md).[`zIndex`](CanvasNodeBase.md#zindex) | [ir/types.ts:480](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L480) |

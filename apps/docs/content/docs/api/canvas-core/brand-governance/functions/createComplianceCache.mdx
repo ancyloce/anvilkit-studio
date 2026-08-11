@@ -1,0 +1,26 @@
+---
+title: "createComplianceCache"
+description: "@anvilkit/canvas-core · createComplianceCache"
+---
+
+```ts
+function createComplianceCache(limit?): CanvasComplianceCache;
+```
+
+Defined in: [brand-governance/compliance-cache.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance-cache.ts#L98)
+
+A bounded per-instance result cache.
+
+Bounded because a long editing session touches many instance states and an
+unbounded map is a leak; eviction is insertion-order (oldest first), which is
+adequate because a stale entry costs one rescan rather than a wrong answer.
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `limit` | `number` | `1024` |
+
+## Returns
+
+[`CanvasComplianceCache`](../interfaces/CanvasComplianceCache)

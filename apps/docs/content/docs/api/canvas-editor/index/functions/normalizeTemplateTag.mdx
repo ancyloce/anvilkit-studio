@@ -1,0 +1,24 @@
+---
+title: "normalizeTemplateTag"
+description: "@anvilkit/canvas-editor · normalizeTemplateTag"
+---
+
+```ts
+function normalizeTemplateTag(tag): string;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/templates/template-provider.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-provider.ts#L58)
+
+The one place a tag is turned into its comparable form. Authored tags,
+facet values from the panel, and values a host round-trips through a URL all
+pass through here, so `"Print"`, `" print"`, and `"print"` are one tag.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `tag` | `string` |
+
+## Returns
+
+`string`

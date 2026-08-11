@@ -1,0 +1,15 @@
+---
+title: "CANVAS_ELEMENT_CATEGORIES"
+description: "@anvilkit/canvas-editor · CANVAS_ELEMENT_CATEGORIES"
+---
+
+```ts
+const CANVAS_ELEMENT_CATEGORIES: readonly ["shape", "icon", "line", "frame", "sticker"];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-entry.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L89)
+
+Every category, in the order the panel's tabs should offer them. Exported as
+data (not just as a type) because `cp3-002` asserts category coverage over it
+and `cp3-003` renders a control from it — two consumers of one list, so
+neither restates the union and drifts from it.

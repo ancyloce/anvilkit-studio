@@ -1,0 +1,23 @@
+---
+title: "isCapabilityAvailable"
+description: "@anvilkit/canvas-editor · isCapabilityAvailable"
+---
+
+```ts
+function isCapabilityAvailable(context, capability): boolean;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand-governance/effective-policy-context.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/effective-policy-context.ts#L68)
+
+Whether an affordance guarded by `capability` should be offered at all.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `context` | `CanvasBrandPolicyContext` |
+| `capability` | keyof `CanvasBrandCapabilities` |
+
+## Returns
+
+`boolean`

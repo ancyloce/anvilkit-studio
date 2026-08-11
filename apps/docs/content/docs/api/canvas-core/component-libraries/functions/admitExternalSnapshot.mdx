@@ -1,0 +1,32 @@
+---
+title: "admitExternalSnapshot"
+description: "@anvilkit/canvas-core · admitExternalSnapshot"
+---
+
+```ts
+function admitExternalSnapshot(envelope, options): Promise<CanvasAdmissionResult<CanvasExternalComponentSnapshot>>;
+```
+
+Defined in: [component-libraries/admission.ts:275](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L275)
+
+Admit an untrusted envelope, or explain why not.
+
+Resolves a result rather than throwing: this runs in an Editor effect against a
+network response, where every rejection is an expected outcome that the UI
+surfaces by `code` (T-007 acceptance: "never a crash").
+
+Order is load-bearing — strict parse → normalize → bound/graph → canonicalize →
+verify → brand. Verification is **last** so that nothing which failed an earlier
+check can ever have its digest computed, and nothing that passed verification can
+have been mutated afterwards.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `envelope` | `unknown` |
+| `options` | [`AdmitExternalSnapshotOptions`](../interfaces/AdmitExternalSnapshotOptions) |
+
+## Returns
+
+`Promise`\<[`CanvasAdmissionResult`](../type-aliases/CanvasAdmissionResult)\<[`CanvasExternalComponentSnapshot`](../../index/interfaces/CanvasExternalComponentSnapshot)\>\>

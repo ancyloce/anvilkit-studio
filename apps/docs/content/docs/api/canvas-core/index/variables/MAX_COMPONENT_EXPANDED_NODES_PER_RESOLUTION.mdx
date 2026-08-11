@@ -1,0 +1,15 @@
+---
+title: "MAX_COMPONENT_EXPANDED_NODES_PER_RESOLUTION"
+description: "@anvilkit/canvas-core · MAX_COMPONENT_EXPANDED_NODES_PER_RESOLUTION"
+---
+
+```ts
+const MAX_COMPONENT_EXPANDED_NODES_PER_RESOLUTION: 10000 = MAX_DOCUMENT_NODES;
+```
+
+Defined in: [limits.ts:152](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L152)
+
+Ceiling on virtual nodes one resolution pass may expand. Anchored to
+`MAX_DOCUMENT_NODES` — expansion output IS a document-scale node set, and
+beyond that figure the measured budgets no longer apply. Enforced by the
+M2 resolver (placeholder + diagnostic past the cap, never a throw).

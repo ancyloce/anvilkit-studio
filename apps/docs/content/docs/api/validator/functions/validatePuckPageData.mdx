@@ -11,7 +11,7 @@ Defined in: [validator/src/validate-page-payload.ts:68](https://github.com/ancyl
 
 Validate a *complete* Puck page document (`{ root, content, zones? }`) — the
 check a publish must pass before the payload is written to storage. Delegates
-`root.props` to the same PageRootSchema as [validatePageRootProps](validatePageRootProps.md)
+`root.props` to the same [PageRootSchema](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts) as [validatePageRootProps](validatePageRootProps.md)
 and additionally asserts the structural shape the renderer depends on.
 
 ## Parameters

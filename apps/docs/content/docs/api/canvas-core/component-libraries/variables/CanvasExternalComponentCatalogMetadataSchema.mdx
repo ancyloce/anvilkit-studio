@@ -1,0 +1,23 @@
+---
+title: "CanvasExternalComponentCatalogMetadataSchema"
+description: "@anvilkit/canvas-core · CanvasExternalComponentCatalogMetadataSchema"
+---
+
+```ts
+const CanvasExternalComponentCatalogMetadataSchema: ZodObject<{
+  deprecationNotice: ZodOptional<ZodString>;
+  description: ZodOptional<ZodString>;
+  name: ZodOptional<ZodString>;
+  publisher: ZodOptional<ZodString>;
+  releaseNotesUrl: ZodOptional<ZodPipe<ZodString, ZodTransform<string | undefined, string>>>;
+  thumbnailUrl: ZodOptional<ZodPipe<ZodString, ZodTransform<string | undefined, string>>>;
+}, $strict>;
+```
+
+Defined in: [component-libraries/admission.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L85)
+
+Non-authoritative catalog metadata.
+
+**Excluded from the canonical preimage** (TD §5.4/§6.2) — a Provider changing a
+description or thumbnail must not change a component's digest, or every stored
+snapshot would invalidate on a cosmetic catalog edit.

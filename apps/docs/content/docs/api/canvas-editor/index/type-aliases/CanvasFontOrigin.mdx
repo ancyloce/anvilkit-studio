@@ -1,0 +1,24 @@
+---
+title: "CanvasFontOrigin"
+description: "@anvilkit/canvas-editor · CanvasFontOrigin"
+---
+
+```ts
+type CanvasFontOrigin = "brand" | "host" | "default";
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/text/font-catalog.ts:77](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L77)
+
+Which tier an entry came from. Precedence is **brand > host > default**.
+
+The tier is carried by the entry rather than implied by argument order,
+which makes [mergeCatalogs](../functions/mergeCatalogs) associative and impossible to call
+"backwards": `mergeCatalogs(brand, host, defaults)` and
+`mergeCatalogs(defaults, host, brand)` produce the same catalog.
+
+Note that a brand kit's own `BrandFontToken` (`{id?, name, family}`,
+`core/src/brand/types.ts:23`) is NOT a catalog entry — it carries no source
+and no licence, and stays a token end to end (`cp2-004`). The `"brand"` tier
+is for a catalog that *describes* those brand families with real files and a
+licence, so an organisation's licensed cut of a family replaces the default
+catalog's copy of it everywhere, including at export.

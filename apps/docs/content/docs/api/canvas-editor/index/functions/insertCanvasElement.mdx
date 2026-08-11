@@ -1,0 +1,38 @@
+---
+title: "insertCanvasElement"
+description: "@anvilkit/canvas-editor · insertCanvasElement"
+---
+
+```ts
+function insertCanvasElement(
+   ctx, 
+   entry, 
+   options?): string | null;
+```
+
+Defined in: packages/capabilities/canvas/editor/src/actions/element-insert-actions.ts:148
+
+Insert one catalog element into the active page as ONE undo entry, and
+select it.
+
+`options.target` (the pointer) picks the parent: the innermost unlocked,
+visible frame containing it becomes the parent and `options.at` is rebased
+into that frame's local space, so a drop over a frame lands INSIDE it. When
+that frame carries `autoLayout` the child is created with NO
+`layoutItem.positioning` override, which is what makes it a flow member the
+resolver lays out — an absolutely-positioned child would sit on top of the
+stack instead of joining it.
+
+Returns the new node's id, or `null` when there is no active page.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`CanvasStudioContextValue`](../interfaces/CanvasStudioContextValue) |
+| `entry` | [`CanvasElementEntry`](../interfaces/CanvasElementEntry) |
+| `options` | [`CanvasElementInsertOptions`](../interfaces/CanvasElementInsertOptions) |
+
+## Returns
+
+`string` \| `null`

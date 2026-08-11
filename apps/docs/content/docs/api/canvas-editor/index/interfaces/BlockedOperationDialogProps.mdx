@@ -1,0 +1,35 @@
+---
+title: "BlockedOperationDialogProps"
+description: "@anvilkit/canvas-editor · BlockedOperationDialogProps"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/panels/governance/BlockedOperationDialog.tsx:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/BlockedOperationDialog.tsx#L40)
+
+## File
+
+Blocked-operation explanation (plan 0021 T-040).
+
+## What this dialog is allowed to say
+
+The stable deny code, localized. Nothing else. `CanvasPolicyDecision.detail`
+is documented as log-only and can name a provider, a library or an
+administrator — rendering it would turn every denial into an information
+disclosure about the host's governance setup, to a user who by definition is
+not trusted with that operation. `blocked-operation-dialog.test.tsx` asserts
+a decision carrying a hostile `detail` never reaches the DOM.
+
+## Why there is no approval flow
+
+T-040 step 3 is explicit: an optional host deep link, never an approval
+inbox. The editor has no idea who grants an exception or how; a host that
+knows can wire [BlockedOperationDialogProps.onDeepLink](#ondeeplink) and own that
+workflow. Without one the dialog just explains and dismisses.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | [`BlockedOperationCode`](../type-aliases/BlockedOperationCode) | Stable deny code — never a message string. | [packages/capabilities/canvas/editor/src/panels/governance/BlockedOperationDialog.tsx:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/BlockedOperationDialog.tsx#L42) |
+| &lt;a id="onclose"&gt;&lt;/a&gt; `onClose` | () =&gt; `void` | - | [packages/capabilities/canvas/editor/src/panels/governance/BlockedOperationDialog.tsx:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/BlockedOperationDialog.tsx#L49) |
+| &lt;a id="ondeeplink"&gt;&lt;/a&gt; `onDeepLink?` | (`code`) =&gt; `void` | Optional host escape hatch. When present a "Learn more" action is offered and the host receives the same stable code; the editor never renders a URL of its own. | [packages/capabilities/canvas/editor/src/panels/governance/BlockedOperationDialog.tsx:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/BlockedOperationDialog.tsx#L48) |
+| &lt;a id="t"&gt;&lt;/a&gt; `t` | [`CanvasT`](../type-aliases/CanvasT) | - | [packages/capabilities/canvas/editor/src/panels/governance/BlockedOperationDialog.tsx:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/BlockedOperationDialog.tsx#L50) |

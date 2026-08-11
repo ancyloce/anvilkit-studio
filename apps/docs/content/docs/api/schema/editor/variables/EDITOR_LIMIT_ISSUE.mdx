@@ -1,0 +1,15 @@
+---
+title: "EDITOR_LIMIT_ISSUE"
+description: "@anvilkit/schema · EDITOR_LIMIT_ISSUE"
+---
+
+```ts
+const EDITOR_LIMIT_ISSUE: "EDITOR_LIMIT_EXCEEDED" = "EDITOR_LIMIT_EXCEEDED";
+```
+
+Defined in: [editor/primitives.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/primitives.ts#L74)
+
+The message prefix carried by every count/byte limit violation.
+Issues also carry `params: { code, limitKey, limit, actual }` so
+the engine can map them to typed `EDITOR_LIMIT_EXCEEDED` errors
+without string parsing.

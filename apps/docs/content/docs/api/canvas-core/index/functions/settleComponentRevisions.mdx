@@ -1,0 +1,36 @@
+---
+title: "settleComponentRevisions"
+description: "@anvilkit/canvas-core · settleComponentRevisions"
+---
+
+```ts
+function settleComponentRevisions(before, after): CanvasIR;
+```
+
+Defined in: [commands/runtime.ts:2964](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/runtime.ts#L2964)
+
+Bump each touched Source's `revision` exactly once for one applied
+command/batch/transaction (plan 0023 M3-02, LC-PROPAGATE).
+
+"Touched" is detected structurally: mutations are immutable with
+structural sharing, so a definition whose reference survived was not
+edited. A definition whose reference changed while its `revision` stayed
+the same had tree/content edits that no handler versioned — those get the
+single top-level bump. A handler that already managed `revision` itself
+(the registry commands) is skipped, so a mixed batch still increments
+exactly once overall.
+
+Undo/redo route through here like any other application, so undoing a
+Source edit bumps the revision AGAIN (monotonic) — propagation must fire
+for the restored content exactly as it did for the edit.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `before` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `after` | [`CanvasIR`](../interfaces/CanvasIR) |
+
+## Returns
+
+[`CanvasIR`](../interfaces/CanvasIR)

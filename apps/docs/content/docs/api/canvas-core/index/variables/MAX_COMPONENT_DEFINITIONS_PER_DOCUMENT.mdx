@@ -1,0 +1,14 @@
+---
+title: "MAX_COMPONENT_DEFINITIONS_PER_DOCUMENT"
+description: "@anvilkit/canvas-core · MAX_COMPONENT_DEFINITIONS_PER_DOCUMENT"
+---
+
+```ts
+const MAX_COMPONENT_DEFINITIONS_PER_DOCUMENT: 256 = 256;
+```
+
+Defined in: [limits.ts:119](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L119)
+
+Ceiling on Component Sources in one document's `ir.components` Registry.
+A document-local library; generous against real marketing documents while
+keeping a hostile Registry parse bounded. Enforced by `ir/validators.ts`.

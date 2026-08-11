@@ -1,0 +1,76 @@
+---
+title: "EditorAnnotationsSchema"
+description: "@anvilkit/schema · EditorAnnotationsSchema"
+---
+
+```ts
+const EditorAnnotationsSchema: z.ZodType<EditorAnnotations>;
+```
+
+Defined in: [editor/appearance.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/appearance.ts#L76)
+
+## File
+
+Barrel for `@anvilkit/schema/editor` — versioned zod
+validation, compaction, migration, and canonical serialization for
+the AnvilKit Core visual editor sidecar (DD-0019; PLAN-0020
+CORE-P0-005A..F, CORE-P0-006).
+
+Resolves through the package's existing `./*` wildcard export as
+`dist/editor.js`; deep module imports
+(`@anvilkit/schema/editor/<module>`) resolve the same way.
+
+Types come from `@anvilkit/contracts/editor`; this package owns the
+**runtime** validation surface. Object schemas are `looseObject`
+throughout: unknown keys are preserved for forward compatibility
+and compaction never drops them.
+
+---
+
+TOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE
+(PLAN-0026 §5; PLAN-0028 `p1-006`).
+
+The canonical document has no version dimension. Until the store
+migration runs in P7 (`p7-002`), a document written before
+finalization may still carry a stale `version` key. These schemas
+accept it — but only as *generic unknown-key preservation* falling
+out of `looseObject`, never as a version branch. Nothing here reads
+a `version` key to decide how to parse, and nothing may start:
+a version branch in this directory is the sidecar returning under a
+new name.
+
+The window CLOSES in `p7-002`. When that task lands, this paragraph
+and the tolerance it describes are removed together. Do not read
+this as licence to keep supporting two document shapes.
+
+`appearance.ts` — the canonical carrier — is already version-free
+(`p1-001`). Seven `z.literal("1")` declarations survive elsewhere in
+`./editor/`, in two groups. Both are deliberate; neither is dead
+vocabulary someone forgot.
+
+GROUP 1 — the legacy `__anvilkit` sidecar, not the canonical
+document. Retained until `p3-009` deletes their last production
+consumer, `packages/runtime/core/src/editor/read-write.ts`:
+
+- `envelope.ts` keeps its literal because `detectAuthoringVersion`
+  is what classifies an `unsupported-major` sidecar into read-only
+  safe mode. That literal is the DD-0019 invariant-9 guard that
+  stops a future-major sidecar being parsed and then overwritten;
+  removing it converts a refusal into silent data loss.
+- `authoring-state.ts` and `node.ts` keep theirs because they
+  validate that same sidecar, which genuinely *is* version 1.
+
+GROUP 2 — `components.ts`, `interactions.ts`, `bindings.ts`,
+`style-definitions.ts`. These *are* canonical document sub-shapes
+and their literals are scheduled to go, but they cannot go from this
+package alone: each schema is annotated `z.ZodType<T>` against a
+contracts interface that still declares `readonly version: "1"`
+(`contracts/src/editor/components.ts:88`, `interactions.ts:105`,
+`bindings.ts:59`, `style-definitions.ts:30`). `p1-002` renamed those
+types but was scoped to renames only. Dropping the literal here
+alone is a hard `TS2322` — verified 2026-08-06 by doing it:
+"Property 'version' is missing ... but required in type 'Binding'".
+Contracts and schema must drop it in one change, together with every
+fresh-object-literal construction site (excess-property checking
+makes each one an error), several of which live in submodules.
+Tracked as a follow-up on `p1-006`; not silently deferred.

@@ -1,0 +1,24 @@
+---
+title: "snapRectFromExtent"
+description: "@anvilkit/canvas-core · snapRectFromExtent"
+---
+
+```ts
+function snapRectFromExtent(extent): SnapRect;
+```
+
+Defined in: [geometry/snap.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/snap.ts#L24)
+
+View a world-space extent (e.g. a resolved layout record's `worldAabb`) as a
+[SnapRect](../interfaces/SnapRect), so snap/align/distribute can consume resolved geometry
+without every call site hand-rolling the conversion.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `extent` | [`BoundsExtent`](../interfaces/BoundsExtent) |
+
+## Returns
+
+[`SnapRect`](../interfaces/SnapRect)

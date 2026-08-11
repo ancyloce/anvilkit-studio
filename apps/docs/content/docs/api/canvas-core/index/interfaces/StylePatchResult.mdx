@@ -1,0 +1,14 @@
+---
+title: "StylePatchResult"
+description: "@anvilkit/canvas-core · StylePatchResult"
+---
+
+Defined in: [commands/apply-style.ts:128](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L128)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="applied"&gt;&lt;/a&gt; `applied` | keyof [`CanvasNodeStyle`](CanvasNodeStyle.md)[] | Style keys the target kind accepted. | [commands/apply-style.ts:132](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L132) |
+| &lt;a id="ignored"&gt;&lt;/a&gt; `ignored` | keyof [`CanvasNodeStyle`](CanvasNodeStyle.md)[] | Style keys the target kind cannot receive (FR-121: reported, not blocking). | [commands/apply-style.ts:134](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L134) |
+| &lt;a id="patch"&gt;&lt;/a&gt; `patch` | `Record`\&lt;`string`, `unknown`\&gt; | node.update-shaped patch for the target node (empty = nothing to apply). | [commands/apply-style.ts:130](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/apply-style.ts#L130) |

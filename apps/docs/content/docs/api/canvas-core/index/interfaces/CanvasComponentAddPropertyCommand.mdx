@@ -1,0 +1,21 @@
+---
+title: "CanvasComponentAddPropertyCommand"
+description: "@anvilkit/canvas-core · CanvasComponentAddPropertyCommand"
+---
+
+Defined in: [commands/types.ts:383](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L383)
+
+Expose a component property (M3-06, LC-CREATE-003). Rejected on write when
+the Property ID already exists on this definition, the target node is not
+in the Source tree, or the target kind is incompatible (§10.1) — the same
+table `validateComponentGraph` applies on read.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="componentid"&gt;&lt;/a&gt; `componentId` | `string` | - | [commands/types.ts:385](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L385) |
+| &lt;a id="index"&gt;&lt;/a&gt; `index?` | `number` | Insertion index into `properties` (append when omitted) — gives remove's inverse an exact slot. | [commands/types.ts:388](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L388) |
+| &lt;a id="property"&gt;&lt;/a&gt; `property` | [`CanvasComponentProperty`](../type-aliases/CanvasComponentProperty) | - | [commands/types.ts:386](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L386) |
+| &lt;a id="revision"&gt;&lt;/a&gt; `revision?` | `number` | Write this exact revision instead of `prior + 1` (inverse convention). | [commands/types.ts:390](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L390) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"component.add-property"` | - | [commands/types.ts:384](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L384) |

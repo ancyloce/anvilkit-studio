@@ -1,0 +1,20 @@
+---
+title: "CanvasComponentReferenceIndex"
+description: "@anvilkit/canvas-core · CanvasComponentReferenceIndex"
+---
+
+Defined in: [components/graph.ts:222](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/graph.ts#L222)
+
+Where every component is referenced FROM (plan 0023 M3-08, LC-DELETE):
+page instances and Source-tree instances, keyed by the referenced
+component id. The read `component.delete` guards on and "detach all and
+delete" plans over. Entry order follows `walkDocument` — pages in
+document order, then definitions in sorted id order — so messages and
+plans built from it are byte-stable.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="pageinstancesbycomponent"&gt;&lt;/a&gt; `pageInstancesByComponent` | `readonly` | `ReadonlyMap`\&lt;`string`, readonly [`CanvasComponentPageInstanceRef`](CanvasComponentPageInstanceRef.md)[]\&gt; | [components/graph.ts:223](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/graph.ts#L223) |
+| &lt;a id="sourcedependenciesbycomponent"&gt;&lt;/a&gt; `sourceDependenciesByComponent` | `readonly` | `ReadonlyMap`\&lt;`string`, readonly [`CanvasComponentSourceInstanceRef`](CanvasComponentSourceInstanceRef.md)[]\&gt; | [components/graph.ts:227](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/graph.ts#L227) |

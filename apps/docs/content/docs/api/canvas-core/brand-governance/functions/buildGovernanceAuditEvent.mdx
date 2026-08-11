@@ -1,0 +1,27 @@
+---
+title: "buildGovernanceAuditEvent"
+description: "@anvilkit/canvas-core · buildGovernanceAuditEvent"
+---
+
+```ts
+function buildGovernanceAuditEvent(input): CanvasGovernanceAuditEvent;
+```
+
+Defined in: [brand-governance/audit.ts:114](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/audit.ts#L114)
+
+Build an audit record with the identifiers already hashed.
+
+The only supported way to construct one: taking the raw ids and hashing here
+means a caller cannot accidentally pass a plaintext document id into a field
+named `...Hash`. Optional fields are omitted rather than set to `undefined`,
+so a serialized record has no empty keys (INV-10's convention).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`BuildGovernanceAuditEventInput`](../interfaces/BuildGovernanceAuditEventInput) |
+
+## Returns
+
+[`CanvasGovernanceAuditEvent`](../interfaces/CanvasGovernanceAuditEvent)

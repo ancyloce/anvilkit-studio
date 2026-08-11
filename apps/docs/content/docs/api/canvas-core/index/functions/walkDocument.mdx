@@ -1,0 +1,32 @@
+---
+title: "walkDocument"
+description: "@anvilkit/canvas-core · walkDocument"
+---
+
+```ts
+function walkDocument(ir, visit): void;
+```
+
+Defined in: [ir/walkers.ts:132](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/walkers.ts#L132)
+
+Walk EVERY node tree a document owns: each page's tree (document order),
+then each Component Source tree in sorted component-id order (plan 0023
+TD-001 — deterministic, so issue ordering built on this walk is
+byte-stable). Each root gets its own `MAX_TREE_DEPTH` budget, the same
+hostile-depth guard `walk` applies.
+
+`walk`/`walkPage` remain pages-only BY CONTRACT and are untouched —
+page-scoped consumers (serializers, per-page intent checks) must not
+silently change meaning. A consumer that needs Registry coverage opts in
+by calling this instead.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `visit` | [`WalkDocumentVisitor`](../type-aliases/WalkDocumentVisitor) |
+
+## Returns
+
+`void`

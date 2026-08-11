@@ -1,0 +1,41 @@
+---
+title: "generateGovernedComplianceReport"
+description: "@anvilkit/canvas-core · generateGovernedComplianceReport"
+---
+
+```ts
+function generateGovernedComplianceReport(
+   document, 
+   brandKit, 
+   context): BrandComplianceReport;
+```
+
+Defined in: [brand-governance/compliance.ts:251](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance.ts#L251)
+
+The governed report: the shipped scan, enriched with component context.
+
+## Why this is a new entry point rather than a third parameter
+
+T-042 step 1 asks for an optional third `context` parameter on
+`generateBrandComplianceReport`. That is not implementable: the shipped
+function lives in `brand/` at rank 4 and `CanvasBrandPolicyContext` is
+declared here at rank 5, so the parameter would be an upward import the
+layering gate forbids.
+
+The intent survives intact, and arguably better: the two-argument form keeps
+working **untouched** (not merely "keeps working"), governance is opt-in by
+calling a different function, and no rank-4 module gains a governance
+dependency. Callers that want the component-aware report import from
+`@anvilkit/canvas-core/brand-governance`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `document` | [`CanvasIR`](../../index/interfaces/CanvasIR) |
+| `brandKit` | [`BrandKitDefinition`](../../index/interfaces/BrandKitDefinition) |
+| `context` | [`CanvasBrandPolicyContext`](../interfaces/CanvasBrandPolicyContext) |
+
+## Returns
+
+[`BrandComplianceReport`](../../index/interfaces/BrandComplianceReport)

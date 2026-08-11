@@ -1,0 +1,26 @@
+---
+title: "resolveDefinitionVariant"
+description: "@anvilkit/canvas-core · resolveDefinitionVariant"
+---
+
+```ts
+function resolveDefinitionVariant(definition, selection): 
+  | CanvasComponentVariantResolution
+  | undefined;
+```
+
+Defined in: [components/variant-resolution.ts:310](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/variant-resolution.ts#L310)
+
+Convenience: resolve against whatever variant set a definition carries.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `definition` | [`CanvasComponentDefinition`](../interfaces/CanvasComponentDefinition) |
+| `selection` | `Readonly`\&lt;`Record`\&lt;`string`, `string`\&gt;\&gt; \| `undefined` |
+
+## Returns
+
+  \| [`CanvasComponentVariantResolution`](../interfaces/CanvasComponentVariantResolution)
+  \| `undefined`

@@ -1,0 +1,37 @@
+---
+title: "responsiveValueSchema"
+description: "@anvilkit/schema · responsiveValueSchema"
+---
+
+```ts
+function responsiveValueSchema<T>(value): ZodObject<{
+  base: ZodOptional<T>;
+  overrides: ZodOptional<ZodRecord<ZodString, ZodNullable<T>>>;
+}, $loose>;
+```
+
+Defined in: [editor/primitives.ts:107](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/primitives.ts#L107)
+
+Build a `ResponsiveValue<T>` schema around a value schema
+(DD-0019 §9.1). Override entries admit `null` on parse — `null`
+clears the local override and resumes inheritance; compaction
+removes it and canonical state never persists it.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* `ZodType`\&lt;`unknown`, `unknown`, `$ZodTypeInternals`\&lt;`unknown`, `unknown`\&gt;\&gt; |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `T` |
+
+## Returns
+
+`ZodObject`\<\{
+  `base`: `ZodOptional`\<`T`\>;
+  `overrides`: `ZodOptional`\<`ZodRecord`\<`ZodString`, `ZodNullable`\<`T`\>\>\>;
+\}, `$loose`\>

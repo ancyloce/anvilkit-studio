@@ -1,0 +1,62 @@
+---
+title: "CanvasFontSource"
+description: "@anvilkit/canvas-editor · CanvasFontSource"
+---
+
+```ts
+type CanvasFontSource = 
+  | {
+  css: string;
+  files?: readonly CanvasFontFile[];
+  kind: "css";
+}
+  | {
+  files: readonly CanvasFontFile[];
+  kind: "files";
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/text/font-catalog.ts:143](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L143)
+
+How a family is obtained, as a discriminated union so a consumer narrows on
+`source.kind` without writing a type guard.
+
+- `"css"` — a stylesheet that declares the family's `@font-face` rules. This
+  is the default catalog's shape (`cp2-002` ships metadata, not bytes).
+- `"files"` — per-face files the host serves or bundles itself.
+
+A `"css"` source MAY also declare `files`. That is not redundancy: a
+stylesheet URL is not a usable `@font-face` `src`, so export would otherwise
+be impossible for exactly the entries the default catalog is made of.
+`files` is what `cp2-006` reads; `css` is what the picker loads. Both
+variants expose `files`, so `source.files ?? []` reads it with no narrowing
+at all — narrowing is for the *loading* decision, which genuinely differs.
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  css: string;
+  files?: readonly CanvasFontFile[];
+  kind: "css";
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `css` | `string` | Stylesheet URL declaring the family's `@font-face` rules. | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:147](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L147) |
+| `files?` | readonly [`CanvasFontFile`](../interfaces/CanvasFontFile)[] | Per-face files for export; absent means this family cannot be embedded. | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:149](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L149) |
+| `kind` | `"css"` | - | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L145) |
+
+***
+
+### Type Literal
+
+```ts
+{
+  files: readonly CanvasFontFile[];
+  kind: "files";
+}
+```

@@ -1,0 +1,24 @@
+---
+title: "CanvasCanonicalizationErrorCode"
+description: "@anvilkit/canvas-core · CanvasCanonicalizationErrorCode"
+---
+
+```ts
+type CanvasCanonicalizationErrorCode = 
+  | "non-finite-number"
+  | "unsupported-type"
+  | "cyclic-reference"
+  | "depth-exceeded"
+  | "duplicate-key-after-normalization";
+```
+
+Defined in: [component-libraries/errors.ts:138](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/errors.ts#L138)
+
+Why a payload has no canonical form.
+
+Every member describes an input that would otherwise produce a digest that is
+either non-deterministic or ambiguous — i.e. two different payloads hashing to
+the same bytes, or one payload hashing differently on two runs. Canonicalizing
+such a payload is worse than refusing it, because the failure would surface
+much later as an integrity mismatch on a document that was never actually
+tampered with.

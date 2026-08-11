@@ -1,0 +1,28 @@
+---
+title: "validateComponentVariantSet"
+description: "@anvilkit/canvas-core · validateComponentVariantSet"
+---
+
+```ts
+function validateComponentVariantSet(set, properties?): readonly CanvasComponentVariantIssue[];
+```
+
+Defined in: [components/variant-resolution.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/variant-resolution.ts#L63)
+
+Validate a variant set against the definition that carries it.
+
+Reports every issue rather than throwing on the first: a definition arriving
+from a Provider is validated once, and an author fixing it wants the whole
+list. Ordering is deterministic (axes then variants, both in declared order)
+so a diagnostic diff is stable.
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `set` | [`CanvasComponentVariantSet`](../interfaces/CanvasComponentVariantSet) | `undefined` |
+| `properties` | readonly [`CanvasComponentProperty`](../type-aliases/CanvasComponentProperty)[] | `[]` |
+
+## Returns
+
+readonly [`CanvasComponentVariantIssue`](../interfaces/CanvasComponentVariantIssue)[]

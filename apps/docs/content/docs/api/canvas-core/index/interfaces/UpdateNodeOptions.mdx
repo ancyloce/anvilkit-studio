@@ -1,0 +1,29 @@
+---
+title: "UpdateNodeOptions"
+description: "@anvilkit/canvas-core · UpdateNodeOptions"
+---
+
+Defined in: [ir/mutations.ts:530](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L530)
+
+Restricts a mutation to one tree — a page's, or a Component Source's
+(plan 0023 M3-01, LC-CMD). Absent = every page, the pre-component
+behavior, so every existing call site keeps its exact semantics.
+
+## Extends
+
+- [`ScopedMutationOptions`](ScopedMutationOptions.md)
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* [`CanvasNodeKind`](../type-aliases/CanvasNodeKind) |
+
+## Properties
+
+| Property | Type | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | - | [ir/mutations.ts:532](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L532) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [`ScopedMutationOptions`](ScopedMutationOptions.md).[`location`](ScopedMutationOptions.md#location) | [ir/mutations.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L96) |
+| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | [`ScopedMutationOptions`](ScopedMutationOptions.md).[`now`](ScopedMutationOptions.md#now) | [ir/mutations.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L44) |
+| &lt;a id="patch"&gt;&lt;/a&gt; `patch` | `Partial`\&lt;`Omit`\&lt;[`CanvasNodeByKind`](../type-aliases/CanvasNodeByKind)\&lt;`K`\&gt;, `"id"` \| `"type"`\&gt;\&gt; | - | [ir/mutations.ts:533](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L533) |

@@ -1,0 +1,100 @@
+---
+title: "Paint"
+description: "@anvilkit/contracts · Paint"
+---
+
+```ts
+type Paint = 
+  | {
+  kind: "none";
+}
+  | {
+  color: TokenOrLiteral<CssColor>;
+  kind: "solid";
+}
+  | {
+  angle: number;
+  kind: "linear-gradient";
+  stops: readonly GradientStop[];
+}
+  | {
+  fit?: "cover" | "contain" | "fill" | "none" | "scale-down";
+  kind: "image";
+  position?: {
+     x: number;
+     y: number;
+  };
+  src: string;
+};
+```
+
+Defined in: [editor/values.ts:166](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L166)
+
+Fill paint (P0 set: solid, linear gradient, image — DD-0019 §11.5).
+Image `src` accepts host asset references as well as URLs; raw-URL
+acceptance is policy-gated (`EditorPolicies.allowRawUrls`), enforced
+at schema-validation time, not encoded in the type.
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  kind: "none";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  color: TokenOrLiteral<CssColor>;
+  kind: "solid";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  angle: number;
+  kind: "linear-gradient";
+  stops: readonly GradientStop[];
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `angle` | `number` | Gradient angle in degrees. | [editor/values.ts:172](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L172) |
+| `kind` | `"linear-gradient"` | - | [editor/values.ts:170](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L170) |
+| `stops` | readonly [`GradientStop`](../interfaces/GradientStop)[] | - | [editor/values.ts:173](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L173) |
+
+***
+
+### Type Literal
+
+```ts
+{
+  fit?: "cover" | "contain" | "fill" | "none" | "scale-down";
+  kind: "image";
+  position?: {
+     x: number;
+     y: number;
+  };
+  src: string;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `fit?` | `"cover"` \| `"contain"` \| `"fill"` \| `"none"` \| `"scale-down"` | - | [editor/values.ts:178](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L178) |
+| `kind` | `"image"` | - | [editor/values.ts:176](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L176) |
+| `position?` | \{ `x`: `number`; `y`: `number`; \} | Normalized 0–1 focal position. | [editor/values.ts:180](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L180) |
+| `position.x` | `number` | - | [editor/values.ts:180](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L180) |
+| `position.y` | `number` | - | [editor/values.ts:180](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L180) |
+| `src` | `string` | - | [editor/values.ts:177](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L177) |

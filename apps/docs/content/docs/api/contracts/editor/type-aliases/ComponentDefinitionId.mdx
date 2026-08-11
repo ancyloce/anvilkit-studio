@@ -1,0 +1,14 @@
+---
+title: "ComponentDefinitionId"
+description: "@anvilkit/contracts · ComponentDefinitionId"
+---
+
+```ts
+type ComponentDefinitionId = string;
+```
+
+Defined in: [editor/components.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L21)
+
+Component definition identifier: opaque, non-empty, caller-generated
+(`crypto.randomUUID()` at the call site — reducers never generate
+IDs), unique within the document, stable across revisions.

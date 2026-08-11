@@ -1,0 +1,46 @@
+---
+title: "EditorSelectionReader"
+description: "@anvilkit/core · EditorSelectionReader"
+---
+
+Defined in: [runtime/core/src/types/editor-api.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L42)
+
+Read-only selection projection for plugins (no mutation surface).
+
+## Methods
+
+### getState()
+
+```ts
+getState(): EditorSelectionState;
+```
+
+Defined in: [runtime/core/src/types/editor-api.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L44)
+
+The current selection snapshot (DD-0019 §10.6).
+
+#### Returns
+
+`EditorSelectionState`
+
+***
+
+### subscribe()
+
+```ts
+subscribe(listener): () => void;
+```
+
+Defined in: [runtime/core/src/types/editor-api.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L46)
+
+Subscribe to selection changes. Returns an unsubscribe fn.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `listener` | (`state`) =&gt; `void` |
+
+#### Returns
+
+() => `void`

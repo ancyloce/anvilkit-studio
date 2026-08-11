@@ -1,0 +1,28 @@
+---
+title: "validateSemanticKeys"
+description: "@anvilkit/canvas-core · validateSemanticKeys"
+---
+
+```ts
+function validateSemanticKeys(properties): readonly CanvasSemanticKeyIssue[];
+```
+
+Defined in: [component-libraries/compatibility.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/compatibility.ts#L70)
+
+Validate the semantic keys declared by one definition.
+
+Uniqueness is enforced **per property kind**, not globally: a `text` and an
+`image` property may legitimately share the key `card:hero` because they
+describe the same slot in different media, and migration matches on
+(key, kind) anyway. Two `text` properties sharing a key is ambiguous and is
+rejected.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `properties` | readonly [`CanvasComponentProperty`](../../index/type-aliases/CanvasComponentProperty)[] |
+
+## Returns
+
+readonly [`CanvasSemanticKeyIssue`](../interfaces/CanvasSemanticKeyIssue)[]

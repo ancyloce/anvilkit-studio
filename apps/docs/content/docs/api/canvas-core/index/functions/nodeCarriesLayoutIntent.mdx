@@ -1,0 +1,32 @@
+---
+title: "nodeCarriesLayoutIntent"
+description: "@anvilkit/canvas-core · nodeCarriesLayoutIntent"
+---
+
+```ts
+function nodeCarriesLayoutIntent(node): boolean;
+```
+
+Defined in: [ir/invariants.ts:117](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L117)
+
+Does this node carry layout intent that a reader must understand
+`layout.auto.v1` to honour?
+
+A `layoutItem` whose every field is absent or at its default (`flow` /
+`fixed`) is semantically identical to no `layoutItem` at all, so it does
+NOT make the capability required — otherwise a normalizer that writes an
+empty record would silently make a plain document layout-bearing.
+
+Exported (T-M3-02) so the SVG serializer's `LAYOUT_UNRESOLVED` detection
+shares this exact predicate — a second copy would let "capability required"
+and "resolution required" drift apart, and they are the same question.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `node` | [`CanvasNode`](../type-aliases/CanvasNode) |
+
+## Returns
+
+`boolean`

@@ -1,0 +1,47 @@
+---
+title: "CanvasRectNodeSchema"
+description: "@anvilkit/canvas-core · CanvasRectNodeSchema"
+---
+
+```ts
+const CanvasRectNodeSchema: ZodObject<{
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  cornerRadii: ZodOptional<ZodObject<{
+     bottomLeft: ZodNumber;
+     bottomRight: ZodNumber;
+     topLeft: ZodNumber;
+     topRight: ZodNumber;
+  }, $loose>>;
+  effects: ZodOptional<ZodArray<ZodType<CanvasEffect, unknown, $ZodTypeInternals<CanvasEffect, unknown>>>>;
+  fill: ZodOptional<ZodType<CanvasFill, unknown, $ZodTypeInternals<CanvasFill, unknown>>>;
+  id: ZodString;
+  layoutItem: ZodOptional<ZodType<CanvasLayoutItem, unknown, $ZodTypeInternals<CanvasLayoutItem, unknown>>>;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  radius: ZodOptional<ZodNumber>;
+  shadow: ZodOptional<ZodType<CanvasShadow, unknown, $ZodTypeInternals<CanvasShadow, unknown>>>;
+  stroke: ZodOptional<ZodString>;
+  strokeCap: ZodOptional<ZodEnum<{
+     butt: "butt";
+     round: "round";
+     square: "square";
+  }>>;
+  strokeDash: ZodOptional<ZodArray<ZodNumber>>;
+  strokeJoin: ZodOptional<ZodEnum<{
+     bevel: "bevel";
+     miter: "miter";
+     round: "round";
+  }>>;
+  strokeOpacity: ZodOptional<ZodNumber>;
+  strokeWidth: ZodOptional<ZodNumber>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"rect">;
+  visible: ZodOptional<ZodBoolean>;
+  zIndex: ZodOptional<ZodNumber>;
+}, $loose>;
+```
+
+Defined in: [ir/validators.ts:430](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L430)

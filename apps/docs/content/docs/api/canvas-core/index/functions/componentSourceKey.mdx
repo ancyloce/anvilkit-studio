@@ -1,0 +1,35 @@
+---
+title: "componentSourceKey"
+description: "@anvilkit/canvas-core · componentSourceKey"
+---
+
+```ts
+function componentSourceKey(source): string;
+```
+
+Defined in: [components/definition-lookup.ts:122](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L122)
+
+A stable identity for one Source, used as the cycle-guard stack entry and as
+the component component of a cache key.
+
+Namespaced by kind so a local component and an external one that happen to
+share an id can never be mistaken for each other — without the prefix, a
+document with a local `button` and a library `button` would produce a false
+cycle or a false cache hit.
+
+For an external Source the key embeds `integrity`, which is what makes cache
+entries version-exact: a republished version with different bytes has a
+different digest, hence a different key, hence no stale reuse. This is why an
+external entry does NOT key on the definition's `revision` the way a local
+one does — `revision` is an author-controlled counter inside the snapshot and
+two distinct versions may well share one.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `source` | [`CanvasComponentSourceRef`](../type-aliases/CanvasComponentSourceRef) |
+
+## Returns
+
+`string`

@@ -1,0 +1,81 @@
+---
+title: "CanvasComponentInstanceNodeSchema"
+description: "@anvilkit/canvas-core · CanvasComponentInstanceNodeSchema"
+---
+
+```ts
+const CanvasComponentInstanceNodeSchema: ZodPipe<ZodObject<{
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  componentId: ZodOptional<ZodString>;
+  id: ZodString;
+  layoutItem: ZodOptional<ZodType<CanvasLayoutItem, unknown, $ZodTypeInternals<CanvasLayoutItem, unknown>>>;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  overrides: ZodOptional<ZodRecord<ZodString, ZodType<CanvasComponentOverride, unknown, $ZodTypeInternals<CanvasComponentOverride, unknown>>>>;
+  source: ZodOptional<ZodType<CanvasComponentSourceRef, unknown, $ZodTypeInternals<CanvasComponentSourceRef, unknown>>>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"component-instance">;
+  variantSelection: ZodOptional<ZodRecord<ZodString, ZodString>>;
+  visible: ZodOptional<ZodBoolean>;
+  zIndex: ZodOptional<ZodNumber>;
+}, $loose>, ZodTransform<{
+  blendMode?: string;
+  bounds: CanvasBounds;
+  id: string;
+  layoutItem?: CanvasLayoutItem;
+  locked?: boolean;
+  meta?: CanvasNodeMeta;
+  name?: string;
+  opacity?: number;
+  overrides?: Record<string, CanvasComponentOverride>;
+  source: CanvasComponentSourceRef;
+  transform: CanvasTransform;
+  type: "component-instance";
+  variantSelection?: Record<string, string>;
+  visible?: boolean;
+  zIndex?: number;
+}, {
+[key: string]: unknown;
+  blendMode?: string;
+  bounds: CanvasBounds;
+  componentId?: string;
+  id: string;
+  layoutItem?: CanvasLayoutItem;
+  locked?: boolean;
+  meta?: CanvasNodeMeta;
+  name?: string;
+  opacity?: number;
+  overrides?: Record<string, CanvasComponentOverride>;
+  source?: CanvasComponentSourceRef;
+  transform: CanvasTransform;
+  type: "component-instance";
+  variantSelection?: Record<string, string>;
+  visible?: boolean;
+  zIndex?: number;
+}>>;
+```
+
+Defined in: [ir/validators.ts:823](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L823)
+
+The `component-instance` member of BOTH node unions.
+
+## The legacy `componentId` migration lives here, not in `CANVAS_IR_MIGRATIONS`
+
+PRD 0015 shipped instances carrying a bare `componentId`, and it shipped them
+**at IR v3** — the same version this build writes. `CANVAS_IR_MIGRATIONS` is
+keyed by version and `migrateCanvasIR` short-circuits when a document is
+already current, so a `2 -> 3` step would never see those documents. A
+version-keyed migration is simply the wrong instrument for a shape change
+that does not cross a version boundary.
+
+Normalizing in the schema instead means every path that parses IR converges
+on the canonical shape with no per-caller opt-in: `migrateCanvasIR`, a bare
+`CanvasIRSchema.parse`, the collab `decodeCanvasIR` path, and
+`instantiateTemplate` all inherit it from one implementation.
+
+It is idempotent by construction — an already-canonical node takes the first
+branch and is returned unchanged — and it preserves unknown keys, because the
+object is `looseObject` and the transform spreads the parsed rest (CON-5).

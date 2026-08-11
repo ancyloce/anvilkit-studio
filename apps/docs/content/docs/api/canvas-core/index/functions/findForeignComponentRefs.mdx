@@ -1,0 +1,26 @@
+---
+title: "findForeignComponentRefs"
+description: "@anvilkit/canvas-core · findForeignComponentRefs"
+---
+
+```ts
+function findForeignComponentRefs(nodes, registry): readonly CanvasForeignComponentRef[];
+```
+
+Defined in: [component-ops/clipboard.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-ops/clipboard.ts#L30)
+
+Instance nodes in `nodes` (a clipboard payload's roots, pre-paste) whose
+`componentId` does not resolve in `registry`. Empty result = safe to paste
+as-is; non-empty = the caller must cancel or flatten, per LC-DOCFLOW's
+"never silently create a broken reference".
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `nodes` | readonly [`CanvasNode`](../type-aliases/CanvasNode)[] |
+| `registry` | \| `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasComponentDefinition`](../interfaces/CanvasComponentDefinition)\&gt;\&gt; \| `undefined` |
+
+## Returns
+
+readonly [`CanvasForeignComponentRef`](../interfaces/CanvasForeignComponentRef)[]

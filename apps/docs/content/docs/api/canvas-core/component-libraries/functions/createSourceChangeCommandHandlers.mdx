@@ -1,0 +1,38 @@
+---
+title: "createSourceChangeCommandHandlers"
+description: "@anvilkit/canvas-core · createSourceChangeCommandHandlers"
+---
+
+```ts
+function createSourceChangeCommandHandlers(): readonly [{
+  apply: (ir, cmd, options) => CommandApplyResult<CanvasComponentRevertSourceChangeCommand>;
+  type: "component-instance.update-source";
+}, {
+  apply: (ir, cmd, options) => CommandApplyResult<CanvasComponentRevertSourceChangeCommand>;
+  type: "component-instance.swap-source";
+}, {
+  apply: (ir, cmd, options) => CommandApplyResult<
+     | CanvasComponentUpdateSourceCommand
+    | CanvasComponentSwapSourceCommand>;
+  type: "component-instance.revert-source-change";
+}];
+```
+
+Defined in: [component-libraries/commands/update-source.ts:365](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/update-source.ts#L365)
+
+The three handlers, for registration through `createCanvasRuntime`.
+
+## Returns
+
+readonly \[\{
+  `apply`: (`ir`, `cmd`, `options`) => [`CommandApplyResult`](../../index/interfaces/CommandApplyResult)\<[`CanvasComponentRevertSourceChangeCommand`](../interfaces/CanvasComponentRevertSourceChangeCommand)\>;
+  `type`: `"component-instance.update-source"`;
+\}, \{
+  `apply`: (`ir`, `cmd`, `options`) => [`CommandApplyResult`](../../index/interfaces/CommandApplyResult)\<[`CanvasComponentRevertSourceChangeCommand`](../interfaces/CanvasComponentRevertSourceChangeCommand)\>;
+  `type`: `"component-instance.swap-source"`;
+\}, \{
+  `apply`: (`ir`, `cmd`, `options`) => [`CommandApplyResult`](../../index/interfaces/CommandApplyResult)\<
+     \| [`CanvasComponentUpdateSourceCommand`](../interfaces/CanvasComponentUpdateSourceCommand)
+    \| [`CanvasComponentSwapSourceCommand`](../interfaces/CanvasComponentSwapSourceCommand)\&gt;;
+  `type`: `"component-instance.revert-source-change"`;
+\}\]

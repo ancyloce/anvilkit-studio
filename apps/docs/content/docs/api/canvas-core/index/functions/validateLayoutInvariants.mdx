@@ -1,0 +1,29 @@
+---
+title: "validateLayoutInvariants"
+description: "@anvilkit/canvas-core · validateLayoutInvariants"
+---
+
+```ts
+function validateLayoutInvariants(ir): CanvasLayoutIssue[];
+```
+
+Defined in: [layout/validate.ts:235](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/validate.ts#L235)
+
+Validate Auto Layout semantics across a document (TD §6.2, level 3).
+
+Pure and read-only; never throws for a malformed-but-schema-valid document
+— malformations are reported as issues (use [assertLayoutInvariants](assertLayoutInvariants.md)
+for a throwing variant). Runs a single `walk` over the document.
+
+Issues come back in the fully specified TD §14 order, so the output is
+byte-stable across runs and safe to snapshot.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+
+## Returns
+
+[`CanvasLayoutIssue`](../interfaces/CanvasLayoutIssue)[]

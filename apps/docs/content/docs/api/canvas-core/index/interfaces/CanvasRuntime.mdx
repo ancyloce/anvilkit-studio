@@ -1,0 +1,22 @@
+---
+title: "CanvasRuntime"
+description: "@anvilkit/canvas-core · CanvasRuntime"
+---
+
+Defined in: [extensions/canvas-runtime.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L69)
+
+The resolved runtime = built-ins + extensions. With NO extension node kinds,
+`nodeSchema`/`irSchema` are the exact static module schemas (identity-equal),
+so the zero-extension runtime is behaviourally identical to today.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="apply"&gt;&lt;/a&gt; `apply` | `readonly` | \&lt;`C`\&gt;(`ir`, `cmd`, `options?`) =&gt; [`CommandApplyResult`](CommandApplyResult.md)\&lt;[`CanvasCommand`](../type-aliases/CanvasCommand) \| `C`\&gt; | Apply a command: built-in types go to the core `applyCommand` (and cannot be shadowed by an extension); custom types dispatch to their registered handler. Throws for an unknown type with no handler. Generic over the command type `C` (P0-4), defaulted to the built-in `CanvasCommand` union so a built-in-only caller needs no type argument — `runtime.apply(ir, cmd)` behaves exactly as `applyCommand(ir, cmd)` would. A caller dispatching a custom command supplies `C` (or lets it infer from a typed `cmd` value) to get back `inverse: C | CanvasCommand` instead of only the built-in union, with no cast required at the call site. | [extensions/canvas-runtime.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L87) |
+| &lt;a id="commands"&gt;&lt;/a&gt; `commands` | `readonly` | [`CanvasCommandRegistry`](CanvasCommandRegistry.md) | - | [extensions/canvas-runtime.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L71) |
+| &lt;a id="irschema"&gt;&lt;/a&gt; `irSchema` | `readonly` | `ZodType`\&lt;[`CanvasIR`](CanvasIR.md)\&gt; | - | [extensions/canvas-runtime.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L74) |
+| &lt;a id="migrate"&gt;&lt;/a&gt; `migrate` | `readonly` | (`raw`) =&gt; [`CanvasIR`](CanvasIR.md) | Forward-migrate a persisted/peer IR to the current version via the migration registry, then validate with this runtime's `irSchema`. The default runtime (no migrations) accepts already-current documents and rejects others. | [extensions/canvas-runtime.ts:97](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L97) |
+| &lt;a id="migrations"&gt;&lt;/a&gt; `migrations` | `readonly` | [`CanvasMigrationRegistry`](CanvasMigrationRegistry.md) | - | [extensions/canvas-runtime.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L72) |
+| &lt;a id="nodekinds"&gt;&lt;/a&gt; `nodeKinds` | `readonly` | [`CanvasNodeKindRegistry`](CanvasNodeKindRegistry.md) | - | [extensions/canvas-runtime.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L70) |
+| &lt;a id="nodeschema"&gt;&lt;/a&gt; `nodeSchema` | `readonly` | `ZodType`\&lt;[`CanvasNode`](../type-aliases/CanvasNode)\&gt; | - | [extensions/canvas-runtime.ts:73](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L73) |

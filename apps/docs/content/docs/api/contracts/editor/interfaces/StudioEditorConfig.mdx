@@ -1,0 +1,22 @@
+---
+title: "StudioEditorConfig"
+description: "@anvilkit/contracts · StudioEditorConfig"
+---
+
+Defined in: [editor/studio-config.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L98)
+
+The `StudioProps.editor` configuration (DD-0019 §22.1, verbatim).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="breakpoints"&gt;&lt;/a&gt; `breakpoints?` | `readonly` | readonly [`BreakpointDefinition`](BreakpointDefinition.md)[] | - | [editor/studio-config.ts:100](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L100) |
+| &lt;a id="datasourceadapter"&gt;&lt;/a&gt; `dataSourceAdapter?` | `readonly` | [`EditorDataSourceAdapter`](EditorDataSourceAdapter.md) | - | [editor/studio-config.ts:127](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L127) |
+| &lt;a id="defaulttokenmode"&gt;&lt;/a&gt; `defaultTokenMode?` | `readonly` | `string` | - | [editor/studio-config.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L101) |
+| &lt;a id="features"&gt;&lt;/a&gt; `features?` | `readonly` | [`StudioEditorFeatures`](StudioEditorFeatures.md) | - | [editor/studio-config.ts:99](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L99) |
+| &lt;a id="importabletokens"&gt;&lt;/a&gt; `importableTokens?` | `readonly` | readonly [`ImportableTokenValue`](ImportableTokenValue.md)[] | Theme/brand values the token picker offers for import-as-copy (ADR 0005 Part 2 §3/§4). Static data — hosts that surface `@anvilkit/plugin-design-system` theme tokens pass them here rather than Core importing an extension package, which the layering rule forbids. Absent = the picker shows document tokens only. | [editor/studio-config.ts:110](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L110) |
+| &lt;a id="pageadapter"&gt;&lt;/a&gt; `pageAdapter?` | `readonly` | [`EditorPageAdapter`](EditorPageAdapter.md) | - | [editor/studio-config.ts:126](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L126) |
+| &lt;a id="policies"&gt;&lt;/a&gt; `policies?` | `readonly` | [`EditorPolicies`](EditorPolicies.md) | - | [editor/studio-config.ts:133](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L133) |
+| &lt;a id="renderscope"&gt;&lt;/a&gt; `renderScope?` | `readonly` | [`EditorRenderScope`](EditorRenderScope.md) | The data scope binding expressions read at **render** time (ED-BIND-002; ADR 0006). Deliberately host-supplied rather than fetched by Core. §19 lets Core store descriptors and expressions but **never preview responses**, so a render-time cache inside Core would break that guarantee. ADR 0006 settles the division: the host fills the scope — from `_dataSource` injection or anything else — and bindings only read it. Absent = bindings resolve to `missing`, which renders as indeterminate rather than hidden. | [editor/studio-config.ts:125](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L125) |
+| &lt;a id="styleadapter"&gt;&lt;/a&gt; `styleAdapter?` | `readonly` | [`EditorStyleAdapter`](EditorStyleAdapter.md) | Strict-CSP authoring-style injection (§29). Absent = Core's default `<style>` element. | [editor/studio-config.ts:132](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/studio-config.ts#L132) |

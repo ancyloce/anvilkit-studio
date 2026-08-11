@@ -1,0 +1,22 @@
+---
+title: "CanvasComponentPropertyBase"
+description: "@anvilkit/canvas-core · CanvasComponentPropertyBase"
+---
+
+Defined in: [ir/types.ts:1113](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1113)
+
+## Extended by
+
+- [`CanvasComponentColorProperty`](CanvasComponentColorProperty.md)
+- [`CanvasComponentImageProperty`](CanvasComponentImageProperty.md)
+- [`CanvasComponentTextProperty`](CanvasComponentTextProperty.md)
+- [`CanvasComponentVisibilityProperty`](CanvasComponentVisibilityProperty.md)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | Stable Property ID — the override-map key (INV-6). Unique within its definition; the SAME id may appear on other definitions (cross-definition reuse is explicitly permitted, TD §5.5) — never treat it as global. | [ir/types.ts:1119](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1119) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `string` | - | [ir/types.ts:1120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1120) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | Id of the node inside THIS definition's tree the property binds to. | [ir/types.ts:1122](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1122) |
+| &lt;a id="semantickey"&gt;&lt;/a&gt; `semanticKey?` | `string` | Optional cross-component identity for this property (plan 0021 T-028, TD §12.1). Property `id` is unique only within one definition, so it cannot answer "is the `title` of component A the same slot as the `title` of component B?" — which is exactly the question an update or a swap must answer to carry an override across. `semanticKey` is that answer, supplied by the component author. Must be namespaced (`ns:name`) so it reads as an identifier rather than a label. That requirement is what stops a localized display string being used here, which would make override migration depend on the authoring UI's language. Validated by `validateSemanticKeys`. | [ir/types.ts:1138](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1138) |

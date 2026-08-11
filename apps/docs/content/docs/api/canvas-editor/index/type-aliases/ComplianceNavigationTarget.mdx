@@ -1,0 +1,102 @@
+---
+title: "ComplianceNavigationTarget"
+description: "@anvilkit/canvas-editor · ComplianceNavigationTarget"
+---
+
+```ts
+type ComplianceNavigationTarget = 
+  | {
+  instanceId?: string;
+  kind: "node";
+  nodeId: string;
+  pageId: string;
+  propertyId?: string;
+  sourceNodeId?: string;
+  variantId?: string;
+}
+  | {
+  componentId: string;
+  kind: "component";
+  propertyId?: string;
+  variantId?: string;
+}
+  | {
+  kind: "unavailable";
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand-governance/use-compliance-navigation.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-compliance-navigation.ts#L34)
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  instanceId?: string;
+  kind: "node";
+  nodeId: string;
+  pageId: string;
+  propertyId?: string;
+  sourceNodeId?: string;
+  variantId?: string;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `instanceId?` | `string` | Page-level instance the issue belongs to, when it is inside one. | [packages/capabilities/canvas/editor/src/brand-governance/use-compliance-navigation.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-compliance-navigation.ts#L40) |
+| `kind` | `"node"` | - | [packages/capabilities/canvas/editor/src/brand-governance/use-compliance-navigation.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-compliance-navigation.ts#L36) |
+| `nodeId` | `string` | - | [packages/capabilities/canvas/editor/src/brand-governance/use-compliance-navigation.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-compliance-navigation.ts#L38) |
+| `pageId` | `string` | - | [packages/capabilities/canvas/editor/src/brand-governance/use-compliance-navigation.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-compliance-navigation.ts#L37) |
+| `propertyId?` | `string` | - | [packages/capabilities/canvas/editor/src/brand-governance/use-compliance-navigation.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-compliance-navigation.ts#L43) |
+| `sourceNodeId?` | `string` | Virtual node inside the resolved Source (OD-08: not selectable directly). | [packages/capabilities/canvas/editor/src/brand-governance/use-compliance-navigation.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-compliance-navigation.ts#L42) |
+| `variantId?` | `string` | - | [packages/capabilities/canvas/editor/src/brand-governance/use-compliance-navigation.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-compliance-navigation.ts#L44) |
+
+***
+
+### Type Literal
+
+```ts
+{
+  componentId: string;
+  kind: "component";
+  propertyId?: string;
+  variantId?: string;
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  kind: "unavailable";
+}
+```
+
+## File
+
+Issue → target resolution and the jump itself (plan 0021 T-044).
+
+## Structural ids only — never the message
+
+Resolution reads `pageId`, `nodeId`, `instanceId`, `sourceNodeId`,
+`propertyId` and `variantId`. It never reads display text, and there is no
+display text to read: `BrandComplianceIssue` deliberately has no `message`
+field (T-041 step 5), so copy is derived from `code` at render time. That is
+what keeps navigation working identically in all four locales — a lookup
+keyed on a localized string silently stops resolving the moment someone
+switches language, and the failure looks like a data bug rather than an i18n
+one. `compliance-navigation.test.ts` asserts a target resolves the same way
+under a `t` that returns garbage.
+
+## Three target classes, and an honest fourth
+
+A page node, a page-level instance (optionally down to a virtual node inside
+its resolved Source), and a Component Source definition — reached through the
+Components panel, because a Source is not on any page and selecting "into" it
+is a scope change rather than a selection. The fourth is `unavailable`: an
+issue whose node exists in neither place. Reporting that plainly beats
+silently doing nothing, which reads to the user as a broken row.

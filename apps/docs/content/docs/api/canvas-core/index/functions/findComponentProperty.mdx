@@ -1,0 +1,28 @@
+---
+title: "findComponentProperty"
+description: "@anvilkit/canvas-core · findComponentProperty"
+---
+
+```ts
+function findComponentProperty(definition, propertyId): 
+  | CanvasComponentProperty
+  | undefined;
+```
+
+Defined in: [components/identity.ts:162](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/identity.ts#L162)
+
+Resolve a property id WITHIN one definition — the only lookup scope that
+exists. There is deliberately no cross-definition index to consult, which
+is what makes cross-definition Property-ID reuse safe.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `definition` | [`CanvasComponentDefinition`](../interfaces/CanvasComponentDefinition) |
+| `propertyId` | `string` |
+
+## Returns
+
+  \| [`CanvasComponentProperty`](../type-aliases/CanvasComponentProperty)
+  \| `undefined`

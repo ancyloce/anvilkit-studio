@@ -1,0 +1,25 @@
+---
+title: "AuthoringEnvelopeSchema"
+description: "@anvilkit/schema · AuthoringEnvelopeSchema"
+---
+
+```ts
+const AuthoringEnvelopeSchema: ZodObject<{
+  bindings: ZodRecord<ZodString, ZodUnknown>;
+  breakpoints: ZodArray<ZodUnknown>;
+  componentDefinitions: ZodRecord<ZodString, ZodUnknown>;
+  interactions: ZodRecord<ZodString, ZodUnknown>;
+  nodes: ZodRecord<ZodString, ZodUnknown>;
+  revision: ZodNumber;
+  styleDefinitions: ZodRecord<ZodString, ZodUnknown>;
+  tokenModes: ZodRecord<ZodString, ZodUnknown>;
+  tokens: ZodRecord<ZodString, ZodUnknown>;
+  version: ZodLiteral<"1">;
+}, $loose>;
+```
+
+Defined in: [editor/envelope.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/envelope.ts#L20)
+
+Shallow envelope: exact major version, non-negative revision, and
+the eight collection slots. Unknown keys are preserved
+(`looseObject`), including at the envelope level.

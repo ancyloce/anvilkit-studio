@@ -1,0 +1,34 @@
+---
+title: "CompliancePanelProps"
+description: "@anvilkit/canvas-editor · CompliancePanelProps"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/panels/governance/CompliancePanel.tsx:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/CompliancePanel.tsx#L35)
+
+## File
+
+The compliance issue list (plan 0021 T-044).
+
+## It extends the Brand surface rather than adding a third one
+
+T-044 step 1. `BrandPanel` already owns "check compliance" and
+`complianceIssueMessage`; `brand-warnings.tsx` already shows the selection's
+issues in the Inspector. A separate top-level Governance panel would be a
+third place the same report is rendered, and the three would drift. This
+component is the Brand panel's report body, promoted to its own file because
+it now has navigation and virtualization in it.
+
+## Virtualized (T-044 step 6)
+
+A brand sweep over a real campaign document produces thousands of issues —
+far more than the layer tree ever holds, because one node contributes one per
+off-brand property. `Windowed`'s default threshold keeps small reports as
+plain DOM, so the common case is unchanged.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="issues"&gt;&lt;/a&gt; `issues` | readonly `BrandComplianceIssue`[] | - | [packages/capabilities/canvas/editor/src/panels/governance/CompliancePanel.tsx:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/CompliancePanel.tsx#L36) |
+| &lt;a id="oncomponenttarget"&gt;&lt;/a&gt; `onComponentTarget?` | (`componentId`) =&gt; `void` | Told when a row resolves to a Component Source instead of a page node, so the host surface can point the user at the Components panel (T-044's documented fallback). Navigation itself never changes scope. | [packages/capabilities/canvas/editor/src/panels/governance/CompliancePanel.tsx:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/CompliancePanel.tsx#L43) |
+| &lt;a id="t"&gt;&lt;/a&gt; `t` | [`CanvasT`](../type-aliases/CanvasT) | - | [packages/capabilities/canvas/editor/src/panels/governance/CompliancePanel.tsx:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/CompliancePanel.tsx#L37) |

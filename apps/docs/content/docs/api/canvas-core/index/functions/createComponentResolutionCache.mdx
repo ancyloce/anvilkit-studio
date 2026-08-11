@@ -1,0 +1,28 @@
+---
+title: "createComponentResolutionCache"
+description: "@anvilkit/canvas-core · createComponentResolutionCache"
+---
+
+```ts
+function createComponentResolutionCache(): CanvasComponentResolutionCache;
+```
+
+Defined in: [components/cache.ts:105](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/cache.ts#L105)
+
+## Returns
+
+[`CanvasComponentResolutionCache`](../interfaces/CanvasComponentResolutionCache)
+
+## File
+
+Public barrel of the `components/` domain (plan 0023, TD §22).
+
+Rank 2: reads `ir/` only. Persisted component shapes (definition, registry,
+properties, overrides) live in `ir/` following the `layout/` precedent —
+`ir/types.ts` owns `CanvasIR.components` and `ir/validators.ts` spreads the
+schemas, and rank 1 cannot import upward. This domain owns the
+resolver-side surface: identity today, graph/resolve/cache in M2.
+
+Curated allowlist per the `serialize/index.ts` precedent — each re-export
+below is an explicit list, so resolver/cache internals never ship through
+the root barrel.

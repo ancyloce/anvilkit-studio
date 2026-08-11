@@ -1,0 +1,67 @@
+---
+title: "AuthoringMigrationRegistry"
+description: "@anvilkit/schema · AuthoringMigrationRegistry"
+---
+
+Defined in: [editor/migrations/index.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/migrations/index.ts#L38)
+
+Registry of migration steps keyed by their `from` version.
+
+## Methods
+
+### list()
+
+```ts
+list(): readonly AuthoringMigration[];
+```
+
+Defined in: [editor/migrations/index.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/migrations/index.ts#L40)
+
+#### Returns
+
+readonly [`AuthoringMigration`](AuthoringMigration.md)[]
+
+***
+
+### register()
+
+```ts
+register(migration): void;
+```
+
+Defined in: [editor/migrations/index.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/migrations/index.ts#L39)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `migration` | [`AuthoringMigration`](AuthoringMigration.md) |
+
+#### Returns
+
+`void`
+
+***
+
+### run()
+
+```ts
+run(state): AuthoringStateV1;
+```
+
+Defined in: [editor/migrations/index.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/migrations/index.ts#L47)
+
+Run the chain from `state.version` to the current version.
+Already-current state is returned as-is (idempotency by
+construction). Throws [AuthoringMigrationError](../classes/AuthoringMigrationError) when a
+needed step is missing or a cycle is detected.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `state` | `Readonly`\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt; |
+
+#### Returns
+
+`AuthoringStateV1`

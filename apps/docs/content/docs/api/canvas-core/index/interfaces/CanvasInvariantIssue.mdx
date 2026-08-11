@@ -1,0 +1,16 @@
+---
+title: "CanvasInvariantIssue"
+description: "@anvilkit/canvas-core · CanvasInvariantIssue"
+---
+
+Defined in: [ir/invariants.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L51)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | [`CanvasInvariantIssueCode`](../type-aliases/CanvasInvariantIssueCode) | - | [ir/invariants.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L52) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | `readonly` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | Where the offending node lives when a Component Source tree is involved (plan 0023 TD-001). Absent for purely page-scoped issues, whose `pageId` already says everything. | [ir/invariants.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L63) |
+| &lt;a id="message"&gt;&lt;/a&gt; `message` | `readonly` | `string` | - | [ir/invariants.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L53) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId?` | `readonly` | `string` | The node the issue was found on, when the issue is node-scoped. | [ir/invariants.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L57) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId?` | `readonly` | `string` | The page the issue was found on, when the issue is page-scoped. | [ir/invariants.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L55) |

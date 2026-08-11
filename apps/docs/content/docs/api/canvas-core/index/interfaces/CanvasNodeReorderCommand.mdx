@@ -1,0 +1,22 @@
+---
+title: "CanvasNodeReorderCommand"
+description: "@anvilkit/canvas-core · CanvasNodeReorderCommand"
+---
+
+Defined in: [commands/types.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L87)
+
+Move a node to a new index among its siblings (same parent). `toIndex` is
+clamped to the sibling range; the inverse restores the prior index.
+
+## Extends
+
+- [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md)
+
+## Properties
+
+| Property | Type | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md).[`location`](CanvasCommandLocationOptions.md#location) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | [commands/types.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L89) |
+| &lt;a id="toindex"&gt;&lt;/a&gt; `toIndex` | `number` | - | [commands/types.ts:90](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L90) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"node.reorder"` | - | [commands/types.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L88) |

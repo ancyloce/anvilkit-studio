@@ -1,0 +1,30 @@
+---
+title: "childrenBoundsFromExtents"
+description: "@anvilkit/canvas-core · childrenBoundsFromExtents"
+---
+
+```ts
+function childrenBoundsFromExtents(extents): CanvasBounds;
+```
+
+Defined in: [geometry/affine.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/affine.ts#L145)
+
+Width/height of the box covering every extent AND the local origin (0,0) —
+the shared children-bounds math for container creation (`node.group`, the
+editor's wrap flows). Anchoring to the origin keeps positive-coordinate
+content measuring from 0 while rotated/scaled content that spills into
+negative coordinates is still fully covered.
+
+Callers feed it stored geometry (`transformedBoundsExtent` per child) or a
+resolved record's `layoutFootprint` — one merge loop for both paths, so raw
+and resolved container bounds cannot drift apart.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `extents` | `Iterable`\&lt;[`BoundsExtent`](../interfaces/BoundsExtent)\&gt; |
+
+## Returns
+
+[`CanvasBounds`](../interfaces/CanvasBounds)

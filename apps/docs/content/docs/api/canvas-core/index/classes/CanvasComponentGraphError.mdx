@@ -1,0 +1,44 @@
+---
+title: "CanvasComponentGraphError"
+description: "@anvilkit/canvas-core · CanvasComponentGraphError"
+---
+
+Defined in: [components/validate.ts:227](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/validate.ts#L227)
+
+Thrown by [assertComponentGraph](../functions/assertComponentGraph); carries EVERY issue found, not just the first error.
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new CanvasComponentGraphError(issues): CanvasComponentGraphError;
+```
+
+Defined in: [components/validate.ts:229](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/validate.ts#L229)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `issues` | readonly [`CanvasComponentIssue`](../interfaces/CanvasComponentIssue)[] |
+
+#### Returns
+
+`CanvasComponentGraphError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="issues"&gt;&lt;/a&gt; `issues` | `readonly` | readonly [`CanvasComponentIssue`](../interfaces/CanvasComponentIssue)[] | [components/validate.ts:228](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/validate.ts#L228) |

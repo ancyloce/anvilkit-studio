@@ -1,0 +1,44 @@
+---
+title: "CANVAS_ANALYTICS_EVENTS"
+description: "@anvilkit/canvas-editor · CANVAS_ANALYTICS_EVENTS"
+---
+
+```ts
+const CANVAS_ANALYTICS_EVENTS: {
+  brandComplianceRun: "anvilkit.canvas.brand.compliance_run";
+  brandOperationBlocked: "anvilkit.canvas.brand.operation_blocked";
+  brandViolationDetected: "anvilkit.canvas.brand.violation_detected";
+  componentSwapped: "anvilkit.canvas.component.swapped";
+  componentUpdateApplied: "anvilkit.canvas.component.update_applied";
+  componentUpdateChecked: "anvilkit.canvas.component.update_checked";
+  componentVariantChanged: "anvilkit.canvas.component.variant_changed";
+  libraryComponentInserted: "anvilkit.canvas.library.component_inserted";
+  librarySearched: "anvilkit.canvas.library.searched";
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L49)
+
+The nine PRD §13 events, stored as their FULL wire names.
+
+Storing the `anvilkit.`-prefixed string — rather than a bare suffix that a
+helper concatenates — is the whole point of OD-16, and the difference is not
+cosmetic. A table of suffixes still leaves a QUOTED bare suffix in this file,
+which the catalog scanner collects and reports as a missing message key. That
+is not hypothetical: it is exactly what the gate did to the first version of
+this module — twice, because the second failure was a quoted example inside
+this very comment. The scanner reads raw text, so prose is not exempt.
+
+## Type Declaration
+
+| Name | Type | Default value | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="property-brandcompliancerun"&gt;&lt;/a&gt; `brandComplianceRun` | `"anvilkit.canvas.brand.compliance_run"` | `"anvilkit.canvas.brand.compliance_run"` | [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L58) |
+| &lt;a id="property-brandoperationblocked"&gt;&lt;/a&gt; `brandOperationBlocked` | `"anvilkit.canvas.brand.operation_blocked"` | `"anvilkit.canvas.brand.operation_blocked"` | [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L57) |
+| &lt;a id="property-brandviolationdetected"&gt;&lt;/a&gt; `brandViolationDetected` | `"anvilkit.canvas.brand.violation_detected"` | `"anvilkit.canvas.brand.violation_detected"` | [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L56) |
+| &lt;a id="property-componentswapped"&gt;&lt;/a&gt; `componentSwapped` | `"anvilkit.canvas.component.swapped"` | `"anvilkit.canvas.component.swapped"` | [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L55) |
+| &lt;a id="property-componentupdateapplied"&gt;&lt;/a&gt; `componentUpdateApplied` | `"anvilkit.canvas.component.update_applied"` | `"anvilkit.canvas.component.update_applied"` | [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L53) |
+| &lt;a id="property-componentupdatechecked"&gt;&lt;/a&gt; `componentUpdateChecked` | `"anvilkit.canvas.component.update_checked"` | `"anvilkit.canvas.component.update_checked"` | [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L52) |
+| &lt;a id="property-componentvariantchanged"&gt;&lt;/a&gt; `componentVariantChanged` | `"anvilkit.canvas.component.variant_changed"` | `"anvilkit.canvas.component.variant_changed"` | [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L54) |
+| &lt;a id="property-librarycomponentinserted"&gt;&lt;/a&gt; `libraryComponentInserted` | `"anvilkit.canvas.library.component_inserted"` | `"anvilkit.canvas.library.component_inserted"` | [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L51) |
+| &lt;a id="property-librarysearched"&gt;&lt;/a&gt; `librarySearched` | `"anvilkit.canvas.library.searched"` | `"anvilkit.canvas.library.searched"` | [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L50) |

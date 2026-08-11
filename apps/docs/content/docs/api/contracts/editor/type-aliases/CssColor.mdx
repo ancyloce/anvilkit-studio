@@ -1,0 +1,34 @@
+---
+title: "CssColor"
+description: "@anvilkit/contracts · CssColor"
+---
+
+```ts
+type CssColor = 
+  | {
+  kind: "hex";
+  value: string;
+}
+  | {
+  a: number;
+  b: number;
+  g: number;
+  kind: "rgba";
+  r: number;
+}
+  | {
+  a: number;
+  h: number;
+  kind: "hsla";
+  l: number;
+  s: number;
+}
+  | {
+  keyword: "transparent" | "currentColor";
+  kind: "keyword";
+};
+```
+
+Defined in: [editor/values.ts:124](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L124)
+
+A typed color value. Token indirection wraps via [TokenOrLiteral](TokenOrLiteral.md).

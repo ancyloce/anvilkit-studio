@@ -1,0 +1,14 @@
+---
+title: "ComponentVariantSchema"
+description: "@anvilkit/schema · ComponentVariantSchema"
+---
+
+```ts
+const ComponentVariantSchema: z.ZodType<ComponentVariant>;
+```
+
+Defined in: [editor/variants.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/variants.ts#L56)
+
+One variant: a full axis selection plus definition-node patches.
+Patch keys are bare definition node ids — never the runtime
+composite form (contract freeze CORE-P0-001 §1.1).

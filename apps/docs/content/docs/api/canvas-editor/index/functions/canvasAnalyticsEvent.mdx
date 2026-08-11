@@ -1,0 +1,30 @@
+---
+title: "canvasAnalyticsEvent"
+description: "@anvilkit/canvas-editor · canvasAnalyticsEvent"
+---
+
+```ts
+function canvasAnalyticsEvent<K>(key, properties): CanvasAnalyticsEvent<K>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:166](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L166)
+
+Build an event. Exported so a test can assert a payload without a sink, and
+so every emission site goes through one place.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* \| `"librarySearched"` \| `"libraryComponentInserted"` \| `"componentUpdateChecked"` \| `"componentUpdateApplied"` \| `"componentVariantChanged"` \| `"componentSwapped"` \| `"brandViolationDetected"` \| `"brandOperationBlocked"` \| `"brandComplianceRun"` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `key` | `K` |
+| `properties` | [`CanvasAnalyticsPayloads`](../interfaces/CanvasAnalyticsPayloads)\[`K`\] |
+
+## Returns
+
+[`CanvasAnalyticsEvent`](../interfaces/CanvasAnalyticsEvent)\<`K`\>

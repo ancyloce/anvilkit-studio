@@ -1,0 +1,29 @@
+---
+title: "TokenValue"
+description: "@anvilkit/contracts · TokenValue"
+---
+
+```ts
+type TokenValue<T> = 
+  | {
+  kind: "literal";
+  value: T;
+}
+  | {
+  kind: "alias";
+  tokenId: string;
+};
+```
+
+Defined in: [editor/tokens.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/tokens.ts#L36)
+
+A token value for one mode: a literal, or an alias to another
+document token. Aliases must be acyclic (invariant 8, §7.2); cycle
+detection lives in the core resolver (§24.5), shape validation in
+`@anvilkit/schema/editor`.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` |

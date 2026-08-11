@@ -4,14 +4,17 @@ description: "@anvilkit/canvas-editor · CanvasStudioStableValue"
 ---
 
 ```ts
-type CanvasStudioStableValue = Omit<CanvasStudioContextValue, "ir" | "activePageId" | "stage">;
+type CanvasStudioStableValue = Omit<CanvasStudioContextValue, "ir" | "activePageId" | "stage" | "documentReadOnly">;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/context/canvas-studio-context.tsx:355](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/canvas-studio-context.tsx#L355)
+Defined in: [packages/capabilities/canvas/editor/src/context/canvas-studio-context.tsx:494](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/canvas-studio-context.tsx#L494)
 
 The stable half of [CanvasStudioContextValue](../interfaces/CanvasStudioContextValue) (W16): the store handles
 and host callbacks, with NO per-commit live state (`ir`/`activePageId`/
-`stage`). `<CanvasStudio>` memoizes this so its identity never changes after
+`stage`/`documentReadOnly` — the last derives from the live `ir`, so it is
+excluded here to make reading it through [useCanvasStores](../functions/useCanvasStores) a compile
+error instead of a silently-undefined trap; use [useCanvasStudio](../functions/useCanvasStudio)).
+`<CanvasStudio>` memoizes this so its identity never changes after
 mount, letting components that only need stores subscribe via
 [useCanvasStores](../functions/useCanvasStores) and skip the re-render that fires on every edit for
 consumers of the full [CanvasStudioContext](../variables/CanvasStudioContext).

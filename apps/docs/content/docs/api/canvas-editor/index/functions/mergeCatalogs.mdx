@@ -1,0 +1,28 @@
+---
+title: "mergeCatalogs"
+description: "@anvilkit/canvas-editor · mergeCatalogs"
+---
+
+```ts
+function mergeCatalogs(...catalogs): CanvasFontCatalog;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/text/font-catalog.ts:314](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L314)
+
+Merge catalogs with precedence **brand > host > default**.
+
+Argument order is irrelevant across tiers and only breaks ties within one,
+because precedence rides on each record's `origin` (see
+[CanvasFontOrigin](../type-aliases/CanvasFontOrigin)). `undefined` inputs are skipped so the common call
+— `mergeCatalogs(DEFAULT_FONT_CATALOG, props.fontCatalog)` with an optional
+prop — needs no filtering at the call site.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`catalogs` | readonly ([`CanvasFontCatalog`](../interfaces/CanvasFontCatalog) \| `undefined`)[] |
+
+## Returns
+
+[`CanvasFontCatalog`](../interfaces/CanvasFontCatalog)

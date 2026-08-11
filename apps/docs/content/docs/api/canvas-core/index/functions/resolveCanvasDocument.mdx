@@ -1,0 +1,28 @@
+---
+title: "resolveCanvasDocument"
+description: "@anvilkit/canvas-core · resolveCanvasDocument"
+---
+
+```ts
+function resolveCanvasDocument(ir, options?): CanvasResolvedComponentDocument;
+```
+
+Defined in: [layout/resolve-document.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/resolve-document.ts#L83)
+
+Resolve a document END TO END: expand every component instance into its
+virtual subtree, then run the Auto Layout solver over the expanded
+document, then attach provenance to every virtual record. The ONLY
+resolution path renderers, hit testing, a11y, and export may use
+(PRD §9.13) — never `resolveCanvasLayout` directly for component-bearing
+documents.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `options` | [`CanvasComponentResolveOptions`](../interfaces/CanvasComponentResolveOptions) |
+
+## Returns
+
+[`CanvasResolvedComponentDocument`](../interfaces/CanvasResolvedComponentDocument)

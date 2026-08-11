@@ -1,0 +1,15 @@
+---
+title: "MAX_MEASUREMENT_TEXT_LENGTH"
+description: "@anvilkit/canvas-core · MAX_MEASUREMENT_TEXT_LENGTH"
+---
+
+```ts
+const MAX_MEASUREMENT_TEXT_LENGTH: 100000 = 100_000;
+```
+
+Defined in: [limits.ts:84](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L84)
+
+Ceiling on the character length of a single text-measurement request.
+
+Guards the measurement port against a single pathological string rather
+than a large number of reasonable ones.

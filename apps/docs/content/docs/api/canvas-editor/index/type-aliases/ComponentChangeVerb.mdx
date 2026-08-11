@@ -1,0 +1,28 @@
+---
+title: "ComponentChangeVerb"
+description: "@anvilkit/canvas-editor · ComponentChangeVerb"
+---
+
+```ts
+type ComponentChangeVerb = "update" | "swap";
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/panels/library/UpdateComponentDialog.tsx:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/library/UpdateComponentDialog.tsx#L28)
+
+## File
+
+Update / swap confirmation (plan 0021 T-031, and T-032's dialog).
+
+## One dialog, two verbs
+
+Update and swap present the same evidence — a compatibility report and a
+per-override outcome — and differ only in wording and in whether a scope
+choice is offered. Two components would be two places for the preview to
+drift away from what the command actually does.
+
+## Cancel is inert, and that is tested
+
+Nothing here mutates. The dialog is a pure view over a report computed by
+`previewSourceChange` — the same call the command makes — and reports the
+user's choice through callbacks. A cancel path that "cleaned up" would imply
+something had already been applied.

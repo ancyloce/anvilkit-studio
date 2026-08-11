@@ -1,0 +1,17 @@
+---
+title: "MAX_EXTERNAL_DISPLAY_STRING_CHARS"
+description: "@anvilkit/canvas-core · MAX_EXTERNAL_DISPLAY_STRING_CHARS"
+---
+
+```ts
+const MAX_EXTERNAL_DISPLAY_STRING_CHARS: 512 = 512;
+```
+
+Defined in: [limits.ts:310](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L310)
+
+Ceiling on characters in a non-authoritative catalog display string (name,
+description, publisher, deprecation notice).
+
+Catalog metadata is excluded from integrity bytes (TD §5.4), so it is the one
+part of an envelope no digest constrains — bounding it here is the only guard
+it gets.

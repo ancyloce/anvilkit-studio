@@ -1,0 +1,36 @@
+---
+title: "insertElementAtPoint"
+description: "@anvilkit/canvas-editor · insertElementAtPoint"
+---
+
+```ts
+function insertElementAtPoint(
+   ctx, 
+   entry, 
+   point): string | null;
+```
+
+Defined in: packages/capabilities/canvas/editor/src/actions/element-insert-actions.ts:189
+
+Drop path: insert `entry` with its top-left at `point` (page space), inside
+whatever frame `point` lands in.
+
+Top-left rather than centred-on-the-cursor to match the sibling drop path in
+the same component: `buildAssetInsertCommands` anchors a dropped image's
+`transform` AT the drop position (`assets/upload-actions.ts:46-57`), and
+`cp3-001`/`cp3-002` both specify "the drag path is the resolved drop point"
+for `CanvasElementBuildContext.at`, which is documented as the top-left.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`CanvasStudioContextValue`](../interfaces/CanvasStudioContextValue) |
+| `entry` | [`CanvasElementEntry`](../interfaces/CanvasElementEntry) |
+| `point` | \{ `x`: `number`; `y`: `number`; \} |
+| `point.x` | `number` |
+| `point.y` | `number` |
+
+## Returns
+
+`string` \| `null`

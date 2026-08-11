@@ -1,0 +1,34 @@
+---
+title: "matrixBoundsExtent"
+description: "@anvilkit/canvas-core · matrixBoundsExtent"
+---
+
+```ts
+function matrixBoundsExtent(
+   m, 
+   width, 
+   height): BoundsExtent;
+```
+
+Defined in: [geometry/affine.ts:97](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/affine.ts#L97)
+
+Axis-aligned bounding box of a `width`×`height` box anchored at the local
+origin, after applying an already-composed matrix.
+
+The matrix-taking form exists because a **world** AABB needs
+`parentWorld × local`, which is not expressible as a single
+`CanvasTransform`. Three copies of this corner loop existed before it
+(here, `hit-test.ts`, and the layout resolver would have been the third);
+both other sites now delegate here.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `m` | [`AffineMatrix`](../type-aliases/AffineMatrix) |
+| `width` | `number` |
+| `height` | `number` |
+
+## Returns
+
+[`BoundsExtent`](../interfaces/BoundsExtent)

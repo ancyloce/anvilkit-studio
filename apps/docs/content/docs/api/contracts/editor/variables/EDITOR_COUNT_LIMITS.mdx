@@ -1,0 +1,48 @@
+---
+title: "EDITOR_COUNT_LIMITS"
+description: "@anvilkit/contracts · EDITOR_COUNT_LIMITS"
+---
+
+```ts
+const EDITOR_COUNT_LIMITS: {
+  actionsPerInteraction: 100;
+  bindingAstDepth: 16;
+  bindingAstNodeCount: 256;
+  breakpoints: 8;
+  commandsPerBatch: 200;
+  componentDefinitions: 500;
+  componentNestingDepth: 10;
+  interactions: 1000;
+  nodeRecords: 5000;
+  styleDefinitions: 1000;
+  tokenAliasDepth: 8;
+  tokens: 2000;
+  variantAxesPerComponent: 3;
+  variantsPerComponent: 20;
+};
+```
+
+Defined in: [editor/limits.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L31)
+
+The frozen §7.3 count-limit table. Enforced at schema parse and
+command validation; each violation carries the exceeded key in
+`EditorError.details`.
+
+## Type Declaration
+
+| Name | Type | Default value | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="property-actionsperinteraction"&gt;&lt;/a&gt; `actionsPerInteraction` | `100` | `100` | Actions per interaction. | [editor/limits.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L53) |
+| &lt;a id="property-bindingastdepth"&gt;&lt;/a&gt; `bindingAstDepth` | `16` | `16` | Binding expression AST depth. | [editor/limits.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L55) |
+| &lt;a id="property-bindingastnodecount"&gt;&lt;/a&gt; `bindingAstNodeCount` | `256` | `256` | Binding expression AST node count. | [editor/limits.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L57) |
+| &lt;a id="property-breakpoints"&gt;&lt;/a&gt; `breakpoints` | `8` | `8` | Enabled breakpoints per document. | [editor/limits.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L33) |
+| &lt;a id="property-commandsperbatch"&gt;&lt;/a&gt; `commandsPerBatch` | `200` | `200` | Commands per batch (contract freeze CORE-P0-001 §5; aligns with the §21.2 AI proposal limit). | [editor/limits.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L60) |
+| &lt;a id="property-componentdefinitions"&gt;&lt;/a&gt; `componentDefinitions` | `500` | `500` | Local component definitions per document. | [editor/limits.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L43) |
+| &lt;a id="property-componentnestingdepth"&gt;&lt;/a&gt; `componentNestingDepth` | `10` | `10` | Component nesting depth (editor UI initially limits to 5). | [editor/limits.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L45) |
+| &lt;a id="property-interactions"&gt;&lt;/a&gt; `interactions` | `1000` | `1_000` | Interactions per document. | [editor/limits.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L51) |
+| &lt;a id="property-noderecords"&gt;&lt;/a&gt; `nodeRecords` | `5000` | `5_000` | Node authoring records per document. | [editor/limits.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L35) |
+| &lt;a id="property-styledefinitions"&gt;&lt;/a&gt; `styleDefinitions` | `1000` | `1_000` | Style definitions per document. | [editor/limits.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L41) |
+| &lt;a id="property-tokenaliasdepth"&gt;&lt;/a&gt; `tokenAliasDepth` | `8` | `8` | Maximum token alias chain depth. | [editor/limits.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L39) |
+| &lt;a id="property-tokens"&gt;&lt;/a&gt; `tokens` | `2000` | `2_000` | Tokens per document. | [editor/limits.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L37) |
+| &lt;a id="property-variantaxespercomponent"&gt;&lt;/a&gt; `variantAxesPerComponent` | `3` | `3` | Variant axes per component. | [editor/limits.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L49) |
+| &lt;a id="property-variantspercomponent"&gt;&lt;/a&gt; `variantsPerComponent` | `20` | `20` | Variants per component. | [editor/limits.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L47) |

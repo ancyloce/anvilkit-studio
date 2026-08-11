@@ -1,0 +1,28 @@
+---
+title: "CanvasNodeGroupCommand"
+description: "@anvilkit/canvas-core · CanvasNodeGroupCommand"
+---
+
+Defined in: [commands/types.ts:136](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L136)
+
+Wrap one or more sibling nodes in a new group node. All `childIds` must share
+the same immediate parent group on `pageId`; they are wrapped in their current
+sibling z-order and the new group takes the slot of the topmost selected node.
+No child transforms are altered (the group is created with an identity
+transform), so grouping is visually a no-op and exactly reversible.
+
+## Extends
+
+- [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md)
+
+## Properties
+
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="childids"&gt;&lt;/a&gt; `childIds` | `string`[] | - | - | [commands/types.ts:140](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L140) |
+| &lt;a id="groupid"&gt;&lt;/a&gt; `groupId` | `string` | - | - | [commands/types.ts:141](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L141) |
+| &lt;a id="groupname"&gt;&lt;/a&gt; `groupName?` | `string` | - | - | [commands/types.ts:142](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L142) |
+| &lt;a id="grouptemplate"&gt;&lt;/a&gt; `groupTemplate?` | `Omit`\&lt;[`CanvasGroupNode`](CanvasGroupNode.md), `"children"`\&gt; | When present (e.g. as the inverse of `node.ungroup`), the created group is reconstructed verbatim from these fields rather than as a canonical identity group. `children` are always supplied from `childIds`. | - | [commands/types.ts:148](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L148) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | - | [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md).[`location`](CanvasCommandLocationOptions.md#location) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId?` | `string` | Required without `location`; ignored when `location` names the tree. | - | [commands/types.ts:139](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L139) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"node.group"` | - | - | [commands/types.ts:137](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L137) |

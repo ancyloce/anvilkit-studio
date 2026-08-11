@@ -1,0 +1,12 @@
+---
+title: "CreateFontCatalogOptions"
+description: "@anvilkit/canvas-editor · CreateFontCatalogOptions"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/text/font-catalog.ts:202](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L202)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="origin"&gt;&lt;/a&gt; `origin?` | `readonly` | [`CanvasFontOrigin`](../type-aliases/CanvasFontOrigin) | Defaults to `"host"` — the tier of the only caller outside this package (`CanvasStudioProps.fontCatalog`, `cp2-007`). The in-repo callers that need another tier (`cp2-002`'s default catalog, a brand adapter) pass it explicitly and are covered by their own tests, so the forgetful case is the one that still lands where its caller meant. | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:210](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L210) |

@@ -3,7 +3,7 @@ title: "ExportFormatRunContext"
 description: "@anvilkit/core · ExportFormatRunContext"
 ---
 
-Defined in: foundation/contracts/dist/export.d.ts:124
+Defined in: foundation/contracts/dist/export.d.ts:150
 
 Per-run context handed to [ExportFormatDefinition.run](ExportFormatDefinition.md#run) for
 formats that opt into asset-URL rewriting (review finding TS-c).
@@ -16,8 +16,15 @@ treats a reference no resolver handles is its own policy — the bundled
 HTML / React exporters omit unresolved `asset://` / `design://` refs and
 emit an `ASSET_UNRESOLVED` warning rather than passing them through.
 
+`compiledAppearance` is the unified compiler's output for the
+document being exported (PLAN-0025 §9.3): present whenever the
+caller supplied its Puck `Config` to the export runner. Formats
+consume `css`/`styledNodeIds` directly instead of resolving node
+styles independently.
+
 ## Properties
 
 | Property | Modifier | Type | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="assetresolvers"&gt;&lt;/a&gt; `assetResolvers?` | `readonly` | readonly [`IRAssetResolver`](../type-aliases/IRAssetResolver)[] | foundation/contracts/dist/export.d.ts:125 |
+| &lt;a id="assetresolvers"&gt;&lt;/a&gt; `assetResolvers?` | `readonly` | readonly [`IRAssetResolver`](../type-aliases/IRAssetResolver)[] | foundation/contracts/dist/export.d.ts:151 |
+| &lt;a id="compiledappearance"&gt;&lt;/a&gt; `compiledAppearance?` | `readonly` | [`CompiledAppearanceArtifact`](CompiledAppearanceArtifact.md) | foundation/contracts/dist/export.d.ts:152 |

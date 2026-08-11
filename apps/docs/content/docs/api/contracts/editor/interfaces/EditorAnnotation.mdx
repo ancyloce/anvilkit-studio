@@ -1,0 +1,29 @@
+---
+title: "EditorAnnotation"
+description: "@anvilkit/contracts · EditorAnnotation"
+---
+
+Defined in: [editor/design-system.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/design-system.ts#L53)
+
+One node's editor annotation (PLAN-0026 §3.6, ADR 0007 decision 1).
+
+**This shape is permanently closed: `name` and `locked`, nothing
+else.** Widening it requires the same scrutiny as adding a new root
+prop, and the reason is not stylistic — an annotations map that
+accepts arbitrary keys is the sidecar again under a new name, which
+is the exact thing this program exists to delete. The Zod mirror
+uses `strictObject` so an unknown key inside an entry is a
+validation error rather than silently-preserved freight, which is
+what makes "closed" enforceable instead of aspirational.
+
+Annotations are editor state *about* a node, not render state *of*
+it, which is why they live in a root prop rather than in component
+props. They are render-neutral and stripped at the IR boundary, so
+the four consumers see identical output with or without them.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `readonly` | `boolean` | [editor/design-system.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/design-system.ts#L55) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `readonly` | `string` | [editor/design-system.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/design-system.ts#L54) |

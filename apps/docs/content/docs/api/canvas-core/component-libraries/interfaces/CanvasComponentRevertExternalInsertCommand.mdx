@@ -1,0 +1,16 @@
+---
+title: "CanvasComponentRevertExternalInsertCommand"
+description: "@anvilkit/canvas-core · CanvasComponentRevertExternalInsertCommand"
+---
+
+Defined in: [component-libraries/commands/insert-external.ts:91](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L91)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="addedsnapshotkeys"&gt;&lt;/a&gt; `addedSnapshotKeys` | `readonly` | readonly `string`[] | Keys this insert ADDED. Snapshots it reused are absent, so undoing an insert that reused an existing snapshot never removes one another instance still depends on. | [component-libraries/commands/insert-external.ts:100](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L100) |
+| &lt;a id="instanceid"&gt;&lt;/a&gt; `instanceId` | `readonly` | `string` | - | [component-libraries/commands/insert-external.ts:93](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L93) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | `readonly` | [`CanvasDocumentLocation`](../../index/interfaces/CanvasDocumentLocation) | - | [component-libraries/commands/insert-external.ts:94](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L94) |
+| &lt;a id="redo"&gt;&lt;/a&gt; `redo` | `readonly` | [`CanvasComponentInsertExternalCommand`](CanvasComponentInsertExternalCommand.md) | The command to replay for redo. | [component-libraries/commands/insert-external.ts:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L102) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | `"component-instance.revert-external-insert"` | - | [component-libraries/commands/insert-external.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L92) |

@@ -1,0 +1,49 @@
+---
+title: "CanvasFrameShape"
+description: "@anvilkit/canvas-core · CanvasFrameShape"
+---
+
+```ts
+type CanvasFrameShape = 
+  | {
+  kind: "rect";
+}
+  | {
+  kind: "ellipse";
+}
+  | {
+  kind: "polygon";
+  sides: number;
+}
+  | {
+  innerRadiusRatio: number;
+  kind: "star";
+  points: number;
+}
+  | {
+  d: string;
+  kind: "path";
+};
+```
+
+Defined in: [ir/types.ts:530](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L530)
+
+What geometry a clipping frame clips to (ADR 0008 decision 2 — the shape
+mask lives on the container, never on the image node).
+
+**Absent = the rectangle frames have always clipped to**, so every document
+written before this field existed keeps its exact geometry with no migration.
+
+Three constraints are resolved centrally by [resolveFrameClipShape](../functions/resolveFrameClipShape) and
+must never be re-derived per consumer:
+
+1. **`shape` only takes effect when `clip` is `true`.** `clip` remains the
+   single on/off switch; `shape` only says what the clip's geometry is. A
+   shape on an unclipped frame is inert, not a second silent clip trigger.
+2. **`radius`/`cornerRadii` apply only to `kind: "rect"`** and are ignored by
+   every other kind.
+3. **An unhonourable shape degrades to the rectangle, never throws** — see
+   the `unsupported-frame-clip-shape` invariant for the diagnostic.
+
+`kind: "path"` carries raw SVG path data; it is sanitized by the serializer's
+existing path guard on the way out rather than by a second validator here.

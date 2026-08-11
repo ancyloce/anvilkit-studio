@@ -1,0 +1,22 @@
+---
+title: "EditorByteLimits"
+description: "@anvilkit/contracts · EditorByteLimits"
+---
+
+Defined in: [editor/limits.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L18)
+
+Byte limits measured against the canonical (compacted)
+serialization (CORE-P0-006). Exceeding a warn limit surfaces a
+persistent diagnostic; exceeding a hard limit rejects the write.
+Hosts may tighten via `EditorPolicies.byteLimits` but never raise
+above the frozen caps.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="commandmaxbytes"&gt;&lt;/a&gt; `commandMaxBytes` | `readonly` | `number` | [editor/limits.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L23) |
+| &lt;a id="componentdefinitionmaxbytes"&gt;&lt;/a&gt; `componentDefinitionMaxBytes` | `readonly` | `number` | [editor/limits.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L21) |
+| &lt;a id="richtextvaluemaxbytes"&gt;&lt;/a&gt; `richTextValueMaxBytes` | `readonly` | `number` | [editor/limits.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L22) |
+| &lt;a id="sidecarmaxbytes"&gt;&lt;/a&gt; `sidecarMaxBytes` | `readonly` | `number` | [editor/limits.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L20) |
+| &lt;a id="sidecarwarnbytes"&gt;&lt;/a&gt; `sidecarWarnBytes` | `readonly` | `number` | [editor/limits.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/limits.ts#L19) |

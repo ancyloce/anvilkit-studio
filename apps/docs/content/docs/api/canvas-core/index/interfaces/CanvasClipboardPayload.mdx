@@ -1,0 +1,18 @@
+---
+title: "CanvasClipboardPayload"
+description: "@anvilkit/canvas-core · CanvasClipboardPayload"
+---
+
+Defined in: [clipboard/payload.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L49)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="assetrefs"&gt;&lt;/a&gt; `assetRefs` | `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasAssetRef`](CanvasAssetRef.md)\&gt;\&gt; | - | [clipboard/payload.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L54) |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | [`CanvasClipboardBounds`](CanvasClipboardBounds.md) | Combined AABB of `nodes` at copy time (paste-offset math). | [clipboard/payload.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L56) |
+| &lt;a id="nodes"&gt;&lt;/a&gt; `nodes` | readonly [`CanvasNode`](../type-aliases/CanvasNode)[] | - | [clipboard/payload.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L53) |
+| &lt;a id="requiredcapabilities"&gt;&lt;/a&gt; `requiredCapabilities?` | readonly `string`[] | Capabilities a reader needs in order to interpret these nodes correctly — e.g. `"layout.auto.v1"` when any copied node carries layout intent. Open by construction, exactly like `CanvasDocumentCompatibility.requiredCapabilities`: an unknown string must survive parsing so it can be reported as unsupported rather than dying as a schema error. This is a PAYLOAD-level check, not the document migration chain — a clipboard payload is a bag of nodes, not a `CanvasIR`, so it has its own version and its own error taxonomy. | [clipboard/payload.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L68) |
+| &lt;a id="sourcedocumentid"&gt;&lt;/a&gt; `sourceDocumentId?` | `string` | - | [clipboard/payload.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L51) |
+| &lt;a id="sourcepageid"&gt;&lt;/a&gt; `sourcePageId?` | `string` | - | [clipboard/payload.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L52) |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `1` | - | [clipboard/payload.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L50) |

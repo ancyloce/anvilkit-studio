@@ -1,0 +1,15 @@
+---
+title: "PropertyPath"
+description: "@anvilkit/contracts · PropertyPath"
+---
+
+```ts
+type PropertyPath = readonly (string | number)[];
+```
+
+Defined in: [editor/values.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L30)
+
+A structural property path: object keys and array indices, matching
+the `EditorError.path` and `ComponentPropDefinition.sourcePath`
+conventions. Never a string-encoded dot/bracket path.
+(Contract freeze CORE-P0-001 §1.2.)

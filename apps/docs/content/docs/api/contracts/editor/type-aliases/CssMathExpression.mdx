@@ -1,0 +1,39 @@
+---
+title: "CssMathExpression"
+description: "@anvilkit/contracts · CssMathExpression"
+---
+
+```ts
+type CssMathExpression = 
+  | {
+  kind: "unit";
+  unit: CssUnit;
+  value: number;
+}
+  | {
+  kind: "number";
+  value: number;
+}
+  | {
+  kind: "token";
+  tokenId: string;
+}
+  | {
+  kind: "op";
+  left: CssMathExpression;
+  operator: "+" | "-" | "*" | "/";
+  right: CssMathExpression;
+}
+  | {
+  args: readonly CssMathExpression[];
+  fn: "min" | "max" | "clamp";
+  kind: "fn";
+};
+```
+
+Defined in: [editor/values.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L63)
+
+AST-built math expression for `calc`/`min`/`max`/`clamp` values.
+Only numeric-unit leaves, token references, binary operators, and
+the three comparison functions exist — there is no raw-text member,
+so unsafe CSS cannot be smuggled through a math expression.

@@ -1,0 +1,20 @@
+---
+title: "CreateComponentInstanceOptions"
+description: "@anvilkit/canvas-core · CreateComponentInstanceOptions"
+---
+
+Defined in: [ir/builders.ts:587](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L587)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | [`CanvasBounds`](CanvasBounds.md) | - | [ir/builders.ts:591](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L591) |
+| &lt;a id="componentid"&gt;&lt;/a&gt; `componentId?` | `string` | Shorthand for a document-local Source — equivalent to `source: { kind: "local", componentId }`. Supply exactly one of this or [CreateComponentInstanceOptions.source](#source). Kept as an authoring convenience (the overwhelmingly common case is a local Source) even though the *node* it builds carries only `source`. This is a builder ergonomic, not a second persisted field. | [ir/builders.ts:602](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L602) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id?` | `string` | - | [ir/builders.ts:588](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L588) |
+| &lt;a id="layoutitem"&gt;&lt;/a&gt; `layoutItem?` | [`CanvasLayoutItem`](CanvasLayoutItem.md) | The instance is ONE item in a parent Auto Layout (LC-INSTANCE-004). | [ir/builders.ts:607](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L607) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `string` | - | [ir/builders.ts:589](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L589) |
+| &lt;a id="overrides"&gt;&lt;/a&gt; `overrides?` | `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasComponentOverride`](../type-aliases/CanvasComponentOverride)\&gt;\&gt; | - | [ir/builders.ts:605](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L605) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source?` | [`CanvasComponentSourceRef`](../type-aliases/CanvasComponentSourceRef) | The Source this instance points at — local or external (plan 0021 T-012). | [ir/builders.ts:604](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L604) |
+| &lt;a id="transform"&gt;&lt;/a&gt; `transform?` | `Partial`\&lt;[`CanvasTransform`](CanvasTransform.md)\&gt; | - | [ir/builders.ts:590](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L590) |
+| &lt;a id="zindex"&gt;&lt;/a&gt; `zIndex?` | `number` | - | [ir/builders.ts:592](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L592) |

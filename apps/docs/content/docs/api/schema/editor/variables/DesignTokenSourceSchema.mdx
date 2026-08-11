@@ -1,0 +1,18 @@
+---
+title: "DesignTokenSourceSchema"
+description: "@anvilkit/schema · DesignTokenSourceSchema"
+---
+
+```ts
+const DesignTokenSourceSchema: ZodObject<{
+  ref: ZodString;
+  system: ZodEnum<{
+     brand: "brand";
+     theme: "theme";
+  }>;
+}, $loose>;
+```
+
+Defined in: [editor/tokens.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/tokens.ts#L33)
+
+Import-as-copy provenance (ADR 0005).

@@ -1,0 +1,32 @@
+---
+title: "strictEnvelopeObject"
+description: "@anvilkit/canvas-core · strictEnvelopeObject"
+---
+
+```ts
+function strictEnvelopeObject<Shape>(shape): ZodObject<{ -readonly [P in string | number | symbol]: Shape[P] }, $strict>;
+```
+
+Defined in: [component-libraries/schema-utils.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/schema-utils.ts#L51)
+
+A `z.strictObject` for envelope shapes — unknown keys are rejected.
+
+A named wrapper rather than calling `z.strictObject` directly so that every
+trust-boundary schema in this domain is greppable as one set, and so the
+rationale above has exactly one place to live.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `Shape` *extends* `Readonly`\&lt;\{ \[`k`: `string`\]: `$ZodType`\&lt;`unknown`, `unknown`, `$ZodTypeInternals`\&lt;`unknown`, `unknown`\&gt;\&gt;; \}\&gt; |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `shape` | `Shape` |
+
+## Returns
+
+`ZodObject`\&lt;\{ -readonly \[P in string \| number \| symbol\]: Shape\[P\] \}, `$strict`\&gt;

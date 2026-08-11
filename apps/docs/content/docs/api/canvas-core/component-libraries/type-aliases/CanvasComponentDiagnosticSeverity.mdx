@@ -1,0 +1,19 @@
+---
+title: "CanvasComponentDiagnosticSeverity"
+description: "@anvilkit/canvas-core · CanvasComponentDiagnosticSeverity"
+---
+
+```ts
+type CanvasComponentDiagnosticSeverity = "error" | "warning" | "info";
+```
+
+Defined in: [component-libraries/diagnostics.ts:127](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/diagnostics.ts#L127)
+
+How badly a diagnostic affects the document.
+
+`error` — the instance cannot render from stored data (missing or invalid
+snapshot, missing dependency, integrity failure).
+`warning` — it renders, but something needs attention (deprecated version,
+an orphaned override after a migration, a variant that fell back).
+`info` — an environmental condition with no effect on stored content
+(Provider offline while the snapshot still renders fine).

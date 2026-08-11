@@ -1,0 +1,24 @@
+---
+title: "CanvasElementBuildContext"
+description: "@anvilkit/canvas-editor · CanvasElementBuildContext"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-entry.ts:197](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L197)
+
+Everything [CanvasElementEntry.build](CanvasElementEntry.md#build) may be told about the insertion
+that is about to happen. Every field is optional and every omission has a
+defined default, matching how `canvas-core`'s own node builders take options
+(`core/src/ir/builders.ts:361`) — so `entry.build()` with no argument is
+always valid and always produces something insertable.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="at"&gt;&lt;/a&gt; `at?` | `readonly` | \{ `x`: `number`; `y`: `number`; \} | Top-left of the element in page coordinates. Defaults to the origin. Top-left rather than centre so it maps straight onto `transform.x/y`, which is what `node.create` persists. `cp3-004`'s click-to-centre path computes `centre - defaultSize / 2` itself — it already knows the viewport, and [CanvasElementEntry.defaultSize](CanvasElementEntry.md#defaultsize) is readable without building anything. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:216](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L216) |
+| `at.x` | `readonly` | `number` | - | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:216](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L216) |
+| `at.y` | `readonly` | `number` | - | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:216](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L216) |
+| &lt;a id="fill"&gt;&lt;/a&gt; `fill?` | `readonly` | `CanvasFill` | Initial fill, for entries whose [CanvasElementRecolor](../type-aliases/CanvasElementRecolor) is `"fill"` or `"multi"`. A `BrandTokenRef` is legal here and stays unresolved in the node, exactly as a hand-drawn shape's brand-token fill does — that is what makes an inserted icon brand-token-aware from the first frame rather than only after a trip through the inspector. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:226](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L226) |
+| &lt;a id="newid"&gt;&lt;/a&gt; `newId?` | `readonly` | () =&gt; `string` | Node id factory. Defaults to whatever `canvas-core`'s builders use (`crypto.randomUUID` with an RFC4122 fallback). Every node in a built subtree must get a FRESH id on every call — two insertions of the same entry that shared ids would trip `duplicate-node-id`, which silently makes every `findNode`/`parentOf` resolve to the wrong node (`core/src/ir/invariants.ts:179-182`). Audited by `checkElementEntry`. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:206](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L206) |
+| &lt;a id="size"&gt;&lt;/a&gt; `size?` | `readonly` | `CanvasBounds` | Target size. Defaults to [CanvasElementEntry.defaultSize](CanvasElementEntry.md#defaultsize). | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:218](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L218) |
+| &lt;a id="stroke"&gt;&lt;/a&gt; `stroke?` | `readonly` | `string` | Initial stroke colour, for entries whose [CanvasElementRecolor](../type-aliases/CanvasElementRecolor) is `"stroke"`. A plain CSS colour string, not a `CanvasFill`: every stroke-bearing IR kind types `stroke` as `string` (`core/src/ir/types.ts:1160-1161`). | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:233](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L233) |

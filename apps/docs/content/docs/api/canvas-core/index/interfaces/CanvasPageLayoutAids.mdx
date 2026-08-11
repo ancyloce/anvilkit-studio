@@ -1,0 +1,21 @@
+---
+title: "CanvasPageLayoutAids"
+description: "@anvilkit/canvas-core · CanvasPageLayoutAids"
+---
+
+Defined in: [ir/types.ts:124](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L124)
+
+Page-level layout aids (PRD 0012 §9.3 / FR-113): persistent guides plus
+margin/bleed/safe-area insets. Purely advisory editor chrome — serializers
+never render these unless a caller explicitly opts in. Absent field =
+that aid is unset; absent object = no aids at all (so pre-existing
+documents need no migration).
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="bleed"&gt;&lt;/a&gt; `bleed?` | [`CanvasInsets`](CanvasInsets.md) | [ir/types.ts:127](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L127) |
+| &lt;a id="guides"&gt;&lt;/a&gt; `guides?` | [`CanvasPageGuides`](CanvasPageGuides.md) | [ir/types.ts:125](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L125) |
+| &lt;a id="margin"&gt;&lt;/a&gt; `margin?` | [`CanvasInsets`](CanvasInsets.md) | [ir/types.ts:126](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L126) |
+| &lt;a id="safearea"&gt;&lt;/a&gt; `safeArea?` | [`CanvasInsets`](CanvasInsets.md) | [ir/types.ts:128](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L128) |

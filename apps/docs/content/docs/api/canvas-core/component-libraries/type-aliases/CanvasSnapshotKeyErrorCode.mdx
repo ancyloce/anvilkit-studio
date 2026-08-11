@@ -1,0 +1,24 @@
+---
+title: "CanvasSnapshotKeyErrorCode"
+description: "@anvilkit/canvas-core · CanvasSnapshotKeyErrorCode"
+---
+
+```ts
+type CanvasSnapshotKeyErrorCode = 
+  | "field-not-a-string"
+  | "field-empty"
+  | "field-too-long"
+  | "field-control-character"
+  | "field-unpaired-surrogate";
+```
+
+Defined in: [ir/snapshot-key.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/snapshot-key.ts#L33)
+
+Why a snapshot key could not be derived from a reference.
+
+Separate from the resource-limit codes (`CanvasComponentLimitCode`, in
+`component-libraries/errors.ts`) even though `field-too-long`
+looks like a cap: these describe a *malformed reference*, which is a
+correctness failure in whatever produced it, not an oversized-but-well-formed
+payload from a remote. Conflating them would make "the Provider sent too much"
+indistinguishable from "we built an invalid key".

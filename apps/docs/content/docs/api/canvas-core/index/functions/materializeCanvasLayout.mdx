@@ -1,0 +1,35 @@
+---
+title: "materializeCanvasLayout"
+description: "@anvilkit/canvas-core · materializeCanvasLayout"
+---
+
+```ts
+function materializeCanvasLayout(
+   ir, 
+   resolved, 
+   options?): CanvasIR;
+```
+
+Defined in: [layout/materialize.ts:105](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/materialize.ts#L105)
+
+Write a resolution's geometry into the document and stamp its freshness.
+
+The stamp is what lets a later reader tell "this cached geometry matches the
+current intent" from "this cached geometry is from two edits ago", which is
+the whole reason the cache is safe to persist at all.
+
+Only pages present in `resolved` are rewritten; resolving a subset of pages
+and materializing the result leaves the others untouched rather than
+blanking them.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `resolved` | [`CanvasResolvedDocument`](../interfaces/CanvasResolvedDocument) |
+| `options` | [`CanvasLayoutMaterializeOptions`](../interfaces/CanvasLayoutMaterializeOptions) |
+
+## Returns
+
+[`CanvasIR`](../interfaces/CanvasIR)

@@ -16,17 +16,36 @@ description: "@anvilkit/canvas-editor · index"
 | Interface | Description |
 | ------ | ------ |
 | [AddPageOptions](interfaces/AddPageOptions.md) | - |
+| [BlockedOperationDialogProps](interfaces/BlockedOperationDialogProps.md) | - |
 | [BrandColor](interfaces/BrandColor.md) | A single named brand color — a swatch the canvas surfaces (color pickers, the property inspector) so designs stay on-brand. |
 | [BrandKit](interfaces/BrandKit.md) | Shared brand data surfaced to the canvas editor (I3-4, upgraded to the canonical FR-020 contract's full shape in canvas-m2-005). Sourced from the host's Studio config — `plugin-canvas-studio`'s `CanvasModeOverlay` maps `StudioConfig.brandKit`/`branding` → `BrandKit` and passes it via the `<CanvasStudio brandKit>` prop. Read it through [useBrandKit](functions/useBrandKit.md), which normalizes the absent case to [EMPTY\_BRAND\_KIT](variables/EMPTY_BRAND_KIT.md). |
 | [BrandPanelProps](interfaces/BrandPanelProps.md) | - |
 | [BuiltinPanelDescriptor](interfaces/BuiltinPanelDescriptor.md) | - |
+| [CanvasAnalyticsEvent](interfaces/CanvasAnalyticsEvent.md) | - |
+| [CanvasAnalyticsPayloads](interfaces/CanvasAnalyticsPayloads.md) | The per-event property bags, exactly PRD §13's "required properties". |
 | [CanvasAssetPicker](interfaces/CanvasAssetPicker.md) | FR-090: host-provided asset browser/picker. |
 | [CanvasAssetUploader](interfaces/CanvasAssetUploader.md) | FR-091: host-provided upload transport. |
+| [CanvasAutoLayoutFlagOptions](interfaces/CanvasAutoLayoutFlagOptions.md) | Object form of the [CanvasStudioProps.autoLayout](interfaces/CanvasStudioProps.md#autolayout) flag (A-2). The boolean shorthand `autoLayout: true` is equivalent to `{ creationUI: true }`. |
 | [CanvasAutoSaveOptions](interfaces/CanvasAutoSaveOptions.md) | - |
 | [CanvasClipboardAdapter](interfaces/CanvasClipboardAdapter.md) | - |
+| [CanvasComponentCatalogEntry](interfaces/CanvasComponentCatalogEntry.md) | One component as the catalog describes it — NOT its definition. |
+| [CanvasComponentCompatibilityQuery](interfaces/CanvasComponentCompatibilityQuery.md) | "Is this swap/update safe?" — answered by the host, checked again by Core. |
+| [CanvasComponentProvider](interfaces/CanvasComponentProvider.md) | The host-implemented protocol. |
+| [CanvasComponentSearchQuery](interfaces/CanvasComponentSearchQuery.md) | - |
+| [CanvasComponentSearchResult](interfaces/CanvasComponentSearchResult.md) | - |
+| [CanvasComponentUpdate](interfaces/CanvasComponentUpdate.md) | One available update for a component the document already uses. |
+| [CanvasComponentUpdateInfo](interfaces/CanvasComponentUpdateInfo.md) | - |
+| [CanvasComponentVersionQuery](interfaces/CanvasComponentVersionQuery.md) | "Which versions of this component exist?" |
+| [CanvasComponentVersionResult](interfaces/CanvasComponentVersionResult.md) | - |
 | [CanvasEditorActions](interfaces/CanvasEditorActions.md) | The unified editor action layer (M0-01, PRD 0012 §19). Every UI surface — toolbars, context menus, keyboard handlers, panels, inspectors — routes document operations through ONE of these actions instead of building commands locally, so behavior (locked-node protection, batch boundaries, selection updates, undo granularity) stays identical everywhere. |
 | [CanvasEditorActionsDeps](interfaces/CanvasEditorActionsDeps.md) | Build a [CanvasEditorActions](interfaces/CanvasEditorActions.md) facade over a studio context. For non-React callers and tests; components should prefer [useCanvasActions](functions/useCanvasActions.md). The context's `getIR`/stores are read at call time, so the facade stays correct across edits as long as `ctx` itself is the live context object. |
 | [CanvasEditorExtension](interfaces/CanvasEditorExtension.md) | - |
+| [CanvasElementBuildContext](interfaces/CanvasElementBuildContext.md) | Everything [CanvasElementEntry.build](interfaces/CanvasElementEntry.md#build) may be told about the insertion that is about to happen. Every field is optional and every omission has a defined default, matching how `canvas-core`'s own node builders take options (`core/src/ir/builders.ts:361`) — so `entry.build()` with no argument is always valid and always produces something insertable. |
+| [CanvasElementEntry](interfaces/CanvasElementEntry.md) | One catalog entry. |
+| [CanvasElementInsertOptions](interfaces/CanvasElementInsertOptions.md) | Where the insertion lands and how it is parented. |
+| [CanvasElementProvider](interfaces/CanvasElementProvider.md) | - |
+| [CanvasElementSearchQuery](interfaces/CanvasElementSearchQuery.md) | Provider-based element API (PLAN-0035 §5 P3, `cp3-001`). |
+| [CanvasElementSearchResult](interfaces/CanvasElementSearchResult.md) | - |
 | [CanvasErrorBoundaryProps](interfaces/CanvasErrorBoundaryProps.md) | - |
 | [CanvasExportActionRequest](interfaces/CanvasExportActionRequest.md) | PRD §11.2 headless export request — format + page scope + output knobs. |
 | [CanvasExportArtifact](interfaces/CanvasExportArtifact.md) | A downloadable artifact. `data` accepts a data URL, raw string, bytes, or a Blob. |
@@ -35,12 +54,21 @@ description: "@anvilkit/canvas-editor · index"
 | [CanvasExportRequest](interfaces/CanvasExportRequest.md) | The user-tunable knobs from the export popover (mirrors the reference panel). |
 | [CanvasExportResult](interfaces/CanvasExportResult.md) | - |
 | [CanvasExportResultArtifact](interfaces/CanvasExportResultArtifact.md) | One artifact from a completed export — PRD §11.1 `onExport` / §11.2 `CanvasStudioActions.export()`. Canonical home for `header/export-action.ts`'s identically-named type (re-exported from there unchanged, so `@anvilkit/canvas-editor`'s public import path is untouched): `header/` (rank 2, editor-surfaces) is where the export machinery that PRODUCES this shape lives, but [CanvasStudioContextValue.onExport](interfaces/CanvasStudioContextValue.md#onexport) below needs it on THIS file's context value, and `check-layering.mjs` ranks `context/` (rank 1, interaction-core) below `header/` — this file may never import FROM header/, only the reverse. Defining the result shape here (header/ imports it back) keeps ONE canonical type instead of two. |
+| [CanvasFontCatalog](interfaces/CanvasFontCatalog.md) | A resolved catalog: entries ordered by descending precedence, plus a case-insensitive family lookup so `cp2-004`/`cp2-006` never scan. |
+| [CanvasFontCatalogEntry](interfaces/CanvasFontCatalogEntry.md) | A family as its author writes it. |
+| [CanvasFontCatalogRecord](interfaces/CanvasFontCatalogRecord.md) | An entry as a catalog stores it: the authoring shape plus the tier it was created at. Stamped by [createFontCatalog](functions/createFontCatalog.md) so authors never repeat it per entry, and preserved by [mergeCatalogs](functions/mergeCatalogs.md) so merging a merged catalog still resolves each family at its true precedence. |
+| [CanvasFontFile](interfaces/CanvasFontFile.md) | One concrete face file — exactly the four things an `@font-face` rule needs, so `cp2-006` can build an `SvgFontFaceDef` from a catalog entry alone. |
+| [CanvasFontWeightRange](interfaces/CanvasFontWeightRange.md) | A variable-font weight axis, as `font-weight: <min> <max>` in CSS. |
 | [CanvasHeaderPlugin](interfaces/CanvasHeaderPlugin.md) | A pluggable action mounted in the [WorkspaceHeader](functions/WorkspaceHeader.md)'s right cluster (between the collaborator avatars and the host `shareSlot`). `render` runs *inside* the `<CanvasStudio>` provider, so the returned node may call [useCanvasStudio](functions/useCanvasStudio.md). `id` keys the node and dedupes registrations. |
+| [CanvasJsonExporterOptions](interfaces/CanvasJsonExporterOptions.md) | Options for [createJsonExporter](functions/createJsonExporter.md). |
 | [CanvasKindInspector](interfaces/CanvasKindInspector.md) | Renders the inspector fields for a custom node kind. |
 | [CanvasKindRenderer](interfaces/CanvasKindRenderer.md) | Draws a custom node kind to react-konva. |
+| [CanvasLoadDiagnostics](interfaces/CanvasLoadDiagnostics.md) | - |
+| [CanvasLoadResult](interfaces/CanvasLoadResult.md) | - |
 | [CanvasPanelContext](interfaces/CanvasPanelContext.md) | - |
 | [CanvasPersistenceAdapter](interfaces/CanvasPersistenceAdapter.md) | - |
 | [CanvasPickedAsset](interfaces/CanvasPickedAsset.md) | - |
+| [CanvasProviderRequestContext](interfaces/CanvasProviderRequestContext.md) | Per-request context. Every Provider method receives one. |
 | [CanvasRecoveryAdapter](interfaces/CanvasRecoveryAdapter.md) | - |
 | [CanvasRecoverySnapshot](interfaces/CanvasRecoverySnapshot.md) | - |
 | [CanvasSaveInput](interfaces/CanvasSaveInput.md) | - |
@@ -49,6 +77,7 @@ description: "@anvilkit/canvas-editor · index"
 | [CanvasShortcutCombo](interfaces/CanvasShortcutCombo.md) | - |
 | [CanvasShortcutOptions](interfaces/CanvasShortcutOptions.md) | - |
 | [CanvasShortcutRunContext](interfaces/CanvasShortcutRunContext.md) | - |
+| [CanvasStaticComponentEntry](interfaces/CanvasStaticComponentEntry.md) | One fixture component: its catalog entry plus the envelope it resolves to. |
 | [CanvasStudioActions](interfaces/CanvasStudioActions.md) | [CanvasEditorActions](interfaces/CanvasEditorActions.md) plus the PRD §11.2 headless `export()` action — named to match the PRD's `CanvasStudioActions` exactly. |
 | [CanvasStudioContextValue](interfaces/CanvasStudioContextValue.md) | - |
 | [CanvasStudioProps](interfaces/CanvasStudioProps.md) | - |
@@ -63,6 +92,10 @@ description: "@anvilkit/canvas-editor · index"
 | [CanvasWorkspaceProps](interfaces/CanvasWorkspaceProps.md) | - |
 | [ClonePageOptions](interfaces/ClonePageOptions.md) | - |
 | [ColorFieldProps](interfaces/ColorFieldProps.md) | - |
+| [ComplianceIssueRowProps](interfaces/ComplianceIssueRowProps.md) | - |
+| [ComplianceNavigation](interfaces/ComplianceNavigation.md) | - |
+| [CompliancePanelProps](interfaces/CompliancePanelProps.md) | - |
+| [CreateFontCatalogOptions](interfaces/CreateFontCatalogOptions.md) | - |
 | [CreateWorkspaceUiStoreOptions](interfaces/CreateWorkspaceUiStoreOptions.md) | - |
 | [DockItem](interfaces/DockItem.md) | - |
 | [EffectiveToolDescriptor](interfaces/EffectiveToolDescriptor.md) | A display-ready tool entry: localized label, icon, shortcut label. |
@@ -71,7 +104,11 @@ description: "@anvilkit/canvas-editor · index"
 | [ElementsPanelProps](interfaces/ElementsPanelProps.md) | - |
 | [ExportStageContentOptions](interfaces/ExportStageContentOptions.md) | - |
 | [FieldContractTarget](interfaces/FieldContractTarget.md) | §10 field-input contract target (B-12): the node(s) a field edits and the `node.update` patch a given value maps to. Multi-selection passes every selected node; `buildPatch` runs per node so patches can spread that node's own current sub-objects (transform, bounds, crop, …). Plain data — the field component wires preview/commit/revert internally. |
+| [InstanceComplianceLookup](interfaces/InstanceComplianceLookup.md) | - |
 | [LayerPanelProps](interfaces/LayerPanelProps.md) | - |
+| [LoadCanvasDocumentOptions](interfaces/LoadCanvasDocumentOptions.md) | - |
+| [LoadVerificationOptions](interfaces/LoadVerificationOptions.md) | - |
+| [LoadVerificationResult](interfaces/LoadVerificationResult.md) | - |
 | [NumberFieldProps](interfaces/NumberFieldProps.md) | - |
 | [PageNavigatorProps](interfaces/PageNavigatorProps.md) | - |
 | [PagesCanvasProps](interfaces/PagesCanvasProps.md) | - |
@@ -87,6 +124,8 @@ description: "@anvilkit/canvas-editor · index"
 | [TabPanelProps](interfaces/TabPanelProps.md) | - |
 | [TextFieldProps](interfaces/TextFieldProps.md) | - |
 | [ToolStripProps](interfaces/ToolStripProps.md) | `<CanvasWorkspace toolStrip>` options (FR-010), mirroring the `shortcuts` boolean-or-options pattern. |
+| [UpdateComponentDialogProps](interfaces/UpdateComponentDialogProps.md) | - |
+| [VariantControlsProps](interfaces/VariantControlsProps.md) | - |
 | [WorkspaceFooterProps](interfaces/WorkspaceFooterProps.md) | - |
 | [WorkspaceHeaderProps](interfaces/WorkspaceHeaderProps.md) | - |
 | [WorkspaceUiState](interfaces/WorkspaceUiState.md) | - |
@@ -97,20 +136,46 @@ description: "@anvilkit/canvas-editor · index"
 | Type Alias | Description |
 | ------ | ------ |
 | [AlignDirection](type-aliases/AlignDirection.md) | - |
+| [BlockedOperationCode](type-aliases/BlockedOperationCode.md) | The stable code the Blocked dialog localizes. |
 | [CampaignResizeResult](type-aliases/CampaignResizeResult.md) | Result of [resizeActivePageToVariants](functions/resizeActivePageToVariants.md). `ok: false` carries a user-facing message rather than throwing — mirrors `TemplateActionResult` (`template-actions.ts`). |
+| [CanvasAnalyticsEventKey](type-aliases/CanvasAnalyticsEventKey.md) | - |
+| [CanvasAnalyticsSink](type-aliases/CanvasAnalyticsSink.md) | The host sink. Optional everywhere — analytics is never load-bearing. |
 | [CanvasDistributeAxis](type-aliases/CanvasDistributeAxis.md) | Axis accepted by [CanvasEditorActions.distributeSelection](interfaces/CanvasEditorActions.md#distributeselection). |
+| [CanvasDocumentOrigin](type-aliases/CanvasDocumentOrigin.md) | Where a document came from — the only input the default policy needs. |
+| [CanvasElementCategory](type-aliases/CanvasElementCategory.md) | The five content categories the panel tabs across. |
+| [CanvasElementNode](type-aliases/CanvasElementNode.md) | The node kinds a catalog entry may build. |
+| [CanvasElementPreview](type-aliases/CanvasElementPreview.md) | A catalog thumbnail. |
+| [CanvasElementRecolor](type-aliases/CanvasElementRecolor.md) | How an inserted entry answers the inspector's colour controls (`cp3-005`). |
 | [CanvasExporter](type-aliases/CanvasExporter.md) | Turns the live editor state + the requested options into a downloadable artifact. May be async (SVG/PDF serialization is). Throwing surfaces through [CanvasExportPluginOptions.onError](interfaces/CanvasExportPluginOptions.md#onerror). |
 | [CanvasExportFormat](type-aliases/CanvasExportFormat.md) | Built-in export formats (AC-010). PNG/JPEG/WebP/JSON ship with the editor; SVG/PDF are host-injected. Mirrors core's export vocabulary (B-04) for the formats the editor UI can drive. |
+| [CanvasFontCategory](type-aliases/CanvasFontCategory.md) | The six families of typeface the picker groups and filters by. |
+| [CanvasFontFileFormat](type-aliases/CanvasFontFileFormat.md) | The `format(...)` hints a `@font-face` `src` may carry. |
+| [CanvasFontOrigin](type-aliases/CanvasFontOrigin.md) | Which tier an entry came from. Precedence is **brand &gt; host &gt; default**. |
+| [CanvasFontSource](type-aliases/CanvasFontSource.md) | How a family is obtained, as a discriminated union so a consumer narrows on `source.kind` without writing a type guard. |
+| [CanvasFontStyle](type-aliases/CanvasFontStyle.md) | - |
+| [CanvasFontWeight](type-aliases/CanvasFontWeight.md) | One static weight (`400`) or a variable axis (`{min: 100, max: 900}`). |
 | [CanvasIRGetter](type-aliases/CanvasIRGetter.md) | - |
+| [CanvasLatencyBucket](type-aliases/CanvasLatencyBucket.md) | Latency reported as a bucket, never as a millisecond count. |
+| [CanvasLayoutEditorEvent](type-aliases/CanvasLayoutEditorEvent.md) | - |
+| [CanvasLayoutEventHandler](type-aliases/CanvasLayoutEventHandler.md) | - |
 | [CanvasPanelDescriptor](type-aliases/CanvasPanelDescriptor.md) | - |
 | [CanvasPanelRegistry](type-aliases/CanvasPanelRegistry.md) | - |
+| [CanvasProviderFailureStatus](type-aliases/CanvasProviderFailureStatus.md) | A failure state, i.e. everything a successful request cannot produce. |
+| [CanvasProviderRequestStatus](type-aliases/CanvasProviderRequestStatus.md) | The eight presentation states of a provider request. |
 | [CanvasSaveState](type-aliases/CanvasSaveState.md) | FR-003/FR-161 save states (B-08). |
 | [CanvasShortcutPlatform](type-aliases/CanvasShortcutPlatform.md) | - |
-| [CanvasStudioStableValue](type-aliases/CanvasStudioStableValue.md) | The stable half of [CanvasStudioContextValue](interfaces/CanvasStudioContextValue.md) (W16): the store handles and host callbacks, with NO per-commit live state (`ir`/`activePageId`/ `stage`). `<CanvasStudio>` memoizes this so its identity never changes after mount, letting components that only need stores subscribe via [useCanvasStores](functions/useCanvasStores.md) and skip the re-render that fires on every edit for consumers of the full [CanvasStudioContext](variables/CanvasStudioContext.md). |
+| [CanvasStudioStableValue](type-aliases/CanvasStudioStableValue.md) | The stable half of [CanvasStudioContextValue](interfaces/CanvasStudioContextValue.md) (W16): the store handles and host callbacks, with NO per-commit live state (`ir`/`activePageId`/ `stage`/`documentReadOnly` — the last derives from the live `ir`, so it is excluded here to make reading it through [useCanvasStores](functions/useCanvasStores.md) a compile error instead of a silently-undefined trap; use [useCanvasStudio](functions/useCanvasStudio.md)). `<CanvasStudio>` memoizes this so its identity never changes after mount, letting components that only need stores subscribe via [useCanvasStores](functions/useCanvasStores.md) and skip the re-render that fires on every edit for consumers of the full [CanvasStudioContext](variables/CanvasStudioContext.md). |
 | [CanvasT](type-aliases/CanvasT.md) | i18n resolver (P7). `key` is a `canvas.*` message id; `fallback` is the inline English default. Returns the host-injected translation when present, else the fallback, else the key. canvas-editor stays standalone (no `@anvilkit/core` dep) — the host (e.g. plugin-canvas-studio) injects a locale-selected catalog via `<CanvasWorkspace messages>`. |
+| [CanvasUpdateCheckResult](type-aliases/CanvasUpdateCheckResult.md) | - |
+| [CanvasVerificationMode](type-aliases/CanvasVerificationMode.md) | What to re-verify. `none` is only reachable for host-persisted documents. |
 | [CanvasWorkspaceState](type-aliases/CanvasWorkspaceState.md) | Plain data slice of [WorkspaceUiState](interfaces/WorkspaceUiState.md) — action methods stripped. Public export (PRD §11.1) for `CanvasWorkspaceProps.initialWorkspaceState`, a host seed for a freshly-mounted workspace (FR-002 territory: distinct from `restoreLayout()`'s hardcoded default — see [CreateWorkspaceUiStoreOptions.initialWorkspaceState](interfaces/CreateWorkspaceUiStoreOptions.md#initialworkspacestate)). |
 | [CommitPatch](type-aliases/CommitPatch.md) | Applies a partial node patch through the editor's `node.update` pipeline. |
+| [ComplianceNavigationTarget](type-aliases/ComplianceNavigationTarget.md) | - |
+| [ComponentChangeVerb](type-aliases/ComponentChangeVerb.md) | - |
 | [DockId](type-aliases/DockId.md) | - |
+| [ExternalComponentFailure](type-aliases/ExternalComponentFailure.md) | Why an insert or recovery did not happen. Never carries a raw error. |
+| [InsertExternalComponentResult](type-aliases/InsertExternalComponentResult.md) | - |
+| [LoadCanvasDocumentWithDiagnosticsOptions](type-aliases/LoadCanvasDocumentWithDiagnosticsOptions.md) | - |
 | [ReorderDirection](type-aliases/ReorderDirection.md) | - |
 | [SaveStatusStoreApi](type-aliases/SaveStatusStoreApi.md) | - |
 | [TemplateActionResult](type-aliases/TemplateActionResult.md) | Result of a template action. `ok: false` carries a structured, user-facing message (canvas-m2-004 / FR-023) — e.g. an invalid template schema — rather than throwing; `ok: true` carries any non-fatal `instantiateTemplate` warnings (missing required variables, unsupported slot/node combinations) so the panel can surface them without parsing strings. |
@@ -121,41 +186,65 @@ description: "@anvilkit/canvas-editor · index"
 
 | Variable | Description |
 | ------ | ------ |
+| [ALL\_DOCK\_ITEMS](variables/ALL_DOCK_ITEMS.md) | Every dock entry, INCLUDING the ones [DOCK\_ITEMS](variables/DOCK_ITEMS.md) filters out. |
+| [CANVAS\_ANALYTICS\_EVENTS](variables/CANVAS_ANALYTICS_EVENTS.md) | The nine PRD §13 events, stored as their FULL wire names. |
+| [CANVAS\_ANALYTICS\_PREFIX](variables/CANVAS_ANALYTICS_PREFIX.md) | The prefix that keeps analytics names out of the i18n namespace (OD-16). |
+| [CANVAS\_ELEMENT\_CATEGORIES](variables/CANVAS_ELEMENT_CATEGORIES.md) | Every category, in the order the panel's tabs should offer them. Exported as data (not just as a type) because `cp3-002` asserts category coverage over it and `cp3-003` renders a control from it — two consumers of one list, so neither restates the union and drifts from it. |
+| [CANVAS\_FONT\_CATEGORIES](variables/CANVAS_FONT_CATEGORIES.md) | Every category, in the order the picker's filter should offer them. Exported as data (not just as a type) because `cp2-002` asserts category coverage over it and `cp2-003` renders a control from it — two consumers of one list, so neither has to restate the union and drift from it. |
 | [CanvasStudioContext](variables/CanvasStudioContext.md) | - |
 | [CanvasStudioStableContext](variables/CanvasStudioStableContext.md) | Stable-only context (W16). Provided alongside [CanvasStudioContext](variables/CanvasStudioContext.md). |
 | [DEFAULT\_CANVAS\_EXPORTERS](variables/DEFAULT_CANVAS_EXPORTERS.md) | Formats the editor can export with zero host wiring (AC-010: all six). |
+| [DEFAULT\_FONT\_CATALOG](variables/DEFAULT_FONT_CATALOG.md) | The default catalog, stamped `origin: "default"` — the lowest tier, so a host or brand entry for the same family replaces it outright. |
+| [DEFAULT\_JSON\_INLINE\_ASSET\_BYTES](variables/DEFAULT_JSON_INLINE_ASSET_BYTES.md) | Default ceiling on the browser-local bytes [createJsonExporter](functions/createJsonExporter.md) will inline as `data:` URIs — **10 MiB of source bytes**, ~14 MB once base64 inflates them by 4/3. |
 | [defaultCanvasPanelRegistry](variables/defaultCanvasPanelRegistry.md) | Built-in panels wired to existing components (layers / brand / elements); the rest are registration stubs awaiting their own content (PRD §1.3.4). |
 | [DOCK\_IDS](variables/DOCK_IDS.md) | - |
 | [DOCK\_ITEMS](variables/DOCK_ITEMS.md) | Dock rail entries actually rendered — stub tabs whose features don't exist yet are filtered out (M0-08); see HIDDEN\_DOCK\_IDS for the list and the revival plan. |
 | [EMPTY\_BRAND\_KIT](variables/EMPTY_BRAND_KIT.md) | Stable empty kit returned by [useBrandKit](functions/useBrandKit.md) when the host has not configured one. Module-level constant so the reference is stable across renders (no per-render allocation). |
 | [jpegExporter](variables/jpegExporter.md) | Built-in JPEG exporter (AC-010). White-on-transparent flattens to black in JPEG's opaque colorspace — hosts needing a background should export PNG or paint a page background. |
-| [jsonExporter](variables/jsonExporter.md) | Built-in JSON exporter. Serializes the IR; round-trips back into the editor. |
+| [jsonExporter](variables/jsonExporter.md) | Built-in JSON exporter with the default inline cap. |
 | [pdfExporter](variables/pdfExporter.md) | Built-in PDF exporter (FR-151/FR-152, AC-010): every page of the given IR is rasterized off-screen (the live stage only holds the active page), then core's raster-embed `serializeDocumentToPdf` packs one PDF page per canvas page — this is what makes multi-page PDF export work (Flow 2). pdf-lib loads via `import()` on first use, never in the eager bundle. |
 | [pngExporter](variables/pngExporter.md) | Built-in PNG exporter. |
-| [svgExporter](variables/svgExporter.md) | Built-in SVG exporter (FR-151, AC-010): core's `serializePageToSvg` on the requested page, with brand tokens resolved against the editor's brand kit (same resolution the stage uses). The serializer module is `import()`ed so its weight stays out of the eager editor bundle. |
+| [svgExporter](variables/svgExporter.md) | Built-in SVG exporter reading the shared browser-local asset store. |
 | [webpExporter](variables/webpExporter.md) | Built-in WebP exporter (AC-010). Chromium-family browsers only — others silently fall back to PNG bytes per the canvas spec. |
-| [WORKSPACE\_UI\_STORE\_PERSIST\_VERSION](variables/WORKSPACE_UI_STORE_PERSIST_VERSION.md) | v2 (B-14): adds `panelWidth`; v1 payloads migrate with the default. v3 (C-06): adds `recentTemplateIds`; older payloads migrate with `[]`. |
+| [WORKSPACE\_UI\_STORE\_PERSIST\_VERSION](variables/WORKSPACE_UI_STORE_PERSIST_VERSION.md) | v2 (B-14): adds `panelWidth`; v1 payloads migrate with the default. v3 (C-06): adds `recentTemplateIds`; older payloads migrate with `[]`. v4 (plan 0023 M5-01): the `components` dock id joins the closed union. The persisted SHAPE is unchanged, so the bump carries no new field — it exists because `activeDockId` is a validated closed union and its legal value set moved. Bumping re-runs `migrate` over every stored payload rather than letting `merge` alone sanitize it, which keeps the "stale selection lands on a valid tab" guarantee explicit at the version boundary instead of implicit. v5 (`cp2-005`): adds `recentFontFamilies`; older payloads migrate with `[]`, exactly as v3 did for `recentTemplateIds`. |
 
 ## Functions
 
 | Function | Description |
 | ------ | ------ |
 | [addPage](functions/addPage.md) | Append a fresh blank page to the IR, commit `page.create`, and activate it. Returns the new page id. |
+| [analyticsEventName](functions/analyticsEventName.md) | The wire name for an event key. |
+| [blockedOperationCodeOf](functions/blockedOperationCodeOf.md) | The stable code to localize for a thrown denial, or `undefined` if it isn't one. |
+| [BlockedOperationDialog](functions/BlockedOperationDialog.md) | - |
+| [blockedOperationMessage](functions/blockedOperationMessage.md) | The i18n key + fallback for a stable deny reason. |
 | [brandKitDefinitionToBrandKit](functions/brandKitDefinitionToBrandKit.md) | Lossless mapping from the canonical `BrandKitDefinition` (FR-031) to the editor's `BrandKit`. `colors` passes through unchanged (identical shape); `fonts` flattens to the plain family-name strings existing consumers (`useBrandFonts`, `resolveBrandToken`) already expect. Every other field — logos, typography, image style presets, tone of voice, rules, default export presets — passes through unchanged, nothing is dropped. |
 | [BrandPanel](functions/BrandPanel.md) | Brand-kit panel: the host's shared palette + fonts (I3-4), plus — when the host supplied a full `BrandKitDefinition` (canvas-m2-005) — a compliance check and apply-brand-kit actions (canvas-m2-006, FR-032). "Check compliance" computes a preview of every action's effect (count of affected nodes) and a compliance report WITHOUT touching the document; each action button then commits its own transform as one reversible step. Testids (`brand-section` / `brand-palette` / `brand-fonts`) are unchanged. |
+| [buildComplianceLookup](functions/buildComplianceLookup.md) | Build a per-node lookup from one document scan. |
 | [CampaignResizePanel](functions/CampaignResizePanel.md) | - |
+| [canvasAnalyticsEvent](functions/canvasAnalyticsEvent.md) | Build an event. Exported so a test can assert a payload without a sink, and so every emission site goes through one place. |
 | [CanvasStudio](functions/CanvasStudio.md) | - |
 | [CanvasToolbar](functions/CanvasToolbar.md) | Dynamic property toolbar — a floating, centered pill above the page (Canva style). Surfaces the most-used quick props for the whole selection (FR-180): fill · border · width · opacity · position for shapes, typography for text / rich-text selections, crop · replace · fit · adjust for a single image — committing through the §10 field contract (transient preview, ONE coalesced undo entry per completed interaction, Escape revert), mixed-value aware across a multi-selection. Renders nothing when the selection is empty or while an inline text editor is open (the `RichTextToolbar` owns that mode). |
 | [CanvasWorkspace](functions/CanvasWorkspace.md) | The Canva-style editor shell: full-width Header · Aside (Panel Dock + Tab Panel) · Canvas (dynamic Toolbar + Page with floating Element Controls) · full-width Footer. Composed over the headless `<CanvasStudio>` via its `renderShell` seam; UI state lives in a per-instance Zustand store provided here. This is the editor's single top-level shell. |
+| [checkForComponentUpdates](functions/checkForComponentUpdates.md) | Ask the Provider whether newer versions exist for what this document uses. |
 | [clonePage](functions/clonePage.md) | Deep-clone a CanvasPage with a brand-new page id and fresh ids on every descendant node. Uses `structuredClone` — safe because the IR is pure data (per `CanvasNode` types in `@anvilkit/canvas-core`). |
+| [collectExternalRefUsage](functions/collectExternalRefUsage.md) | Every distinct external ref the document uses, with instance counts. |
+| [collectRetainedSnapshotKeys](functions/collectRetainedSnapshotKeys.md) | Every snapshot key referenced by the undo and redo stacks. |
 | [ColorField](functions/ColorField.md) | - |
+| [ComplianceIssueRow](functions/ComplianceIssueRow.md) | - |
+| [CompliancePanel](functions/CompliancePanel.md) | - |
 | [createCanvasEditorActions](functions/createCanvasEditorActions.md) | - |
 | [createCanvasExportPlugin](functions/createCanvasExportPlugin.md) | Builds the export [CanvasHeaderPlugin](interfaces/CanvasHeaderPlugin.md) for the workspace header. Pass it to `<CanvasWorkspace headerPlugins={[…]}>`. PNG/JSON work with no config; inject `exporters.svg` / `exporters.pdf` to enable those cards. |
 | [createCanvasPanelRegistry](functions/createCanvasPanelRegistry.md) | Merge host overrides over the defaults (override wins per dock id). |
 | [createCanvasStudioActions](functions/createCanvasStudioActions.md) | Build a [CanvasStudioActions](interfaces/CanvasStudioActions.md) facade over a studio context — the `export`-augmented sibling of [createCanvasEditorActions](functions/createCanvasEditorActions.md). |
 | [createCanvasTextMeasurer](functions/createCanvasTextMeasurer.md) | A `CanvasTextMeasurer` (core's headless text-measurement contract) backed by a real Canvas2D context — pass this to core's `serializePageToSvg({ textMeasurer })` (or `canvasToSvg` in `@anvilkit/plugin-export-canvas`) so an SVG export wraps rich text at exactly the points the stage does. Both paths go through the same internal layout function; only the glyph-width source differs from what the stage renderer (`CanvasNodeRenderer.tsx`) uses, and it is the same source. |
 | [createCoreShortcutBindings](functions/createCoreShortcutBindings.md) | The built-in FR-040 bindings shipped by A-04. Later Phase-1a tasks extend this list in place: clipboard (A-05), zoom/view (A-07), tools (A-10). NOTE: Lock is `Ctrl/Cmd+Shift+L` — plain `Ctrl+L` is reserved by browsers for address-bar focus and cannot be intercepted reliably (PRD FR-040 note). |
+| [createDefaultElementProvider](functions/createDefaultElementProvider.md) | A provider over the built-in catalog, fetched on first `search`/`getById`. |
+| [createFontCatalog](functions/createFontCatalog.md) | Build a catalog from authored entries, stamping every one with `origin`. |
 | [createIndexedDbRecoveryAdapter](functions/createIndexedDbRecoveryAdapter.md) | FR-164 default adapter: one snapshot per document id in IndexedDB. Every method opens/closes its own connection — recovery traffic is low-volume and this keeps the adapter free of connection lifecycle state. Throws where IndexedDB is unavailable (SSR/jsdom); the recovery controller treats adapter failures as best-effort and never breaks editing. |
+| [createJsonExporter](functions/createJsonExporter.md) | Built-in JSON exporter (cp1-006). Serializes the IR and round-trips back into the editor. |
+| [createLazyElementProvider](functions/createLazyElementProvider.md) | Defer a provider until its first query, then reuse it. |
+| [createStaticComponentProvider](functions/createStaticComponentProvider.md) | Wrap a static component array in the Provider protocol. |
+| [createStaticElementProvider](functions/createStaticElementProvider.md) | Wrap a static element array in the provider protocol: synchronous filtering with offset-cursor pagination. Mirrors `createStaticTemplateProvider` exactly, including the `pageSize` option and the `Promise.resolve` return, so the two behave identically under the same query. |
 | [createStaticTemplateProvider](functions/createStaticTemplateProvider.md) | Wrap a static template array in the provider protocol: synchronous filtering with offset-cursor pagination. This is what the panel uses for `CanvasStudioProps.templates`, and a convenient base for host tests. |
 | [createWorkspaceUiStore](functions/createWorkspaceUiStore.md) | Build a fresh per-instance store. The persistence key is namespaced by `storeId` so concurrent stores never collide in `localStorage`. |
 | [deletePage](functions/deletePage.md) | Delete a page. Blocked when only one page remains (last-page guard — an empty IR would render the "no active page" fallback in `<CanvasStudio>`); FR-170 fires a warning toast so a blocked delete is never a silent no-op, regardless of which UI entry point (row button, context menu, toolbar icon) triggered it — every caller routes through this one guard, so the toast fires exactly once per attempt. Reuses the same copy as the disabled delete controls' tooltip (`canvas.nav.cannotDeleteOnly`). If the deleted page was active, moves active to the page at the same index (or the previous one if the deleted was last). |
@@ -164,34 +253,58 @@ description: "@anvilkit/canvas-editor · index"
 | [duplicateCurrentPage](functions/duplicateCurrentPage.md) | Deep-clone the currently active page (including all nodes with fresh ids), insert it directly after the original, and activate the clone. Returns the clone's id, or null if there is no active page in the current IR. |
 | [effectiveToolDescriptors](functions/effectiveToolDescriptors.md) | Resolve the EFFECTIVE tool registry into display-ready descriptors: built-ins (rail order) first, then extension tools (registry order) with a fallback icon when they declare none. `registry` is normally `useCanvasStudio().toolRegistry`; `undefined` (partial test contexts) yields the built-in rail alone. |
 | [ElementControls](functions/ElementControls.md) | Floating per-selection controls pinned **above the selected element** (lock, duplicate, delete, "⋯ more"). The toolbar is a DOM element so it doesn't scale with the Konva canvas — but its position is computed from the rendered canvas-pixel bounding box (via `Konva.Node#getClientRect`), so it tracks the element on screen through any nested group transforms, rotation, zoom, or hand-tool pan. Lock + delete run through the existing command pipeline; duplicate / copy-paste-style / align / layer-order are host callbacks (disabled when unwired). |
-| [ElementsPanel](functions/ElementsPanel.md) | The Canva-shell "Elements" panel — the new home for the drawing tools. Renders each effective tool (built-in rail + extension-registered tools, FR-010) as a button bound to `toolStore`; the active tool is highlighted. It is the drawing-tool surface for the `CanvasWorkspace` shell (decision §1.3.2). The `tools` prop still overrides the list entirely. |
+| [ElementsPanel](functions/ElementsPanel.md) | - |
+| [emitCanvasAnalytics](functions/emitCanvasAnalytics.md) | Emit, tolerating a throwing sink. |
 | [ExportMenu](functions/ExportMenu.md) | The header export control: an `@anvilkit/ui` popover laid out after the reference "Export image" panel (format cards · quality · resolution · metadata toggle · Export). Reads the live stage/IR from [useCanvasStudio](functions/useCanvasStudio.md) and runs the matching exporter, then downloads. PNG/JSON are built in; SVG/PDF (and overrides) arrive via `exporters`. |
 | [exportStageContentDataURL](functions/exportStageContentDataURL.md) | Serialize a live editor stage to a data URL with the editor-only chrome layers hidden and the viewport's live pan/zoom neutralized, so the exported preview shows only design content, at the page's real 1:1 scale/position — not the transformer handles, guides, or remote-presence overlays the user happened to have on screen, nor whatever pan/zoom their viewport happened to be at, at export time. Every caller of this function shares this guarantee (E-14) — earlier, only the built-in raster exporters neutralized the viewport themselves (E-8); `CanvasExportBridge`-driven DesignBlock previews had no such reset, so a saved preview shifted/cropped (and its resolution varied with zoom) whenever the stage was panned/zoomed. |
 | [FieldRow](functions/FieldRow.md) | - |
 | [formatShortcut](functions/formatShortcut.md) | Platform-aware display label — generated, never hand-translated (§8.7). |
+| [getComplianceLookup](functions/getComplianceLookup.md) | The lookup for `(ir, brandKit)`, shared across every component that asks. |
+| [hashIdentifier](functions/hashIdentifier.md) | The one hashing primitive for governance identifiers. |
+| [insertCanvasElement](functions/insertCanvasElement.md) | Insert one catalog element into the active page as ONE undo entry, and select it. |
+| [insertElementAtPoint](functions/insertElementAtPoint.md) | Drop path: insert `entry` with its top-left at `point` (page space), inside whatever frame `point` lands in. |
+| [insertElementAtViewportCenter](functions/insertElementAtViewportCenter.md) | Click / Enter / Space path: insert `entry` centred on what the user is currently looking at. |
+| [insertExternalComponent](functions/insertExternalComponent.md) | Insert one catalog component: fetch its envelope, verify it, and commit the snapshot plus the instance as a single Undo entry. |
 | [insertTemplateAsNewPages](functions/insertTemplateAsNewPages.md) | Insert a template's pages as NEW pages alongside the current document's existing pages, as ONE undo entry — the "create new" counterpart to [loadTemplate](functions/loadTemplate.md)'s "replace" (FR-023, UX-001). `<CanvasStudio>` owns one live multi-page scene rather than a document tab set, so "create a new document" is expressed here as appending a fresh, non-destructive set of pages rather than discarding the current ones. |
+| [isCapabilityAvailable](functions/isCapabilityAvailable.md) | Whether an affordance guarded by `capability` should be offered at all. |
+| [isPropertyEditable](functions/isPropertyEditable.md) | Per-instance editable-property narrowing (OD-08). |
+| [latencyBucket](functions/latencyBucket.md) | - |
 | [LayerPanel](functions/LayerPanel.md) | - |
+| [loadCanvasDocument](functions/loadCanvasDocument.md) | Parse (when given a string), forward-migrate, then validate an untrusted document payload. |
+| [loadCanvasDocumentWithDiagnostics](functions/loadCanvasDocumentWithDiagnostics.md) | The full TD §21.1 load pipeline: parse → migrate → validate snapshot keys and canonical form → validate graph and variants → validate policy → (caller) resolve without a Provider → mount with diagnostics. |
 | [loadTemplate](functions/loadTemplate.md) | Replace the current document's pages with a template's pages, as ONE undo entry (canvas-m0-009 / FR-005, upgraded to `instantiateTemplate` in canvas-m2-004). The batch creates the new pages first, then deletes the previous ones — ordering that never violates the schema's one-page minimum. Undoing the batch restores the prior pages and removes the template's. |
+| [mergeCatalogs](functions/mergeCatalogs.md) | Merge catalogs with precedence **brand &gt; host &gt; default**. |
+| [normalizeTemplateTag](functions/normalizeTemplateTag.md) | The one place a tag is turned into its comparable form. Authored tags, facet values from the panel, and values a host round-trips through a URL all pass through here, so `"Print"`, `" print"`, and `"print"` are one tag. |
 | [NumberField](functions/NumberField.md) | - |
 | [PageNavigator](functions/PageNavigator.md) | - |
 | [PagesCanvas](functions/PagesCanvas.md) | Canva-style vertical multi-page view. Owns the scrollable canvas viewport on the neutral-gray surface: the active page is the live editable Konva stage; the rest are cached rasterized thumbnails (`usePageThumbnails`). Clicking a thumbnail activates that page. On entry the active page is zoomed to fit the visible area; all pages share the viewport `zoom`, so the footer slider scales the whole canvas uniformly. |
 | [PanelDock](functions/PanelDock.md) | Vertical icon rail (Aside, col 1). Each entry switches the active Tab Panel via `workspaceUi.activeDockId`; the active entry is highlighted and each inactive icon can carry a configurable accent `color`. |
+| [policyDecisionOf](functions/policyDecisionOf.md) | Recover the structured decision from a thrown command error. |
 | [PropertyInspector](functions/PropertyInspector.md) | Right-hand property inspector (M0-07 architecture, completed in B-12): - no selection → the ACTIVE PAGE's properties (FR-070), - single selection → full per-kind sections, - multi selection → the shared Layer/Transform/Appearance sections over every selected node, with mixed values rendered as "Mixed" and commits fanning out as ONE batch (§10 contract via the fields' `contract` prop); when every selected node also shares one KIND (`summary.sharedKind`), the kind-specific section (Fill/Stroke/CornerRadius for a shape, the text fields, the media section, …) renders too, over the whole selection, via the same mixed-value/one-batch mechanism (FR-070 gap closure — a mixed-kind selection still only gets the shared sections). |
 | [rasterizePage](functions/rasterizePage.md) | Render a single `CanvasIR` page into a detached `Konva.Stage` and return a data URL of its contents. The stage is built off-screen (the container element is appended to the body but positioned far outside the viewport) and torn down before the function resolves, so callers do not need to manage lifecycle. |
+| [recoverExternalSnapshot](functions/recoverExternalSnapshot.md) | Re-fetch a snapshot the document references but does not store (T-023). |
 | [renamePage](functions/renamePage.md) | Rename a page. No-op when the page id is unknown or the new name matches the existing name. Pass `undefined` (or use `clearPageName`) to remove the explicit name and fall back to the default tab label. |
 | [reorderPage](functions/reorderPage.md) | Reorder a page in the IR. No-op when the page is already at `toIndex`, the page id is unknown, or `toIndex` is out of range. Active page is preserved (reordering does not change which page is editable). |
 | [resizeActivePageToVariants](functions/resizeActivePageToVariants.md) | Generates one new page per preset from `sourcePageId`'s content, commits the whole batch as one undo step, and switches to the first generated variant (FR-061, canvas-m3-007). Presentational callers (e.g. a "Create variants" button) should disable themselves while `presets` is empty rather than calling this with none. |
 | [resolveBrandToken](functions/resolveBrandToken.md) | Resolve a `BrandTokenRef` (`@anvilkit/canvas-core`) against the editor's `BrandKit` — the SAME resolution the stage, the offscreen rasterizer, and a host's SVG exporter (via core's `SvgSerializeOptions.resolveBrandToken`) all call, so a document renders identically everywhere. |
+| [resolveComplianceTarget](functions/resolveComplianceTarget.md) | Resolve one issue to a navigable target. |
+| [resolveEffectivePolicyContext](functions/resolveEffectivePolicyContext.md) | Resolve the context the Editor should present against. |
+| [resolveFontCatalog](functions/resolveFontCatalog.md) | `DEFAULT_FONT_CATALOG` extended by the host's catalog, or the default alone when the host passed none. |
 | [resolveShortcutBindings](functions/resolveShortcutBindings.md) | Built-ins merged with host bindings (host id wins over a built-in id). |
+| [resolveVerificationMode](functions/resolveVerificationMode.md) | The mode that will actually run. |
 | [sanitizeExportFilename](functions/sanitizeExportFilename.md) | §14.5 export file-name sanitization: strip path separators, characters illegal on common filesystems, control characters, and leading dots, then cap the length. An empty result falls back to `fallback`. |
 | [Section](functions/Section.md) | - |
+| [severityPresentation](functions/severityPresentation.md) | Glyph + localized word for a severity. `undefined` severity reads as warning. |
 | [SizePresetPicker](functions/SizePresetPicker.md) | - |
+| [SwapComponentDialog](functions/SwapComponentDialog.md) | The swap dialog is the same view with the swap verb (T-032). |
 | [switchToPage](functions/switchToPage.md) | Switch active page AND clear transient UI state — selection, draft (any in-progress drag), text editor, and smart guides. Without the clears, a stale `selectionStore.selectedIds` would point at node ids that don't exist on the newly active page. |
 | [TabPanel](functions/TabPanel.md) | Tab Panel (Aside, col 2). Renders the registry descriptor for the active dock id, with an optional search box, and dispatches by descriptor kind (built-in / plugin / remote / search). Search resets when the dock changes so each panel opens fresh. |
 | [TemplatesPanel](functions/TemplatesPanel.md) | - |
 | [TextField](functions/TextField.md) | - |
 | [ToolAnnouncer](functions/ToolAnnouncer.md) | `@anvilkit/canvas-editor` — public, host-facing API (W1). |
 | [ToolStrip](functions/ToolStrip.md) | The floating tool strip (B-06, PRD 0012 FR-010 — the v2 layout decision: a floating cluster INSIDE the canvas section, not a new grid column). The rail renders the built-in `TOOL_RAIL_ITEMS` (or the `items` selection); extension-registered tools surface under a "More tools" overflow menu at the strip's end. Tooltips carry the registry-derived shortcut labels. Hidden or replaced via `<CanvasWorkspace toolStrip>`. |
+| [unsupportedDeclaredCapabilities](functions/unsupportedDeclaredCapabilities.md) | Capabilities a payload declares that this build does not implement — read BEFORE any schema parse (plan 0023 M6-06, decision D-7, LC-COMPAT-002, INV-14). |
+| [UpdateComponentDialog](functions/UpdateComponentDialog.md) | - |
 | [useActiveDock](functions/useActiveDock.md) | - |
 | [useBrandColors](functions/useBrandColors.md) | Just the brand color swatches (empty array when none configured). |
 | [useBrandFonts](functions/useBrandFonts.md) | Just the brand font families (empty array when none configured). The first entry, when present, is the brand default font. |
@@ -201,15 +314,22 @@ description: "@anvilkit/canvas-editor · index"
 | [useBrandRules](functions/useBrandRules.md) | Just the brand's allowed/forbidden color and font rules (empty array when none configured) — consumed by canvas-m2-006's compliance report. |
 | [useBrandTypography](functions/useBrandTypography.md) | Just the brand typography presets (empty array when none configured). |
 | [useCanvasActions](functions/useCanvasActions.md) | The action layer as a hook. Built on [useCanvasStores](functions/useCanvasStores.md) (the stable context half), so consumers do NOT re-render on every commit and the returned object keeps a stable identity for the lifetime of the editor (PRD 0012 §13.3). Live state (`ir`, `activePageId`) is resolved from the stores at call time. |
+| [useCanvasFontCatalog](functions/useCanvasFontCatalog.md) | The resolved catalog for the current editor — what the font picker offers and what the SVG exporter derives its `@font-face` manifest from. |
 | [useCanvasStores](functions/useCanvasStores.md) | Read the stable store handles + callbacks WITHOUT subscribing to the live per-commit state (W16). Use this in components that only touch stores/commit and have no need for `ir`/`activePageId`/`stage`, so they don't re-render on every edit. |
 | [useCanvasStudio](functions/useCanvasStudio.md) | - |
 | [useCanvasStudioActions](functions/useCanvasStudioActions.md) | [CanvasStudioActions](interfaces/CanvasStudioActions.md) as a hook — the `export`-augmented sibling of [useCanvasActions](functions/useCanvasActions.md). Unlike `useCanvasActions` (which only reads the STABLE store handles so it never re-renders on commit), this hook also reads the full reactive `useCanvasStudio()` context because `export()` needs the live `stage`/`brandKit` at call time. |
 | [useCanvasT](functions/useCanvasT.md) | Resolve `canvas.*` chrome strings. Null-tolerant: when there is no `<CanvasStudio>` ancestor (or it provides no `t`), returns [DEFAULT\_CANVAS\_T](#) so the inline English fallback always renders. |
 | [useCommitPatch](functions/useCommitPatch.md) | Returns a stable [CommitPatch](type-aliases/CommitPatch.md) bound to the current studio context. Identical to the inspector's former local `commitPatch` — every field mutation flows through `ctx.commit({ type: "node.update", … })`. Discrete controls (switches, selects, buttons) keep using this; continuous fields upgrade to the `contract` prop (§10, B-12). |
+| [useComplianceNavigation](functions/useComplianceNavigation.md) | Navigate from a compliance issue to the thing it is about. |
+| [useEffectivePolicyContext](functions/useEffectivePolicyContext.md) | The live policy context, refreshed when the host's capability revision changes mid-session (T-040 step 4). |
+| [useExternalComponent](functions/useExternalComponent.md) | React binding: the same two operations, with `ctx` and the provider bound. |
 | [useInspectorCollapsed](functions/useInspectorCollapsed.md) | - |
+| [useInstanceCompliance](functions/useInstanceCompliance.md) | - |
 | [usePanelSearch](functions/usePanelSearch.md) | - |
 | [useWorkspaceUiStore](functions/useWorkspaceUiStore.md) | - |
 | [useWorkspaceUiStoreApi](functions/useWorkspaceUiStoreApi.md) | Internal accessor for the active store. Throws if used outside a `WorkspaceUiStoreProvider` so missing wiring fails loudly in development. |
+| [VariantControls](functions/VariantControls.md) | - |
+| [verifyDocumentSnapshots](functions/verifyDocumentSnapshots.md) | Re-verify a loaded document's snapshot registry. |
 | [WorkspaceFooter](functions/WorkspaceFooter.md) | Full-width bottom footer (Canva style): a zoom slider with ± steppers and a percentage readout, then the page indicator. Bound to `viewportStore.zoom` and `pagesStore`. |
 | [WorkspaceHeader](functions/WorkspaceHeader.md) | Full-width top header: Back · undo/redo · editable name · avatars · Share. Undo/redo run the standard `historyStore` → `sceneStore` wiring. The name is click-to-edit only when `onTitleChange` is wired (the host owns persistence). |
 | [WorkspaceUiStoreProvider](functions/WorkspaceUiStoreProvider.md) | - |

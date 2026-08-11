@@ -1,0 +1,25 @@
+---
+title: "CanvasComponentDefinition"
+description: "@anvilkit/canvas-core · CanvasComponentDefinition"
+---
+
+Defined in: [ir/types.ts:1209](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1209)
+
+One document-local Component Source (LC-MODEL-001).
+
+`root`'s node ids are unique across Pages AND all definitions (INV-2,
+enforced by `validateCanvasIRInvariants` via `walkDocument`).
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="createdat"&gt;&lt;/a&gt; `createdAt?` | `string` | - | [ir/types.ts:1240](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1240) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | Globally unique within the document; the Registry key equals this id. | [ir/types.ts:1211](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1211) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `string` | - | [ir/types.ts:1212](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1212) |
+| &lt;a id="policy"&gt;&lt;/a&gt; `policy?` | [`CanvasBrandComponentPolicy`](CanvasBrandComponentPolicy.md) | Portable brand policy for instances of this component (plan 0021 T-036). Part of the component's canonical payload, so it is covered by the integrity digest and replicated with the snapshot — a policy cannot be stripped or edited without changing the component's identity. Carries no identity of its own; see `ir/component-policy.ts`. | [ir/types.ts:1239](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1239) |
+| &lt;a id="properties"&gt;&lt;/a&gt; `properties` | readonly [`CanvasComponentProperty`](../type-aliases/CanvasComponentProperty)[] | - | [ir/types.ts:1220](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1220) |
+| &lt;a id="revision"&gt;&lt;/a&gt; `revision` | `number` | Monotonic edit revision — the propagation signal. A Source edit bumps this and invalidates dependent resolutions; instance nodes are never rewritten (LC-PROPAGATE). | [ir/types.ts:1218](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1218) |
+| &lt;a id="root"&gt;&lt;/a&gt; `root` | [`CanvasNode`](../type-aliases/CanvasNode) | - | [ir/types.ts:1219](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1219) |
+| &lt;a id="updatedat"&gt;&lt;/a&gt; `updatedAt?` | `string` | - | [ir/types.ts:1241](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1241) |
+| &lt;a id="variants"&gt;&lt;/a&gt; `variants?` | [`CanvasComponentVariantSet`](CanvasComponentVariantSet.md) | Sparse multi-axis variants (plan 0021 T-024, OD-07). On the DEFINITION, so a document-local Source may legally carry one even though P0 ships no local authoring UI — resolution must not assume "variants implies external". Absent on every component that has none, so a variant-free document is byte-identical to one written before the field existed. | [ir/types.ts:1230](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1230) |

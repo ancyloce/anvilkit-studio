@@ -1,0 +1,29 @@
+---
+title: "collectRetainedSnapshotKeys"
+description: "@anvilkit/canvas-editor · collectRetainedSnapshotKeys"
+---
+
+```ts
+function collectRetainedSnapshotKeys(history): ReadonlySet<string>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/retained-keys.ts:104](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/retained-keys.ts#L104)
+
+Every snapshot key referenced by the undo and redo stacks.
+
+Pass the result to `component-snapshot.collect-unused` as
+`retainedSnapshotKeys`. An empty result is meaningful only when the history
+is genuinely empty — which is why the command requires the argument rather
+than defaulting it.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `history` | \{ `future`: readonly [`AnyCanvasCommand`](../../internal/type-aliases/AnyCanvasCommand)[]; `past`: readonly [`AnyCanvasCommand`](../../internal/type-aliases/AnyCanvasCommand)[]; \} |
+| `history.future` | readonly [`AnyCanvasCommand`](../../internal/type-aliases/AnyCanvasCommand)[] |
+| `history.past` | readonly [`AnyCanvasCommand`](../../internal/type-aliases/AnyCanvasCommand)[] |
+
+## Returns
+
+`ReadonlySet`\<`string`\>

@@ -1,0 +1,23 @@
+---
+title: "MAX_EXTERNAL_DEPENDENCIES_PER_COMPONENT"
+description: "@anvilkit/canvas-core · MAX_EXTERNAL_DEPENDENCIES_PER_COMPONENT"
+---
+
+```ts
+const MAX_EXTERNAL_DEPENDENCIES_PER_COMPONENT: 64 = MAX_COMPONENT_PROPERTIES_PER_COMPONENT;
+```
+
+Defined in: [limits.ts:241](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L241)
+
+Ceiling on **direct** dependency references declared by one external
+definition — the fan-out guard against a dependency bomb (TD §22.1).
+
+Anchored to `MAX_COMPONENT_PROPERTIES_PER_COMPONENT` (64): a definition's
+dependency list and its property list are the same order of structural
+complexity, and a component needing more than 64 direct dependencies is not a
+component.
+
+Fan-out alone does not bound total work — `MAX_EXTERNAL_DEPENDENCY_DEPTH`
+bounds the other axis, and `MAX_COMPONENT_EXPANDED_NODES_PER_RESOLUTION` bounds
+the product. All three are enforced **after** expansion, not before, because a
+bomb is cheap to declare and expensive to expand.

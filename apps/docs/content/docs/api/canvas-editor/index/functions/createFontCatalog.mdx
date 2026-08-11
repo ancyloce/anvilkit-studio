@@ -1,0 +1,26 @@
+---
+title: "createFontCatalog"
+description: "@anvilkit/canvas-editor · createFontCatalog"
+---
+
+```ts
+function createFontCatalog(entries, options?): CanvasFontCatalog;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/text/font-catalog.ts:297](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L297)
+
+Build a catalog from authored entries, stamping every one with `origin`.
+
+Duplicate families within a single call resolve to the last of them — see
+indexRecords for why that is a replacement and not a merge.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `entries` | readonly [`CanvasFontCatalogEntry`](../interfaces/CanvasFontCatalogEntry)[] |
+| `options` | [`CreateFontCatalogOptions`](../interfaces/CreateFontCatalogOptions) |
+
+## Returns
+
+[`CanvasFontCatalog`](../interfaces/CanvasFontCatalog)

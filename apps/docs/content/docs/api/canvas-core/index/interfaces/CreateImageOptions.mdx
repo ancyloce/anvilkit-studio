@@ -1,0 +1,23 @@
+---
+title: "CreateImageOptions"
+description: "@anvilkit/canvas-core · CreateImageOptions"
+---
+
+Defined in: [ir/builders.ts:459](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L459)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="adjustments"&gt;&lt;/a&gt; `adjustments?` | [`CanvasImageAdjustments`](CanvasImageAdjustments.md) | - | [ir/builders.ts:468](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L468) |
+| &lt;a id="alt"&gt;&lt;/a&gt; `alt?` | `string` | - | [ir/builders.ts:485](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L485) |
+| &lt;a id="assetid"&gt;&lt;/a&gt; `assetId` | `string` | - | [ir/builders.ts:465](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L465) |
+| &lt;a id="assettoken"&gt;&lt;/a&gt; `assetToken?` | [`BrandTokenRef`](BrandTokenRef.md) | - | [ir/builders.ts:484](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L484) |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | [`CanvasBounds`](CanvasBounds.md) | - | [ir/builders.ts:463](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L463) |
+| &lt;a id="crop"&gt;&lt;/a&gt; `crop?` | [`CanvasImageCrop`](CanvasImageCrop.md) | - | [ir/builders.ts:466](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L466) |
+| &lt;a id="filters"&gt;&lt;/a&gt; `filters?` | [`ImageFilter`](ImageFilter.md)[] | - | [ir/builders.ts:467](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L467) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id?` | `string` | - | [ir/builders.ts:460](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L460) |
+| &lt;a id="maskassetid"&gt;&lt;/a&gt; ~~`maskAssetId?`~~ | `string` | **Deprecated** Since `0.1.2`. **Scheduled for removal in `@anvilkit/canvas-core@1.0.0`** — see [CanvasImageNode.maskAssetId](CanvasImageNode.md#maskassetid) and ADR 0008 decision 3 (`docs/adr/0008-canvas-masking.md`). The option and its write-through are retained until then, because removing them is a compile break for any host that sets it. Passing it still produces a node carrying the field — it simply renders nowhere. **Migration:** create a clipping [CanvasFrameNode](CanvasFrameNode.md) via `createFrame`, set `clip: true` and a `shape` (`CanvasFrameShape`) on it, and make the image its child. | [ir/builders.ts:483](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L483) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `string` | - | [ir/builders.ts:461](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L461) |
+| &lt;a id="transform"&gt;&lt;/a&gt; `transform?` | `Partial`\&lt;[`CanvasTransform`](CanvasTransform.md)\&gt; | - | [ir/builders.ts:462](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L462) |
+| &lt;a id="zindex"&gt;&lt;/a&gt; `zIndex?` | `number` | - | [ir/builders.ts:464](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L464) |

@@ -1,0 +1,36 @@
+---
+title: "recoverExternalSnapshot"
+description: "@anvilkit/canvas-editor · recoverExternalSnapshot"
+---
+
+```ts
+function recoverExternalSnapshot(ref, deps): Promise<
+  | {
+  ok: true;
+}
+| { readonly ok: false; } & ExternalComponentFailure>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/use-external-component.ts:227](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-external-component.ts#L227)
+
+Re-fetch a snapshot the document references but does not store (T-023).
+
+Exact-version by construction: it fetches `ref` and passes the same `ref` as
+`expectedRef`, and Core refuses the command if the two disagree — so a
+Provider that answered with a different version cannot silently restyle the
+document.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ref` | `CanvasExternalComponentRef` |
+| `deps` | `ExternalComponentDeps` |
+
+## Returns
+
+`Promise`\<
+  \| \{
+  `ok`: `true`;
+\}
+  \| \{ readonly ok: false; \} & ExternalComponentFailure\&gt;

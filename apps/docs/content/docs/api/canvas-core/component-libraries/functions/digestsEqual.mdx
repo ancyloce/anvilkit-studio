@@ -1,0 +1,40 @@
+---
+title: "digestsEqual"
+description: "@anvilkit/canvas-core · digestsEqual"
+---
+
+```ts
+function digestsEqual(a, b): boolean;
+```
+
+Defined in: [component-libraries/integrity.ts:151](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/integrity.ts#L151)
+
+Compare two base64url digests without an early-exit on the first differing
+character.
+
+## Why timing is not actually a concern here — and why this is still written this way
+
+Neither digest is a secret. The expected digest is stored in the document, ships
+inside the Provider envelope, and appears verbatim in the snapshot registry key;
+an attacker who wants it can simply read it. There is no secret to extract, so
+there is no timing oracle to exploit, and a plain `===` would be correct.
+
+It is written this way regardless because the cost is one pass over 43
+characters, and because "compare digests with ===" is exactly the pattern that
+gets copied into a context where the compared value *is* secret (an HMAC, a
+signature, a session token). Making the safe form the local idiom costs nothing
+and removes that footgun.
+
+Padding is normalized first so `AAAA=` and `AAAA` compare equal — they are the
+same digest, and treating them as different would reject valid Provider output.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `a` | `string` |
+| `b` | `string` |
+
+## Returns
+
+`boolean`

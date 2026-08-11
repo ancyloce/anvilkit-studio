@@ -1,0 +1,25 @@
+---
+title: "CanvasAutoLayout"
+description: "@anvilkit/canvas-core · CanvasAutoLayout"
+---
+
+Defined in: [ir/types.ts:417](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L417)
+
+Persisted Auto Layout intent on a frame (`layout.auto.v1`).
+
+This is the **authoritative** description of the frame's arrangement; the
+`x/y/width/height` stored on its children are a discardable materialized
+cache of a resolution, not the source of truth (PRD 0014 §9.4). Resolution
+itself lives in `layout/` (rank 4) — only the persisted shape lives here,
+because `ir/validators.ts` (rank 1) must be able to type it.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="crossalign"&gt;&lt;/a&gt; `crossAlign` | [`CanvasLayoutAlign`](../type-aliases/CanvasLayoutAlign) | Alignment along the axis perpendicular to `direction`. | [ir/types.ts:436](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L436) |
+| &lt;a id="direction"&gt;&lt;/a&gt; `direction` | [`CanvasLayoutDirection`](../type-aliases/CanvasLayoutDirection) | - | [ir/types.ts:424](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L424) |
+| &lt;a id="gap"&gt;&lt;/a&gt; `gap` | `number` | Space between adjacent flow children, in the frame's local units. Non-negative and finite. Gap never collapses: an overfull frame overflows and reports `layout-insufficient-space` instead (PRD 0014 §9.3). | [ir/types.ts:432](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L432) |
+| &lt;a id="padding"&gt;&lt;/a&gt; `padding` | [`CanvasInsets`](CanvasInsets.md) | Four-sided padding in the frame's **local** units — see [CanvasInsets](CanvasInsets.md). | [ir/types.ts:426](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L426) |
+| &lt;a id="primaryalign"&gt;&lt;/a&gt; `primaryAlign` | [`CanvasLayoutAlign`](../type-aliases/CanvasLayoutAlign) | Alignment along `direction`. | [ir/types.ts:434](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L434) |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `1` | Shape version of the layout intent itself, independent of the document's `CanvasIR["version"]`. A numeric literal (not the IR's string discriminator) so the two can never be confused at a call site. | [ir/types.ts:423](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L423) |

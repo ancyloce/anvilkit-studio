@@ -1,0 +1,35 @@
+---
+title: "validateExternalClosure"
+description: "@anvilkit/canvas-core · validateExternalClosure"
+---
+
+```ts
+function validateExternalClosure(
+   snapshot, 
+   resolver, 
+   options?): 
+  | CanvasComponentDiagnostic
+  | null;
+```
+
+Defined in: [component-libraries/dependencies.ts:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/dependencies.ts#L102)
+
+Validate one snapshot's full external dependency closure.
+
+Returns `null` when the closure is complete, acyclic, and within every cap;
+otherwise the diagnostic explaining the first problem found. Never throws —
+this runs inside `admitExternalSnapshot`, where every rejection is an
+expected outcome the UI surfaces by code.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `snapshot` | [`CanvasExternalComponentSnapshot`](../../index/interfaces/CanvasExternalComponentSnapshot) |
+| `resolver` | [`ClosureResolver`](../interfaces/ClosureResolver) \| `undefined` |
+| `options` | [`ValidateExternalClosureOptions`](../interfaces/ValidateExternalClosureOptions) |
+
+## Returns
+
+  \| [`CanvasComponentDiagnostic`](../interfaces/CanvasComponentDiagnostic)
+  \| `null`

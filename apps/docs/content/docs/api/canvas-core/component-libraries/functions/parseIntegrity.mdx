@@ -1,0 +1,28 @@
+---
+title: "parseIntegrity"
+description: "@anvilkit/canvas-core · parseIntegrity"
+---
+
+```ts
+function parseIntegrity(integrity): CanvasParseIntegrityResult;
+```
+
+Defined in: [component-libraries/integrity.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/integrity.ts#L85)
+
+Parse and validate an integrity string.
+
+Never throws — an unsupported algorithm or malformed digest comes back as a
+`component-integrity-mismatch` diagnostic (T-007 acceptance: "never a crash").
+Adding an algorithm is a reviewed contract extension, not a parser tweak, which
+is why the allowlist is a single equality check rather than a lookup table
+someone can quietly extend.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `integrity` | `unknown` |
+
+## Returns
+
+[`CanvasParseIntegrityResult`](../type-aliases/CanvasParseIntegrityResult)

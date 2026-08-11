@@ -1,0 +1,31 @@
+---
+title: "CanvasValidatedExternalSnapshot"
+description: "@anvilkit/canvas-core · CanvasValidatedExternalSnapshot"
+---
+
+```ts
+type CanvasValidatedExternalSnapshot<T> = T & {
+  [validatedExternalSnapshot]: "canvas-validated-external-snapshot";
+};
+```
+
+Defined in: [component-libraries/admission.ts:176](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L176)
+
+A snapshot that has passed strict parsing, bounding, canonicalization, and
+digest verification.
+
+Only [admitExternalSnapshot](../functions/admitExternalSnapshot) can produce one. A command taking this type
+as its input therefore cannot be called with unverified data — the guarantee is
+enforced by the compiler, not by documentation or call ordering.
+
+## Type Declaration
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `[validatedExternalSnapshot]` | `"canvas-validated-external-snapshot"` | [component-libraries/admission.ts:180](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L180) |
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` *extends* [`CanvasExternalComponentSnapshotLike`](CanvasExternalComponentSnapshotLike.md) | [`CanvasExternalComponentSnapshotLike`](CanvasExternalComponentSnapshotLike.md) |

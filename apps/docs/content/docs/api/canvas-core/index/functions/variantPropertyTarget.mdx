@@ -1,0 +1,26 @@
+---
+title: "variantPropertyTarget"
+description: "@anvilkit/canvas-core · variantPropertyTarget"
+---
+
+```ts
+function variantPropertyTarget(property, variant): string;
+```
+
+Defined in: [components/variant-resolution.ts:302](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/variant-resolution.ts#L302)
+
+The node a property binds to for a given variant.
+
+Falls back to the definition's own `nodeId` when the variant does not remap
+it — the common case, since `propertyTargetMap` only lists what MOVES.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `property` | [`CanvasComponentProperty`](../type-aliases/CanvasComponentProperty) |
+| `variant` | \| [`CanvasComponentVariantDefinition`](../interfaces/CanvasComponentVariantDefinition) \| `undefined` |
+
+## Returns
+
+`string`

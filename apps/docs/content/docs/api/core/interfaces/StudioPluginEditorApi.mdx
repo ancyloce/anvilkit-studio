@@ -1,0 +1,24 @@
+---
+title: "StudioPluginEditorApi"
+description: "@anvilkit/core · StudioPluginEditorApi"
+---
+
+Defined in: [runtime/core/src/types/editor-api.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L58)
+
+The optional `editor` member of `StudioPluginContext`
+(DD-0019 §21.1, verbatim): present exactly when the host enabled
+the visual editor (`StudioProps.editor.features.enabled === true`).
+Writes issued here flow through the same commit helpers the UI uses
+(one history entry per intent); before the lazily-loaded editor
+runtime finishes mounting, every commit rejects deterministically
+instead of throwing.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="capabilities"&gt;&lt;/a&gt; `capabilities` | `readonly` | [`EditorCapabilityRegistry`](EditorCapabilityRegistry.md) | Capability metadata lookup. | [runtime/core/src/types/editor-api.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L71) |
+| &lt;a id="diagnostics"&gt;&lt;/a&gt; `diagnostics` | `readonly` | `EditorDiagnosticPort` | Persistent diagnostics + content-free operational events. | [runtime/core/src/types/editor-api.ts:73](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L73) |
+| &lt;a id="editor"&gt;&lt;/a&gt; `editor` | `readonly` | [`EditorApi`](EditorApi.md) | The canonical editor API (`p3-008`): a read projection, a change subscription and the commit helpers. `p3-009` replaced the typed command port here — a plugin writing through `commit.*` takes exactly the path the UI takes, one intent per history entry, with no command vocabulary crossing the boundary. | [runtime/core/src/types/editor-api.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L67) |
+| &lt;a id="selection"&gt;&lt;/a&gt; `selection` | `readonly` | [`EditorSelectionReader`](EditorSelectionReader.md) | Read-only multi-selection state. | [runtime/core/src/types/editor-api.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L69) |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `readonly` | `"1"` | - | [runtime/core/src/types/editor-api.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L59) |

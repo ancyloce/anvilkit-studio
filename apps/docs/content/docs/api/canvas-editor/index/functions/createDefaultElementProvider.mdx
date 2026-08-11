@@ -1,0 +1,31 @@
+---
+title: "createDefaultElementProvider"
+description: "@anvilkit/canvas-editor · createDefaultElementProvider"
+---
+
+```ts
+function createDefaultElementProvider(options?): CanvasElementProvider;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/default-element-provider.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/default-element-provider.ts#L45)
+
+A provider over the built-in catalog, fetched on first `search`/`getById`.
+
+Cheap to call: it allocates a wrapper, not a catalog. Nothing is fetched
+until the panel actually asks a question, which is `cp3-003`'s "load on first
+panel open, not at editor mount". A failed load is not cached
+([createLazyElementProvider](createLazyElementProvider.md)), so a Retry button keeps working.
+
+Call it once per host and keep the result — a second call is a second chunk
+fetch's worth of promise bookkeeping and a second parsed catalog.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options?` | \{ `pageSize?`: `number`; \} |
+| `options.pageSize?` | `number` |
+
+## Returns
+
+[`CanvasElementProvider`](../interfaces/CanvasElementProvider)

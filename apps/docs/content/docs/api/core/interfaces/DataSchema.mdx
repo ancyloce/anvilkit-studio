@@ -1,0 +1,19 @@
+---
+title: "DataSchema"
+description: "@anvilkit/core · DataSchema"
+---
+
+Defined in: foundation/contracts/dist/editor/bindings.d.ts:79
+
+A minimal recursive schema for a data source, enough to drive path
+pickers and validation. `fields` is present for `object` schemas,
+`items` for `array` schemas.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="fields"&gt;&lt;/a&gt; `fields?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `DataSchema`\&gt;\&gt; | foundation/contracts/dist/editor/bindings.d.ts:81 |
+| &lt;a id="items"&gt;&lt;/a&gt; `items?` | `readonly` | `DataSchema` | foundation/contracts/dist/editor/bindings.d.ts:82 |
+| &lt;a id="nullable"&gt;&lt;/a&gt; `nullable?` | `readonly` | `boolean` | foundation/contracts/dist/editor/bindings.d.ts:83 |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | `"string"` \| `"number"` \| `"boolean"` \| `"object"` \| `"array"` | foundation/contracts/dist/editor/bindings.d.ts:80 |

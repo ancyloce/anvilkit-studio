@@ -1,0 +1,30 @@
+---
+title: "DEFAULT_FONT_CATALOG"
+description: "@anvilkit/canvas-editor · DEFAULT_FONT_CATALOG"
+---
+
+```ts
+const DEFAULT_FONT_CATALOG: CanvasFontCatalog;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/text/default-font-catalog.ts:714](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/default-font-catalog.ts#L714)
+
+The default catalog, stamped `origin: "default"` — the lowest tier, so a
+host or brand entry for the same family replaces it outright.
+
+Passing `origin` is required rather than decorative: `createFontCatalog`
+defaults to `"host"`, and a default catalog stamped `host` would outrank a
+host's own override of the same family.
+
+Built eagerly at module scope, and that is measured rather than assumed.
+Today this module is not reachable from `src/index.ts`, so it adds **0 bytes**
+to the entry chunk (114,527 B gzipped of a 409,600 budget, unchanged). Adding
+it to the public entry — which `cp2-007` will effectively do — costs
+**+12,931 B raw / +1,714 B gzipped**, or 0.42% of the budget, measured by
+bundling the package with and without this subpath re-exported.
+
+Left eager on that number. Buying back 0.42% is not worth making every reader
+of the catalog async, including `cp2-006`'s export path, which is synchronous.
+If the catalog ever grows an order of magnitude, revisit the trade — the data
+already lives in its own module behind a single import, so
+`await import("./default-font-catalog.js")` is the whole change.

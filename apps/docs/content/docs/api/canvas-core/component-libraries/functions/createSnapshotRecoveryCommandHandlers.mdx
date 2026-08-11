@@ -1,0 +1,28 @@
+---
+title: "createSnapshotRecoveryCommandHandlers"
+description: "@anvilkit/canvas-core · createSnapshotRecoveryCommandHandlers"
+---
+
+```ts
+function createSnapshotRecoveryCommandHandlers(): readonly [{
+  apply: (ir, cmd, _options) => CommandApplyResult<CanvasComponentUnrecoverSnapshotCommand>;
+  type: "component-snapshot.recover";
+}, {
+  apply: (ir, cmd, _options) => CommandApplyResult<CanvasComponentRecoverSnapshotCommand>;
+  type: "component-snapshot.unrecover";
+}];
+```
+
+Defined in: [component-libraries/commands/recover-snapshot.ts:163](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/recover-snapshot.ts#L163)
+
+The recovery handler pair, for registration through `createCanvasRuntime`.
+
+## Returns
+
+readonly \[\{
+  `apply`: (`ir`, `cmd`, `_options`) => [`CommandApplyResult`](../../index/interfaces/CommandApplyResult)\<[`CanvasComponentUnrecoverSnapshotCommand`](../interfaces/CanvasComponentUnrecoverSnapshotCommand)\>;
+  `type`: `"component-snapshot.recover"`;
+\}, \{
+  `apply`: (`ir`, `cmd`, `_options`) => [`CommandApplyResult`](../../index/interfaces/CommandApplyResult)\<[`CanvasComponentRecoverSnapshotCommand`](../interfaces/CanvasComponentRecoverSnapshotCommand)\>;
+  `type`: `"component-snapshot.unrecover"`;
+\}\]

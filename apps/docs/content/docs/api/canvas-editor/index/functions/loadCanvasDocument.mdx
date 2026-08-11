@@ -1,0 +1,37 @@
+---
+title: "loadCanvasDocument"
+description: "@anvilkit/canvas-editor · loadCanvasDocument"
+---
+
+```ts
+function loadCanvasDocument(raw, options?): CanvasIR;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/load-pipeline.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/load-pipeline.ts#L69)
+
+Parse (when given a string), forward-migrate, then validate an untrusted
+document payload.
+
+Accepts `unknown` rather than `string` because the sources differ in shape:
+a persistence adapter's `load` resolves an already-parsed object, while
+recovery snapshots and collab payloads arrive as JSON text. Normalising
+here keeps every caller on one code path instead of each deciding when to
+parse.
+
+**Throws** on malformed JSON, an unsupported version, or a
+structurally-invalid document — migration ends in the same Zod validation
+the editor has always run, so a corrupt or hostile payload cannot reach the
+scene. Callers are responsible for catching: a load failure must be
+reported to the host, never allowed to break the mount, and never allowed
+to escape a Yjs observer.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `raw` | `unknown` |
+| `options` | [`LoadCanvasDocumentOptions`](../interfaces/LoadCanvasDocumentOptions) |
+
+## Returns
+
+[`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts)

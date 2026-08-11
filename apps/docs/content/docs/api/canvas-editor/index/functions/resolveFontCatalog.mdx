@@ -1,0 +1,45 @@
+---
+title: "resolveFontCatalog"
+description: "@anvilkit/canvas-editor · resolveFontCatalog"
+---
+
+```ts
+function resolveFontCatalog(hostCatalog?): CanvasFontCatalog;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/context/use-font-catalog.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/use-font-catalog.ts#L59)
+
+`DEFAULT_FONT_CATALOG` extended by the host's catalog, or the default alone
+when the host passed none.
+
+**Argument order is not the precedence.** `mergeCatalogs` resolves a
+duplicate family by the winning record's `origin`, so passing the default
+first does not make it win: a host entry (`origin: "host"`, the default of
+`createFontCatalog`) replaces a default entry for the same family, and a
+brand entry (`createFontCatalog(entries, { origin: "brand" })`) replaces
+both. This is the non-obvious part of the contract and the one a host is
+most likely to get wrong by "fixing" the order at its own call site.
+
+Replacement is WHOLE-ENTRY, never field-level (`cp2-001`): a host entry never
+inherits the default entry's `license` or `source`, because an entry claiming
+a licence nobody asserted for those bytes is a licensing bug, not a
+convenience.
+
+What this canNOT do, stated rather than discovered: it never *removes* a
+default family. A host that overrides `Inter` sees its own `Inter`, but the
+other 36 default families still appear in the picker. Shipping a curated list
+only is not expressible through this prop today.
+
+Not memoized — it allocates a new catalog per call. `<CanvasStudio>` calls it
+inside the memo that builds the stable context value, so in-tree consumers
+should read [useCanvasFontCatalog](useCanvasFontCatalog.md) rather than calling this in render.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `hostCatalog?` | [`CanvasFontCatalog`](../interfaces/CanvasFontCatalog) |
+
+## Returns
+
+[`CanvasFontCatalog`](../interfaces/CanvasFontCatalog)

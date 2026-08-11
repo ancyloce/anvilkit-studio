@@ -1,0 +1,169 @@
+---
+title: "CanvasComponentEvent"
+description: "@anvilkit/canvas-editor · CanvasComponentEvent"
+---
+
+```ts
+type CanvasComponentEvent = 
+  | {
+  hasAutoLayout: boolean;
+  nodeCount: number;
+  sourceKind: CanvasComponentSourceKind;
+  type: "canvas.component.created";
+}
+  | {
+  componentIdHash: string;
+  insertionMethod: CanvasComponentInsertionMethod;
+  pageIdHash: string;
+  type: "canvas.component.instance_inserted";
+}
+  | {
+  affectedInstanceCount: number;
+  operation: CanvasComponentSourceOperation;
+  type: "canvas.component.source_edited";
+}
+  | {
+  priorState: CanvasComponentOverridePriorState;
+  propertyType: CanvasComponentPropertyType;
+  type: "canvas.component.override_set";
+}
+  | {
+  propertyType:   | CanvasComponentPropertyType
+     | "mixed";
+  resetScope: CanvasComponentResetScope;
+  type: "canvas.component.override_reset";
+}
+  | {
+  nestedDepth: number;
+  nodeCount: number;
+  type: "canvas.component.detached";
+  warningCount: number;
+}
+  | {
+  dependentCount: number;
+  outcome: CanvasComponentDeleteOutcome;
+  type: "canvas.component.delete_attempted";
+}
+  | {
+  code: string;
+  operation: string;
+  severity: "warning" | "error";
+  type: "canvas.component.diagnostic";
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/context/component-events.ts:77](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/component-events.ts#L77)
+
+The eight PRD §12 events, as a discriminated union on `type`.
+
+A union rather than eight callbacks: a host wires ONE handler and switches,
+and adding a ninth event cannot silently go unhandled in a host that switches
+exhaustively.
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  hasAutoLayout: boolean;
+  nodeCount: number;
+  sourceKind: CanvasComponentSourceKind;
+  type: "canvas.component.created";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  componentIdHash: string;
+  insertionMethod: CanvasComponentInsertionMethod;
+  pageIdHash: string;
+  type: "canvas.component.instance_inserted";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  affectedInstanceCount: number;
+  operation: CanvasComponentSourceOperation;
+  type: "canvas.component.source_edited";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  priorState: CanvasComponentOverridePriorState;
+  propertyType: CanvasComponentPropertyType;
+  type: "canvas.component.override_set";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  propertyType:   | CanvasComponentPropertyType
+     | "mixed";
+  resetScope: CanvasComponentResetScope;
+  type: "canvas.component.override_reset";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  nestedDepth: number;
+  nodeCount: number;
+  type: "canvas.component.detached";
+  warningCount: number;
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  dependentCount: number;
+  outcome: CanvasComponentDeleteOutcome;
+  type: "canvas.component.delete_attempted";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  code: string;
+  operation: string;
+  severity: "warning" | "error";
+  type: "canvas.component.diagnostic";
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `code` | `string` | A `CanvasComponentIssueCode` — a stable enum, never a message. | [packages/capabilities/canvas/editor/src/context/component-events.ts:119](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/component-events.ts#L119) |
+| `operation` | `string` | The operation that surfaced it, for triage grouping. | [packages/capabilities/canvas/editor/src/context/component-events.ts:122](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/component-events.ts#L122) |
+| `severity` | `"warning"` \| `"error"` | - | [packages/capabilities/canvas/editor/src/context/component-events.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/component-events.ts#L120) |
+| `type` | `"canvas.component.diagnostic"` | - | [packages/capabilities/canvas/editor/src/context/component-events.ts:117](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/component-events.ts#L117) |

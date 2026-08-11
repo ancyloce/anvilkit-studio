@@ -1,0 +1,18 @@
+---
+title: "CanvasComponentDiagnosticCode"
+description: "@anvilkit/canvas-core · CanvasComponentDiagnosticCode"
+---
+
+```ts
+type CanvasComponentDiagnosticCode = typeof CANVAS_COMPONENT_DIAGNOSTIC_CODES[number];
+```
+
+Defined in: [component-libraries/diagnostics.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/diagnostics.ts#L53)
+
+A closed union — deliberately not `string`.
+
+PRD §9.16 acceptance: "No `string` typed error codes anywhere in the new
+surface." A closed union is what makes a `switch` over diagnostics
+exhaustively checkable, so adding a code forces every consumer (UI message
+catalogue, analytics mapper, compliance panel) to acknowledge it at compile
+time rather than falling through to a generic "unknown error".

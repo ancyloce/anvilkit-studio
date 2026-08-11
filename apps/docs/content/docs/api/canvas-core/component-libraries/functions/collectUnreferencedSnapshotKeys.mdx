@@ -1,0 +1,26 @@
+---
+title: "collectUnreferencedSnapshotKeys"
+description: "@anvilkit/canvas-core · collectUnreferencedSnapshotKeys"
+---
+
+```ts
+function collectUnreferencedSnapshotKeys(ir): readonly string[];
+```
+
+Defined in: [component-libraries/reference-index.ts:114](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/reference-index.ts#L114)
+
+Snapshot keys stored but not reachable from the document.
+
+"Unreferenced by this document" — NOT "safe to delete". Undo history may still
+need them, which is why the GC command unions this with a caller-supplied
+retained set rather than acting on it alone.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../../index/interfaces/CanvasIR) |
+
+## Returns
+
+readonly `string`[]

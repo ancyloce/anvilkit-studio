@@ -3,13 +3,13 @@ title: "CanvasKindRenderer"
 description: "@anvilkit/canvas-editor · CanvasKindRenderer"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/extensions/editor-extension.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/editor-extension.ts#L18)
+Defined in: [packages/capabilities/canvas/editor/src/extensions/editor-extension.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/editor-extension.ts#L19)
 
 Draws a custom node kind to react-konva.
 
 ## Properties
 
-| Property | Modifier | Type | Defined in |
-| ------ | ------ | ------ | ------ |
-| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | `string` | [packages/capabilities/canvas/editor/src/extensions/editor-extension.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/editor-extension.ts#L19) |
-| &lt;a id="render"&gt;&lt;/a&gt; `render` | `readonly` | (`props`) =&gt; `Element` \| `null` | [packages/capabilities/canvas/editor/src/extensions/editor-extension.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/editor-extension.ts#L20) |
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | `string` | - | [packages/capabilities/canvas/editor/src/extensions/editor-extension.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/editor-extension.ts#L20) |
+| &lt;a id="render"&gt;&lt;/a&gt; `render` | `readonly` | (`props`) =&gt; `Element` \| `null` | T-M3-08: `resolved` carries the node's resolved-layout geometry when a resolution is available (its `localTransform`/`bounds` are already substituted into `node`; the record adds world-space data). OPTIONAL and additive — an existing renderer typed `(props: { node }) => …` remains assignable, so no published extension breaks. | [packages/capabilities/canvas/editor/src/extensions/editor-extension.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/editor-extension.ts#L28) |

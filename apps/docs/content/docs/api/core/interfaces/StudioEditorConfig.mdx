@@ -1,0 +1,22 @@
+---
+title: "StudioEditorConfig"
+description: "@anvilkit/core · StudioEditorConfig"
+---
+
+Defined in: foundation/contracts/dist/editor/studio-config.d.ts:94
+
+The `StudioProps.editor` configuration (DD-0019 §22.1, verbatim).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="breakpoints"&gt;&lt;/a&gt; `breakpoints?` | `readonly` | readonly `BreakpointDefinition`[] | - | foundation/contracts/dist/editor/studio-config.d.ts:96 |
+| &lt;a id="datasourceadapter"&gt;&lt;/a&gt; `dataSourceAdapter?` | `readonly` | [`EditorDataSourceAdapter`](EditorDataSourceAdapter.md) | - | foundation/contracts/dist/editor/studio-config.d.ts:123 |
+| &lt;a id="defaulttokenmode"&gt;&lt;/a&gt; `defaultTokenMode?` | `readonly` | `string` | - | foundation/contracts/dist/editor/studio-config.d.ts:97 |
+| &lt;a id="features"&gt;&lt;/a&gt; `features?` | `readonly` | `StudioEditorFeatures` | - | foundation/contracts/dist/editor/studio-config.d.ts:95 |
+| &lt;a id="importabletokens"&gt;&lt;/a&gt; `importableTokens?` | `readonly` | readonly `ImportableTokenValue`[] | Theme/brand values the token picker offers for import-as-copy (ADR 0005 Part 2 §3/§4). Static data — hosts that surface `@anvilkit/plugin-design-system` theme tokens pass them here rather than Core importing an extension package, which the layering rule forbids. Absent = the picker shows document tokens only. | foundation/contracts/dist/editor/studio-config.d.ts:106 |
+| &lt;a id="pageadapter"&gt;&lt;/a&gt; `pageAdapter?` | `readonly` | [`EditorPageAdapter`](EditorPageAdapter.md) | - | foundation/contracts/dist/editor/studio-config.d.ts:122 |
+| &lt;a id="policies"&gt;&lt;/a&gt; `policies?` | `readonly` | [`EditorPolicies`](EditorPolicies.md) | - | foundation/contracts/dist/editor/studio-config.d.ts:129 |
+| &lt;a id="renderscope"&gt;&lt;/a&gt; `renderScope?` | `readonly` | [`EditorRenderScope`](EditorRenderScope.md) | The data scope binding expressions read at **render** time (ED-BIND-002; ADR 0006). Deliberately host-supplied rather than fetched by Core. §19 lets Core store descriptors and expressions but **never preview responses**, so a render-time cache inside Core would break that guarantee. ADR 0006 settles the division: the host fills the scope — from `_dataSource` injection or anything else — and bindings only read it. Absent = bindings resolve to `missing`, which renders as indeterminate rather than hidden. | foundation/contracts/dist/editor/studio-config.d.ts:121 |
+| &lt;a id="styleadapter"&gt;&lt;/a&gt; `styleAdapter?` | `readonly` | [`EditorStyleAdapter`](EditorStyleAdapter.md) | Strict-CSP authoring-style injection (§29). Absent = Core's default `<style>` element. | foundation/contracts/dist/editor/studio-config.d.ts:128 |

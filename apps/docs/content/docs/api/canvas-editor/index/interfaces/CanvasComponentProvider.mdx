@@ -1,0 +1,160 @@
+---
+title: "CanvasComponentProvider"
+description: "@anvilkit/canvas-editor · CanvasComponentProvider"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/component-provider.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/component-provider.ts#L120)
+
+The host-implemented protocol.
+
+Every method is cancellable and every method may reject; the request store
+(T-019) maps failures onto the seven presentation states and never surfaces a
+raw error body.
+
+## Methods
+
+### checkCompatibility()?
+
+```ts
+optional checkCompatibility(query, context): Promise<{
+  compatible: boolean;
+  reason?: string;
+}>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/component-provider.ts:140](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/component-provider.ts#L140)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `query` | [`CanvasComponentCompatibilityQuery`](CanvasComponentCompatibilityQuery.md) |
+| `context` | [`CanvasProviderRequestContext`](CanvasProviderRequestContext.md) |
+
+#### Returns
+
+`Promise`\<\{
+  `compatible`: `boolean`;
+  `reason?`: `string`;
+\}\>
+
+***
+
+### getEnvelope()
+
+```ts
+getEnvelope(ref, context): Promise<
+  | {
+  canonicalFormatVersion: 1;
+  definition: {
+   [key: string]: unknown;
+     createdAt?: string;
+     id: string;
+     name: string;
+     policy?: CanvasBrandComponentPolicy;
+     properties: CanvasComponentProperty[];
+     revision: number;
+     root: CanvasNode;
+     updatedAt?: string;
+     variants?: CanvasComponentVariantSet;
+  };
+  dependencies: CanvasExternalComponentRef[];
+  metadata?: {
+     deprecationNotice?: string;
+     description?: string;
+     name?: string;
+     publisher?: string;
+     releaseNotesUrl?: string;
+     thumbnailUrl?: string;
+  };
+  ref: CanvasExternalComponentRef;
+}
+| null>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/component-provider.ts:132](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/component-provider.ts#L132)
+
+Fetch the full, integrity-bearing envelope for one exact reference.
+
+Returns `null` for "no such version", which is a normal catalog answer, not
+an error — distinguishing the two is what lets the UI offer a re-fetch for
+a transient failure but not for a version that was withdrawn.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ref` | `CanvasExternalComponentRef` |
+| `context` | [`CanvasProviderRequestContext`](CanvasProviderRequestContext.md) |
+
+#### Returns
+
+`Promise`\<
+  \| \{
+  `canonicalFormatVersion`: `1`;
+  `definition`: \{
+   \[`key`: `string`\]: `unknown`;
+     `createdAt?`: `string`;
+     `id`: `string`;
+     `name`: `string`;
+     `policy?`: `CanvasBrandComponentPolicy`;
+     `properties`: `CanvasComponentProperty`[];
+     `revision`: `number`;
+     `root`: `CanvasNode`;
+     `updatedAt?`: `string`;
+     `variants?`: `CanvasComponentVariantSet`;
+  \};
+  `dependencies`: `CanvasExternalComponentRef`[];
+  `metadata?`: \{
+     `deprecationNotice?`: `string`;
+     `description?`: `string`;
+     `name?`: `string`;
+     `publisher?`: `string`;
+     `releaseNotesUrl?`: `string`;
+     `thumbnailUrl?`: `string`;
+  \};
+  `ref`: `CanvasExternalComponentRef`;
+\}
+  \| `null`\&gt;
+
+***
+
+### listVersions()?
+
+```ts
+optional listVersions(query, context): Promise<CanvasComponentVersionResult>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/component-provider.ts:136](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/component-provider.ts#L136)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `query` | [`CanvasComponentVersionQuery`](CanvasComponentVersionQuery.md) |
+| `context` | [`CanvasProviderRequestContext`](CanvasProviderRequestContext.md) |
+
+#### Returns
+
+`Promise`\<[`CanvasComponentVersionResult`](CanvasComponentVersionResult.md)\>
+
+***
+
+### search()
+
+```ts
+search(query, context): Promise<CanvasComponentSearchResult>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/component-provider.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/component-provider.ts#L121)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `query` | [`CanvasComponentSearchQuery`](CanvasComponentSearchQuery.md) |
+| `context` | [`CanvasProviderRequestContext`](CanvasProviderRequestContext.md) |
+
+#### Returns
+
+`Promise`\<[`CanvasComponentSearchResult`](CanvasComponentSearchResult.md)\>

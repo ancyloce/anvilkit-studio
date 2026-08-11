@@ -1,0 +1,27 @@
+---
+title: "CanvasFrameSetLayoutCommand"
+description: "@anvilkit/canvas-core · CanvasFrameSetLayoutCommand"
+---
+
+Defined in: [commands/types.ts:531](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L531)
+
+Set or replace a frame's Auto Layout intent, optionally writing resolved
+geometry for its descendants in the same atomic step.
+
+Also the vehicle for batched Inspector property edits: changing gap,
+padding, direction and alignment together is one `frame.set-layout`, hence
+one Undo entry, rather than four commands.
+
+## Extends
+
+- [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md)
+
+## Properties
+
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="geometry"&gt;&lt;/a&gt; `geometry?` | readonly [`CanvasLayoutGeometryWrite`](CanvasLayoutGeometryWrite.md)[] | Caller-computed geometry to write alongside the intent. | - | [commands/types.ts:537](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L537) |
+| &lt;a id="layout"&gt;&lt;/a&gt; `layout` | [`CanvasAutoLayout`](CanvasAutoLayout.md) | - | - | [commands/types.ts:535](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L535) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | - | [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md).[`location`](CanvasCommandLocationOptions.md#location) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | - | [commands/types.ts:534](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L534) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"frame.set-layout"` | - | - | [commands/types.ts:533](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L533) |

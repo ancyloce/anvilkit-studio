@@ -1,0 +1,33 @@
+---
+title: "previewVariantChange"
+description: "@anvilkit/canvas-core · previewVariantChange"
+---
+
+```ts
+function previewVariantChange(
+   ir, 
+   instanceId, 
+   selection): 
+  | CanvasVariantChangeSummary
+  | undefined;
+```
+
+Defined in: [component-libraries/commands/set-variant.ts:247](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/set-variant.ts#L247)
+
+Preview a variant change without touching the document.
+
+The dialog/inspector calls this to show what would be preserved and what
+would be orphaned BEFORE committing (T-026 step 4).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../../index/interfaces/CanvasIR) |
+| `instanceId` | `string` |
+| `selection` | [`CanvasComponentVariantSelection`](../../index/type-aliases/CanvasComponentVariantSelection) |
+
+## Returns
+
+  \| [`CanvasVariantChangeSummary`](../interfaces/CanvasVariantChangeSummary)
+  \| `undefined`

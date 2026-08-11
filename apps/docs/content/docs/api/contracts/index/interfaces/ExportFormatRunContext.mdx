@@ -1,0 +1,30 @@
+---
+title: "ExportFormatRunContext"
+description: "@anvilkit/contracts · ExportFormatRunContext"
+---
+
+Defined in: [export.ts:158](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/export.ts#L158)
+
+Per-run context handed to [ExportFormatDefinition.run](ExportFormatDefinition.md#run) for
+formats that opt into asset-URL rewriting (review finding TS-c).
+
+`assetResolvers` is the runtime's registration-ordered resolver list
+(sourced from `StudioRuntime.assetResolvers`): a format consults each
+resolver in order and stops at the first that returns a non-null
+rewrite. Absent or empty ⇒ no rewriting is applied; how a format then
+treats a reference no resolver handles is its own policy — the bundled
+HTML / React exporters omit unresolved `asset://` / `design://` refs and
+emit an `ASSET_UNRESOLVED` warning rather than passing them through.
+
+`compiledAppearance` is the unified compiler's output for the
+document being exported (PLAN-0025 §9.3): present whenever the
+caller supplied its Puck `Config` to the export runner. Formats
+consume `css`/`styledNodeIds` directly instead of resolving node
+styles independently.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="assetresolvers"&gt;&lt;/a&gt; `assetResolvers?` | `readonly` | readonly [`IRAssetResolver`](../type-aliases/IRAssetResolver)[] | [export.ts:159](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/export.ts#L159) |
+| &lt;a id="compiledappearance"&gt;&lt;/a&gt; `compiledAppearance?` | `readonly` | [`CompiledAppearanceArtifact`](CompiledAppearanceArtifact.md) | [export.ts:160](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/export.ts#L160) |

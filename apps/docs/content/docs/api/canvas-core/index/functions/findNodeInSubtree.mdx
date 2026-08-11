@@ -1,0 +1,28 @@
+---
+title: "findNodeInSubtree"
+description: "@anvilkit/canvas-core · findNodeInSubtree"
+---
+
+```ts
+function findNodeInSubtree(root, id): 
+  | FindNodeInSubtreeResult
+  | null;
+```
+
+Defined in: [ir/walkers.ts:220](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/walkers.ts#L220)
+
+Find a node by id within ONE tree — a page's or a Component Source's —
+including the root itself. The scoped complement of `findNode`, which is
+pages-only by contract (plan 0023 M3-01). Depth-guarded like every walker.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `root` | [`CanvasNode`](../type-aliases/CanvasNode) |
+| `id` | `string` |
+
+## Returns
+
+  \| [`FindNodeInSubtreeResult`](../interfaces/FindNodeInSubtreeResult)
+  \| `null`

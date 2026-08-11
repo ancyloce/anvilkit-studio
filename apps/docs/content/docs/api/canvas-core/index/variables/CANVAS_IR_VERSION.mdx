@@ -1,0 +1,18 @@
+---
+title: "CANVAS_IR_VERSION"
+description: "@anvilkit/canvas-core · CANVAS_IR_VERSION"
+---
+
+```ts
+const CANVAS_IR_VERSION: "3";
+```
+
+Defined in: [ir/validators.ts:913](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L913)
+
+The CanvasIR schema version this build emits and treats as current.
+
+Policy: **migrate-on-read, write current.** Anything parsed through
+`migrateCanvasIR`/`runtime.migrate` comes out at this version, and
+builders/serializers emit it. This is the single version literal — the
+static schema below and `buildExtendedSchemas` both derive from it, so the
+two can never drift.

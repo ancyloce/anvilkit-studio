@@ -1,0 +1,14 @@
+---
+title: "BrandApplyResult"
+description: "@anvilkit/canvas-core · BrandApplyResult"
+---
+
+Defined in: [brand/apply.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/apply.ts#L31)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="command"&gt;&lt;/a&gt; `command` | [`CanvasBatchCommand`](CanvasBatchCommand.md) \| `null` | The reversible batch that produced `document` from the input, or `null` when nothing matched. Apply it yourself (e.g. `ctx.commit(command)` in canvas-editor) to get proper undo-stack tracking — `document` alone is NOT re-appliable as a command. Covers PAGE nodes only. Component Source trees are patched structurally (with a `revision` bump per touched definition — the LC-PROPAGATE signal) and are NOT in this batch: command-addressable Source mutation arrives with the M3 component commands (plan 0023, DEV-M1-C). | [brand/apply.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/apply.ts#L44) |
+| &lt;a id="document"&gt;&lt;/a&gt; `document` | [`CanvasIR`](CanvasIR.md) | - | [brand/apply.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/apply.ts#L32) |
+| &lt;a id="report"&gt;&lt;/a&gt; `report` | [`BrandApplyReport`](BrandApplyReport.md) | - | [brand/apply.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/apply.ts#L45) |

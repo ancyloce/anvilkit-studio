@@ -1,0 +1,25 @@
+---
+title: "MotionTransition"
+description: "@anvilkit/contracts · MotionTransition"
+---
+
+```ts
+type MotionTransition = 
+  | {
+  delayMs?: number;
+  durationMs: number;
+  easing: CubicBezier;
+  type: "tween";
+}
+  | {
+  damping: number;
+  delayMs?: number;
+  mass: number;
+  stiffness: number;
+  type: "spring";
+};
+```
+
+Defined in: [editor/interactions.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L29)
+
+Motion transition (DD-0019 §16, verbatim).

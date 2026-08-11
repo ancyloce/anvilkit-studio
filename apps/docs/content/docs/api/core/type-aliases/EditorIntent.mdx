@@ -1,0 +1,49 @@
+---
+title: "EditorIntent"
+description: "@anvilkit/core · EditorIntent"
+---
+
+```ts
+type EditorIntent = 
+  | {
+  kind: "set-inline-text";
+  nodeId: string;
+  targetId: string;
+  value: string;
+}
+  | {
+  interactions: readonly Interaction[];
+  kind: "set-interactions";
+  nodeId: string;
+}
+  | {
+  bindings: readonly Binding[];
+  kind: "set-bindings";
+  nodeId: string;
+}
+  | {
+  kind: "set-instance-variant";
+  nodeIds: readonly string[];
+  selection: Readonly<Record<string, string>>;
+}
+  | {
+  kind: "rename-node";
+  name: string;
+  nodeId: string;
+}
+  | {
+  kind: "delete-nodes";
+  nodeIds: readonly string[];
+};
+```
+
+Defined in: [runtime/core/src/types/editor-api-v2.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L96)
+
+What an AI proposal can ask the host to do.
+
+**A request vocabulary, not an IR.** Every member resolves
+immediately to exactly one commit-helper call. It has no Zod schema,
+no serializer and no persistence path — acquiring any of those would
+make it a parallel IR and breach rule 5, which is precisely what
+distinguishes it from the `EditorCommand` union being deleted.
+Document state never round-trips through an intent.

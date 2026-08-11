@@ -1,0 +1,17 @@
+---
+title: "CanvasComponentDependencyRef"
+description: "@anvilkit/canvas-core · CanvasComponentDependencyRef"
+---
+
+```ts
+type CanvasComponentDependencyRef = CanvasExternalComponentRef;
+```
+
+Defined in: [component-libraries/dependencies.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/dependencies.ts#L47)
+
+A reference from one external component to another.
+
+An alias of [CanvasExternalComponentRef](../../index/interfaces/CanvasExternalComponentRef) rather than a distinct shape:
+a dependency IS an exact reference, and giving it its own type would invite
+the two to drift into "almost the same" — at which point a dependency could
+express something a reference cannot, e.g. a range.

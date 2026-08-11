@@ -1,0 +1,16 @@
+---
+title: "CanvasDocumentOrigin"
+description: "@anvilkit/canvas-editor · CanvasDocumentOrigin"
+---
+
+```ts
+type CanvasDocumentOrigin = "host-persisted" | "imported";
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/load-verification.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/load-verification.ts#L54)
+
+Where a document came from — the only input the default policy needs.
+
+`host-persisted` covers a persistence adapter's `load`, a recovery snapshot,
+and a collaborating peer: all three are inside the host's trust boundary.
+`imported` covers a user-supplied file.

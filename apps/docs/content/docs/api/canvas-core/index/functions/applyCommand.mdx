@@ -1,0 +1,28 @@
+---
+title: "applyCommand"
+description: "@anvilkit/canvas-core · applyCommand"
+---
+
+```ts
+function applyCommand(
+   ir, 
+   cmd, 
+   options?): CommandApplyResult;
+```
+
+Defined in: [commands/runtime.ts:3092](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/runtime.ts#L3092)
+
+Apply one command (including a whole `batch`) and settle Source revisions
+once — the entry point everything user-facing goes through.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `cmd` | [`CanvasCommand`](../type-aliases/CanvasCommand) |
+| `options` | [`CommandApplyOptions`](../interfaces/CommandApplyOptions) |
+
+## Returns
+
+[`CommandApplyResult`](../interfaces/CommandApplyResult)

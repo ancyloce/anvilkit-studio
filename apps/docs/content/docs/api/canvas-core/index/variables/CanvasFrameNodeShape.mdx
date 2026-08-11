@@ -1,0 +1,63 @@
+---
+title: "CanvasFrameNodeShape"
+description: "@anvilkit/canvas-core · CanvasFrameNodeShape"
+---
+
+```ts
+const CanvasFrameNodeShape: {
+  autoLayout: ZodOptional<ZodType<CanvasAutoLayout, unknown, $ZodTypeInternals<CanvasAutoLayout, unknown>>>;
+  background: ZodOptional<ZodType<CanvasFill, unknown, $ZodTypeInternals<CanvasFill, unknown>>>;
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  clip: ZodOptional<ZodBoolean>;
+  cornerRadii: ZodOptional<ZodObject<{
+     bottomLeft: ZodNumber;
+     bottomRight: ZodNumber;
+     topLeft: ZodNumber;
+     topRight: ZodNumber;
+  }, $loose>>;
+  id: ZodString;
+  layoutItem: ZodOptional<ZodType<CanvasLayoutItem, unknown, $ZodTypeInternals<CanvasLayoutItem, unknown>>>;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  placeholder: ZodOptional<ZodType<FramePlaceholder, unknown, $ZodTypeInternals<FramePlaceholder, unknown>>>;
+  radius: ZodOptional<ZodNumber>;
+  shape: ZodOptional<ZodType<CanvasFrameShape, unknown, $ZodTypeInternals<CanvasFrameShape, unknown>>>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"frame">;
+  visible: ZodOptional<ZodBoolean>;
+  zIndex: ZodOptional<ZodNumber>;
+};
+```
+
+Defined in: [ir/validators.ts:669](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L669)
+
+Frame's own (non-recursive) fields. Split out because `children` must be bound
+to whichever node union is being assembled — the static one below, or the
+extension-aware one `buildExtendedSchemas` builds — and the two must not drift.
+
+## Type Declaration
+
+| Name | Type | Default value | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="property-autolayout"&gt;&lt;/a&gt; `autoLayout` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasAutoLayout`](../interfaces/CanvasAutoLayout), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasAutoLayout`](../interfaces/CanvasAutoLayout), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:678](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L678) |
+| &lt;a id="property-background"&gt;&lt;/a&gt; `background` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasFill`](../type-aliases/CanvasFill), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasFill`](../type-aliases/CanvasFill), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:674](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L674) |
+| &lt;a id="property-blendmode"&gt;&lt;/a&gt; `blendMode` | `ZodOptional`\&lt;`ZodString`\&gt; | - | [ir/validators.ts:404](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L404) |
+| &lt;a id="property-bounds"&gt;&lt;/a&gt; `bounds` | `ZodType`\&lt;[`CanvasBounds`](../interfaces/CanvasBounds), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasBounds`](../interfaces/CanvasBounds), `unknown`\&gt;\&gt; | `CanvasBoundsSchema` | [ir/validators.ts:400](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L400) |
+| &lt;a id="property-clip"&gt;&lt;/a&gt; `clip` | `ZodOptional`\&lt;`ZodBoolean`\&gt; | - | [ir/validators.ts:672](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L672) |
+| &lt;a id="property-cornerradii"&gt;&lt;/a&gt; `cornerRadii` | `ZodOptional`\&lt;`ZodObject`\&lt;\{ `bottomLeft`: `ZodNumber`; `bottomRight`: `ZodNumber`; `topLeft`: `ZodNumber`; `topRight`: `ZodNumber`; \}, `$loose`\&gt;\&gt; | - | [ir/validators.ts:677](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L677) |
+| &lt;a id="property-id"&gt;&lt;/a&gt; `id` | `ZodString` | - | [ir/validators.ts:397](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L397) |
+| &lt;a id="property-layoutitem"&gt;&lt;/a&gt; `layoutItem` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasLayoutItem`](../interfaces/CanvasLayoutItem), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasLayoutItem`](../interfaces/CanvasLayoutItem), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:408](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L408) |
+| &lt;a id="property-locked"&gt;&lt;/a&gt; `locked` | `ZodOptional`\&lt;`ZodBoolean`\&gt; | - | [ir/validators.ts:403](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L403) |
+| &lt;a id="property-meta"&gt;&lt;/a&gt; `meta` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasNodeMeta`](../interfaces/CanvasNodeMeta), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasNodeMeta`](../interfaces/CanvasNodeMeta), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:407](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L407) |
+| &lt;a id="property-name"&gt;&lt;/a&gt; `name` | `ZodOptional`\&lt;`ZodString`\&gt; | - | [ir/validators.ts:398](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L398) |
+| &lt;a id="property-opacity"&gt;&lt;/a&gt; `opacity` | `ZodOptional`\&lt;`ZodNumber`\&gt; | - | [ir/validators.ts:401](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L401) |
+| &lt;a id="property-placeholder"&gt;&lt;/a&gt; `placeholder` | `ZodOptional`\&lt;`ZodType`\&lt;[`FramePlaceholder`](../interfaces/FramePlaceholder), `unknown`, `$ZodTypeInternals`\&lt;[`FramePlaceholder`](../interfaces/FramePlaceholder), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:675](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L675) |
+| &lt;a id="property-radius"&gt;&lt;/a&gt; `radius` | `ZodOptional`\&lt;`ZodNumber`\&gt; | - | [ir/validators.ts:676](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L676) |
+| &lt;a id="property-shape"&gt;&lt;/a&gt; `shape` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasFrameShape`](../type-aliases/CanvasFrameShape), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasFrameShape`](../type-aliases/CanvasFrameShape), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:673](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L673) |
+| &lt;a id="property-transform"&gt;&lt;/a&gt; `transform` | `ZodType`\&lt;[`CanvasTransform`](../interfaces/CanvasTransform), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasTransform`](../interfaces/CanvasTransform), `unknown`\&gt;\&gt; | `CanvasTransformSchema` | [ir/validators.ts:399](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L399) |
+| &lt;a id="property-type"&gt;&lt;/a&gt; `type` | `ZodLiteral`\&lt;`"frame"`\&gt; | - | [ir/validators.ts:671](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L671) |
+| &lt;a id="property-visible"&gt;&lt;/a&gt; `visible` | `ZodOptional`\&lt;`ZodBoolean`\&gt; | - | [ir/validators.ts:402](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L402) |
+| &lt;a id="property-zindex"&gt;&lt;/a&gt; `zIndex` | `ZodOptional`\&lt;`ZodNumber`\&gt; | - | [ir/validators.ts:406](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L406) |

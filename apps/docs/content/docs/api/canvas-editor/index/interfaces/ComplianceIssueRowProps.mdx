@@ -1,0 +1,27 @@
+---
+title: "ComplianceIssueRowProps"
+description: "@anvilkit/canvas-editor · ComplianceIssueRowProps"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/panels/governance/ComplianceIssueRow.tsx:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/ComplianceIssueRow.tsx#L25)
+
+## File
+
+One compliance row (plan 0021 T-044).
+
+## Status is never colour alone (T-044 step 5)
+
+Every row carries a glyph AND a localized severity word in an
+`aria-label`ed element. Amber-vs-red tells a sighted user with normal colour
+vision which issues block; it tells a screen reader, a monochrome display and
+roughly one man in twelve nothing at all. The colour classes stay — they are
+a redundant channel, not the channel.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="issue"&gt;&lt;/a&gt; `issue` | `BrandComplianceIssue` | [packages/capabilities/canvas/editor/src/panels/governance/ComplianceIssueRow.tsx:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/ComplianceIssueRow.tsx#L26) |
+| &lt;a id="onactivate"&gt;&lt;/a&gt; `onActivate` | (`issue`) =&gt; `void` | [packages/capabilities/canvas/editor/src/panels/governance/ComplianceIssueRow.tsx:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/ComplianceIssueRow.tsx#L28) |
+| &lt;a id="t"&gt;&lt;/a&gt; `t` | [`CanvasT`](../type-aliases/CanvasT) | [packages/capabilities/canvas/editor/src/panels/governance/ComplianceIssueRow.tsx:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/ComplianceIssueRow.tsx#L29) |
+| &lt;a id="target"&gt;&lt;/a&gt; `target` | [`ComplianceNavigationTarget`](../type-aliases/ComplianceNavigationTarget) | [packages/capabilities/canvas/editor/src/panels/governance/ComplianceIssueRow.tsx:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/ComplianceIssueRow.tsx#L27) |

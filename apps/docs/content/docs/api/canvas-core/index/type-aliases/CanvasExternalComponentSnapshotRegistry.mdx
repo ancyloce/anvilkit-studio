@@ -1,0 +1,16 @@
+---
+title: "CanvasExternalComponentSnapshotRegistry"
+description: "@anvilkit/canvas-core · CanvasExternalComponentSnapshotRegistry"
+---
+
+```ts
+type CanvasExternalComponentSnapshotRegistry = Readonly<Record<string, CanvasExternalComponentSnapshot>>;
+```
+
+Defined in: [ir/types.ts:1308](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1308)
+
+The document's external snapshot registry, keyed by
+`libraryId/componentId/version/integrity` (see `ir/snapshot-key.ts`).
+
+A plain persisted map, exactly like [CanvasComponentRegistry](CanvasComponentRegistry.md) and
+`CanvasIR.assets` — no `register()` surface, no runtime behavior, just data.

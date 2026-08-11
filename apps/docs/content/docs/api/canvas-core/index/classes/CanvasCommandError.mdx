@@ -1,0 +1,48 @@
+---
+title: "CanvasCommandError"
+description: "@anvilkit/canvas-core · CanvasCommandError"
+---
+
+Defined in: [commands/runtime.ts:154](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/runtime.ts#L154)
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new CanvasCommandError(
+   code, 
+   message, 
+   policy?): CanvasCommandError;
+```
+
+Defined in: [commands/runtime.ts:170](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/runtime.ts#L170)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `code` | [`CanvasCommandErrorCode`](../type-aliases/CanvasCommandErrorCode) |
+| `message` | `string` |
+| `policy?` | [`CanvasPolicyDecision`](../../brand-governance/interfaces/CanvasPolicyDecision) |
+
+#### Returns
+
+`CanvasCommandError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | [`CanvasCommandErrorCode`](../type-aliases/CanvasCommandErrorCode) | - | [commands/runtime.ts:155](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/runtime.ts#L155) |
+| &lt;a id="policy"&gt;&lt;/a&gt; `policy?` | `readonly` | [`CanvasPolicyDecision`](../../brand-governance/interfaces/CanvasPolicyDecision) | The structured decision behind a `brand-policy-denied` throw (plan 0021 T-040), absent for every other code. The Editor needs the STABLE `reason` to pick localized copy. `message` cannot serve that purpose: it interpolates `decision.detail`, which is explicitly log-only and may name a provider or an identity. Without this field the only way to recover the reason is to parse the message — which is both brittle and one careless `{error.message}` away from rendering the detail it exists to keep out of the UI. | [commands/runtime.ts:168](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/runtime.ts#L168) |

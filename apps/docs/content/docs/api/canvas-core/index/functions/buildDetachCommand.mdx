@@ -1,0 +1,30 @@
+---
+title: "buildDetachCommand"
+description: "@anvilkit/canvas-core · buildDetachCommand"
+---
+
+```ts
+function buildDetachCommand(
+   ir, 
+   instanceId, 
+   options?): CanvasDetachPlan;
+```
+
+Defined in: [component-ops/detach.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-ops/detach.ts#L75)
+
+Resolve the instance fully and allocate a persistent id for every node the
+detach will materialize. Throws (nothing applied) when the expansion is
+unsafe — missing Source or a degraded boundary — mirroring the command's
+own guard so a plan that builds is a plan that applies.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `instanceId` | `string` |
+| `options` | [`BuildDetachCommandOptions`](../interfaces/BuildDetachCommandOptions) |
+
+## Returns
+
+[`CanvasDetachPlan`](../interfaces/CanvasDetachPlan)

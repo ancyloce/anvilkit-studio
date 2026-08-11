@@ -1,0 +1,21 @@
+---
+title: "CanvasFontWeight"
+description: "@anvilkit/canvas-editor · CanvasFontWeight"
+---
+
+```ts
+type CanvasFontWeight = 
+  | number
+  | CanvasFontWeightRange;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/text/font-catalog.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L101)
+
+One static weight (`400`) or a variable axis (`{min: 100, max: 900}`).
+
+Both, deliberately: a family advertises `weights` as a *list* whose members
+may be either, so a static family is `[400, 700]`, a variable family is
+`[{min: 100, max: 900}]`, and a family shipping both cuts is a list of both.
+A single list keeps `cp2-003`'s weight control to one code path, and
+fontWeightCss turns either shape into the string `SvgFontFaceDef.weight`
+wants.

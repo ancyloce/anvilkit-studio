@@ -1,0 +1,31 @@
+---
+title: "checkForComponentUpdates"
+description: "@anvilkit/canvas-editor · checkForComponentUpdates"
+---
+
+```ts
+function checkForComponentUpdates(
+   ir, 
+   provider, 
+options?): Promise<CanvasUpdateCheckResult>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/use-update-check.ts:90](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-update-check.ts#L90)
+
+Ask the Provider whether newer versions exist for what this document uses.
+
+Pure with respect to the document: it reads `ir` and returns findings. The
+caller decides whether to show them.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) |
+| `provider` | [`CanvasComponentProvider`](../interfaces/CanvasComponentProvider) |
+| `options` | \{ `signal?`: `AbortSignal`; \} |
+| `options.signal?` | `AbortSignal` |
+
+## Returns
+
+`Promise`\<[`CanvasUpdateCheckResult`](../type-aliases/CanvasUpdateCheckResult)\>

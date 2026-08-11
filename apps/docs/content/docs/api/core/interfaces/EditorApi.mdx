@@ -1,0 +1,52 @@
+---
+title: "EditorApi"
+description: "@anvilkit/core · EditorApi"
+---
+
+Defined in: [runtime/core/src/types/editor-api-v2.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L78)
+
+The whole public editor surface for plugins and AI.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="commit"&gt;&lt;/a&gt; `commit` | `readonly` | [`EditorCommitApi`](EditorCommitApi.md) | [runtime/core/src/types/editor-api-v2.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L83) |
+
+## Methods
+
+### readDocument()
+
+```ts
+readDocument(): DocumentModel;
+```
+
+Defined in: [runtime/core/src/types/editor-api-v2.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L80)
+
+The current document projection. Never a mutable handle.
+
+#### Returns
+
+`DocumentModel`
+
+***
+
+### subscribe()
+
+```ts
+subscribe(listener): () => void;
+```
+
+Defined in: [runtime/core/src/types/editor-api-v2.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L82)
+
+Change notification. Returns an unsubscribe function.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `listener` | () =&gt; `void` |
+
+#### Returns
+
+() => `void`

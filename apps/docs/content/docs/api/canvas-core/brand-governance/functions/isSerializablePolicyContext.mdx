@@ -1,0 +1,25 @@
+---
+title: "isSerializablePolicyContext"
+description: "@anvilkit/canvas-core · isSerializablePolicyContext"
+---
+
+```ts
+function isSerializablePolicyContext(context): boolean;
+```
+
+Defined in: [brand-governance/types.ts:234](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L234)
+
+Is this context free of anything unserializable?
+
+Used by a test and available to hosts. Cheap structural check rather than a
+schema, because the contract is "no functions anywhere", not a shape.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `context` | [`CanvasBrandPolicyContext`](../interfaces/CanvasBrandPolicyContext) |
+
+## Returns
+
+`boolean`

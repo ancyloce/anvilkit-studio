@@ -1,0 +1,55 @@
+---
+title: "AuthorableStyleProperty"
+description: "@anvilkit/contracts · AuthorableStyleProperty"
+---
+
+```ts
+type AuthorableStyleProperty = 
+  | "display"
+  | "position"
+  | "width"
+  | "minWidth"
+  | "maxWidth"
+  | "height"
+  | "margin"
+  | "padding"
+  | "gap"
+  | "alignItems"
+  | "justifyContent"
+  | "background"
+  | "border"
+  | "borderRadius"
+  | "boxShadow"
+  | "opacity"
+  | "color"
+  | "fontFamily"
+  | "fontSize"
+  | "fontWeight"
+  | "lineHeight"
+  | "letterSpacing"
+  | "textAlign"
+  | "direction"
+  | "wrap"
+  | "rowGap"
+  | "columnGap"
+  | "columns"
+  | "rows"
+  | "minHeight"
+  | "maxHeight"
+  | "inset"
+  | "overflow"
+  | "zIndex"
+  | "filter"
+  | "blendMode"
+  | "cursor"
+  | "textDecoration"
+  | "textTransform"
+  | "textWrap";
+```
+
+Defined in: [editor/component-metadata.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/component-metadata.ts#L27)
+
+Every style property an author may be granted, keyed exactly as the
+authoring specs spell them. Extending this union is a schema change
+(plan §15 gate 8): new CSS enters here and the capability allowlist
+before any panel or compiler may emit it.

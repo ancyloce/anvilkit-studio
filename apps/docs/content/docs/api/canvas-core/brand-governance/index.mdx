@@ -1,0 +1,80 @@
+---
+title: "index"
+description: "@anvilkit/canvas-core · index"
+---
+
+## Interfaces
+
+| Interface | Description |
+| ------ | ------ |
+| [BuildGovernanceAuditEventInput](interfaces/BuildGovernanceAuditEventInput.md) | - |
+| [CanvasBrandCapabilities](interfaces/CanvasBrandCapabilities.md) | What THIS session's user may do, as plain booleans. |
+| [CanvasBrandPolicyContext](interfaces/CanvasBrandPolicyContext.md) | Everything the command layer needs to make a policy decision. |
+| [CanvasBrandPolicyIssue](interfaces/CanvasBrandPolicyIssue.md) | - |
+| [CanvasComplianceCache](interfaces/CanvasComplianceCache.md) | - |
+| [CanvasGovernanceAuditEvent](interfaces/CanvasGovernanceAuditEvent.md) | - |
+| [CanvasPolicyDecision](interfaces/CanvasPolicyDecision.md) | The outcome of asking policy about one operation. |
+| [CanvasPolicyQuery](interfaces/CanvasPolicyQuery.md) | What the evaluator is being asked. |
+| [ComplianceCacheKeyParts](interfaces/ComplianceCacheKeyParts.md) | - |
+| [ComplianceOrdering](interfaces/ComplianceOrdering.md) | Sort key components, in the §16.2 order: page, then tree position, then instance, property, code. |
+| [ValidateBrandComponentCommandInput](interfaces/ValidateBrandComponentCommandInput.md) | - |
+
+## Type Aliases
+
+| Type Alias | Description |
+| ------ | ------ |
+| [CanvasBrandPolicyIssueCode](type-aliases/CanvasBrandPolicyIssueCode.md) | - |
+| [CanvasGovernanceAuditOutcome](type-aliases/CanvasGovernanceAuditOutcome.md) | - |
+| [CanvasGovernanceAuditSink](type-aliases/CanvasGovernanceAuditSink.md) | The host sink for audit records. Optional; never load-bearing. |
+| [CanvasPolicyDenyReason](type-aliases/CanvasPolicyDenyReason.md) | Why a mutation was refused, as a stable code. |
+| [CanvasPolicyEvaluator](type-aliases/CanvasPolicyEvaluator.md) | The port `commands/` (rank 3) calls. |
+| [CanvasPolicyOperation](type-aliases/CanvasPolicyOperation.md) | Operations policy can be asked about. |
+
+## Variables
+
+| Variable | Description |
+| ------ | ------ |
+| [CANVAS\_ALLOW\_ALL\_POLICY](variables/CANVAS_ALLOW_ALL_POLICY.md) | An evaluator that permits everything — the default when no host wires one. |
+| [CANVAS\_PERMISSIVE\_POLICY\_CONTEXT](variables/CANVAS_PERMISSIVE_POLICY_CONTEXT.md) | A context that denies nothing — the default when a host wires no policy. |
+| [CanvasBrandComponentPolicySchema](variables/CanvasBrandComponentPolicySchema.md) | Loose, like every persisted shape (CON-5): a policy authored by a newer build must round-trip through this one rather than have its unknown fields deleted. The identity-field scan in `validateBrandComponentPolicy` is what stops that looseness being abused — it inspects unknown keys precisely because they survive here. |
+
+## Functions
+
+| Function | Description |
+| ------ | ------ |
+| [applyComponentContext](functions/applyComponentContext.md) | Annotate raw issues with component context and effective severity. |
+| [assertBrandComponentCommand](functions/assertBrandComponentCommand.md) | Throwing wrapper for the mutation path. |
+| [buildComplianceOrdering](functions/buildComplianceOrdering.md) | Build the document-order maps the comparator needs. |
+| [buildGovernanceAuditEvent](functions/buildGovernanceAuditEvent.md) | Build an audit record with the identifiers already hashed. |
+| [collectPolicyPath](functions/collectPolicyPath.md) | Every policy on the path from the page-level instance inward. |
+| [compareIssues](functions/compareIssues.md) | - |
+| [composeComplianceCacheKey](functions/composeComplianceCacheKey.md) | Compose the §16.3 key. Length-prefixed so no part can forge a separator. |
+| [createBrandPolicyEvaluator](functions/createBrandPolicyEvaluator.md) | The evaluator form, for `CommandApplyOptions.brandPolicy`. |
+| [createComplianceCache](functions/createComplianceCache.md) | A bounded per-instance result cache. |
+| [effectivePathSeverity](functions/effectivePathSeverity.md) | Severity for an issue found under a whole instance PATH. |
+| [effectiveSeverity](functions/effectiveSeverity.md) | OD-10, verbatim. |
+| [generateGovernedComplianceReport](functions/generateGovernedComplianceReport.md) | The governed report: the shipped scan, enriched with component context. |
+| [hashComponentRef](functions/hashComponentRef.md) | Hash a component Source. |
+| [hashDocumentId](functions/hashDocumentId.md) | Correlatable, not reversible. See the file header. |
+| [hashIdentifier](functions/hashIdentifier.md) | The one hashing primitive for governance identifiers. |
+| [isSerializablePolicyContext](functions/isSerializablePolicyContext.md) | Is this context free of anything unserializable? |
+| [normalizeComplianceIssues](functions/normalizeComplianceIssues.md) | Deduplicate by semantic key and sort deterministically. |
+| [overrideHashOf](functions/overrideHashOf.md) | Stable hash of an instance's override map. |
+| [pathRecommendsBlocking](functions/pathRecommendsBlocking.md) | Does any policy on the path recommend blocking? |
+| [policyHashOf](functions/policyHashOf.md) | Stable hash of a policy, order-independent. |
+| [summarizeIssues](functions/summarizeIssues.md) | Counts for the report summary. |
+| [validateBrandComponentCommand](functions/validateBrandComponentCommand.md) | The whole §15 pipeline: capability -&gt; path policies -&gt; intersection -&gt; enforcement mode. |
+| [validateBrandComponentPolicy](functions/validateBrandComponentPolicy.md) | Validate a policy against the definition that carries it. |
+| [variantHashOf](functions/variantHashOf.md) | Stable hash of an instance's variant selection. |
+
+## References
+
+### CanvasBrandComponentPolicy
+
+Re-exports [CanvasBrandComponentPolicy](../index/interfaces/CanvasBrandComponentPolicy)
+
+***
+
+### CanvasBrandTokenConstraint
+
+Re-exports [CanvasBrandTokenConstraint](../index/interfaces/CanvasBrandTokenConstraint)

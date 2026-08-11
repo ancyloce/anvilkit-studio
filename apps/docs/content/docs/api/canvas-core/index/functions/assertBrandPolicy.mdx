@@ -1,0 +1,41 @@
+---
+title: "assertBrandPolicy"
+description: "@anvilkit/canvas-core · assertBrandPolicy"
+---
+
+```ts
+function assertBrandPolicy(options, query): void;
+```
+
+Defined in: [commands/runtime.ts:2685](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/runtime.ts#L2685)
+
+Consult brand policy through the rank-2 port (plan 0021 T-039).
+
+A no-op when no `brandPolicy` is wired, which is every existing caller — so
+this is additive. A `deny` throws BEFORE any mutation, so a refused command
+leaves the document untouched; a `warn` is intentionally silent here and is
+surfaced by the compliance report instead (advisory mode must not block).
+
+The evaluator is called rather than the gateway imported: the gateway lives
+in `brand-governance/` at rank 5 and this file is rank 3. The port is what
+makes enforcement reachable from where mutations actually happen.
+
+**Exported** (plan 0021 M5 follow-up #1) because three of the nine policy
+operations belong to commands that cannot live in this file at all:
+`insert-external`, `source-update` and `source-swap` carry rank-4 branded
+types and register through the extension seam. They import this helper rather
+than re-deriving the check, so every operation refuses with the same code,
+the same structured `decision`, and the same before-any-mutation timing. A
+second implementation would be a second place for the three-state
+allow/warn/deny rule to drift.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CommandApplyOptions`](../interfaces/CommandApplyOptions) |
+| `query` | [`CanvasPolicyQuery`](../../brand-governance/interfaces/CanvasPolicyQuery) |
+
+## Returns
+
+`void`

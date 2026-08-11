@@ -1,0 +1,19 @@
+---
+title: "CanvasKnownCapability"
+description: "@anvilkit/canvas-core · CanvasKnownCapability"
+---
+
+```ts
+type CanvasKnownCapability = "layout.auto.v1" | "components.local.v1" | "components.overrides.v1";
+```
+
+Defined in: [ir/types.ts:1016](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1016)
+
+Capabilities THIS build knows how to honour.
+
+A TypeScript convenience for local call sites ONLY — it is deliberately
+**never** the type of a schema field and never the type of a persisted
+value. `CanvasDocumentCompatibility.requiredCapabilities` is an open
+`readonly string[]` for the reason spelled out there; typing it against
+this union would make every document declaring a future capability fail
+schema parse before the graceful-degradation path could ever run.

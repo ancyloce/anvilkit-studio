@@ -1,0 +1,29 @@
+---
+title: "CanvasFontCatalogRecord"
+description: "@anvilkit/canvas-editor · CanvasFontCatalogRecord"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/text/font-catalog.ts:188](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L188)
+
+An entry as a catalog stores it: the authoring shape plus the tier it was
+created at. Stamped by [createFontCatalog](../functions/createFontCatalog) so authors never repeat it
+per entry, and preserved by [mergeCatalogs](../functions/mergeCatalogs) so merging a merged
+catalog still resolves each family at its true precedence.
+
+## Extends
+
+- [`CanvasFontCatalogEntry`](CanvasFontCatalogEntry.md)
+
+## Properties
+
+| Property | Modifier | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="category"&gt;&lt;/a&gt; `category` | `readonly` | [`CanvasFontCategory`](../type-aliases/CanvasFontCategory) | - | [`CanvasFontCatalogEntry`](CanvasFontCatalogEntry.md).[`category`](CanvasFontCatalogEntry.md#category) | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:168](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L168) |
+| &lt;a id="family"&gt;&lt;/a&gt; `family` | `readonly` | `string` | - | [`CanvasFontCatalogEntry`](CanvasFontCatalogEntry.md).[`family`](CanvasFontCatalogEntry.md#family) | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:167](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L167) |
+| &lt;a id="italic"&gt;&lt;/a&gt; `italic?` | `readonly` | `boolean` | Whether the family ships an italic cut. Absent means unknown/none. | [`CanvasFontCatalogEntry`](CanvasFontCatalogEntry.md).[`italic`](CanvasFontCatalogEntry.md#italic) | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:172](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L172) |
+| &lt;a id="license"&gt;&lt;/a&gt; `license` | `readonly` | `string` | SPDX identifier. Required — see the interface doc. | [`CanvasFontCatalogEntry`](CanvasFontCatalogEntry.md).[`license`](CanvasFontCatalogEntry.md#license) | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:177](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L177) |
+| &lt;a id="origin"&gt;&lt;/a&gt; `origin` | `readonly` | [`CanvasFontOrigin`](../type-aliases/CanvasFontOrigin) | - | - | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:189](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L189) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source` | `readonly` | [`CanvasFontSource`](../type-aliases/CanvasFontSource) | - | [`CanvasFontCatalogEntry`](CanvasFontCatalogEntry.md).[`source`](CanvasFontCatalogEntry.md#source) | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:173](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L173) |
+| &lt;a id="subsets"&gt;&lt;/a&gt; `subsets?` | `readonly` | readonly `string`[] | Script coverage, e.g. `["latin", "latin-ext", "japanese"]`. | [`CanvasFontCatalogEntry`](CanvasFontCatalogEntry.md).[`subsets`](CanvasFontCatalogEntry.md#subsets) | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:175](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L175) |
+| &lt;a id="upstreamurl"&gt;&lt;/a&gt; `upstreamUrl?` | `readonly` | `string` | Where the family came from, for the `cp6-006` licensing audit. | [`CanvasFontCatalogEntry`](CanvasFontCatalogEntry.md).[`upstreamUrl`](CanvasFontCatalogEntry.md#upstreamurl) | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:179](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L179) |
+| &lt;a id="weights"&gt;&lt;/a&gt; `weights` | `readonly` | readonly [`CanvasFontWeight`](../type-aliases/CanvasFontWeight)[] | What the picker may offer. See [CanvasFontWeight](../type-aliases/CanvasFontWeight). | [`CanvasFontCatalogEntry`](CanvasFontCatalogEntry.md).[`weights`](CanvasFontCatalogEntry.md#weights) | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:170](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L170) |

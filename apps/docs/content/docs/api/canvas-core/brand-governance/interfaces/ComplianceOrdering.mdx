@@ -1,0 +1,20 @@
+---
+title: "ComplianceOrdering"
+description: "@anvilkit/canvas-core · ComplianceOrdering"
+---
+
+Defined in: [brand-governance/compliance.ts:90](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance.ts#L90)
+
+Sort key components, in the §16.2 order: page, then tree position, then
+instance, property, code.
+
+`pageOrder`/`nodeOrder` are supplied by the scan rather than derived here, so
+ordering reflects document order rather than lexicographic id order — two
+pages named "b" and "a" must still report in document sequence.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="nodeorder"&gt;&lt;/a&gt; `nodeOrder` | `readonly` | `ReadonlyMap`\&lt;`string`, `number`\&gt; | [brand-governance/compliance.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance.ts#L92) |
+| &lt;a id="pageorder"&gt;&lt;/a&gt; `pageOrder` | `readonly` | `ReadonlyMap`\&lt;`string`, `number`\&gt; | [brand-governance/compliance.ts:91](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance.ts#L91) |

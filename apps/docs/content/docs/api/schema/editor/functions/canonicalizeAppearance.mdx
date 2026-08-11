@@ -1,0 +1,23 @@
+---
+title: "canonicalizeAppearance"
+description: "@anvilkit/schema · canonicalizeAppearance"
+---
+
+```ts
+function canonicalizeAppearance(appearance): AnvilAppearance | undefined;
+```
+
+Defined in: [editor/appearance.ts:193](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/appearance.ts#L193)
+
+Canonicalize an appearance: drop content-free targets, and collapse
+a content-free appearance to `undefined`. Never mutates its input.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `appearance` | `AnvilAppearance` \| `undefined` |
+
+## Returns
+
+`AnvilAppearance` \| `undefined`

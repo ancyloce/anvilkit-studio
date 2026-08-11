@@ -1,0 +1,30 @@
+---
+title: "omitEmptyComponents"
+description: "@anvilkit/canvas-core · omitEmptyComponents"
+---
+
+```ts
+function omitEmptyComponents<T>(ir): T;
+```
+
+Defined in: [ir/validators.ts:1157](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L1157)
+
+Normalize an empty Registry to omission (INV-10): `components: {}` and an
+absent key must be indistinguishable downstream. Shared by BOTH IR schema
+paths so parity holds by construction.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* \{ `components?`: `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasComponentDefinition`](../interfaces/CanvasComponentDefinition)\&gt;\&gt;; `externalComponentSnapshots?`: `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasExternalComponentSnapshot`](../interfaces/CanvasExternalComponentSnapshot)\&gt;\&gt;; \} |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | `T` |
+
+## Returns
+
+`T`

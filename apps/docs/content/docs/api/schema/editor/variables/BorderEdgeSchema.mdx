@@ -1,0 +1,21 @@
+---
+title: "BorderEdgeSchema"
+description: "@anvilkit/schema · BorderEdgeSchema"
+---
+
+```ts
+const BorderEdgeSchema: ZodObject<{
+  color: ZodOptional<ZodType<TokenOrLiteral<CssColor>, unknown, $ZodTypeInternals<TokenOrLiteral<CssColor>, unknown>>>;
+  style: ZodOptional<ZodEnum<{
+     dashed: "dashed";
+     dotted: "dotted";
+     none: "none";
+     solid: "solid";
+  }>>;
+  width: ZodOptional<ZodType<CssLength, unknown, $ZodTypeInternals<CssLength, unknown>>>;
+}, $loose>;
+```
+
+Defined in: [editor/style.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/style.ts#L75)
+
+One border edge.

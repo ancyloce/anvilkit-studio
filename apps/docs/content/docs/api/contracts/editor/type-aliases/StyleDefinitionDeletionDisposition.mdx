@@ -1,0 +1,24 @@
+---
+title: "StyleDefinitionDeletionDisposition"
+description: "@anvilkit/contracts · StyleDefinitionDeletionDisposition"
+---
+
+```ts
+type StyleDefinitionDeletionDisposition = 
+  | {
+  kind: "materialize";
+}
+  | {
+  kind: "discard";
+};
+```
+
+Defined in: [editor/style-definitions.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/style-definitions.ts#L24)
+
+What happens to a definition's contribution when it is deleted
+(ED-STYLEDEF-001; DD-0019 §15.1 "deletion materializes resolved
+values by default to preserve appearance").
+
+`"materialize"` writes the definition's effective contribution into
+each referencing node's own layer, so nothing changes visually;
+`"discard"` drops it and lets the node fall back.

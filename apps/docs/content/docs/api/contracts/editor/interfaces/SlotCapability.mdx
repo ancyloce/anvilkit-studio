@@ -1,0 +1,17 @@
+---
+title: "SlotCapability"
+description: "@anvilkit/contracts · SlotCapability"
+---
+
+Defined in: [editor/capability-metadata.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/capability-metadata.ts#L32)
+
+Per-slot capability constraints, keyed by slot field name. Declares
+what the editor may do inside a slot a component exposes.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="allowedtypes"&gt;&lt;/a&gt; `allowedTypes?` | `readonly` | readonly `string`[] | Component types accepted in this slot; absent = unrestricted. | [editor/capability-metadata.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/capability-metadata.ts#L34) |
+| &lt;a id="layoutcontainer"&gt;&lt;/a&gt; `layoutContainer?` | `readonly` | `boolean` | Whether universal layout controls apply to this slot's container. | [editor/capability-metadata.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/capability-metadata.ts#L38) |
+| &lt;a id="reorder"&gt;&lt;/a&gt; `reorder?` | `readonly` | `boolean` | Whether the editor may reorder direct children. Default true. | [editor/capability-metadata.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/capability-metadata.ts#L36) |

@@ -1,0 +1,35 @@
+---
+title: "marqueeHitsResolved"
+description: "@anvilkit/canvas-core · marqueeHitsResolved"
+---
+
+```ts
+function marqueeHitsResolved<T>(
+   targets, 
+   marquee, 
+   opts?): T[];
+```
+
+Defined in: [geometry/hit-test.ts:208](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/hit-test.ts#L208)
+
+Resolved-record variant of [marqueeHits](marqueeHits.md): reads the resolver's world
+AABB instead of recomputing one, so nested/transformed ancestors are
+accounted for by construction. Returns matches in input order.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* [`ResolvedHitTarget`](../interfaces/ResolvedHitTarget) |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `targets` | readonly `T`[] |
+| `marquee` | [`BoundsExtent`](../interfaces/BoundsExtent) |
+| `opts` | [`MarqueeHitsOptions`](../interfaces/MarqueeHitsOptions) |
+
+## Returns
+
+`T`[]

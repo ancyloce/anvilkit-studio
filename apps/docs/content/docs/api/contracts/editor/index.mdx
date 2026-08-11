@@ -1,0 +1,134 @@
+---
+title: "index"
+description: "@anvilkit/contracts · index"
+---
+
+## Interfaces
+
+| Interface | Description |
+| ------ | ------ |
+| [AccessibilityOverride](interfaces/AccessibilityOverride.md) | Explicit accessibility overrides authored on a node (referenced by DD-0019 §9.2; consumed by the §20 diagnostics engine). `label` set to an empty string marks decorative content. |
+| [AnimationStep](interfaces/AnimationStep.md) | One animation step: target values plus the transition that carries them. Color values are serialized CSS color strings produced by the allowlisted serializer; numeric values are unitless or pixel-based per property convention. |
+| [AnvilAppearance](interfaces/AnvilAppearance.md) | The per-node appearance prop. `targets` keys must match the component's declared `metadata.anvilkit.editor.styleTargets`; unknown targets are compiler diagnostics, never silently styled. |
+| [AnvilComponentMetadata](interfaces/AnvilComponentMetadata.md) | The v2 capability declaration. `styleTargets` keys are part of the component's DATA contract: renaming a published target requires a prop migration (plan §6.4). |
+| [AnvilNodeFeatureProps](interfaces/AnvilNodeFeatureProps.md) | The authoring feature props a component may declare. Interaction ownership is the trigger node; binding ownership is the bound node. Cross-node references use stable component `props.id` values and are references, not containment. |
+| [AnvilRootProps](interfaces/AnvilRootProps.md) | The root-prop surface a host page declares. Every member must be declared as a Puck root field — the contract never relies on Puck incidentally preserving unknown root props. |
+| [AuthorStyle](interfaces/AuthorStyle.md) | One layer of authored style for a target: the three spec families (`visual` carries `VisualStyleSpec`). |
+| [Binding](interfaces/Binding.md) | A stored binding (DD-0019 §19, verbatim). |
+| [BorderEdge](interfaces/BorderEdge.md) | One border edge: style, width, color — each independently optional. |
+| [BorderSpec](interfaces/BorderSpec.md) | Per-edge border specification (DD-0019 §11.5). |
+| [BreakpointDefinition](interfaces/BreakpointDefinition.md) | One enabled breakpoint (DD-0019 §12.2): at most eight per document; `maxWidth` is a unique integer 240–7680; `order` is display-only and normalized from widths; `base` is implicit and never stored here. |
+| [ComponentDefinition](interfaces/ComponentDefinition.md) | A document-local component definition (DD-0019 §14.2, verbatim). |
+| [ComponentInstanceState](interfaces/ComponentInstanceState.md) | Per-instance component state (DD-0019 §14.2, verbatim). Stored on the instance node's authoring record; retained unchanged while a referenced definition is unresolvable (ED-COMP-007). |
+| [ComponentOverrideTarget](interfaces/ComponentOverrideTarget.md) | Override address used by the reset/promote lifecycle commands: a definition node plus a property path rooted at that node's `props` (≥1 segment — contract freeze CORE-P0-001 §1.2). |
+| [ComponentPropDefinition](interfaces/ComponentPropDefinition.md) | One exposed component property (DD-0019 §14.2, verbatim). |
+| [ComponentVariant](interfaces/ComponentVariant.md) | One variant: a full axis selection plus the definition-node patches it applies (≤20 combinations per component; caps schema-enforced). |
+| [CssBoxEdges](interfaces/CssBoxEdges.md) | Per-edge box values (margin, padding, inset). All edges optional. |
+| [CssCorners](interfaces/CssCorners.md) | Per-corner radius values. Linked radii set all four corners. |
+| [DataSchema](interfaces/DataSchema.md) | A minimal recursive schema for a data source, enough to drive path pickers and validation. `fields` is present for `object` schemas, `items` for `array` schemas. |
+| [DataSourceDescriptor](interfaces/DataSourceDescriptor.md) | A host data source visible to the binding editor. Descriptors are stored by Core; credentials and preview responses never are. |
+| [DesignSystem](interfaces/DesignSystem.md) | The document design system, stored at `root.props.designSystem`. |
+| [DesignToken](interfaces/DesignToken.md) | A document-local design token (DD-0019 §9.4). |
+| [DesignTokenSource](interfaces/DesignTokenSource.md) | Import-as-copy provenance (ADR 0005; DD-0019 §9.4). Records that a token was created by importing a value from another token system. Metadata only: resolution ignores it, values remain ordinary literals or document-token aliases, and generated output never varies on it. It never creates a live cross-system alias. |
+| [DocumentComponentLibrary](interfaces/DocumentComponentLibrary.md) | Document-local component definitions at `root.props.componentLibrary`. |
+| [EditorAnnotation](interfaces/EditorAnnotation.md) | One node's editor annotation (PLAN-0026 §3.6, ADR 0007 decision 1). |
+| [EditorByteLimits](interfaces/EditorByteLimits.md) | Byte limits measured against the canonical (compacted) serialization (CORE-P0-006). Exceeding a warn limit surfaces a persistent diagnostic; exceeding a hard limit rejects the write. Hosts may tighten via `EditorPolicies.byteLimits` but never raise above the frozen caps. |
+| [EditorDataSourceAdapter](interfaces/EditorDataSourceAdapter.md) | Host adapter that supplies data sources to the binding editor (DD-0019 §19, verbatim; follows the `plugin-asset-manager` host-adapter idiom). Preview requests time out after five seconds and accept at most 2 MiB. |
+| [EditorDiagnosticPort](interfaces/EditorDiagnosticPort.md) | Read-side diagnostic surface exposed to plugins and hosts: current persistent diagnostics plus an event subscription. Emission happens after commit or rejection (DD-0019 §10.3 rule 7); payloads are content-free by contract. |
+| [EditorError](interfaces/EditorError.md) | The stable error envelope (DD-0019 §9.5, verbatim). |
+| [EditorExportCapabilities](interfaces/EditorExportCapabilities.md) | An exporter's declared editor capabilities (DD-0019 §23.2, verbatim). |
+| [EditorPageAdapter](interfaces/EditorPageAdapter.md) | Host page adapter (DD-0019 §18, verbatim). Without an adapter, page navigation is hidden. Core never persists page trees and page switches never enter Puck history. |
+| [EditorPageDescriptor](interfaces/EditorPageDescriptor.md) | A host page visible to the editor's page navigator (ED-PAGE-001). |
+| [EditorPolicies](interfaces/EditorPolicies.md) | Host policy bag (DD-0019 §22.4, verbatim). |
+| [EditorRenderScope](interfaces/EditorRenderScope.md) | Host-supplied roots for render-time binding evaluation. |
+| [EditorSelectionState](interfaces/EditorSelectionState.md) | The current selection. A selection can never span component editing scopes; changing scope clears it (§10.6). |
+| [EditorStyleAdapter](interfaces/EditorStyleAdapter.md) | Strict-CSP injection adapter for the authoring stylesheet (DD-0019 §29: "Hosts with strict CSP may provide a nonce or constructable-stylesheet adapter for authoring styles"). |
+| [ExportValidationResult](interfaces/ExportValidationResult.md) | The result of used-features vs declared-capabilities validation. |
+| [FilterSpec](interfaces/FilterSpec.md) | Basic filter set (P0 — DD-0019 §11.5). Ratio values are normalized numbers where `1` is identity; `grayscale` is 0–1. |
+| [GradientStop](interfaces/GradientStop.md) | Gradient color stop; `offset` is normalized 0–1. |
+| [ImageAdjustment](interfaces/ImageAdjustment.md) | Image adjustment state (DD-0019 §17, verbatim). Crop uses normalized source-image coordinates; focal `position` is normalized 0–1. Decorative mode writes empty alt text. |
+| [ImageTarget](interfaces/ImageTarget.md) | One declared image editing target (DD-0019 §8, verbatim). |
+| [ImportableTokenValue](interfaces/ImportableTokenValue.md) | A value from another token system that the picker offers for **import-as-copy** (ADR 0005 Part 2 §3). |
+| [InlineTextTarget](interfaces/InlineTextTarget.md) | One declared inline-text editing target (DD-0019 §8, verbatim). |
+| [Interaction](interfaces/Interaction.md) | A stored interaction (DD-0019 §16, verbatim). |
+| [LayoutSpec](interfaces/LayoutSpec.md) | Universal layout specification (DD-0019 §9.2). |
+| [NodeAuthoringStateV1](interfaces/NodeAuthoringStateV1.md) | The authoring record for one Puck node (DD-0019 §9.2, verbatim). Records exist only when non-default authoring state exists (invariant 3, §7.2); node IDs act as stable indices. |
+| [NodeOverridePatch](interfaces/NodeOverridePatch.md) | An override patch targeting one definition node: prop values plus the universal authoring families. Applied per the §14.4 precedence (definition base → variant patch → exposed prop override → instance node override → breakpoint override). |
+| [PreviewDataRequest](interfaces/PreviewDataRequest.md) | A preview-data request (caps: 5 s timeout, 2 MiB, 50 records). |
+| [ResolvedValue](interfaces/ResolvedValue.md) | The output of responsive resolution: the winning value, which layer produced it, and whether it was inherited from a wider layer rather than written at the resolved layer. |
+| [ResponsiveEditorState](interfaces/ResponsiveEditorState.md) | Transient responsive editor state (DD-0019 §12.3): actual viewport size versus the active write target, follow mode, and the overrides-only filter. Never undoable; never part of the sidecar. |
+| [ResponsiveValue](interfaces/ResponsiveValue.md) | A per-breakpoint layered value. |
+| [SerializablePuckNode](interfaces/SerializablePuckNode.md) | A serializable Puck node subtree. Structurally equivalent to Puck's `ComponentData` restricted to JSON-safe props: slot content is encoded the way Puck stores it — arrays of node objects inside `props`. The shape is owned here (rather than aliasing Puck's generic types) so serializability is guaranteed by construction; assignability from JSON-safe `ComponentData` is covered by contract tests. No runtime Puck import (DD-0019 §30.5 as read per C-6). |
+| [ShadowSpec](interfaces/ShadowSpec.md) | One shadow layer; multi-layer shadows are ordered arrays. |
+| [SlotCapability](interfaces/SlotCapability.md) | Per-slot capability constraints, keyed by slot field name. Declares what the editor may do inside a slot a component exposes. |
+| [StudioEditorConfig](interfaces/StudioEditorConfig.md) | The `StudioProps.editor` configuration (DD-0019 §22.1, verbatim). |
+| [StudioEditorFeatures](interfaces/StudioEditorFeatures.md) | Per-capability feature flags (DD-0019 §22.1, verbatim). |
+| [StudioPluginCollabCapability](interfaces/StudioPluginCollabCapability.md) | Declared collab document encoding (DD-0019 §7.4, verbatim). |
+| [StyleDefinition](interfaces/StyleDefinition.md) | A reusable, document-local style definition (DD-0019 §9.4). |
+| [StyleTargetCapability](interfaces/StyleTargetCapability.md) | One named target's granted authoring surface. |
+| [TargetAppearance](interfaces/TargetAppearance.md) | Authored appearance for ONE declared target of a node. |
+| [TiptapBlockNode](interfaces/TiptapBlockNode.md) | A Tiptap block node in the shared rich-text contract. Allowed nodes (paragraphs, headings 1–6, lists, list items, blockquotes, text, hard breaks) and marks (bold, italic, underline, strike, code, safe links) are enforced by the shared sanitization pipeline — raw HTML and inline-style marks are rejected (DD-0019 §17). |
+| [TiptapDocument](interfaces/TiptapDocument.md) | The stable versioned Tiptap JSON contract (ED-TEXT-002) shared by the `RichTextField` field type and canvas inline editing — one schema and sanitizer for both surfaces so they cannot drift. |
+| [TokenMode](interfaces/TokenMode.md) | One token mode. Modes are document-scoped; every token carries a value per mode it participates in. The default mode is selected by `StudioEditorConfig.defaultTokenMode`. |
+| [TypographySpec](interfaces/TypographySpec.md) | Universal typography specification (DD-0019 §9.2). |
+| [VariantAxis](interfaces/VariantAxis.md) | A variant axis (≤3 per component; caps schema-enforced). |
+| [VariantAxisOption](interfaces/VariantAxisOption.md) | One option of a variant axis. |
+| [VisualStyleSpec](interfaces/VisualStyleSpec.md) | Universal visual style specification (DD-0019 §9.2). |
+
+## Type Aliases
+
+| Type Alias | Description |
+| ------ | ------ |
+| [AnimatableProperty](type-aliases/AnimatableProperty.md) | The P0 animatable property set (DD-0019 §16). Width and height are deliberately excluded (layout thrashing). |
+| [AuthorableProps](type-aliases/AuthorableProps.md) | A component's business props widened with the authoring props. |
+| [AuthorableStyleProperty](type-aliases/AuthorableStyleProperty.md) | Every style property an author may be granted, keyed exactly as the authoring specs spell them. Extending this union is a schema change (plan §15 gate 8): new CSS enters here and the capability allowlist before any panel or compiler may emit it. |
+| [BindingId](type-aliases/BindingId.md) | Binding identifier. |
+| [BindingTarget](type-aliases/BindingTarget.md) | What a binding writes to (DD-0019 §19, verbatim). |
+| [BreakpointId](type-aliases/BreakpointId.md) | Breakpoint identifier. The literal `"base"` is reserved for the implicit base layer and is never a valid `BreakpointDefinition.id` (contract freeze CORE-P0-001 §1.3; schema-enforced). |
+| [ComponentDefinitionDeletePolicy](type-aliases/ComponentDefinitionDeletePolicy.md) | How deleting a component definition with live instances behaves (DD-0019 §14.6, ED-COMP-006): `"confirm-detach-all"` (default) offers cancel or detach-all; `"block-when-referenced"` rejects with `EDITOR_DEFINITION_REFERENCED` — including for a single-transaction detach-all→delete batch, whose policy check runs against the batch-entry state (contract freeze CORE-P0-001 §4). |
+| [ComponentDefinitionId](type-aliases/ComponentDefinitionId.md) | Component definition identifier: opaque, non-empty, caller-generated (`crypto.randomUUID()` at the call site — reducers never generate IDs), unique within the document, stable across revisions. |
+| [CssAlignment](type-aliases/CssAlignment.md) | Cross-axis alignment values shared by flex and grid controls. |
+| [CssBlendMode](type-aliases/CssBlendMode.md) | Standard CSS blend modes. |
+| [CssColor](type-aliases/CssColor.md) | A typed color value. Token indirection wraps via [TokenOrLiteral](type-aliases/TokenOrLiteral.md). |
+| [CssCursor](type-aliases/CssCursor.md) | Cursor values exposed by the visual style inspector. |
+| [CssJustification](type-aliases/CssJustification.md) | Main-axis justification values shared by flex and grid controls. |
+| [CssLength](type-aliases/CssLength.md) | A typed CSS length: number-plus-unit, a safe keyword, a token reference, or an AST-built math expression (DD-0019 §9.3). |
+| [CssMathExpression](type-aliases/CssMathExpression.md) | AST-built math expression for `calc`/`min`/`max`/`clamp` values. Only numeric-unit leaves, token references, binary operators, and the three comparison functions exist — there is no raw-text member, so unsafe CSS cannot be smuggled through a math expression. |
+| [CssUnit](type-aliases/CssUnit.md) | Length units accepted by the typed CSS schema (DD-0019 §9.3). |
+| [CubicBezier](type-aliases/CubicBezier.md) | Cubic-bezier easing as `[x1, y1, x2, y2]`. |
+| [EditorAnnotations](type-aliases/EditorAnnotations.md) | Node id → annotation. The one document-state addition of the rewrite. |
+| [EditorCountLimits](type-aliases/EditorCountLimits.md) | The frozen count-limit table's type. |
+| [EditorErrorCode](type-aliases/EditorErrorCode.md) | The frozen editor error code set (DD-0019 §9.5, all 14 codes). |
+| [EditorEvent](type-aliases/EditorEvent.md) | Operational event union (DD-0019 §22.4, verbatim). |
+| [EditorFeatureId](type-aliases/EditorFeatureId.md) | Feature identifiers used for capability validation (DD-0019 §23.2). |
+| [EditorPatch](type-aliases/EditorPatch.md) | Recursive command patch. A property set to `null` means "remove this property at the addressed layer" (DD-0019 §9.1 `null` semantics applied property-wise). `null` is a **write-time signal only**: reducers translate it into key removal; persisted spec objects never store nulls. (Contract freeze CORE-P0-001 D-8.) |
+| [GridTrack](type-aliases/GridTrack.md) | A single grid track (P0 set: fixed, fr, auto — DD-0019 §11.5). |
+| [GridTrackList](type-aliases/GridTrackList.md) | Ordered grid track list for `columns` / `rows`. |
+| [InlineTextValue](type-aliases/InlineTextValue.md) | An inline-editable text value (DD-0019 §17, verbatim). |
+| [InteractionAction](type-aliases/InteractionAction.md) | The closed action set (ED-INT-002: navigate, URL, scroll, visibility, variant, and animation families). |
+| [InteractionId](type-aliases/InteractionId.md) | Interaction identifier. |
+| [InteractionTrigger](type-aliases/InteractionTrigger.md) | Interaction trigger (DD-0019 §16, verbatim). |
+| [JsonValue](type-aliases/JsonValue.md) | A JSON-serializable value. The persistence baseline for everything that enters the authoring sidecar: props, overrides, fallbacks. |
+| [MotionTransition](type-aliases/MotionTransition.md) | Motion transition (DD-0019 §16, verbatim). |
+| [Paint](type-aliases/Paint.md) | Fill paint (P0 set: solid, linear gradient, image — DD-0019 §11.5). Image `src` accepts host asset references as well as URLs; raw-URL acceptance is policy-gated (`EditorPolicies.allowRawUrls`), enforced at schema-validation time, not encoded in the type. |
+| [PropertyPath](type-aliases/PropertyPath.md) | A structural property path: object keys and array indices, matching the `EditorError.path` and `ComponentPropDefinition.sourcePath` conventions. Never a string-encoded dot/bracket path. (Contract freeze CORE-P0-001 §1.2.) |
+| [ResponsiveFamily](type-aliases/ResponsiveFamily.md) | The responsive-capable authoring families addressable by `SetResponsiveOverrideCommand` (contract freeze CORE-P0-001 D-1). |
+| [ResponsiveLayerRef](type-aliases/ResponsiveLayerRef.md) | Layer address used by commands that write layered values: the implicit base layer or one enabled breakpoint. (Contract freeze CORE-P0-001 §1.3.) |
+| [SafeCondition](type-aliases/SafeCondition.md) | A condition is a boolean-evaluated [SafeExpression](type-aliases/SafeExpression.md) (interaction conditions, visibility bindings). |
+| [SafeExpression](type-aliases/SafeExpression.md) | The safe expression AST (DD-0019 §19, verbatim). Function calls, member access on functions, and getter traversal are structurally unrepresentable. |
+| [SizeValue](type-aliases/SizeValue.md) | Width/height value. Alias of [CssLength](type-aliases/CssLength.md): sizing keywords (`auto`, `min-content`, …) are carried by the keyword member. |
+| [StyleDefinitionDeletionDisposition](type-aliases/StyleDefinitionDeletionDisposition.md) | What happens to a definition's contribution when it is deleted (ED-STYLEDEF-001; DD-0019 §15.1 "deletion materializes resolved values by default to preserve appearance"). |
+| [StyleDefinitionId](type-aliases/StyleDefinitionId.md) | Style definition identifier. |
+| [StyleTargetId](type-aliases/StyleTargetId.md) | A component-declared style target name. |
+| [TokenDeletionDisposition](type-aliases/TokenDeletionDisposition.md) | What happens to every reference to a token being deleted (ED-TOKEN-003; DD-0019 §15.1 "show impact and replacement options before deletion"). |
+| [TokenModeId](type-aliases/TokenModeId.md) | Token mode identifier (e.g. a `"light"` / `"dark"` mode pair). |
+| [TokenOrLiteral](type-aliases/TokenOrLiteral.md) | A literal value or a reference to a document design token. Mirrors the `TokenValue` literal/alias naming (DD-0019 §9.4); resolution is performed by `resolveToken` (§24.5) after precedence selection. |
+| [TokenType](type-aliases/TokenType.md) | The typed token categories supported in v1 (DD-0019 §9.4). |
+| [TokenValue](type-aliases/TokenValue.md) | A token value for one mode: a literal, or an alias to another document token. Aliases must be acyclic (invariant 8, §7.2); cycle detection lives in the core resolver (§24.5), shape validation in `@anvilkit/schema/editor`. |
+
+## Variables
+
+| Variable | Description |
+| ------ | ------ |
+| [EDITOR\_ANNOTATIONS\_PROP](variables/EDITOR_ANNOTATIONS_PROP.md) | The declared root prop key annotations live under. |
+| [EDITOR\_COUNT\_LIMITS](variables/EDITOR_COUNT_LIMITS.md) | The frozen §7.3 count-limit table. Enforced at schema parse and command validation; each violation carries the exceeded key in `EditorError.details`. |

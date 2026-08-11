@@ -1,0 +1,31 @@
+---
+title: "materializeExportVariant"
+description: "@anvilkit/canvas-core · materializeExportVariant"
+---
+
+```ts
+function materializeExportVariant(ir, options?): CanvasIR;
+```
+
+Defined in: [component-ops/export-variant.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-ops/export-variant.ts#L37)
+
+Derive an `export-variant` document from `ir`: detach every page instance
+(recursively — Source-tree instances vanish with the Registry), drop
+`components`, and strip the component capabilities from
+`compatibility.requiredCapabilities`. Pure — `ir` is never mutated.
+
+Throws when any instance cannot resolve: an export of a document with
+broken component references is an authoring error to surface, not a
+silently-degraded artifact (NFR-002 applies to edits; export preflight is
+where "fix your document" belongs).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `options` | [`MaterializeExportVariantOptions`](../interfaces/MaterializeExportVariantOptions) |
+
+## Returns
+
+[`CanvasIR`](../interfaces/CanvasIR)

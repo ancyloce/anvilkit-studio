@@ -1,0 +1,50 @@
+---
+title: "listUsedEditorFeatures"
+description: "@anvilkit/ir · listUsedEditorFeatures"
+---
+
+```ts
+function listUsedEditorFeatures(authoring, document?): readonly EditorFeatureId[];
+```
+
+Defined in: [editor/index.ts:257](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L257)
+
+Scan a document and its sidecar for every used editor feature
+(DD-0019 §23.2; DD-DEC-018).
+
+This is the **complete** scanner and the one every production
+preflight call site must use. [listUsedAuthoringFeatures](listUsedAuthoringFeatures.md) is
+kept as the sidecar-only view for callers that genuinely have no
+document (see its own note).
+
+Feature coverage, one line per `EditorFeatureId`:
+
+| feature | detected from |
+|---|---|
+| `responsive` | declared breakpoints, or any per-node responsive override |
+| `tokens` | sidecar token definitions, or any live token reference |
+| `styleDefinitions` | sidecar definitions, or any node `styleRefs` |
+| `localComponents` | sidecar definitions, or any node `componentInstance` |
+| `variants` | definition axes/variants, or any instance `variantSelection` |
+| `interactions` | sidecar interactions, or any node `interactionRefs` |
+| `bindings` | sidecar bindings, or any node `bindingRefs` |
+| `richText` | a `TiptapDocument` in component props, definition roots, or instance overrides |
+
+The dangling-reference arms (a node referencing a definition that
+the sidecar no longer holds) matter: they are exactly the states a
+partially-edited document reaches, and treating them as "unused"
+would let a document escape the production block.
+
+Output order is stable and matches the `EditorFeatureId` union
+declaration order, so callers may compare results directly.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `authoring` | `AuthoringStateV1` |
+| `document?` | \| [`EditorFeatureScanDocument`](../interfaces/EditorFeatureScanDocument) \| `null` |
+
+## Returns
+
+readonly `EditorFeatureId`[]

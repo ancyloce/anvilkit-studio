@@ -1,0 +1,16 @@
+---
+title: "CanvasLatencyBucket"
+description: "@anvilkit/canvas-editor · CanvasLatencyBucket"
+---
+
+```ts
+type CanvasLatencyBucket = "instant" | "fast" | "slow" | "very-slow";
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/analytics.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/analytics.ts#L78)
+
+Latency reported as a bucket, never as a millisecond count.
+
+A raw duration is a weak side channel — it correlates with result-set size
+and therefore with what a user searched for. Buckets keep the operational
+signal (is the Provider slow?) without the correlation.

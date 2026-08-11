@@ -1,0 +1,18 @@
+---
+title: "SnapshotKeySchema"
+description: "@anvilkit/canvas-core · SnapshotKeySchema"
+---
+
+```ts
+const SnapshotKeySchema: z.ZodType<string>;
+```
+
+Defined in: [ir/snapshot-key.ts:225](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/snapshot-key.ts#L225)
+
+Zod schema for the keys of `CanvasIR.externalComponentSnapshots`.
+
+Used as the record's key schema in M1 (T-014), which additionally asserts that
+every key equals `snapshotKey(entry.ref)` — the check that defeats
+cross-library snapshot confusion (TD §22.1). Validation is delegated to
+[parseSnapshotKey](../functions/parseSnapshotKey) rather than restated as a regex, so the schema and the
+codec cannot disagree about what a key is.

@@ -1,0 +1,35 @@
+---
+title: "instanceScopeTargetForResolvedId"
+description: "@anvilkit/canvas-editor · instanceScopeTargetForResolvedId"
+---
+
+```ts
+function instanceScopeTargetForResolvedId(
+   view, 
+   resolvedNodeId, 
+   instanceId): 
+  | CanvasSelectionTarget
+  | null;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/selection/component-selection-policy.ts:109](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/component-selection-policy.ts#L109)
+
+The Instance Scope target for one resolved id, when that id is a virtual node
+belonging to `instanceId`.
+
+Returns `null` for a plain node, for an unknown id, and for a virtual node
+belonging to a DIFFERENT instance — an instance's scope never reaches into a
+sibling's expansion.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `view` | `CanvasResolvedView` |
+| `resolvedNodeId` | `string` \| `CanvasResolvedNodeId` |
+| `instanceId` | `string` |
+
+## Returns
+
+  \| [`CanvasSelectionTarget`](../type-aliases/CanvasSelectionTarget)
+  \| `null`

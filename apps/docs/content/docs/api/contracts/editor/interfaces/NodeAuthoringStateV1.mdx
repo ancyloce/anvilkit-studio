@@ -1,0 +1,30 @@
+---
+title: "NodeAuthoringStateV1"
+description: "@anvilkit/contracts · NodeAuthoringStateV1"
+---
+
+Defined in: [editor/node-state.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L33)
+
+The authoring record for one Puck node (DD-0019 §9.2, verbatim).
+Records exist only when non-default authoring state exists
+(invariant 3, §7.2); node IDs act as stable indices.
+
+`hidden` is responsive editor metadata compiled to `display:none`;
+it never overwrites `layout.display` (§18).
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="accessibility"&gt;&lt;/a&gt; `accessibility?` | `readonly` | [`AccessibilityOverride`](AccessibilityOverride.md) | [editor/node-state.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L45) |
+| &lt;a id="bindingrefs"&gt;&lt;/a&gt; `bindingRefs?` | `readonly` | readonly `string`[] | [editor/node-state.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L43) |
+| &lt;a id="componentinstance"&gt;&lt;/a&gt; `componentInstance?` | `readonly` | [`ComponentInstanceState`](ComponentInstanceState.md) | [editor/node-state.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L44) |
+| &lt;a id="hidden"&gt;&lt;/a&gt; `hidden?` | `readonly` | [`ResponsiveValue`](ResponsiveValue.md)\&lt;`boolean`\&gt; | [editor/node-state.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L36) |
+| &lt;a id="interactionrefs"&gt;&lt;/a&gt; `interactionRefs?` | `readonly` | readonly `string`[] | [editor/node-state.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L42) |
+| &lt;a id="layout"&gt;&lt;/a&gt; `layout?` | `readonly` | [`ResponsiveValue`](ResponsiveValue.md)\&lt;[`LayoutSpec`](LayoutSpec.md)\&gt; | [editor/node-state.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L38) |
+| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `readonly` | `boolean` | [editor/node-state.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L37) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `readonly` | `string` | [editor/node-state.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L35) |
+| &lt;a id="style"&gt;&lt;/a&gt; `style?` | `readonly` | [`ResponsiveValue`](ResponsiveValue.md)\&lt;[`VisualStyleSpec`](VisualStyleSpec.md)\&gt; | [editor/node-state.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L39) |
+| &lt;a id="stylerefs"&gt;&lt;/a&gt; `styleRefs?` | `readonly` | [`ResponsiveValue`](ResponsiveValue.md)\&lt;readonly `string`[]\&gt; | [editor/node-state.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L41) |
+| &lt;a id="typography"&gt;&lt;/a&gt; `typography?` | `readonly` | [`ResponsiveValue`](ResponsiveValue.md)\&lt;[`TypographySpec`](TypographySpec.md)\&gt; | [editor/node-state.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L40) |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `readonly` | `"1"` | [editor/node-state.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L34) |

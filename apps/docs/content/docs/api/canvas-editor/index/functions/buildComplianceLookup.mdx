@@ -1,0 +1,30 @@
+---
+title: "buildComplianceLookup"
+description: "@anvilkit/canvas-editor · buildComplianceLookup"
+---
+
+```ts
+function buildComplianceLookup(
+   ir, 
+   brandKit, 
+   scan?): InstanceComplianceLookup;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand-governance/use-instance-compliance.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-instance-compliance.ts#L78)
+
+Build a per-node lookup from one document scan.
+
+Exported separately from the hook so a test can drive it without React and
+count scans directly.
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) | `undefined` |
+| `brandKit` | `BrandKitDefinition` \| `undefined` | `undefined` |
+| `scan` | (`ir`, `kit`) =&gt; \{ `issues`: `BrandComplianceIssue`[]; \} | `generateBrandComplianceReport` |
+
+## Returns
+
+[`InstanceComplianceLookup`](../interfaces/InstanceComplianceLookup)

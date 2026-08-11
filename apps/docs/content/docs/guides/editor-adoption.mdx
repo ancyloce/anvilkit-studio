@@ -1,27 +1,35 @@
 ---
 title: Visual editor adoption
-description: "Adopt the Puck-native authoring protocol: declare named style targets in metadata v2, stamp stable target attributes in your render, and carry appearance/interactions/bindings as ordinary component props."
+description: "Adopt the canonical Puck-native authoring model: declare named style targets in metadata, stamp stable target attributes in your render, and carry appearance/interactions/bindings as ordinary component props."
 ---
 
 The visual editor never guesses at your component's structure.
 Everything it can do for your component comes from what you
-**declare** — and since the Puck-native refactor (PLAN-0025), those
-declarations live in exactly three places, all of them ordinary Puck
-concepts:
+**declare**, and those declarations live in exactly three places — all
+of them ordinary Puck concepts:
 
-1. **`metadata.anvilkit.editor` (v2)** — your component's named style
-   targets and per-target property allowlists.
+1. **`metadata.anvilkit.editor`** — your component's named style
+   targets and their per-target property allowlists.
 2. **Your render** — every declared target stamps its stable attribute
    pair in **every** mode (editing, preview, production, export).
 3. **Your props** — authored state arrives as serializable component
-   props (`appearance`, `interactions`, `bindings`) plus the shared
-   hidden fields. There is no sidecar, no config decoration, and no
-   editor-only render path.
+   props (`appearance`, `interactions`, `bindings`).
 
 A component that declares nothing is not broken — it keeps working
 with native Puck fields. Adoption is opt-in and reversible.
 
-## 1. Declare metadata v2
+<Callout type="info" title="There is one document form">
+	There is no sidecar, no config decoration, no editor-only render
+	path, and **no version marker**. `metadata.anvilkit.editor` has no
+	`version` member, the appearance carrier has no `version` member,
+	and neither do the document root props. A component declaring
+	`styleTargets` is declaring the contract; one without it is not.
+	Documents written before the rename may still carry a stale
+	`version` key — the schemas preserve unknown keys, and nothing
+	reads it.
+</Callout>
+
+## 1. Declare your style targets
 
 ```ts
 // src/config.ts
@@ -30,14 +38,20 @@ export const componentConfig = {
 	metadata: {
 		anvilkit: {
 			editor: {
-				version: "2",
 				styleTargets: {
 					root: {
 						label: "Card",
 						responsive: true,
 						properties: ["display", "padding", "background", "opacity"],
 					},
-					media: { label: "Media", properties: ["opacity"] },
+					cardTitle: {
+						label: "Card title",
+						properties: ["color", "fontSize", "fontWeight", "textAlign"],
+					},
+					cardImage: {
+						label: "Card image",
+						properties: ["borderRadius", "filter", "blendMode"],
+					},
 				},
 			},
 		},
@@ -46,11 +60,44 @@ export const componentConfig = {
 };
 ```
 
-- `styleTargets` keys are part of your **data contract**: renaming a
-  published target requires a prop migration.
-- Grant only properties your DOM actually honors. The unified
-  appearance compiler rejects everything else with a diagnostic — a
-  granted-but-ineffective property is a bug the editor will surface.
+- `styleTargets` **keys** are part of your **data contract**: renaming
+  a published target requires a prop migration. Labels are display
+  text and may change freely (see [step 4](#4-localize-your-target-labels)).
+- `responsive: true` opts a target into per-breakpoint overrides. A
+  target without it pins itself to the base layer rather than offering
+  an override that cannot land.
+- Grant only properties your DOM actually honors. The allowlist is the
+  single source of truth: the Inspector renders a control **only** for
+  a granted property, and the appearance compiler drops anything
+  outside the list. A granted-but-ineffective property is a bug — it
+  shows the author a control that appears to do nothing.
+
+### The authoring vocabulary is 40 properties
+
+Every grantable property, exactly as the authoring specs spell them.
+The vocabulary equals the spec vocabulary, so there is no "why is this
+one missing" question — what a component grants is entirely its own
+per-target decision.
+
+| Family | Properties |
+|---|---|
+| Layout (22) | `display`, `position`, `width`, `minWidth`, `maxWidth`, `height`, `minHeight`, `maxHeight`, `margin`, `padding`, `gap`, `rowGap`, `columnGap`, `columns`, `rows`, `alignItems`, `justifyContent`, `direction`, `wrap`, `inset`, `overflow`, `zIndex` |
+| Visual (8) | `background`, `border`, `borderRadius`, `boxShadow`, `opacity`, `filter`, `blendMode`, `cursor` |
+| Typography (10) | `color`, `fontFamily`, `fontSize`, `fontWeight`, `lineHeight`, `letterSpacing`, `textAlign`, `textDecoration`, `textTransform`, `textWrap` |
+
+Two names differ from the CSS declaration they emit: `direction`
+becomes `flex-direction` and `wrap` becomes `flex-wrap`. `inset` emits
+four separate edge declarations rather than the shorthand.
+
+<Callout type="warn" title="zIndex is the one to withhold">
+	Every other property in the set has a local effect. Raising a
+	node's stacking order changes its relationship to elements the
+	author neither sees nor selected, so it escapes the box the author
+	is editing. Across the twelve bundled component packages it is
+	granted on exactly **two** targets, both of which already establish
+	their own stacking context. Grant it only where the containing
+	element does.
+</Callout>
 
 ## 2. Stamp the target attributes
 
@@ -58,21 +105,32 @@ export const componentConfig = {
 // src/CardView.tsx
 import { anvilRootAttrs, anvilTargetAttrs } from "@anvilkit/core/editor";
 
-export function CardView({ id, image, children }: CardProps) {
+export function CardView({ id, image, title, children }: CardProps) {
 	return (
 		<section {...anvilRootAttrs(id, "root")} className="ak-card">
-			<img {...anvilTargetAttrs(id, "media")} src={image} alt="" />
+			<img {...anvilTargetAttrs(id, "cardImage")} src={image} alt="" />
+			<h3 {...anvilTargetAttrs(id, "cardTitle")}>{title}</h3>
 			{children}
 		</section>
 	);
 }
 ```
 
-The pair (`data-ak-style-node` + `data-ak-style-target`) is the ONLY
-selector surface the compiler emits against. Stamp it identically in
-every render branch — the editing canvas, `<Render>`, and the
-exporters must see the same boxes. A target that exists only in some
-branches must be re-homed on a stable container.
+The pair `data-ak-style-node` + `data-ak-style-target` is the ONLY
+selector surface the compiler emits against, as an exact attribute
+pair — never a descendant selector, which could accidentally match a
+nested component's targets.
+
+Stamp it identically in **every** render branch: the editing canvas,
+`Render`, and both exporters must see the same boxes. A target that
+exists in only some branches is honest as long as it is declared —
+the editor reports it as *not in this render* rather than drawing a
+phantom box — but a target that *moves* between branches is a bug.
+Re-home it on a stable container.
+
+A repeated target is fine and expected: a list that stamps `card` once
+per post resolves to every matched element, and a style written there
+reaches all of them at once.
 
 ## 3. Carry the authoring props
 
@@ -85,61 +143,245 @@ import {
 
 export const fields = {
 	...nativeFields,
-	appearance: appearanceField(),
-	interactions: interactionsField(),
-	bindings: bindingsField(),
+	appearance: appearanceField,
+	interactions: interactionsField,
+	bindings: bindingsField,
 };
 ```
 
-Authored state is now **data you own**: `props.appearance` holds
-per-target layered styles (`base` + breakpoint overrides +
-`styleRefs` + `hidden`), interactions ride their trigger node, and
-bindings ride the node they bind. Document-level state (design
-tokens, breakpoints, style definitions) lives in
-`root.props.designSystem`. Everything is serializable; render props
-never expose functions.
+These are declared Puck fields, not accidental data Puck happens to
+preserve. They are hidden (`visible: false`), so they never appear in
+the Properties tab; the Style panel writes them through the Puck API.
 
-## 4. Prove it
+Authored state is **data you own**:
 
-Every adopted component ships two tests:
+- `props.appearance.targets[targetId]` holds that target's layered
+  style — `style` (base plus breakpoint overrides), `styleRefs`, and
+  `hidden`. An appearance with no effective content canonicalizes to
+  `undefined`; empty shells are never stored.
+- `props.interactions` rides the trigger node.
+- `props.bindings` rides the node they bind.
+
+Everything is serializable. Render props never expose functions or
+refs.
+
+## 4. Localize your target labels
+
+Target **ids** are the data contract and never change. Labels are
+display text, and a component package localizes them through its
+`createComponentConfig` factory:
 
 ```ts
-it("declares valid v2 metadata", () => {
-	expect(readEditorMetadataV2(config, "Card")?.styleTargets.root).toBeDefined();
+import { createComponentConfig } from "@anvilkit/blog-list";
+
+const config = createComponentConfig({ locale: "ja" });
+```
+
+The static `componentConfig` export stays English and byte-identical,
+so nothing that imports it changes. All twelve bundled packages and
+all three `gen:component` scaffolding templates follow this pattern.
+
+## Component mode: styling elements inside a component
+
+The editor has two modes. In **Page** mode the author selects and
+moves whole nodes. In **Elements** mode the author selects one
+declared target *inside* the selected component and styles it in
+place — the Style tab narrows to that target, and the canvas outlines
+every element the target resolves to.
+
+The rule that makes this safe is the same rule as everywhere else:
+**only declared targets are addressable.** An element your metadata
+never named is not in the index, cannot be hit by a click, cannot be
+reached by keyboard traversal, and has no control anywhere in the
+Inspector. The editor cannot invent a styling surface your component
+did not grant.
+
+Two consequences worth designing around:
+
+- **A repeated target is styled as a set, not per instance.** When a
+  target resolves to more than one element the panel says so with a
+  count, and the write reaches all of them. Nothing in the editor
+  styles one instance of a repeated target — if authors need that,
+  the answer is a distinct target or a per-instance prop, not a
+  hidden per-element override.
+- **Traversal follows declaration order.** The target picker and the
+  keyboard order both read your `styleTargets` in the order you wrote
+  them, so declare them in the order an author would walk the
+  component.
+
+## Document-level state
+
+Node-level state lives in that node's props. Document-level state
+lives in **declared root props**:
+
+| Root prop | Holds |
+|---|---|
+| `root.props.designSystem` | breakpoints, tokens, token modes, the default token mode, and style definitions |
+| `root.props.componentLibrary` | the document's local component definitions, keyed by id — variants, exposed props and all |
+| `root.props.editorAnnotations` | per-node `name` and `locked`, and nothing else — a permanently closed shape, stripped at the IR boundary so it never reaches a rendered or exported page |
+
+A local component **instance** is an ordinary node carrying its own
+instance prop; its definition is resolved out of
+`root.props.componentLibrary` at render time. There is no second
+document and no copy.
+
+## Integrating: `EditorApi`
+
+Plugins and AI features reach the document through `EditorApi`, and
+through nothing else:
+
+```ts
+const model = editorApi.readDocument();      // a projection, never a handle
+const stop = editorApi.subscribe(onChange);  // change notification
+editorApi.commit.inlineText({ nodeId, targetId, value });
+```
+
+Three surfaces — read, subscribe, commit — and deliberately **no
+dispatch entry point**, because a fourth surface is how a command port
+grows back. Plugins write through the same commit helpers the editor
+UI uses, and each `commit.*` call resolves to exactly one
+history-recording write, so one author action is one undo.
+
+There is deliberately no capability lookup on `EditorApi` either:
+declared style targets are part of the document projection
+(`readDocument().nodes`), read through the one canonical metadata
+reader, so a second capability surface would be a second answer to the
+same question.
+
+<Callout type="warn" title="The command port is being retired">
+	The typed command port that predates `EditorApi`, and the
+	command-dispatch surface around it, are on their way out; the
+	reference application already runs on `EditorApi` and a typed
+	intent union. Build new integrations on `EditorApi`. If you are
+	still importing command types out of the installed packages, treat
+	them as scheduled for deletion rather than as a supported surface.
+</Callout>
+
+## One pipeline, four consumers
+
+Whatever you declare is compiled by ONE compiler
+(`compileDocumentAppearance`) into one artifact, and that same
+artifact feeds the editor canvas, the preview route, production
+rendering, and both exporters. If your component looks different in
+any of those surfaces, that is a bug — file it; never fork a
+per-surface style path.
+
+Export formats declare which editor features they can carry, and the
+preflight blocks an export that would silently drop one:
+
+| Format | Certified today |
+|---|---|
+| HTML | `responsive`, `tokens`, `styleDefinitions`, `richText` |
+| React | `responsive`, `tokens`, `styleDefinitions` — plus `localComponents` and `variants`, **declared but not yet re-certified** |
+
+Treat the React format's `localComponents` and `variants` as an
+unproven claim until they are certified against a canonical document.
+The HTML format withdrew both for the same reason.
+
+## Check what you declared
+
+`inspectEditorCapabilities` reports what the editor can actually do
+with your config, so "the inspector is empty for my component" becomes
+an actionable answer:
+
+```ts
+import {
+	formatEditorCapabilityReport,
+	inspectEditorCapabilities,
+} from "@anvilkit/core/editor";
+import { componentConfig } from "./config";
+
+const report = inspectEditorCapabilities({ components: { MyCard: componentConfig } });
+console.log(formatEditorCapabilityReport(report));
+```
+
+It is pure and React-free, so it runs in a unit test or a plain Node
+script with no Studio mount — which makes it usable as a regression
+assertion:
+
+```ts
+it("stays at least Level 2", () => {
+	const report = inspectEditorCapabilities({ components: { MyCard: componentConfig } });
+	expect(report.components[0]?.level).toBeGreaterThanOrEqual(2);
+});
+```
+
+It also flags declarations that parsed but cannot do anything — a
+`responsive` target with no granted property to override, or an image
+target with no `altPropPath`.
+
+## Prove the parity
+
+Every adopted component ships two checks: that its declaration is
+well-formed, and that its stamped targets are **identical** in editing
+and production.
+
+```ts
+import { resolveStyleTargets } from "@anvilkit/core/editor";
+
+it("declares well-formed style targets", () => {
+	const config = { components: { MyCard: componentConfig } };
+	expect(resolveStyleTargets(config, "MyCard").map((t) => t.id)).toContain("root");
 });
 
 it("emits identical targets in editing and production", () => {
-	const editing = renderToStaticMarkup(editingBranch);
-	const production = renderToStaticMarkup(<Render config={config} data={doc} />);
-	expect(targetPairsOf(editing)).toEqual(targetPairsOf(production));
+	expect(targetPairsOf(editingMarkup)).toEqual(targetPairsOf(productionMarkup));
 });
 ```
 
 The workspace harness in `packages/extensions/components/tests/`
 enforces both for every bundled package — copy its pattern
-(`authoring-contract.ts`, `authoring-parity.ts`) for new packages.
+(`authoring-contract.test.ts`, `authoring-parity.test.ts`) for new
+packages.
 
-## Inline text targets
+## Inline text and images
 
-Elements holding inline-editable content stamp a text target and
-declare it in metadata (`inlineText`):
+Elements holding inline-editable content declare an `inlineText`
+target and stamp a text attribute in the render:
 
 ```tsx
 <h1 data-ak-text-target="headline">{props.headline}</h1>
 ```
 
-Always pair an image's `src` with its `alt` prop path in `images`
-declarations — without it the accessibility rules cannot detect or fix
-missing alt text.
+Always pair an image's `src` with its `alt` prop path in an `images`
+declaration — without it the accessibility rules can neither detect
+nor fix missing alt text on your component.
 
-## One pipeline, four consumers
+## What this program deliberately did not build
 
-Whatever you declare is honored by ONE compiler
-(`compileDocumentAppearance`) feeding the editor canvas, the preview
-route, production `<Render>` (via `AnvilKitRender`), and the HTML and
-React exporters. If your component looks different in any of those
-surfaces, that is a bug — file it; never fork a per-surface style
-path.
+Named here so you do not have to infer whether these exist. They do
+not, and their absence is a scheduling decision rather than an
+oversight:
+
+- **Slot authoring.** `slots` is part of the metadata contract, but no
+  editor surface swaps or constrains slot contents today, and no
+  bundled package declares a slot. Whether the bundled components
+  *should* expose slots is an open product question — a real children
+  slot has layout, export and accessibility consequences.
+- **Image crop and focal point.** `images` is likewise part of the
+  contract, but no bundled package declares an image target, so
+  replace/crop/focal has no live surface. `altPropPath` is the half
+  that is purely a declaration, and it is an accessibility
+  requirement — declare it now for image-bearing components.
+- **HTML export render fidelity.** The HTML exporter does **not**
+  server-render your component. It runs a hand-written emitter per
+  component type: nine of the twelve bundled packages have one, three
+  have none, and per-element targets, authored class names and
+  animation presets do not reach its output. The React exporter and
+  production rendering do not share this limitation. This is a known
+  breach of the one-pipeline rule and is tracked as its own project;
+  it is not fixed by adopting the model in this guide.
+
+## A note on collaborative editing
+
+Concurrent merge granularity is **per node, per prop key, and no
+finer.** Two authors styling two different nodes both keep their work.
+Two authors editing two different props of the same node both keep
+their work. But two authors styling two different **targets of the
+same node** collide — a node's entire appearance is one declared prop,
+so one author's whole target edit is dropped, and which one survives
+is not decided by wall-clock order. Design collaborative workflows
+around nodes, not around targets within a node.
 
 ## What does not change
 
@@ -147,7 +389,11 @@ path.
   `metadata.anvilkit.editor` simply gets no style targets — native
   Puck fields behave exactly as before.
 - **Your own `metadata` is untouched.** The editor reads only
-  `metadata.anvilkit.editor` and ignores everything else you store.
-- **A malformed declaration is ignored, not fatal.** If `version` is
-  not `"2"`, the whole block reads as absent and the component stays
-  un-adopted.
+  `metadata.anvilkit.editor` and ignores everything else you store
+  there.
+- **A malformed declaration is ignored, not fatal.** Anything that is
+  not a well-formed declaration reads as "no declared targets", and
+  the Style tab shows its undeclared state rather than fabricating
+  support. `inspectEditorCapabilities` calls that case out
+  specifically, because "declared but thrown away" and "never
+  declared" look identical from the outside and need opposite fixes.

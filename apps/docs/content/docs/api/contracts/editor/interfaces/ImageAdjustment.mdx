@@ -1,0 +1,25 @@
+---
+title: "ImageAdjustment"
+description: "@anvilkit/contracts · ImageAdjustment"
+---
+
+Defined in: [editor/node-state.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L87)
+
+Image adjustment state (DD-0019 §17, verbatim). Crop uses
+normalized source-image coordinates; focal `position` is normalized
+0–1. Decorative mode writes empty alt text.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="crop"&gt;&lt;/a&gt; `crop?` | `readonly` | \{ `height`: `number`; `width`: `number`; `x`: `number`; `y`: `number`; \} | [editor/node-state.ts:90](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L90) |
+| `crop.height` | `readonly` | `number` | [editor/node-state.ts:94](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L94) |
+| `crop.width` | `readonly` | `number` | [editor/node-state.ts:93](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L93) |
+| `crop.x` | `readonly` | `number` | [editor/node-state.ts:91](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L91) |
+| `crop.y` | `readonly` | `number` | [editor/node-state.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L92) |
+| &lt;a id="fit"&gt;&lt;/a&gt; `fit` | `readonly` | `"none"` \| `"cover"` \| `"contain"` \| `"fill"` \| `"scale-down"` | [editor/node-state.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L88) |
+| &lt;a id="position"&gt;&lt;/a&gt; `position` | `readonly` | \{ `x`: `number`; `y`: `number`; \} | [editor/node-state.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L89) |
+| `position.x` | `readonly` | `number` | [editor/node-state.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L89) |
+| `position.y` | `readonly` | `number` | [editor/node-state.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L89) |
+| &lt;a id="rotation"&gt;&lt;/a&gt; `rotation?` | `readonly` | `0` \| `90` \| `180` \| `270` | [editor/node-state.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L96) |

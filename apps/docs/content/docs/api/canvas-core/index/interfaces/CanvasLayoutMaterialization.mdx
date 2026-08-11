@@ -1,0 +1,28 @@
+---
+title: "CanvasLayoutMaterialization"
+description: "@anvilkit/canvas-core · CanvasLayoutMaterialization"
+---
+
+Defined in: [ir/types.ts:1082](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1082)
+
+Freshness stamp for the resolved geometry written back into the document.
+
+Lives at the top level of `CanvasIR` alongside `compatibility` rather than
+inside `CanvasIRMetadata`, because `applyCommand` bumps that record's
+`updatedAt` on every single command — a stamp living there could never
+distinguish "the layout was re-resolved" from "anything at all happened".
+
+The stamp describes a **discardable cache**. Any operation that copies
+content into a new context must write the copy with this field ABSENT
+(`page.duplicate`, `resizeToVariants`): a stamp that claims a freshness it
+does not have is strictly worse than no stamp, because
+`layout-materialization-stale` would then never fire.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="engineversion"&gt;&lt;/a&gt; `engineVersion` | `1` | Resolver engine that produced the cached geometry. | [ir/types.ts:1084](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1084) |
+| &lt;a id="inputhash"&gt;&lt;/a&gt; `inputHash` | `string` | Hash of the resolver inputs the cache was produced from. | [ir/types.ts:1086](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1086) |
+| &lt;a id="measurementmanifesthash"&gt;&lt;/a&gt; `measurementManifestHash?` | `string` | Hash of the text-measurement manifest in force at resolution time. Absent when the document needed no measurement. | [ir/types.ts:1093](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1093) |
+| &lt;a id="resolvedatrevision"&gt;&lt;/a&gt; `resolvedAtRevision` | `number` | History state id — the same revision number `CanvasSaveInput.revision` carries. | [ir/types.ts:1088](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1088) |

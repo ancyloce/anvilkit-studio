@@ -1,0 +1,24 @@
+---
+title: "CanvasComponentInsertExternalCommand"
+description: "@anvilkit/canvas-core · CanvasComponentInsertExternalCommand"
+---
+
+Defined in: [component-libraries/commands/insert-external.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L59)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | `readonly` | [`CanvasBounds`](../../index/interfaces/CanvasBounds) | - | [component-libraries/commands/insert-external.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L81) |
+| &lt;a id="candidate"&gt;&lt;/a&gt; `candidate` | `readonly` | [`CanvasValidatedExternalSnapshot`](../type-aliases/CanvasValidatedExternalSnapshot) | The verified snapshot to store. Only `admitExternalSnapshot` can make one. | [component-libraries/commands/insert-external.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L62) |
+| &lt;a id="dependencies"&gt;&lt;/a&gt; `dependencies?` | `readonly` | readonly [`CanvasValidatedExternalSnapshot`](../type-aliases/CanvasValidatedExternalSnapshot)[] | Verified snapshots for the candidate's dependency closure. Admitted in the same transaction, so they are validated together and committed together — a closure that is only partly present would render a hole inside an otherwise-correct component. | [component-libraries/commands/insert-external.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L70) |
+| &lt;a id="index"&gt;&lt;/a&gt; `index?` | `readonly` | `number` | - | [component-libraries/commands/insert-external.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L87) |
+| &lt;a id="instanceid"&gt;&lt;/a&gt; `instanceId` | `readonly` | `string` | - | [component-libraries/commands/insert-external.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L80) |
+| &lt;a id="layoutitem"&gt;&lt;/a&gt; `layoutItem?` | `readonly` | [`CanvasLayoutItem`](../../index/interfaces/CanvasLayoutItem) | - | [component-libraries/commands/insert-external.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L85) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | `readonly` | [`CanvasDocumentLocation`](../../index/interfaces/CanvasDocumentLocation) | - | [component-libraries/commands/insert-external.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L88) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `readonly` | `string` | - | [component-libraries/commands/insert-external.ts:84](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L84) |
+| &lt;a id="overrides"&gt;&lt;/a&gt; `overrides?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasComponentOverride`](../../index/type-aliases/CanvasComponentOverride)\&gt;\&gt; | - | [component-libraries/commands/insert-external.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L83) |
+| &lt;a id="parentid"&gt;&lt;/a&gt; `parentId?` | `readonly` | `string` | - | [component-libraries/commands/insert-external.ts:86](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L86) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source` | `readonly` | [`CanvasExternalComponentRef`](../../index/interfaces/CanvasExternalComponentRef) | The reference the INSTANCE will carry. Deliberately redundant with `candidate.ref` and checked for deep equality: without the check, a caller could store one component's bytes and point the instance at another's identity, and every individual field would still validate (TD §22.1). | [component-libraries/commands/insert-external.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L79) |
+| &lt;a id="transform"&gt;&lt;/a&gt; `transform?` | `readonly` | `Partial`\&lt;[`CanvasTransform`](../../index/interfaces/CanvasTransform)\&gt; | - | [component-libraries/commands/insert-external.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L82) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | `"component-instance.insert-external"` | - | [component-libraries/commands/insert-external.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L60) |

@@ -1,0 +1,28 @@
+---
+title: "verifyDocumentSnapshots"
+description: "@anvilkit/canvas-editor · verifyDocumentSnapshots"
+---
+
+```ts
+function verifyDocumentSnapshots(ir, options?): Promise<LoadVerificationResult>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/load-verification.ts:124](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/load-verification.ts#L124)
+
+Re-verify a loaded document's snapshot registry.
+
+Never throws and never rejects: a load must always mount (T-045 step 3), so
+every failure mode — a malformed integrity string, an unkeyable ref, a
+verifier that itself throws — resolves to a quarantine entry plus a
+diagnostic rather than taking the document down.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) |
+| `options` | [`LoadVerificationOptions`](../interfaces/LoadVerificationOptions) |
+
+## Returns
+
+`Promise`\<[`LoadVerificationResult`](../interfaces/LoadVerificationResult)\>

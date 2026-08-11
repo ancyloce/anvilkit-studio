@@ -1,0 +1,15 @@
+---
+title: "MAX_COMPONENT_TEXT_OVERRIDE_CHARS"
+description: "@anvilkit/canvas-core · MAX_COMPONENT_TEXT_OVERRIDE_CHARS"
+---
+
+```ts
+const MAX_COMPONENT_TEXT_OVERRIDE_CHARS: 10000 = 10_000;
+```
+
+Defined in: [limits.ts:160](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L160)
+
+Ceiling on characters carried by ONE text override — plain string length,
+or the summed span text of a rich value. Bounds a hostile override without
+constraining real copy (the measurement port itself accepts
+`MAX_MEASUREMENT_TEXT_LENGTH` = 100k). Enforced by `ir/validators.ts`.

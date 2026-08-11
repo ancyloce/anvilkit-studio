@@ -1,0 +1,19 @@
+---
+title: "DataSchema"
+description: "@anvilkit/contracts · DataSchema"
+---
+
+Defined in: [editor/bindings.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/bindings.ts#L82)
+
+A minimal recursive schema for a data source, enough to drive path
+pickers and validation. `fields` is present for `object` schemas,
+`items` for `array` schemas.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="fields"&gt;&lt;/a&gt; `fields?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `DataSchema`\&gt;\&gt; | [editor/bindings.ts:84](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/bindings.ts#L84) |
+| &lt;a id="items"&gt;&lt;/a&gt; `items?` | `readonly` | `DataSchema` | [editor/bindings.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/bindings.ts#L85) |
+| &lt;a id="nullable"&gt;&lt;/a&gt; `nullable?` | `readonly` | `boolean` | [editor/bindings.ts:86](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/bindings.ts#L86) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | `"string"` \| `"number"` \| `"boolean"` \| `"object"` \| `"array"` | [editor/bindings.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/bindings.ts#L83) |

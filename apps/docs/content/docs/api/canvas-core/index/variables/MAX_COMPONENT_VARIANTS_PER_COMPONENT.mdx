@@ -1,0 +1,19 @@
+---
+title: "MAX_COMPONENT_VARIANTS_PER_COMPONENT"
+description: "@anvilkit/canvas-core · MAX_COMPONENT_VARIANTS_PER_COMPONENT"
+---
+
+```ts
+const MAX_COMPONENT_VARIANTS_PER_COMPONENT: 256 = 256;
+```
+
+Defined in: [limits.ts:279](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L279)
+
+Ceiling on **stored** variant definitions for one component.
+
+This is the load-bearing variant cap, and it is deliberately not the product
+of the two above. Variants are *sparse* (PRD §9.6): 8 axes × 16 values is
+16^8 dense combinations, a number no cap on axes or values alone would ever
+bound. Only the count actually present in the payload can be checked, so that
+is what is capped. Anchored to `MAX_EXTERNAL_SNAPSHOTS_PER_DOCUMENT` (256) as
+the package's standing figure for "entries in one keyed registry".

@@ -1,0 +1,18 @@
+---
+title: "AnimationStep"
+description: "@anvilkit/contracts · AnimationStep"
+---
+
+Defined in: [editor/interactions.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L65)
+
+One animation step: target values plus the transition that carries
+them. Color values are serialized CSS color strings produced by the
+allowlisted serializer; numeric values are unitless or pixel-based
+per property convention.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="to"&gt;&lt;/a&gt; `to` | `readonly` | `Readonly`\&lt;`Partial`\&lt;`Record`\&lt;[`AnimatableProperty`](../type-aliases/AnimatableProperty), `string` \| `number`\&gt;\&gt;\&gt; | [editor/interactions.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L66) |
+| &lt;a id="transition"&gt;&lt;/a&gt; `transition` | `readonly` | [`MotionTransition`](../type-aliases/MotionTransition) | [editor/interactions.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L67) |

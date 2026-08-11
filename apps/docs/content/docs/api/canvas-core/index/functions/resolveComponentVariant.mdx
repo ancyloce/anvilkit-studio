@@ -1,0 +1,35 @@
+---
+title: "resolveComponentVariant"
+description: "@anvilkit/canvas-core · resolveComponentVariant"
+---
+
+```ts
+function resolveComponentVariant(set, selection): 
+  | CanvasComponentVariantResolution
+  | undefined;
+```
+
+Defined in: [components/variant-resolution.ts:229](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/variant-resolution.ts#L229)
+
+Resolve a (possibly partial, possibly stale) selection to a concrete variant.
+
+Order, per §11.4: **normalize with axis defaults → exact lookup → explicit
+default variant**. Normalizing first is what makes a partial selection
+meaningful — a document that persists only `{ tone: "brand" }` still resolves
+deterministically once `size` is filled from its axis default.
+
+Never throws: a stale selection is a normal state for a document written
+against an older version of a component, and it degrades to the default with
+a diagnostic rather than taking a render down.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `set` | [`CanvasComponentVariantSet`](../interfaces/CanvasComponentVariantSet) |
+| `selection` | `Readonly`\&lt;`Record`\&lt;`string`, `string`\&gt;\&gt; \| `undefined` |
+
+## Returns
+
+  \| [`CanvasComponentVariantResolution`](../interfaces/CanvasComponentVariantResolution)
+  \| `undefined`

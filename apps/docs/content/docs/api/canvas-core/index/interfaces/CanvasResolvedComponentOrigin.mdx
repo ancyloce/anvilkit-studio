@@ -1,0 +1,21 @@
+---
+title: "CanvasResolvedComponentOrigin"
+description: "@anvilkit/canvas-core · CanvasResolvedComponentOrigin"
+---
+
+Defined in: [components/types.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L96)
+
+Component provenance of one resolved record (plan 0023 M2-03, TD §9.3) —
+the additive optional field `CanvasResolvedNodeRecord.component` carries.
+Additive by contract: every existing `CanvasResolvedDocument` consumer
+keeps working unchanged on component-free documents, where the field is
+absent on every record.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="componentid"&gt;&lt;/a&gt; `componentId` | `readonly` | `string` | - | [components/types.ts:111](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L111) |
+| &lt;a id="definitionnodeid"&gt;&lt;/a&gt; `definitionNodeId` | `readonly` | `string` | ID of the node inside the definition tree. Distinct from `sourceNodeId`, which stays the record's own addressing field. | [components/types.ts:116](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L116) |
+| &lt;a id="depth"&gt;&lt;/a&gt; `depth` | `readonly` | `number` | Expansion depth; 1 for a top-level instance's own subtree. | [components/types.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L118) |
+| &lt;a id="instanceid"&gt;&lt;/a&gt; `instanceId` | `readonly` | `string` | The instance node that produced this record — its IMMEDIATE owner, which is a persistent document id only at `depth: 1`. Inside a NESTED instance this is the nested instance's own VIRTUAL id: the expansion threads that codec id down as the child pass's instance id, so a record two definitions deep reports something like `akv1:6:inst-112:outer-nested`, which addresses no document node. A consumer that needs the persistent instance a record ultimately belongs to (selection, commands, anything persisted) must follow the owner chain to its fixed point — the record whose origin names itself. Editor-side that is `persistentInstanceIdFor` in `selection/component-selection-policy.ts`. | [components/types.ts:110](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L110) |

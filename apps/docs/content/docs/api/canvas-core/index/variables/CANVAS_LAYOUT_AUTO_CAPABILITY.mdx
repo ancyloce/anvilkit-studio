@@ -1,0 +1,18 @@
+---
+title: "CANVAS_LAYOUT_AUTO_CAPABILITY"
+description: "@anvilkit/canvas-core · CANVAS_LAYOUT_AUTO_CAPABILITY"
+---
+
+```ts
+const CANVAS_LAYOUT_AUTO_CAPABILITY: "layout.auto.v1" = "layout.auto.v1";
+```
+
+Defined in: [ir/invariants.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L45)
+
+The capability string a document must declare once any of its content
+carries Auto Layout intent.
+
+A runtime constant rather than a bare literal at each call site, but note it
+is deliberately NOT the type of any schema field: `requiredCapabilities` is
+an open `string[]`, so an unknown capability parses and degrades gracefully
+instead of failing validation (see `CanvasDocumentCompatibility`).

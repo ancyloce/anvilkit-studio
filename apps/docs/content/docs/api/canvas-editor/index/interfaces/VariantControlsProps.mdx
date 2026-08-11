@@ -1,0 +1,37 @@
+---
+title: "VariantControlsProps"
+description: "@anvilkit/canvas-editor · VariantControlsProps"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/panels/library/VariantControls.tsx:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/library/VariantControls.tsx#L32)
+
+## File
+
+One control per variant axis (plan 0021 T-027, TD §11.5).
+
+## Unsupported combinations are marked by TEXT AND ICON, never colour alone
+
+A sparse variant set means most axis-value combinations do not exist. Marking
+those with colour only fails for the ~4% of users with a colour-vision
+deficiency and for anyone using a screen reader, so each unsupported option
+carries a visible marker character, a `title`, and `aria-disabled` — the
+T-027 DoD.
+
+## Availability is computed against the OTHER axes' current values
+
+"Is `size=lg` available?" only has an answer relative to the rest of the
+selection: `lg` may exist with `tone=brand` and not with `tone=neutral`. So
+each option is tested by substituting it into the current selection and
+asking whether that exact combination is declared.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="classname"&gt;&lt;/a&gt; `className?` | `string` | - | [packages/capabilities/canvas/editor/src/panels/library/VariantControls.tsx:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/library/VariantControls.tsx#L41) |
+| &lt;a id="disabled"&gt;&lt;/a&gt; `disabled?` | `boolean` | - | [packages/capabilities/canvas/editor/src/panels/library/VariantControls.tsx:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/library/VariantControls.tsx#L39) |
+| &lt;a id="onchange"&gt;&lt;/a&gt; `onChange` | (`next`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/panels/library/VariantControls.tsx:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/library/VariantControls.tsx#L36) |
+| &lt;a id="orphanwarning"&gt;&lt;/a&gt; `orphanWarning?` | (`next`) =&gt; `boolean` | Marks options whose selection would orphan an override. | [packages/capabilities/canvas/editor/src/panels/library/VariantControls.tsx:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/library/VariantControls.tsx#L38) |
+| &lt;a id="selection"&gt;&lt;/a&gt; `selection` | `Readonly`\&lt;`Record`\&lt;`string`, `string`\&gt;\&gt; \| `undefined` | Current persisted selection (may be partial or stale). | [packages/capabilities/canvas/editor/src/panels/library/VariantControls.tsx:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/library/VariantControls.tsx#L35) |
+| &lt;a id="set"&gt;&lt;/a&gt; `set` | `CanvasComponentVariantSet` | - | [packages/capabilities/canvas/editor/src/panels/library/VariantControls.tsx:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/library/VariantControls.tsx#L33) |
+| &lt;a id="t"&gt;&lt;/a&gt; `t` | [`CanvasT`](../type-aliases/CanvasT) | - | [packages/capabilities/canvas/editor/src/panels/library/VariantControls.tsx:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/library/VariantControls.tsx#L40) |

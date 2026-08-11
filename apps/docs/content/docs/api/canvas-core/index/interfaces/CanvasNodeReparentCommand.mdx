@@ -1,0 +1,27 @@
+---
+title: "CanvasNodeReparentCommand"
+description: "@anvilkit/canvas-core · CanvasNodeReparentCommand"
+---
+
+Defined in: [commands/types.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L101)
+
+Move a node into a different container (group/frame/page-root group) at
+`toIndex` (A-01, PRD 0012 FR-052). Same-page only; `toIndex` is clamped to
+the target's child range; moving a node into itself or a descendant is
+rejected (`invariant-violated`); page roots cannot be reparented. The
+inverse reparents back to the original parent at the original index, so
+layer-panel drag-and-drop is fully undoable.
+
+## Extends
+
+- [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md)
+
+## Properties
+
+| Property | Type | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md).[`location`](CanvasCommandLocationOptions.md#location) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | [commands/types.ts:104](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L104) |
+| &lt;a id="toindex"&gt;&lt;/a&gt; `toIndex` | `number` | - | [commands/types.ts:106](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L106) |
+| &lt;a id="toparentid"&gt;&lt;/a&gt; `toParentId` | `string` | - | [commands/types.ts:105](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L105) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"node.reparent"` | - | [commands/types.ts:103](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L103) |

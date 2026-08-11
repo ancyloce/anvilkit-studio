@@ -1,0 +1,25 @@
+---
+title: "resolveComplianceTarget"
+description: "@anvilkit/canvas-editor · resolveComplianceTarget"
+---
+
+```ts
+function resolveComplianceTarget(ir, issue): ComplianceNavigationTarget;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand-governance/use-compliance-navigation.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/use-compliance-navigation.ts#L70)
+
+Resolve one issue to a navigable target.
+
+Pure and React-free so the resolution table can be tested directly.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) |
+| `issue` | `BrandComplianceIssue` |
+
+## Returns
+
+[`ComplianceNavigationTarget`](../type-aliases/ComplianceNavigationTarget)

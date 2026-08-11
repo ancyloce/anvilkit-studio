@@ -1,0 +1,17 @@
+---
+title: "CanvasComponentVariantAxis"
+description: "@anvilkit/canvas-core · CanvasComponentVariantAxis"
+---
+
+Defined in: [ir/component-variants.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-variants.ts#L40)
+
+One axis of variation, e.g. `size` with values `sm`/`md`/`lg`.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="defaultvalueid"&gt;&lt;/a&gt; `defaultValueId` | `readonly` | `string` | Value id used when a selection omits this axis. Must be one of `values`. Required, not inferred from the first entry: reordering the array would otherwise silently change which variant an under-specified selection resolves to. | [ir/component-variants.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-variants.ts#L53) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable, opaque id. Participates in the canonical key. | [ir/component-variants.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-variants.ts#L42) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `readonly` | `string` | Display label. NEVER participates in a key (T-025 DoD). | [ir/component-variants.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-variants.ts#L44) |
+| &lt;a id="values"&gt;&lt;/a&gt; `values` | `readonly` | readonly [`CanvasComponentVariantValue`](CanvasComponentVariantValue.md)[] | - | [ir/component-variants.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-variants.ts#L45) |

@@ -1,0 +1,22 @@
+---
+title: "isCanvasComponentAbortingCode"
+description: "@anvilkit/canvas-core · isCanvasComponentAbortingCode"
+---
+
+```ts
+function isCanvasComponentAbortingCode(code): code is "component-snapshot-missing" | "component-integrity-mismatch" | "component-library-capability-denied" | "component-dependency-missing";
+```
+
+Defined in: [component-libraries/diagnostics.ts:108](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/diagnostics.ts#L108)
+
+Whether a diagnostic condition must abort the command that hit it.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `code` | `unknown` |
+
+## Returns
+
+code is "component-snapshot-missing" \| "component-integrity-mismatch" \| "component-library-capability-denied" \| "component-dependency-missing"

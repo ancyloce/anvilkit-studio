@@ -1,0 +1,14 @@
+---
+title: "MAX_COMPONENT_SOURCE_NODES_PER_DEFINITION"
+description: "@anvilkit/canvas-core · MAX_COMPONENT_SOURCE_NODES_PER_DEFINITION"
+---
+
+```ts
+const MAX_COMPONENT_SOURCE_NODES_PER_DEFINITION: 512 = 512;
+```
+
+Defined in: [limits.ts:126](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L126)
+
+Ceiling on nodes in one definition's Source tree — ~1/6 of the measured
+3,000-node baseline document, so even a page of maximum-size instances
+stays inside the profiled envelope. Enforced by `ir/validators.ts`.

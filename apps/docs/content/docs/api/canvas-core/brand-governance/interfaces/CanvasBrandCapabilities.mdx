@@ -1,0 +1,23 @@
+---
+title: "CanvasBrandCapabilities"
+description: "@anvilkit/canvas-core · CanvasBrandCapabilities"
+---
+
+Defined in: [brand-governance/types.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L49)
+
+What THIS session's user may do, as plain booleans.
+
+Computed by the host from its own identity model and handed to Core already
+decided. Core never asks who the user is.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="canchangevariant"&gt;&lt;/a&gt; `canChangeVariant` | `readonly` | `boolean` | - | [brand-governance/types.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L51) |
+| &lt;a id="candetach"&gt;&lt;/a&gt; `canDetach` | `readonly` | `boolean` | - | [brand-governance/types.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L52) |
+| &lt;a id="caneditoverrides"&gt;&lt;/a&gt; `canEditOverrides` | `readonly` | `boolean` | - | [brand-governance/types.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L50) |
+| &lt;a id="canflatten"&gt;&lt;/a&gt; `canFlatten` | `readonly` | `boolean` | - | [brand-governance/types.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L53) |
+| &lt;a id="caninsertexternalcomponents"&gt;&lt;/a&gt; `canInsertExternalComponents` | `readonly` | `boolean` | - | [brand-governance/types.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L54) |
+| &lt;a id="canupdatecomponents"&gt;&lt;/a&gt; `canUpdateComponents` | `readonly` | `boolean` | - | [brand-governance/types.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L55) |
+| &lt;a id="editablepropertyidsbyinstance"&gt;&lt;/a&gt; `editablePropertyIdsByInstance?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, readonly `string`[]\&gt;\&gt; | Per-instance allowlist of editable Property IDs, keyed by the **persistent page-level instance id** (OD-08). Page-level rather than per-virtual-node because a virtual id is derived from a resolution and changes when a Source or variant changes — a capability keyed on one would silently lapse on the next edit. Absent for an instance means "no per-instance narrowing"; an empty array means "nothing editable on this instance". | [brand-governance/types.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/types.ts#L66) |

@@ -1,0 +1,24 @@
+---
+title: "canonicalSerializeFragment"
+description: "@anvilkit/schema · canonicalSerializeFragment"
+---
+
+```ts
+function canonicalSerializeFragment(value): CanonicalAuthoringSerialization;
+```
+
+Defined in: [editor/canonical-serialize.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/canonical-serialize.ts#L74)
+
+Canonically serialize an arbitrary JSON-safe fragment (component
+definitions, rich-text values, commands) for per-entity byte
+limits. Same rules, no compaction step.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `unknown` |
+
+## Returns
+
+[`CanonicalAuthoringSerialization`](../interfaces/CanonicalAuthoringSerialization)

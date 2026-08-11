@@ -1,0 +1,23 @@
+---
+title: "StudioPluginRuntimeCapabilities"
+description: "@anvilkit/core · StudioPluginRuntimeCapabilities"
+---
+
+Defined in: [runtime/core/src/types/plugin.ts:270](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L270)
+
+Declarative **runtime** capabilities carried on
+[StudioPluginMeta](StudioPluginMeta.md) — normative declarations the runtime *does*
+read (unlike the advisory surface flags).
+
+`collaboration` MUST be declared by every collab transport plugin
+(DD-0019 §7.4; CORE-P0-020 freeze) — in **TypeScript** meta only:
+a JSON-sourced `meta/config.json` value widens the encoding literal
+to `string` and is deliberately not assignable (the same precedent
+as `StudioPluginMeta.icon`). Undeclared transports are undetectable
+— a documented limitation.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="collaboration"&gt;&lt;/a&gt; `collaboration?` | `readonly` | [`StudioPluginCollabCapability`](StudioPluginCollabCapability.md) | [runtime/core/src/types/plugin.ts:271](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L271) |

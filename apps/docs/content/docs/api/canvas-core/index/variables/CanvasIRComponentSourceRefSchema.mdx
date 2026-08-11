@@ -1,0 +1,16 @@
+---
+title: "CanvasIRComponentSourceRefSchema"
+description: "@anvilkit/canvas-core · CanvasIRComponentSourceRefSchema"
+---
+
+```ts
+const CanvasIRComponentSourceRefSchema: z.ZodType<CanvasComponentSourceRef>;
+```
+
+Defined in: [ir/component-source.ts:292](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-source.ts#L292)
+
+The persisted `source` field.
+
+`discriminatedUnion` rather than a plain union so a wrong `kind` reports one
+precise issue on that field instead of the union's full cross-product of
+failures.

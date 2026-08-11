@@ -1,0 +1,21 @@
+---
+title: "FrameClipShapeSource"
+description: "@anvilkit/canvas-core · FrameClipShapeSource"
+---
+
+```ts
+type FrameClipShapeSource = "default" | "declared" | "degraded";
+```
+
+Defined in: [ir/frame-clip.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L28)
+
+Where the resolved geometry came from.
+
+`"default"` and `"declared"` are the mask analogue of the distinction
+[resolveNodeEffects](../functions/resolveNodeEffects) draws between an absent `effects` array and an
+explicitly empty one: a frame that never declared a shape inherits the
+rectangle, while a frame declaring `{ kind: "rect" }` has *deliberately no
+shape mask*. Both clip to the same rectangle, and they must stay
+distinguishable — that is how an edit removes a mask (writing the rectangle)
+without deleting the frame's history, and how UI can tell "unset" from
+"explicitly rectangular".

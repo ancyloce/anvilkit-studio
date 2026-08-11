@@ -1,0 +1,23 @@
+---
+title: "MAX_EXTERNAL_ENVELOPE_BYTES"
+description: "@anvilkit/canvas-core · MAX_EXTERNAL_ENVELOPE_BYTES"
+---
+
+```ts
+const MAX_EXTERNAL_ENVELOPE_BYTES: number = MAX_CLIPBOARD_BYTES;
+```
+
+Defined in: [limits.ts:212](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L212)
+
+Ceiling on the serialized byte size of one Provider envelope.
+
+Anchored to `MAX_CLIPBOARD_BYTES` (also 2 MiB), which is this package's
+existing answer to "how many bytes may a single untrusted payload carry".
+An envelope is the same kind of object: one-shot, externally supplied, parsed
+once. It carries at most one definition (≤
+`MAX_COMPONENT_SOURCE_NODES_PER_DEFINITION` nodes) plus its dependency refs,
+which is a smaller shape than the ≤1,000-node clipboard payload the figure was
+set for — so it is a ceiling with headroom, not a target.
+
+Checked against the transport-reported length **before** full parse where the
+transport provides one (TD §23.3).

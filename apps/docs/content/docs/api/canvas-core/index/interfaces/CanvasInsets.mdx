@@ -1,0 +1,29 @@
+---
+title: "CanvasInsets"
+description: "@anvilkit/canvas-core · CanvasInsets"
+---
+
+Defined in: [ir/types.ts:100](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L100)
+
+Per-edge inset distances. The single shared insets shape (PRD 0012 §9.3):
+there is deliberately no second inset type in this package.
+
+**The unit depends on the owner, not on this type.** Two usages exist:
+
+- *Page-level layout aids* (margin/bleed/safeArea) and the `CanvasSafeArea`
+  alias in `templates/` — in the owning page's `size.unit`.
+- *Node-local Auto Layout padding* (`CanvasAutoLayout.padding`) — in the
+  owning frame's local units, matching `CanvasFrameNode.radius` and the
+  frame's own `bounds`, NOT the page unit.
+
+Consumers must therefore read the unit from the owner rather than assuming
+a page unit for every `CanvasInsets` they encounter.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="bottom"&gt;&lt;/a&gt; `bottom` | `number` | [ir/types.ts:103](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L103) |
+| &lt;a id="left"&gt;&lt;/a&gt; `left` | `number` | [ir/types.ts:104](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L104) |
+| &lt;a id="right"&gt;&lt;/a&gt; `right` | `number` | [ir/types.ts:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L102) |
+| &lt;a id="top"&gt;&lt;/a&gt; `top` | `number` | [ir/types.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L101) |

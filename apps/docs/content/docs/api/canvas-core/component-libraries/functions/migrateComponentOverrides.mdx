@@ -1,0 +1,31 @@
+---
+title: "migrateComponentOverrides"
+description: "@anvilkit/canvas-core · migrateComponentOverrides"
+---
+
+```ts
+function migrateComponentOverrides(overrides, report): CanvasOverrideMigrationResult;
+```
+
+Defined in: [component-libraries/compatibility.ts:361](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/compatibility.ts#L361)
+
+Carry an instance's overrides from one definition to another.
+
+Precedence, per §12.4: **exact property id + kind → unique semantic key +
+kind → ambiguous → blocked → orphaned**. Everything that is not a provable
+match is orphaned with its value retained.
+
+Never invents a value: an override appears in the output only if it appeared
+in the input. A target property with no incoming override is simply absent,
+so it renders its own default.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `overrides` | \| `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasComponentOverride`](../../index/type-aliases/CanvasComponentOverride)\&gt;\&gt; \| `undefined` |
+| `report` | [`CanvasComponentCompatibilityReport`](../interfaces/CanvasComponentCompatibilityReport) |
+
+## Returns
+
+[`CanvasOverrideMigrationResult`](../interfaces/CanvasOverrideMigrationResult)

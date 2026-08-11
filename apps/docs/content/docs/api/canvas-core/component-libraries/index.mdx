@@ -1,0 +1,295 @@
+---
+title: "index"
+description: "@anvilkit/canvas-core · index"
+---
+
+## Classes
+
+| Class | Description |
+| ------ | ------ |
+| [CanvasCanonicalizationError](classes/CanvasCanonicalizationError.md) | A payload could not be reduced to canonical RFC 8785 bytes. |
+| [CanvasComponentLimitError](classes/CanvasComponentLimitError.md) | A Provider envelope (or an imported document's snapshot registry) exceeded a documented resource ceiling. |
+| [CanvasSnapshotKeyError](classes/CanvasSnapshotKeyError.md) | A reference field was unfit to encode into a registry key. |
+
+## Interfaces
+
+| Interface | Description |
+| ------ | ------ |
+| [AdmitExternalSnapshotOptions](interfaces/AdmitExternalSnapshotOptions.md) | - |
+| [CanvasCollectionPreview](interfaces/CanvasCollectionPreview.md) | What a collection WOULD do. Pure; the dialog renders this before committing. |
+| [CanvasComponentCollectUnusedCommand](interfaces/CanvasComponentCollectUnusedCommand.md) | - |
+| [CanvasComponentCompatibilityReport](interfaces/CanvasComponentCompatibilityReport.md) | - |
+| [CanvasComponentDiagnostic](interfaces/CanvasComponentDiagnostic.md) | One reported diagnostic. |
+| [CanvasComponentInsertExternalCommand](interfaces/CanvasComponentInsertExternalCommand.md) | - |
+| [CanvasComponentRecoverSnapshotCommand](interfaces/CanvasComponentRecoverSnapshotCommand.md) | - |
+| [CanvasComponentRestoreCollectedCommand](interfaces/CanvasComponentRestoreCollectedCommand.md) | - |
+| [CanvasComponentRevertExternalInsertCommand](interfaces/CanvasComponentRevertExternalInsertCommand.md) | - |
+| [CanvasComponentRevertSourceChangeCommand](interfaces/CanvasComponentRevertSourceChangeCommand.md) | - |
+| [CanvasComponentSetVariantCommand](interfaces/CanvasComponentSetVariantCommand.md) | - |
+| [CanvasComponentSwapSourceCommand](interfaces/CanvasComponentSwapSourceCommand.md) | - |
+| [CanvasComponentUnrecoverSnapshotCommand](interfaces/CanvasComponentUnrecoverSnapshotCommand.md) | - |
+| [CanvasComponentUpdateSourceCommand](interfaces/CanvasComponentUpdateSourceCommand.md) | - |
+| [CanvasDependencyChange](interfaces/CanvasDependencyChange.md) | - |
+| [CanvasIntegrityVerifier](interfaces/CanvasIntegrityVerifier.md) | Host-supplied digest verification. |
+| [CanvasOverrideMigrationResult](interfaces/CanvasOverrideMigrationResult.md) | - |
+| [CanvasParsedIntegrity](interfaces/CanvasParsedIntegrity.md) | A parsed `sha256-<base64url>` integrity string. |
+| [CanvasPropertyMapping](interfaces/CanvasPropertyMapping.md) | - |
+| [CanvasSemanticKeyIssue](interfaces/CanvasSemanticKeyIssue.md) | - |
+| [CanvasVariantChangeSummary](interfaces/CanvasVariantChangeSummary.md) | - |
+| [CanvasVariantMapping](interfaces/CanvasVariantMapping.md) | - |
+| [CanvasVariantOverrideOutcome](interfaces/CanvasVariantOverrideOutcome.md) | How one override fared across a variant change (surfaced for the preview). |
+| [ClosureResolver](interfaces/ClosureResolver.md) | How to look up a snapshot while walking a closure. |
+| [ValidateExternalClosureOptions](interfaces/ValidateExternalClosureOptions.md) | - |
+
+## Type Aliases
+
+| Type Alias | Description |
+| ------ | ------ |
+| [CanvasAdmissionResult](type-aliases/CanvasAdmissionResult.md) | - |
+| [CanvasCanonicalizationErrorCode](type-aliases/CanvasCanonicalizationErrorCode.md) | Why a payload has no canonical form. |
+| [CanvasComponentAbortingCode](type-aliases/CanvasComponentAbortingCode.md) | - |
+| [CanvasComponentCompatibilityClass](type-aliases/CanvasComponentCompatibilityClass.md) | - |
+| [CanvasComponentDependencyRef](type-aliases/CanvasComponentDependencyRef.md) | A reference from one external component to another. |
+| [CanvasComponentDiagnosticCode](type-aliases/CanvasComponentDiagnosticCode.md) | A closed union — deliberately not `string`. |
+| [CanvasComponentDiagnosticSeverity](type-aliases/CanvasComponentDiagnosticSeverity.md) | How badly a diagnostic affects the document. |
+| [CanvasComponentLimitCode](type-aliases/CanvasComponentLimitCode.md) | Why a resource cap was refused. |
+| [CanvasExternalComponentCatalogMetadata](type-aliases/CanvasExternalComponentCatalogMetadata.md) | - |
+| [CanvasExternalComponentEnvelope](type-aliases/CanvasExternalComponentEnvelope.md) | - |
+| [CanvasExternalComponentSnapshotLike](type-aliases/CanvasExternalComponentSnapshotLike.md) | The snapshot shape stored in the document. |
+| [CanvasIntegrityAlgorithm](type-aliases/CanvasIntegrityAlgorithm.md) | - |
+| [CanvasParseIntegrityResult](type-aliases/CanvasParseIntegrityResult.md) | - |
+| [CanvasPropertyMappingKind](type-aliases/CanvasPropertyMappingKind.md) | How an override on `from` maps onto `to`. |
+| [CanvasSemanticKeyIssueCode](type-aliases/CanvasSemanticKeyIssueCode.md) | - |
+| [CanvasSnapshotKeyErrorCode](type-aliases/CanvasSnapshotKeyErrorCode.md) | Why a snapshot key could not be derived from a reference. |
+| [CanvasValidatedExternalSnapshot](type-aliases/CanvasValidatedExternalSnapshot.md) | A snapshot that has passed strict parsing, bounding, canonicalization, and digest verification. |
+
+## Variables
+
+| Variable | Description |
+| ------ | ------ |
+| [CANVAS\_CANONICAL\_FORMAT\_VERSION](variables/CANVAS_CANONICAL_FORMAT_VERSION.md) | The canonical format version this build produces and accepts (TD §5.3). |
+| [CANVAS\_COMPONENT\_ABORTING\_CODES](variables/CANVAS_COMPONENT_ABORTING_CODES.md) | The subset of diagnostics that must also abort a command. |
+| [CANVAS\_COMPONENT\_DIAGNOSTIC\_CODES](variables/CANVAS_COMPONENT_DIAGNOSTIC_CODES.md) | Every stable diagnostic code, in PRD §9.16 order. |
+| [CANVAS\_INTEGRITY\_ALGORITHM](variables/CANVAS_INTEGRITY_ALGORITHM.md) | The only digest algorithm P0 supports (TD §6.1). |
+| [CanvasComponentSourceRefSchema](variables/CanvasComponentSourceRefSchema.md) | Either source kind, discriminated on `kind`. |
+| [CanvasComponentVariantAxisSchema](variables/CanvasComponentVariantAxisSchema.md) | Component variants — public re-export door (plan 0021 T-024/T-025). |
+| [CanvasComponentVariantDefinitionSchema](variables/CanvasComponentVariantDefinitionSchema.md) | Component variants — public re-export door (plan 0021 T-024/T-025). |
+| [CanvasComponentVariantValueSchema](variables/CanvasComponentVariantValueSchema.md) | Component variants — public re-export door (plan 0021 T-024/T-025). |
+| [CanvasExternalComponentCatalogMetadataSchema](variables/CanvasExternalComponentCatalogMetadataSchema.md) | Non-authoritative catalog metadata. |
+| [CanvasExternalComponentDefinitionSchema](variables/CanvasExternalComponentDefinitionSchema.md) | The component definition carried by an envelope (plan 0021 T-014). |
+| [CanvasExternalComponentEnvelopeSchema](variables/CanvasExternalComponentEnvelopeSchema.md) | The Provider envelope. |
+| [CanvasExternalComponentRefSchema](variables/CanvasExternalComponentRefSchema.md) | - |
+| [CanvasLocalComponentSourceRefSchema](variables/CanvasLocalComponentSourceRefSchema.md) | The document-local source variant PRD 0015 instances migrate to (T-012). |
+| [COLLECT\_UNUSED\_COMMAND](variables/COLLECT_UNUSED_COMMAND.md) | - |
+| [INSERT\_EXTERNAL\_COMMAND](variables/INSERT_EXTERNAL_COMMAND.md) | - |
+| [RECOVER\_SNAPSHOT\_COMMAND](variables/RECOVER_SNAPSHOT_COMMAND.md) | - |
+| [RESTORE\_COLLECTED\_COMMAND](variables/RESTORE_COLLECTED_COMMAND.md) | - |
+| [REVERT\_EXTERNAL\_INSERT\_COMMAND](variables/REVERT_EXTERNAL_INSERT_COMMAND.md) | - |
+| [REVERT\_SOURCE\_CHANGE\_COMMAND](variables/REVERT_SOURCE_CHANGE_COMMAND.md) | - |
+| [SET\_VARIANT\_COMMAND](variables/SET_VARIANT_COMMAND.md) | - |
+| [SnapshotKeySchema](variables/SnapshotKeySchema.md) | Zod schema for the keys of `CanvasIR.externalComponentSnapshots`. |
+| [SWAP\_SOURCE\_COMMAND](variables/SWAP_SOURCE_COMMAND.md) | - |
+| [UNRECOVER\_SNAPSHOT\_COMMAND](variables/UNRECOVER_SNAPSHOT_COMMAND.md) | - |
+| [UPDATE\_SOURCE\_COMMAND](variables/UPDATE_SOURCE_COMMAND.md) | - |
+
+## Functions
+
+| Function | Description |
+| ------ | ------ |
+| [admitExternalSnapshot](functions/admitExternalSnapshot.md) | Admit an untrusted envelope, or explain why not. |
+| [boundedDisplayString](functions/boundedDisplayString.md) | A display-scale bounded string for non-authoritative catalog metadata. |
+| [boundedIdentifier](functions/boundedIdentifier.md) | An identifier-scale bounded string (1–[MAX\_EXTERNAL\_REF\_FIELD\_CHARS](../index/variables/MAX_EXTERNAL_REF_FIELD_CHARS)). |
+| [boundedProviderUrl](functions/boundedProviderUrl.md) | A Provider-supplied URL: length-bounded, then scheme-checked. |
+| [canonicalizeComponentPayload](functions/canonicalizeComponentPayload.md) | Canonical UTF-8 bytes for `value`. |
+| [canonicalizeComponentPayloadToString](functions/canonicalizeComponentPayloadToString.md) | The canonical form as a JS string. |
+| [collectReferencedSnapshotKeys](functions/collectReferencedSnapshotKeys.md) | Every snapshot key this document reaches. |
+| [collectUnreferencedSnapshotKeys](functions/collectUnreferencedSnapshotKeys.md) | Snapshot keys stored but not reachable from the document. |
+| [compareComponentDefinitions](functions/compareComponentDefinitions.md) | Compare two definitions and describe what an override migration would do. |
+| [componentDiagnostic](functions/componentDiagnostic.md) | Build a diagnostic, defaulting `severity` from the code. |
+| [componentDiagnosticSeverity](functions/componentDiagnosticSeverity.md) | The documented severity for a diagnostic code. |
+| [createCollectUnusedCommandHandlers](functions/createCollectUnusedCommandHandlers.md) | - |
+| [createExternalInsertCommandHandlers](functions/createExternalInsertCommandHandlers.md) | The two handlers, as an extension bundle fragment. |
+| [createSetVariantCommandHandlers](functions/createSetVariantCommandHandlers.md) | The handler, for registration through `createCanvasRuntime`. |
+| [createSnapshotRecoveryCommandHandlers](functions/createSnapshotRecoveryCommandHandlers.md) | The recovery handler pair, for registration through `createCanvasRuntime`. |
+| [createSourceChangeCommandHandlers](functions/createSourceChangeCommandHandlers.md) | The three handlers, for registration through `createCanvasRuntime`. |
+| [digestsEqual](functions/digestsEqual.md) | Compare two base64url digests without an early-exit on the first differing character. |
+| [enforceLimit](functions/enforceLimit.md) | Throw [CanvasComponentLimitError](classes/CanvasComponentLimitError.md) when `observed` exceeds the ceiling declared for `code`. |
+| [formatIntegrity](functions/formatIntegrity.md) | Build the canonical `sha256-<digest>` string from a parsed pair. |
+| [isCanvasComponentAbortingCode](functions/isCanvasComponentAbortingCode.md) | Whether a diagnostic condition must abort the command that hit it. |
+| [isCanvasComponentDiagnosticCode](functions/isCanvasComponentDiagnosticCode.md) | Whether `code` is one of the stable component diagnostics. |
+| [isCompatible](functions/isCompatible.md) | Convenience: does this report describe a change safe to apply unattended? |
+| [isSnapshotKey](functions/isSnapshotKey.md) | Whether `key` is a well-formed snapshot key. |
+| [limitFor](functions/limitFor.md) | The ceiling enforced for a given limit code. |
+| [migrateComponentOverrides](functions/migrateComponentOverrides.md) | Carry an instance's overrides from one definition to another. |
+| [parseIntegrity](functions/parseIntegrity.md) | Parse and validate an integrity string. |
+| [parseSnapshotKey](functions/parseSnapshotKey.md) | Parse a registry key back into its exact reference, or `null` when the key is not one this codec could have produced. |
+| [previewCollectUnused](functions/previewCollectUnused.md) | Compute what a collection would remove, without removing it. |
+| [previewSourceChange](functions/previewSourceChange.md) | Compare the current and target definitions. |
+| [previewVariantChange](functions/previewVariantChange.md) | Preview a variant change without touching the document. |
+| [sanitizeProviderUrl](functions/sanitizeProviderUrl.md) | `@anvilkit/canvas-core/component-libraries` — external Component Library support: canonicalization, integrity verification, the snapshot-key codec, envelope admission, external resolution, and the library commands. |
+| [snapshotKey](functions/snapshotKey.md) | Derive the registry key for an exact external reference. |
+| [strictEnvelopeObject](functions/strictEnvelopeObject.md) | A `z.strictObject` for envelope shapes — unknown keys are rejected. |
+| [validateExternalClosure](functions/validateExternalClosure.md) | Validate one snapshot's full external dependency closure. |
+| [validateSemanticKeys](functions/validateSemanticKeys.md) | Validate the semantic keys declared by one definition. |
+
+## References
+
+### buildExternalSnapshotIndex
+
+Re-exports [buildExternalSnapshotIndex](../index/functions/buildExternalSnapshotIndex)
+
+***
+
+### canonicalVariantKey
+
+Re-exports [canonicalVariantKey](../index/functions/canonicalVariantKey)
+
+***
+
+### CanvasComponentSourceRef
+
+Re-exports [CanvasComponentSourceRef](../index/type-aliases/CanvasComponentSourceRef)
+
+***
+
+### CanvasComponentVariantAxis
+
+Re-exports [CanvasComponentVariantAxis](../index/interfaces/CanvasComponentVariantAxis)
+
+***
+
+### CanvasComponentVariantDefinition
+
+Re-exports [CanvasComponentVariantDefinition](../index/interfaces/CanvasComponentVariantDefinition)
+
+***
+
+### CanvasComponentVariantIssue
+
+Re-exports [CanvasComponentVariantIssue](../index/interfaces/CanvasComponentVariantIssue)
+
+***
+
+### CanvasComponentVariantIssueCode
+
+Re-exports [CanvasComponentVariantIssueCode](../index/type-aliases/CanvasComponentVariantIssueCode)
+
+***
+
+### CanvasComponentVariantResolution
+
+Re-exports [CanvasComponentVariantResolution](../index/interfaces/CanvasComponentVariantResolution)
+
+***
+
+### CanvasComponentVariantResolutionCode
+
+Re-exports [CanvasComponentVariantResolutionCode](../index/type-aliases/CanvasComponentVariantResolutionCode)
+
+***
+
+### CanvasComponentVariantSelection
+
+Re-exports [CanvasComponentVariantSelection](../index/type-aliases/CanvasComponentVariantSelection)
+
+***
+
+### CanvasComponentVariantSet
+
+Re-exports [CanvasComponentVariantSet](../index/interfaces/CanvasComponentVariantSet)
+
+***
+
+### CanvasComponentVariantSetSchema
+
+Re-exports [CanvasComponentVariantSetSchema](../index/variables/CanvasComponentVariantSetSchema)
+
+***
+
+### CanvasComponentVariantValue
+
+Re-exports [CanvasComponentVariantValue](../index/interfaces/CanvasComponentVariantValue)
+
+***
+
+### CanvasDefinitionLookup
+
+Re-exports [CanvasDefinitionLookup](../index/type-aliases/CanvasDefinitionLookup)
+
+***
+
+### CanvasExternalComponentRef
+
+Re-exports [CanvasExternalComponentRef](../index/interfaces/CanvasExternalComponentRef)
+
+***
+
+### CanvasExternalComponentSnapshot
+
+Re-exports [CanvasExternalComponentSnapshot](../index/interfaces/CanvasExternalComponentSnapshot)
+
+***
+
+### CanvasExternalComponentSnapshotRegistry
+
+Re-exports [CanvasExternalComponentSnapshotRegistry](../index/type-aliases/CanvasExternalComponentSnapshotRegistry)
+
+***
+
+### CanvasExternalComponentState
+
+Re-exports [CanvasExternalComponentState](../index/type-aliases/CanvasExternalComponentState)
+
+***
+
+### CanvasExternalSnapshotIndex
+
+Re-exports [CanvasExternalSnapshotIndex](../index/interfaces/CanvasExternalSnapshotIndex)
+
+***
+
+### componentSourceKey
+
+Re-exports [componentSourceKey](../index/functions/componentSourceKey)
+
+***
+
+### getDefinition
+
+Re-exports [getDefinition](../index/functions/getDefinition)
+
+***
+
+### isExternalSourceRef
+
+Re-exports [isExternalSourceRef](../index/functions/isExternalSourceRef)
+
+***
+
+### isLocalSourceRef
+
+Re-exports [isLocalSourceRef](../index/functions/isLocalSourceRef)
+
+***
+
+### resolveComponentVariant
+
+Re-exports [resolveComponentVariant](../index/functions/resolveComponentVariant)
+
+***
+
+### resolveDefinitionVariant
+
+Re-exports [resolveDefinitionVariant](../index/functions/resolveDefinitionVariant)
+
+***
+
+### validateComponentVariantSet
+
+Re-exports [validateComponentVariantSet](../index/functions/validateComponentVariantSet)
+
+***
+
+### variantPropertyTarget
+
+Re-exports [variantPropertyTarget](../index/functions/variantPropertyTarget)

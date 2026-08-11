@@ -1,0 +1,25 @@
+---
+title: "RichTextSpan"
+description: "@anvilkit/canvas-core · RichTextSpan"
+---
+
+Defined in: [ir/types.ts:708](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L708)
+
+A styled run of text. Every style field is optional: an omitted field inherits
+from the host's defaults at measure/render time rather than being resolved
+here, which keeps the IR free of any font or layout knowledge.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="fill"&gt;&lt;/a&gt; `fill?` | [`CanvasFill`](../type-aliases/CanvasFill) | - | [ir/types.ts:719](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L719) |
+| &lt;a id="fontfamily"&gt;&lt;/a&gt; `fontFamily?` | [`CanvasFontFamily`](../type-aliases/CanvasFontFamily) | - | [ir/types.ts:710](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L710) |
+| &lt;a id="fontsize"&gt;&lt;/a&gt; `fontSize?` | `number` | - | [ir/types.ts:711](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L711) |
+| &lt;a id="fontweight"&gt;&lt;/a&gt; `fontWeight?` | `string` | - | [ir/types.ts:712](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L712) |
+| &lt;a id="italic"&gt;&lt;/a&gt; `italic?` | `boolean` | - | [ir/types.ts:713](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L713) |
+| &lt;a id="letterspacing"&gt;&lt;/a&gt; `letterSpacing?` | `number` | - | [ir/types.ts:717](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L717) |
+| &lt;a id="strikethrough"&gt;&lt;/a&gt; `strikethrough?` | `boolean` | FR-081 (B-03c). | [ir/types.ts:716](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L716) |
+| &lt;a id="text"&gt;&lt;/a&gt; `text` | `string` | - | [ir/types.ts:709](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L709) |
+| &lt;a id="texttransform"&gt;&lt;/a&gt; `textTransform?` | [`RichTextTransform`](../type-aliases/RichTextTransform) | - | [ir/types.ts:718](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L718) |
+| &lt;a id="underline"&gt;&lt;/a&gt; `underline?` | `boolean` | - | [ir/types.ts:714](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L714) |

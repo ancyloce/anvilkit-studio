@@ -1,0 +1,17 @@
+---
+title: "ComponentScopeState"
+description: "@anvilkit/canvas-editor · ComponentScopeState"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/stores/component-scope-store.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/component-scope-store.ts#L56)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="activeframe"&gt;&lt;/a&gt; `activeFrame` | `public` | () =&gt; [`CanvasComponentEditingFrame`](CanvasComponentEditingFrame.md) \| `null` | The active frame, or `null` when editing a page. | [packages/capabilities/canvas/editor/src/stores/component-scope-store.ts:73](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/component-scope-store.ts#L73) |
+| &lt;a id="enter"&gt;&lt;/a&gt; `enter` | `public` | (`frame`) =&gt; \| [`CanvasComponentScopeRejection`](../type-aliases/CanvasComponentScopeRejection) \| `null` | Push a frame. Returns `null` on success, or why it was refused — callers surface the diagnostic rather than failing silently. | [packages/capabilities/canvas/editor/src/stores/component-scope-store.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/component-scope-store.ts#L63) |
+| &lt;a id="exitall"&gt;&lt;/a&gt; `exitAll` | `public` | () =&gt; [`CanvasComponentEditingFrame`](CanvasComponentEditingFrame.md) \| `null` | Pop everything and return the OUTERMOST frame — the one whose `returnSelection` points back at a page. `null` when not editing. | [packages/capabilities/canvas/editor/src/stores/component-scope-store.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/component-scope-store.ts#L71) |
+| &lt;a id="exitone"&gt;&lt;/a&gt; `exitOne` | `public` | () =&gt; [`CanvasComponentEditingFrame`](CanvasComponentEditingFrame.md) \| `null` | Pop the innermost frame and return it, so the caller can restore its `returnSelection`. `null` when the stack is already empty. | [packages/capabilities/canvas/editor/src/stores/component-scope-store.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/component-scope-store.ts#L68) |
+| &lt;a id="isopen"&gt;&lt;/a&gt; `isOpen` | `public` | (`componentId`) =&gt; `boolean` | True when `componentId` is anywhere on the stack. | [packages/capabilities/canvas/editor/src/stores/component-scope-store.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/component-scope-store.ts#L75) |
+| &lt;a id="stack"&gt;&lt;/a&gt; `stack` | `readonly` | readonly [`CanvasComponentEditingFrame`](CanvasComponentEditingFrame.md)[] | Outermost frame first; the LAST entry is the active editing scope. | [packages/capabilities/canvas/editor/src/stores/component-scope-store.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/component-scope-store.ts#L58) |

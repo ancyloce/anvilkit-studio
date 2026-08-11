@@ -1,0 +1,28 @@
+---
+title: "snapshotKey"
+description: "@anvilkit/canvas-core · snapshotKey"
+---
+
+```ts
+function snapshotKey(ref): string;
+```
+
+Defined in: [ir/snapshot-key.ts:143](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/snapshot-key.ts#L143)
+
+Derive the registry key for an exact external reference.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ref` | [`CanvasExternalComponentRef`](../../index/interfaces/CanvasExternalComponentRef) |
+
+## Returns
+
+`string`
+
+## Throws
+
+when any field is absent, empty, longer than
+[MAX\_EXTERNAL\_REF\_FIELD\_CHARS](../../index/variables/MAX_EXTERNAL_REF_FIELD_CHARS), or contains a control character or
+unpaired surrogate.

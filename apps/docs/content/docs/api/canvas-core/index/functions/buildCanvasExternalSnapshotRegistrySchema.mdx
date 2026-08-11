@@ -1,0 +1,41 @@
+---
+title: "buildCanvasExternalSnapshotRegistrySchema"
+description: "@anvilkit/canvas-core · buildCanvasExternalSnapshotRegistrySchema"
+---
+
+```ts
+function buildCanvasExternalSnapshotRegistrySchema(nodeSchema): ZodType<Readonly<Record<string, CanvasExternalComponentSnapshot>>>;
+```
+
+Defined in: [ir/validators.ts:1078](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L1078)
+
+Build the `ir.externalComponentSnapshots` schema against a node union
+(plan 0021 T-014), for the same reason the Registry builder exists: a custom
+node kind inside an external Source tree must validate exactly like one
+inside a local Source tree.
+
+## The key assertion is the point of this schema
+
+Every entry's key must equal `snapshotKey(entry.ref)`. Without it a document
+could store component *A*'s bytes under component *B*'s key, and the resolver
+— which looks up by key — would hand back the wrong component while every
+individual field still validated (TD §22.1, cross-library confusion). This is
+why the key codec had to move down to `ir/` (see `ir/snapshot-key.ts`): rank 1
+cannot import it from `component-libraries/` at rank 4, so before the move
+this check was simply not expressible where the schema lives.
+
+Entries are `looseObject` like the rest of the IR (CON-5). That is deliberate
+and NOT a weakening of the strict Provider envelope: strictness belongs at the
+moment untrusted bytes arrive (`component-libraries/admission.ts`), whereas
+this schema parses a document that already contains admitted snapshots and
+must round-trip a newer peer's unknown fields rather than delete them.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `nodeSchema` | `ZodType`\&lt;[`CanvasNode`](../type-aliases/CanvasNode)\&gt; |
+
+## Returns
+
+`ZodType`\<`Readonly`\<`Record`\<`string`, [`CanvasExternalComponentSnapshot`](../interfaces/CanvasExternalComponentSnapshot)\>\>\>

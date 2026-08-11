@@ -1,0 +1,30 @@
+---
+title: "CssLength"
+description: "@anvilkit/contracts · CssLength"
+---
+
+```ts
+type CssLength = 
+  | {
+  kind: "unit";
+  unit: CssUnit;
+  value: number;
+}
+  | {
+  keyword: "auto" | "min-content" | "max-content" | "fit-content";
+  kind: "keyword";
+}
+  | {
+  kind: "token";
+  tokenId: string;
+}
+  | {
+  expression: CssMathExpression;
+  kind: "math";
+};
+```
+
+Defined in: [editor/values.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L83)
+
+A typed CSS length: number-plus-unit, a safe keyword, a token
+reference, or an AST-built math expression (DD-0019 §9.3).

@@ -1,0 +1,16 @@
+---
+title: "CanvasCollectionPreview"
+description: "@anvilkit/canvas-core · CanvasCollectionPreview"
+---
+
+Defined in: [component-libraries/commands/collect-unused.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/collect-unused.ts#L56)
+
+What a collection WOULD do. Pure; the dialog renders this before committing.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="eligiblebytes"&gt;&lt;/a&gt; `eligibleBytes` | `readonly` | `number` | Approximate serialized size of those entries. Named `eligibleBytes`, never `reclaimedBytes`: this is the size of the JSON this command would drop, not a promise about a file on disk. | [component-libraries/commands/collect-unused.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/collect-unused.ts#L65) |
+| &lt;a id="eligiblekeys"&gt;&lt;/a&gt; `eligibleKeys` | `readonly` | readonly `string`[] | Keys that would be removed, sorted. | [component-libraries/commands/collect-unused.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/collect-unused.ts#L58) |
+| &lt;a id="retainedonlybyhistory"&gt;&lt;/a&gt; `retainedOnlyByHistory` | `readonly` | readonly `string`[] | Keys kept only because `retainedSnapshotKeys` asked for them. | [component-libraries/commands/collect-unused.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/collect-unused.ts#L67) |

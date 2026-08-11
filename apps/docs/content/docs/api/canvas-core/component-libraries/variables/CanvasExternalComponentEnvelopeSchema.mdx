@@ -1,0 +1,39 @@
+---
+title: "CanvasExternalComponentEnvelopeSchema"
+description: "@anvilkit/canvas-core · CanvasExternalComponentEnvelopeSchema"
+---
+
+```ts
+const CanvasExternalComponentEnvelopeSchema: ZodObject<{
+  canonicalFormatVersion: ZodLiteral<1>;
+  definition: ZodObject<{
+     createdAt: ZodOptional<ZodString>;
+     id: ZodString;
+     name: ZodString;
+     policy: ZodOptional<ZodType<CanvasBrandComponentPolicy, unknown, $ZodTypeInternals<CanvasBrandComponentPolicy, unknown>>>;
+     properties: ZodArray<ZodType<CanvasComponentProperty, unknown, $ZodTypeInternals<CanvasComponentProperty, unknown>>>;
+     revision: ZodInt;
+     root: ZodType<CanvasNode, unknown, $ZodTypeInternals<CanvasNode, unknown>>;
+     updatedAt: ZodOptional<ZodString>;
+     variants: ZodOptional<ZodType<CanvasComponentVariantSet, unknown, $ZodTypeInternals<CanvasComponentVariantSet, unknown>>>;
+  }, $loose>;
+  dependencies: ZodArray<ZodType<CanvasExternalComponentRef, unknown, $ZodTypeInternals<CanvasExternalComponentRef, unknown>>>;
+  metadata: ZodOptional<ZodObject<{
+     deprecationNotice: ZodOptional<ZodString>;
+     description: ZodOptional<ZodString>;
+     name: ZodOptional<ZodString>;
+     publisher: ZodOptional<ZodString>;
+     releaseNotesUrl: ZodOptional<ZodPipe<ZodString, ZodTransform<string | undefined, string>>>;
+     thumbnailUrl: ZodOptional<ZodPipe<ZodString, ZodTransform<string | undefined, string>>>;
+  }, $strict>>;
+  ref: ZodType<CanvasExternalComponentRef, unknown, $ZodTypeInternals<CanvasExternalComponentRef, unknown>>;
+}, $strict>;
+```
+
+Defined in: [component-libraries/admission.ts:134](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L134)
+
+The Provider envelope.
+
+`strictEnvelopeObject` — unknown keys are rejected at the top level. See
+`schema-utils.ts` for why this is the opposite posture from
+`ir/validators.ts:40-46`, and why both are correct.

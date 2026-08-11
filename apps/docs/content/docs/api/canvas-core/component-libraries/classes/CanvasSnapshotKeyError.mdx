@@ -1,0 +1,49 @@
+---
+title: "CanvasSnapshotKeyError"
+description: "@anvilkit/canvas-core · CanvasSnapshotKeyError"
+---
+
+Defined in: [ir/snapshot-key.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/snapshot-key.ts#L47)
+
+A reference field was unfit to encode into a registry key.
+
+Thrown by `snapshotKey`, never by `parseSnapshotKey` — deriving a key is how
+data enters the document, so an invalid one must not be constructible; parsing
+reads untrusted input and returns `null` instead.
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new CanvasSnapshotKeyError(code, message): CanvasSnapshotKeyError;
+```
+
+Defined in: [ir/snapshot-key.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/snapshot-key.ts#L50)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `code` | [`CanvasSnapshotKeyErrorCode`](../type-aliases/CanvasSnapshotKeyErrorCode) |
+| `message` | `string` |
+
+#### Returns
+
+`CanvasSnapshotKeyError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | [`CanvasSnapshotKeyErrorCode`](../type-aliases/CanvasSnapshotKeyErrorCode) | [ir/snapshot-key.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/snapshot-key.ts#L48) |

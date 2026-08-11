@@ -1,0 +1,17 @@
+---
+title: "ComponentDefinitionDeletePolicy"
+description: "@anvilkit/contracts · ComponentDefinitionDeletePolicy"
+---
+
+```ts
+type ComponentDefinitionDeletePolicy = "confirm-detach-all" | "block-when-referenced";
+```
+
+Defined in: [editor/policies.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/policies.ts#L20)
+
+How deleting a component definition with live instances behaves
+(DD-0019 §14.6, ED-COMP-006): `"confirm-detach-all"` (default)
+offers cancel or detach-all; `"block-when-referenced"` rejects with
+`EDITOR_DEFINITION_REFERENCED` — including for a single-transaction
+detach-all→delete batch, whose policy check runs against the
+batch-entry state (contract freeze CORE-P0-001 §4).

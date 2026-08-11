@@ -1,0 +1,26 @@
+---
+title: "EditorFeatureScanDocument"
+description: "@anvilkit/ir · EditorFeatureScanDocument"
+---
+
+Defined in: [editor/index.ts:137](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L137)
+
+A structural view of an authored document, sufficient for
+prop-level feature detection.
+
+Deliberately **not** Puck's `Data`: `@anvilkit/ir` is a foundation
+package with no runtime Puck import (§30.5 as read per C-6). The
+fields are widened to `unknown` so that both shapes a caller can
+hold are assignable without a cast — Puck `Data`
+(`root.props` / `content` / `zones`) and `PageIR`
+(`root.children`) — and the scan itself walks the whole object
+rather than a fixed field list, so a future container cannot
+silently hide rich text from the gate.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="content"&gt;&lt;/a&gt; `content?` | `readonly` | readonly `unknown`[] | [editor/index.ts:139](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L139) |
+| &lt;a id="root"&gt;&lt;/a&gt; `root?` | `readonly` | `unknown` | [editor/index.ts:138](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L138) |
+| &lt;a id="zones"&gt;&lt;/a&gt; `zones?` | `readonly` | `unknown` | [editor/index.ts:140](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L140) |

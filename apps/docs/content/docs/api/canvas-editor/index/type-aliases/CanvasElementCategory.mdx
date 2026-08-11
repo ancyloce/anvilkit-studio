@@ -1,0 +1,17 @@
+---
+title: "CanvasElementCategory"
+description: "@anvilkit/canvas-editor · CanvasElementCategory"
+---
+
+```ts
+type CanvasElementCategory = "shape" | "icon" | "sticker" | "line" | "frame";
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-entry.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L76)
+
+The five content categories the panel tabs across.
+
+Deliberately a CLOSED union, unlike `CanvasTemplateDefinition.category`
+(an open `string`). A template catalog is host content whose taxonomy the
+host owns; the element panel ships a fixed set of tabs, and an open string
+would mean the tab strip is only knowable by scanning every entry.

@@ -7,10 +7,11 @@ description: "@anvilkit/canvas-editor · getOtherNodeRects"
 function getOtherNodeRects(
    ir, 
    activePageId, 
-   excludeIds?): SnapRect[];
+   excludeIds?, 
+   space?): SnapRect[];
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/snap/get-node-rect.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/snap/get-node-rect.ts#L23)
+Defined in: [packages/capabilities/canvas/editor/src/snap/get-node-rect.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/snap/get-node-rect.ts#L33)
 
 Bounding rects of every direct child of the active page's root,
 excluding any ids in `excludeIds`. Used as `others` for the snap engine.
@@ -22,6 +23,7 @@ excluding any ids in `excludeIds`. Used as `others` for the snap engine.
 | `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) |
 | `activePageId` | `string` |
 | `excludeIds` | `ReadonlySet`\&lt;`string`\&gt; |
+| `space?` | `ResolvedPageSpace` \| `null` |
 
 ## Returns
 

@@ -3,16 +3,18 @@ title: "SelectionState"
 description: "@anvilkit/canvas-editor · SelectionState"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/stores/selection-store.ts:3](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L3)
+Defined in: [packages/capabilities/canvas/editor/src/stores/selection-store.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L49)
 
 ## Properties
 
-| Property | Type | Defined in |
-| ------ | ------ | ------ |
-| &lt;a id="addtoselection"&gt;&lt;/a&gt; `addToSelection` | (`id`) =&gt; `void` | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:6](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L6) |
-| &lt;a id="clearselection"&gt;&lt;/a&gt; `clearSelection` | () =&gt; `void` | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L9) |
-| &lt;a id="isselected"&gt;&lt;/a&gt; `isSelected` | (`id`) =&gt; `boolean` | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L10) |
-| &lt;a id="removefromselection"&gt;&lt;/a&gt; `removeFromSelection` | (`id`) =&gt; `void` | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:7](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L7) |
-| &lt;a id="selectedids"&gt;&lt;/a&gt; `selectedIds` | `string`[] | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:4](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L4) |
-| &lt;a id="setselection"&gt;&lt;/a&gt; `setSelection` | (`ids`) =&gt; `void` | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:5](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L5) |
-| &lt;a id="toggleselection"&gt;&lt;/a&gt; `toggleSelection` | (`id`) =&gt; `void` | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:8](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L8) |
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="addtoselection"&gt;&lt;/a&gt; `addToSelection` | (`id`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L72) |
+| &lt;a id="clearselection"&gt;&lt;/a&gt; `clearSelection` | () =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L75) |
+| &lt;a id="isselected"&gt;&lt;/a&gt; `isSelected` | (`id`) =&gt; `boolean` | - | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L76) |
+| &lt;a id="removefromselection"&gt;&lt;/a&gt; `removeFromSelection` | (`id`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:73](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L73) |
+| &lt;a id="selectedids"&gt;&lt;/a&gt; `selectedIds` | `string`[] | Persistent-node selection. DELIBERATELY UNCHANGED in shape and meaning: the transformer, align/group/crop/path-edit actions, Inspector sections, layer panel, a11y tree, and export-by-selection all read this, and M4-04's contract is that none of them had to change. It is always exactly [projectSelectionTargets](../functions/projectSelectionTargets) of [targets](#targets) — an invariant pinned by test, because two sources of truth that can drift is the whole risk here. | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L58) |
+| &lt;a id="setselection"&gt;&lt;/a&gt; `setSelection` | (`ids`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L65) |
+| &lt;a id="settargets"&gt;&lt;/a&gt; `setTargets` | (`targets`) =&gt; `void` | Select an explicit target list — the component-aware entry point (e.g. the hit-test policy resolving a click inside an instance). `selectedIds` is re-derived, never set independently. | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L71) |
+| &lt;a id="targets"&gt;&lt;/a&gt; `targets` | readonly [`CanvasSelectionTarget`](../type-aliases/CanvasSelectionTarget)[] | The richer selection (plan 0023 M4-04). Only component-aware surfaces read it; everything else keeps using [selectedIds](#selectedids). For a selection with no virtual nodes this is just the plain-node mirror of it. | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L64) |
+| &lt;a id="toggleselection"&gt;&lt;/a&gt; `toggleSelection` | (`id`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/selection-store.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L74) |

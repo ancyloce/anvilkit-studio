@@ -1,0 +1,27 @@
+---
+title: "ImportableTokenValue"
+description: "@anvilkit/contracts · ImportableTokenValue"
+---
+
+Defined in: [editor/tokens.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/tokens.ts#L75)
+
+A value from another token system that the picker offers for
+**import-as-copy** (ADR 0005 Part 2 §3).
+
+Deliberately static host-supplied data, not a live adapter:
+importing creates an ordinary document token whose value is the
+copied literal plus a [DesignTokenSource](DesignTokenSource.md) provenance record.
+Resolution never consults this list again, so a document renders and
+exports identically under any host — the property that ruled out
+live cross-system aliases in v1. Active re-sync and drift detection
+need the token-source adapter deferred to a future design.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="label"&gt;&lt;/a&gt; `label` | `readonly` | `string` | Human-readable name shown in the picker. | [editor/tokens.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/tokens.ts#L80) |
+| &lt;a id="ref"&gt;&lt;/a&gt; `ref` | `readonly` | `string` | Stable reference recorded as `DesignTokenSource.ref`. | [editor/tokens.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/tokens.ts#L78) |
+| &lt;a id="system"&gt;&lt;/a&gt; `system` | `readonly` | `"theme"` \| `"brand"` | - | [editor/tokens.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/tokens.ts#L76) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | [`TokenType`](../type-aliases/TokenType) | - | [editor/tokens.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/tokens.ts#L81) |
+| &lt;a id="value"&gt;&lt;/a&gt; `value` | `readonly` | [`JsonValue`](../type-aliases/JsonValue) | The resolved literal copied into the created document token. | [editor/tokens.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/tokens.ts#L83) |

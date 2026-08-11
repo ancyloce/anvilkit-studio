@@ -1,0 +1,28 @@
+---
+title: "CanvasElementNode"
+description: "@anvilkit/canvas-editor · CanvasElementNode"
+---
+
+```ts
+type CanvasElementNode = Extract<CanvasNode, {
+  type:   | "group"
+     | "frame"
+     | "rect"
+     | "ellipse"
+     | "polygon"
+     | "star"
+     | "line"
+     | "path";
+}>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-entry.ts:107](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L107)
+
+The node kinds a catalog entry may build.
+
+See the module doc for why this is a narrowing rather than a bare
+`CanvasNode`. In one line: these are the kinds that are self-contained (they
+reference nothing in `ir.assets`, `ir.components` or a job queue) and whose
+paint is reachable from `CanvasFill`. A `frame` qualifies — an empty image
+well (`placeholder: { kind: "image" }` with no `assetId`) is what the
+`"frame"` category is for, and it references no asset until a user fills it.

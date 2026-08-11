@@ -1,0 +1,38 @@
+---
+title: "CanvasIntegrityVerifier"
+description: "@anvilkit/canvas-core · CanvasIntegrityVerifier"
+---
+
+Defined in: [component-libraries/integrity.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/integrity.ts#L44)
+
+Host-supplied digest verification.
+
+Exactly the shape in Technical Design §6.3. `verify` resolves `true` only when
+`canonicalBytes` hashes under `algorithm` to `expectedDigest`. An implementation
+must **resolve `false`** rather than reject for a mismatch, and should reject
+only for a genuine environmental failure (no crypto available, hardware error) —
+that split is what lets a caller distinguish "this snapshot is not authentic"
+from "we could not check".
+
+## Methods
+
+### verify()
+
+```ts
+verify(input): Promise<boolean>;
+```
+
+Defined in: [component-libraries/integrity.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/integrity.ts#L45)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | \{ `algorithm`: `"sha256"`; `canonicalBytes`: `Uint8Array`; `expectedDigest`: `string`; \} |
+| `input.algorithm` | `"sha256"` |
+| `input.canonicalBytes` | `Uint8Array` |
+| `input.expectedDigest` | `string` |
+
+#### Returns
+
+`Promise`\<`boolean`\>

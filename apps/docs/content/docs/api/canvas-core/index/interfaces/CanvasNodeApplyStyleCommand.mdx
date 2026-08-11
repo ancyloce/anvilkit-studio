@@ -1,0 +1,25 @@
+---
+title: "CanvasNodeApplyStyleCommand"
+description: "@anvilkit/canvas-core · CanvasNodeApplyStyleCommand"
+---
+
+Defined in: [commands/types.ts:171](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L171)
+
+Paste style onto one node (C-05, FR-121): the payload is intersected with
+the target kind's compatible keys via `computeStylePatch` — incompatible
+keys are ignored (callers report them), never a failure. The inverse is a
+`node.update` restoring the applied keys' prior values exactly. Multi-node
+paste is a `batch` of these (one per target — one undo entry).
+
+## Extends
+
+- [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md)
+
+## Properties
+
+| Property | Type | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md).[`location`](CanvasCommandLocationOptions.md#location) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | [commands/types.ts:174](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L174) |
+| &lt;a id="style"&gt;&lt;/a&gt; `style` | [`CanvasNodeStyle`](CanvasNodeStyle.md) | - | [commands/types.ts:175](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L175) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"node.applyStyle"` | - | [commands/types.ts:173](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L173) |

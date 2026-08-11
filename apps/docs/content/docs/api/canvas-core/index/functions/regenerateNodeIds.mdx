@@ -1,0 +1,38 @@
+---
+title: "regenerateNodeIds"
+description: "@anvilkit/canvas-core · regenerateNodeIds"
+---
+
+```ts
+function regenerateNodeIds<T>(node, options?): RegenerateNodeIdsResult<T>;
+```
+
+Defined in: [ir/regenerate-ids.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/regenerate-ids.ts#L71)
+
+Deep-copy a node subtree and give every node a brand-new id, preserving
+hierarchy, order, and every other field (M0-05, PRD 0012 §9.2). This is THE
+shared id-regeneration primitive behind duplicate, paste, page cloning, and
+template instantiation — do not hand-roll another remap loop.
+
+- Non-mutating: the input subtree is `structuredClone`d first.
+- Pre-order assignment with the same [MAX\_TREE\_DEPTH](../variables/MAX_TREE_DEPTH) guard as the
+  walkers ([CanvasIRDepthError](../classes/CanvasIRDepthError) on hostile depth).
+- Returns the old→new [RegenerateNodeIdsResult.idMap](../interfaces/RegenerateNodeIdsResult#idmap) so callers can
+  translate external references (locked-id lists, selections, asset keys).
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* [`CanvasNode`](../type-aliases/CanvasNode) |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `node` | `T` |
+| `options` | [`RegenerateNodeIdsOptions`](../interfaces/RegenerateNodeIdsOptions) |
+
+## Returns
+
+[`RegenerateNodeIdsResult`](../interfaces/RegenerateNodeIdsResult)\<`T`\>

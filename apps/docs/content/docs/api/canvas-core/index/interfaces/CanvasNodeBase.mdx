@@ -1,0 +1,40 @@
+---
+title: "CanvasNodeBase"
+description: "@anvilkit/canvas-core · CanvasNodeBase"
+---
+
+Defined in: [ir/types.ts:454](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L454)
+
+## Extended by
+
+- [`CanvasGroupNode`](CanvasGroupNode.md)
+- [`CanvasFrameNode`](CanvasFrameNode.md)
+- [`CanvasRectNode`](CanvasRectNode.md)
+- [`CanvasEllipseNode`](CanvasEllipseNode.md)
+- [`CanvasPolygonNode`](CanvasPolygonNode.md)
+- [`CanvasStarNode`](CanvasStarNode.md)
+- [`CanvasLineNode`](CanvasLineNode.md)
+- [`CanvasPathNode`](CanvasPathNode.md)
+- [`CanvasTextNode`](CanvasTextNode.md)
+- [`CanvasRichTextNode`](CanvasRichTextNode.md)
+- [`CanvasImageNode`](CanvasImageNode.md)
+- [`CanvasSvgNode`](CanvasSvgNode.md)
+- [`CanvasAiPlaceholderNode`](CanvasAiPlaceholderNode.md)
+- [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md)
+- [`CanvasComponentInstanceNode`](CanvasComponentInstanceNode.md)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="blendmode"&gt;&lt;/a&gt; `blendMode?` | `string` | - | [ir/types.ts:462](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L462) |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | [`CanvasBounds`](CanvasBounds.md) | - | [ir/types.ts:458](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L458) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | - | [ir/types.ts:455](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L455) |
+| &lt;a id="layoutitem"&gt;&lt;/a&gt; `layoutItem?` | [`CanvasLayoutItem`](CanvasLayoutItem.md) | How this node participates in its parent frame's Auto Layout, when that parent has `autoLayout`. Absent — or present but all-default — means the node is an ordinary Flow child at its stored Fixed size. A **non-default** value anywhere in a document makes `layout.auto.v1` a required capability (see `CanvasDocumentCompatibility`), enforced by the `missing-required-capability` invariant. | [ir/types.ts:472](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L472) |
+| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `boolean` | - | [ir/types.ts:461](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L461) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | [`CanvasNodeMeta`](CanvasNodeMeta.md) | - | [ir/types.ts:481](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L481) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `string` | - | [ir/types.ts:456](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L456) |
+| &lt;a id="opacity"&gt;&lt;/a&gt; `opacity?` | `number` | - | [ir/types.ts:459](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L459) |
+| &lt;a id="transform"&gt;&lt;/a&gt; `transform` | [`CanvasTransform`](CanvasTransform.md) | - | [ir/types.ts:457](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L457) |
+| &lt;a id="visible"&gt;&lt;/a&gt; `visible?` | `boolean` | - | [ir/types.ts:460](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L460) |
+| &lt;a id="zindex"&gt;&lt;/a&gt; `zIndex?` | `number` | Reserved for future explicit paint-order control — currently unused (C-9). Paint order is entirely determined by each container's `children` array order; no code in `@anvilkit/canvas-core` or `@anvilkit/canvas-editor` reads this field. Optional so callers (including AI-generated payloads) aren't forced to supply a value that has no effect. | [ir/types.ts:480](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L480) |

@@ -1,0 +1,30 @@
+---
+title: "resolveComponentInstance"
+description: "@anvilkit/canvas-core · resolveComponentInstance"
+---
+
+```ts
+function resolveComponentInstance(
+   registry, 
+   instance, 
+   options?): CanvasResolvedComponentInstance;
+```
+
+Defined in: [components/resolve.ts:299](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L299)
+
+Resolve ONE instance (T-RES-1): registry lookup → graph/depth/limit
+validation → override application → nested recursion → virtual subtree +
+origins + diagnostics + cache key. Pure and deterministic: identical
+inputs produce identical output, diagnostics in identical order (INV-5).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `registry` | \| `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasComponentDefinition`](../interfaces/CanvasComponentDefinition)\&gt;\&gt; \| `undefined` |
+| `instance` | [`CanvasComponentInstanceNode`](../interfaces/CanvasComponentInstanceNode) |
+| `options` | [`CanvasComponentExpansionOptions`](../interfaces/CanvasComponentExpansionOptions) |
+
+## Returns
+
+[`CanvasResolvedComponentInstance`](../interfaces/CanvasResolvedComponentInstance)

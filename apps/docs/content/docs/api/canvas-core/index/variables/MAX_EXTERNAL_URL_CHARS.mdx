@@ -1,0 +1,18 @@
+---
+title: "MAX_EXTERNAL_URL_CHARS"
+description: "@anvilkit/canvas-core · MAX_EXTERNAL_URL_CHARS"
+---
+
+```ts
+const MAX_EXTERNAL_URL_CHARS: 2048 = 2_048;
+```
+
+Defined in: [limits.ts:300](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L300)
+
+Ceiling on characters in a Provider-supplied URL (release notes, thumbnail,
+deep link).
+
+2,048 is the de-facto interoperable URL ceiling across browsers, servers, and
+log pipelines. Length is checked in addition to `sanitizeProviderUrl`'s scheme
+allowlist, because a scheme-valid megabyte URL is still a denial-of-service
+vector against whatever renders or persists it.

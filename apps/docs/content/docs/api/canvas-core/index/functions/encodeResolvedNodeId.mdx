@@ -1,0 +1,34 @@
+---
+title: "encodeResolvedNodeId"
+description: "@anvilkit/canvas-core · encodeResolvedNodeId"
+---
+
+```ts
+function encodeResolvedNodeId(path): CanvasResolvedNodeId;
+```
+
+Defined in: [components/identity.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/identity.ts#L85)
+
+Encode an identity path as an opaque resolved id.
+
+Length-prefixed — `akv1:<len>:<segment><len>:<segment>…` — NEVER naive
+delimiter concatenation: document node ids are arbitrary strings, so any
+unescaped delimiter scheme collides. Lengths count UTF-16 code units,
+which is byte-stable across every JS runtime.
+
+Guarantee: distinct valid paths encode to distinct ids, and
+`decodeResolvedNodeId(encodeResolvedNodeId(p))` returns `p` exactly. A
+HOSTILE source node id that happens to equal some encoded output is a
+document-level duplicate-identity problem (the resolver diagnoses record
+collisions), not a codec collision — the codec never produces two ids
+from one path or one id from two paths.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `path` | [`CanvasVirtualNodePath`](../interfaces/CanvasVirtualNodePath) |
+
+## Returns
+
+[`CanvasResolvedNodeId`](../type-aliases/CanvasResolvedNodeId)

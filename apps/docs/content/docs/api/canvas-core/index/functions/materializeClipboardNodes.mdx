@@ -1,0 +1,36 @@
+---
+title: "materializeClipboardNodes"
+description: "@anvilkit/canvas-core · materializeClipboardNodes"
+---
+
+```ts
+function materializeClipboardNodes(
+   payload, 
+   target, 
+   options?): MaterializedClipboard;
+```
+
+Defined in: [clipboard/payload.ts:268](https://github.com/ancyloce/anvilkit-studio/blob/main/src/clipboard/payload.ts#L268)
+
+Prepare a validated payload for insertion into `target` (FR-021):
+
+- Every node subtree gets fresh ids via the shared `regenerateNodeIds`.
+- Same-document paste (`sourceDocumentId === target.id`): nodes keep their
+  asset references; nothing is added to the asset table.
+- Cross-document paste: each payload asset is copied into the target unless
+  an IDENTICAL entry already exists; an id collision with a DIFFERENT asset
+  is re-keyed and every `assetId`/`maskAssetId` reference in the pasted
+  nodes is rewritten. Transferring asset BINARIES between hosts stays a
+  host concern — only refs travel.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `payload` | [`CanvasClipboardPayload`](../interfaces/CanvasClipboardPayload) |
+| `target` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `options` | [`MaterializeClipboardOptions`](../interfaces/MaterializeClipboardOptions) |
+
+## Returns
+
+[`MaterializedClipboard`](../interfaces/MaterializedClipboard)

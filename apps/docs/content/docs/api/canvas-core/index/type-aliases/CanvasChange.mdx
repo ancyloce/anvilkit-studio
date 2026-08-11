@@ -1,0 +1,156 @@
+---
+title: "CanvasChange"
+description: "@anvilkit/canvas-core · CanvasChange"
+---
+
+```ts
+type CanvasChange = 
+  | {
+  kind: "added";
+  nodeId: string;
+  pageId?: string;
+}
+  | {
+  kind: "removed";
+  nodeId: string;
+  pageId?: string;
+}
+  | {
+  keys: readonly string[];
+  kind: "updated";
+  nodeId: string;
+}
+  | {
+  drot: number;
+  dx: number;
+  dy: number;
+  kind: "transform";
+  nodeId: string;
+}
+  | {
+  kind: "page";
+  op:   | "create"
+     | "delete"
+     | "rename"
+     | "reorder"
+     | "resize"
+     | "background"
+     | "layout-aids"
+     | "duplicate";
+  pageId: string;
+}
+  | {
+  assetId: string;
+  kind: "asset";
+  op: "put" | "remove";
+}
+  | {
+  componentId: string;
+  kind: "component";
+  op: CanvasComponentChangeOp;
+  revision?: number;
+};
+```
+
+Defined in: [commands/change-events.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L34)
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  kind: "added";
+  nodeId: string;
+  pageId?: string;
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  kind: "removed";
+  nodeId: string;
+  pageId?: string;
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  keys: readonly string[];
+  kind: "updated";
+  nodeId: string;
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  drot: number;
+  dx: number;
+  dy: number;
+  kind: "transform";
+  nodeId: string;
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  kind: "page";
+  op:   | "create"
+     | "delete"
+     | "rename"
+     | "reorder"
+     | "resize"
+     | "background"
+     | "layout-aids"
+     | "duplicate";
+  pageId: string;
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  assetId: string;
+  kind: "asset";
+  op: "put" | "remove";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  componentId: string;
+  kind: "component";
+  op: CanvasComponentChangeOp;
+  revision?: number;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `componentId` | `string` | - | [commands/change-events.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L55) |
+| `kind` | `"component"` | - | [commands/change-events.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L54) |
+| `op` | [`CanvasComponentChangeOp`](CanvasComponentChangeOp.md) | - | [commands/change-events.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L56) |
+| `revision?` | `number` | The Source revision the command wrote, when the command carries it. | [commands/change-events.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L58) |

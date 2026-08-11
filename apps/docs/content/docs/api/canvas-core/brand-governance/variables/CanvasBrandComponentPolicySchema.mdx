@@ -1,0 +1,16 @@
+---
+title: "CanvasBrandComponentPolicySchema"
+description: "@anvilkit/canvas-core · CanvasBrandComponentPolicySchema"
+---
+
+```ts
+const CanvasBrandComponentPolicySchema: z.ZodType<CanvasBrandComponentPolicy>;
+```
+
+Defined in: [ir/component-policy.ts:113](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-policy.ts#L113)
+
+Loose, like every persisted shape (CON-5): a policy authored by a newer build
+must round-trip through this one rather than have its unknown fields deleted.
+The identity-field scan in `validateBrandComponentPolicy` is what stops that
+looseness being abused — it inspects unknown keys precisely because they
+survive here.

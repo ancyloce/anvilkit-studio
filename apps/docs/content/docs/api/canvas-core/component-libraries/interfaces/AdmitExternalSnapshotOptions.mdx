@@ -1,0 +1,17 @@
+---
+title: "AdmitExternalSnapshotOptions"
+description: "@anvilkit/canvas-core · AdmitExternalSnapshotOptions"
+---
+
+Defined in: [component-libraries/admission.ts:183](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L183)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="closureresolver"&gt;&lt;/a&gt; `closureResolver?` | [`ClosureResolver`](ClosureResolver.md) | Already-admitted snapshots to resolve this envelope's dependencies against (plan 0021 T-017). Optional, and its absence does NOT disable closure validation — the checks that need no registry (declared-vs-actual references, fan-out, depth, expanded-node count, no local references) always run. Supplying it additionally proves the closure is *present*. | [component-libraries/admission.ts:202](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L202) |
+| &lt;a id="fetchedat"&gt;&lt;/a&gt; `fetchedAt?` | `string` | ISO timestamp recorded once as `fetchedAt`. | [component-libraries/admission.ts:192](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L192) |
+| &lt;a id="pendingsnapshots"&gt;&lt;/a&gt; `pendingSnapshots?` | readonly [`CanvasExternalComponentSnapshot`](../../index/interfaces/CanvasExternalComponentSnapshot)[] | Snapshots being admitted in the same transaction (see [ValidateExternalClosureOptions.pending](ValidateExternalClosureOptions.md#pending)). | [component-libraries/admission.ts:204](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L204) |
+| &lt;a id="rawbytelength"&gt;&lt;/a&gt; `rawByteLength?` | `number` | Transport-reported byte length, checked **before** parsing when available (TD §23.3) so a hostile multi-megabyte body is refused without being walked. | [component-libraries/admission.ts:190](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L190) |
+| &lt;a id="validategraph"&gt;&lt;/a&gt; `validateGraph?` | (`snapshot`) =&gt; [`CanvasComponentDiagnostic`](CanvasComponentDiagnostic.md) \| `null` | Extra host-supplied graph validation, run **in addition to** the built-in closure check (T-017). Both run **after** normalization and **before** canonicalization, because a rejected graph must never reach the digest. | [component-libraries/admission.ts:212](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L212) |
+| &lt;a id="verifier"&gt;&lt;/a&gt; `verifier` | [`CanvasIntegrityVerifier`](CanvasIntegrityVerifier.md) | Host-supplied SHA-256 verifier (TD §6.3). | [component-libraries/admission.ts:185](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L185) |

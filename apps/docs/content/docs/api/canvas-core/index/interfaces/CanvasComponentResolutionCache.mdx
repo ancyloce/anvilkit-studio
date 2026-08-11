@@ -1,0 +1,93 @@
+---
+title: "CanvasComponentResolutionCache"
+description: "@anvilkit/canvas-core · CanvasComponentResolutionCache"
+---
+
+Defined in: [components/cache.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/cache.ts#L47)
+
+## File
+
+Public barrel of the `components/` domain (plan 0023, TD §22).
+
+Rank 2: reads `ir/` only. Persisted component shapes (definition, registry,
+properties, overrides) live in `ir/` following the `layout/` precedent —
+`ir/types.ts` owns `CanvasIR.components` and `ir/validators.ts` spreads the
+schemas, and rank 1 cannot import upward. This domain owns the
+resolver-side surface: identity today, graph/resolve/cache in M2.
+
+Curated allowlist per the `serialize/index.ts` precedent — each re-export
+below is an explicit list, so resolver/cache internals never ship through
+the root barrel.
+
+## Methods
+
+### invalidateAll()
+
+```ts
+invalidateAll(): void;
+```
+
+Defined in: [components/cache.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/cache.ts#L53)
+
+#### Returns
+
+`void`
+
+***
+
+### invalidateComponent()
+
+```ts
+invalidateComponent(componentId, graph): void;
+```
+
+Defined in: [components/cache.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/cache.ts#L52)
+
+Drop every entry for `componentId` AND its transitive dependents —
+§11.3 step 5. Entries for unrelated components survive (T-PERF-1).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `componentId` | `string` |
+| `graph` | [`CanvasComponentGraph`](CanvasComponentGraph.md) |
+
+#### Returns
+
+`void`
+
+***
+
+### stats()
+
+```ts
+stats(): {
+  base: number;
+  definition: number;
+  instance: number;
+  page: number;
+};
+```
+
+Defined in: [components/cache.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/cache.ts#L55)
+
+Counts only — entries never leak through the public surface.
+
+#### Returns
+
+```ts
+{
+  base: number;
+  definition: number;
+  instance: number;
+  page: number;
+}
+```
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `base` | `number` | [components/cache.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/cache.ts#L57) |
+| `definition` | `number` | [components/cache.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/cache.ts#L56) |
+| `instance` | `number` | [components/cache.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/cache.ts#L58) |
+| `page` | `number` | [components/cache.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/cache.ts#L59) |

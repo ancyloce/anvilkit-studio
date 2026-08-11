@@ -7,6 +7,7 @@ description: "@anvilkit/canvas-editor · CanvasWorkspaceState"
 type CanvasWorkspaceState = Omit<WorkspaceUiState, 
   | "setActiveDockId"
   | "addRecentTemplate"
+  | "addRecentFont"
   | "setPanelOpen"
   | "setInspectorCollapsed"
   | "setPanelWidth"
@@ -15,7 +16,7 @@ type CanvasWorkspaceState = Omit<WorkspaceUiState,
 | "reset">;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L56)
+Defined in: [packages/capabilities/canvas/editor/src/workspace/state/workspace-ui-store.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/workspace-ui-store.ts#L65)
 
 Plain data slice of [WorkspaceUiState](../interfaces/WorkspaceUiState) — action methods stripped.
 Public export (PRD §11.1) for `CanvasWorkspaceProps.initialWorkspaceState`,

@@ -1,0 +1,21 @@
+---
+title: "AnvilComponentMetadata"
+description: "@anvilkit/contracts · AnvilComponentMetadata"
+---
+
+Defined in: [editor/component-metadata.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/component-metadata.ts#L85)
+
+The v2 capability declaration. `styleTargets` keys are part of the
+component's DATA contract: renaming a published target requires a
+prop migration (plan §6.4).
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="bindings"&gt;&lt;/a&gt; `bindings?` | `readonly` | `boolean` | [editor/component-metadata.ts:91](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/component-metadata.ts#L91) |
+| &lt;a id="images"&gt;&lt;/a&gt; `images?` | `readonly` | readonly [`ImageTarget`](ImageTarget.md)[] | [editor/component-metadata.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/component-metadata.ts#L88) |
+| &lt;a id="inlinetext"&gt;&lt;/a&gt; `inlineText?` | `readonly` | readonly [`InlineTextTarget`](InlineTextTarget.md)[] | [editor/component-metadata.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/component-metadata.ts#L87) |
+| &lt;a id="interactions"&gt;&lt;/a&gt; `interactions?` | `readonly` | `boolean` | [editor/component-metadata.ts:90](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/component-metadata.ts#L90) |
+| &lt;a id="slots"&gt;&lt;/a&gt; `slots?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, [`SlotCapability`](SlotCapability.md)\&gt;\&gt; | [editor/component-metadata.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/component-metadata.ts#L89) |
+| &lt;a id="styletargets"&gt;&lt;/a&gt; `styleTargets` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, [`StyleTargetCapability`](StyleTargetCapability.md)\&gt;\&gt; | [editor/component-metadata.ts:86](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/component-metadata.ts#L86) |

@@ -1,0 +1,19 @@
+---
+title: "CanvasLayoutItem"
+description: "@anvilkit/canvas-core · CanvasLayoutItem"
+---
+
+Defined in: [ir/types.ts:445](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L445)
+
+Per-node participation in an ancestor frame's Auto Layout
+(`layout.auto.v1`). Every field is optional and every omission is the
+default (`flow` / `fixed`), so a node with no layout relationship carries
+no `layoutItem` at all.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="heightsizing"&gt;&lt;/a&gt; `heightSizing?` | [`CanvasLayoutSizing`](../type-aliases/CanvasLayoutSizing) | Default `"fixed"` when absent. | [ir/types.ts:451](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L451) |
+| &lt;a id="positioning"&gt;&lt;/a&gt; `positioning?` | [`CanvasLayoutPositioning`](../type-aliases/CanvasLayoutPositioning) | Default `"flow"` when absent. | [ir/types.ts:447](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L447) |
+| &lt;a id="widthsizing"&gt;&lt;/a&gt; `widthSizing?` | [`CanvasLayoutSizing`](../type-aliases/CanvasLayoutSizing) | Default `"fixed"` when absent. | [ir/types.ts:449](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L449) |

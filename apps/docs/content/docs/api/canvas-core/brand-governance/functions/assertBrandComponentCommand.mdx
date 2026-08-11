@@ -1,0 +1,25 @@
+---
+title: "assertBrandComponentCommand"
+description: "@anvilkit/canvas-core · assertBrandComponentCommand"
+---
+
+```ts
+function assertBrandComponentCommand(input): CanvasPolicyDecision;
+```
+
+Defined in: [brand-governance/command-policy.ts:308](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/command-policy.ts#L308)
+
+Throwing wrapper for the mutation path.
+
+`deny` throws **before** any mutation, so a refused command leaves the
+document untouched; `warn` returns the decision for the caller to report.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`ValidateBrandComponentCommandInput`](../interfaces/ValidateBrandComponentCommandInput) |
+
+## Returns
+
+[`CanvasPolicyDecision`](../interfaces/CanvasPolicyDecision)

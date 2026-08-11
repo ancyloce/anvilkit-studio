@@ -1,0 +1,50 @@
+---
+title: "safeParseAuthoringEnvelope"
+description: "@anvilkit/schema · safeParseAuthoringEnvelope"
+---
+
+```ts
+function safeParseAuthoringEnvelope(value): ZodSafeParseResult<{
+[key: string]: unknown;
+  bindings: Record<string, unknown>;
+  breakpoints: unknown[];
+  componentDefinitions: Record<string, unknown>;
+  interactions: Record<string, unknown>;
+  nodes: Record<string, unknown>;
+  revision: number;
+  styleDefinitions: Record<string, unknown>;
+  tokenModes: Record<string, unknown>;
+  tokens: Record<string, unknown>;
+  version: "1";
+}>;
+```
+
+Defined in: [editor/envelope.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/envelope.ts#L83)
+
+Safe-parse the shallow envelope. Callers classify with
+[detectAuthoringVersion](detectAuthoringVersion.md) first; an `"unsupported-major"`
+value must not be handed to this schema (its `version` literal
+would fail as a plain shape error rather than a version
+diagnostic).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `unknown` |
+
+## Returns
+
+`ZodSafeParseResult`\<\{
+\[`key`: `string`\]: `unknown`;
+  `bindings`: `Record`\<`string`, `unknown`\>;
+  `breakpoints`: `unknown`[];
+  `componentDefinitions`: `Record`\<`string`, `unknown`\>;
+  `interactions`: `Record`\<`string`, `unknown`\>;
+  `nodes`: `Record`\<`string`, `unknown`\>;
+  `revision`: `number`;
+  `styleDefinitions`: `Record`\<`string`, `unknown`\>;
+  `tokenModes`: `Record`\<`string`, `unknown`\>;
+  `tokens`: `Record`\<`string`, `unknown`\>;
+  `version`: `"1"`;
+\}\>

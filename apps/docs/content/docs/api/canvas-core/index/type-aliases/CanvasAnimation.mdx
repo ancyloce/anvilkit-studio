@@ -1,0 +1,40 @@
+---
+title: "CanvasAnimation"
+description: "@anvilkit/canvas-core · CanvasAnimation"
+---
+
+```ts
+type CanvasAnimation = 
+  | CanvasFadeAnimation
+  | CanvasSlideAnimation
+  | CanvasScaleAnimation
+  | CanvasRotateAnimation
+  | CanvasPopAnimation
+  | CanvasTypewriterAnimation
+  | CanvasMotionPathAnimation;
+```
+
+Defined in: [ir/types.ts:369](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L369)
+
+Animation intent carried by a node (`meta.animation`) or a page
+(`page.animation`) — FR-080, canvas-m6-001.
+
+**Metadata-only, exactly as [CanvasMediaNodeBase](../interfaces/CanvasMediaNodeBase) is
+contract-only.** No playback or motion rendering is implemented anywhere in
+this repository: canvas-core has no timeline, `@anvilkit/canvas-editor`
+never reads this field (no preview, no scrubber), and no motion output
+format exists — there is no GIF/APNG/MP4/WebM/Lottie exporter, and the SVG
+output contains no SMIL or CSS animation. This is a contract an
+export/render worker consumes later, and nothing more.
+
+Static exports therefore render the node/page in its normal resting state
+(its own `transform`/`opacity`/etc., unaffected by this field) and merely
+surface `ANIMATION_IGNORED` — `serializePageToSvg` per animated node AND
+per animated page, `serializeDocumentToPdf` per animated page (page-scoped
+by construction: it embeds a flat raster and cannot see nodes). Raster
+captures (PNG/JPEG/WebP) are snapshots of a stage that never animated, so
+they carry no warning at all. A `json` export round-trips this metadata
+verbatim — losslessly persisted, still never played.
+
+See [CanvasAnimationBase](../interfaces/CanvasAnimationBase) for the shared `delay`/`duration`/`easing`
+timing fields.

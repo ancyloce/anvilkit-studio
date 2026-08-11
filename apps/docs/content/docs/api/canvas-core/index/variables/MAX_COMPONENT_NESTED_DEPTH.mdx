@@ -1,0 +1,15 @@
+---
+title: "MAX_COMPONENT_NESTED_DEPTH"
+description: "@anvilkit/canvas-core · MAX_COMPONENT_NESTED_DEPTH"
+---
+
+```ts
+const MAX_COMPONENT_NESTED_DEPTH: 16 = 16;
+```
+
+Defined in: [limits.ts:144](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L144)
+
+Ceiling on nested component depth (instance → Source → instance …).
+Well under `MAX_TREE_DEPTH` (64) so an expanded virtual tree can never
+approach the walker guard even atop a deep page subtree. Enforced by the
+M2 dependency graph (`validateComponentGraph`) and again at read time.

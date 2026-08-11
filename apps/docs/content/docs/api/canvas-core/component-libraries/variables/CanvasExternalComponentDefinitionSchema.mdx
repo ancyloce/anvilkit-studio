@@ -1,0 +1,42 @@
+---
+title: "CanvasExternalComponentDefinitionSchema"
+description: "@anvilkit/canvas-core · CanvasExternalComponentDefinitionSchema"
+---
+
+```ts
+const CanvasExternalComponentDefinitionSchema: ZodObject<{
+  createdAt: ZodOptional<ZodString>;
+  id: ZodString;
+  name: ZodString;
+  policy: ZodOptional<ZodType<CanvasBrandComponentPolicy, unknown, $ZodTypeInternals<CanvasBrandComponentPolicy, unknown>>>;
+  properties: ZodArray<ZodType<CanvasComponentProperty, unknown, $ZodTypeInternals<CanvasComponentProperty, unknown>>>;
+  revision: ZodInt;
+  root: ZodType<CanvasNode, unknown, $ZodTypeInternals<CanvasNode, unknown>>;
+  updatedAt: ZodOptional<ZodString>;
+  variants: ZodOptional<ZodType<CanvasComponentVariantSet, unknown, $ZodTypeInternals<CanvasComponentVariantSet, unknown>>>;
+}, $loose>;
+```
+
+Defined in: [component-libraries/admission.ts:122](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L122)
+
+The component definition carried by an envelope (plan 0021 T-014).
+
+## Loose, deliberately, inside an otherwise strict envelope
+
+The envelope's *top level* is strict — an unknown key there is a malformed
+request. The definition subtree is **not**, and that asymmetry is load-bearing
+rather than an oversight:
+
+1. The digest the Provider published was computed over the definition's own
+   bytes. If parsing stripped a field this build does not know about, the
+   canonical form would no longer match those bytes and verification would
+   fail — so a strict definition schema would reject every component authored
+   by a *newer* Provider, reporting it as an integrity mismatch, which is both
+   wrong and extremely hard to diagnose.
+2. The definition is then stored in the document and replicated to peers, at
+   which point the CRDT forward-compatibility rule in `ir/validators.ts:40-46`
+   applies to it exactly as it does to a local Source.
+
+Strictness at this boundary buys nothing here: the content is pinned by an
+exact version and covered by a digest, so unknown fields cannot be substituted
+without breaking verification. Please do not "fix" this to match the top level.

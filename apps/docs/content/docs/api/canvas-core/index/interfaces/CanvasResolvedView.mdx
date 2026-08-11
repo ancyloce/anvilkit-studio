@@ -1,0 +1,72 @@
+---
+title: "CanvasResolvedView"
+description: "@anvilkit/canvas-core · CanvasResolvedView"
+---
+
+Defined in: [layout/types.ts:218](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L218)
+
+The read adapter consumers use instead of touching `records` directly
+(TD §12.1).
+
+Kept as an interface rather than a class so a host can wrap or decorate it,
+and so PRD 0015's virtual nodes can be served through the same three methods.
+
+## Methods
+
+### getChildren()
+
+```ts
+getChildren(id): readonly CanvasResolvedNodeRecord[];
+```
+
+Defined in: [layout/types.ts:222](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L222)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | \| `string` \| [`CanvasResolvedNodeId`](../type-aliases/CanvasResolvedNodeId) |
+
+#### Returns
+
+readonly [`CanvasResolvedNodeRecord`](CanvasResolvedNodeRecord.md)[]
+
+***
+
+### getPageRoots()
+
+```ts
+getPageRoots(pageId): readonly CanvasResolvedNodeRecord[];
+```
+
+Defined in: [layout/types.ts:225](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L225)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `pageId` | `string` |
+
+#### Returns
+
+readonly [`CanvasResolvedNodeRecord`](CanvasResolvedNodeRecord.md)[]
+
+***
+
+### getRecord()
+
+```ts
+getRecord(id): CanvasResolvedNodeRecord | undefined;
+```
+
+Defined in: [layout/types.ts:219](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L219)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | \| `string` \| [`CanvasResolvedNodeId`](../type-aliases/CanvasResolvedNodeId) |
+
+#### Returns
+
+[`CanvasResolvedNodeRecord`](CanvasResolvedNodeRecord.md) \| `undefined`

@@ -1,0 +1,17 @@
+---
+title: "CanvasLoadDiagnostics"
+description: "@anvilkit/canvas-editor · CanvasLoadDiagnostics"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/load-pipeline.ts:130](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/load-pipeline.ts#L130)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="blocksexport"&gt;&lt;/a&gt; `blocksExport` | `readonly` | `boolean` | Whether anything found here must block export (T-045 step 3). | [packages/capabilities/canvas/editor/src/persistence/load-pipeline.ts:142](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/load-pipeline.ts#L142) |
+| &lt;a id="graph"&gt;&lt;/a&gt; `graph` | `readonly` | readonly `CanvasComponentIssue`[] | Graph, variant and override findings from `validateComponentGraph`. | [packages/capabilities/canvas/editor/src/persistence/load-pipeline.ts:136](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/load-pipeline.ts#L136) |
+| &lt;a id="integrity"&gt;&lt;/a&gt; `integrity` | `readonly` | readonly `CanvasComponentDiagnostic`[] | Integrity findings, one per quarantined snapshot. | [packages/capabilities/canvas/editor/src/persistence/load-pipeline.ts:134](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/load-pipeline.ts#L134) |
+| &lt;a id="policy"&gt;&lt;/a&gt; `policy` | `readonly` | readonly `string`[] | Instance ids carrying a policy that failed portable-contract validation. | [packages/capabilities/canvas/editor/src/persistence/load-pipeline.ts:138](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/load-pipeline.ts#L138) |
+| &lt;a id="quarantinedkeys"&gt;&lt;/a&gt; `quarantinedKeys` | `readonly` | readonly `string`[] | Snapshot keys quarantined by re-verification. | [packages/capabilities/canvas/editor/src/persistence/load-pipeline.ts:132](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/load-pipeline.ts#L132) |
+| &lt;a id="verifiedcount"&gt;&lt;/a&gt; `verifiedCount` | `readonly` | `number` | How many snapshots were hashed. 0 when re-verification did not run. | [packages/capabilities/canvas/editor/src/persistence/load-pipeline.ts:140](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/load-pipeline.ts#L140) |

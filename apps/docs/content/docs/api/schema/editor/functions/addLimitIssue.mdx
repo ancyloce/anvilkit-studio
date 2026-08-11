@@ -1,0 +1,31 @@
+---
+title: "addLimitIssue"
+description: "@anvilkit/schema · addLimitIssue"
+---
+
+```ts
+function addLimitIssue(
+   ctx, 
+   limitKey, 
+   actual): void;
+```
+
+Defined in: [editor/primitives.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/primitives.ts#L85)
+
+Add a stable `EDITOR_LIMIT_EXCEEDED` issue when `actual` exceeds
+the frozen limit for `limitKey`. Shared by every collection schema
+(DD-0019 §7.3: limits produce stable validation errors; data is
+never silently truncated).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | \{ `addIssue`: (`issue`) =&gt; `void`; \} |
+| `ctx.addIssue` | (`issue`) =&gt; `void` |
+| `limitKey` | \| `"breakpoints"` \| `"nodeRecords"` \| `"tokens"` \| `"tokenAliasDepth"` \| `"styleDefinitions"` \| `"componentDefinitions"` \| `"componentNestingDepth"` \| `"variantsPerComponent"` \| `"variantAxesPerComponent"` \| `"interactions"` \| `"actionsPerInteraction"` \| `"bindingAstDepth"` \| `"bindingAstNodeCount"` \| `"commandsPerBatch"` |
+| `actual` | `number` |
+
+## Returns
+
+`void`

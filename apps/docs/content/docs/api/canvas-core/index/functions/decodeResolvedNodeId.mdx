@@ -1,0 +1,27 @@
+---
+title: "decodeResolvedNodeId"
+description: "@anvilkit/canvas-core · decodeResolvedNodeId"
+---
+
+```ts
+function decodeResolvedNodeId(id): CanvasVirtualNodePath;
+```
+
+Defined in: [components/identity.ts:108](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/identity.ts#L108)
+
+Decode a resolved id back to its identity path.
+
+A non-virtual id (no codec prefix, or a malformed payload — e.g. a hostile
+document node id that merely STARTS with the prefix) decodes to its
+single-segment conceptual path rather than throwing: consumers treat ids
+as opaque, and "this id is not a codec product" is an answer, not an error.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | [`CanvasResolvedNodeId`](../type-aliases/CanvasResolvedNodeId) |
+
+## Returns
+
+[`CanvasVirtualNodePath`](../interfaces/CanvasVirtualNodePath)

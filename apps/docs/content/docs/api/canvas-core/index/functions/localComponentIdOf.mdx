@@ -1,0 +1,28 @@
+---
+title: "localComponentIdOf"
+description: "@anvilkit/canvas-core · localComponentIdOf"
+---
+
+```ts
+function localComponentIdOf(source): string | undefined;
+```
+
+Defined in: [ir/component-source.ts:107](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-source.ts#L107)
+
+The registry key for a **local** Source, or `undefined` for an external one.
+
+The one accessor every `ir.components[…]` lookup goes through. It exists
+because "which document-local definition does this instance use" and "which
+Source does this instance use" stopped being the same question the moment
+`source` became a union — and a call site that answers the second question
+with the first silently treats every external instance as local.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `source` | [`CanvasComponentSourceRef`](../type-aliases/CanvasComponentSourceRef) |
+
+## Returns
+
+`string` \| `undefined`

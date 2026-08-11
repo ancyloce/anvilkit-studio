@@ -1,0 +1,29 @@
+---
+title: "CanvasSelectionWrapInLayoutFrameCommand"
+description: "@anvilkit/canvas-core · CanvasSelectionWrapInLayoutFrameCommand"
+---
+
+Defined in: [commands/types.ts:565](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L565)
+
+Wrap sibling nodes in a NEW Auto Layout frame.
+
+Mirrors `node.group` — same-parent validation, current sibling z-order, the
+topmost selected node's slot, a caller-supplied stable id — with one
+deliberate difference: `node.group` creates an *identity* group so grouping
+is visually a no-op, whereas this creates a frame that lays its children
+out, so child transforms **do** change and the inverse must restore them
+explicitly (which is what `geometry` is for).
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | [`CanvasBounds`](CanvasBounds.md) | - | [commands/types.ts:574](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L574) |
+| &lt;a id="childids"&gt;&lt;/a&gt; `childIds` | `string`[] | - | [commands/types.ts:568](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L568) |
+| &lt;a id="frameid"&gt;&lt;/a&gt; `frameId` | `string` | Caller-supplied stable id, following the `node.group`/`page.duplicate` convention. | [commands/types.ts:570](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L570) |
+| &lt;a id="framename"&gt;&lt;/a&gt; `frameName?` | `string` | - | [commands/types.ts:571](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L571) |
+| &lt;a id="geometry"&gt;&lt;/a&gt; `geometry?` | readonly [`CanvasLayoutGeometryWrite`](CanvasLayoutGeometryWrite.md)[] | Caller-computed child geometry, relative to the new frame. | [commands/types.ts:577](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L577) |
+| &lt;a id="layout"&gt;&lt;/a&gt; `layout` | [`CanvasAutoLayout`](CanvasAutoLayout.md) | - | [commands/types.ts:575](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L575) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId` | `string` | - | [commands/types.ts:567](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L567) |
+| &lt;a id="transform"&gt;&lt;/a&gt; `transform` | [`CanvasTransform`](CanvasTransform.md) | Caller-computed frame placement (typically the selection bounds). | [commands/types.ts:573](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L573) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"selection.wrap-in-layout-frame"` | - | [commands/types.ts:566](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L566) |

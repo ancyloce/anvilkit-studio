@@ -1,0 +1,27 @@
+---
+title: "validateCanvasIRInvariants"
+description: "@anvilkit/canvas-core · validateCanvasIRInvariants"
+---
+
+```ts
+function validateCanvasIRInvariants(ir): CanvasInvariantIssue[];
+```
+
+Defined in: [ir/invariants.ts:150](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L150)
+
+Validate document-wide semantic invariants a Zod schema cannot express.
+Pure and read-only; never throws for a malformed-but-schema-valid `CanvasIR`
+— malformations are reported as issues, not exceptions (use
+[assertCanvasIRInvariants](assertCanvasIRInvariants.md) for a throwing variant). Runs one `walk`
+over the whole document (O(n) in total node count) plus O(pages) and
+O(assets) passes.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+
+## Returns
+
+[`CanvasInvariantIssue`](../interfaces/CanvasInvariantIssue)[]

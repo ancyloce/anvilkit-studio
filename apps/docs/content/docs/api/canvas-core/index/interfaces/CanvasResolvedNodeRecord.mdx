@@ -1,0 +1,18 @@
+---
+title: "CanvasResolvedNodeRecord"
+description: "@anvilkit/canvas-core · CanvasResolvedNodeRecord"
+---
+
+Defined in: [layout/types.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L78)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="childids"&gt;&lt;/a&gt; `childIds` | `readonly` | readonly [`CanvasResolvedNodeId`](../type-aliases/CanvasResolvedNodeId)[] | Resolved children in flow order. **Stored, not derived.** TD §12.1 makes `getChildren` a required consumer API called per node by the renderer and the accessibility tree; deriving it from `parentId` would turn every such call into a full scan of `records`, i.e. O(n²) over one render pass. | [layout/types.ts:90](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L90) |
+| &lt;a id="component"&gt;&lt;/a&gt; `component?` | `readonly` | [`CanvasResolvedComponentOrigin`](CanvasResolvedComponentOrigin.md) | Component provenance when this record is a VIRTUAL node expanded from a component instance (plan 0023 M2-03). Absent on every record of a component-free document — additive, existing consumers untouched. | [layout/types.ts:99](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L99) |
+| &lt;a id="geometry"&gt;&lt;/a&gt; `geometry` | `readonly` | [`CanvasResolvedGeometry`](CanvasResolvedGeometry.md) | - | [layout/types.ts:93](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L93) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | [`CanvasResolvedNodeId`](../type-aliases/CanvasResolvedNodeId) | - | [layout/types.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L79) |
+| &lt;a id="node"&gt;&lt;/a&gt; `node` | `readonly` | [`CanvasNode`](../type-aliases/CanvasNode) | The source node this record resolves. Style and content are read from here; geometry never is. | [layout/types.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L92) |
+| &lt;a id="parentid"&gt;&lt;/a&gt; `parentId?` | `readonly` | [`CanvasResolvedNodeId`](../type-aliases/CanvasResolvedNodeId) | - | [layout/types.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L81) |
+| &lt;a id="sourcenodeid"&gt;&lt;/a&gt; `sourceNodeId` | `readonly` | `string` | - | [layout/types.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L80) |

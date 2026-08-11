@@ -1,0 +1,26 @@
+---
+title: "componentSourceLabel"
+description: "@anvilkit/canvas-core · componentSourceLabel"
+---
+
+```ts
+function componentSourceLabel(source): string;
+```
+
+Defined in: [ir/component-source.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-source.ts#L120)
+
+A stable, human-readable label for a Source — diagnostics and messages only.
+
+Never a registry key and never persisted: the external form is lossy on
+purpose (it omits `integrity`, which is unreadable and would swamp the
+message). Use [localComponentIdOf](localComponentIdOf.md) to look anything up.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `source` | [`CanvasComponentSourceRef`](../type-aliases/CanvasComponentSourceRef) |
+
+## Returns
+
+`string`

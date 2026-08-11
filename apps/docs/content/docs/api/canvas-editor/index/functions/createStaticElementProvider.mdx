@@ -1,0 +1,27 @@
+---
+title: "createStaticElementProvider"
+description: "@anvilkit/canvas-editor · createStaticElementProvider"
+---
+
+```ts
+function createStaticElementProvider(elements, options?): CanvasElementProvider;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-provider.ts:77](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-provider.ts#L77)
+
+Wrap a static element array in the provider protocol: synchronous filtering
+with offset-cursor pagination. Mirrors `createStaticTemplateProvider`
+exactly, including the `pageSize` option and the `Promise.resolve` return, so
+the two behave identically under the same query.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `elements` | readonly [`CanvasElementEntry`](../interfaces/CanvasElementEntry)[] |
+| `options` | \{ `pageSize?`: `number`; \} |
+| `options.pageSize?` | `number` |
+
+## Returns
+
+[`CanvasElementProvider`](../interfaces/CanvasElementProvider)

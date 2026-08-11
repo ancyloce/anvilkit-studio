@@ -1,0 +1,36 @@
+---
+title: "BrandComplianceIssue"
+description: "@anvilkit/canvas-core · BrandComplianceIssue"
+---
+
+Defined in: [brand/compliance.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L48)
+
+One compliance finding.
+
+**Widened additively in plan 0021 T-041.** The original four fields stay
+REQUIRED and unchanged, because two shipped call sites depend on them —
+`panels/BrandPanel.tsx` and `panels/inspector/brand-warnings.tsx`, the latter
+filtering on `nodeId`. Everything component-aware is optional, so an existing
+consumer compiles and behaves exactly as before.
+
+There is deliberately **no `message` field** (T-041 step 5): display text is
+derived from `code`, which is what keeps the four locale catalogs the single
+source of user-facing wording and stops a localized string being used to
+identify an issue.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="brandid"&gt;&lt;/a&gt; `brandId?` | `string` | - | [brand/compliance.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L70) |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | [`BrandComplianceIssueCode`](../type-aliases/BrandComplianceIssueCode) | - | [brand/compliance.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L50) |
+| &lt;a id="instanceid"&gt;&lt;/a&gt; `instanceId?` | `string` | Page-level instance this issue was found under (OD-08 keying). | [brand/compliance.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L63) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | [brand/compliance.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L49) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId?` | `string` | - | [brand/compliance.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L61) |
+| &lt;a id="property"&gt;&lt;/a&gt; `property` | `string` | Which property this issue was found on, e.g. `"fill"`, `"fontFamily"`. | [brand/compliance.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L52) |
+| &lt;a id="propertyid"&gt;&lt;/a&gt; `propertyId?` | `string` | - | [brand/compliance.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L68) |
+| &lt;a id="severity"&gt;&lt;/a&gt; `severity?` | `"warning"` \| `"blocking"` | How this issue should be treated. Absent means `"warning"` — the shipped behaviour, so enabling governance cannot retroactively block an existing document (T-042 acceptance). | [brand/compliance.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L60) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source?` | `string` | Which component Source the offending node came from. | [brand/compliance.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L65) |
+| &lt;a id="sourcenodeid"&gt;&lt;/a&gt; `sourceNodeId?` | `string` | Node id INSIDE the Source tree, when the issue is in expanded content. | [brand/compliance.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L67) |
+| &lt;a id="value"&gt;&lt;/a&gt; `value` | `string` | The token id (for token issues) or literal value (for literal issues). | [brand/compliance.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L54) |
+| &lt;a id="variantid"&gt;&lt;/a&gt; `variantId?` | `string` | - | [brand/compliance.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/compliance.ts#L69) |

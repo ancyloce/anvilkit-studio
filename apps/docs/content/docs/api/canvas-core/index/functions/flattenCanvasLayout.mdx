@@ -1,0 +1,30 @@
+---
+title: "flattenCanvasLayout"
+description: "@anvilkit/canvas-core · flattenCanvasLayout"
+---
+
+```ts
+function flattenCanvasLayout(ir, options?): CanvasIR;
+```
+
+Defined in: [layout/materialize.ts:168](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/materialize.ts#L168)
+
+Replace Auto Layout intent with the absolute geometry it currently resolves
+to.
+
+The result renders identically and contains no `autoLayout`, no
+`layoutItem`, and no materialization stamp — there is nothing left to be
+stale about. This is the rollback and export-compatibility path, and it is
+deliberately lossy: the intent cannot be reconstructed from the geometry, so
+a caller must write the result somewhere new (PRD §19).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `options` | [`CanvasLayoutFlattenOptions`](../interfaces/CanvasLayoutFlattenOptions) |
+
+## Returns
+
+[`CanvasIR`](../interfaces/CanvasIR)

@@ -1,0 +1,27 @@
+---
+title: "withComputedCapabilities"
+description: "@anvilkit/canvas-core · withComputedCapabilities"
+---
+
+```ts
+function withComputedCapabilities(ir): CanvasIR;
+```
+
+Defined in: [ir/capabilities.ts:136](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/capabilities.ts#L136)
+
+Return `ir` with `compatibility` refreshed from its content — the save-path
+helper.
+
+`compatibility` is omitted entirely when nothing is required, so a plain
+document stays byte-identical to one written before capabilities existed
+(the same omit-empty rule `components` follows).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+
+## Returns
+
+[`CanvasIR`](../interfaces/CanvasIR)

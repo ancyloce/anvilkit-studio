@@ -1,0 +1,28 @@
+---
+title: "policyDecisionOf"
+description: "@anvilkit/canvas-editor · policyDecisionOf"
+---
+
+```ts
+function policyDecisionOf(error): CanvasPolicyDecision | undefined;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand-governance/effective-policy-context.ts:170](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/effective-policy-context.ts#L170)
+
+Recover the structured decision from a thrown command error.
+
+Deliberately structural rather than `instanceof CanvasCommandError`: the
+editor and core can end up as separate module instances (dual ESM/CJS
+resolution, a duplicated dependency in a host's tree), and a cross-realm
+`instanceof` then reports false for an error that is unmistakably ours —
+the same class of bug PLAN-0020 Phase 1B hit in the browser.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `error` | `unknown` |
+
+## Returns
+
+`CanvasPolicyDecision` \| `undefined`

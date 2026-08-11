@@ -1,0 +1,19 @@
+---
+title: "boundedDisplayString"
+description: "@anvilkit/canvas-core · boundedDisplayString"
+---
+
+```ts
+function boundedDisplayString(): ZodString;
+```
+
+Defined in: [component-libraries/schema-utils.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/schema-utils.ts#L72)
+
+A display-scale bounded string for non-authoritative catalog metadata.
+
+Catalog metadata is excluded from integrity bytes (TD §5.4), so no digest
+constrains it — this bound is the only guard it gets.
+
+## Returns
+
+`ZodString`

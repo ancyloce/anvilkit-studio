@@ -1,0 +1,25 @@
+---
+title: "useCanvasFontCatalog"
+description: "@anvilkit/canvas-editor · useCanvasFontCatalog"
+---
+
+```ts
+function useCanvasFontCatalog(): CanvasFontCatalog;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/context/use-font-catalog.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/use-font-catalog.ts#L79)
+
+The resolved catalog for the current editor — what the font picker offers and
+what the SVG exporter derives its `@font-face` manifest from.
+
+Mirrors [useBrandKit](useBrandKit.md): the context field is optional (a partial test
+context, or a surface mounted outside a full `<CanvasStudio>`, may omit it)
+and the absent case normalizes to `DEFAULT_FONT_CATALOG`, so a caller never
+branches on `undefined` and never sees an empty catalog.
+
+Reads through `useCanvasStores`, so it does NOT subscribe to the per-commit
+live state — a picker rendering 37 options must not re-render on every edit.
+
+## Returns
+
+[`CanvasFontCatalog`](../interfaces/CanvasFontCatalog)

@@ -1,0 +1,22 @@
+---
+title: "CanvasLayoutMeasurementProvider"
+description: "@anvilkit/canvas-core · CanvasLayoutMeasurementProvider"
+---
+
+Defined in: [layout/types.ts:165](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L165)
+
+Host-supplied measurement (TD §8.1).
+
+Composes the existing `CanvasTextMeasurer` port; it never redefines it. That
+port is synchronous and required to be pure, because the same measurer must
+produce identical line breaks in the editor, in an export worker, and in
+Node — so the resolver is synchronous too and there is **no `Promise`
+variant**. Async font/asset work happens entirely before resolution.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="getintrinsicassetsize"&gt;&lt;/a&gt; `getIntrinsicAssetSize?` | `readonly` | (`assetId`) =&gt; [`CanvasBounds`](CanvasBounds.md) \| `undefined` | Only for assets whose intrinsic size is not already recorded on `ir.assets[assetId]` (`CanvasAssetRef.width`/`height`), which the resolver consults **first** — the document is authoritative over the provider, because it is what an export worker also has. | [layout/types.ts:174](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L174) |
+| &lt;a id="manifesthash"&gt;&lt;/a&gt; `manifestHash?` | `readonly` | `string` | Identity of the font/asset manifest in force. Part of the measurement key, so a font load that changes metrics invalidates cached measurements instead of silently reusing pre-load ones. | [layout/types.ts:182](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L182) |
+| &lt;a id="measuretext"&gt;&lt;/a&gt; `measureText` | `readonly` | [`CanvasTextMeasurer`](../type-aliases/CanvasTextMeasurer) | The existing Core port, reused verbatim. | [layout/types.ts:167](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/types.ts#L167) |

@@ -1,0 +1,24 @@
+---
+title: "normalizeAuthoringState"
+description: "@anvilkit/schema · normalizeAuthoringState"
+---
+
+```ts
+function normalizeAuthoringState(state): AuthoringStateV1;
+```
+
+Defined in: [editor/compact.ts:235](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/compact.ts#L235)
+
+Canonical normalization: compaction plus breakpoint display-order
+normalization (widest first). The result is the shape all writers
+must persist (invariant 10).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `state` | `AuthoringStateV1` |
+
+## Returns
+
+`AuthoringStateV1`

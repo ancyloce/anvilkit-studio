@@ -1,0 +1,31 @@
+---
+title: "CanvasExternalComponentRef"
+description: "@anvilkit/canvas-core · CanvasExternalComponentRef"
+---
+
+Defined in: [ir/component-source.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-source.ts#L50)
+
+An **exact, immutable** reference to one version of one external component.
+
+Every field is required and none of them is a range. `version` is an opaque
+exact identifier: hosts may use SemVer, calendar versions, or content hashes,
+but Canvas only ever compares it for **equality** and displays it. Ordering
+and "is an update available" come from Provider metadata, never from parsing
+this string — which is why range and channel syntax is rejected at parse time
+rather than tolerated and ignored.
+
+`integrity` is a Subresource-Integrity-style `sha256-<base64url>` digest of
+the component's canonical bytes. Because it participates in the snapshot key,
+the same logical version published twice with different bytes produces a
+*different* key — so a Provider cannot substitute content under a version a
+document already trusts (TD §22.1, same-version content substitution).
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="componentid"&gt;&lt;/a&gt; `componentId` | `string` | Opaque identifier for the component within `libraryId`. | [ir/component-source.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-source.ts#L55) |
+| &lt;a id="integrity"&gt;&lt;/a&gt; `integrity` | `string` | `sha256-<base64url>` digest of the canonical component bytes. | [ir/component-source.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-source.ts#L59) |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `"library"` | - | [ir/component-source.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-source.ts#L51) |
+| &lt;a id="libraryid"&gt;&lt;/a&gt; `libraryId` | `string` | Opaque host identifier for the library. Not a display name. | [ir/component-source.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-source.ts#L53) |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `string` | Opaque exact version. Compared for equality only; never ordered. | [ir/component-source.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-source.ts#L57) |

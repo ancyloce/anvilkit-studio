@@ -1,0 +1,31 @@
+---
+title: "CanvasPolicyEvaluator"
+description: "@anvilkit/canvas-core · CanvasPolicyEvaluator"
+---
+
+```ts
+type CanvasPolicyEvaluator = (query, context) => CanvasPolicyDecision;
+```
+
+Defined in: [policy-contracts.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L118)
+
+The port `commands/` (rank 3) calls.
+
+`context` is typed `unknown` **on purpose**: the real type is
+`CanvasBrandPolicyContext`, which lives in `brand-governance/` at rank 5 and
+is unreachable from here. Passing it opaquely is what lets rank 3 consult
+policy without any `brand/` import at all (T-038 step 2) — the implementation
+at rank 5 casts it back. The alternative, moving the brand context down to
+rank 2, would drag brand vocabulary into a layer that has no business
+knowing it.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `query` | [`CanvasPolicyQuery`](../interfaces/CanvasPolicyQuery) |
+| `context` | `unknown` |
+
+## Returns
+
+[`CanvasPolicyDecision`](../interfaces/CanvasPolicyDecision)

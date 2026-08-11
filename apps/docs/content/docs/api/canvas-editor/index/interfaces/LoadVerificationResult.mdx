@@ -1,0 +1,14 @@
+---
+title: "LoadVerificationResult"
+description: "@anvilkit/canvas-editor · LoadVerificationResult"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/load-verification.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/load-verification.ts#L81)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="diagnostics"&gt;&lt;/a&gt; `diagnostics` | `readonly` | readonly `CanvasComponentDiagnostic`[] | One diagnostic per quarantined snapshot, in key order. | [packages/capabilities/canvas/editor/src/component-libraries/load-verification.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/load-verification.ts#L85) |
+| &lt;a id="quarantinedkeys"&gt;&lt;/a&gt; `quarantinedKeys` | `readonly` | readonly `string`[] | Snapshot keys that must not resolve. Empty when everything verified. | [packages/capabilities/canvas/editor/src/component-libraries/load-verification.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/load-verification.ts#L83) |
+| &lt;a id="verifiedcount"&gt;&lt;/a&gt; `verifiedCount` | `readonly` | `number` | How many snapshots were actually hashed — 0 when the mode is `none`. | [packages/capabilities/canvas/editor/src/component-libraries/load-verification.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/load-verification.ts#L87) |

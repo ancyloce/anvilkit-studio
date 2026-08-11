@@ -1,0 +1,28 @@
+---
+title: "CanvasPageResizeCommand"
+description: "@anvilkit/canvas-core · CanvasPageResizeCommand"
+---
+
+Defined in: [commands/types.ts:263](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L263)
+
+Resize a page (B-01). `mode` decides what happens to the page's top-level
+content: `canvas-only` leaves it untouched, `scale-content` scales each
+top-level child's transform uniformly by min(w-ratio, h-ratio), `recenter`
+keeps content size and shifts it by half the size delta. The root group's
+bounds stay synced to the page size. The inverse restores the prior size
+AND the exact prior child transforms (a composite batch for
+`scale-content`, where a reciprocal scale would drift in floating point).
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="from"&gt;&lt;/a&gt; `from` | \{ `height`: `number`; `width`: `number`; \} | - | [commands/types.ts:266](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L266) |
+| `from.height` | `number` | - | [commands/types.ts:266](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L266) |
+| `from.width` | `number` | - | [commands/types.ts:266](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L266) |
+| &lt;a id="mode"&gt;&lt;/a&gt; `mode?` | [`CanvasPageResizeMode`](../type-aliases/CanvasPageResizeMode) | Default `"canvas-only"`. | [commands/types.ts:269](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L269) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId` | `string` | - | [commands/types.ts:265](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L265) |
+| &lt;a id="to"&gt;&lt;/a&gt; `to` | \{ `height`: `number`; `width`: `number`; \} | - | [commands/types.ts:267](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L267) |
+| `to.height` | `number` | - | [commands/types.ts:267](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L267) |
+| `to.width` | `number` | - | [commands/types.ts:267](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L267) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"page.resize"` | - | [commands/types.ts:264](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L264) |

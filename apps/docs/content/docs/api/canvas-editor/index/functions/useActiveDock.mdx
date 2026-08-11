@@ -4,11 +4,27 @@ description: "@anvilkit/canvas-editor · useActiveDock"
 ---
 
 ```ts
-function useActiveDock(): readonly ["text" | "templates" | "ai" | "elements" | "brand" | "uploads" | "layers", (id) => void];
+function useActiveDock(): readonly [
+  | "text"
+  | "brand"
+  | "templates"
+  | "components"
+  | "ai"
+  | "layers"
+  | "elements"
+  | "uploads", (id) => void];
 ```
 
 Defined in: [packages/capabilities/canvas/editor/src/workspace/state/hooks.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/state/hooks.ts#L23)
 
 ## Returns
 
-readonly \[`"text"` \| `"templates"` \| `"ai"` \| `"elements"` \| `"brand"` \| `"uploads"` \| `"layers"`, (`id`) =&gt; `void`\]
+readonly \[
+  \| `"text"`
+  \| `"brand"`
+  \| `"templates"`
+  \| `"components"`
+  \| `"ai"`
+  \| `"layers"`
+  \| `"elements"`
+  \| `"uploads"`, (`id`) =&gt; `void`\]

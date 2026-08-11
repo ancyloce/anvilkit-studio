@@ -1,0 +1,28 @@
+---
+title: "collectExternalRefUsage"
+description: "@anvilkit/canvas-editor · collectExternalRefUsage"
+---
+
+```ts
+function collectExternalRefUsage(ir): ReadonlyMap<string, {
+  count: number;
+  ref: CanvasExternalComponentRef;
+}>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/use-update-check.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-update-check.ts#L52)
+
+Every distinct external ref the document uses, with instance counts.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) |
+
+## Returns
+
+`ReadonlyMap`\<`string`, \{
+  `count`: `number`;
+  `ref`: `CanvasExternalComponentRef`;
+\}\>

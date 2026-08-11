@@ -1,0 +1,15 @@
+---
+title: "CanvasComponentRegistry"
+description: "@anvilkit/canvas-core · CanvasComponentRegistry"
+---
+
+```ts
+type CanvasComponentRegistry = Readonly<Record<string, CanvasComponentDefinition>>;
+```
+
+Defined in: [ir/types.ts:1250](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1250)
+
+The document-local Source registry — a PLAIN persisted map keyed by
+component id, deliberately NOT an extension-style registry: there is no
+`register()` surface, no runtime behavior, just data. An empty registry is
+normalized to an absent `components` key (INV-10).

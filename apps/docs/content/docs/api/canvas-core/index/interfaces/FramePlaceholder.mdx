@@ -1,0 +1,18 @@
+---
+title: "FramePlaceholder"
+description: "@anvilkit/canvas-core · FramePlaceholder"
+---
+
+Defined in: [ir/types.ts:497](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L497)
+
+Marks a frame as an empty slot awaiting content — an image well, a logo well.
+Deliberately minimal: enough to say "this frame is an image placeholder".
+Template slot binding is a separate concern and does not live here.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="assetid"&gt;&lt;/a&gt; `assetId?` | `string` | Asset currently filling the placeholder, when one has been chosen. | [ir/types.ts:500](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L500) |
+| &lt;a id="assettoken"&gt;&lt;/a&gt; `assetToken?` | [`BrandTokenRef`](BrandTokenRef.md) | Live binding to a brand-kit asset/logo token, when this placeholder should track a token rather than (or alongside) a fixed `assetId`. Resolution is external to core. | [ir/types.ts:506](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L506) |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | [`FramePlaceholderKind`](../type-aliases/FramePlaceholderKind) | - | [ir/types.ts:498](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L498) |

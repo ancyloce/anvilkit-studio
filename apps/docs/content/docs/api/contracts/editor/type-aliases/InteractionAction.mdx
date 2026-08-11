@@ -1,0 +1,133 @@
+---
+title: "InteractionAction"
+description: "@anvilkit/contracts · InteractionAction"
+---
+
+```ts
+type InteractionAction = 
+  | {
+  pageId: string;
+  type: "navigate";
+}
+  | {
+  newTab?: boolean;
+  type: "url";
+  url: string;
+}
+  | {
+  behavior?: "smooth" | "instant";
+  targetNodeId: string;
+  type: "scroll";
+}
+  | {
+  operation: "show" | "hide" | "toggle";
+  targetNodeId: string;
+  transition?: MotionTransition;
+  type: "visibility";
+}
+  | {
+  selection: Readonly<Record<string, string>>;
+  targetNodeId: string;
+  type: "variant";
+}
+  | {
+  composition: "sequence" | "parallel";
+  staggerMs?: number;
+  steps: readonly AnimationStep[];
+  targetNodeIds: readonly string[];
+  type: "animate";
+};
+```
+
+Defined in: [editor/interactions.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L74)
+
+The closed action set (ED-INT-002: navigate, URL, scroll,
+visibility, variant, and animation families).
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  pageId: string;
+  type: "navigate";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  newTab?: boolean;
+  type: "url";
+  url: string;
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  behavior?: "smooth" | "instant";
+  targetNodeId: string;
+  type: "scroll";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  operation: "show" | "hide" | "toggle";
+  targetNodeId: string;
+  transition?: MotionTransition;
+  type: "visibility";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  selection: Readonly<Record<string, string>>;
+  targetNodeId: string;
+  type: "variant";
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `selection` | `Readonly`\&lt;`Record`\&lt;`string`, `string`\&gt;\&gt; | Variant axis id → option id. | [editor/interactions.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L92) |
+| `targetNodeId` | `string` | - | [editor/interactions.ts:90](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L90) |
+| `type` | `"variant"` | - | [editor/interactions.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L89) |
+
+***
+
+### Type Literal
+
+```ts
+{
+  composition: "sequence" | "parallel";
+  staggerMs?: number;
+  steps: readonly AnimationStep[];
+  targetNodeIds: readonly string[];
+  type: "animate";
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `composition` | `"sequence"` \| `"parallel"` | - | [editor/interactions.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L98) |
+| `staggerMs?` | `number` | Per-target stagger delay for multi-target animations. | [editor/interactions.ts:100](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L100) |
+| `steps` | readonly [`AnimationStep`](../interfaces/AnimationStep)[] | - | [editor/interactions.ts:97](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L97) |
+| `targetNodeIds` | readonly `string`[] | - | [editor/interactions.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L96) |
+| `type` | `"animate"` | - | [editor/interactions.ts:95](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L95) |

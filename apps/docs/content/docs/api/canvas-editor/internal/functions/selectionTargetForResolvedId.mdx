@@ -1,0 +1,31 @@
+---
+title: "selectionTargetForResolvedId"
+description: "@anvilkit/canvas-editor · selectionTargetForResolvedId"
+---
+
+```ts
+function selectionTargetForResolvedId(view, resolvedNodeId): 
+  | CanvasSelectionTarget
+  | null;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/selection/component-selection-policy.ts:161](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/component-selection-policy.ts#L161)
+
+Map any resolved id to the target that should be selected for it.
+
+The single-click / keyboard-select rule: a virtual node collapses to its
+owning instance ROOT, a plain node stays itself. This is what makes an
+instance read as one object to every existing consumer without those
+consumers knowing components exist.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `view` | `CanvasResolvedView` |
+| `resolvedNodeId` | `string` \| `CanvasResolvedNodeId` |
+
+## Returns
+
+  \| [`CanvasSelectionTarget`](../type-aliases/CanvasSelectionTarget)
+  \| `null`

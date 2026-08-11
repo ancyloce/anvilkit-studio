@@ -1,0 +1,38 @@
+---
+title: "sanitizeProviderUrl"
+description: "@anvilkit/canvas-core · sanitizeProviderUrl"
+---
+
+```ts
+function sanitizeProviderUrl(input): string | undefined;
+```
+
+Defined in: [uri.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/uri.ts#L120)
+
+Returns a safe **absolute** http(s) URL, or `undefined`.
+
+Stricter than `normalizeUri` in exactly one way, and deliberately so:
+the scheme is **required**. `normalizeUri` permits scheme-less input because a
+relative `href` inside an SVG document is meaningful and resolves against that
+document. A Provider-supplied link has no such base — it is metadata from an
+untrusted remote catalog that the Editor may render as an anchor or an
+`<img src>`. A bare `//evil.example` or `some/path` there is either
+meaningless or a protocol-relative escape, so both are rejected rather than
+passed through for the UI to resolve against the *app's* origin.
+
+`data:` is never accepted here regardless of payload — a catalog has no reason
+to inline an image, and TD §22.2 names `data:` alongside `javascript:` as the
+schemes that must not ride in on catalog metadata.
+
+Callers must treat `undefined` as "render nothing" (strip), never as "render
+the raw input".
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | `string` |
+
+## Returns
+
+`string` \| `undefined`

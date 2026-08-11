@@ -1,0 +1,30 @@
+---
+title: "insertExternalComponent"
+description: "@anvilkit/canvas-editor · insertExternalComponent"
+---
+
+```ts
+function insertExternalComponent(
+   entry, 
+   deps, 
+placement?): Promise<InsertExternalComponentResult>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/use-external-component.ts:146](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-external-component.ts#L146)
+
+Insert one catalog component: fetch its envelope, verify it, and commit the
+snapshot plus the instance as a single Undo entry.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `entry` | [`CanvasComponentCatalogEntry`](../interfaces/CanvasComponentCatalogEntry) |
+| `deps` | `ExternalComponentDeps` |
+| `placement` | \{ `index?`: `number`; `parentId?`: `string`; \} |
+| `placement.index?` | `number` |
+| `placement.parentId?` | `string` |
+
+## Returns
+
+`Promise`\<[`InsertExternalComponentResult`](../type-aliases/InsertExternalComponentResult)\>

@@ -1,0 +1,15 @@
+---
+title: "CANVAS_FONT_CATEGORIES"
+description: "@anvilkit/canvas-editor · CANVAS_FONT_CATEGORIES"
+---
+
+```ts
+const CANVAS_FONT_CATEGORIES: readonly CanvasFontCategory[];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/text/font-catalog.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L53)
+
+Every category, in the order the picker's filter should offer them. Exported
+as data (not just as a type) because `cp2-002` asserts category coverage over
+it and `cp2-003` renders a control from it — two consumers of one list, so
+neither has to restate the union and drift from it.

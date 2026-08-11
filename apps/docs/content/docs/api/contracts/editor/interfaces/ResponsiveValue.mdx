@@ -1,0 +1,27 @@
+---
+title: "ResponsiveValue"
+description: "@anvilkit/contracts · ResponsiveValue"
+---
+
+Defined in: [editor/responsive.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/responsive.ts#L25)
+
+A per-breakpoint layered value.
+
+`null` in `overrides` clears the local override and resumes
+inheritance; `undefined` means "never written" and is removed during
+serialization (DD-0019 §9.1). Persisted canonical state never
+contains `null` entries — the write-time `null` is normalized into
+key removal by the reducer/compaction pipeline.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` |
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="base"&gt;&lt;/a&gt; `base?` | `readonly` | `T` | [editor/responsive.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/responsive.ts#L26) |
+| &lt;a id="overrides"&gt;&lt;/a&gt; `overrides?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `T` \| `null`\&gt;\&gt; | [editor/responsive.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/responsive.ts#L27) |

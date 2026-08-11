@@ -1,0 +1,37 @@
+---
+title: "CanvasComponentDefinitionShape"
+description: "@anvilkit/canvas-core · CanvasComponentDefinitionShape"
+---
+
+```ts
+const CanvasComponentDefinitionShape: {
+  createdAt: ZodOptional<ZodString>;
+  id: ZodString;
+  name: ZodString;
+  policy: ZodOptional<ZodType<CanvasBrandComponentPolicy, unknown, $ZodTypeInternals<CanvasBrandComponentPolicy, unknown>>>;
+  properties: ZodArray<ZodType<CanvasComponentProperty, unknown, $ZodTypeInternals<CanvasComponentProperty, unknown>>>;
+  revision: ZodInt;
+  updatedAt: ZodOptional<ZodString>;
+  variants: ZodOptional<ZodType<CanvasComponentVariantSet, unknown, $ZodTypeInternals<CanvasComponentVariantSet, unknown>>>;
+};
+```
+
+Defined in: [ir/validators.ts:989](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L989)
+
+`CanvasComponentDefinition`'s non-recursive fields, split out for the same
+reason as `CanvasFrameNodeShape`: `root` must bind to whichever node union
+is being assembled — static or extension-aware — and every other field must
+not drift between the two paths.
+
+## Type Declaration
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="property-createdat"&gt;&lt;/a&gt; `createdAt` | `ZodOptional`\&lt;`ZodString`\&gt; | [ir/validators.ts:1005](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L1005) |
+| &lt;a id="property-id"&gt;&lt;/a&gt; `id` | `ZodString` | [ir/validators.ts:990](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L990) |
+| &lt;a id="property-name"&gt;&lt;/a&gt; `name` | `ZodString` | [ir/validators.ts:991](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L991) |
+| &lt;a id="property-policy"&gt;&lt;/a&gt; `policy` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasBrandComponentPolicy`](../interfaces/CanvasBrandComponentPolicy), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasBrandComponentPolicy`](../interfaces/CanvasBrandComponentPolicy), `unknown`\&gt;\&gt;\&gt; | [ir/validators.ts:1004](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L1004) |
+| &lt;a id="property-properties"&gt;&lt;/a&gt; `properties` | `ZodArray`\&lt;`ZodType`\&lt;[`CanvasComponentProperty`](../type-aliases/CanvasComponentProperty), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasComponentProperty`](../type-aliases/CanvasComponentProperty), `unknown`\&gt;\&gt;\&gt; | [ir/validators.ts:993](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L993) |
+| &lt;a id="property-revision"&gt;&lt;/a&gt; `revision` | `ZodInt` | [ir/validators.ts:992](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L992) |
+| &lt;a id="property-updatedat"&gt;&lt;/a&gt; `updatedAt` | `ZodOptional`\&lt;`ZodString`\&gt; | [ir/validators.ts:1006](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L1006) |
+| &lt;a id="property-variants"&gt;&lt;/a&gt; `variants` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasComponentVariantSet`](../interfaces/CanvasComponentVariantSet), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasComponentVariantSet`](../interfaces/CanvasComponentVariantSet), `unknown`\&gt;\&gt;\&gt; | [ir/validators.ts:1000](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L1000) |

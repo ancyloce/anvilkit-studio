@@ -1,0 +1,35 @@
+---
+title: "CanvasComponentLimitCode"
+description: "@anvilkit/canvas-core · CanvasComponentLimitCode"
+---
+
+```ts
+type CanvasComponentLimitCode = 
+  | "envelope-too-large"
+  | "too-many-snapshots"
+  | "too-many-dependencies"
+  | "excessive-dependency-depth"
+  | "too-many-variants"
+  | "too-many-variant-axes"
+  | "too-many-variant-values"
+  | "field-too-long"
+  | "url-too-long"
+  | "string-too-long";
+```
+
+Defined in: [component-libraries/errors.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/errors.ts#L30)
+
+Why a resource cap was refused.
+
+A **closed** union, deliberately mirroring `CanvasClipboardErrorCode` — the
+package's existing precedent for "untrusted payload exceeded a documented
+ceiling". Closed rather than `string` so every producer is exhaustively
+switchable and no caller can invent a code the UI has no message for
+(PRD §9.16 acceptance: no `string`-typed error codes in the new surface).
+
+Note these are *limit* codes, not the reported
+`CanvasComponentDiagnosticCode` diagnostics and not the thrown
+`CanvasCommandErrorCode` codes. Three separate unions because they have three
+different lifecycles: a limit breach aborts admission before anything enters
+the IR, a diagnostic is reported about a document that already exists, and a
+command error rolls back a mutation.

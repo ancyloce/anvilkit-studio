@@ -1,0 +1,31 @@
+---
+title: "collectPolicyPath"
+description: "@anvilkit/canvas-core · collectPolicyPath"
+---
+
+```ts
+function collectPolicyPath(
+   ir, 
+   instanceId, 
+   maxDepth?): readonly CanvasBrandComponentPolicy[];
+```
+
+Defined in: [brand-governance/command-policy.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/command-policy.ts#L81)
+
+Every policy on the path from the page-level instance inward.
+
+Ordered outermost-first. Bounded by `maxDepth` because a malformed document
+can contain a reference cycle and this runs inside synchronous command
+application.
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `ir` | [`CanvasIR`](../../index/interfaces/CanvasIR) | `undefined` |
+| `instanceId` | `string` | `undefined` |
+| `maxDepth` | `number` | `32` |
+
+## Returns
+
+readonly [`CanvasBrandComponentPolicy`](../../index/interfaces/CanvasBrandComponentPolicy)[]

@@ -1,0 +1,36 @@
+---
+title: "severityPresentation"
+description: "@anvilkit/canvas-editor · severityPresentation"
+---
+
+```ts
+function severityPresentation(severity, t): {
+  glyph: string;
+  label: string;
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/panels/governance/ComplianceIssueRow.tsx:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/ComplianceIssueRow.tsx#L33)
+
+Glyph + localized word for a severity. `undefined` severity reads as warning.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `severity` | `"warning"` \| `"blocking"` \| `undefined` |
+| `t` | [`CanvasT`](../type-aliases/CanvasT) |
+
+## Returns
+
+```ts
+{
+  glyph: string;
+  label: string;
+}
+```
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `glyph` | `string` | [packages/capabilities/canvas/editor/src/panels/governance/ComplianceIssueRow.tsx:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/ComplianceIssueRow.tsx#L36) |
+| `label` | `string` | [packages/capabilities/canvas/editor/src/panels/governance/ComplianceIssueRow.tsx:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/governance/ComplianceIssueRow.tsx#L36) |

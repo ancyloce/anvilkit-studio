@@ -1,0 +1,16 @@
+---
+title: "CanvasLayoutIssueFallback"
+description: "@anvilkit/canvas-core · CanvasLayoutIssueFallback"
+---
+
+```ts
+type CanvasLayoutIssueFallback = "fixed-size" | "zero-fill" | "cached-geometry";
+```
+
+Defined in: [layout/validate.ts:73](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/validate.ts#L73)
+
+The deterministic degradation a consumer applies when an issue fires.
+
+Absent where TD §14's prescribed recovery is not one of these three (for
+example "clamp to 0", which the negative-gap/padding codes use) — the field
+names a *substituted geometry source*, not every possible remedy.

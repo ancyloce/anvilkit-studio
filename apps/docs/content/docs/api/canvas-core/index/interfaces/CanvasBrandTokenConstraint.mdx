@@ -1,0 +1,16 @@
+---
+title: "CanvasBrandTokenConstraint"
+description: "@anvilkit/canvas-core · CanvasBrandTokenConstraint"
+---
+
+Defined in: [ir/component-policy.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-policy.ts#L29)
+
+Which token values a property may take.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="allowedtokenids"&gt;&lt;/a&gt; `allowedTokenIds?` | `readonly` | readonly `string`[] | Token ids the property may use. Absent means "any token of this type". An EMPTY array means "none" — the two are deliberately different. | [ir/component-policy.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-policy.ts#L35) |
+| &lt;a id="allowliteral"&gt;&lt;/a&gt; `allowLiteral?` | `readonly` | `boolean` | Whether a literal (non-token) value is allowed at all. Default `true`, so a policy that only lists tokens does not silently forbid literals. | [ir/component-policy.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-policy.ts#L40) |
+| &lt;a id="tokentype"&gt;&lt;/a&gt; `tokenType` | `readonly` | [`BrandTokenType`](../type-aliases/BrandTokenType) | - | [ir/component-policy.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-policy.ts#L30) |

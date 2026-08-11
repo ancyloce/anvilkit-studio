@@ -1,0 +1,32 @@
+---
+title: "enforceLimit"
+description: "@anvilkit/canvas-core · enforceLimit"
+---
+
+```ts
+function enforceLimit(
+   code, 
+   observed, 
+   detail?): void;
+```
+
+Defined in: [component-libraries/errors.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/errors.ts#L101)
+
+Throw [CanvasComponentLimitError](../classes/CanvasComponentLimitError) when `observed` exceeds the ceiling
+declared for `code`.
+
+The ceiling is looked up from the code rather than passed in, so a call site
+cannot check a different number than the one documented in `limits.ts` — that
+drift is exactly what a single central cap module exists to prevent.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `code` | [`CanvasComponentLimitCode`](../type-aliases/CanvasComponentLimitCode) |
+| `observed` | `number` |
+| `detail?` | `string` |
+
+## Returns
+
+`void`

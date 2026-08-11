@@ -1,0 +1,24 @@
+---
+title: "useEffectivePolicyContext"
+description: "@anvilkit/canvas-editor · useEffectivePolicyContext"
+---
+
+```ts
+function useEffectivePolicyContext(): CanvasBrandPolicyContext;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand-governance/effective-policy-context.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/effective-policy-context.ts#L58)
+
+The live policy context, refreshed when the host's capability revision
+changes mid-session (T-040 step 4).
+
+The memo depends on the context object AND on `policyRevision` explicitly.
+A host that mutates its snapshot in place and only bumps the revision is
+doing something unusual, but it is the documented signal for "cached
+decisions are stale" — honouring only object identity would let a revision
+bump pass unnoticed and leave the UI showing capabilities the host has
+already withdrawn.
+
+## Returns
+
+`CanvasBrandPolicyContext`

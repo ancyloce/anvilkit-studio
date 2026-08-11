@@ -1,0 +1,26 @@
+---
+title: "collectHitNames"
+description: "@anvilkit/canvas-editor · collectHitNames"
+---
+
+```ts
+function collectHitNames(target): string[];
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/selection/component-selection-policy.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/component-selection-policy.ts#L85)
+
+Names on the stage-node chain, DEEPEST FIRST.
+
+Anonymous helpers (a frame's background `Rect` carries no name on purpose, so
+a click on it selects the frame) contribute nothing and are skipped rather
+than terminating the walk.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `target` | [`HitNodeLike`](../interfaces/HitNodeLike) \| `null` \| `undefined` |
+
+## Returns
+
+`string`[]

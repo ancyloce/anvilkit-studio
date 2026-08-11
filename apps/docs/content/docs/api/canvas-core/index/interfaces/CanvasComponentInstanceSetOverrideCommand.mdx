@@ -1,0 +1,26 @@
+---
+title: "CanvasComponentInstanceSetOverrideCommand"
+description: "@anvilkit/canvas-core · CanvasComponentInstanceSetOverrideCommand"
+---
+
+Defined in: [commands/types.ts:448](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L448)
+
+Set one typed override, keyed by Property ID (LC-INSTANCE-003, INV-6).
+Writes the entry verbatim — target validation happens at resolve time, so
+an entry whose property has since changed is retained as an orphan rather
+than rejected here (§10.3). The inverse restores the prior entry, or
+resets the key when there was none.
+
+## Extends
+
+- [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md)
+
+## Properties
+
+| Property | Type | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md).[`location`](CanvasCommandLocationOptions.md#location) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | [commands/types.ts:451](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L451) |
+| &lt;a id="propertyid"&gt;&lt;/a&gt; `propertyId` | `string` | - | [commands/types.ts:452](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L452) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"component-instance.set-override"` | - | [commands/types.ts:450](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L450) |
+| &lt;a id="value"&gt;&lt;/a&gt; `value` | [`CanvasComponentOverride`](../type-aliases/CanvasComponentOverride) | - | [commands/types.ts:453](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L453) |

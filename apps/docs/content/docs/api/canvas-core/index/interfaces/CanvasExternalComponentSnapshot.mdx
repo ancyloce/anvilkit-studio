@@ -1,0 +1,29 @@
+---
+title: "CanvasExternalComponentSnapshot"
+description: "@anvilkit/canvas-core · CanvasExternalComponentSnapshot"
+---
+
+Defined in: [ir/types.ts:1268](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1268)
+
+One immutable, integrity-verified copy of an external component version,
+stored in the document (plan 0021 T-014, TD 0016 §5.3).
+
+This is the **render authority**: once admitted, resolution reads only from
+here and never contacts a Provider, which is what makes opening, rendering,
+and exporting a document work offline and reproducibly (AC-003). A Provider
+is consulted to *obtain* a snapshot, never to *use* one.
+
+Immutability is enforced by the key: a snapshot is stored under
+`libraryId/componentId/version/integrity`, so re-publishing different bytes
+under the same version yields a **different** key rather than overwriting the
+one this document already trusts (TD §22.1).
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="canonicalformatversion"&gt;&lt;/a&gt; `canonicalFormatVersion` | `number` | The canonicalization format the digest was computed under. Persisted so a future format change is detectable rather than silently invalidating every stored snapshot. | [ir/types.ts:1290](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1290) |
+| &lt;a id="definition"&gt;&lt;/a&gt; `definition` | [`CanvasComponentDefinition`](CanvasComponentDefinition.md) | The component itself, in the same shape as a document-local Source. Identical to `CanvasComponentDefinition` on purpose: it is what makes one resolver serve both local and external Sources (TD §10) instead of two pipelines that drift. | [ir/types.ts:1278](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1278) |
+| &lt;a id="dependencies"&gt;&lt;/a&gt; `dependencies` | readonly [`CanvasExternalComponentRef`](CanvasExternalComponentRef.md)[] | Other external components this one references, as exact refs. Every entry must itself be present in the registry before the snapshot is usable — closure validation is plan 0021 T-017. | [ir/types.ts:1284](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1284) |
+| &lt;a id="fetchedat"&gt;&lt;/a&gt; `fetchedAt?` | `string` | When this snapshot was admitted. Written **once** and never updated, and excluded from the canonical preimage — otherwise re-fetching identical bytes would produce a different digest. Informational only: nothing about resolution or verification depends on it. | [ir/types.ts:1298](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1298) |
+| &lt;a id="ref"&gt;&lt;/a&gt; `ref` | [`CanvasExternalComponentRef`](CanvasExternalComponentRef.md) | The exact reference this snapshot is a copy of. Also derives its key. | [ir/types.ts:1270](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1270) |

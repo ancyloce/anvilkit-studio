@@ -1,0 +1,17 @@
+---
+title: "EditorAnnotationSchema"
+description: "@anvilkit/schema · EditorAnnotationSchema"
+---
+
+```ts
+const EditorAnnotationSchema: z.ZodType<EditorAnnotation>;
+```
+
+Defined in: [editor/appearance.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/appearance.ts#L70)
+
+Editor annotations (PLAN-0026 §3.6). The per-entry object is
+`strictObject` **on purpose** — unlike every other schema in this
+directory, which is `looseObject` for forward compatibility. An
+unknown key inside an annotation entry is a validation error,
+because tolerating one is how this closed map would grow back into
+a sidecar.

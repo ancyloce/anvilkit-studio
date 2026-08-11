@@ -1,0 +1,24 @@
+---
+title: "normalizeBreakpointOrder"
+description: "@anvilkit/schema · normalizeBreakpointOrder"
+---
+
+```ts
+function normalizeBreakpointOrder(breakpoints): readonly BreakpointDefinition[];
+```
+
+Defined in: [editor/responsive.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/responsive.ts#L75)
+
+Recompute display `order` from widths, widest first (DD-0019
+§12.2: order is normalized from widths, not authored). Pure;
+returns a new array, input untouched.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `breakpoints` | readonly `BreakpointDefinition`[] |
+
+## Returns
+
+readonly `BreakpointDefinition`[]

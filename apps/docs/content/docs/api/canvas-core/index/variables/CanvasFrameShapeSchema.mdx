@@ -1,0 +1,22 @@
+---
+title: "CanvasFrameShapeSchema"
+description: "@anvilkit/canvas-core · CanvasFrameShapeSchema"
+---
+
+```ts
+const CanvasFrameShapeSchema: z.ZodType<CanvasFrameShape>;
+```
+
+Defined in: [ir/validators.ts:639](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L639)
+
+The clip geometry of a frame (ADR 0008 decision 2). Optional and additive on
+`CanvasFrameNode`, so every document written before it existed parses
+unchanged and needs no migration.
+
+A `discriminatedUnion` on `kind` for the same reason `CanvasNodeSchema`
+discriminates on `type` — O(1) dispatch and a precise error for an unknown
+tag — and the numeric guards are the SAME refinements the `polygon`/`star`
+nodes use, so a shape mask and the equivalent drawn shape can never disagree
+about what a legal side count or inner radius is. `d` is `min(1)` exactly
+like `CanvasPathNodeSchema.d`: the character allowlist is the serializer's
+`PATH_D_RE`, applied on the way out, not a second validator here.

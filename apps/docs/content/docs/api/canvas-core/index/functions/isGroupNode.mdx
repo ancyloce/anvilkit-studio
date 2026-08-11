@@ -1,0 +1,25 @@
+---
+title: "isGroupNode"
+description: "@anvilkit/canvas-core · isGroupNode"
+---
+
+```ts
+function isGroupNode(node): node is CanvasGroupNode;
+```
+
+Defined in: [ir/walkers.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/walkers.ts#L63)
+
+True only for a literal `group`. Prefer [isContainerNode](isContainerNode.md) when the
+question is "does this node have children"; use this one only when the
+behaviour is specific to groups (e.g. ungrouping, which a frame does not
+support).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `node` | [`CanvasNode`](../type-aliases/CanvasNode) |
+
+## Returns
+
+`node is CanvasGroupNode`

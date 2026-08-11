@@ -1,0 +1,48 @@
+---
+title: "CanvasChangeEmitter"
+description: "@anvilkit/canvas-core · CanvasChangeEmitter"
+---
+
+Defined in: [commands/change-events.ts:411](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L411)
+
+A subscriber for change batches. Returns an unsubscribe function.
+
+## Methods
+
+### emit()
+
+```ts
+emit(changes): void;
+```
+
+Defined in: [commands/change-events.ts:412](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L412)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `changes` | readonly [`CanvasChange`](../type-aliases/CanvasChange)[] |
+
+#### Returns
+
+`void`
+
+***
+
+### subscribe()
+
+```ts
+subscribe(fn): () => void;
+```
+
+Defined in: [commands/change-events.ts:413](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L413)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `fn` | (`changes`) =&gt; `void` |
+
+#### Returns
+
+() => `void`

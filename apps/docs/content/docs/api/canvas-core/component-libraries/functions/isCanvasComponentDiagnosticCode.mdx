@@ -1,0 +1,22 @@
+---
+title: "isCanvasComponentDiagnosticCode"
+description: "@anvilkit/canvas-core · isCanvasComponentDiagnosticCode"
+---
+
+```ts
+function isCanvasComponentDiagnosticCode(code): code is "component-snapshot-missing" | "component-integrity-mismatch" | "component-library-capability-denied" | "component-dependency-missing" | "component-provider-offline" | "component-provider-unauthorized" | "component-version-missing" | "component-version-deprecated" | "component-snapshot-invalid" | "component-update-incompatible" | "component-variant-invalid" | "component-swap-incompatible" | "component-override-migration-orphan";
+```
+
+Defined in: [component-libraries/diagnostics.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/diagnostics.ts#L98)
+
+Whether `code` is one of the stable component diagnostics.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `code` | `unknown` |
+
+## Returns
+
+code is "component-snapshot-missing" \| "component-integrity-mismatch" \| "component-library-capability-denied" \| "component-dependency-missing" \| "component-provider-offline" \| "component-provider-unauthorized" \| "component-version-missing" \| "component-version-deprecated" \| "component-snapshot-invalid" \| "component-update-incompatible" \| "component-variant-invalid" \| "component-swap-incompatible" \| "component-override-migration-orphan"

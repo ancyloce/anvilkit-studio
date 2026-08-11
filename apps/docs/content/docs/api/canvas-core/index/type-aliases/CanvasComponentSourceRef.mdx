@@ -1,0 +1,22 @@
+---
+title: "CanvasComponentSourceRef"
+description: "@anvilkit/canvas-core · CanvasComponentSourceRef"
+---
+
+```ts
+type CanvasComponentSourceRef = 
+  | CanvasLocalComponentSourceRef
+  | CanvasExternalComponentRef;
+```
+
+Defined in: [ir/component-source.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/component-source.ts#L80)
+
+Where an instance's Source comes from — the same field for both kinds.
+
+A discriminated union on `kind` so a resolver handles both in one place
+(TD §10, the shared local/external resolver) and TypeScript makes a missing
+case an error rather than a silent fallthrough to "local".
+
+PRD 0015 shipped local instances carrying a bare `componentId`; the instance
+schema migrates those to `{ kind: "local", componentId }` on read — see
+`CanvasComponentInstanceNodeSchema` in `./validators.js`.

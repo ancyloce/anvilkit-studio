@@ -1,0 +1,44 @@
+---
+title: "CanvasLayoutInvariantError"
+description: "@anvilkit/canvas-core · CanvasLayoutInvariantError"
+---
+
+Defined in: [layout/validate.ts:496](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/validate.ts#L496)
+
+Thrown by [assertLayoutInvariants](../functions/assertLayoutInvariants); carries every issue found, not just the first.
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new CanvasLayoutInvariantError(issues): CanvasLayoutInvariantError;
+```
+
+Defined in: [layout/validate.ts:499](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/validate.ts#L499)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `issues` | readonly [`CanvasLayoutIssue`](../interfaces/CanvasLayoutIssue)[] |
+
+#### Returns
+
+`CanvasLayoutInvariantError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="issues"&gt;&lt;/a&gt; `issues` | `readonly` | readonly [`CanvasLayoutIssue`](../interfaces/CanvasLayoutIssue)[] | [layout/validate.ts:497](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/validate.ts#L497) |

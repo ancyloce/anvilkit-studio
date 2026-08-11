@@ -1,0 +1,133 @@
+---
+title: "CanvasExternalSnapshotIndex"
+description: "@anvilkit/canvas-core · CanvasExternalSnapshotIndex"
+---
+
+Defined in: [components/snapshot-index.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/snapshot-index.ts#L45)
+
+O(1) lookup of an admitted snapshot by exact reference.
+
+Deliberately read-only: there is no `set`. Snapshots enter a document through
+a command (T-021), never through this index — an index that could write would
+be a second, unversioned way to mutate the registry.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="size"&gt;&lt;/a&gt; `size` | `readonly` | `number` | Number of indexed snapshots. Excludes quarantined entries. | [components/snapshot-index.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/snapshot-index.ts#L65) |
+
+## Methods
+
+### get()
+
+```ts
+get(ref): 
+  | CanvasExternalComponentSnapshot
+  | undefined;
+```
+
+Defined in: [components/snapshot-index.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/snapshot-index.ts#L47)
+
+The snapshot for this exact ref, or `undefined`.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ref` | [`CanvasExternalComponentRef`](CanvasExternalComponentRef.md) |
+
+#### Returns
+
+  \| [`CanvasExternalComponentSnapshot`](CanvasExternalComponentSnapshot.md)
+  \| `undefined`
+
+***
+
+### getByKey()
+
+```ts
+getByKey(key): 
+  | CanvasExternalComponentSnapshot
+  | undefined;
+```
+
+Defined in: [components/snapshot-index.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/snapshot-index.ts#L51)
+
+The snapshot stored under an already-derived key, or `undefined`.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `key` | `string` |
+
+#### Returns
+
+  \| [`CanvasExternalComponentSnapshot`](CanvasExternalComponentSnapshot.md)
+  \| `undefined`
+
+***
+
+### has()
+
+```ts
+has(ref): boolean;
+```
+
+Defined in: [components/snapshot-index.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/snapshot-index.ts#L52)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ref` | [`CanvasExternalComponentRef`](CanvasExternalComponentRef.md) |
+
+#### Returns
+
+`boolean`
+
+***
+
+### isQuarantined()
+
+```ts
+isQuarantined(key): boolean;
+```
+
+Defined in: [components/snapshot-index.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/snapshot-index.ts#L63)
+
+Whether this key names a snapshot that is PRESENT in the document but was
+quarantined at load (plan 0021 T-045).
+
+A quarantined snapshot is invisible to [get](#get)/[has](#has), so a
+resolver that never asks this question degrades safely — it simply cannot
+resolve the Source. Asking lets a caller tell "the bytes are wrong" apart
+from "we never had it", which is the difference between offering re-fetch
+and offering removal.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `key` | `string` |
+
+#### Returns
+
+`boolean`
+
+***
+
+### keys()
+
+```ts
+keys(): readonly string[];
+```
+
+Defined in: [components/snapshot-index.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/snapshot-index.ts#L67)
+
+Indexed keys, sorted — deterministic iteration for diagnostics.
+
+#### Returns
+
+readonly `string`[]

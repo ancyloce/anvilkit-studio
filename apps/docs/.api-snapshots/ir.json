@@ -1,2531 +1,3730 @@
 {
-	"schemaVersion": "2.0",
-	"id": 0,
-	"name": "@anvilkit/ir",
-	"variant": "project",
-	"kind": 1,
-	"flags": {},
-	"children": [
-		{
-			"id": 1,
-			"name": "index",
-			"variant": "declaration",
-			"kind": 2,
-			"flags": {},
-			"children": [
-				{
-					"id": 35,
-					"name": "PuckDataToIROptions",
-					"variant": "declaration",
-					"kind": 256,
-					"flags": {},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Options accepted by "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "puckDataToIR",
-								"target": 43
-							},
-							{
-								"kind": "text",
-								"text": "."
-							}
-						]
-					},
-					"children": [
-						{
-							"id": 36,
-							"name": "now",
-							"variant": "declaration",
-							"kind": 1024,
-							"flags": {
-								"isOptional": true
-							},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Injectable clock — defaults to "
-									},
-									{
-										"kind": "code",
-										"text": "`() => new Date()`"
-									},
-									{
-										"kind": "text",
-										"text": ".\nPass a fixed value in tests so "
-									},
-									{
-										"kind": "code",
-										"text": "`metadata.createdAt`"
-									},
-									{
-										"kind": "text",
-										"text": " is stable."
-									}
-								]
-							},
-							"sources": [
-								{
-									"fileName": "puck-data-to-ir.ts",
-									"line": 37,
-									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/puck-data-to-ir.ts#L37"
-								}
-							],
-							"type": {
-								"type": "reflection",
-								"declaration": {
-									"id": 37,
-									"name": "__type",
-									"variant": "declaration",
-									"kind": 65536,
-									"flags": {},
-									"signatures": [
-										{
-											"id": 38,
-											"name": "__type",
-											"variant": "signature",
-											"kind": 4096,
-											"flags": {},
-											"type": {
-												"type": "reference",
-												"target": {
-													"packageName": "typescript",
-													"packagePath": "lib/lib.es5.d.ts",
-													"qualifiedName": "Date"
-												},
-												"name": "Date",
-												"package": "typescript"
-											}
-										}
-									]
-								}
-							}
-						},
-						{
-							"id": 39,
-							"name": "onWarning",
-							"variant": "declaration",
-							"kind": 1024,
-							"flags": {
-								"isOptional": true
-							},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Optional callback that receives non-fatal warnings during the\ntransform (e.g. function-valued props being dropped)."
-									}
-								]
-							},
-							"sources": [
-								{
-									"fileName": "puck-data-to-ir.ts",
-									"line": 42,
-									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/puck-data-to-ir.ts#L42"
-								}
-							],
-							"type": {
-								"type": "reflection",
-								"declaration": {
-									"id": 40,
-									"name": "__type",
-									"variant": "declaration",
-									"kind": 65536,
-									"flags": {},
-									"signatures": [
-										{
-											"id": 41,
-											"name": "__type",
-											"variant": "signature",
-											"kind": 4096,
-											"flags": {},
-											"parameters": [
-												{
-													"id": 42,
-													"name": "warning",
-													"variant": "param",
-													"kind": 32768,
-													"flags": {},
-													"type": {
-														"type": "reference",
-														"target": {
-															"packageName": "@anvilkit/contracts",
-															"packagePath": "src/export.ts",
-															"qualifiedName": "ExportWarning"
-														},
-														"name": "ExportWarning",
-														"package": "@anvilkit/contracts"
-													}
-												}
-											],
-											"type": {
-												"type": "intrinsic",
-												"name": "void"
-											}
-										}
-									]
-								}
-							}
-						}
-					],
-					"groups": [
-						{
-							"title": "Properties",
-							"children": [36, 39]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "puck-data-to-ir.ts",
-							"line": 32,
-							"character": 17,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/puck-data-to-ir.ts#L32"
-						}
-					]
-				},
-				{
-					"id": 26,
-					"name": "RemoteCsvDirective",
-					"variant": "declaration",
-					"kind": 256,
-					"flags": {},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Fetch a CSV and synthesize props from it (the only kind shipped — §8.4)."
-							}
-						]
-					},
-					"children": [
-						{
-							"id": 27,
-							"name": "kind",
-							"variant": "declaration",
-							"kind": 1024,
-							"flags": {
-								"isReadonly": true
-							},
-							"sources": [
-								{
-									"fileName": "data-source.ts",
-									"line": 17,
-									"character": 10,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L17"
-								}
-							],
-							"type": {
-								"type": "literal",
-								"value": "remote_csv"
-							}
-						},
-						{
-							"id": 28,
-							"name": "url",
-							"variant": "declaration",
-							"kind": 1024,
-							"flags": {
-								"isReadonly": true
-							},
-							"sources": [
-								{
-									"fileName": "data-source.ts",
-									"line": 18,
-									"character": 10,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L18"
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "string"
-							}
-						}
-					],
-					"groups": [
-						{
-							"title": "Properties",
-							"children": [27, 28]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "data-source.ts",
-							"line": 16,
-							"character": 17,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L16"
-						}
-					]
-				},
-				{
-					"id": 22,
-					"name": "DataSourceDirective",
-					"variant": "declaration",
-					"kind": 2097152,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "data-source.ts",
-							"line": 21,
-							"character": 12,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L21"
-						}
-					],
-					"type": {
-						"type": "reference",
-						"target": 26,
-						"name": "RemoteCsvDirective",
-						"package": "@anvilkit/ir"
-					}
-				},
-				{
-					"id": 21,
-					"name": "DATA_SOURCE_PROP",
-					"variant": "declaration",
-					"kind": 32,
-					"flags": {
-						"isConst": true
-					},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Reserved prop key carrying a "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "DataSourceDirective",
-								"target": 22
-							},
-							{
-								"kind": "text",
-								"text": " on a node."
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "data-source.ts",
-							"line": 13,
-							"character": 13,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L13"
-						}
-					],
-					"type": {
-						"type": "literal",
-						"value": "_dataSource"
-					},
-					"defaultValue": "\"_dataSource\""
-				},
-				{
-					"id": 15,
-					"name": "collectAssets",
-					"variant": "declaration",
-					"kind": 64,
-					"flags": {},
-					"comment": {
-						"summary": [],
-						"blockTags": [
-							{
-								"tag": "@file",
-								"content": [
-									{
-										"kind": "text",
-										"text": "Public barrel for "
-									},
-									{
-										"kind": "code",
-										"text": "`@anvilkit/ir`"
-									},
-									{
-										"kind": "text",
-										"text": ".\n\nThe IR package is the single source of truth for turning Puck\n"
-									},
-									{
-										"kind": "code",
-										"text": "`Data`"
-									},
-									{
-										"kind": "text",
-										"text": " into a normalized "
-									},
-									{
-										"kind": "code",
-										"text": "`PageIR`"
-									},
-									{
-										"kind": "text",
-										"text": " document (declared in\n"
-									},
-									{
-										"kind": "code",
-										"text": "`@anvilkit/contracts`"
-									},
-									{
-										"kind": "text",
-										"text": "), and for round-tripping it back. Every\nAnvilkit export format (HTML today, React/JSON/MDX later)\nconsumes IR — never raw Puck "
-									},
-									{
-										"kind": "code",
-										"text": "`Data`"
-									},
-									{
-										"kind": "text",
-										"text": " — so this barrel is the\nentry point every downstream package pins against.\n\nSee "
-									},
-									{
-										"kind": "code",
-										"text": "`docs/tasks/phase3-002-ir-scaffold.md`"
-									},
-									{
-										"kind": "text",
-										"text": " (phase3-002) for the\nfull scaffold spec."
-									}
-								]
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "collect-assets.ts",
-							"line": 32,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/collect-assets.ts#L32"
-						}
-					],
-					"signatures": [
-						{
-							"id": 16,
-							"name": "collectAssets",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Walk a node's props and collect every asset reference into a\ndeduplicated, deterministically-ordered list.\n\nUsed by "
-									},
-									{
-										"kind": "code",
-										"text": "`puckDataToIR`"
-									},
-									{
-										"kind": "text",
-										"text": " to populate the root IR document's\n"
-									},
-									{
-										"kind": "code",
-										"text": "`assets`"
-									},
-									{
-										"kind": "text",
-										"text": " manifest, and by node-scoped exporters that want to\nresolve only their own slice of the asset graph.\n\n**Does not fetch or read files** — asset collection is purely\nstatic analysis of prop values."
-									}
-								],
-								"blockTags": [
-									{
-										"tag": "@returns",
-										"content": [
-											{
-												"kind": "text",
-												"text": "A deduplicated list of assets, ordered by first encounter."
-											}
-										]
-									}
-								]
-							},
-							"sources": [
-								{
-									"fileName": "collect-assets.ts",
-									"line": 32,
-									"character": 16,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/collect-assets.ts#L32"
-								}
-							],
-							"parameters": [
-								{
-									"id": 17,
-									"name": "node",
-									"variant": "param",
-									"kind": 32768,
-									"flags": {},
-									"comment": {
-										"summary": [
-											{
-												"kind": "text",
-												"text": "The node (or Puck content item) to walk."
-											}
-										]
-									},
-									"type": {
-										"type": "union",
-										"types": [
-											{
-												"type": "reference",
-												"target": {
-													"packageName": "@anvilkit/contracts",
-													"packagePath": "src/ir.ts",
-													"qualifiedName": "PageIRNode"
-												},
-												"name": "PageIRNode",
-												"package": "@anvilkit/contracts",
-												"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
-											},
-											{
-												"type": "reflection",
-												"declaration": {
-													"id": 18,
-													"name": "__type",
-													"variant": "declaration",
-													"kind": 65536,
-													"flags": {},
-													"children": [
-														{
-															"id": 19,
-															"name": "props",
-															"variant": "declaration",
-															"kind": 1024,
-															"flags": {},
-															"sources": [
-																{
-																	"fileName": "collect-assets.ts",
-																	"line": 33,
-																	"character": 22,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/collect-assets.ts#L33"
-																}
-															],
-															"type": {
-																"type": "reference",
-																"target": {
-																	"packageName": "typescript",
-																	"packagePath": "lib/lib.es5.d.ts",
-																	"qualifiedName": "Record"
-																},
-																"typeArguments": [
-																	{
-																		"type": "intrinsic",
-																		"name": "string"
-																	},
-																	{
-																		"type": "intrinsic",
-																		"name": "unknown"
-																	}
-																],
-																"name": "Record",
-																"package": "typescript"
-															}
-														}
-													],
-													"groups": [
-														{
-															"title": "Properties",
-															"children": [19]
-														}
-													]
-												}
-											}
-										]
-									}
-								},
-								{
-									"id": 20,
-									"name": "opts",
-									"variant": "param",
-									"kind": 32768,
-									"flags": {
-										"isOptional": true
-									},
-									"comment": {
-										"summary": [
-											{
-												"kind": "text",
-												"text": "Optional collection options (currently a "
-											},
-											{
-												"kind": "code",
-												"text": "`deriveId`"
-											},
-											{
-												"kind": "text",
-												"text": "\n  callback override)."
-											}
-										]
-									},
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "@anvilkit/ir",
-											"packagePath": "src/collect-assets.ts",
-											"qualifiedName": "CollectAssetsOptions"
-										},
-										"name": "CollectAssetsOptions",
-										"package": "@anvilkit/ir"
-									}
-								}
-							],
-							"type": {
-								"type": "typeOperator",
-								"operator": "readonly",
-								"target": {
-									"type": "array",
-									"elementType": {
-										"type": "reference",
-										"target": {
-											"packageName": "@anvilkit/contracts",
-											"packagePath": "src/ir.ts",
-											"qualifiedName": "PageIRAsset"
-										},
-										"name": "PageIRAsset",
-										"package": "@anvilkit/contracts"
-									}
-								}
-							}
-						}
-					]
-				},
-				{
-					"id": 23,
-					"name": "getDataSourceDirective",
-					"variant": "declaration",
-					"kind": 64,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "data-source.ts",
-							"line": 27,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L27"
-						}
-					],
-					"signatures": [
-						{
-							"id": 24,
-							"name": "getDataSourceDirective",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Read a "
-									},
-									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "DataSourceDirective",
-										"target": 22
-									},
-									{
-										"kind": "text",
-										"text": " off a node's props, or "
-									},
-									{
-										"kind": "code",
-										"text": "`undefined`"
-									},
-									{
-										"kind": "text",
-										"text": " when\nabsent / malformed. Pure + isomorphic."
-									}
-								]
-							},
-							"sources": [
-								{
-									"fileName": "data-source.ts",
-									"line": 27,
-									"character": 16,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L27"
-								}
-							],
-							"parameters": [
-								{
-									"id": 25,
-									"name": "props",
-									"variant": "param",
-									"kind": 32768,
-									"flags": {},
-									"type": {
-										"type": "union",
-										"types": [
-											{
-												"type": "reference",
-												"target": {
-													"packageName": "typescript",
-													"packagePath": "lib/lib.es5.d.ts",
-													"qualifiedName": "Readonly"
-												},
-												"typeArguments": [
-													{
-														"type": "reference",
-														"target": {
-															"packageName": "typescript",
-															"packagePath": "lib/lib.es5.d.ts",
-															"qualifiedName": "Record"
-														},
-														"typeArguments": [
-															{
-																"type": "intrinsic",
-																"name": "string"
-															},
-															{
-																"type": "intrinsic",
-																"name": "unknown"
-															}
-														],
-														"name": "Record",
-														"package": "typescript"
-													}
-												],
-												"name": "Readonly",
-												"package": "typescript"
-											},
-											{
-												"type": "intrinsic",
-												"name": "undefined"
-											}
-										]
-									}
-								}
-							],
-							"type": {
-								"type": "union",
-								"types": [
-									{
-										"type": "reference",
-										"target": 26,
-										"name": "RemoteCsvDirective",
-										"package": "@anvilkit/ir"
-									},
-									{
-										"type": "intrinsic",
-										"name": "undefined"
-									}
-								]
-							}
-						}
-					]
-				},
-				{
-					"id": 29,
-					"name": "identifySlots",
-					"variant": "declaration",
-					"kind": 64,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "identify-slots.ts",
-							"line": 32,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/identify-slots.ts#L32"
-						}
-					],
-					"signatures": [
-						{
-							"id": 30,
-							"name": "identifySlots",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Inspect a Puck "
-									},
-									{
-										"kind": "code",
-										"text": "`Config`"
-									},
-									{
-										"kind": "text",
-										"text": " and return the set of field keys that\nbehave as "
-									},
-									{
-										"kind": "code",
-										"text": "`slot`"
-									},
-									{
-										"kind": "text",
-										"text": " (nested child-tree) fields, grouped by\ncomponent name.\n\nThe IR transform uses this to decide which prop values should be\ndescended into as "
-									},
-									{
-										"kind": "code",
-										"text": "`PageIRNode.children`"
-									},
-									{
-										"kind": "text",
-										"text": " versus copied verbatim\ninto "
-									},
-									{
-										"kind": "code",
-										"text": "`PageIRNode.props`"
-									},
-									{
-										"kind": "text",
-										"text": " ("
-									},
-									{
-										"kind": "code",
-										"text": "`PageIRNode`"
-									},
-									{
-										"kind": "text",
-										"text": " is declared in\n"
-									},
-									{
-										"kind": "code",
-										"text": "`@anvilkit/contracts`"
-									},
-									{
-										"kind": "text",
-										"text": ").\n\n### Detection heuristic\n\nA field is considered a slot if its "
-									},
-									{
-										"kind": "code",
-										"text": "`type`"
-									},
-									{
-										"kind": "text",
-										"text": " is "
-									},
-									{
-										"kind": "code",
-										"text": "`\"slot\"`"
-									},
-									{
-										"kind": "text",
-										"text": " (Puck's\nexplicit slot field type). This covers Puck 0.19+ where slot\nfields are first-class citizens in the field schema."
-									}
-								],
-								"blockTags": [
-									{
-										"tag": "@returns",
-										"content": [
-											{
-												"kind": "text",
-												"text": "A map from component name to the list of slot-field keys\n  declared on that component. Components with no slots are\n  included with an empty array."
-											}
-										]
-									}
-								]
-							},
-							"sources": [
-								{
-									"fileName": "identify-slots.ts",
-									"line": 32,
-									"character": 16,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/identify-slots.ts#L32"
-								}
-							],
-							"parameters": [
-								{
-									"id": 31,
-									"name": "config",
-									"variant": "param",
-									"kind": 32768,
-									"flags": {},
-									"comment": {
-										"summary": [
-											{
-												"kind": "text",
-												"text": "The Puck "
-											},
-											{
-												"kind": "code",
-												"text": "`Config`"
-											},
-											{
-												"kind": "text",
-												"text": " to inspect."
-											}
-										]
-									},
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-Csn3gOP8.d.ts",
-											"qualifiedName": "Config"
-										},
-										"name": "Config",
-										"package": "@puckeditor/core"
-									}
-								}
-							],
-							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "typescript",
-									"packagePath": "lib/lib.es2015.collection.d.ts",
-									"qualifiedName": "Map"
-								},
-								"typeArguments": [
-									{
-										"type": "intrinsic",
-										"name": "string"
-									},
-									{
-										"type": "typeOperator",
-										"operator": "readonly",
-										"target": {
-											"type": "array",
-											"elementType": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										}
-									}
-								],
-								"name": "Map",
-								"package": "typescript"
-							}
-						}
-					]
-				},
-				{
-					"id": 32,
-					"name": "irToPuckData",
-					"variant": "declaration",
-					"kind": 64,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "ir-to-puck-data.ts",
-							"line": 39,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/ir-to-puck-data.ts#L39"
-						}
-					],
-					"signatures": [
-						{
-							"id": 33,
-							"name": "irToPuckData",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Reverse of "
-									},
-									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "puckDataToIR",
-										"target": 43
-									},
-									{
-										"kind": "text",
-										"text": ": rebuild a Puck "
-									},
-									{
-										"kind": "code",
-										"text": "`Data`"
-									},
-									{
-										"kind": "text",
-										"text": " document\nfrom a "
-									},
-									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "PageIR",
-										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
-									},
-									{
-										"kind": "text",
-										"text": ".\n\nThis function backs the round-trip guarantee: for serializable,\nalready-canonical Puck "
-									},
-									{
-										"kind": "code",
-										"text": "`Data`"
-									},
-									{
-										"kind": "text",
-										"text": ", "
-									},
-									{
-										"kind": "code",
-										"text": "`irToPuckData(puckDataToIR(d))`"
-									},
-									{
-										"kind": "text",
-										"text": " is\n*structurally equivalent* to "
-									},
-									{
-										"kind": "code",
-										"text": "`d`"
-									},
-									{
-										"kind": "text",
-										"text": ". (The forward transform is\nintentionally normalizing — it sorts keys and drops\nfunctions/"
-									},
-									{
-										"kind": "code",
-										"text": "`undefined`"
-									},
-									{
-										"kind": "text",
-										"text": "/non-JSON values — so the equivalence is\nstructural, not byte-for-byte, for non-canonical input.) That\nguarantee is what lets us snapshot-test IR shapes without drift.\nIt is also the entry point the AI copilot plugin uses to turn a\nvalidated LLM "
-									},
-									{
-										"kind": "code",
-										"text": "`PageIR`"
-									},
-									{
-										"kind": "text",
-										"text": " response back into a "
-									},
-									{
-										"kind": "code",
-										"text": "`setData`"
-									},
-									{
-										"kind": "text",
-										"text": " payload.\n\nReturns a plain (un-frozen) Puck "
-									},
-									{
-										"kind": "code",
-										"text": "`Data`"
-									},
-									{
-										"kind": "text",
-										"text": " so Puck can mutate it."
-									}
-								],
-								"blockTags": [
-									{
-										"tag": "@returns",
-										"content": [
-											{
-												"kind": "text",
-												"text": "A Puck "
-											},
-											{
-												"kind": "code",
-												"text": "`Data`"
-											},
-											{
-												"kind": "text",
-												"text": " equivalent to the IR input."
-											}
-										]
-									}
-								]
-							},
-							"sources": [
-								{
-									"fileName": "ir-to-puck-data.ts",
-									"line": 39,
-									"character": 16,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/ir-to-puck-data.ts#L39"
-								}
-							],
-							"parameters": [
-								{
-									"id": 34,
-									"name": "ir",
-									"variant": "param",
-									"kind": 32768,
-									"flags": {},
-									"comment": {
-										"summary": [
-											{
-												"kind": "text",
-												"text": "The page IR document to rehydrate."
-											}
-										]
-									},
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "@anvilkit/contracts",
-											"packagePath": "src/ir.ts",
-											"qualifiedName": "PageIR"
-										},
-										"name": "PageIR",
-										"package": "@anvilkit/contracts",
-										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
-									}
-								}
-							],
-							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
-									"qualifiedName": "Data"
-								},
-								"name": "Data",
-								"package": "@puckeditor/core"
-							}
-						}
-					]
-				},
-				{
-					"id": 43,
-					"name": "puckDataToIR",
-					"variant": "declaration",
-					"kind": 64,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "puck-data-to-ir.ts",
-							"line": 196,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/puck-data-to-ir.ts#L196"
-						}
-					],
-					"signatures": [
-						{
-							"id": 44,
-							"name": "puckDataToIR",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Transform a Puck "
-									},
-									{
-										"kind": "code",
-										"text": "`Data`"
-									},
-									{
-										"kind": "text",
-										"text": " document into a normalized "
-									},
-									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "PageIR",
-										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
-									},
-									{
-										"kind": "text",
-										"text": ".\n\nThis is the primary entry point every Anvilkit export format\nconsumes. Given a Puck "
-									},
-									{
-										"kind": "code",
-										"text": "`Data`"
-									},
-									{
-										"kind": "text",
-										"text": " and its matching "
-									},
-									{
-										"kind": "code",
-										"text": "`Config`"
-									},
-									{
-										"kind": "text",
-										"text": ", the\nresult is a pure, JSON-serializable, deeply-frozen "
-									},
-									{
-										"kind": "code",
-										"text": "`PageIR`"
-									},
-									{
-										"kind": "text",
-										"text": " with\nstable node ids, canonicalized (sorted) props, and a flat asset\nmanifest."
-									}
-								],
-								"blockTags": [
-									{
-										"tag": "@returns",
-										"content": [
-											{
-												"kind": "text",
-												"text": "The normalized, frozen page IR document."
-											}
-										]
-									}
-								]
-							},
-							"sources": [
-								{
-									"fileName": "puck-data-to-ir.ts",
-									"line": 196,
-									"character": 16,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/puck-data-to-ir.ts#L196"
-								}
-							],
-							"parameters": [
-								{
-									"id": 45,
-									"name": "data",
-									"variant": "param",
-									"kind": 32768,
-									"flags": {},
-									"comment": {
-										"summary": [
-											{
-												"kind": "text",
-												"text": "Puck editor document to normalize."
-											}
-										]
-									},
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-Csn3gOP8.d.ts",
-											"qualifiedName": "Data"
-										},
-										"name": "Data",
-										"package": "@puckeditor/core"
-									}
-								},
-								{
-									"id": 46,
-									"name": "config",
-									"variant": "param",
-									"kind": 32768,
-									"flags": {},
-									"comment": {
-										"summary": [
-											{
-												"kind": "text",
-												"text": "Puck "
-											},
-											{
-												"kind": "code",
-												"text": "`Config`"
-											},
-											{
-												"kind": "text",
-												"text": " matching "
-											},
-											{
-												"kind": "code",
-												"text": "`data`"
-											},
-											{
-												"kind": "text",
-												"text": ". **Required** — used\n  by "
-											},
-											{
-												"kind": "inline-tag",
-												"tag": "@link",
-												"text": "identifySlots",
-												"target": 29
-											},
-											{
-												"kind": "text",
-												"text": " to tell slot fields (descended into as\n  "
-											},
-											{
-												"kind": "code",
-												"text": "`children`"
-											},
-											{
-												"kind": "text",
-												"text": ") apart from plain serializable props."
-											}
-										]
-									},
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-Csn3gOP8.d.ts",
-											"qualifiedName": "Config"
-										},
-										"name": "Config",
-										"package": "@puckeditor/core"
-									}
-								},
-								{
-									"id": 47,
-									"name": "opts",
-									"variant": "param",
-									"kind": 32768,
-									"flags": {
-										"isOptional": true
-									},
-									"comment": {
-										"summary": [
-											{
-												"kind": "text",
-												"text": "See "
-											},
-											{
-												"kind": "inline-tag",
-												"tag": "@link",
-												"text": "PuckDataToIROptions",
-												"target": 35
-											},
-											{
-												"kind": "text",
-												"text": "."
-											}
-										]
-									},
-									"type": {
-										"type": "reference",
-										"target": 35,
-										"name": "PuckDataToIROptions",
-										"package": "@anvilkit/ir"
-									}
-								}
-							],
-							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "@anvilkit/contracts",
-									"packagePath": "src/ir.ts",
-									"qualifiedName": "PageIR"
-								},
-								"name": "PageIR",
-								"package": "@anvilkit/contracts",
-								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
-							}
-						}
-					]
-				}
-			],
-			"groups": [
-				{
-					"title": "Interfaces",
-					"children": [35, 26]
-				},
-				{
-					"title": "Type Aliases",
-					"children": [22]
-				},
-				{
-					"title": "Variables",
-					"children": [21]
-				},
-				{
-					"title": "Functions",
-					"children": [15, 23, 29, 32, 43]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "index.ts",
-					"line": 1,
-					"character": 0,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/index.ts#L1"
-				}
-			]
-		},
-		{
-			"id": 2,
-			"name": "migrations",
-			"variant": "declaration",
-			"kind": 2,
-			"flags": {},
-			"children": [
-				{
-					"id": 52,
-					"name": "PageIRNodeMetaError",
-					"variant": "declaration",
-					"kind": 128,
-					"flags": {},
-					"children": [
-						{
-							"id": 53,
-							"name": "constructor",
-							"variant": "declaration",
-							"kind": 512,
-							"flags": {},
-							"sources": [
-								{
-									"fileName": "migrations/error.ts",
-									"line": 16,
-									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L16"
-								}
-							],
-							"signatures": [
-								{
-									"id": 54,
-									"name": "PageIRNodeMetaError",
-									"variant": "signature",
-									"kind": 16384,
-									"flags": {},
-									"sources": [
-										{
-											"fileName": "migrations/error.ts",
-											"line": 16,
-											"character": 1,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L16"
-										}
-									],
-									"parameters": [
-										{
-											"id": 55,
-											"name": "issues",
-											"variant": "param",
-											"kind": 32768,
-											"flags": {},
-											"type": {
-												"type": "typeOperator",
-												"operator": "readonly",
-												"target": {
-													"type": "array",
-													"elementType": {
-														"type": "reference",
-														"target": 48,
-														"name": "NodeMetaValidationIssue",
-														"package": "@anvilkit/ir"
-													}
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "reference",
-										"target": 52,
-										"name": "PageIRNodeMetaError",
-										"package": "@anvilkit/ir"
-									},
-									"overwrites": {
-										"type": "reference",
-										"target": -1,
-										"name": "Error.constructor",
-										"package": "typescript"
-									}
-								}
-							],
-							"overwrites": {
-								"type": "reference",
-								"target": -1,
-								"name": "Error.constructor",
-								"package": "typescript"
-							}
-						},
-						{
-							"id": 56,
-							"name": "issues",
-							"variant": "declaration",
-							"kind": 1024,
-							"flags": {
-								"isReadonly": true
-							},
-							"sources": [
-								{
-									"fileName": "migrations/error.ts",
-									"line": 15,
-									"character": 10,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L15"
-								}
-							],
-							"type": {
-								"type": "typeOperator",
-								"operator": "readonly",
-								"target": {
-									"type": "array",
-									"elementType": {
-										"type": "reference",
-										"target": 48,
-										"name": "NodeMetaValidationIssue",
-										"package": "@anvilkit/ir"
-									}
-								}
-							}
-						}
-					],
-					"groups": [
-						{
-							"title": "Constructors",
-							"children": [53]
-						},
-						{
-							"title": "Properties",
-							"children": [56]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "migrations/error.ts",
-							"line": 14,
-							"character": 13,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L14"
-						}
-					],
-					"extendedTypes": [
-						{
-							"type": "reference",
-							"target": {
-								"packageName": "typescript",
-								"packagePath": "lib/lib.es5.d.ts",
-								"qualifiedName": "Error"
-							},
-							"name": "Error",
-							"package": "typescript"
-						}
-					]
-				},
-				{
-					"id": 48,
-					"name": "NodeMetaValidationIssue",
-					"variant": "declaration",
-					"kind": 256,
-					"flags": {},
-					"comment": {
-						"summary": [],
-						"blockTags": [
-							{
-								"tag": "@file",
-								"content": [
-									{
-										"kind": "text",
-										"text": "Public error class for "
-									},
-									{
-										"kind": "code",
-										"text": "`@anvilkit/ir/migrations`"
-									},
-									{
-										"kind": "text",
-										"text": " cap\nviolations. Lives outside "
-									},
-									{
-										"kind": "code",
-										"text": "`internal/`"
-									},
-									{
-										"kind": "text",
-										"text": " so TypeDoc surfaces it on\nthe public api-snapshot — consumers "
-									},
-									{
-										"kind": "code",
-										"text": "`instanceof`"
-									},
-									{
-										"kind": "text",
-										"text": " against this\nclass to recover from invalid "
-									},
-									{
-										"kind": "code",
-										"text": "`meta`"
-									},
-									{
-										"kind": "text",
-										"text": " payloads."
-									}
-								]
-							}
-						]
-					},
-					"children": [
-						{
-							"id": 49,
-							"name": "code",
-							"variant": "declaration",
-							"kind": 1024,
-							"flags": {
-								"isReadonly": true
-							},
-							"sources": [
-								{
-									"fileName": "migrations/error.ts",
-									"line": 9,
-									"character": 10,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L9"
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "string"
-							}
-						},
-						{
-							"id": 50,
-							"name": "message",
-							"variant": "declaration",
-							"kind": 1024,
-							"flags": {
-								"isReadonly": true
-							},
-							"sources": [
-								{
-									"fileName": "migrations/error.ts",
-									"line": 10,
-									"character": 10,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L10"
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "string"
-							}
-						},
-						{
-							"id": 51,
-							"name": "path",
-							"variant": "declaration",
-							"kind": 1024,
-							"flags": {
-								"isReadonly": true
-							},
-							"sources": [
-								{
-									"fileName": "migrations/error.ts",
-									"line": 11,
-									"character": 10,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L11"
-								}
-							],
-							"type": {
-								"type": "typeOperator",
-								"operator": "readonly",
-								"target": {
-									"type": "array",
-									"elementType": {
-										"type": "union",
-										"types": [
-											{
-												"type": "intrinsic",
-												"name": "string"
-											},
-											{
-												"type": "intrinsic",
-												"name": "number"
-											}
-										]
-									}
-								}
-							}
-						}
-					],
-					"groups": [
-						{
-							"title": "Properties",
-							"children": [49, 50, 51]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "migrations/error.ts",
-							"line": 8,
-							"character": 17,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L8"
-						}
-					]
-				},
-				{
-					"id": 12,
-					"name": "PageIRMigrationOptions",
-					"variant": "declaration",
-					"kind": 256,
-					"flags": {},
-					"children": [
-						{
-							"id": 13,
-							"name": "from",
-							"variant": "declaration",
-							"kind": 1024,
-							"flags": {
-								"isReadonly": true
-							},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Peer-range label of the document being migrated."
-									}
-								]
-							},
-							"sources": [
-								{
-									"fileName": "migrations/index.ts",
-									"line": 41,
-									"character": 10,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L41"
-								}
-							],
-							"type": {
-								"type": "union",
-								"types": [
-									{
-										"type": "literal",
-										"value": "0.21"
-									},
-									{
-										"type": "literal",
-										"value": "0.22"
-									}
-								]
-							}
-						},
-						{
-							"id": 14,
-							"name": "to",
-							"variant": "declaration",
-							"kind": 1024,
-							"flags": {
-								"isReadonly": true
-							},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Target peer-range label."
-									}
-								]
-							},
-							"sources": [
-								{
-									"fileName": "migrations/index.ts",
-									"line": 43,
-									"character": 10,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L43"
-								}
-							],
-							"type": {
-								"type": "union",
-								"types": [
-									{
-										"type": "literal",
-										"value": "0.21"
-									},
-									{
-										"type": "literal",
-										"value": "0.22"
-									}
-								]
-							}
-						}
-					],
-					"groups": [
-						{
-							"title": "Properties",
-							"children": [13, 14]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "migrations/index.ts",
-							"line": 39,
-							"character": 17,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L39"
-						}
-					]
-				},
-				{
-					"id": 11,
-					"name": "PageIRMigrationVersion",
-					"variant": "declaration",
-					"kind": 2097152,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "migrations/index.ts",
-							"line": 37,
-							"character": 12,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L37"
-						}
-					],
-					"type": {
-						"type": "indexedAccess",
-						"indexType": {
-							"type": "intrinsic",
-							"name": "number"
-						},
-						"objectType": {
-							"type": "query",
-							"queryType": {
-								"type": "reference",
-								"target": 10,
-								"name": "MIGRATION_VERSIONS",
-								"package": "@anvilkit/ir"
-							}
-						}
-					}
-				},
-				{
-					"id": 10,
-					"name": "MIGRATION_VERSIONS",
-					"variant": "declaration",
-					"kind": 32,
-					"flags": {
-						"isConst": true
-					},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "The peer-range labels that "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "migratePageIR",
-								"target": 3
-							},
-							{
-								"kind": "text",
-								"text": " accepts.\n\n"
-							},
-							{
-								"kind": "code",
-								"text": "`\"0.21\"`"
-							},
-							{
-								"kind": "text",
-								"text": " is the "
-							},
-							{
-								"kind": "code",
-								"text": "`1.0`"
-							},
-							{
-								"kind": "text",
-								"text": " GA peer range (no "
-							},
-							{
-								"kind": "code",
-								"text": "`meta`"
-							},
-							{
-								"kind": "text",
-								"text": "); "
-							},
-							{
-								"kind": "code",
-								"text": "`\"0.22\"`"
-							},
-							{
-								"kind": "text",
-								"text": " is the\n"
-							},
-							{
-								"kind": "code",
-								"text": "`1.1`"
-							},
-							{
-								"kind": "text",
-								"text": " peer range (additive "
-							},
-							{
-								"kind": "code",
-								"text": "`meta`"
-							},
-							{
-								"kind": "text",
-								"text": "). The values map to\n"
-							},
-							{
-								"kind": "code",
-								"text": "`@puckeditor/core`"
-							},
-							{
-								"kind": "text",
-								"text": " peer-range labels rather than to the IR\ndocument's own "
-							},
-							{
-								"kind": "code",
-								"text": "`version`"
-							},
-							{
-								"kind": "text",
-								"text": " literal — the IR literal stays "
-							},
-							{
-								"kind": "code",
-								"text": "`\"1\"`"
-							},
-							{
-								"kind": "text",
-								"text": "."
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "migrations/index.ts",
-							"line": 35,
-							"character": 13,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L35"
-						}
-					],
-					"type": {
-						"type": "typeOperator",
-						"operator": "readonly",
-						"target": {
-							"type": "tuple",
-							"elements": [
-								{
-									"type": "literal",
-									"value": "0.21"
-								},
-								{
-									"type": "literal",
-									"value": "0.22"
-								}
-							]
-						}
-					},
-					"defaultValue": "..."
-				},
-				{
-					"id": 7,
-					"name": "downgradePageIR",
-					"variant": "declaration",
-					"kind": 64,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "migrations/index.ts",
-							"line": 163,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L163"
-						}
-					],
-					"signatures": [
-						{
-							"id": 8,
-							"name": "downgradePageIR",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Recursively strip "
-									},
-									{
-										"kind": "code",
-										"text": "`meta`"
-									},
-									{
-										"kind": "text",
-										"text": " from every node in a "
-									},
-									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "PageIR",
-										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
-									},
-									{
-										"kind": "text",
-										"text": ".\n\nUse when surfacing IR to a "
-									},
-									{
-										"kind": "code",
-										"text": "`1.0`"
-									},
-									{
-										"kind": "text",
-										"text": " consumer that pins against the\npre-"
-									},
-									{
-										"kind": "code",
-										"text": "`meta`"
-									},
-									{
-										"kind": "text",
-										"text": " contract. Always returns a fresh, frozen tree — even\nwhen the input had no "
-									},
-									{
-										"kind": "code",
-										"text": "`meta`"
-									},
-									{
-										"kind": "text",
-										"text": " to strip — so callers can safely\ncache the result."
-									}
-								]
-							},
-							"sources": [
-								{
-									"fileName": "migrations/index.ts",
-									"line": 163,
-									"character": 16,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L163"
-								}
-							],
-							"parameters": [
-								{
-									"id": 9,
-									"name": "ir",
-									"variant": "param",
-									"kind": 32768,
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "@anvilkit/contracts",
-											"packagePath": "src/ir.ts",
-											"qualifiedName": "PageIR"
-										},
-										"name": "PageIR",
-										"package": "@anvilkit/contracts",
-										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
-									}
-								}
-							],
-							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "@anvilkit/contracts",
-									"packagePath": "src/ir.ts",
-									"qualifiedName": "PageIR"
-								},
-								"name": "PageIR",
-								"package": "@anvilkit/contracts",
-								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
-							}
-						}
-					]
-				},
-				{
-					"id": 3,
-					"name": "migratePageIR",
-					"variant": "declaration",
-					"kind": 64,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "migrations/index.ts",
-							"line": 63,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L63"
-						}
-					],
-					"signatures": [
-						{
-							"id": 4,
-							"name": "migratePageIR",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Migrate a "
-									},
-									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "PageIR",
-										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
-									},
-									{
-										"kind": "text",
-										"text": " document between peer-range labels.\n\n- Pure no-op when "
-									},
-									{
-										"kind": "code",
-										"text": "`from === to`"
-									},
-									{
-										"kind": "text",
-										"text": " AND every node has "
-									},
-									{
-										"kind": "code",
-										"text": "`meta === undefined`"
-									},
-									{
-										"kind": "text",
-										"text": ".\n  Returns the original reference.\n- Validates every "
-									},
-									{
-										"kind": "code",
-										"text": "`node.meta`"
-									},
-									{
-										"kind": "text",
-										"text": " (when present) against the runtime\n  caps documented on "
-									},
-									{
-										"kind": "code",
-										"text": "`PageIRNodeMeta`"
-									},
-									{
-										"kind": "text",
-										"text": " (from "
-									},
-									{
-										"kind": "code",
-										"text": "`@anvilkit/contracts`"
-									},
-									{
-										"kind": "text",
-										"text": ").\n  Throws "
-									},
-									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "PageIRNodeMetaError",
-										"target": 52
-									},
-									{
-										"kind": "text",
-										"text": " on the first invalid node.\n- Returns a frozen IR with a freshly rebuilt node spine when\n  validation succeeds with at least one populated "
-									},
-									{
-										"kind": "code",
-										"text": "`meta`"
-									},
-									{
-										"kind": "text",
-										"text": ". The\n  rebuild is structural only: "
-									},
-									{
-										"kind": "code",
-										"text": "`props`"
-									},
-									{
-										"kind": "text",
-										"text": ", "
-									},
-									{
-										"kind": "code",
-										"text": "`assets`"
-									},
-									{
-										"kind": "text",
-										"text": ", and "
-									},
-									{
-										"kind": "code",
-										"text": "`meta`"
-									},
-									{
-										"kind": "text",
-										"text": " are\n  carried over by reference (not deep-cloned) and "
-									},
-									{
-										"kind": "code",
-										"text": "`meta`"
-									},
-									{
-										"kind": "text",
-										"text": " is\n  preserved byte-for-byte; no new fields are synthesized.\n\nImportantly, this helper NEVER bumps "
-									},
-									{
-										"kind": "code",
-										"text": "`ir.version`"
-									},
-									{
-										"kind": "text",
-										"text": ". The literal\nstays "
-									},
-									{
-										"kind": "code",
-										"text": "`\"1\"`"
-									},
-									{
-										"kind": "text",
-										"text": " across "
-									},
-									{
-										"kind": "code",
-										"text": "`0.21 ↔ 0.22`"
-									},
-									{
-										"kind": "text",
-										"text": "."
-									}
-								]
-							},
-							"sources": [
-								{
-									"fileName": "migrations/index.ts",
-									"line": 63,
-									"character": 16,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L63"
-								}
-							],
-							"parameters": [
-								{
-									"id": 5,
-									"name": "ir",
-									"variant": "param",
-									"kind": 32768,
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "@anvilkit/contracts",
-											"packagePath": "src/ir.ts",
-											"qualifiedName": "PageIR"
-										},
-										"name": "PageIR",
-										"package": "@anvilkit/contracts",
-										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
-									}
-								},
-								{
-									"id": 6,
-									"name": "options",
-									"variant": "param",
-									"kind": 32768,
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"target": 12,
-										"name": "PageIRMigrationOptions",
-										"package": "@anvilkit/ir"
-									}
-								}
-							],
-							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "@anvilkit/contracts",
-									"packagePath": "src/ir.ts",
-									"qualifiedName": "PageIR"
-								},
-								"name": "PageIR",
-								"package": "@anvilkit/contracts",
-								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
-							}
-						}
-					]
-				}
-			],
-			"groups": [
-				{
-					"title": "Classes",
-					"children": [52]
-				},
-				{
-					"title": "Interfaces",
-					"children": [48, 12]
-				},
-				{
-					"title": "Type Aliases",
-					"children": [11]
-				},
-				{
-					"title": "Variables",
-					"children": [10]
-				},
-				{
-					"title": "Functions",
-					"children": [7, 3]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "migrations/index.ts",
-					"line": 1,
-					"character": 0,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L1"
-				}
-			]
-		}
-	],
-	"groups": [
-		{
-			"title": "Modules",
-			"children": [1, 2]
-		}
-	],
-	"packageName": "@anvilkit/ir",
-	"symbolIdMap": {
-		"1": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/index.ts",
-			"qualifiedName": ""
-		},
-		"2": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": ""
-		},
-		"3": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": "migratePageIR"
-		},
-		"4": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": "migratePageIR"
-		},
-		"5": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": "ir"
-		},
-		"6": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": "options"
-		},
-		"7": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": "downgradePageIR"
-		},
-		"8": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": "downgradePageIR"
-		},
-		"9": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": "ir"
-		},
-		"10": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": "MIGRATION_VERSIONS"
-		},
-		"11": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": "PageIRMigrationVersion"
-		},
-		"12": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": "PageIRMigrationOptions"
-		},
-		"13": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": "PageIRMigrationOptions.from"
-		},
-		"14": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/index.ts",
-			"qualifiedName": "PageIRMigrationOptions.to"
-		},
-		"15": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/collect-assets.ts",
-			"qualifiedName": "collectAssets"
-		},
-		"16": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/collect-assets.ts",
-			"qualifiedName": "collectAssets"
-		},
-		"17": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/collect-assets.ts",
-			"qualifiedName": "node"
-		},
-		"18": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/collect-assets.ts",
-			"qualifiedName": "__type"
-		},
-		"19": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/collect-assets.ts",
-			"qualifiedName": "__type.props"
-		},
-		"20": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/collect-assets.ts",
-			"qualifiedName": "opts"
-		},
-		"21": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/data-source.ts",
-			"qualifiedName": "DATA_SOURCE_PROP"
-		},
-		"22": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/data-source.ts",
-			"qualifiedName": "DataSourceDirective"
-		},
-		"23": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/data-source.ts",
-			"qualifiedName": "getDataSourceDirective"
-		},
-		"24": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/data-source.ts",
-			"qualifiedName": "getDataSourceDirective"
-		},
-		"25": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/data-source.ts",
-			"qualifiedName": "props"
-		},
-		"26": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/data-source.ts",
-			"qualifiedName": "RemoteCsvDirective"
-		},
-		"27": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/data-source.ts",
-			"qualifiedName": "RemoteCsvDirective.kind"
-		},
-		"28": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/data-source.ts",
-			"qualifiedName": "RemoteCsvDirective.url"
-		},
-		"29": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/identify-slots.ts",
-			"qualifiedName": "identifySlots"
-		},
-		"30": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/identify-slots.ts",
-			"qualifiedName": "identifySlots"
-		},
-		"31": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/identify-slots.ts",
-			"qualifiedName": "config"
-		},
-		"32": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/ir-to-puck-data.ts",
-			"qualifiedName": "irToPuckData"
-		},
-		"33": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/ir-to-puck-data.ts",
-			"qualifiedName": "irToPuckData"
-		},
-		"34": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/ir-to-puck-data.ts",
-			"qualifiedName": "ir"
-		},
-		"35": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "PuckDataToIROptions"
-		},
-		"36": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "PuckDataToIROptions.now"
-		},
-		"37": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"38": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"39": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "PuckDataToIROptions.onWarning"
-		},
-		"40": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"41": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"42": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "warning"
-		},
-		"43": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "puckDataToIR"
-		},
-		"44": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "puckDataToIR"
-		},
-		"45": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "data"
-		},
-		"46": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "config"
-		},
-		"47": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "opts"
-		},
-		"48": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/error.ts",
-			"qualifiedName": "NodeMetaValidationIssue"
-		},
-		"49": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/error.ts",
-			"qualifiedName": "NodeMetaValidationIssue.code"
-		},
-		"50": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/error.ts",
-			"qualifiedName": "NodeMetaValidationIssue.message"
-		},
-		"51": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/error.ts",
-			"qualifiedName": "NodeMetaValidationIssue.path"
-		},
-		"52": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/error.ts",
-			"qualifiedName": "PageIRNodeMetaError"
-		},
-		"53": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/error.ts",
-			"qualifiedName": "PageIRNodeMetaError.__constructor"
-		},
-		"54": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/error.ts",
-			"qualifiedName": "PageIRNodeMetaError"
-		},
-		"55": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/error.ts",
-			"qualifiedName": "issues"
-		},
-		"56": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/migrations/error.ts",
-			"qualifiedName": "PageIRNodeMetaError.issues"
-		}
-	},
-	"files": {
-		"entries": {
-			"1": "src/index.ts",
-			"2": "src/migrations/index.ts"
-		},
-		"reflections": {
-			"1": 1,
-			"2": 2
-		}
-	}
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@anvilkit/ir",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "id": 15,
+      "name": "editor",
+      "variant": "declaration",
+      "kind": 2,
+      "flags": {},
+      "children": [
+        {
+          "id": 35,
+          "name": "EditorFeatureScanDocument",
+          "variant": "declaration",
+          "kind": 256,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "A structural view of an authored document, sufficient for\nprop-level feature detection.\n\nDeliberately **not** Puck's "
+              },
+              {
+                "kind": "code",
+                "text": "`Data`"
+              },
+              {
+                "kind": "text",
+                "text": ": "
+              },
+              {
+                "kind": "code",
+                "text": "`@anvilkit/ir`"
+              },
+              {
+                "kind": "text",
+                "text": " is a foundation\npackage with no runtime Puck import (§30.5 as read per C-6). The\nfields are widened to "
+              },
+              {
+                "kind": "code",
+                "text": "`unknown`"
+              },
+              {
+                "kind": "text",
+                "text": " so that both shapes a caller can\nhold are assignable without a cast — Puck "
+              },
+              {
+                "kind": "code",
+                "text": "`Data`"
+              },
+              {
+                "kind": "text",
+                "text": "\n("
+              },
+              {
+                "kind": "code",
+                "text": "`root.props`"
+              },
+              {
+                "kind": "text",
+                "text": " / "
+              },
+              {
+                "kind": "code",
+                "text": "`content`"
+              },
+              {
+                "kind": "text",
+                "text": " / "
+              },
+              {
+                "kind": "code",
+                "text": "`zones`"
+              },
+              {
+                "kind": "text",
+                "text": ") and "
+              },
+              {
+                "kind": "code",
+                "text": "`PageIR`"
+              },
+              {
+                "kind": "text",
+                "text": "\n("
+              },
+              {
+                "kind": "code",
+                "text": "`root.children`"
+              },
+              {
+                "kind": "text",
+                "text": ") — and the scan itself walks the whole object\nrather than a fixed field list, so a future container cannot\nsilently hide rich text from the gate."
+              }
+            ]
+          },
+          "children": [
+            {
+              "id": 37,
+              "name": "content",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isOptional": true,
+                "isReadonly": true
+              },
+              "sources": [
+                {
+                  "fileName": "editor/index.ts",
+                  "line": 139,
+                  "character": 10,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L139"
+                }
+              ],
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "intrinsic",
+                    "name": "unknown"
+                  }
+                }
+              }
+            },
+            {
+              "id": 36,
+              "name": "root",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isOptional": true,
+                "isReadonly": true
+              },
+              "sources": [
+                {
+                  "fileName": "editor/index.ts",
+                  "line": 138,
+                  "character": 10,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L138"
+                }
+              ],
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            },
+            {
+              "id": 38,
+              "name": "zones",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isOptional": true,
+                "isReadonly": true
+              },
+              "sources": [
+                {
+                  "fileName": "editor/index.ts",
+                  "line": 140,
+                  "character": 10,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L140"
+                }
+              ],
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            }
+          ],
+          "groups": [
+            {
+              "title": "Properties",
+              "children": [
+                37,
+                36,
+                38
+              ]
+            }
+          ],
+          "sources": [
+            {
+              "fileName": "editor/index.ts",
+              "line": 137,
+              "character": 17,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L137"
+            }
+          ]
+        },
+        {
+          "id": 39,
+          "name": "ValidateExportCapabilitiesOptions",
+          "variant": "declaration",
+          "kind": 256,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Options for "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "validateExportCapabilities",
+                "target": 30
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "children": [
+            {
+              "id": 40,
+              "name": "mode",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isOptional": true,
+                "isReadonly": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "code",
+                    "text": "`\"production\"`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " (default): unsupported features **block** export.\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`\"development\"`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ": preview may degrade — unsupported features\nproduce a "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`\"warning\"`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " result with the same error entries."
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "editor/index.ts",
+                  "line": 637,
+                  "character": 10,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L637"
+                }
+              ],
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "literal",
+                    "value": "production"
+                  },
+                  {
+                    "type": "literal",
+                    "value": "development"
+                  }
+                ]
+              }
+            }
+          ],
+          "groups": [
+            {
+              "title": "Properties",
+              "children": [
+                40
+              ]
+            }
+          ],
+          "sources": [
+            {
+              "fileName": "editor/index.ts",
+              "line": 631,
+              "character": 17,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L631"
+            }
+          ]
+        },
+        {
+          "id": 27,
+          "name": "listUsedAuthoringFeatures",
+          "variant": "declaration",
+          "kind": 64,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "editor/index.ts",
+              "line": 624,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L624"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 28,
+              "name": "listUsedAuthoringFeatures",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Scan a parsed sidecar for used editor features (DD-0019 §23.2).\n\n**Partial by construction — not for production preflight.** This\nsees only what the sidecar holds, so "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`richText`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " (which lives in\ncomponent props) is invisible to it. It is retained because it is\npublic API and because sidecar-only callers exist that legitimately\nhave no document in hand; every export gate uses\n"
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "listUsedEditorFeatures",
+                    "target": 20
+                  },
+                  {
+                    "kind": "text",
+                    "text": " instead."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@deprecated",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "Prefer "
+                      },
+                      {
+                        "kind": "inline-tag",
+                        "tag": "@link",
+                        "text": "listUsedEditorFeatures",
+                        "target": 20
+                      },
+                      {
+                        "kind": "text",
+                        "text": ", which takes the\ndocument as an optional second argument and detects every\n"
+                      },
+                      {
+                        "kind": "code",
+                        "text": "`EditorFeatureId`"
+                      },
+                      {
+                        "kind": "text",
+                        "text": "."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "editor/index.ts",
+                  "line": 624,
+                  "character": 16,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L624"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 29,
+                  "name": "authoring",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/ir",
+                      "packagePath": "src/editor/index.ts",
+                      "qualifiedName": "AuthoringStateV1"
+                    },
+                    "name": "AuthoringStateV1",
+                    "package": "@anvilkit/ir"
+                  }
+                }
+              ],
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/contracts",
+                      "packagePath": "src/editor/export-capabilities.ts",
+                      "qualifiedName": "EditorFeatureId"
+                    },
+                    "name": "EditorFeatureId",
+                    "package": "@anvilkit/contracts"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 24,
+          "name": "listUsedDocumentFeatures",
+          "variant": "declaration",
+          "kind": 64,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "editor/index.ts",
+              "line": 571,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L571"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 25,
+              "name": "listUsedDocumentFeatures",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Feature scan for a **canonical carrier document** — the entry point\na caller uses when there is no sidecar to read ("
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`p2-007`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ").\n\nAdded so consumers stop parsing a sidecar purely to satisfy an\nargument. The studio editor page did exactly that: it called\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`readAuthoringState(publishedData).state`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " on every export click, on\ndocuments that have no sidecar, to feed a scan that then reported\nnothing.\n\nAdditive on purpose — "
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "listUsedEditorFeatures",
+                    "target": 20
+                  },
+                  {
+                    "kind": "text",
+                    "text": " keeps its\nsignature, so pre-finalization callers that genuinely hold a sidecar\nare unaffected until "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`p7-002`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " retires that form."
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "editor/index.ts",
+                  "line": 571,
+                  "character": 16,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L571"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 26,
+                  "name": "document",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "reference",
+                        "target": 35,
+                        "name": "EditorFeatureScanDocument",
+                        "package": "@anvilkit/ir"
+                      },
+                      {
+                        "type": "literal",
+                        "value": null
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "undefined"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/contracts",
+                      "packagePath": "src/editor/export-capabilities.ts",
+                      "qualifiedName": "EditorFeatureId"
+                    },
+                    "name": "EditorFeatureId",
+                    "package": "@anvilkit/contracts"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 20,
+          "name": "listUsedEditorFeatures",
+          "variant": "declaration",
+          "kind": 64,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "editor/index.ts",
+              "line": 257,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L257"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 21,
+              "name": "listUsedEditorFeatures",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Scan a document and its sidecar for every used editor feature\n(DD-0019 §23.2; DD-DEC-018).\n\nThis is the **complete** scanner and the one every production\npreflight call site must use. "
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "listUsedAuthoringFeatures",
+                    "target": 27
+                  },
+                  {
+                    "kind": "text",
+                    "text": " is\nkept as the sidecar-only view for callers that genuinely have no\ndocument (see its own note).\n\nFeature coverage, one line per "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`EditorFeatureId`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ":\n\n| feature | detected from |\n|---|---|\n| "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`responsive`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " | declared breakpoints, or any per-node responsive override |\n| "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`tokens`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " | sidecar token definitions, or any live token reference |\n| "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`styleDefinitions`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " | sidecar definitions, or any node "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`styleRefs`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " |\n| "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`localComponents`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " | sidecar definitions, or any node "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`componentInstance`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " |\n| "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`variants`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " | definition axes/variants, or any instance "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`variantSelection`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " |\n| "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`interactions`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " | sidecar interactions, or any node "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`interactionRefs`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " |\n| "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`bindings`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " | sidecar bindings, or any node "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`bindingRefs`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " |\n| "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`richText`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " | a "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`TiptapDocument`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " in component props, definition roots, or instance overrides |\n\nThe dangling-reference arms (a node referencing a definition that\nthe sidecar no longer holds) matter: they are exactly the states a\npartially-edited document reaches, and treating them as \"unused\"\nwould let a document escape the production block.\n\nOutput order is stable and matches the "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`EditorFeatureId`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " union\ndeclaration order, so callers may compare results directly."
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "editor/index.ts",
+                  "line": 257,
+                  "character": 16,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L257"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 22,
+                  "name": "authoring",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/ir",
+                      "packagePath": "src/editor/index.ts",
+                      "qualifiedName": "AuthoringStateV1"
+                    },
+                    "name": "AuthoringStateV1",
+                    "package": "@anvilkit/ir"
+                  }
+                },
+                {
+                  "id": 23,
+                  "name": "document",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "reference",
+                        "target": 35,
+                        "name": "EditorFeatureScanDocument",
+                        "package": "@anvilkit/ir"
+                      },
+                      {
+                        "type": "literal",
+                        "value": null
+                      }
+                    ]
+                  }
+                }
+              ],
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/contracts",
+                      "packagePath": "src/editor/export-capabilities.ts",
+                      "qualifiedName": "EditorFeatureId"
+                    },
+                    "name": "EditorFeatureId",
+                    "package": "@anvilkit/contracts"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "name": "projectAuthoringToIR",
+          "variant": "declaration",
+          "kind": 64,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "editor/index.ts",
+              "line": 108,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L108"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 17,
+              "name": "projectAuthoringToIR",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Project sidecar-owned authoring facts into an already-converted\nPageIR (DD-DEC-020): "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`locked`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " → "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`meta.locked`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", one-way. Everything\nelse in the sidecar is either materialized upstream (styles,\ncomponents — by core/editor via the export pipeline) or carries no\nIR representation. Pure; documents with no locked records return\nthe input IR **by reference** (legacy byte-identity)."
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "editor/index.ts",
+                  "line": 108,
+                  "character": 16,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L108"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 18,
+                  "name": "ir",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/contracts",
+                      "packagePath": "src/ir.ts",
+                      "qualifiedName": "PageIR"
+                    },
+                    "name": "PageIR",
+                    "package": "@anvilkit/contracts",
+                    "externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+                  }
+                },
+                {
+                  "id": 19,
+                  "name": "authoring",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/ir",
+                      "packagePath": "src/editor/index.ts",
+                      "qualifiedName": "AuthoringStateV1"
+                    },
+                    "name": "AuthoringStateV1",
+                    "package": "@anvilkit/ir"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@anvilkit/contracts",
+                  "packagePath": "src/ir.ts",
+                  "qualifiedName": "PageIR"
+                },
+                "name": "PageIR",
+                "package": "@anvilkit/contracts",
+                "externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+              }
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "name": "validateExportCapabilities",
+          "variant": "declaration",
+          "kind": 64,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "editor/index.ts",
+              "line": 646,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L646"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 31,
+              "name": "validateExportCapabilities",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Compare used features against a format's declared capabilities\n(DD-0019 §23.2; DD-DEC-018). A format without a declaration\ndeclares **no** editor features: any used feature blocks\nproduction export through it."
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "editor/index.ts",
+                  "line": 646,
+                  "character": 16,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L646"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 32,
+                  "name": "usedFeatures",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "typeOperator",
+                    "operator": "readonly",
+                    "target": {
+                      "type": "array",
+                      "elementType": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@anvilkit/contracts",
+                          "packagePath": "src/editor/export-capabilities.ts",
+                          "qualifiedName": "EditorFeatureId"
+                        },
+                        "name": "EditorFeatureId",
+                        "package": "@anvilkit/contracts"
+                      }
+                    }
+                  }
+                },
+                {
+                  "id": 33,
+                  "name": "capabilities",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@anvilkit/contracts",
+                          "packagePath": "src/editor/export-capabilities.ts",
+                          "qualifiedName": "EditorExportCapabilities"
+                        },
+                        "name": "EditorExportCapabilities",
+                        "package": "@anvilkit/contracts"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "undefined"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": 34,
+                  "name": "options",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 39,
+                    "name": "ValidateExportCapabilitiesOptions",
+                    "package": "@anvilkit/ir"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@anvilkit/contracts",
+                  "packagePath": "src/editor/export-capabilities.ts",
+                  "qualifiedName": "ExportValidationResult"
+                },
+                "name": "ExportValidationResult",
+                "package": "@anvilkit/contracts"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Interfaces",
+          "children": [
+            35,
+            39
+          ]
+        },
+        {
+          "title": "Functions",
+          "children": [
+            27,
+            24,
+            20,
+            16,
+            30
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "editor/index.ts",
+          "line": 1,
+          "character": 0,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L1"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "index",
+      "variant": "declaration",
+      "kind": 2,
+      "flags": {},
+      "children": [
+        {
+          "id": 61,
+          "name": "PuckDataToIROptions",
+          "variant": "declaration",
+          "kind": 256,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Options accepted by "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "puckDataToIR",
+                "target": 69
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "children": [
+            {
+              "id": 62,
+              "name": "now",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isOptional": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Injectable clock — defaults to "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`() => new Date()`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ".\nPass a fixed value in tests so "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`metadata.createdAt`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " is stable."
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "puck-data-to-ir.ts",
+                  "line": 38,
+                  "character": 1,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/puck-data-to-ir.ts#L38"
+                }
+              ],
+              "type": {
+                "type": "reflection",
+                "declaration": {
+                  "id": 63,
+                  "name": "__type",
+                  "variant": "declaration",
+                  "kind": 65536,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 64,
+                      "name": "__type",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Date"
+                        },
+                        "name": "Date",
+                        "package": "typescript"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": 65,
+              "name": "onWarning",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isOptional": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Optional callback that receives non-fatal warnings during the\ntransform (e.g. function-valued props being dropped)."
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "puck-data-to-ir.ts",
+                  "line": 43,
+                  "character": 1,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/puck-data-to-ir.ts#L43"
+                }
+              ],
+              "type": {
+                "type": "reflection",
+                "declaration": {
+                  "id": 66,
+                  "name": "__type",
+                  "variant": "declaration",
+                  "kind": 65536,
+                  "flags": {},
+                  "signatures": [
+                    {
+                      "id": 67,
+                      "name": "__type",
+                      "variant": "signature",
+                      "kind": 4096,
+                      "flags": {},
+                      "parameters": [
+                        {
+                          "id": 68,
+                          "name": "warning",
+                          "variant": "param",
+                          "kind": 32768,
+                          "flags": {},
+                          "type": {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "@anvilkit/contracts",
+                              "packagePath": "src/export.ts",
+                              "qualifiedName": "ExportWarning"
+                            },
+                            "name": "ExportWarning",
+                            "package": "@anvilkit/contracts"
+                          }
+                        }
+                      ],
+                      "type": {
+                        "type": "intrinsic",
+                        "name": "void"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "groups": [
+            {
+              "title": "Properties",
+              "children": [
+                62,
+                65
+              ]
+            }
+          ],
+          "sources": [
+            {
+              "fileName": "puck-data-to-ir.ts",
+              "line": 33,
+              "character": 17,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/puck-data-to-ir.ts#L33"
+            }
+          ]
+        },
+        {
+          "id": 52,
+          "name": "RemoteCsvDirective",
+          "variant": "declaration",
+          "kind": 256,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Fetch a CSV and synthesize props from it (the only kind shipped — §8.4)."
+              }
+            ]
+          },
+          "children": [
+            {
+              "id": 53,
+              "name": "kind",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isReadonly": true
+              },
+              "sources": [
+                {
+                  "fileName": "data-source.ts",
+                  "line": 17,
+                  "character": 10,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L17"
+                }
+              ],
+              "type": {
+                "type": "literal",
+                "value": "remote_csv"
+              }
+            },
+            {
+              "id": 54,
+              "name": "url",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isReadonly": true
+              },
+              "sources": [
+                {
+                  "fileName": "data-source.ts",
+                  "line": 18,
+                  "character": 10,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L18"
+                }
+              ],
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "groups": [
+            {
+              "title": "Properties",
+              "children": [
+                53,
+                54
+              ]
+            }
+          ],
+          "sources": [
+            {
+              "fileName": "data-source.ts",
+              "line": 16,
+              "character": 17,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L16"
+            }
+          ]
+        },
+        {
+          "id": 48,
+          "name": "DataSourceDirective",
+          "variant": "declaration",
+          "kind": 2097152,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "data-source.ts",
+              "line": 21,
+              "character": 12,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L21"
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 52,
+            "name": "RemoteCsvDirective",
+            "package": "@anvilkit/ir"
+          }
+        },
+        {
+          "id": 47,
+          "name": "DATA_SOURCE_PROP",
+          "variant": "declaration",
+          "kind": 32,
+          "flags": {
+            "isConst": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Reserved prop key carrying a "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "DataSourceDirective",
+                "target": 48
+              },
+              {
+                "kind": "text",
+                "text": " on a node."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "data-source.ts",
+              "line": 13,
+              "character": 13,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L13"
+            }
+          ],
+          "type": {
+            "type": "literal",
+            "value": "_dataSource"
+          },
+          "defaultValue": "\"_dataSource\""
+        },
+        {
+          "id": 41,
+          "name": "collectAssets",
+          "variant": "declaration",
+          "kind": 64,
+          "flags": {},
+          "comment": {
+            "summary": [],
+            "blockTags": [
+              {
+                "tag": "@file",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "Public barrel for "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`@anvilkit/ir`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ".\n\nThe IR package is the single source of truth for turning Puck\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`Data`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " into a normalized "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`PageIR`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " document (declared in\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`@anvilkit/contracts`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": "), and for round-tripping it back. Every\nAnvilkit export format (HTML today, React/JSON/MDX later)\nconsumes IR — never raw Puck "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`Data`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " — so this barrel is the\nentry point every downstream package pins against.\n\nSee "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`docs/tasks/phase3-002-ir-scaffold.md`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " (phase3-002) for the\nfull scaffold spec."
+                  }
+                ]
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "collect-assets.ts",
+              "line": 32,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/collect-assets.ts#L32"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 42,
+              "name": "collectAssets",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Walk a node's props and collect every asset reference into a\ndeduplicated, deterministically-ordered list.\n\nUsed by "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`puckDataToIR`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " to populate the root IR document's\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`assets`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " manifest, and by node-scoped exporters that want to\nresolve only their own slice of the asset graph.\n\n**Does not fetch or read files** — asset collection is purely\nstatic analysis of prop values."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "A deduplicated list of assets, ordered by first encounter."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "collect-assets.ts",
+                  "line": 32,
+                  "character": 16,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/collect-assets.ts#L32"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 43,
+                  "name": "node",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "The node (or Puck content item) to walk."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "@anvilkit/contracts",
+                          "packagePath": "src/ir.ts",
+                          "qualifiedName": "PageIRNode"
+                        },
+                        "name": "PageIRNode",
+                        "package": "@anvilkit/contracts",
+                        "externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+                      },
+                      {
+                        "type": "reflection",
+                        "declaration": {
+                          "id": 44,
+                          "name": "__type",
+                          "variant": "declaration",
+                          "kind": 65536,
+                          "flags": {},
+                          "children": [
+                            {
+                              "id": 45,
+                              "name": "props",
+                              "variant": "declaration",
+                              "kind": 1024,
+                              "flags": {},
+                              "sources": [
+                                {
+                                  "fileName": "collect-assets.ts",
+                                  "line": 33,
+                                  "character": 22,
+                                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/collect-assets.ts#L33"
+                                }
+                              ],
+                              "type": {
+                                "type": "reference",
+                                "target": {
+                                  "packageName": "typescript",
+                                  "packagePath": "lib/lib.es5.d.ts",
+                                  "qualifiedName": "Record"
+                                },
+                                "typeArguments": [
+                                  {
+                                    "type": "intrinsic",
+                                    "name": "string"
+                                  },
+                                  {
+                                    "type": "intrinsic",
+                                    "name": "unknown"
+                                  }
+                                ],
+                                "name": "Record",
+                                "package": "typescript"
+                              }
+                            }
+                          ],
+                          "groups": [
+                            {
+                              "title": "Properties",
+                              "children": [
+                                45
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": 46,
+                  "name": "opts",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Optional collection options (currently a "
+                      },
+                      {
+                        "kind": "code",
+                        "text": "`deriveId`"
+                      },
+                      {
+                        "kind": "text",
+                        "text": "\n  callback override)."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/ir",
+                      "packagePath": "src/collect-assets.ts",
+                      "qualifiedName": "CollectAssetsOptions"
+                    },
+                    "name": "CollectAssetsOptions",
+                    "package": "@anvilkit/ir"
+                  }
+                }
+              ],
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/contracts",
+                      "packagePath": "src/ir.ts",
+                      "qualifiedName": "PageIRAsset"
+                    },
+                    "name": "PageIRAsset",
+                    "package": "@anvilkit/contracts"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 49,
+          "name": "getDataSourceDirective",
+          "variant": "declaration",
+          "kind": 64,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "data-source.ts",
+              "line": 27,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L27"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 50,
+              "name": "getDataSourceDirective",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Read a "
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "DataSourceDirective",
+                    "target": 48
+                  },
+                  {
+                    "kind": "text",
+                    "text": " off a node's props, or "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`undefined`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " when\nabsent / malformed. Pure + isomorphic."
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "data-source.ts",
+                  "line": 27,
+                  "character": 16,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/data-source.ts#L27"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 51,
+                  "name": "props",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "typescript",
+                          "packagePath": "lib/lib.es5.d.ts",
+                          "qualifiedName": "Readonly"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "typescript",
+                              "packagePath": "lib/lib.es5.d.ts",
+                              "qualifiedName": "Record"
+                            },
+                            "typeArguments": [
+                              {
+                                "type": "intrinsic",
+                                "name": "string"
+                              },
+                              {
+                                "type": "intrinsic",
+                                "name": "unknown"
+                              }
+                            ],
+                            "name": "Record",
+                            "package": "typescript"
+                          }
+                        ],
+                        "name": "Readonly",
+                        "package": "typescript"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "undefined"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "reference",
+                    "target": 52,
+                    "name": "RemoteCsvDirective",
+                    "package": "@anvilkit/ir"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "undefined"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 55,
+          "name": "identifySlots",
+          "variant": "declaration",
+          "kind": 64,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "identify-slots.ts",
+              "line": 32,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/identify-slots.ts#L32"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 56,
+              "name": "identifySlots",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Inspect a Puck "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`Config`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " and return the set of field keys that\nbehave as "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`slot`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " (nested child-tree) fields, grouped by\ncomponent name.\n\nThe IR transform uses this to decide which prop values should be\ndescended into as "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`PageIRNode.children`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " versus copied verbatim\ninto "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`PageIRNode.props`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " ("
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`PageIRNode`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " is declared in\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`@anvilkit/contracts`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ").\n\n### Detection heuristic\n\nA field is considered a slot if its "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`type`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " is "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`\"slot\"`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " (Puck's\nexplicit slot field type). This covers Puck 0.19+ where slot\nfields are first-class citizens in the field schema."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "A map from component name to the list of slot-field keys\n  declared on that component. Components with no slots are\n  included with an empty array."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "identify-slots.ts",
+                  "line": 32,
+                  "character": 16,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/identify-slots.ts#L32"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 57,
+                  "name": "config",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "The Puck "
+                      },
+                      {
+                        "kind": "code",
+                        "text": "`Config`"
+                      },
+                      {
+                        "kind": "text",
+                        "text": " to inspect."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@puckeditor/core",
+                      "packagePath": "dist/actions-DA1J5F56.d.ts",
+                      "qualifiedName": "Config"
+                    },
+                    "name": "Config",
+                    "package": "@puckeditor/core"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "typescript",
+                  "packagePath": "lib/lib.es2015.collection.d.ts",
+                  "qualifiedName": "Map"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "typeOperator",
+                    "operator": "readonly",
+                    "target": {
+                      "type": "array",
+                      "elementType": {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    }
+                  }
+                ],
+                "name": "Map",
+                "package": "typescript"
+              }
+            }
+          ]
+        },
+        {
+          "id": 58,
+          "name": "irToPuckData",
+          "variant": "declaration",
+          "kind": 64,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "ir-to-puck-data.ts",
+              "line": 39,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/ir-to-puck-data.ts#L39"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 59,
+              "name": "irToPuckData",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Reverse of "
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "puckDataToIR",
+                    "target": 69
+                  },
+                  {
+                    "kind": "text",
+                    "text": ": rebuild a Puck "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`Data`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " document\nfrom a "
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "PageIR",
+                    "target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ".\n\nThis function backs the round-trip guarantee: for serializable,\nalready-canonical Puck "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`Data`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`irToPuckData(puckDataToIR(d))`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " is\n*structurally equivalent* to "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`d`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ". (The forward transform is\nintentionally normalizing — it sorts keys and drops\nfunctions/"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`undefined`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": "/non-JSON values — so the equivalence is\nstructural, not byte-for-byte, for non-canonical input.) That\nguarantee is what lets us snapshot-test IR shapes without drift.\nIt is also the entry point the AI copilot plugin uses to turn a\nvalidated LLM "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`PageIR`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " response back into a "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`setData`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " payload.\n\nReturns a plain (un-frozen) Puck "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`Data`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " so Puck can mutate it."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "A Puck "
+                      },
+                      {
+                        "kind": "code",
+                        "text": "`Data`"
+                      },
+                      {
+                        "kind": "text",
+                        "text": " equivalent to the IR input."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "ir-to-puck-data.ts",
+                  "line": 39,
+                  "character": 16,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/ir-to-puck-data.ts#L39"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 60,
+                  "name": "ir",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "The page IR document to rehydrate."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/contracts",
+                      "packagePath": "src/ir.ts",
+                      "qualifiedName": "PageIR"
+                    },
+                    "name": "PageIR",
+                    "package": "@anvilkit/contracts",
+                    "externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@puckeditor/core",
+                  "packagePath": "dist/actions-DA1J5F56.d.ts",
+                  "qualifiedName": "Data"
+                },
+                "name": "Data",
+                "package": "@puckeditor/core"
+              }
+            }
+          ]
+        },
+        {
+          "id": 69,
+          "name": "puckDataToIR",
+          "variant": "declaration",
+          "kind": 64,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "puck-data-to-ir.ts",
+              "line": 197,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/puck-data-to-ir.ts#L197"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 70,
+              "name": "puckDataToIR",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Transform a Puck "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`Data`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " document into a normalized "
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "PageIR",
+                    "target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ".\n\nThis is the primary entry point every Anvilkit export format\nconsumes. Given a Puck "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`Data`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " and its matching "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`Config`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", the\nresult is a pure, JSON-serializable, deeply-frozen "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`PageIR`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " with\nstable node ids, canonicalized (sorted) props, and a flat asset\nmanifest."
+                  }
+                ],
+                "blockTags": [
+                  {
+                    "tag": "@returns",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "The normalized, frozen page IR document."
+                      }
+                    ]
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "puck-data-to-ir.ts",
+                  "line": 197,
+                  "character": 16,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/puck-data-to-ir.ts#L197"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 71,
+                  "name": "data",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Puck editor document to normalize."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@puckeditor/core",
+                      "packagePath": "dist/actions-DA1J5F56.d.ts",
+                      "qualifiedName": "Data"
+                    },
+                    "name": "Data",
+                    "package": "@puckeditor/core"
+                  }
+                },
+                {
+                  "id": 72,
+                  "name": "config",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "Puck "
+                      },
+                      {
+                        "kind": "code",
+                        "text": "`Config`"
+                      },
+                      {
+                        "kind": "text",
+                        "text": " matching "
+                      },
+                      {
+                        "kind": "code",
+                        "text": "`data`"
+                      },
+                      {
+                        "kind": "text",
+                        "text": ". **Required** — used\n  by "
+                      },
+                      {
+                        "kind": "inline-tag",
+                        "tag": "@link",
+                        "text": "identifySlots",
+                        "target": 55
+                      },
+                      {
+                        "kind": "text",
+                        "text": " to tell slot fields (descended into as\n  "
+                      },
+                      {
+                        "kind": "code",
+                        "text": "`children`"
+                      },
+                      {
+                        "kind": "text",
+                        "text": ") apart from plain serializable props."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@puckeditor/core",
+                      "packagePath": "dist/actions-DA1J5F56.d.ts",
+                      "qualifiedName": "Config"
+                    },
+                    "name": "Config",
+                    "package": "@puckeditor/core"
+                  }
+                },
+                {
+                  "id": 73,
+                  "name": "opts",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "comment": {
+                    "summary": [
+                      {
+                        "kind": "text",
+                        "text": "See "
+                      },
+                      {
+                        "kind": "inline-tag",
+                        "tag": "@link",
+                        "text": "PuckDataToIROptions",
+                        "target": 61
+                      },
+                      {
+                        "kind": "text",
+                        "text": "."
+                      }
+                    ]
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": 61,
+                    "name": "PuckDataToIROptions",
+                    "package": "@anvilkit/ir"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@anvilkit/contracts",
+                  "packagePath": "src/ir.ts",
+                  "qualifiedName": "PageIR"
+                },
+                "name": "PageIR",
+                "package": "@anvilkit/contracts",
+                "externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Interfaces",
+          "children": [
+            61,
+            52
+          ]
+        },
+        {
+          "title": "Type Aliases",
+          "children": [
+            48
+          ]
+        },
+        {
+          "title": "Variables",
+          "children": [
+            47
+          ]
+        },
+        {
+          "title": "Functions",
+          "children": [
+            41,
+            49,
+            55,
+            58,
+            69
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "index.ts",
+          "line": 1,
+          "character": 0,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/index.ts#L1"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "migrations",
+      "variant": "declaration",
+      "kind": 2,
+      "flags": {},
+      "children": [
+        {
+          "id": 78,
+          "name": "PageIRNodeMetaError",
+          "variant": "declaration",
+          "kind": 128,
+          "flags": {},
+          "children": [
+            {
+              "id": 79,
+              "name": "constructor",
+              "variant": "declaration",
+              "kind": 512,
+              "flags": {},
+              "sources": [
+                {
+                  "fileName": "migrations/error.ts",
+                  "line": 16,
+                  "character": 1,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L16"
+                }
+              ],
+              "signatures": [
+                {
+                  "id": 80,
+                  "name": "PageIRNodeMetaError",
+                  "variant": "signature",
+                  "kind": 16384,
+                  "flags": {},
+                  "sources": [
+                    {
+                      "fileName": "migrations/error.ts",
+                      "line": 16,
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L16"
+                    }
+                  ],
+                  "parameters": [
+                    {
+                      "id": 81,
+                      "name": "issues",
+                      "variant": "param",
+                      "kind": 32768,
+                      "flags": {},
+                      "type": {
+                        "type": "typeOperator",
+                        "operator": "readonly",
+                        "target": {
+                          "type": "array",
+                          "elementType": {
+                            "type": "reference",
+                            "target": 74,
+                            "name": "NodeMetaValidationIssue",
+                            "package": "@anvilkit/ir"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": 78,
+                    "name": "PageIRNodeMetaError",
+                    "package": "@anvilkit/ir"
+                  },
+                  "overwrites": {
+                    "type": "reference",
+                    "target": -1,
+                    "name": "Error.constructor",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "Error.constructor",
+                "package": "typescript"
+              }
+            },
+            {
+              "id": 82,
+              "name": "issues",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isReadonly": true
+              },
+              "sources": [
+                {
+                  "fileName": "migrations/error.ts",
+                  "line": 15,
+                  "character": 10,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L15"
+                }
+              ],
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "reference",
+                    "target": 74,
+                    "name": "NodeMetaValidationIssue",
+                    "package": "@anvilkit/ir"
+                  }
+                }
+              }
+            }
+          ],
+          "groups": [
+            {
+              "title": "Constructors",
+              "children": [
+                79
+              ]
+            },
+            {
+              "title": "Properties",
+              "children": [
+                82
+              ]
+            }
+          ],
+          "sources": [
+            {
+              "fileName": "migrations/error.ts",
+              "line": 14,
+              "character": 13,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L14"
+            }
+          ],
+          "extendedTypes": [
+            {
+              "type": "reference",
+              "target": {
+                "packageName": "typescript",
+                "packagePath": "lib/lib.es5.d.ts",
+                "qualifiedName": "Error"
+              },
+              "name": "Error",
+              "package": "typescript"
+            }
+          ]
+        },
+        {
+          "id": 74,
+          "name": "NodeMetaValidationIssue",
+          "variant": "declaration",
+          "kind": 256,
+          "flags": {},
+          "comment": {
+            "summary": [],
+            "blockTags": [
+              {
+                "tag": "@file",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "Public error class for "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`@anvilkit/ir/migrations`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " cap\nviolations. Lives outside "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`internal/`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " so TypeDoc surfaces it on\nthe public api-snapshot — consumers "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`instanceof`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " against this\nclass to recover from invalid "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`meta`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " payloads."
+                  }
+                ]
+              }
+            ]
+          },
+          "children": [
+            {
+              "id": 75,
+              "name": "code",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isReadonly": true
+              },
+              "sources": [
+                {
+                  "fileName": "migrations/error.ts",
+                  "line": 9,
+                  "character": 10,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L9"
+                }
+              ],
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            },
+            {
+              "id": 76,
+              "name": "message",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isReadonly": true
+              },
+              "sources": [
+                {
+                  "fileName": "migrations/error.ts",
+                  "line": 10,
+                  "character": 10,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L10"
+                }
+              ],
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            },
+            {
+              "id": 77,
+              "name": "path",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isReadonly": true
+              },
+              "sources": [
+                {
+                  "fileName": "migrations/error.ts",
+                  "line": 11,
+                  "character": 10,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L11"
+                }
+              ],
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "union",
+                    "types": [
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "number"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "groups": [
+            {
+              "title": "Properties",
+              "children": [
+                75,
+                76,
+                77
+              ]
+            }
+          ],
+          "sources": [
+            {
+              "fileName": "migrations/error.ts",
+              "line": 8,
+              "character": 17,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/error.ts#L8"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "PageIRMigrationOptions",
+          "variant": "declaration",
+          "kind": 256,
+          "flags": {},
+          "children": [
+            {
+              "id": 13,
+              "name": "from",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isReadonly": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Peer-range label of the document being migrated."
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "migrations/index.ts",
+                  "line": 41,
+                  "character": 10,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L41"
+                }
+              ],
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "literal",
+                    "value": "0.21"
+                  },
+                  {
+                    "type": "literal",
+                    "value": "0.22"
+                  }
+                ]
+              }
+            },
+            {
+              "id": 14,
+              "name": "to",
+              "variant": "declaration",
+              "kind": 1024,
+              "flags": {
+                "isReadonly": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Target peer-range label."
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "migrations/index.ts",
+                  "line": 43,
+                  "character": 10,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L43"
+                }
+              ],
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "literal",
+                    "value": "0.21"
+                  },
+                  {
+                    "type": "literal",
+                    "value": "0.22"
+                  }
+                ]
+              }
+            }
+          ],
+          "groups": [
+            {
+              "title": "Properties",
+              "children": [
+                13,
+                14
+              ]
+            }
+          ],
+          "sources": [
+            {
+              "fileName": "migrations/index.ts",
+              "line": 39,
+              "character": 17,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L39"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "PageIRMigrationVersion",
+          "variant": "declaration",
+          "kind": 2097152,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "migrations/index.ts",
+              "line": 37,
+              "character": 12,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L37"
+            }
+          ],
+          "type": {
+            "type": "indexedAccess",
+            "indexType": {
+              "type": "intrinsic",
+              "name": "number"
+            },
+            "objectType": {
+              "type": "query",
+              "queryType": {
+                "type": "reference",
+                "target": 10,
+                "name": "MIGRATION_VERSIONS",
+                "package": "@anvilkit/ir"
+              }
+            }
+          }
+        },
+        {
+          "id": 10,
+          "name": "MIGRATION_VERSIONS",
+          "variant": "declaration",
+          "kind": 32,
+          "flags": {
+            "isConst": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The peer-range labels that "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "migratePageIR",
+                "target": 3
+              },
+              {
+                "kind": "text",
+                "text": " accepts.\n\n"
+              },
+              {
+                "kind": "code",
+                "text": "`\"0.21\"`"
+              },
+              {
+                "kind": "text",
+                "text": " is the "
+              },
+              {
+                "kind": "code",
+                "text": "`1.0`"
+              },
+              {
+                "kind": "text",
+                "text": " GA peer range (no "
+              },
+              {
+                "kind": "code",
+                "text": "`meta`"
+              },
+              {
+                "kind": "text",
+                "text": "); "
+              },
+              {
+                "kind": "code",
+                "text": "`\"0.22\"`"
+              },
+              {
+                "kind": "text",
+                "text": " is the\n"
+              },
+              {
+                "kind": "code",
+                "text": "`1.1`"
+              },
+              {
+                "kind": "text",
+                "text": " peer range (additive "
+              },
+              {
+                "kind": "code",
+                "text": "`meta`"
+              },
+              {
+                "kind": "text",
+                "text": "). The values map to\n"
+              },
+              {
+                "kind": "code",
+                "text": "`@puckeditor/core`"
+              },
+              {
+                "kind": "text",
+                "text": " peer-range labels rather than to the IR\ndocument's own "
+              },
+              {
+                "kind": "code",
+                "text": "`version`"
+              },
+              {
+                "kind": "text",
+                "text": " literal — the IR literal stays "
+              },
+              {
+                "kind": "code",
+                "text": "`\"1\"`"
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "migrations/index.ts",
+              "line": 35,
+              "character": 13,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L35"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "tuple",
+              "elements": [
+                {
+                  "type": "literal",
+                  "value": "0.21"
+                },
+                {
+                  "type": "literal",
+                  "value": "0.22"
+                }
+              ]
+            }
+          },
+          "defaultValue": "..."
+        },
+        {
+          "id": 7,
+          "name": "downgradePageIR",
+          "variant": "declaration",
+          "kind": 64,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "migrations/index.ts",
+              "line": 163,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L163"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 8,
+              "name": "downgradePageIR",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Recursively strip "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`meta`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " from every node in a "
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "PageIR",
+                    "target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ".\n\nUse when surfacing IR to a "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`1.0`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " consumer that pins against the\npre-"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`meta`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " contract. Always returns a fresh, frozen tree — even\nwhen the input had no "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`meta`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " to strip — so callers can safely\ncache the result."
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "migrations/index.ts",
+                  "line": 163,
+                  "character": 16,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L163"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 9,
+                  "name": "ir",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/contracts",
+                      "packagePath": "src/ir.ts",
+                      "qualifiedName": "PageIR"
+                    },
+                    "name": "PageIR",
+                    "package": "@anvilkit/contracts",
+                    "externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@anvilkit/contracts",
+                  "packagePath": "src/ir.ts",
+                  "qualifiedName": "PageIR"
+                },
+                "name": "PageIR",
+                "package": "@anvilkit/contracts",
+                "externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+              }
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "migratePageIR",
+          "variant": "declaration",
+          "kind": 64,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "migrations/index.ts",
+              "line": 63,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L63"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 4,
+              "name": "migratePageIR",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Migrate a "
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "PageIR",
+                    "target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " document between peer-range labels.\n\n- Pure no-op when "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`from === to`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " AND every node has "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`meta === undefined`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ".\n  Returns the original reference.\n- Validates every "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`node.meta`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " (when present) against the runtime\n  caps documented on "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`PageIRNodeMeta`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " (from "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`@anvilkit/contracts`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ").\n  Throws "
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "PageIRNodeMetaError",
+                    "target": 78
+                  },
+                  {
+                    "kind": "text",
+                    "text": " on the first invalid node.\n- Returns a frozen IR with a freshly rebuilt node spine when\n  validation succeeds with at least one populated "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`meta`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ". The\n  rebuild is structural only: "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`props`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`assets`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", and "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`meta`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " are\n  carried over by reference (not deep-cloned) and "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`meta`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " is\n  preserved byte-for-byte; no new fields are synthesized.\n\nImportantly, this helper NEVER bumps "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`ir.version`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ". The literal\nstays "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`\"1\"`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " across "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`0.21 ↔ 0.22`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": "."
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "migrations/index.ts",
+                  "line": 63,
+                  "character": 16,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L63"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 5,
+                  "name": "ir",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/contracts",
+                      "packagePath": "src/ir.ts",
+                      "qualifiedName": "PageIR"
+                    },
+                    "name": "PageIR",
+                    "package": "@anvilkit/contracts",
+                    "externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+                  }
+                },
+                {
+                  "id": 6,
+                  "name": "options",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "reference",
+                    "target": 12,
+                    "name": "PageIRMigrationOptions",
+                    "package": "@anvilkit/ir"
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@anvilkit/contracts",
+                  "packagePath": "src/ir.ts",
+                  "qualifiedName": "PageIR"
+                },
+                "name": "PageIR",
+                "package": "@anvilkit/contracts",
+                "externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "title": "Classes",
+          "children": [
+            78
+          ]
+        },
+        {
+          "title": "Interfaces",
+          "children": [
+            74,
+            12
+          ]
+        },
+        {
+          "title": "Type Aliases",
+          "children": [
+            11
+          ]
+        },
+        {
+          "title": "Variables",
+          "children": [
+            10
+          ]
+        },
+        {
+          "title": "Functions",
+          "children": [
+            7,
+            3
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "migrations/index.ts",
+          "line": 1,
+          "character": 0,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L1"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Modules",
+      "children": [
+        15,
+        1,
+        2
+      ]
+    }
+  ],
+  "packageName": "@anvilkit/ir",
+  "symbolIdMap": {
+    "1": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "2": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": ""
+    },
+    "3": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": "migratePageIR"
+    },
+    "4": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": "migratePageIR"
+    },
+    "5": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": "ir"
+    },
+    "6": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": "options"
+    },
+    "7": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": "downgradePageIR"
+    },
+    "8": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": "downgradePageIR"
+    },
+    "9": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": "ir"
+    },
+    "10": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": "MIGRATION_VERSIONS"
+    },
+    "11": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": "PageIRMigrationVersion"
+    },
+    "12": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": "PageIRMigrationOptions"
+    },
+    "13": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": "PageIRMigrationOptions.from"
+    },
+    "14": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/index.ts",
+      "qualifiedName": "PageIRMigrationOptions.to"
+    },
+    "15": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": ""
+    },
+    "16": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "projectAuthoringToIR"
+    },
+    "17": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "projectAuthoringToIR"
+    },
+    "18": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "ir"
+    },
+    "19": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "authoring"
+    },
+    "20": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "listUsedEditorFeatures"
+    },
+    "21": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "listUsedEditorFeatures"
+    },
+    "22": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "authoring"
+    },
+    "23": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "document"
+    },
+    "24": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "listUsedDocumentFeatures"
+    },
+    "25": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "listUsedDocumentFeatures"
+    },
+    "26": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "document"
+    },
+    "27": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "listUsedAuthoringFeatures"
+    },
+    "28": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "listUsedAuthoringFeatures"
+    },
+    "29": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "authoring"
+    },
+    "30": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "validateExportCapabilities"
+    },
+    "31": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "validateExportCapabilities"
+    },
+    "32": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "usedFeatures"
+    },
+    "33": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "capabilities"
+    },
+    "34": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "options"
+    },
+    "35": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "EditorFeatureScanDocument"
+    },
+    "36": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "EditorFeatureScanDocument.root"
+    },
+    "37": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "EditorFeatureScanDocument.content"
+    },
+    "38": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "EditorFeatureScanDocument.zones"
+    },
+    "39": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "ValidateExportCapabilitiesOptions"
+    },
+    "40": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/editor/index.ts",
+      "qualifiedName": "ValidateExportCapabilitiesOptions.mode"
+    },
+    "41": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/collect-assets.ts",
+      "qualifiedName": "collectAssets"
+    },
+    "42": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/collect-assets.ts",
+      "qualifiedName": "collectAssets"
+    },
+    "43": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/collect-assets.ts",
+      "qualifiedName": "node"
+    },
+    "44": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/collect-assets.ts",
+      "qualifiedName": "__type"
+    },
+    "45": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/collect-assets.ts",
+      "qualifiedName": "__type.props"
+    },
+    "46": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/collect-assets.ts",
+      "qualifiedName": "opts"
+    },
+    "47": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/data-source.ts",
+      "qualifiedName": "DATA_SOURCE_PROP"
+    },
+    "48": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/data-source.ts",
+      "qualifiedName": "DataSourceDirective"
+    },
+    "49": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/data-source.ts",
+      "qualifiedName": "getDataSourceDirective"
+    },
+    "50": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/data-source.ts",
+      "qualifiedName": "getDataSourceDirective"
+    },
+    "51": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/data-source.ts",
+      "qualifiedName": "props"
+    },
+    "52": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/data-source.ts",
+      "qualifiedName": "RemoteCsvDirective"
+    },
+    "53": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/data-source.ts",
+      "qualifiedName": "RemoteCsvDirective.kind"
+    },
+    "54": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/data-source.ts",
+      "qualifiedName": "RemoteCsvDirective.url"
+    },
+    "55": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/identify-slots.ts",
+      "qualifiedName": "identifySlots"
+    },
+    "56": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/identify-slots.ts",
+      "qualifiedName": "identifySlots"
+    },
+    "57": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/identify-slots.ts",
+      "qualifiedName": "config"
+    },
+    "58": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/ir-to-puck-data.ts",
+      "qualifiedName": "irToPuckData"
+    },
+    "59": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/ir-to-puck-data.ts",
+      "qualifiedName": "irToPuckData"
+    },
+    "60": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/ir-to-puck-data.ts",
+      "qualifiedName": "ir"
+    },
+    "61": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "PuckDataToIROptions"
+    },
+    "62": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "PuckDataToIROptions.now"
+    },
+    "63": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "__type"
+    },
+    "64": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "__type"
+    },
+    "65": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "PuckDataToIROptions.onWarning"
+    },
+    "66": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "__type"
+    },
+    "67": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "__type"
+    },
+    "68": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "warning"
+    },
+    "69": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "puckDataToIR"
+    },
+    "70": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "puckDataToIR"
+    },
+    "71": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "data"
+    },
+    "72": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "config"
+    },
+    "73": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/puck-data-to-ir.ts",
+      "qualifiedName": "opts"
+    },
+    "74": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/error.ts",
+      "qualifiedName": "NodeMetaValidationIssue"
+    },
+    "75": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/error.ts",
+      "qualifiedName": "NodeMetaValidationIssue.code"
+    },
+    "76": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/error.ts",
+      "qualifiedName": "NodeMetaValidationIssue.message"
+    },
+    "77": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/error.ts",
+      "qualifiedName": "NodeMetaValidationIssue.path"
+    },
+    "78": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/error.ts",
+      "qualifiedName": "PageIRNodeMetaError"
+    },
+    "79": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/error.ts",
+      "qualifiedName": "PageIRNodeMetaError.__constructor"
+    },
+    "80": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/error.ts",
+      "qualifiedName": "PageIRNodeMetaError"
+    },
+    "81": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/error.ts",
+      "qualifiedName": "issues"
+    },
+    "82": {
+      "packageName": "@anvilkit/ir",
+      "packagePath": "src/migrations/error.ts",
+      "qualifiedName": "PageIRNodeMetaError.issues"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "src/index.ts",
+      "2": "src/migrations/index.ts",
+      "3": "src/editor/index.ts"
+    },
+    "reflections": {
+      "1": 1,
+      "2": 2,
+      "3": 15
+    }
+  }
 }

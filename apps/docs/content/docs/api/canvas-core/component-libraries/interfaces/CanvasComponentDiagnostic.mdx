@@ -1,0 +1,26 @@
+---
+title: "CanvasComponentDiagnostic"
+description: "@anvilkit/canvas-core · CanvasComponentDiagnostic"
+---
+
+Defined in: [component-libraries/diagnostics.ts:168](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/diagnostics.ts#L168)
+
+One reported diagnostic.
+
+Intentionally minimal in M0. The resolution-state carrier that attaches these
+to a specific instance and snapshot (`CanvasExternalComponentState`,
+TD §17.1) lands in M1/T-016; this is the shape it will carry.
+
+`message` is developer-facing English for logs and diagnostics panels. It is
+**not** the user-facing string — that is looked up from `code` in the Editor's
+four locale catalogues, which is the whole reason `code` is a closed union.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | \| `"component-snapshot-missing"` \| `"component-integrity-mismatch"` \| `"component-library-capability-denied"` \| `"component-dependency-missing"` \| `"component-provider-offline"` \| `"component-provider-unauthorized"` \| `"component-version-missing"` \| `"component-version-deprecated"` \| `"component-snapshot-invalid"` \| `"component-update-incompatible"` \| `"component-variant-invalid"` \| `"component-swap-incompatible"` \| `"component-override-migration-orphan"` | - | [component-libraries/diagnostics.ts:169](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/diagnostics.ts#L169) |
+| &lt;a id="message"&gt;&lt;/a&gt; `message` | `string` | Developer-facing detail. Never rendered to end users; never localized. | [component-libraries/diagnostics.ts:171](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/diagnostics.ts#L171) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId?` | `string` | Instance node id this concerns, when it concerns one. | [component-libraries/diagnostics.ts:177](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/diagnostics.ts#L177) |
+| &lt;a id="severity"&gt;&lt;/a&gt; `severity?` | [`CanvasComponentDiagnosticSeverity`](../type-aliases/CanvasComponentDiagnosticSeverity) | Severity, defaulting to [componentDiagnosticSeverity](../functions/componentDiagnosticSeverity) for `code`. | [component-libraries/diagnostics.ts:173](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/diagnostics.ts#L173) |
+| &lt;a id="snapshotkey"&gt;&lt;/a&gt; `snapshotKey?` | `string` | Snapshot key this concerns, when it concerns one. | [component-libraries/diagnostics.ts:175](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/diagnostics.ts#L175) |

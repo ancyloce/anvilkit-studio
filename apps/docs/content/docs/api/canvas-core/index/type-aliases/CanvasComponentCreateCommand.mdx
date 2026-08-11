@@ -1,0 +1,77 @@
+---
+title: "CanvasComponentCreateCommand"
+description: "@anvilkit/canvas-core · CanvasComponentCreateCommand"
+---
+
+```ts
+type CanvasComponentCreateCommand = 
+  | {
+  definition: CanvasComponentDefinition;
+  mode: "restore";
+  type: "component.create";
+}
+  | {
+  componentId: string;
+  firstInstanceId: string;
+  location?: CanvasDocumentLocation;
+  mode: "from-selection";
+  name?: string;
+  rootStrategy?: "reuse-container" | "wrap-in-frame";
+  selectedNodeIds: string[];
+  sourceRootId: string;
+  type: "component.create";
+};
+```
+
+Defined in: [commands/types.ts:313](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L313)
+
+Add a Component Source to the Registry.
+
+`restore` mode carries the complete definition verbatim — deterministic,
+replayable, and exactly what `component.delete`'s inverse needs (INV-10:
+it restores the `components` key itself when it was dropped).
+`from-selection` mode (M3-05) turns page/Source nodes into a new
+definition plus a first instance; its IDs are allocated by the caller so
+replay is deterministic.
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  definition: CanvasComponentDefinition;
+  mode: "restore";
+  type: "component.create";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  componentId: string;
+  firstInstanceId: string;
+  location?: CanvasDocumentLocation;
+  mode: "from-selection";
+  name?: string;
+  rootStrategy?: "reuse-container" | "wrap-in-frame";
+  selectedNodeIds: string[];
+  sourceRootId: string;
+  type: "component.create";
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `componentId` | `string` | - | [commands/types.ts:325](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L325) |
+| `firstInstanceId` | `string` | - | [commands/types.ts:327](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L327) |
+| `location?` | [`CanvasDocumentLocation`](../interfaces/CanvasDocumentLocation) | Tree the selection lives in. Absent = the page tree holding the nodes. | [commands/types.ts:323](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L323) |
+| `mode` | `"from-selection"` | - | [commands/types.ts:321](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L321) |
+| `name?` | `string` | - | [commands/types.ts:328](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L328) |
+| `rootStrategy?` | `"reuse-container"` \| `"wrap-in-frame"` | How the Source root is formed: `reuse-container` promotes a single selected group/frame to the root; `wrap-in-frame` wraps the selection in a new frame at the selection's world AABB. Default: `reuse-container` for a single container selection, else `wrap-in-frame`. | [commands/types.ts:336](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L336) |
+| `selectedNodeIds` | `string`[] | - | [commands/types.ts:324](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L324) |
+| `sourceRootId` | `string` | - | [commands/types.ts:326](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L326) |
+| `type` | `"component.create"` | - | [commands/types.ts:320](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L320) |

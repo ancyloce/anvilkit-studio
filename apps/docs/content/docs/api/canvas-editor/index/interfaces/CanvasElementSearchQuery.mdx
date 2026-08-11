@@ -1,0 +1,39 @@
+---
+title: "CanvasElementSearchQuery"
+description: "@anvilkit/canvas-editor · CanvasElementSearchQuery"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-provider.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-provider.ts#L31)
+
+Provider-based element API (PLAN-0035 §5 P3, `cp3-001`).
+
+A DELIBERATE COPY OF THE TEMPLATE PROVIDER, NOT A SECOND PATTERN.
+
+`templates/template-provider.ts` already establishes how a Canvas content
+surface is fed: one `search(query)` returning `{ entries, nextCursor?,
+total? }`, one `getById(id)`, an opaque offset cursor, a provider-clampable
+`limit`, and a `createStatic…` wrapper so the panel speaks ONE protocol
+whether the host passed an array or a real backend. This module matches all
+of it name for name, so a reader who has learned the Templates panel has
+already learned this one. The four deviations are individually justified
+where they occur:
+
+1. `query.category` is the closed [CanvasElementCategory](../type-aliases/CanvasElementCategory), not an open
+   `string` — the element taxonomy is fixed, a template's is host-owned.
+2. There is no `size` filter — a template's page size is a real facet a user
+   filters on; an icon's is not.
+3. `matchesText` also searches `keywords` (see [CanvasElementEntry](CanvasElementEntry.md)).
+4. [createLazyElementProvider](../functions/createLazyElementProvider) is added. The template catalog is host
+   data that is already in memory; `cp3-002`'s is 300-500 entries that must
+   contribute **zero bytes** to the eager editor chunk. Shipping the deferred
+   wrapper here is how that decision is enforced rather than merely hoped
+   for — see its doc.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="category"&gt;&lt;/a&gt; `category?` | `readonly` | [`CanvasElementCategory`](../type-aliases/CanvasElementCategory) | Exact category, or absent for all. | [packages/capabilities/canvas/editor/src/elements/element-provider.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-provider.ts#L35) |
+| &lt;a id="cursor"&gt;&lt;/a&gt; `cursor?` | `readonly` | `string` | Opaque cursor from a previous result's `nextCursor`. | [packages/capabilities/canvas/editor/src/elements/element-provider.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-provider.ts#L37) |
+| &lt;a id="limit"&gt;&lt;/a&gt; `limit?` | `readonly` | `number` | Page size; providers may clamp. | [packages/capabilities/canvas/editor/src/elements/element-provider.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-provider.ts#L39) |
+| &lt;a id="text"&gt;&lt;/a&gt; `text?` | `readonly` | `string` | Free-text search over name/tags/keywords. | [packages/capabilities/canvas/editor/src/elements/element-provider.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-provider.ts#L33) |

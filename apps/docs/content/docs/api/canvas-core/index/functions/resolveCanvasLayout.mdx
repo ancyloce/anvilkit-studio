@@ -1,0 +1,27 @@
+---
+title: "resolveCanvasLayout"
+description: "@anvilkit/canvas-core · resolveCanvasLayout"
+---
+
+```ts
+function resolveCanvasLayout(ir, options): CanvasResolvedDocument;
+```
+
+Defined in: [layout/resolve.ts:820](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/resolve.ts#L820)
+
+Resolve a document's Auto Layout into one shared geometry tree.
+
+`options` is a required parameter with entirely optional fields — PRD §9.3
+writes it as required while TD §5.4 makes every field optional, and this
+satisfies both readings (plan §10.1).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `options` | [`CanvasLayoutResolveOptions`](../interfaces/CanvasLayoutResolveOptions) |
+
+## Returns
+
+[`CanvasResolvedDocument`](../interfaces/CanvasResolvedDocument)

@@ -1,0 +1,37 @@
+---
+title: "AuthoringMigration"
+description: "@anvilkit/schema · AuthoringMigration"
+---
+
+Defined in: [editor/migrations/index.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/migrations/index.ts#L31)
+
+One pure, idempotent migration step. `from`/`to` are version
+strings; steps chain until the state reports
+[CURRENT\_AUTHORING\_VERSION](../variables/CURRENT_AUTHORING_VERSION).
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="from"&gt;&lt;/a&gt; `from` | `readonly` | `string` | [editor/migrations/index.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/migrations/index.ts#L32) |
+| &lt;a id="to"&gt;&lt;/a&gt; `to` | `readonly` | `string` | [editor/migrations/index.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/migrations/index.ts#L33) |
+
+## Methods
+
+### migrate()
+
+```ts
+migrate(state): Record<string, unknown>;
+```
+
+Defined in: [editor/migrations/index.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/migrations/index.ts#L34)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `state` | `Readonly`\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt; |
+
+#### Returns
+
+`Record`\<`string`, `unknown`\>

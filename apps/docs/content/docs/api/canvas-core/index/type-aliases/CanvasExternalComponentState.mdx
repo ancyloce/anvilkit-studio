@@ -1,0 +1,79 @@
+---
+title: "CanvasExternalComponentState"
+description: "@anvilkit/canvas-core · CanvasExternalComponentState"
+---
+
+```ts
+type CanvasExternalComponentState = 
+  | {
+  kind: "resolved";
+  ref: CanvasExternalComponentRef;
+  snapshot: CanvasExternalComponentSnapshot;
+}
+  | {
+  kind: "snapshot-missing";
+  ref: CanvasExternalComponentRef;
+}
+  | {
+  kind: "dependency-missing";
+  missing: readonly CanvasExternalComponentRef[];
+  ref: CanvasExternalComponentRef;
+};
+```
+
+Defined in: [components/definition-lookup.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L49)
+
+What the document alone can say about an external Source (TD §17.1).
+
+Deliberately narrow: these are the states derivable from the document's own
+snapshot registry. Provider-derived conditions — offline, unauthorized,
+rate-limited, deprecated — are **not** here, because the resolver never
+consults a Provider and therefore cannot observe them. They belong to the
+Editor's request layer (M2/T-019), which reports them alongside, not through,
+resolution.
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  kind: "resolved";
+  ref: CanvasExternalComponentRef;
+  snapshot: CanvasExternalComponentSnapshot;
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  kind: "snapshot-missing";
+  ref: CanvasExternalComponentRef;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `kind` | `"snapshot-missing"` | No snapshot for this exact ref. Recoverable by re-fetching (T-023). | [components/definition-lookup.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L57) |
+| `ref` | [`CanvasExternalComponentRef`](../interfaces/CanvasExternalComponentRef) | - | [components/definition-lookup.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L58) |
+
+***
+
+### Type Literal
+
+```ts
+{
+  kind: "dependency-missing";
+  missing: readonly CanvasExternalComponentRef[];
+  ref: CanvasExternalComponentRef;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `kind` | `"dependency-missing"` | The snapshot is present but its dependency closure is not (T-017). | [components/definition-lookup.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L62) |
+| `missing` | readonly [`CanvasExternalComponentRef`](../interfaces/CanvasExternalComponentRef)[] | - | [components/definition-lookup.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L64) |
+| `ref` | [`CanvasExternalComponentRef`](../interfaces/CanvasExternalComponentRef) | - | [components/definition-lookup.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L63) |

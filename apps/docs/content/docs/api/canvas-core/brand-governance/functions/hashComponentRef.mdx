@@ -1,0 +1,26 @@
+---
+title: "hashComponentRef"
+description: "@anvilkit/canvas-core · hashComponentRef"
+---
+
+```ts
+function hashComponentRef(source): string;
+```
+
+Defined in: [brand-governance/audit.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/audit.ts#L80)
+
+Hash a component Source.
+
+Local and external Sources are namespaced before hashing, so a local `card`
+and a library `card` cannot produce the same token — the same reason
+`componentSourceKey` namespaces its cache keys.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `source` | [`CanvasComponentSourceRef`](../../index/type-aliases/CanvasComponentSourceRef) |
+
+## Returns
+
+`string`

@@ -1,0 +1,17 @@
+---
+title: "CanvasExternalComponentSnapshotLike"
+description: "@anvilkit/canvas-core · CanvasExternalComponentSnapshotLike"
+---
+
+```ts
+type CanvasExternalComponentSnapshotLike = CanvasExternalComponentSnapshot;
+```
+
+Defined in: [component-libraries/admission.ts:156](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/admission.ts#L156)
+
+The snapshot shape stored in the document.
+
+Since T-014 this is exactly `CanvasExternalComponentSnapshot` from `ir/types.ts`
+— the persisted shape — rather than a structural stand-in. The alias is kept
+because it names the *role* ("what admission produces and a command consumes")
+at every use site, and because it is what the branded type is parameterized on.

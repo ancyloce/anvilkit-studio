@@ -1,0 +1,23 @@
+---
+title: "CanvasFontFile"
+description: "@anvilkit/canvas-editor · CanvasFontFile"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/text/font-catalog.ts:116](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L116)
+
+One concrete face file — exactly the four things an `@font-face` rule needs,
+so `cp2-006` can build an `SvgFontFaceDef` from a catalog entry alone.
+
+`unicodeRange` is recorded for completeness (subsetted Google-style files
+carry one) but has no `SvgFontFaceDef` counterpart; core's `fontFaceRule`
+emits `font-family`, `src`, `font-weight` and `font-style` only.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="format"&gt;&lt;/a&gt; `format?` | `readonly` | [`CanvasFontFileFormat`](../type-aliases/CanvasFontFileFormat) | Omitted means "emit no `format(...)` hint" — never guessed from the URL. | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L120) |
+| &lt;a id="style"&gt;&lt;/a&gt; `style?` | `readonly` | [`CanvasFontStyle`](../type-aliases/CanvasFontStyle) | Defaults to `"normal"` where omitted. | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:123](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L123) |
+| &lt;a id="unicoderange"&gt;&lt;/a&gt; `unicodeRange?` | `readonly` | `string` | CSS `unicode-range` for a subsetted file, e.g. `"U+0000-00FF"`. | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:125](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L125) |
+| &lt;a id="url"&gt;&lt;/a&gt; `url` | `readonly` | `string` | Absolute or app-relative URL of the font file. | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L118) |
+| &lt;a id="weight"&gt;&lt;/a&gt; `weight` | `readonly` | [`CanvasFontWeight`](../type-aliases/CanvasFontWeight) | - | [packages/capabilities/canvas/editor/src/text/font-catalog.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/font-catalog.ts#L121) |

@@ -1,0 +1,26 @@
+---
+title: "CanvasComponentChangeOp"
+description: "@anvilkit/canvas-core · CanvasComponentChangeOp"
+---
+
+```ts
+type CanvasComponentChangeOp = 
+  | "create"
+  | "rename"
+  | "duplicate"
+  | "delete"
+  | "add-property"
+  | "update-property"
+  | "remove-property"
+  | "source-edit";
+```
+
+Defined in: [commands/change-events.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L24)
+
+What happened to a Component Source (plan 0023 M3-03). `source-edit` is
+any location-scoped node command inside the Source tree; the named ops map
+1:1 onto the registry commands. Instance-side edits (inserting an
+instance, setting/resetting overrides) are ordinary NODE changes on the
+instance node (`updated` with `keys: ["overrides"]`, `added`, `removed`)
+and deliberately do NOT use this kind. Virtual (resolved) node ids never
+appear as change targets.

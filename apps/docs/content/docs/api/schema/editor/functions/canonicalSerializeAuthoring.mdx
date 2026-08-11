@@ -1,0 +1,24 @@
+---
+title: "canonicalSerializeAuthoring"
+description: "@anvilkit/schema · canonicalSerializeAuthoring"
+---
+
+```ts
+function canonicalSerializeAuthoring(state): CanonicalAuthoringSerialization;
+```
+
+Defined in: [editor/canonical-serialize.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/canonical-serialize.ts#L62)
+
+Canonically serialize an authoring state and measure its UTF-8
+byte length. Deterministic: permuted key insertion orders produce
+identical bytes.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `state` | `AuthoringStateV1` |
+
+## Returns
+
+[`CanonicalAuthoringSerialization`](../interfaces/CanonicalAuthoringSerialization)

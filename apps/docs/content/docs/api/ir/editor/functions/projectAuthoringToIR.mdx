@@ -1,0 +1,28 @@
+---
+title: "projectAuthoringToIR"
+description: "@anvilkit/ir · projectAuthoringToIR"
+---
+
+```ts
+function projectAuthoringToIR(ir, authoring): PageIR;
+```
+
+Defined in: [editor/index.ts:108](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L108)
+
+Project sidecar-owned authoring facts into an already-converted
+PageIR (DD-DEC-020): `locked` → `meta.locked`, one-way. Everything
+else in the sidecar is either materialized upstream (styles,
+components — by core/editor via the export pipeline) or carries no
+IR representation. Pure; documents with no locked records return
+the input IR **by reference** (legacy byte-identity).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts) |
+| `authoring` | `AuthoringStateV1` |
+
+## Returns
+
+[`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts)

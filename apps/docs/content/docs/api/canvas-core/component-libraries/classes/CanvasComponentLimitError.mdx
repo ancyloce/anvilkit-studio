@@ -1,0 +1,60 @@
+---
+title: "CanvasComponentLimitError"
+description: "@anvilkit/canvas-core · CanvasComponentLimitError"
+---
+
+Defined in: [component-libraries/errors.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/errors.ts#L68)
+
+A Provider envelope (or an imported document's snapshot registry) exceeded a
+documented resource ceiling.
+
+Thrown, not returned, matching `CanvasClipboardError` and
+`CanvasCommandError`: a cap breach means the input is refused outright, so
+there is no partial result for a caller to inspect.
+
+The message names the observed value, the ceiling, and the constant, because
+the first question on seeing one of these in a host's logs is always "how far
+over was it, and can the limit move?".
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new CanvasComponentLimitError(
+   code, 
+   observed, 
+   detail?): CanvasComponentLimitError;
+```
+
+Defined in: [component-libraries/errors.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/errors.ts#L75)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `code` | [`CanvasComponentLimitCode`](../type-aliases/CanvasComponentLimitCode) |
+| `observed` | `number` |
+| `detail?` | `string` |
+
+#### Returns
+
+`CanvasComponentLimitError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | [`CanvasComponentLimitCode`](../type-aliases/CanvasComponentLimitCode) | - | [component-libraries/errors.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/errors.ts#L69) |
+| &lt;a id="limit"&gt;&lt;/a&gt; `limit` | `readonly` | `number` | The documented ceiling that was exceeded. | [component-libraries/errors.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/errors.ts#L71) |
+| &lt;a id="observed"&gt;&lt;/a&gt; `observed` | `readonly` | `number` | What was actually observed. | [component-libraries/errors.ts:73](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/errors.ts#L73) |

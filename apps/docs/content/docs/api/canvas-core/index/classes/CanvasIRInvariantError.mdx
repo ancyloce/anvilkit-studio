@@ -1,0 +1,44 @@
+---
+title: "CanvasIRInvariantError"
+description: "@anvilkit/canvas-core · CanvasIRInvariantError"
+---
+
+Defined in: [ir/invariants.ts:305](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L305)
+
+Thrown by [assertCanvasIRInvariants](../functions/assertCanvasIRInvariants); carries every issue found, not just the first.
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new CanvasIRInvariantError(issues): CanvasIRInvariantError;
+```
+
+Defined in: [ir/invariants.ts:308](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L308)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `issues` | readonly [`CanvasInvariantIssue`](../interfaces/CanvasInvariantIssue)[] |
+
+#### Returns
+
+`CanvasIRInvariantError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="issues"&gt;&lt;/a&gt; `issues` | `readonly` | readonly [`CanvasInvariantIssue`](../interfaces/CanvasInvariantIssue)[] | [ir/invariants.ts:306](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L306) |

@@ -1,0 +1,53 @@
+---
+title: "EditorStyleAdapter"
+description: "@anvilkit/core · EditorStyleAdapter"
+---
+
+Defined in: foundation/contracts/dist/editor/studio-config.d.ts:76
+
+Strict-CSP injection adapter for the authoring stylesheet
+(DD-0019 §29: "Hosts with strict CSP may provide a nonce or
+constructable-stylesheet adapter for authoring styles").
+
+Core writes authoring CSS into the canvas iframe through a single
+channel, so a host under `style-src 'nonce-…'` (or one that forbids
+inline `<style>` entirely) has exactly one seam to override. Absent,
+Core keeps its default `<style>` element — unchanged behaviour for
+every host that does not need this.
+
+The two members are alternatives, not layers: when [adopt](#adopt) is
+supplied Core does not create a `<style>` element at all, so
+[nonce](#nonce) would have nothing to apply to.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="nonce"&gt;&lt;/a&gt; `nonce?` | `readonly` | `string` | CSP nonce stamped on the `<style>` element Core creates. Applied to both the `nonce` property and the attribute: the property is what the browser actually checks, the attribute keeps the element inspectable. | foundation/contracts/dist/editor/studio-config.d.ts:83 |
+
+## Methods
+
+### adopt()?
+
+```ts
+optional adopt(doc, cssText): void;
+```
+
+Defined in: foundation/contracts/dist/editor/studio-config.d.ts:91
+
+Takes over injection entirely — typically via a constructable
+`CSSStyleSheet` pushed onto `document.adoptedStyleSheets`, which
+needs no `style-src` allowance at all. Called on every authoring
+change with the full stylesheet text; the host owns idempotency
+and teardown for the document it was handed.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `doc` | `Document` |
+| `cssText` | `string` |
+
+#### Returns
+
+`void`

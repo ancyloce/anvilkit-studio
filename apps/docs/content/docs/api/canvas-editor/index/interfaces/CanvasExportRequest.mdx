@@ -3,7 +3,7 @@ title: "CanvasExportRequest"
 description: "@anvilkit/canvas-editor · CanvasExportRequest"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L55)
+Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L70)
 
 The user-tunable knobs from the export popover (mirrors the reference panel).
 
@@ -18,7 +18,7 @@ knobs / a downloadable-blob shape) and stay as they are.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="iscancelled"&gt;&lt;/a&gt; `isCancelled?` | `readonly` | () =&gt; `boolean` | Poll-based cancellation (FR-154): when present and returns `true`, a built-in multi-page exporter (PDF) stops between page iterations and throws [CanvasExportCancelledError](../classes/CanvasExportCancelledError) instead of completing. Optional — most callers (the headless `export()` action, host-injected exporters that don't support cancellation) omit it and run to completion. A single page's own render call is never interrupted mid-flight — only the boundary BETWEEN pages is checked, mirroring the dialog's existing per-page raster/SVG loop. | [packages/capabilities/canvas/editor/src/header/types.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L72) |
-| &lt;a id="quality"&gt;&lt;/a&gt; `quality` | `readonly` | `number` | 0–100. Honored by lossy raster encoders; ignored by PNG/vector/data. | [packages/capabilities/canvas/editor/src/header/types.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L57) |
-| &lt;a id="resolution"&gt;&lt;/a&gt; `resolution` | `readonly` | `number` | Output scale factor (e.g. `1`, `0.5`). Raster exporters multiply pixelRatio by it. | [packages/capabilities/canvas/editor/src/header/types.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L59) |
-| &lt;a id="stripmetadata"&gt;&lt;/a&gt; `stripMetadata` | `readonly` | `boolean` | Strip EXIF/location/camera metadata from raster output. | [packages/capabilities/canvas/editor/src/header/types.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L61) |
+| &lt;a id="iscancelled"&gt;&lt;/a&gt; `isCancelled?` | `readonly` | () =&gt; `boolean` | Poll-based cancellation (FR-154): when present and returns `true`, a built-in multi-page exporter (PDF) stops between page iterations and throws [CanvasExportCancelledError](../classes/CanvasExportCancelledError) instead of completing. Optional — most callers (the headless `export()` action, host-injected exporters that don't support cancellation) omit it and run to completion. A single page's own render call is never interrupted mid-flight — only the boundary BETWEEN pages is checked, mirroring the dialog's existing per-page raster/SVG loop. | [packages/capabilities/canvas/editor/src/header/types.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L87) |
+| &lt;a id="quality"&gt;&lt;/a&gt; `quality` | `readonly` | `number` | 0–100. Honored by lossy raster encoders; ignored by PNG/vector/data. | [packages/capabilities/canvas/editor/src/header/types.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L72) |
+| &lt;a id="resolution"&gt;&lt;/a&gt; `resolution` | `readonly` | `number` | Output scale factor (e.g. `1`, `0.5`). Raster exporters multiply pixelRatio by it. | [packages/capabilities/canvas/editor/src/header/types.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L74) |
+| &lt;a id="stripmetadata"&gt;&lt;/a&gt; `stripMetadata` | `readonly` | `boolean` | Strip EXIF/location/camera metadata from raster output. | [packages/capabilities/canvas/editor/src/header/types.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L76) |

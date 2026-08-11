@@ -1,0 +1,27 @@
+---
+title: "effectiveSeverity"
+description: "@anvilkit/canvas-core · effectiveSeverity"
+---
+
+```ts
+function effectiveSeverity(policy, context): "warning" | "blocking";
+```
+
+Defined in: [brand-governance/compliance.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance.ts#L47)
+
+OD-10, verbatim.
+
+Deliberately not "simplified": every branch here is load-bearing, and the
+shape mirrors the decision text so a reader can check them against each other
+line by line.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `policy` | \| [`CanvasBrandComponentPolicy`](../../index/interfaces/CanvasBrandComponentPolicy) \| `undefined` |
+| `context` | `Pick`\&lt;[`CanvasBrandPolicyContext`](../interfaces/CanvasBrandPolicyContext), `"enforcement"`\&gt; |
+
+## Returns
+
+`"warning"` \| `"blocking"`

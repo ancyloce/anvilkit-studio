@@ -1,0 +1,19 @@
+---
+title: "DesignTokenSource"
+description: "@anvilkit/contracts · DesignTokenSource"
+---
+
+Defined in: [editor/tokens.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/tokens.ts#L47)
+
+Import-as-copy provenance (ADR 0005; DD-0019 §9.4). Records that a
+token was created by importing a value from another token system.
+Metadata only: resolution ignores it, values remain ordinary
+literals or document-token aliases, and generated output never
+varies on it. It never creates a live cross-system alias.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="ref"&gt;&lt;/a&gt; `ref` | `readonly` | `string` | [editor/tokens.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/tokens.ts#L49) |
+| &lt;a id="system"&gt;&lt;/a&gt; `system` | `readonly` | `"theme"` \| `"brand"` | [editor/tokens.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/tokens.ts#L48) |

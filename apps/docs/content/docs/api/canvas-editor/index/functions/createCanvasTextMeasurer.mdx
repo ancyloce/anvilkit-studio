@@ -7,7 +7,7 @@ description: "@anvilkit/canvas-editor · createCanvasTextMeasurer"
 function createCanvasTextMeasurer(): CanvasTextMeasurer;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/text/canvas-text-measurer.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/canvas-text-measurer.ts#L14)
+Defined in: [packages/capabilities/canvas/editor/src/text/canvas-text-measurer.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/canvas-text-measurer.ts#L23)
 
 A `CanvasTextMeasurer` (core's headless text-measurement contract) backed
 by a real Canvas2D context — pass this to core's
@@ -16,6 +16,10 @@ by a real Canvas2D context — pass this to core's
 exactly the points the stage does. Both paths go through the same internal
 layout function; only the glyph-width source differs from what the stage
 renderer (`CanvasNodeRenderer.tsx`) uses, and it is the same source.
+
+Routes through the editor's ONE measurement cache (T-M3-04), keyed on the
+request's own `defaults` and the live font manifest — an export and the
+stage therefore share measurements instead of re-laying-out.
 
 ## Returns
 

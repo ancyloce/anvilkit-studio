@@ -1,0 +1,58 @@
+---
+title: "CanvasElementEntry"
+description: "@anvilkit/canvas-editor · CanvasElementEntry"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-entry.ts:247](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L247)
+
+One catalog entry.
+
+`license` is REQUIRED and is an SPDX identifier — `"MIT"`, `"Apache-2.0"`,
+`"CC0-1.0"`, `"OFL-1.1"`, or a `LicenseRef-…` for a private licence a host
+holds. Not narrowed to a closed union, for the same reason the font catalog
+declined to (`text/font-catalog.ts:156-165`): `cp3-002` restricts the
+*default* catalog to open licences and enforces that set by test, but a host
+shipping its own artwork must be able to record its real licence rather than
+the nearest open lie.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="category"&gt;&lt;/a&gt; `category` | `readonly` | [`CanvasElementCategory`](../type-aliases/CanvasElementCategory) | - | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:252](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L252) |
+| &lt;a id="defaultsize"&gt;&lt;/a&gt; `defaultSize` | `readonly` | `CanvasBounds` | Intrinsic size, in page units. Required — it is the element analogue of a template's always-present `document.pages[0].size`, which `TemplatesPanel` relies on for both the card's aspect ratio and its size caption. `cp3-003` needs it before building anything, and `cp3-004`'s click-to-centre path needs it to place the element. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:270](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L270) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable, catalog-unique. Not a node id — `build()` mints those. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:249](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L249) |
+| &lt;a id="keywords"&gt;&lt;/a&gt; `keywords?` | `readonly` | readonly `string`[] | Search synonyms that are NOT worth showing as chips — "bin", "trash", "delete", "remove" for one icon. Searched exactly like `tags`. Templates have no equivalent because a template's title and description already carry its vocabulary; an icon's name is one word. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:261](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L261) |
+| &lt;a id="license"&gt;&lt;/a&gt; `license` | `readonly` | `string` | SPDX identifier. Required — see the interface doc. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:272](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L272) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `readonly` | `string` | Human-readable, already localized by whoever supplied the catalog. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:251](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L251) |
+| &lt;a id="preview"&gt;&lt;/a&gt; `preview` | `readonly` | [`CanvasElementPreview`](../type-aliases/CanvasElementPreview) | - | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:262](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L262) |
+| &lt;a id="recolor"&gt;&lt;/a&gt; `recolor` | `readonly` | [`CanvasElementRecolor`](../type-aliases/CanvasElementRecolor) | Required. See [CanvasElementRecolor](../type-aliases/CanvasElementRecolor) for why. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:276](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L276) |
+| &lt;a id="tags"&gt;&lt;/a&gt; `tags` | `readonly` | readonly `string`[] | Coarse facets the panel may show as chips. Searched. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:254](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L254) |
+| &lt;a id="upstreamurl"&gt;&lt;/a&gt; `upstreamUrl?` | `readonly` | `string` | Provenance, for the `cp6-006` licensing audit. | [packages/capabilities/canvas/editor/src/elements/element-entry.ts:274](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L274) |
+
+## Methods
+
+### build()
+
+```ts
+build(context?): CanvasElementNode;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-entry.ts:285](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L285)
+
+Mint the node this entry inserts.
+
+Pure and side-effect-free apart from id generation: the same context must
+produce the same geometry, and a fresh id set, on every call. Returns a
+[CanvasElementNode](../type-aliases/CanvasElementNode) — always a `CanvasNode`, never an asset
+reference. See the module doc for why that is load-bearing.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `context?` | [`CanvasElementBuildContext`](CanvasElementBuildContext.md) |
+
+#### Returns
+
+[`CanvasElementNode`](../type-aliases/CanvasElementNode)

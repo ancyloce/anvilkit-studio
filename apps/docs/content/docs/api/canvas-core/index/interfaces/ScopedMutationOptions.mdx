@@ -1,0 +1,31 @@
+---
+title: "ScopedMutationOptions"
+description: "@anvilkit/canvas-core · ScopedMutationOptions"
+---
+
+Defined in: [ir/mutations.ts:95](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L95)
+
+Restricts a mutation to one tree — a page's, or a Component Source's
+(plan 0023 M3-01, LC-CMD). Absent = every page, the pre-component
+behavior, so every existing call site keeps its exact semantics.
+
+## Extends
+
+- `NowOption`
+
+## Extended by
+
+- [`InsertNodeOptions`](InsertNodeOptions.md)
+- [`RemoveNodeOptions`](RemoveNodeOptions.md)
+- [`UpdateNodeOptions`](UpdateNodeOptions.md)
+- [`MoveNodeOptions`](MoveNodeOptions.md)
+- [`ReorderChildrenOptions`](ReorderChildrenOptions.md)
+- [`ReplaceChildrenInParentOptions`](ReplaceChildrenInParentOptions.md)
+- [`ReplaceNodeOptions`](ReplaceNodeOptions.md)
+
+## Properties
+
+| Property | Type | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | - | [ir/mutations.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L96) |
+| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | `NowOption.now` | [ir/mutations.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L44) |

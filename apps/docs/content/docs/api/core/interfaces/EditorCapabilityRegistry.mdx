@@ -1,0 +1,72 @@
+---
+title: "EditorCapabilityRegistry"
+description: "@anvilkit/core · EditorCapabilityRegistry"
+---
+
+Defined in: [runtime/core/src/types/editor-api.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L26)
+
+Capability lookup over the live document and config
+(DD-0019 §21.1): what the editor may do per component type and per
+node, plus which editor features the current document uses.
+
+## Methods
+
+### forComponent()
+
+```ts
+forComponent(componentType): AnvilComponentMetadata | undefined;
+```
+
+Defined in: [runtime/core/src/types/editor-api.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L31)
+
+The declared `metadata.editor` capability metadata for a component
+type; `undefined` for legacy components (≡ `styleTarget: "none"`).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `componentType` | `string` |
+
+#### Returns
+
+`AnvilComponentMetadata` \| `undefined`
+
+***
+
+### forNode()
+
+```ts
+forNode(nodeId): AnvilComponentMetadata | undefined;
+```
+
+Defined in: [runtime/core/src/types/editor-api.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L33)
+
+[forComponent](#forcomponent) resolved through a node's component type.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `nodeId` | `string` |
+
+#### Returns
+
+`AnvilComponentMetadata` \| `undefined`
+
+***
+
+### listUsedFeatures()
+
+```ts
+listUsedFeatures(): readonly EditorFeatureId[];
+```
+
+Defined in: [runtime/core/src/types/editor-api.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api.ts#L38)
+
+The editor features the current document uses (sidecar-visible
+set — the same projection exporter preflight consumes).
+
+#### Returns
+
+readonly `EditorFeatureId`[]

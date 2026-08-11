@@ -1,0 +1,18 @@
+---
+title: "CanvasPolicyQuery"
+description: "@anvilkit/canvas-core · CanvasPolicyQuery"
+---
+
+Defined in: [policy-contracts.ts:93](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L93)
+
+What the evaluator is being asked.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="instanceid"&gt;&lt;/a&gt; `instanceId?` | `readonly` | `string` | Page-level instance id (OD-08). Absent for document-scoped operations. | [policy-contracts.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L96) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | `readonly` | [`CanvasDocumentLocation`](../../index/interfaces/CanvasDocumentLocation) | - | [policy-contracts.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L98) |
+| &lt;a id="operation"&gt;&lt;/a&gt; `operation` | `readonly` | [`CanvasPolicyOperation`](../type-aliases/CanvasPolicyOperation) | - | [policy-contracts.ts:94](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L94) |
+| &lt;a id="propertyid"&gt;&lt;/a&gt; `propertyId?` | `readonly` | `string` | - | [policy-contracts.ts:97](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L97) |
+| &lt;a id="value"&gt;&lt;/a&gt; `value?` | `readonly` | `unknown` | The value being written, when the operation writes one — used only for token-constraint checks. `unknown` because this rank must not know brand value shapes. | [policy-contracts.ts:104](https://github.com/ancyloce/anvilkit-studio/blob/main/src/policy-contracts.ts#L104) |

@@ -1,0 +1,16 @@
+---
+title: "FrameClipDegradation"
+description: "@anvilkit/canvas-core · FrameClipDegradation"
+---
+
+```ts
+type FrameClipDegradation = "unknown-shape-kind" | "invalid-shape-geometry";
+```
+
+Defined in: [ir/frame-clip.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L10)
+
+Why a declared [CanvasFrameShape](CanvasFrameShape.md) could not be honoured. Both cases are
+reachable at runtime even though [CanvasFrameShapeSchema](../variables/CanvasFrameShapeSchema) rejects them:
+nodes are routinely constructed in TypeScript without going through the
+schema, and the IR's `looseObject` posture means a newer peer's shape kind
+survives a round-trip through a build that has never heard of it.

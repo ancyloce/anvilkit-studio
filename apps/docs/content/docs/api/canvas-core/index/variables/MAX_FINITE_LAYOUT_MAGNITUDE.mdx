@@ -1,0 +1,23 @@
+---
+title: "MAX_FINITE_LAYOUT_MAGNITUDE"
+description: "@anvilkit/canvas-core · MAX_FINITE_LAYOUT_MAGNITUDE"
+---
+
+```ts
+const MAX_FINITE_LAYOUT_MAGNITUDE: 1000000000 = 1e9;
+```
+
+Defined in: [limits.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L48)
+
+Largest finite coordinate, extent, padding, or gap magnitude that layout
+arithmetic is guaranteed to handle without precision loss.
+
+Derived, not chosen: layout output is quantised to 1e-4 local units, so a
+value only round-trips exactly while `value * 1e4` stays inside
+`Number.MAX_SAFE_INTEGER` (~9.007e15), giving a true ceiling of ~9.007e11.
+1e9 sits three orders of magnitude below that, leaving headroom for
+intermediate sums (a padding + gap + child-extent accumulation across a
+deep Hug chain) to stay exact rather than merely representable.
+
+Values beyond this are rejected as non-finite-equivalent rather than
+silently producing drifting geometry.

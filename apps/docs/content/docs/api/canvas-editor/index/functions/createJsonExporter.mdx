@@ -1,0 +1,30 @@
+---
+title: "createJsonExporter"
+description: "@anvilkit/canvas-editor · createJsonExporter"
+---
+
+```ts
+function createJsonExporter(options?): CanvasExporter;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/header/exporters.ts:184](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/exporters.ts#L184)
+
+Built-in JSON exporter (cp1-006). Serializes the IR and round-trips back
+into the editor.
+
+Browser-local assets (`blob:`) are inlined as `data:` URIs when their total
+fits under [CanvasJsonExporterOptions.maxInlineAssetBytes](../interfaces/CanvasJsonExporterOptions#maxinlineassetbytes); above it
+the document is emitted unchanged **plus one warning naming each image that
+will not travel**. It never silently emits an unresolvable URI, and it never
+rewrites the live document — the inlined map exists only inside the
+artifact.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CanvasJsonExporterOptions`](../interfaces/CanvasJsonExporterOptions) |
+
+## Returns
+
+[`CanvasExporter`](../type-aliases/CanvasExporter)

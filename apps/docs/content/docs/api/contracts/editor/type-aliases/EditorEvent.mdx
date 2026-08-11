@@ -1,0 +1,39 @@
+---
+title: "EditorEvent"
+description: "@anvilkit/contracts · EditorEvent"
+---
+
+```ts
+type EditorEvent = 
+  | {
+  changedNodeCount: number;
+  commandType: string;
+  durationMs: number;
+  source: string;
+  type: "command.committed";
+}
+  | {
+  commandType: string;
+  errorCodes: readonly EditorErrorCode[];
+  type: "command.rejected";
+}
+  | {
+  durationMs: number;
+  gesture: string;
+  type: "gesture.completed";
+}
+  | {
+  count: number;
+  severity: string;
+  type: "diagnostic.changed";
+}
+  | {
+  featureIds: readonly string[];
+  status: "passed" | "failed";
+  type: "export.validation";
+};
+```
+
+Defined in: [editor/events.ts:13](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/events.ts#L13)
+
+Operational event union (DD-0019 §22.4, verbatim).

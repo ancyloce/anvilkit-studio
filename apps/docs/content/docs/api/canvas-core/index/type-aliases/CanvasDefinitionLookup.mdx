@@ -1,0 +1,89 @@
+---
+title: "CanvasDefinitionLookup"
+description: "@anvilkit/canvas-core · CanvasDefinitionLookup"
+---
+
+```ts
+type CanvasDefinitionLookup = 
+  | {
+  componentId: string;
+  definition: CanvasComponentDefinition;
+  kind: "local";
+  sourceKey: string;
+}
+  | {
+  definition: CanvasComponentDefinition;
+  kind: "external";
+  ref: CanvasExternalComponentRef;
+  sourceKey: string;
+  state: Extract<CanvasExternalComponentState, {
+     kind: "resolved";
+  }>;
+}
+  | {
+  externalState?: CanvasExternalComponentState;
+  kind: "unresolved";
+  reason: "local-missing" | "snapshot-missing" | "integrity-failed" | "unkeyable";
+  source: CanvasComponentSourceRef;
+};
+```
+
+Defined in: [components/definition-lookup.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L68)
+
+The outcome of asking "what definition does this Source name?".
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  componentId: string;
+  definition: CanvasComponentDefinition;
+  kind: "local";
+  sourceKey: string;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `componentId` | `string` | - | [components/definition-lookup.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L71) |
+| `definition` | [`CanvasComponentDefinition`](../interfaces/CanvasComponentDefinition) | - | [components/definition-lookup.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L72) |
+| `kind` | `"local"` | - | [components/definition-lookup.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L70) |
+| `sourceKey` | `string` | Stable identity for cache keys and the cycle guard. | [components/definition-lookup.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L74) |
+
+***
+
+### Type Literal
+
+```ts
+{
+  definition: CanvasComponentDefinition;
+  kind: "external";
+  ref: CanvasExternalComponentRef;
+  sourceKey: string;
+  state: Extract<CanvasExternalComponentState, {
+     kind: "resolved";
+  }>;
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  externalState?: CanvasExternalComponentState;
+  kind: "unresolved";
+  reason: "local-missing" | "snapshot-missing" | "integrity-failed" | "unkeyable";
+  source: CanvasComponentSourceRef;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `externalState?` | [`CanvasExternalComponentState`](CanvasExternalComponentState.md) | - | [components/definition-lookup.ts:103](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L103) |
+| `kind` | `"unresolved"` | - | [components/definition-lookup.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L87) |
+| `reason` | `"local-missing"` \| `"snapshot-missing"` \| `"integrity-failed"` \| `"unkeyable"` | `local-missing` — not in `ir.components`. `snapshot-missing` — no admitted snapshot for this exact ref. `integrity-failed` — a snapshot IS stored under this exact ref, but it was quarantined at load because its bytes no longer hash to its `integrity` (T-045). Distinct from `snapshot-missing` because the remedy differs: re-fetch or remove, never "carry on". `unkeyable` — the ref is malformed and no key can be derived. | [components/definition-lookup.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L98) |
+| `source` | [`CanvasComponentSourceRef`](CanvasComponentSourceRef.md) | - | [components/definition-lookup.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/definition-lookup.ts#L88) |

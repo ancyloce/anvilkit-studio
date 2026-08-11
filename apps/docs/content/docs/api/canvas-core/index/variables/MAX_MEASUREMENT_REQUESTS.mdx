@@ -1,0 +1,15 @@
+---
+title: "MAX_MEASUREMENT_REQUESTS"
+description: "@anvilkit/canvas-core · MAX_MEASUREMENT_REQUESTS"
+---
+
+```ts
+const MAX_MEASUREMENT_REQUESTS: 5000 = 5_000;
+```
+
+Defined in: [limits.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L76)
+
+Ceiling on text-measurement requests issued for one layout resolution.
+
+Measurement is the only host-provided (and therefore unbounded-cost) step
+in an otherwise pure resolver, so it is capped separately from node count.

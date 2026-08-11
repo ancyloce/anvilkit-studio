@@ -1,0 +1,32 @@
+---
+title: "createExternalInsertCommandHandlers"
+description: "@anvilkit/canvas-core · createExternalInsertCommandHandlers"
+---
+
+```ts
+function createExternalInsertCommandHandlers(): readonly [{
+  apply: (ir, cmd, options) => CommandApplyResult<CanvasComponentRevertExternalInsertCommand>;
+  type: "component-instance.insert-external";
+}, {
+  apply: (ir, cmd, options) => CommandApplyResult<CanvasComponentInsertExternalCommand>;
+  type: "component-instance.revert-external-insert";
+}];
+```
+
+Defined in: [component-libraries/commands/insert-external.ts:292](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/commands/insert-external.ts#L292)
+
+The two handlers, as an extension bundle fragment.
+
+Exposed as a factory rather than a frozen array so a host registering them
+twice gets two distinct objects and the registry's duplicate guard reports
+the real problem (`duplicate-command`) rather than an identity coincidence.
+
+## Returns
+
+readonly \[\{
+  `apply`: (`ir`, `cmd`, `options`) => [`CommandApplyResult`](../../index/interfaces/CommandApplyResult)\<[`CanvasComponentRevertExternalInsertCommand`](../interfaces/CanvasComponentRevertExternalInsertCommand)\>;
+  `type`: `"component-instance.insert-external"`;
+\}, \{
+  `apply`: (`ir`, `cmd`, `options`) => [`CommandApplyResult`](../../index/interfaces/CommandApplyResult)\<[`CanvasComponentInsertExternalCommand`](../interfaces/CanvasComponentInsertExternalCommand)\>;
+  `type`: `"component-instance.revert-external-insert"`;
+\}\]

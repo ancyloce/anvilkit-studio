@@ -1,0 +1,37 @@
+---
+title: "CanvasAudioNode"
+description: "@anvilkit/canvas-core · CanvasAudioNode"
+---
+
+Defined in: [ir/types.ts:895](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L895)
+
+Fields shared by the video/audio asset-reference nodes (FR-081,
+canvas-m6-002). Deliberately holds ONLY an `assetId` — no inline media
+bytes ever enter Canvas IR, matching the `image`/`svg` asset-reference
+convention. No playback/rendering is implemented in canvas-core: this is a
+contract an export/render worker consumes later.
+
+## Extends
+
+- [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md)
+
+## Properties
+
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="assetid"&gt;&lt;/a&gt; `assetId` | `string` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`assetId`](CanvasMediaNodeBase.md#assetid) | [ir/types.ts:882](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L882) |
+| &lt;a id="blendmode"&gt;&lt;/a&gt; `blendMode?` | `string` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`blendMode`](CanvasMediaNodeBase.md#blendmode) | [ir/types.ts:462](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L462) |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | [`CanvasBounds`](CanvasBounds.md) | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`bounds`](CanvasMediaNodeBase.md#bounds) | [ir/types.ts:458](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L458) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`id`](CanvasMediaNodeBase.md#id) | [ir/types.ts:455](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L455) |
+| &lt;a id="layoutitem"&gt;&lt;/a&gt; `layoutItem?` | [`CanvasLayoutItem`](CanvasLayoutItem.md) | How this node participates in its parent frame's Auto Layout, when that parent has `autoLayout`. Absent — or present but all-default — means the node is an ordinary Flow child at its stored Fixed size. A **non-default** value anywhere in a document makes `layout.auto.v1` a required capability (see `CanvasDocumentCompatibility`), enforced by the `missing-required-capability` invariant. | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`layoutItem`](CanvasMediaNodeBase.md#layoutitem) | [ir/types.ts:472](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L472) |
+| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `boolean` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`locked`](CanvasMediaNodeBase.md#locked) | [ir/types.ts:461](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L461) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | [`CanvasNodeMeta`](CanvasNodeMeta.md) | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`meta`](CanvasMediaNodeBase.md#meta) | [ir/types.ts:481](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L481) |
+| &lt;a id="muted"&gt;&lt;/a&gt; `muted?` | `boolean` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`muted`](CanvasMediaNodeBase.md#muted) | [ir/types.ts:884](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L884) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `string` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`name`](CanvasMediaNodeBase.md#name) | [ir/types.ts:456](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L456) |
+| &lt;a id="opacity"&gt;&lt;/a&gt; `opacity?` | `number` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`opacity`](CanvasMediaNodeBase.md#opacity) | [ir/types.ts:459](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L459) |
+| &lt;a id="transform"&gt;&lt;/a&gt; `transform` | [`CanvasTransform`](CanvasTransform.md) | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`transform`](CanvasMediaNodeBase.md#transform) | [ir/types.ts:457](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L457) |
+| &lt;a id="trim"&gt;&lt;/a&gt; `trim?` | [`CanvasMediaTrim`](CanvasMediaTrim.md) | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`trim`](CanvasMediaNodeBase.md#trim) | [ir/types.ts:883](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L883) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"audio"` | - | - | [ir/types.ts:896](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L896) |
+| &lt;a id="visible"&gt;&lt;/a&gt; `visible?` | `boolean` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`visible`](CanvasMediaNodeBase.md#visible) | [ir/types.ts:460](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L460) |
+| &lt;a id="volume"&gt;&lt;/a&gt; `volume?` | `number` | 0-1 playback volume. Defaults to 1 (full volume). Ignored when `muted`. | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`volume`](CanvasMediaNodeBase.md#volume) | [ir/types.ts:886](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L886) |
+| &lt;a id="zindex"&gt;&lt;/a&gt; `zIndex?` | `number` | Reserved for future explicit paint-order control — currently unused (C-9). Paint order is entirely determined by each container's `children` array order; no code in `@anvilkit/canvas-core` or `@anvilkit/canvas-editor` reads this field. Optional so callers (including AI-generated payloads) aren't forced to supply a value that has no effect. | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`zIndex`](CanvasMediaNodeBase.md#zindex) | [ir/types.ts:480](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L480) |

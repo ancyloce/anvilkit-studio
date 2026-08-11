@@ -1,0 +1,17 @@
+---
+title: "MAX_EXTERNAL_REF_FIELD_CHARS"
+description: "@anvilkit/canvas-core · MAX_EXTERNAL_REF_FIELD_CHARS"
+---
+
+```ts
+const MAX_EXTERNAL_REF_FIELD_CHARS: 256 = 256;
+```
+
+Defined in: [limits.ts:289](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L289)
+
+Ceiling on characters in one field of an exact external reference
+(`libraryId`, `componentId`, `version`, `integrity`).
+
+Fixed by TD §5.3, which requires each decoded snapshot-key segment to be
+1–256 characters. Declared once here so the key codec and the reference schema
+cannot disagree — they validate the same bound from the same constant.

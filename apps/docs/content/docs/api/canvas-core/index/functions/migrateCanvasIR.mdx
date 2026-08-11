@@ -1,0 +1,34 @@
+---
+title: "migrateCanvasIR"
+description: "@anvilkit/canvas-core · migrateCanvasIR"
+---
+
+```ts
+function migrateCanvasIR(raw): CanvasIR;
+```
+
+Defined in: [ir/validators.ts:1222](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L1222)
+
+Parse + forward-migrate an untrusted/persisted IR to the current schema
+version, then validate it. This is the single seam for schema evolution.
+
+Policy: **migrate-on-read, write current** (`CANVAS_IR_VERSION`). A
+supported older version (see `CANVAS_IR_MIGRATIONS`) is upgraded step by
+step before the `CanvasIRSchema.parse`, so persisted and peer-supplied
+documents (e.g. collaborative editing) keep loading as the schema grows —
+and always come out stamped with the current version. An unsupported
+version is rejected with a clear, actionable error rather than a cryptic
+schema failure.
+
+Prefer this over a bare `CanvasIRSchema.parse` when decoding persisted or
+peer-supplied IR.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `raw` | `unknown` |
+
+## Returns
+
+[`CanvasIR`](../interfaces/CanvasIR)

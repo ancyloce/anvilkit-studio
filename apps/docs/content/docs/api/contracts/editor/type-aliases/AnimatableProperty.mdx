@@ -1,0 +1,22 @@
+---
+title: "AnimatableProperty"
+description: "@anvilkit/contracts · AnimatableProperty"
+---
+
+```ts
+type AnimatableProperty = 
+  | "opacity"
+  | "translateX"
+  | "translateY"
+  | "scale"
+  | "rotate"
+  | "backgroundColor"
+  | "textColor"
+  | "borderColor"
+  | "radius";
+```
+
+Defined in: [editor/interactions.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/interactions.ts#L48)
+
+The P0 animatable property set (DD-0019 §16). Width and height are
+deliberately excluded (layout thrashing).

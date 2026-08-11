@@ -4,21 +4,25 @@ description: "@anvilkit/canvas-editor · getNodeWorldRect"
 ---
 
 ```ts
-function getNodeWorldRect(node): SnapRect;
+function getNodeWorldRect(node, space?): SnapRect;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/snap/get-node-rect.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/snap/get-node-rect.ts#L14)
+Defined in: [packages/capabilities/canvas/editor/src/snap/get-node-rect.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/snap/get-node-rect.ts#L19)
 
-World-space rect for a node — the rotation/scale-aware axis-aligned bounding
-box from `@anvilkit/canvas-core` (`nodeWorldAabb`). For an unrotated, unscaled
-node this equals `{x, y, width, height}`; rotated/scaled nodes now report
-their true visual bounds (the earlier approximation ignored rotation/scale).
+World-space rect for a node. With a ResolvedPageSpace (T-M3-07) the
+rect comes from the node's RESOLVED page-space AABB — ancestor-composed and
+Auto-Layout-corrected. Without one (lightweight tool tests, partial
+contexts) it falls back to `nodeWorldAabb` on stored geometry, which is
+rotation/scale-aware but composes no ancestors — world-correct only for a
+direct child of the page root (the M0 coordinate suite pins that
+limitation on this fallback path).
 
 ## Parameters
 
 | Parameter | Type |
 | ------ | ------ |
 | `node` | `CanvasNode` |
+| `space?` | `ResolvedPageSpace` \| `null` |
 
 ## Returns
 

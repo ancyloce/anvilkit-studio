@@ -1,0 +1,27 @@
+---
+title: "CanvasImageReplaceCommand"
+description: "@anvilkit/canvas-core · CanvasImageReplaceCommand"
+---
+
+Defined in: [commands/types.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L121)
+
+Targets a node command at one tree: a page's (the default when absent —
+every pre-component call site keeps its exact semantics) or a Component
+Source's (plan 0023 M3-02, LC-CMD/LC-CREATE-002). A command's inverse
+carries the same `location`, so undo edits the same tree. One successful
+command (or one `batch`/transaction) against a Source increments that
+definition's `revision` exactly once — see `applyCommand`.
+
+## Extends
+
+- [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md)
+
+## Properties
+
+| Property | Type | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="fromassetid"&gt;&lt;/a&gt; `fromAssetId` | `string` | - | [commands/types.ts:125](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L125) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [`CanvasCommandLocationOptions`](CanvasCommandLocationOptions.md).[`location`](CanvasCommandLocationOptions.md#location) | [commands/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L45) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | - | [commands/types.ts:124](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L124) |
+| &lt;a id="toassetid"&gt;&lt;/a&gt; `toAssetId` | `string` | - | [commands/types.ts:126](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L126) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"image.replace"` | - | [commands/types.ts:123](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L123) |

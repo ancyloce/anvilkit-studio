@@ -1,0 +1,24 @@
+---
+title: "BindingTarget"
+description: "@anvilkit/contracts · BindingTarget"
+---
+
+```ts
+type BindingTarget = 
+  | {
+  path: readonly (string | number)[];
+  type: "prop";
+}
+  | {
+  type: "visibility";
+}
+  | {
+  itemName: string;
+  limit?: number;
+  type: "repeat";
+};
+```
+
+Defined in: [editor/bindings.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/bindings.ts#L48)
+
+What a binding writes to (DD-0019 §19, verbatim).

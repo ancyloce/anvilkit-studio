@@ -1,0 +1,23 @@
+---
+title: "ReplaceChildrenInParentOptions"
+description: "@anvilkit/canvas-core · ReplaceChildrenInParentOptions"
+---
+
+Defined in: [ir/mutations.ts:720](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L720)
+
+Restricts a mutation to one tree — a page's, or a Component Source's
+(plan 0023 M3-01, LC-CMD). Absent = every page, the pre-component
+behavior, so every existing call site keeps its exact semantics.
+
+## Extends
+
+- [`ScopedMutationOptions`](ScopedMutationOptions.md)
+
+## Properties
+
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | - | [`ScopedMutationOptions`](ScopedMutationOptions.md).[`location`](ScopedMutationOptions.md#location) | [ir/mutations.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L96) |
+| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | - | [`ScopedMutationOptions`](ScopedMutationOptions.md).[`now`](ScopedMutationOptions.md#now) | [ir/mutations.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L44) |
+| &lt;a id="parentid"&gt;&lt;/a&gt; `parentId` | `string` | - | - | [ir/mutations.ts:721](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L721) |
+| &lt;a id="replace"&gt;&lt;/a&gt; `replace` | (`children`) =&gt; [`CanvasNode`](../type-aliases/CanvasNode)[] | Receives the parent container's current children and returns the replacement array. Runs inside a single tree rewrite, so a batch edit (e.g. grouping or ungrouping N siblings) costs one O(n) pass instead of N insert/remove passes. The caller owns IR invariants (unique ids, no cycles) within the returned array. | - | [ir/mutations.ts:729](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L729) |

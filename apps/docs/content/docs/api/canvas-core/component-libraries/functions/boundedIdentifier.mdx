@@ -1,0 +1,18 @@
+---
+title: "boundedIdentifier"
+description: "@anvilkit/canvas-core · boundedIdentifier"
+---
+
+```ts
+function boundedIdentifier(): ZodString;
+```
+
+Defined in: [component-libraries/schema-utils.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/schema-utils.ts#L62)
+
+An identifier-scale bounded string (1–[MAX\_EXTERNAL\_REF\_FIELD\_CHARS](../../index/variables/MAX_EXTERNAL_REF_FIELD_CHARS)).
+
+Bounded *before* any allocation-heavy work, per TD §22.2.
+
+## Returns
+
+`ZodString`

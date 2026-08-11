@@ -1,0 +1,27 @@
+---
+title: "componentDiagnostic"
+description: "@anvilkit/canvas-core · componentDiagnostic"
+---
+
+```ts
+function componentDiagnostic(
+   code, 
+   message, 
+   context?): CanvasComponentDiagnostic;
+```
+
+Defined in: [component-libraries/diagnostics.ts:181](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/diagnostics.ts#L181)
+
+Build a diagnostic, defaulting `severity` from the code.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `code` | \| `"component-snapshot-missing"` \| `"component-integrity-mismatch"` \| `"component-library-capability-denied"` \| `"component-dependency-missing"` \| `"component-provider-offline"` \| `"component-provider-unauthorized"` \| `"component-version-missing"` \| `"component-version-deprecated"` \| `"component-snapshot-invalid"` \| `"component-update-incompatible"` \| `"component-variant-invalid"` \| `"component-swap-incompatible"` \| `"component-override-migration-orphan"` |
+| `message` | `string` |
+| `context` | `Omit`\&lt;[`CanvasComponentDiagnostic`](../interfaces/CanvasComponentDiagnostic), `"message"` \| `"code"` \| `"severity"`\&gt; & \{ `severity?`: [`CanvasComponentDiagnosticSeverity`](../type-aliases/CanvasComponentDiagnosticSeverity); \} |
+
+## Returns
+
+[`CanvasComponentDiagnostic`](../interfaces/CanvasComponentDiagnostic)

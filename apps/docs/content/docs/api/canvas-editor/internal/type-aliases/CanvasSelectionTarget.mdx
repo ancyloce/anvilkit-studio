@@ -1,0 +1,37 @@
+---
+title: "CanvasSelectionTarget"
+description: "@anvilkit/canvas-editor · CanvasSelectionTarget"
+---
+
+```ts
+type CanvasSelectionTarget = 
+  | {
+  kind: "node";
+  nodeId: string;
+}
+  | {
+  instanceId: string;
+  kind: "instance-node";
+  resolvedNodeId: CanvasResolvedNodeId;
+  sourceNodeId: string;
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/stores/selection-store.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/selection-store.ts#L22)
+
+What the user has selected, richly enough to describe a node INSIDE a
+component instance (plan 0023 M4-04, LC-INSTANCE-002, TD §13.1).
+
+`"node"` is an ordinary persistent document node — the only kind that
+existed before components, and still the only kind any persistent-node
+command may address.
+
+`"instance-node"` is a VIRTUAL node produced by expanding an instance. It
+carries three ids because each answers a different question:
+- `instanceId` — the persistent node that owns it, i.e. what the transformer
+  moves, what a `node.*` command may target, and what
+  [projectSelectionTargets](../functions/projectSelectionTargets) reports;
+- `resolvedNodeId` — its identity in the resolved tree, for hit testing,
+  focus, and reading its record;
+- `sourceNodeId` — its identity inside the DEFINITION tree, which is what a
+  Source-scoped edit or a property binding addresses.

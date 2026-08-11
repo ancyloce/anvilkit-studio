@@ -1,0 +1,17 @@
+---
+title: "createMigrationRegistry"
+description: "@anvilkit/canvas-core · createMigrationRegistry"
+---
+
+```ts
+function createMigrationRegistry(): CanvasMigrationRegistry;
+```
+
+Defined in: [ir/migrations.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/migrations.ts#L63)
+
+Create a registry pre-seeded with [CANVAS\_IR\_MIGRATIONS](../variables/CANVAS_IR_MIGRATIONS); `register`
+adds extension steps (re-registering a `from` overrides the earlier step).
+
+## Returns
+
+[`CanvasMigrationRegistry`](../interfaces/CanvasMigrationRegistry)

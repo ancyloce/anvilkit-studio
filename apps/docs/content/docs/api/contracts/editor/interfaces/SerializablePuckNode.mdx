@@ -1,0 +1,21 @@
+---
+title: "SerializablePuckNode"
+description: "@anvilkit/contracts · SerializablePuckNode"
+---
+
+Defined in: [editor/components.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L32)
+
+A serializable Puck node subtree. Structurally equivalent to Puck's
+`ComponentData` restricted to JSON-safe props: slot content is
+encoded the way Puck stores it — arrays of node objects inside
+`props`. The shape is owned here (rather than aliasing Puck's
+generic types) so serializability is guaranteed by construction;
+assignability from JSON-safe `ComponentData` is covered by contract
+tests. No runtime Puck import (DD-0019 §30.5 as read per C-6).
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="props"&gt;&lt;/a&gt; `props` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, [`JsonValue`](../type-aliases/JsonValue)\&gt;\&gt; | [editor/components.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L34) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | `string` | [editor/components.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/components.ts#L33) |

@@ -1,0 +1,19 @@
+---
+title: "MAX_EXTERNAL_DEPENDENCY_DEPTH"
+description: "@anvilkit/canvas-core · MAX_EXTERNAL_DEPENDENCY_DEPTH"
+---
+
+```ts
+const MAX_EXTERNAL_DEPENDENCY_DEPTH: 16 = MAX_COMPONENT_NESTED_DEPTH;
+```
+
+Defined in: [limits.ts:254](https://github.com/ancyloce/anvilkit-studio/blob/main/src/limits.ts#L254)
+
+Ceiling on dependency-closure depth (component → depends on → component …).
+
+The same axis as `MAX_COMPONENT_NESTED_DEPTH`, measured across libraries
+instead of within one document, so it takes the same value: a closure and a
+nested-instance chain both expand into the same virtual tree, and that tree is
+what must stay clear of the `MAX_TREE_DEPTH` (64) walker guard. Giving them
+different values would mean a mixed local/external chain could exceed whichever
+limit was checked.

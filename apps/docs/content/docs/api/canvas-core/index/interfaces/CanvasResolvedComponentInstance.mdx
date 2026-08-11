@@ -1,0 +1,17 @@
+---
+title: "CanvasResolvedComponentInstance"
+description: "@anvilkit/canvas-core · CanvasResolvedComponentInstance"
+---
+
+Defined in: [components/resolve.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L72)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="cachekey"&gt;&lt;/a&gt; `cacheKey` | `readonly` | `string` | §12.1 composite key, `"unresolvable"` for a missing Source. | [components/resolve.ts:84](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L84) |
+| &lt;a id="expandednodecount"&gt;&lt;/a&gt; `expandedNodeCount` | `readonly` | `number` | - | [components/resolve.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L85) |
+| &lt;a id="issues"&gt;&lt;/a&gt; `issues` | `readonly` | readonly [`CanvasComponentIssue`](CanvasComponentIssue.md)[] | - | [components/resolve.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L82) |
+| &lt;a id="origins"&gt;&lt;/a&gt; `origins` | `readonly` | `ReadonlyMap`\&lt;`string`, [`CanvasResolvedComponentOrigin`](CanvasResolvedComponentOrigin.md)\&gt; | Expanded-tree node id → provenance, including the root. | [components/resolve.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L81) |
+| &lt;a id="placeholder"&gt;&lt;/a&gt; `placeholder` | `readonly` | `boolean` | - | [components/resolve.ts:86](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L86) |
+| &lt;a id="root"&gt;&lt;/a&gt; `root` | `readonly` | [`CanvasNode`](../type-aliases/CanvasNode) | The runtime subtree replacing the instance node. Its root keeps the PERSISTENT instance id (selection stays stable); every descendant carries a codec-encoded virtual id. On degradation this is the original instance node itself — the selectable placeholder. | [components/resolve.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/resolve.ts#L79) |

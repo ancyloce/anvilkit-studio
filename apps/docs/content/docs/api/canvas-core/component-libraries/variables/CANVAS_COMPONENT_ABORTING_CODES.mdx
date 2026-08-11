@@ -1,0 +1,19 @@
+---
+title: "CANVAS_COMPONENT_ABORTING_CODES"
+description: "@anvilkit/canvas-core · CANVAS_COMPONENT_ABORTING_CODES"
+---
+
+```ts
+const CANVAS_COMPONENT_ABORTING_CODES: readonly ["component-library-capability-denied", "component-integrity-mismatch", "component-snapshot-missing", "component-dependency-missing"];
+```
+
+Defined in: [component-libraries/diagnostics.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/diagnostics.ts#L66)
+
+The subset of diagnostics that must also abort a command.
+
+These are the conditions under which continuing would write something invalid
+into the document, so they exist in `CanvasCommandErrorCode` too and are thrown
+from command application. `brand-policy-denied` is the fifth aborting code but
+is NOT a component diagnostic — it belongs to brand governance (M4), which
+reports policy findings through the compliance report rather than through this
+union.

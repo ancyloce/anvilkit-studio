@@ -1,0 +1,33 @@
+---
+title: "applyComponentContext"
+description: "@anvilkit/canvas-core · applyComponentContext"
+---
+
+```ts
+function applyComponentContext(
+   ir, 
+   issues, 
+   context): BrandComplianceIssue[];
+```
+
+Defined in: [brand-governance/compliance.ts:166](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand-governance/compliance.ts#L166)
+
+Annotate raw issues with component context and effective severity.
+
+Additive by design: it takes issues the existing whole-document scanner
+already produced and enriches them, rather than replacing that scanner. The
+two-argument `generateBrandComplianceReport` therefore keeps working
+untouched, and governance is something a caller opts into by supplying a
+context.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../../index/interfaces/CanvasIR) |
+| `issues` | readonly [`BrandComplianceIssue`](../../index/interfaces/BrandComplianceIssue)[] |
+| `context` | [`CanvasBrandPolicyContext`](../interfaces/CanvasBrandPolicyContext) |
+
+## Returns
+
+[`BrandComplianceIssue`](../../index/interfaces/BrandComplianceIssue)[]

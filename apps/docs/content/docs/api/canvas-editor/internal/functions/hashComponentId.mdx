@@ -1,0 +1,27 @@
+---
+title: "hashComponentId"
+description: "@anvilkit/canvas-editor · hashComponentId"
+---
+
+```ts
+function hashComponentId(id): string;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/context/component-events.ts:162](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/component-events.ts#L162)
+
+Stable, non-reversible hash of a document id for analytics.
+
+FNV-1a over UTF-16 code units — small, dependency-free and deterministic. It
+is NOT a security primitive and does not need to be: the requirement is that
+a host can correlate two events about the same component without the editor
+shipping the id (or the name behind it) off the machine.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+
+## Returns
+
+`string`

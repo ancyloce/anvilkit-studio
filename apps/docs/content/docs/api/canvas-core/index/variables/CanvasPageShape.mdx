@@ -1,0 +1,37 @@
+---
+title: "CanvasPageShape"
+description: "@anvilkit/canvas-core · CanvasPageShape"
+---
+
+```ts
+const CanvasPageShape: {
+  animation: ZodOptional<ZodType<CanvasAnimation, unknown, $ZodTypeInternals<CanvasAnimation, unknown>>>;
+  background: ZodType<CanvasPageBackground, unknown, $ZodTypeInternals<CanvasPageBackground, unknown>>;
+  id: ZodString;
+  layoutAids: ZodOptional<ZodType<CanvasPageLayoutAids, unknown, $ZodTypeInternals<CanvasPageLayoutAids, unknown>>>;
+  name: ZodOptional<ZodString>;
+  size: ZodType<CanvasPageSize, unknown, $ZodTypeInternals<CanvasPageSize, unknown>>;
+  variantSource: ZodOptional<ZodType<CanvasPageVariantSource, unknown, $ZodTypeInternals<CanvasPageVariantSource, unknown>>>;
+};
+```
+
+Defined in: [ir/validators.ts:881](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L881)
+
+`CanvasPage`'s own (non-recursive) fields, split out for the same reason as
+`CanvasFrameNodeShape`: `root` must bind to whichever node union is being
+assembled — the static one below, or the extension-aware one
+`buildExtendedSchemas` builds — and every OTHER page field (notably
+`variantSource`/`animation`) must not drift between the two. Both paths
+spread this shape rather than re-declaring it (P0-3).
+
+## Type Declaration
+
+| Name | Type | Default value | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="property-animation"&gt;&lt;/a&gt; `animation` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasAnimation`](../type-aliases/CanvasAnimation), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasAnimation`](../type-aliases/CanvasAnimation), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:887](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L887) |
+| &lt;a id="property-background"&gt;&lt;/a&gt; `background` | `ZodType`\&lt;[`CanvasPageBackground`](../interfaces/CanvasPageBackground), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasPageBackground`](../interfaces/CanvasPageBackground), `unknown`\&gt;\&gt; | `CanvasPageBackgroundSchema` | [ir/validators.ts:885](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L885) |
+| &lt;a id="property-id"&gt;&lt;/a&gt; `id` | `ZodString` | - | [ir/validators.ts:882](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L882) |
+| &lt;a id="property-layoutaids"&gt;&lt;/a&gt; `layoutAids` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasPageLayoutAids`](../interfaces/CanvasPageLayoutAids), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasPageLayoutAids`](../interfaces/CanvasPageLayoutAids), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:888](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L888) |
+| &lt;a id="property-name"&gt;&lt;/a&gt; `name` | `ZodOptional`\&lt;`ZodString`\&gt; | - | [ir/validators.ts:883](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L883) |
+| &lt;a id="property-size"&gt;&lt;/a&gt; `size` | `ZodType`\&lt;[`CanvasPageSize`](../interfaces/CanvasPageSize), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasPageSize`](../interfaces/CanvasPageSize), `unknown`\&gt;\&gt; | `CanvasPageSizeSchema` | [ir/validators.ts:884](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L884) |
+| &lt;a id="property-variantsource"&gt;&lt;/a&gt; `variantSource` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasPageVariantSource`](../interfaces/CanvasPageVariantSource), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasPageVariantSource`](../interfaces/CanvasPageVariantSource), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:886](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L886) |

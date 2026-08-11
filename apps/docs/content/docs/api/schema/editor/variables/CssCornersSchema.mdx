@@ -1,0 +1,17 @@
+---
+title: "CssCornersSchema"
+description: "@anvilkit/schema · CssCornersSchema"
+---
+
+```ts
+const CssCornersSchema: ZodObject<{
+  bottomLeft: ZodOptional<ZodType<CssLength, unknown, $ZodTypeInternals<CssLength, unknown>>>;
+  bottomRight: ZodOptional<ZodType<CssLength, unknown, $ZodTypeInternals<CssLength, unknown>>>;
+  topLeft: ZodOptional<ZodType<CssLength, unknown, $ZodTypeInternals<CssLength, unknown>>>;
+  topRight: ZodOptional<ZodType<CssLength, unknown, $ZodTypeInternals<CssLength, unknown>>>;
+}, $loose>;
+```
+
+Defined in: [editor/css.ts:179](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/css.ts#L179)
+
+Per-corner radius values.

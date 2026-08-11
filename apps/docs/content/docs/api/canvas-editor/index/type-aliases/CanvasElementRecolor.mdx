@@ -1,0 +1,25 @@
+---
+title: "CanvasElementRecolor"
+description: "@anvilkit/canvas-editor · CanvasElementRecolor"
+---
+
+```ts
+type CanvasElementRecolor = "fill" | "stroke" | "multi" | "none";
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-entry.ts:188](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-entry.ts#L188)
+
+How an inserted entry answers the inspector's colour controls (`cp3-005`).
+
+Required on every entry, and audited by `checkElementEntry`, because the
+failure this prevents is silent: an icon whose fill control moves *some* of
+its geometry reads as a bug, not as a limitation. Declaring the answer makes
+`cp3-003` able to say so in the UI and `cp3-005` able to test it catalog-wide.
+
+- `"fill"` — one fill mutation repaints the whole element.
+- `"stroke"` — a stroke-drawn element; the stroke control repaints all of it.
+- `"multi"` — deliberately multi-coloured. Per-part editing works by
+  selecting the part; a single top-level fill does NOT repaint everything,
+  and that is declared rather than discovered.
+- `"none"` — fixed colours by design (a flag, a brand mark under a licence
+  that forbids recolouring).

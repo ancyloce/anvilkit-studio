@@ -1,0 +1,48 @@
+---
+title: "createLazyElementProvider"
+description: "@anvilkit/canvas-editor · createLazyElementProvider"
+---
+
+```ts
+function createLazyElementProvider(load): CanvasElementProvider;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/elements/element-provider.ts:137](https://github.com/ancyloce/anvilkit-studio/blob/main/src/elements/element-provider.ts#L137)
+
+Defer a provider until its first query, then reuse it.
+
+THE EAGER/LAZY DECISION, MADE HERE RATHER THAN IN `cp3-002`.
+
+Nothing about [CanvasElementProvider](../interfaces/CanvasElementProvider) forces its catalog into the eager
+chunk: `search` and `getById` are already async, exactly as the template
+provider's are, so a provider may resolve its data whenever it likes. This
+wrapper is what makes that the path of least resistance instead of a thing
+each call site has to remember:
+
+```ts
+const elements = createLazyElementProvider(async () =>
+  createStaticElementProvider(
+    (await import("./default-element-catalog.js")).DEFAULT_ELEMENTS,
+  ),
+);
+```
+
+The `import()` is inside the callback, so the catalog is a separate chunk
+fetched on first search — `cp3-003`'s "load on first panel open, not at
+editor mount", and `cp3-002`'s "zero bytes in the eager editor chunk". This
+is the same dynamic-`import()` precedent the SVG/PDF exporters already set in
+this package.
+
+A rejected `load()` is NOT cached: the next call retries. Without that, one
+transient failure would make the Retry button (which the Templates panel
+already has, and `cp3-003` mirrors) permanently useless.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `load` | () =&gt; `Promise`\&lt;[`CanvasElementProvider`](../interfaces/CanvasElementProvider)\&gt; |
+
+## Returns
+
+[`CanvasElementProvider`](../interfaces/CanvasElementProvider)

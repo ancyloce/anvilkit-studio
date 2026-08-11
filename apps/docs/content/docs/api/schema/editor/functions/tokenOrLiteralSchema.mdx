@@ -1,0 +1,28 @@
+---
+title: "tokenOrLiteralSchema"
+description: "@anvilkit/schema · tokenOrLiteralSchema"
+---
+
+```ts
+function tokenOrLiteralSchema<T>(literal): ZodType<TokenOrLiteral<output<T>>>;
+```
+
+Defined in: [editor/css.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/editor/css.ts#L145)
+
+Build a `TokenOrLiteral<T>` schema around a literal value schema.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* `ZodType`\&lt;`unknown`, `unknown`, `$ZodTypeInternals`\&lt;`unknown`, `unknown`\&gt;\&gt; |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `literal` | `T` |
+
+## Returns
+
+`ZodType`\<`TokenOrLiteral`\<`output`\<`T`\>\>\>

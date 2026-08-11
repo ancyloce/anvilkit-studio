@@ -50,6 +50,7 @@ type DrawDraft =
   | {
   currentX: number;
   currentY: number;
+  layoutDrop?: LayoutDropPreview | null;
   nodeStarts: NodeStart[];
   startX: number;
   startY: number;
@@ -71,4 +72,142 @@ type DrawDraft =
 };
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/stores/draft-store.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/draft-store.ts#L14)
+Defined in: [packages/capabilities/canvas/editor/src/stores/draft-store.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/draft-store.ts#L26)
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "rect";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "frame";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "ellipse";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "polygon";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "star";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "line";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  currentX: number;
+  currentY: number;
+  layoutDrop?: LayoutDropPreview | null;
+  nodeStarts: NodeStart[];
+  startX: number;
+  startY: number;
+  type: "move";
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `currentX` | `number` | - | [packages/capabilities/canvas/editor/src/stores/draft-store.ts:73](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/draft-store.ts#L73) |
+| `currentY` | `number` | - | [packages/capabilities/canvas/editor/src/stores/draft-store.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/draft-store.ts#L74) |
+| `layoutDrop?` | `LayoutDropPreview` \| `null` | T-M4-06 flow-reorder preview: the Auto Layout frame under the pointer plus the previewed insertion slot. Preview-only state — the IR is never reordered during pointer movement; `onPointerUp` reads this to commit. `null`/absent = no layout drop target. | [packages/capabilities/canvas/editor/src/stores/draft-store.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/draft-store.ts#L82) |
+| `nodeStarts` | `NodeStart`[] | - | [packages/capabilities/canvas/editor/src/stores/draft-store.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/draft-store.ts#L75) |
+| `startX` | `number` | - | [packages/capabilities/canvas/editor/src/stores/draft-store.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/draft-store.ts#L71) |
+| `startY` | `number` | - | [packages/capabilities/canvas/editor/src/stores/draft-store.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/draft-store.ts#L72) |
+| `type` | `"move"` | - | [packages/capabilities/canvas/editor/src/stores/draft-store.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/draft-store.ts#L70) |
+
+***
+
+### Type Literal
+
+```ts
+{
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "marquee";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  startPanX: number;
+  startPanY: number;
+  startScreenX: number;
+  startScreenY: number;
+  type: "pan";
+}
+```

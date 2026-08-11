@@ -1,0 +1,27 @@
+---
+title: "assertLayoutInvariants"
+description: "@anvilkit/canvas-core · assertLayoutInvariants"
+---
+
+```ts
+function assertLayoutInvariants(ir): void;
+```
+
+Defined in: [layout/validate.ts:518](https://github.com/ancyloce/anvilkit-studio/blob/main/src/layout/validate.ts#L518)
+
+Throwing wrapper around [validateLayoutInvariants](validateLayoutInvariants.md).
+
+Throws only on `severity: "error"` issues. Warnings describe a degradation
+the resolver applies deterministically (a Hug that falls back to the stored
+Fixed size still renders), so treating them as a hard failure would reject
+documents that render correctly.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+
+## Returns
+
+`void`

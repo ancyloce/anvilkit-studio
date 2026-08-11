@@ -1,0 +1,41 @@
+---
+title: "loadCanvasDocumentWithDiagnostics"
+description: "@anvilkit/canvas-editor · loadCanvasDocumentWithDiagnostics"
+---
+
+```ts
+function loadCanvasDocumentWithDiagnostics(raw, options?): Promise<CanvasLoadResult>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/persistence/load-pipeline.ts:174](https://github.com/ancyloce/anvilkit-studio/blob/main/src/persistence/load-pipeline.ts#L174)
+
+The full TD §21.1 load pipeline: parse → migrate → validate snapshot keys and
+canonical form → validate graph and variants → validate policy → (caller)
+resolve without a Provider → mount with diagnostics.
+
+## Why this returns diagnostics instead of throwing
+
+[loadCanvasDocument](loadCanvasDocument.md) throws, and must: a payload that is not a valid
+document has nothing to mount. But every step added here describes a document
+that IS valid and merely has something wrong *inside* it — a quarantined
+snapshot, an orphaned override, a policy that no longer parses. T-045 step 3
+is explicit that the document still mounts in those cases; the affected
+instance degrades to a placeholder and export is blocked until it is fixed.
+Throwing would turn a recoverable, explainable state into a lost document.
+
+The resolve step is the caller's, not this function's: resolution needs the
+quarantine set returned here, and it belongs to the render path rather than
+to load. Passing `diagnostics.quarantinedKeys` into
+`buildExternalSnapshotIndex` is what makes a tampered snapshot resolve to a
+placeholder instead of rendering content that failed verification.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `raw` | `unknown` |
+| `options` | [`LoadCanvasDocumentWithDiagnosticsOptions`](../type-aliases/LoadCanvasDocumentWithDiagnosticsOptions) |
+
+## Returns
+
+`Promise`\<[`CanvasLoadResult`](../interfaces/CanvasLoadResult)\>

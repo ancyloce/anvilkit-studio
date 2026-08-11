@@ -1,0 +1,26 @@
+---
+title: "resolveVerificationMode"
+description: "@anvilkit/canvas-editor · resolveVerificationMode"
+---
+
+```ts
+function resolveVerificationMode(options): CanvasVerificationMode;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/load-verification.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/load-verification.ts#L74)
+
+The mode that will actually run.
+
+An import always verifies. That is deliberate and is asserted by a test: the
+override exists to let a host verify MORE than the default, never less on the
+one path where the bytes are untrusted.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`LoadVerificationOptions`](../interfaces/LoadVerificationOptions) |
+
+## Returns
+
+[`CanvasVerificationMode`](../type-aliases/CanvasVerificationMode)

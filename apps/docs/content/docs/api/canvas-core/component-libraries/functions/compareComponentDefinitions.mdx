@@ -1,0 +1,27 @@
+---
+title: "compareComponentDefinitions"
+description: "@anvilkit/canvas-core · compareComponentDefinitions"
+---
+
+```ts
+function compareComponentDefinitions(from, to): CanvasComponentCompatibilityReport;
+```
+
+Defined in: [component-libraries/compatibility.ts:172](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/compatibility.ts#L172)
+
+Compare two definitions and describe what an override migration would do.
+
+Pure and read-only. The classification is the *worst* outcome present:
+anything blocked makes the whole change `incompatible`; anything ambiguous or
+orphaned makes it `review-required`; otherwise `compatible`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `from` | [`CanvasComponentDefinition`](../../index/interfaces/CanvasComponentDefinition) |
+| `to` | [`CanvasComponentDefinition`](../../index/interfaces/CanvasComponentDefinition) |
+
+## Returns
+
+[`CanvasComponentCompatibilityReport`](../interfaces/CanvasComponentCompatibilityReport)

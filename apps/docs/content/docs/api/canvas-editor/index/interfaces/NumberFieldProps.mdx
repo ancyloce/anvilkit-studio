@@ -3,18 +3,19 @@ title: "NumberFieldProps"
 description: "@anvilkit/canvas-editor · NumberFieldProps"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/panels/fields.tsx:176](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L176)
+Defined in: [packages/capabilities/canvas/editor/src/panels/fields.tsx:115](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L115)
 
 ## Properties
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="contract"&gt;&lt;/a&gt; `contract?` | [`FieldContractTarget`](FieldContractTarget.md)\&lt;`number`\&gt; | §10 field-input contract (B-12): preview + coalesced commit + revert. | [packages/capabilities/canvas/editor/src/panels/fields.tsx:186](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L186) |
-| &lt;a id="datatestid"&gt;&lt;/a&gt; `dataTestId` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:182](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L182) |
-| &lt;a id="label"&gt;&lt;/a&gt; `label` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:177](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L177) |
-| &lt;a id="max"&gt;&lt;/a&gt; `max?` | `number` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:181](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L181) |
-| &lt;a id="min"&gt;&lt;/a&gt; `min?` | `number` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:180](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L180) |
-| &lt;a id="mixed"&gt;&lt;/a&gt; `mixed?` | `boolean` | Multi-selection mixed value (B-12): renders an empty "Mixed" field. | [packages/capabilities/canvas/editor/src/panels/fields.tsx:188](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L188) |
-| &lt;a id="oncommit"&gt;&lt;/a&gt; `onCommit?` | (`next`) =&gt; `void` | Legacy commit path; ignored when [contract](#contract) is present. | [packages/capabilities/canvas/editor/src/panels/fields.tsx:184](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L184) |
-| &lt;a id="step"&gt;&lt;/a&gt; `step?` | `number` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:179](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L179) |
-| &lt;a id="value"&gt;&lt;/a&gt; `value` | `number` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:178](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L178) |
+| &lt;a id="contract"&gt;&lt;/a&gt; `contract?` | [`FieldContractTarget`](FieldContractTarget.md)\&lt;`number`\&gt; | §10 field-input contract (B-12): preview + coalesced commit + revert. | [packages/capabilities/canvas/editor/src/panels/fields.tsx:125](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L125) |
+| &lt;a id="datatestid"&gt;&lt;/a&gt; `dataTestId` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:121](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L121) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label` | `string` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:116](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L116) |
+| &lt;a id="max"&gt;&lt;/a&gt; `max?` | `number` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L120) |
+| &lt;a id="min"&gt;&lt;/a&gt; `min?` | `number` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:119](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L119) |
+| &lt;a id="mixed"&gt;&lt;/a&gt; `mixed?` | `boolean` | Multi-selection mixed value (B-12): renders an empty "Mixed" field. | [packages/capabilities/canvas/editor/src/panels/fields.tsx:133](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L133) |
+| &lt;a id="oncommit"&gt;&lt;/a&gt; `onCommit?` | (`next`) =&gt; `void` | Legacy commit path; ignored when [contract](#contract)/[pageContract](#pagecontract) is present. | [packages/capabilities/canvas/editor/src/panels/fields.tsx:123](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L123) |
+| &lt;a id="pagecontract"&gt;&lt;/a&gt; `pageContract?` | `FieldPageContract`\&lt;`number`\&gt; | PAGE-level §10 contract (plan 0024 Phase 2) — the artboard's own size. Mutually exclusive with [contract](#contract); a separate prop rather than a union so both keep full parameter inference (see `AnyFieldContract`). | [packages/capabilities/canvas/editor/src/panels/fields.tsx:131](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L131) |
+| &lt;a id="step"&gt;&lt;/a&gt; `step?` | `number` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L118) |
+| &lt;a id="value"&gt;&lt;/a&gt; `value` | `number` | - | [packages/capabilities/canvas/editor/src/panels/fields.tsx:117](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L117) |

@@ -1,0 +1,28 @@
+---
+title: "replaceNode"
+description: "@anvilkit/canvas-core · replaceNode"
+---
+
+```ts
+function replaceNode(ir, options): CanvasIR;
+```
+
+Defined in: [ir/mutations.ts:780](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L780)
+
+Replace the subtree rooted at `id` with `node` — id and kind may BOTH
+change, unlike `updateNode`, which pins them. The building block for
+detach-style materialization (plan 0023 M3-07): swap one node for another
+at the exact same tree position. A page root may only be replaced by
+another group (a page root is a group by contract); a Component Source
+root may be replaced by any node.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `options` | [`ReplaceNodeOptions`](../interfaces/ReplaceNodeOptions) |
+
+## Returns
+
+[`CanvasIR`](../interfaces/CanvasIR)

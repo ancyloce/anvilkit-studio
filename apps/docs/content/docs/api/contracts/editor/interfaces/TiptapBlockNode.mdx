@@ -1,0 +1,22 @@
+---
+title: "TiptapBlockNode"
+description: "@anvilkit/contracts · TiptapBlockNode"
+---
+
+Defined in: [editor/node-state.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L55)
+
+A Tiptap block node in the shared rich-text contract. Allowed nodes
+(paragraphs, headings 1–6, lists, list items, blockquotes, text,
+hard breaks) and marks (bold, italic, underline, strike, code, safe
+links) are enforced by the shared sanitization pipeline — raw HTML
+and inline-style marks are rejected (DD-0019 §17).
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="attrs"&gt;&lt;/a&gt; `attrs?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `string` \| `number` \| `boolean` \| `null`\&gt;\&gt; | [editor/node-state.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L57) |
+| &lt;a id="content"&gt;&lt;/a&gt; `content?` | `readonly` | readonly `TiptapBlockNode`[] | [editor/node-state.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L58) |
+| &lt;a id="marks"&gt;&lt;/a&gt; `marks?` | `readonly` | readonly \{ `attrs?`: `Readonly`\&lt;`Record`\&lt;`string`, `string` \| `number` \| `boolean` \| `null`\&gt;\&gt;; `type`: `string`; \}[] | [editor/node-state.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L59) |
+| &lt;a id="text"&gt;&lt;/a&gt; `text?` | `readonly` | `string` | [editor/node-state.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L63) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | `string` | [editor/node-state.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L56) |

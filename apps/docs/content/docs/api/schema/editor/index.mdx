@@ -1,0 +1,143 @@
+---
+title: "index"
+description: "@anvilkit/schema · index"
+---
+
+## Classes
+
+| Class | Description |
+| ------ | ------ |
+| [AuthoringMigrationError](classes/AuthoringMigrationError.md) | Error thrown for structurally invalid migration registrations. |
+
+## Interfaces
+
+| Interface | Description |
+| ------ | ------ |
+| [AuthoringMigration](interfaces/AuthoringMigration.md) | One pure, idempotent migration step. `from`/`to` are version strings; steps chain until the state reports [CURRENT\_AUTHORING\_VERSION](variables/CURRENT_AUTHORING_VERSION.md). |
+| [AuthoringMigrationRegistry](interfaces/AuthoringMigrationRegistry.md) | Registry of migration steps keyed by their `from` version. |
+| [CanonicalAuthoringSerialization](interfaces/CanonicalAuthoringSerialization.md) | The canonical serialization result. |
+
+## Type Aliases
+
+| Type Alias | Description |
+| ------ | ------ |
+| [AuthoringVersionDetection](type-aliases/AuthoringVersionDetection.md) | Classification of a candidate sidecar value before deep parsing (DD-0019 §24.1 read semantics): |
+| [EditorCountLimitKey](type-aliases/EditorCountLimitKey.md) | Keys of the frozen §7.3 count-limit table. |
+
+## Variables
+
+| Variable | Description |
+| ------ | ------ |
+| [AccessibilityOverrideSchema](variables/AccessibilityOverrideSchema.md) | Explicit accessibility overrides authored on a node. |
+| [AnimatablePropertySchema](variables/AnimatablePropertySchema.md) | The P0 animatable property set. |
+| [AnimationStepSchema](variables/AnimationStepSchema.md) | One animation step. |
+| [AnvilAppearanceSchema](variables/AnvilAppearanceSchema.md) | - |
+| [AuthorableStylePropertySchema](variables/AuthorableStylePropertySchema.md) | Mirrors `AuthorableStyleProperty` — extending it is a gated schema change. |
+| [AuthoringEnvelopeSchema](variables/AuthoringEnvelopeSchema.md) | Shallow envelope: exact major version, non-negative revision, and the eight collection slots. Unknown keys are preserved (`looseObject`), including at the envelope level. |
+| [AuthoringStateSchema](variables/AuthoringStateSchema.md) | The complete, deeply-validated authoring sidecar schema. |
+| [AuthorStyleSchema](variables/AuthorStyleSchema.md) | - |
+| [BindingCollectionSchema](variables/BindingCollectionSchema.md) | The document binding collection. |
+| [BindingSchema](variables/BindingSchema.md) | A stored binding (DD-0019 §19, verbatim shape). |
+| [BindingTargetSchema](variables/BindingTargetSchema.md) | What a binding writes to (DD-0019 §19, verbatim shape). |
+| [BorderEdgeSchema](variables/BorderEdgeSchema.md) | One border edge. |
+| [BorderSpecSchema](variables/BorderSpecSchema.md) | Per-edge border specification. |
+| [BreakpointDefinitionSchema](variables/BreakpointDefinitionSchema.md) | One breakpoint definition (DD-0019 §9.1, verbatim shape). |
+| [BreakpointIdSchema](variables/BreakpointIdSchema.md) | A breakpoint id: non-empty and never the reserved literal `"base"` (contract freeze CORE-P0-001 §1.3). |
+| [BreakpointSetSchema](variables/BreakpointSetSchema.md) | The document breakpoint set: §12.2 invariants across the array. |
+| [COMPONENT\_NESTING\_DEPTH\_LIMIT](variables/COMPONENT_NESTING_DEPTH_LIMIT.md) | Re-exported cap for consumers building materializer guards. |
+| [ComponentDefinitionCollectionSchema](variables/ComponentDefinitionCollectionSchema.md) | The document component-definition collection (≤500 definitions). |
+| [ComponentDefinitionSchema](variables/ComponentDefinitionSchema.md) | A document-local component definition (verbatim shape + caps). |
+| [ComponentInstanceStateSchema](variables/ComponentInstanceStateSchema.md) | Per-instance component state (verbatim shape; frozen id rules). |
+| [ComponentMetadataSchema](variables/ComponentMetadataSchema.md) | - |
+| [ComponentPropDefinitionSchema](variables/ComponentPropDefinitionSchema.md) | One exposed component property (DD-0019 §14.2, verbatim shape). |
+| [ComponentVariantSchema](variables/ComponentVariantSchema.md) | One variant: a full axis selection plus definition-node patches. Patch keys are bare definition node ids — never the runtime composite form (contract freeze CORE-P0-001 §1.1). |
+| [CSS\_MATH\_MAX\_DEPTH](variables/CSS_MATH_MAX_DEPTH.md) | Maximum math-expression AST depth accepted at parse time. |
+| [CssAlignmentSchema](variables/CssAlignmentSchema.md) | Cross-axis alignment values. |
+| [CssBlendModeSchema](variables/CssBlendModeSchema.md) | Standard CSS blend modes. |
+| [CssBoxEdgesSchema](variables/CssBoxEdgesSchema.md) | Per-edge box values. |
+| [CssColorSchema](variables/CssColorSchema.md) | A typed color value. |
+| [CssCornersSchema](variables/CssCornersSchema.md) | Per-corner radius values. |
+| [CssCursorSchema](variables/CssCursorSchema.md) | Cursor values exposed by the inspector. |
+| [CssJustificationSchema](variables/CssJustificationSchema.md) | Main-axis justification values. |
+| [CssLengthSchema](variables/CssLengthSchema.md) | A typed CSS length (DD-0019 §9.3 allowlist). |
+| [CssMathExpressionSchema](variables/CssMathExpressionSchema.md) | AST-built `calc`/`min`/`max`/`clamp` expression, depth-bounded. |
+| [CssUnitSchema](variables/CssUnitSchema.md) | Length units accepted by the typed CSS schema (DD-0019 §9.3). |
+| [CubicBezierSchema](variables/CubicBezierSchema.md) | Cubic-bezier easing tuple. |
+| [CURRENT\_AUTHORING\_VERSION](variables/CURRENT_AUTHORING_VERSION.md) | The current authoring contract version. |
+| [DesignSystemSchema](variables/DesignSystemSchema.md) | - |
+| [DesignTokenSchema](variables/DesignTokenSchema.md) | A document-local design token (DD-0019 §9.4, verbatim shape). |
+| [DesignTokenSourceSchema](variables/DesignTokenSourceSchema.md) | Import-as-copy provenance (ADR 0005). |
+| [DocumentComponentLibrarySchema](variables/DocumentComponentLibrarySchema.md) | - |
+| [EDITOR\_LIMIT\_ISSUE](variables/EDITOR_LIMIT_ISSUE.md) | The message prefix carried by every count/byte limit violation. Issues also carry `params: { code, limitKey, limit, actual }` so the engine can map them to typed `EDITOR_LIMIT_EXCEEDED` errors without string parsing. |
+| [EditorAnnotationSchema](variables/EditorAnnotationSchema.md) | Editor annotations (PLAN-0026 §3.6). The per-entry object is `strictObject` **on purpose** — unlike every other schema in this directory, which is `looseObject` for forward compatibility. An unknown key inside an annotation entry is a validation error, because tolerating one is how this closed map would grow back into a sidecar. |
+| [EditorAnnotationsSchema](variables/EditorAnnotationsSchema.md) | - |
+| [FilterSpecSchema](variables/FilterSpecSchema.md) | Basic filter set (ratios are identity-1 numbers; grayscale 0–1). |
+| [FiniteNumberSchema](variables/FiniteNumberSchema.md) | A finite number (rejects NaN and ±Infinity). |
+| [FontFamilyNameSchema](variables/FontFamilyNameSchema.md) | A safe font-family name literal. |
+| [FontWeightSchema](variables/FontWeightSchema.md) | A font weight (1–1000, integer). |
+| [GradientStopSchema](variables/GradientStopSchema.md) | Gradient color stop. |
+| [GridTrackListSchema](variables/GridTrackListSchema.md) | Ordered grid track list. |
+| [GridTrackSchema](variables/GridTrackSchema.md) | One grid track (P0 set: fixed, fr, auto). |
+| [IdSchema](variables/IdSchema.md) | A non-empty identifier string. |
+| [ImageSourceSchema](variables/ImageSourceSchema.md) | Image paint source: a host asset reference or an http(s) URL, or a relative path. Executable and data-smuggling schemes are rejected structurally. |
+| [InteractionActionSchema](variables/InteractionActionSchema.md) | The closed action set (ED-INT-002 families). |
+| [InteractionCollectionSchema](variables/InteractionCollectionSchema.md) | The document interaction collection (≤1,000 interactions). |
+| [InteractionSchema](variables/InteractionSchema.md) | A stored interaction (verbatim shape + the ≤100 actions cap). |
+| [InteractionTriggerSchema](variables/InteractionTriggerSchema.md) | Interaction trigger (DD-0019 §16, verbatim shape). |
+| [JsonValueSchema](variables/JsonValueSchema.md) | A JSON-serializable value (recursive). |
+| [LayoutSpecSchema](variables/LayoutSpecSchema.md) | Universal layout specification (DD-0019 §9.2, verbatim shape). |
+| [MotionTransitionSchema](variables/MotionTransitionSchema.md) | Motion transition (DD-0019 §16, verbatim shape). |
+| [NodeAuthoringStateSchema](variables/NodeAuthoringStateSchema.md) | The authoring record for one Puck node (DD-0019 §9.2, verbatim shape). |
+| [NodeCollectionSchema](variables/NodeCollectionSchema.md) | The document node-record collection (≤5,000 records; keys are persisted Puck node ids, never the runtime composite form). |
+| [NodeOverridePatchSchema](variables/NodeOverridePatchSchema.md) | An override patch targeting one definition node: prop values plus the universal authoring families. |
+| [NonNegativeFiniteNumberSchema](variables/NonNegativeFiniteNumberSchema.md) | A non-negative finite number. |
+| [NonNegativeIntegerSchema](variables/NonNegativeIntegerSchema.md) | A non-negative integer (revisions, counts, indices). |
+| [PaintSchema](variables/PaintSchema.md) | Fill paint (P0 set: none, solid, linear gradient, image). |
+| [PersistedNodeIdSchema](variables/PersistedNodeIdSchema.md) | A persisted node/definition-node id: non-empty and never the runtime composite `${instanceNodeId}::${definitionNodeId}` form, which must never be persisted (contract freeze CORE-P0-001 §1.1). |
+| [PropertyPathSchema](variables/PropertyPathSchema.md) | A structural property path with at least one segment. |
+| [PropertyPathSegmentSchema](variables/PropertyPathSegmentSchema.md) | A structural property path segment (string key or array index). |
+| [SafeConditionSchema](variables/SafeConditionSchema.md) | A condition is a boolean-evaluated safe expression. |
+| [SafeExpressionSchema](variables/SafeExpressionSchema.md) | The safe expression AST, depth- and count-bounded at parse time (limits from the frozen §7.3 table). |
+| [SafeUrlSchema](variables/SafeUrlSchema.md) | An interaction-action URL: http/https/mailto/tel only. |
+| [SerializablePuckNodeSchema](variables/SerializablePuckNodeSchema.md) | A serializable Puck node subtree (JSON-safe props by construction). |
+| [ShadowSpecSchema](variables/ShadowSpecSchema.md) | One shadow layer. |
+| [SizeValueSchema](variables/SizeValueSchema.md) | Width/height value — alias of [CssLengthSchema](variables/CssLengthSchema.md). |
+| [StyleDefinitionCollectionSchema](variables/StyleDefinitionCollectionSchema.md) | The document style-definition collection (≤1,000 definitions). |
+| [StyleDefinitionSchema](variables/StyleDefinitionSchema.md) | A reusable, document-local style definition (verbatim shape). |
+| [StyleTargetCapabilitySchema](variables/StyleTargetCapabilitySchema.md) | - |
+| [TargetAppearanceSchema](variables/TargetAppearanceSchema.md) | - |
+| [TokenCollectionSchema](variables/TokenCollectionSchema.md) | The document token collection (≤2,000 tokens). |
+| [TokenModeCollectionSchema](variables/TokenModeCollectionSchema.md) | The document token-mode collection. |
+| [TokenModeSchema](variables/TokenModeSchema.md) | One token mode. |
+| [TokenTypeSchema](variables/TokenTypeSchema.md) | The typed token categories supported in v1. |
+| [TokenValueSchema](variables/TokenValueSchema.md) | A token value for one mode: literal or alias. |
+| [TypographySpecSchema](variables/TypographySpecSchema.md) | Universal typography specification (DD-0019 §9.2, verbatim shape). |
+| [UnitIntervalSchema](variables/UnitIntervalSchema.md) | A normalized 0–1 fraction (gradient offsets, focal points). |
+| [VariantAxisOptionSchema](variables/VariantAxisOptionSchema.md) | One option of a variant axis. |
+| [VariantAxisSchema](variables/VariantAxisSchema.md) | A variant axis. |
+| [VisualStyleSpecSchema](variables/VisualStyleSpecSchema.md) | Universal visual style specification (DD-0019 §9.2, verbatim shape). |
+
+## Functions
+
+| Function | Description |
+| ------ | ------ |
+| [addLimitIssue](functions/addLimitIssue.md) | Add a stable `EDITOR_LIMIT_EXCEEDED` issue when `actual` exceeds the frozen limit for `limitKey`. Shared by every collection schema (DD-0019 §7.3: limits produce stable validation errors; data is never silently truncated). |
+| [canonicalizeAppearance](functions/canonicalizeAppearance.md) | - |
+| [canonicalSerializeAuthoring](functions/canonicalSerializeAuthoring.md) | Canonically serialize an authoring state and measure its UTF-8 byte length. Deterministic: permuted key insertion orders produce identical bytes. |
+| [canonicalSerializeFragment](functions/canonicalSerializeFragment.md) | Canonically serialize an arbitrary JSON-safe fragment (component definitions, rich-text values, commands) for per-entity byte limits. Same rules, no compaction step. |
+| [compactAuthoringState](functions/compactAuthoringState.md) | Compact a full authoring state (pure; unknown keys preserved at every level; ids and order untouched). |
+| [compactNodeRecord](functions/compactNodeRecord.md) | Compact one node record. Returns `undefined` when nothing but the `version` marker (and no unknown keys) remains — invariant 3 says such records must not exist. |
+| [compactResponsiveValue](functions/compactResponsiveValue.md) | Compact one `ResponsiveValue`: remove `undefined` base, remove `null` override entries (write-time removal signal), remove override values that compact to empty objects, and collapse to `undefined` when neither base nor overrides remain. |
+| [createAuthoringMigrationRegistry](functions/createAuthoringMigrationRegistry.md) | Create an empty migration registry (v1: no steps registered). |
+| [createEmptyAuthoringState](functions/createEmptyAuthoringState.md) | An empty, canonical v1 authoring state. |
+| [detectAuthoringVersion](functions/detectAuthoringVersion.md) | Classify a candidate sidecar value without deep parsing. Never throws. |
+| [limitedRecordSchema](functions/limitedRecordSchema.md) | Build a record schema whose size is capped by a frozen §7.3 limit and whose keys are validated as identifiers. |
+| [normalizeAuthoringState](functions/normalizeAuthoringState.md) | Canonical normalization: compaction plus breakpoint display-order normalization (widest first). The result is the shape all writers must persist (invariant 10). |
+| [normalizeBreakpointOrder](functions/normalizeBreakpointOrder.md) | Recompute display `order` from widths, widest first (DD-0019 §12.2: order is normalized from widths, not authored). Pure; returns a new array, input untouched. |
+| [responsiveValueSchema](functions/responsiveValueSchema.md) | Build a `ResponsiveValue<T>` schema around a value schema (DD-0019 §9.1). Override entries admit `null` on parse — `null` clears the local override and resumes inheritance; compaction removes it and canonical state never persists it. |
+| [safeParseAppearance](functions/safeParseAppearance.md) | - |
+| [safeParseAuthoringEnvelope](functions/safeParseAuthoringEnvelope.md) | Safe-parse the shallow envelope. Callers classify with [detectAuthoringVersion](functions/detectAuthoringVersion.md) first; an `"unsupported-major"` value must not be handed to this schema (its `version` literal would fail as a plain shape error rather than a version diagnostic). |
+| [safeParseAuthoringState](functions/safeParseAuthoringState.md) | Safe-parse the complete sidecar. Never throws. |
+| [safeParseDesignSystem](functions/safeParseDesignSystem.md) | - |
+| [safeParseEditorAnnotations](functions/safeParseEditorAnnotations.md) | - |
+| [tokenOrLiteralSchema](functions/tokenOrLiteralSchema.md) | Build a `TokenOrLiteral<T>` schema around a literal value schema. |

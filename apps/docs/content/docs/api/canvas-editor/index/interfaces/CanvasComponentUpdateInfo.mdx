@@ -1,0 +1,34 @@
+---
+title: "CanvasComponentUpdateInfo"
+description: "@anvilkit/canvas-editor · CanvasComponentUpdateInfo"
+---
+
+Defined in: [packages/capabilities/canvas/editor/src/component-libraries/use-update-check.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-update-check.ts#L33)
+
+## File
+
+Read-only update discovery (plan 0021 T-028, §12.2).
+
+## Discovery must not touch the document
+
+"Is a newer version available?" is a question about a catalog, not about the
+document — so nothing here writes IR, and the acceptance criterion (AC-002)
+is literally "no visual change on discovery". A provider failure likewise
+must not invalidate the snapshot the document already has: being unable to
+ask about updates is not evidence that the installed version is bad.
+
+## Explicitly triggered
+
+Never on a timer and never on render. It runs on user action, on panel open
+with host opt-in, or on a host-scheduled scan — because a background poll
+against a host's catalog is the host's cost to authorize, not ours to take.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="affectedinstancecount"&gt;&lt;/a&gt; `affectedInstanceCount` | `readonly` | `number` | How many instances in the document carry `current`. | [packages/capabilities/canvas/editor/src/component-libraries/use-update-check.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-update-check.ts#L37) |
+| &lt;a id="current"&gt;&lt;/a&gt; `current` | `readonly` | `CanvasExternalComponentRef` | - | [packages/capabilities/canvas/editor/src/component-libraries/use-update-check.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-update-check.ts#L34) |
+| &lt;a id="deprecationnotice"&gt;&lt;/a&gt; `deprecationNotice` | `readonly` | `string` \| `undefined` | - | [packages/capabilities/canvas/editor/src/component-libraries/use-update-check.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-update-check.ts#L40) |
+| &lt;a id="latest"&gt;&lt;/a&gt; `latest` | `readonly` | [`CanvasComponentCatalogEntry`](CanvasComponentCatalogEntry.md) | - | [packages/capabilities/canvas/editor/src/component-libraries/use-update-check.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-update-check.ts#L35) |
+| &lt;a id="releasenotesurl"&gt;&lt;/a&gt; `releaseNotesUrl` | `readonly` | `string` \| `undefined` | Sanitized; `undefined` when the catalog gave an unsafe or absent URL. | [packages/capabilities/canvas/editor/src/component-libraries/use-update-check.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/component-libraries/use-update-check.ts#L39) |

@@ -1,0 +1,20 @@
+---
+title: "InlineTextValue"
+description: "@anvilkit/contracts · InlineTextValue"
+---
+
+```ts
+type InlineTextValue = 
+  | {
+  format: "plain";
+  value: string;
+}
+  | {
+  format: "tiptap";
+  value: TiptapDocument;
+};
+```
+
+Defined in: [editor/node-state.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/node-state.ts#L78)
+
+An inline-editable text value (DD-0019 §17, verbatim).

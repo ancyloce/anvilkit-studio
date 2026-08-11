@@ -1,0 +1,22 @@
+---
+title: "CanvasIR"
+description: "@anvilkit/canvas-core · CanvasIR"
+---
+
+Defined in: [ir/types.ts:1312](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1312)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="assets"&gt;&lt;/a&gt; `assets` | `Record`\&lt;`string`, [`CanvasAssetRef`](CanvasAssetRef.md)\&gt; | - | [ir/types.ts:1318](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1318) |
+| &lt;a id="compatibility"&gt;&lt;/a&gt; `compatibility?` | [`CanvasDocumentCompatibility`](CanvasDocumentCompatibility.md) | What a reader needs to open this document correctly. Optional: absent on every migrated-forward v2 document and on any document whose content requires nothing beyond the base schema. | [ir/types.ts:1325](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1325) |
+| &lt;a id="components"&gt;&lt;/a&gt; `components?` | `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasComponentDefinition`](CanvasComponentDefinition.md)\&gt;\&gt; | Document-local Component Sources (plan 0023, LC-MODEL-001). Optional in both directions: absent on every pre-component document and on any document that defines none — an empty map is normalized to omission (INV-10). Frozen decision: Sources live HERE, never in a hidden page. | [ir/types.ts:1337](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1337) |
+| &lt;a id="documentkind"&gt;&lt;/a&gt; `documentKind?` | [`CanvasDocumentKind`](../type-aliases/CanvasDocumentKind) | - | [ir/types.ts:1314](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1314) |
+| &lt;a id="externalcomponentsnapshots"&gt;&lt;/a&gt; `externalComponentSnapshots?` | `Readonly`\&lt;`Record`\&lt;`string`, [`CanvasExternalComponentSnapshot`](CanvasExternalComponentSnapshot.md)\&gt;\&gt; | Immutable copies of every external component version this document uses (plan 0021 T-014, CL-SNAPSHOT-001). Additive and optional in both directions: absent on every document that uses no external components, and an empty map normalizes to omission — so a document without external components stays byte-identical to one written before this field existed. | [ir/types.ts:1347](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1347) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | - | [ir/types.ts:1315](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1315) |
+| &lt;a id="layoutmaterialization"&gt;&lt;/a&gt; `layoutMaterialization?` | [`CanvasLayoutMaterialization`](CanvasLayoutMaterialization.md) | Freshness stamp for the materialized layout cache. A discardable derived value — see [CanvasLayoutMaterialization](CanvasLayoutMaterialization.md). | [ir/types.ts:1330](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1330) |
+| &lt;a id="metadata"&gt;&lt;/a&gt; `metadata` | [`CanvasIRMetadata`](CanvasIRMetadata.md) | - | [ir/types.ts:1319](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1319) |
+| &lt;a id="pages"&gt;&lt;/a&gt; `pages` | [`CanvasPage`](CanvasPage.md)[] | - | [ir/types.ts:1317](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1317) |
+| &lt;a id="title"&gt;&lt;/a&gt; `title` | `string` | - | [ir/types.ts:1316](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1316) |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `"3"` | - | [ir/types.ts:1313](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1313) |

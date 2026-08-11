@@ -1,0 +1,28 @@
+---
+title: "TokenOrLiteral"
+description: "@anvilkit/contracts · TokenOrLiteral"
+---
+
+```ts
+type TokenOrLiteral<T> = 
+  | {
+  kind: "literal";
+  value: T;
+}
+  | {
+  kind: "token";
+  tokenId: string;
+};
+```
+
+Defined in: [editor/values.ts:150](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/editor/values.ts#L150)
+
+A literal value or a reference to a document design token. Mirrors
+the `TokenValue` literal/alias naming (DD-0019 §9.4); resolution is
+performed by `resolveToken` (§24.5) after precedence selection.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` |

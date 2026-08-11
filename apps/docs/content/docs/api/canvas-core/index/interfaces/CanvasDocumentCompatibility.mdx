@@ -1,0 +1,33 @@
+---
+title: "CanvasDocumentCompatibility"
+description: "@anvilkit/canvas-core · CanvasDocumentCompatibility"
+---
+
+Defined in: [ir/types.ts:1041](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1041)
+
+What a reader needs in order to open this document correctly.
+
+Optional in both directions: a v2 document migrated forward has none, and a
+document with no capability-bearing content needs none. But a document that
+*does* carry layout intent and omits `layout.auto.v1` here is malformed —
+that is the `missing-required-capability` document invariant (level 2),
+and it exists because such a document otherwise parses cleanly and is then
+edited destructively by every reader, which is precisely the data loss the
+capability mechanism is for.
+
+Note the deliberate asymmetry with the unsupportedness check:
+**completeness** (a writer omitted a capability its own content requires)
+rejects the write, because the local build can prove the document is
+malformed; **unsupportedness** (this reader does not implement a capability
+the document declares) never rejects, because the document may be perfectly
+well-formed and merely newer — the correct response there is a read-only
+materialized preview (`layout-capability-unsupported`, a level-4
+diagnostic).
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="minreaderschemaversion"&gt;&lt;/a&gt; `minReaderSchemaVersion` | `string` | The oldest reader that can open this document. A bare `string`, NOT `CanvasIRVersion`: the whole point of the field is to name a version the current reader may not know, and a closed union of already-known versions cannot express that — a v3 writer typed against `CanvasIRVersion` could only ever write `"3"`, which is exactly `schemaVersion` and carries no information. | [ir/types.ts:1056](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1056) |
+| &lt;a id="requiredcapabilities"&gt;&lt;/a&gt; `requiredCapabilities` | readonly `string`[] | Capability strings this document's content depends on, sorted and deduplicated during normalization. **Open by construction** — validated as `z.array(z.string())`, never a `z.enum`, and no code path may narrow it to a closed union before the compatibility check runs. See [CanvasKnownCapability](../type-aliases/CanvasKnownCapability). | [ir/types.ts:1065](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1065) |
+| &lt;a id="schemaversion"&gt;&lt;/a&gt; `schemaVersion` | `"3"` | Always equal to the document's own `version`. Typed as the narrow written-version literal rather than the readable `CanvasIRVersion` union so the compiler enforces that equality instead of leaving it as prose. | [ir/types.ts:1047](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L1047) |

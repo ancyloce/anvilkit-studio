@@ -1,0 +1,23 @@
+---
+title: "CanvasComponentIssue"
+description: "@anvilkit/canvas-core · CanvasComponentIssue"
+---
+
+Defined in: [components/types.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L78)
+
+One component diagnostic (TD §19). `severity: "warning"` never throws
+anywhere — `assertComponentGraph` is the strict gate for `"error"` issues
+only, mirroring the shipped invariant trio.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | [`CanvasComponentIssueCode`](../type-aliases/CanvasComponentIssueCode) | [components/types.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L79) |
+| &lt;a id="componentid"&gt;&lt;/a&gt; `componentId?` | `readonly` | `string` | [components/types.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L81) |
+| &lt;a id="instanceid"&gt;&lt;/a&gt; `instanceId?` | `readonly` | `string` | [components/types.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L82) |
+| &lt;a id="location"&gt;&lt;/a&gt; `location?` | `readonly` | [`CanvasDocumentLocation`](CanvasDocumentLocation.md) | [components/types.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L85) |
+| &lt;a id="message"&gt;&lt;/a&gt; `message` | `readonly` | `string` | [components/types.ts:86](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L86) |
+| &lt;a id="propertyid"&gt;&lt;/a&gt; `propertyId?` | `readonly` | `string` | [components/types.ts:84](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L84) |
+| &lt;a id="severity"&gt;&lt;/a&gt; `severity` | `readonly` | `"warning"` \| `"error"` | [components/types.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L80) |
+| &lt;a id="sourcenodeid"&gt;&lt;/a&gt; `sourceNodeId?` | `readonly` | `string` | [components/types.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/types.ts#L83) |

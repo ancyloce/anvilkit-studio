@@ -1,0 +1,34 @@
+---
+title: "hitTestResolved"
+description: "@anvilkit/canvas-core · hitTestResolved"
+---
+
+```ts
+function hitTestResolved<T>(
+   targets, 
+   world, 
+   opts?): T | null;
+```
+
+Defined in: [geometry/hit-test.ts:189](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/hit-test.ts#L189)
+
+Resolved-record variant of [hitTest](hitTest.md): same paint-order semantics (last
+match wins) and the same skip flags, read from each record's source node.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* [`ResolvedHitTarget`](../interfaces/ResolvedHitTarget) |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `targets` | readonly `T`[] |
+| `world` | `Point` |
+| `opts` | [`HitTestOptions`](../interfaces/HitTestOptions) |
+
+## Returns
+
+`T` \| `null`
