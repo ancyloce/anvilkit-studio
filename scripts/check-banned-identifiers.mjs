@@ -66,7 +66,10 @@
  *     than source.
  *
  * Every other Renamed old-name and Deleted row of
- * `docs/architecture/canonical-editor-naming-map.md` has a row below.
+ * `docs/architecture/canonical-editor-naming-map.md` had a row below
+ * when `p0-001` seeded this list. Rows are PRUNED as they reach zero
+ * (rule 2), so the list below is the countdown of names still alive,
+ * not the historical record — the naming map is the record.
  *
  * Suppression: a line carrying `anvilkit-tombstone-ok: <reason>` (on
  * the line itself or the line above) is exempt. Suppressions are
@@ -101,39 +104,30 @@ const SELF = fileURLToPath(import.meta.url);
  * `note`  — why a row is expected to survive longer than its phase.
  */
 const TOMBSTONES = [
-	// --- renamed: the OLD name must die (p1-001) ---
-	{ id: "AuthorStyleV1", kind: "identifier", dies: "p1-001" },
-	{ id: "TargetAppearanceV1", kind: "identifier", dies: "p1-001" },
-	{ id: "AnvilAppearanceV1", kind: "identifier", dies: "p1-001" },
-	{ id: "DesignSystemV1", kind: "identifier", dies: "p1-001" },
-	{ id: "DocumentComponentLibraryV1", kind: "identifier", dies: "p1-001" },
-	{ id: "AnvilKitV2RootProps", kind: "identifier", dies: "p1-001" },
-	// --- renamed (p1-002) ---
-	{ id: "InteractionV1", kind: "identifier", dies: "p1-002" },
-	{ id: "BindingV1", kind: "identifier", dies: "p1-002" },
-	{ id: "ComponentDefinitionV1", kind: "identifier", dies: "p1-002" },
-	{ id: "StyleDefinitionV1", kind: "identifier", dies: "p1-002" },
-	{ id: "TiptapDocumentV1", kind: "identifier", dies: "p1-002" },
 	// --- renamed (p1-003) ---
-	{ id: "component-metadata-v2", kind: "filename", dies: "p1-003" },
-	{ id: "StyleTargetCapabilityV2", kind: "identifier", dies: "p1-003" },
-	{ id: "AnvilComponentMetadataV2", kind: "identifier", dies: "p1-003" },
-	{ id: "StyleTargetCapabilityV2Schema", kind: "identifier", dies: "p1-003" },
-	{ id: "ComponentMetadataV2Schema", kind: "identifier", dies: "p1-003" },
-	{ id: "readEditorMetadataV2", kind: "identifier", dies: "p1-003" },
+	// The p1-001 and p1-002 rename blocks, and all five p1-003 rows,
+	// reached zero and were pruned — four by `p6-007`, the last
+	// (`readEditorMetadataV2`) by `p3-009`. The full list of what this
+	// file once tombstoned is the naming map's own Renamed/Deleted
+	// tables — that is the permanent record; this list is only the
+	// countdown of names still alive.
+	//
+	// `p3-009` pruned nine rows in one pass under rule 2, the largest
+	// shrink so far: `readEditorMetadataV2` (p1-003) plus
+	// `AnvilKitRootProps`, `EditorCommandBase`, `BatchEditorCommand`,
+	// `EditorCommandResult` and `EditorCommandSnapshot` (p1-005, whose
+	// last carrier was `core/src/editor/legacy/`, deleted there), plus
+	// all three of its own rows — `V2CommandPlan`, `planV2Command`,
+	// `applyV2Plan` — which died with `puck/command-bridge.ts`.
+	//
 	// --- deleted: sidecar state (p1-005) ---
 	{ id: "ANVILKIT_AUTHORING_KEY", kind: "identifier", dies: "p1-005" },
 	{ id: "AuthoringStateV1", kind: "identifier", dies: "p1-005" },
 	{ id: "NodeAuthoringStateV1", kind: "identifier", dies: "p1-005" },
-	{ id: "AnvilKitRootProps", kind: "identifier", dies: "p1-005" },
 	{ id: "createEmptyAuthoringState", kind: "identifier", dies: "p1-005" },
 	// --- deleted: the command IR (p1-005) ---
-	{ id: "EditorCommandBase", kind: "identifier", dies: "p1-005" },
 	{ id: "EditorCommand", kind: "identifier", dies: "p1-005" },
 	{ id: "AtomicEditorCommand", kind: "identifier", dies: "p1-005" },
-	{ id: "BatchEditorCommand", kind: "identifier", dies: "p1-005" },
-	{ id: "EditorCommandResult", kind: "identifier", dies: "p1-005" },
-	{ id: "EditorCommandSnapshot", kind: "identifier", dies: "p1-005" },
 	{
 		id: "EditorCommandPort",
 		kind: "identifier",
@@ -147,10 +141,6 @@ const TOMBSTONES = [
 		dies: "p2-006",
 		note: "only this export of capability-metadata.ts dies; InlineTextTarget/ImageTarget/SlotCapability are retained (naming map F-1)",
 	},
-	// --- deleted: the command bridge (p3-009) ---
-	{ id: "V2CommandPlan", kind: "identifier", dies: "p3-009" },
-	{ id: "planV2Command", kind: "identifier", dies: "p3-009" },
-	{ id: "applyV2Plan", kind: "identifier", dies: "p3-009" },
 	// --- deleted: the migration layer (p7-004) ---
 	{ id: "migrateToPuckNativeV2", kind: "identifier", dies: "p7-004" },
 	{ id: "guardDocumentForV2Editor", kind: "identifier", dies: "p7-004" },
@@ -361,7 +351,11 @@ function selfTest() {
 			"EditorCommandPort, not EditorCommand",
 		],
 		["type T = EditorCommand;", 1, "EditorCommand alone"],
-		["const s: StyleTargetCapabilityV2Schema = z;", 1, "…V2Schema, not …V2"],
+		// Was `StyleTargetCapabilityV2Schema` vs `…V2` until `p6-007`
+		// pruned both as dead. `NodeAuthoringStateV1` is the surviving
+		// overlapping pair and proves the same property: the longer name
+		// matches once and does NOT also register as `AuthoringStateV1`.
+		["type N = NodeAuthoringStateV1;", 1, "NodeAuthoringStateV1, not …StateV1"],
 		// Genuine hits.
 		["import type { AuthoringStateV1 } from './x';", 1, "AuthoringStateV1"],
 		["migrate:puck-native-v2", 1, "filename tombstone"],
