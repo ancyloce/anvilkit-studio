@@ -147,6 +147,21 @@ jobs:
       - name: Build workspace
         run: pnpm build
 
+      # PLAN-0035 `cp5-R02`: the AI provider token is server-only by design and
+      # the client gate is a separate public flag. Nothing enforced either, so a
+      # bundler inlining the secret would have shipped silently. This greps the
+      # BUILT client output (`apps/studio/.next/static` + the prerendered
+      # HTML/RSC payloads) — the source is not what ships, and a source grep
+      # would pass forever while the value was inlined.
+      #
+      # It lives in `validate` (which has no `if:` and therefore always runs)
+      # rather than in `package-gates` or a per-package `check:all`, because
+      # `package-gates` is skipped when every changed file lives under `apps/` —
+      # exactly the diff that would introduce this leak. It must run AFTER
+      # `pnpm build`; the script fails loudly when no build artifact exists.
+      - name: Client secret-leak assertion (studio build output)
+        run: pnpm --filter studio check:client-secret-leak
+
   package-gates:
     name: Package release gates
     runs-on: ubuntu-latest
