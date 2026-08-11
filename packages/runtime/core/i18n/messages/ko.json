@@ -446,6 +446,7 @@
 	"studio.editor.target.list": "컴포넌트 요소",
 	"studio.editor.target.absent": "현재 렌더에 없음",
 	"studio.editor.target.multiInstance": "이 변경은 {count}개의 요소에 영향을 줍니다.",
+	"studio.editor.target.perInstance": "요소를 개별적으로 바꾸려면 '{tab}' 탭 또는 사용자 지정 클래스를 사용하세요.",
 	"studio.editor.component.canvas": "컴포넌트 정의",
 	"studio.editor.component.breadcrumb": "정의 탐색",
 	"studio.editor.component.backToPage": "페이지로 돌아가기",

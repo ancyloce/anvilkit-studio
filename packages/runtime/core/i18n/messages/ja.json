@@ -446,6 +446,7 @@
 	"studio.editor.target.list": "コンポーネント要素",
 	"studio.editor.target.absent": "現在のレンダーには存在しません",
 	"studio.editor.target.multiInstance": "この変更は {count} 個の要素に影響します。",
+	"studio.editor.target.perInstance": "要素を個別に変えるには、「{tab}」タブまたはカスタムクラスを使用します。",
 	"studio.editor.component.canvas": "コンポーネント定義",
 	"studio.editor.component.breadcrumb": "定義ナビゲーション",
 	"studio.editor.component.backToPage": "ページに戻る",

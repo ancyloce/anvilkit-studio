@@ -446,6 +446,7 @@
 	"studio.editor.target.list": "组件元素",
 	"studio.editor.target.absent": "当前渲染中不存在",
 	"studio.editor.target.multiInstance": "此更改将影响 {count} 个元素。",
+	"studio.editor.target.perInstance": "如需单独调整某个元素，请使用“{tab}”标签页或自定义类。",
 	"studio.editor.component.canvas": "组件定义",
 	"studio.editor.component.breadcrumb": "定义导航",
 	"studio.editor.component.backToPage": "返回页面",
