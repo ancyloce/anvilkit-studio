@@ -16,11 +16,14 @@
  * added — reading an undeclared location is a contract violation, not
  * a shortcut.
  *
- * **Schema access.** This directory may not import `@anvilkit/schema`:
- * `check:no-headless-import` allows the foundation validation packages
- * under `src/editor/` only. All parsing therefore goes through the
- * helpers in `../puck/read-appearance.ts`, which already owns that
- * import.
+ * **Schema access.** This directory does not import `@anvilkit/schema`
+ * directly. All parsing goes through the helpers in
+ * `../puck/read-appearance.ts`, which owns the declared-prop parsers,
+ * so a prop has exactly one place where it becomes a validated value.
+ * This is an ownership rule, not a layering constraint:
+ * `check:no-headless-import` permits `@anvilkit/schema` throughout
+ * `src/` because it is a foundation leaf (its only workspace
+ * dependency is `@anvilkit/contracts`).
  *
  * ---
  *

@@ -5,14 +5,16 @@
  * Enforces the layer rule `runtime -> foundation (+ runtime)` from
  * `docs/architecture/repository-structure.md` (restructure plan 0001,
  * Phase 4): shipped `src/` may import **only** the allowlisted
- * `@anvilkit/*` packages (`contracts`, `ui`, `utils`). Every other
- * `@anvilkit/*` specifier is forbidden, which covers both historic
- * failure modes with one rule:
+ * `@anvilkit/*` packages (`contracts`, `schema`, `ui`, `utils`). Every
+ * other `@anvilkit/*` specifier is forbidden, which covers both
+ * historic failure modes with one rule:
  *
- * - **Headless inversion** (architecture §4 A5): `@anvilkit/ir` imports
- *   `PageIR` from `@anvilkit/core/types` and declares core a peer. If
- *   `src/` ever imports `@anvilkit/ir`/`schema`/`validator`, the acyclic
- *   layering inverts and `PageIR` can drift from `src/types/ir.ts`.
+ * - **Headless inversion** (architecture §4 A5): `@anvilkit/ir` is the
+ *   projection layer that historically imported `PageIR` from
+ *   `@anvilkit/core/types` and declared core a peer. If `src/` ever
+ *   imports `@anvilkit/ir`/`@anvilkit/validator` outside the scoped
+ *   `src/editor/` exception, the acyclic layering inverts and `PageIR`
+ *   can drift from `src/types/ir.ts`.
  * - **Capability/extension leakage**: concrete analytics, Canvas, SEO,
  *   export, or collaboration packages (`@anvilkit/analytics-*`,
  *   `@anvilkit/canvas-*`, `@anvilkit/plugin-*`, component packages)
@@ -44,21 +46,46 @@ const SRC_DIR = resolve(PACKAGE_ROOT, "src");
 /**
  * The only `@anvilkit/*` packages runtime `src/` may import: its
  * foundation dependencies plus the runtime sibling `@anvilkit/ui`.
- * Any other `@anvilkit/*` specifier — headless (`ir`/`schema`/
- * `validator`), capabilities (`analytics-*`, `canvas-*`), extensions
- * (`plugin-*`, components, templates) — is forbidden, including
- * subpaths. Type-only imports count too — a
+ * Any other `@anvilkit/*` specifier — the projection/validation layer
+ * (`ir`, `validator`), capabilities (`analytics-*`, `canvas-*`),
+ * extensions (`plugin-*`, components, templates) — is forbidden,
+ * including subpaths. Type-only imports count too — a
  * `import type { ... } from "@anvilkit/ir"` still couples the contract
  * direction even though it erases at build time.
+ *
+ * `@anvilkit/schema` is allowlisted across all of `src/` (not just
+ * `src/editor/`) because it cannot participate in the inversion this
+ * gate exists to prevent: it is a foundation leaf whose only workspace
+ * dependency is `@anvilkit/contracts` (`packages/foundation/schema/
+ * package.json`), so `core -> schema` is a plain downward
+ * `runtime -> foundation` edge and a cycle is structurally impossible.
+ * Core already declares it a production dependency. It owns the Zod
+ * shapes for *declared document data* (appearance, interactions,
+ * bindings, design system, component library), which the Puck-facing
+ * write/read surfaces in `src/puck/`, `src/style-compiler/`, and
+ * `src/migrations/` must validate at the boundary. The alternatives —
+ * re-declaring those schemas inside core, or laundering them through a
+ * re-export in an already-importing module — would risk document-format
+ * drift or add indirection that inverts nothing.
+ *
+ * `@anvilkit/ir` and `@anvilkit/validator` deliberately stay out of
+ * this list: `ir` is the projection layer with the historic back-edge
+ * to core, and is confined to the {@link EDITOR_ALLOWED} exception.
  */
-const ALLOWED = ["@anvilkit/contracts", "@anvilkit/ui", "@anvilkit/utils"];
+const ALLOWED = [
+	"@anvilkit/contracts",
+	"@anvilkit/schema",
+	"@anvilkit/ui",
+	"@anvilkit/utils",
+];
 
 /**
  * The React-free editor engine (`src/editor/`, the `./editor`
  * subpath — DD-0019 §6.4, PLAN-0020 CORE-P0-016) sits one layer
- * lower than the rest of `src/`: it may consume the foundation
- * validation/projection packages (`@anvilkit/schema`,
- * `@anvilkit/ir`) but never `@anvilkit/ui` (React) — the
+ * lower than the rest of `src/`. It differs from {@link ALLOWED} in
+ * both directions: it additionally may consume the projection package
+ * `@anvilkit/ir` (the sole sanctioned `ir` consumer in core), and it
+ * may never import `@anvilkit/ui` (React) — the
  * `check:react-free-runtime` DOM/React scan complements this rule.
  */
 const EDITOR_ALLOWED = [
@@ -317,7 +344,9 @@ async function scanFile(filePath, allowed) {
 /** Allowlist for one source file, scoped by directory (CORE-P0-016). */
 function allowlistFor(filePath) {
 	const rel = relative(SRC_DIR, filePath);
-	return rel === "editor" || rel.startsWith("editor/") || rel.startsWith("editor\\")
+	return rel === "editor" ||
+		rel.startsWith("editor/") ||
+		rel.startsWith("editor\\")
 		? EDITOR_ALLOWED
 		: ALLOWED;
 }
@@ -355,10 +384,13 @@ async function main() {
 	}
 	console.error("");
 	console.error(
-		"Headless: `PageIR` lives in src/types/ir.ts (source of truth); @anvilkit/ir",
+		"Projection: `PageIR` lives in src/types/ir.ts (source of truth); @anvilkit/ir",
 	);
 	console.error(
-		"consumes it, declaring @anvilkit/core a peer dep (core-functional-architecture.md §4 / §6 A5).",
+		"projects from it and must not be imported back (core-functional-architecture.md §4 / §6 A5).",
+	);
+	console.error(
+		"Only src/editor/ may import @anvilkit/ir; it may never import @anvilkit/ui.",
 	);
 	console.error(
 		"Capabilities/extensions: keep them behind runtime-owned ports (e.g. src/shared/analytics-port.ts);",

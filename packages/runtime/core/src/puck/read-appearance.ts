@@ -115,12 +115,12 @@ export function collectAppearanceNodes(
  * never destroys or rejects stored data, it just declines to project
  * what it cannot understand.
  *
- * Exported because `src/document-model/` needs it and **may not import
- * `@anvilkit/schema` itself**: `check:no-headless-import` allows the
- * foundation validation packages only under `src/editor/`, so every
- * other consumer reaches Zod through a helper in an already-importing
- * module. Adding a new schema-importing file under `src/puck/` would
- * add a seventh offender to a gate that is already red.
+ * Exported because `src/document-model/` needs it and deliberately
+ * keeps its own schema surface: parsing a node's declared `appearance`
+ * belongs to this read model, so there is one place where the raw prop
+ * becomes an `AnvilAppearance`. (`check:no-headless-import` allows
+ * `@anvilkit/schema` throughout `src/` — it is a foundation leaf — so
+ * this is a design choice about ownership, not a gate workaround.)
  */
 export function parseNodeAppearance(raw: unknown): AnvilAppearance | undefined {
 	if (raw === undefined) return undefined;
@@ -186,10 +186,9 @@ export function parseEditorAnnotations(
 /**
  * Validate a candidate component library (`p3-001` write path).
  *
- * Exported for the same reason as the parsers above: `src/puck/` may
- * not gain another `@anvilkit/schema` importer without adding a
- * seventh offender to `check:no-headless-import`, so the write path
- * reaches Zod through this module.
+ * Exported for the same reason as the parsers above: this module owns
+ * the declared-prop parsers, so the `p3-001` write path validates the
+ * candidate library here rather than re-deriving the shape.
  */
 export function parseComponentLibrary(
 	raw: unknown,

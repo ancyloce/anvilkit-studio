@@ -71,7 +71,8 @@
 	},
 	"files": [
 		"dist",
-		"src/globals.css"
+		"src/globals.css",
+		"NOTICE"
 	],
 	"license": "MIT",
 	"sideEffects": [

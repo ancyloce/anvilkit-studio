@@ -171,7 +171,8 @@
 	},
 	"files": [
 		"dist",
-		"i18n"
+		"i18n",
+		"NOTICE"
 	],
 	"license": "MIT",
 	"sideEffects": [
