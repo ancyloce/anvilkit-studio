@@ -397,15 +397,15 @@
 									},
 									{
 										"kind": "text",
-										"text": " keeps its\nsignature, so pre-finalization callers that genuinely hold a sidecar\nare unaffected until "
+										"text": " keeps its\nsignature, so callers that genuinely hold a sidecar are unaffected\nuntil "
 									},
 									{
 										"kind": "code",
-										"text": "`p7-002`"
+										"text": "`p7-004`"
 									},
 									{
 										"kind": "text",
-										"text": " retires that form."
+										"text": " retires that form with the migration layer."
 									}
 								]
 							},
