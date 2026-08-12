@@ -102,7 +102,7 @@ This prompts you to select affected packages and describe the change. The genera
 
 **Do not** hand-edit `version` fields in `package.json` — Changesets manages all version bumps.
 
-Release leads: see [`docs/release/release-runbook.md`](docs/release/release-runbook.md) for the `publish.yml` workflow modes, pre-flight checks, rollback procedure, and smoke verification.
+Release leads: the workflow modes (`auto`, `enter-beta`, `exit-beta`, `publish-only`), their ceremony hooks, and the `NPM_TOKEN` scope are documented in the header of [`.github/workflows/publish.yml`](.github/workflows/publish.yml). Run the pre-release verification checklist before dispatching it.
 
 ## Marketplace Submission
 
