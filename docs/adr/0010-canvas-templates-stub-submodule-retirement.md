@@ -68,7 +68,7 @@ Two searches, both scoped to the working tree and excluding `node_modules`, `dis
 | --- | --- | --- |
 | The registration itself | 2 | `.gitmodules:52`, `.gitmodules:53` |
 | The stub's own gitdir pointer | 1 | `packages/capabilities/canvas/templates/.git:1` |
-| Prose in `docs/` describing the stub as dead weight | 9 | `docs/archive/plans/0031-canvas-starter-content-library-0806-1336.md:29,81`; `docs/plans/0035-canvas-core-parity-phased-execution-0806-1854.md:114`; `docs/reviews/0007-canvas-core-editor-adversarial-review-0720-1446.md:126`; `docs/reviews/0034-plan-0035-canvas-core-parity-audit-0806-2216.md:141`; `docs/runs/0007-canvas-core-editor-adversarial-review-closeout.md:123`; `docs/tasks/0002-m4-execution-report-0715.md:53`; `docs/tasks/cp0-006-stub-submodule-retirement-signoff.md:3`; `docs/tasks/cp3-008-retire-stub-submodule.md:3` |
+| Prose in `docs/` describing the stub as dead weight | 9 | `docs/archive/plans/0031-canvas-starter-content-library-0806-1336.md:29,81`; `docs/plans/0035-canvas-core-parity-phased-execution-0806-1854.md:114`; `docs/reviews/0007-canvas-core-editor-adversarial-review-0720-1446.md:126`; `docs/reviews/0034-plan-0035-canvas-core-parity-audit-0806-2216.md:141`; `docs/runs/0007-canvas-core-editor-adversarial-review-closeout.md:123` *(journal deleted 2026-08-12 in the `docs/` cleanup; see `docs/archive/README.md`)*; `docs/tasks/0002-m4-execution-report-0715.md:53`; `docs/tasks/cp0-006-stub-submodule-retirement-signoff.md:3`; `docs/tasks/cp3-008-retire-stub-submodule.md:3` |
 | **Code, config, build, or CI** | **0** | — |
 
 Restricted to tracked files and recursed into every submodule
