@@ -55,23 +55,35 @@ export default mergeConfig(
 			 * a gate that flakes on unrelated tests is not a gate.
 			 *
 			 * Thresholds are **per directory glob**, deliberately not
-			 * global: `commands/` carries ~292 branches and `resolve/` ~85,
-			 * so a single aggregate number lets a regression in the smaller
-			 * directory hide behind the larger one — exactly the
+			 * global, so a regression in a small directory cannot hide
+			 * behind a larger well-covered one — the
 			 * "high aggregate conceals a failing target" failure mode.
 			 *
-			 * `include` is scoped to the two mandated directories so the
-			 * report is the gate, with nothing else diluting it. Widening
-			 * the floor to more of `src/editor/` is a deliberate future
+			 * This block used to carry a second glob for
+			 * `src/editor/commands/**` (the reducer half of §13's
+			 * "reducers/resolvers" floor). That directory was **deleted**
+			 * with the legacy authoring sidecar, and its successor write
+			 * path is `src/puck/` (`update-tree`, `update-appearance`,
+			 * `update-overrides`, `create-component`, …). A threshold glob
+			 * matching zero files passes silently, so the entry was not a
+			 * dormant gate — it was a gate that reported green on nothing,
+			 * which is worse than no gate. It is removed rather than
+			 * repointed: `src/puck/` currently sits near 25% branch
+			 * coverage, so re-arming the reducer floor there is real work,
+			 * not a config edit. **The reducer half of §13 is currently
+			 * unenforced** — that gap is recorded here on purpose.
+			 *
+			 * `include` is scoped to the mandated directory so the report
+			 * is the gate, with nothing else diluting it. Widening the
+			 * floor to more of `src/editor/` is a deliberate future
 			 * decision, not something to inherit by accident.
 			 */
 			coverage: {
 				enabled: false,
 				provider: "v8",
 				reporter: ["text-summary", "json-summary"],
-				include: ["src/editor/commands/**", "src/editor/resolve/**"],
+				include: ["src/editor/resolve/**"],
 				thresholds: {
-					"src/editor/commands/**": { branches: 95 },
 					"src/editor/resolve/**": { branches: 95 },
 				},
 			},
