@@ -16,82 +16,59 @@
  * cases the spec does not, which is exactly why it is not re-derived.
  */
 
-import { makeEditorError } from "../editor/diagnostics.js";
 import type {
-	ComponentDefinitionId,
 	ComponentDefinition,
+	ComponentDefinitionId,
 	ComponentInstanceState,
 	ComponentPropDefinition,
 	ComponentVariant,
 	EditorError,
-	VariantAxis,
 	JsonValue,
 	NodeOverridePatch,
 	SerializablePuckNode,
+	VariantAxis,
 } from "@anvilkit/contracts/editor";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
+import { makeEditorError } from "../editor/diagnostics.js";
 
 /**
  * The prop key that marks a node inside a definition root as a
  * **nested component instance**.
  *
- * `ComponentInstanceState` is stored per page node in
- * `AuthoringStateV1.nodes[id].componentInstance`, which has no
- * equivalent inside a definition's `root` — yet §14.3 requires cycle
- * detection and §24.4 caps nesting depth at 10, both of which
- * presuppose that definitions can contain instances. This reserved,
- * JSON-safe prop is that encoding. It lives inside
+ * A component instance has no equivalent inside a definition's `root`
+ * — yet §14.3 requires cycle detection and §24.4 caps nesting depth at
+ * 10, both of which presuppose that definitions can contain instances.
+ * This reserved, JSON-safe prop is that encoding. It lives inside
  * `SerializablePuckNode.props` (already `Record<string, JsonValue>`),
- * so it needs no contract change and round-trips through the sidecar
- * untouched.
- */
-export const COMPONENT_INSTANCE_PROP = "__anvilkitInstance";
-
-/**
- * The canonical spelling PLAN-0026 §2 renames this key to, as part of
- * the `p7-002` data migration.
+ * so it needs no contract change.
+ *
+ * **One spelling.** `p3-003` renamed the write side from the legacy
+ * `__anvilkitInstance`; `p7-002` renamed it in the store and closed the
+ * dual read that bridged the two. There is no fallback key left to
+ * read, and re-introducing one would be re-opening a window that a
+ * one-way data migration has already closed.
  */
 export const CANONICAL_COMPONENT_INSTANCE_PROP = "anvilComponentInstance";
 
 /**
- * Read the instance-link prop, tolerating **both** spellings.
+ * Write the instance link.
  *
- * TIME-BOXED: the tolerance exists only while stored documents may
- * still carry the legacy `__anvilkitInstance` key. `p7-002` migrates
- * the store; when it lands, this function collapses to a read of
- * {@link CANONICAL_COMPONENT_INSTANCE_PROP} and
- * {@link COMPONENT_INSTANCE_PROP} is deleted along with its tombstone
- * entry. It is NOT a permanent dual-key contract — two spellings for
- * one concept is how a sidecar grows back.
- *
- * Canonical wins when both are present, so a migrated document is
- * never re-interpreted through the legacy key.
- */
-/**
- * Write the instance link, emitting **only** the canonical key.
- *
- * `p3-003` executes PLAN-0026 §2's last document-visible rename: from
- * this task onward every write emits
- * {@link CANONICAL_COMPONENT_INSTANCE_PROP} and **deletes** the legacy
- * key from the node it touches. Reads stay tolerant of both spellings
- * until `p7-002` migrates the store, so a document mid-migration keeps
- * working — but nothing re-introduces the old key, and a node that any
- * write touches is upgraded in place rather than left carrying two
- * spellings of one concept.
+ * `p3-003` executed PLAN-0026 §2's last document-visible rename; since
+ * `p7-002` migrated the store there is a single spelling on both the
+ * read and the write side.
  */
 export function writeComponentInstanceProp(
 	props: Readonly<Record<string, unknown>>,
 	instance: unknown,
 ): Record<string, unknown> {
-	const { [COMPONENT_INSTANCE_PROP]: _legacy, ...rest } = props;
-	return { ...rest, [CANONICAL_COMPONENT_INSTANCE_PROP]: instance };
+	return { ...props, [CANONICAL_COMPONENT_INSTANCE_PROP]: instance };
 }
 
+/** Read the instance-link prop. */
 export function readComponentInstanceProp(
 	props: Readonly<Record<string, unknown>>,
 ): unknown {
-	const canonical = props[CANONICAL_COMPONENT_INSTANCE_PROP];
-	return canonical !== undefined ? canonical : props[COMPONENT_INSTANCE_PROP];
+	return props[CANONICAL_COMPONENT_INSTANCE_PROP];
 }
 
 /** The outcome of materializing one instance. */
@@ -694,4 +671,3 @@ export function validateVariantModel(
 
 	return errors;
 }
-

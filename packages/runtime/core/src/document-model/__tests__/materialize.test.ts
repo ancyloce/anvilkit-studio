@@ -12,7 +12,7 @@ import type {
 } from "@anvilkit/contracts/editor";
 import { describe, expect, it } from "vitest";
 import {
-	COMPONENT_INSTANCE_PROP,
+	CANONICAL_COMPONENT_INSTANCE_PROP,
 	formatComponentPath,
 	materializeInstance,
 	runtimeNodeId,
@@ -286,7 +286,7 @@ describe("cycles and depth (§24.4)", () => {
 							type: "Box",
 							props: {
 								id: `${id}-slot`,
-								[COMPONENT_INSTANCE_PROP]: {
+								[CANONICAL_COMPONENT_INSTANCE_PROP]: {
 									definitionId: childDefinitionId,
 									definitionRevision: 1,
 									variantSelection: {},

@@ -62,7 +62,6 @@ import type { InlineTextTarget } from "@anvilkit/contracts/editor";
 import type { Config, Data } from "@puckeditor/core";
 import { walkTree } from "@puckeditor/core";
 import { deepEqualJson } from "../editor/patch.js";
-import { readComponentInstanceProp } from "./materialize.js";
 import {
 	type ResolvedStyleTarget,
 	readEditorMetadataFor,
@@ -76,6 +75,7 @@ import {
 	parseNodeBindings,
 	parseNodeInteractions,
 } from "../puck/read-appearance.js";
+import { readComponentInstanceProp } from "./materialize.js";
 import type {
 	DocumentAnnotations,
 	DocumentModel,
@@ -84,10 +84,11 @@ import type {
 } from "./types.js";
 
 /**
- * The instance-link prop is read through the single tolerant reader in
- * `./materialize.ts` (`p2-004` deliverable 4), so `p7-002`'s rename to
- * `anvilComponentInstance` is a one-line change in one place rather
- * than a hunt for string literals.
+ * The instance-link prop is read through the single reader in
+ * `./materialize.ts` (`p2-004` deliverable 4). Concentrating it there
+ * is what made `p7-002`'s rename to `anvilComponentInstance` — and the
+ * closure of the dual read that bridged it — a change in one place
+ * rather than a hunt for string literals.
  */
 
 const EMPTY_INLINE_TEXT: readonly InlineTextTarget[] = Object.freeze([]);

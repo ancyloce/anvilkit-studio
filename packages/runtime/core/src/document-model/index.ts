@@ -9,6 +9,12 @@
  */
 
 export {
+	type ComponentEditSink,
+	componentDocument,
+	foldComponentDocument,
+	variantCombinations,
+} from "./component-document.js";
+export {
 	type ComponentLibraryModel,
 	collectOrphanOverrides,
 	type OrphanOverride,
@@ -17,20 +23,13 @@ export {
 } from "./component-library.js";
 export {
 	CANONICAL_COMPONENT_INSTANCE_PROP,
-	COMPONENT_INSTANCE_PROP,
 	formatComponentPath,
 	type MaterializeResult,
 	materializeInstance,
 	readComponentInstanceProp,
-	writeComponentInstanceProp,
 	runtimeNodeId,
+	writeComponentInstanceProp,
 } from "./materialize.js";
-export {
-	type ComponentEditSink,
-	componentDocument,
-	foldComponentDocument,
-	variantCombinations,
-} from "./component-document.js";
 export { readDocument } from "./read-document.js";
 export {
 	type NodeFieldAddress,

@@ -197,13 +197,13 @@ function withPatchedAppearance(
 	layer: ResponsiveLayerRef,
 	patch: AppearancePatch,
 ): AnvilAppearance | undefined {
-	// Keys we do not understand are PRESERVED, never dropped. The
-	// schemas are `looseObject` precisely so a document written before
-	// the canonical rename (which may still carry a stale `version`)
-	// keeps working until `p7-002` strips it from the store — and
-	// PLAN-0026 §5 defines that tolerance as *generic unknown-key
-	// preservation*. Rebuilding the value from `targets` alone would
-	// silently destroy them on the first edit.
+	// Keys we do not understand are PRESERVED, never dropped. PLAN-0026
+	// §5 defines the tolerance as *generic unknown-key preservation*,
+	// and it outlives the migration window: `p7-002` stripped the stale
+	// `version` key from the store, but forward compatibility is why the
+	// schemas are `looseObject` in the first place. Rebuilding the value
+	// from `targets` alone would silently destroy unknown keys on the
+	// first edit.
 	const { targets: _known, ...unknown } = (appearance ?? {}) as Record<
 		string,
 		unknown
@@ -441,7 +441,7 @@ export function commitAppearanceUpdate(
 ): AppearanceCommitResult {
 	const gate = writerGateError(deps);
 	if (gate !== null) {
-		return { status: "rejected", changedNodeIds: [],  errors: [gate] };
+		return { status: "rejected", changedNodeIds: [], errors: [gate] };
 	}
 	const api = deps.getPuckApi();
 	const current = api.appState.data as Data;

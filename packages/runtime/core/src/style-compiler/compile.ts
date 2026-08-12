@@ -203,10 +203,11 @@ export function compileDocumentAppearance(
 			seenIds.add(nodeId);
 			const appearance = (item.props as { appearance?: AnvilAppearance })
 				.appearance;
-			// No version gate: there is one document form. A document
-			// written before the rename may still carry a stale `version`
-			// key, which is preserved as an unknown key and read by
-			// nothing (PLAN-0026 §5; stripped from the store by `p7-002`).
+			// No version gate: there is one document form, and since
+			// `p7-002` stripped the markers from the store it carries no
+			// version key at all (PLAN-0026 §5). An out-of-contract
+			// artifact that still has one is preserved as an unknown key
+			// and read by nothing here.
 			if (appearance === undefined || appearance.targets === undefined) {
 				continue;
 			}
@@ -226,9 +227,9 @@ export function compileDocumentAppearance(
 	const targetsByNode = new Map<string, string[]>();
 	for (const node of collected) {
 		const declared = metadata.get(node.type);
-		for (const [targetId] of Object.entries(
-			node.appearance.targets ?? {},
-		).sort(([a], [b]) => (a < b ? -1 : 1))) {
+		for (const [targetId] of Object.entries(node.appearance.targets ?? {}).sort(
+			([a], [b]) => (a < b ? -1 : 1),
+		)) {
 			if (declared === undefined || !declared.has(targetId)) {
 				sink.add([
 					makeEditorError(

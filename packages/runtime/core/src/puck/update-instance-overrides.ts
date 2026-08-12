@@ -315,9 +315,9 @@ function withFreshIds(
 	props.id = freshId;
 	assigned.push(freshId);
 	// A detached node is a plain node: nothing points back at the
-	// definition it came from (rule 5).
+	// definition it came from (rule 5). One key, because `p7-002`
+	// renamed the last stored occurrence of the legacy spelling.
 	delete props.anvilComponentInstance;
-	delete props.__anvilkitInstance;
 	for (const [key, value] of Object.entries(node.props)) {
 		if (!Array.isArray(value)) continue;
 		props[key] = value.map((entry) =>
@@ -441,7 +441,7 @@ function commit(
 ): InstanceCommitResult {
 	const gate = writerGateError(deps);
 	if (gate !== null) {
-		return { status: "rejected", changedNodeIds: NO_IDS,  errors: [gate] };
+		return { status: "rejected", changedNodeIds: NO_IDS, errors: [gate] };
 	}
 	const api = deps.getPuckApi();
 	const current = api.appState.data as Data;

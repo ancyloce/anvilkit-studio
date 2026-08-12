@@ -5,8 +5,8 @@
  * Converts a legacy sidecar document (`root.props.__anvilkit`,
  * PLAN-0020 model) into the Puck-native v2 model: per-node §5.1
  * carriers (`appearance`/`interactions`/`bindings` on component
- * props) plus §5.2 root props (`designSystem`/`componentLibrary`/
- * `authoringSchemaVersion: 2`). §10.1 principles enforced here:
+ * props) plus §5.2 root props (`designSystem`/`componentLibrary`).
+ * §10.1 principles enforced here:
  *
  * - **Pure** — no I/O, no clock, no randomness; same input, same
  *   output. Storage, snapshots, and CAS live in the CLI (P5-02).
@@ -33,6 +33,16 @@
  * normalization (`normalizeCssForParity`) are the SAME logic the
  * P1-06 legacy-golden parity suite proved against committed goldens —
  * lifted here so exactly one conversion exists.
+ *
+ * ### `p7-002` — no version marker is written, and none is read
+ *
+ * This migration used to both *route on* and *stamp*
+ * `root.props.authoringSchemaVersion`. It now does neither: the run is
+ * classified by whether a `__anvilkit` sidecar is present, and its
+ * output goes through {@link finalizeStoredDocument} so the document
+ * leaves in its final, version-free form. See the two `p7-002` comments
+ * in the body for why the old behaviour was safe before `p3-009` and is
+ * not safe now.
  */
 
 import type {
@@ -44,14 +54,11 @@ import type {
 	Interaction,
 	NodeAuthoringStateV1,
 } from "@anvilkit/contracts/editor";
-import {
-	ANVILKIT_AUTHORING_KEY,
-	readLegacySidecar,
-} from "./legacy-sidecar.js";
 import type { Config, Data } from "@puckeditor/core";
 import { migrate, transformProps, walkTree } from "@puckeditor/core";
 import { readEditorMetadataFor } from "../puck/component-metadata.js";
-import { compileDocumentAppearance } from "../style-compiler/compile.js";
+import { finalizeStoredDocument } from "./finalize-document.js";
+import { ANVILKIT_AUTHORING_KEY, readLegacySidecar } from "./legacy-sidecar.js";
 
 /** One migration diagnostic. Module-owned (plan §10.2 shape). */
 export interface MigrationDiagnostic {
@@ -301,13 +308,19 @@ export function migrateToPuckNativeV2(
 			details: { errors: read.errors },
 		});
 	}
-	if (!sidecarPresent && rootProps.authoringSchemaVersion === 2) {
-		return {
-			status: "already-v2",
-			diagnostics,
-			report: emptyReport,
-		};
-	}
+	// `p7-002`: classification is SIDECAR-DRIVEN, not marker-driven.
+	//
+	// Until this task the early exit here was
+	// `rootProps.authoringSchemaVersion === 2` — a key `p1-001` removed
+	// from the contract and no canonical writer emits, so a canonical
+	// document classified as `migrated` and the migration stamped the
+	// marker back on. That was safe only while the legacy command port
+	// fell through to the sidecar write path without it; `p3-009`
+	// deleted the port, and this task deletes the marker from the store,
+	// so the classification moves to the fact that actually decides it:
+	// **is there a sidecar to convert?** The `already-v2` answer is now
+	// produced at the end of the run, once the finalization pass has
+	// confirmed there is no marker left to strip either.
 	const state = read.state;
 
 	// Step 3 — node-id → legacy record index.
@@ -476,8 +489,8 @@ export function migrateToPuckNativeV2(
 	);
 
 	// Steps 7–9 — root props: collections move to designSystem /
-	// componentLibrary; the sidecar (and its revision) is removed; the
-	// v2 schema version is stamped.
+	// componentLibrary and the sidecar (with its revision) is removed.
+	// Nothing is stamped in its place (`p7-002`).
 	const defaultTokenMode = options?.defaultTokenMode ?? "default";
 	if (
 		options?.defaultTokenMode === undefined &&
@@ -512,7 +525,7 @@ export function migrateToPuckNativeV2(
 
 	const { [ANVILKIT_AUTHORING_KEY]: _removedSidecar, ...remainingRootProps } =
 		(transformed.root?.props ?? {}) as Record<string, unknown>;
-	const migratedData: Data = {
+	const carrierData: Data = {
 		...transformed,
 		root: {
 			...transformed.root,
@@ -520,10 +533,20 @@ export function migrateToPuckNativeV2(
 				...remainingRootProps,
 				...(designSystem !== undefined ? { designSystem } : {}),
 				...(componentLibrary !== undefined ? { componentLibrary } : {}),
-				authoringSchemaVersion: 2,
 			},
 		},
 	} as Data;
+
+	// `p7-002` step 9 — finalization. No `authoringSchemaVersion` is
+	// stamped: PLAN-0026 §5 gives the canonical document no version
+	// dimension, so writing one here would re-introduce, on every
+	// migrated document, exactly the marker this task exists to remove.
+	// The same pass also strips any stale carrier `version` key and
+	// renames a surviving `__anvilkitInstance`, so a document leaves the
+	// migration in its FINAL form rather than in a form that needs a
+	// second pass.
+	const finalized = finalizeStoredDocument(carrierData);
+	const migratedData = finalized.value;
 
 	// Step 11 — CSS parity: REMOVED by `p3-009`.
 	//
@@ -542,18 +565,42 @@ export function migrateToPuckNativeV2(
 	// deferred-verification ledger against `p8-006`, not a behaviour the
 	// product still has.
 
+	const report = {
+		visitedNodes,
+		migratedNodes,
+		orphanNodeStates,
+		unknownComponentTypes,
+		unknownTargets,
+	};
+
+	// `p7-002` — the `already-v2` answer, decided by what the run
+	// actually did rather than by a marker the document carries. A
+	// document is already canonical when there was no sidecar to
+	// convert, no node gained a carrier, no root collection was added
+	// and the finalization pass found no marker to strip. Reported
+	// WITHOUT `data`, per the §10.2 contract, so a caller keeps its own
+	// reference and no byte moves.
+	//
+	// Deliberately still validated first: the walk above blocks
+	// duplicate node ids and unknown component types on a canonical
+	// document too, and short-circuiting before it would have quietly
+	// dropped that from the restore-admission path.
+	if (
+		!sidecarPresent &&
+		!finalized.changed &&
+		migratedNodes === 0 &&
+		designSystem === undefined &&
+		componentLibrary === undefined
+	) {
+		return { status: "already-v2", diagnostics, report };
+	}
+
 	// Step 12 — all clear: commit the pure result.
 	return {
 		status: "migrated",
 		data: migratedData,
 		diagnostics,
-		report: {
-			visitedNodes,
-			migratedNodes,
-			orphanNodeStates,
-			unknownComponentTypes,
-			unknownTargets,
-		},
+		report,
 	};
 }
 
@@ -570,4 +617,3 @@ function blocked(
 function structuredCloneData(data: Data): Data {
 	return structuredClone(data);
 }
-
