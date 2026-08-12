@@ -44,18 +44,16 @@
  *   changing what the IR boundary emits is an `@anvilkit/ir` decision,
  *   not an app one.
  *
- * ### Both document shapes, through the tolerant parse — closes in `p7-002`
+ * ### One admission point, and the version tolerance is closed
  *
- * Until the store migration runs, two shapes can arrive: a snapshot
- * written before the carrier cutover (sidecar form) and a canonical
- * one, the latter possibly carrying stale `version` keys that the
- * `looseObject` schemas preserve and nothing reads. Both are admitted
- * — the canonical one unchanged, the pre-carrier one migrated on read
- * — and neither is admitted by branching on a version field. This
- * tolerance is **time-boxed**: `p7-002` migrates the stored snapshots
- * and closes it, and `p7-004` deletes the guard entirely. See
- * `./migration/v2-guard.ts` for why the routing marker has to survive
- * that long.
+ * `p7-002` migrated the stored snapshots, so a snapshot no longer
+ * arrives carrying a stale `version`, an `authoringSchemaVersion` or a
+ * `__anvilkitInstance` prop; the guard's finalization pass strips any
+ * that an out-of-contract artifact still has rather than admitting it
+ * as a second shape. What can still arrive is a snapshot written
+ * before the carrier cutover, which holds a `__anvilkit` sidecar and is
+ * converted on read — a structural conversion, never a version branch.
+ * `p7-004` deletes the guard with the rest of the migration layer.
  */
 
 import type { StudioPlugin, StudioPluginMeta } from "@anvilkit/core";
@@ -144,19 +142,17 @@ function HistorySidebarPanel({
 
 			setRestoreError(null);
 			if (admitted.kind === "migrated" && admitted.convertedLegacyState) {
-				// The time-boxed shape: a pre-carrier snapshot converted on
-				// read, in memory only. `p7-002` migrates the stored
-				// snapshots and this branch stops being reachable.
+				// A pre-carrier snapshot holding a `__anvilkit` sidecar,
+				// converted on read, in memory only. Out of contract since
+				// `p7-002` migrated the store; `p7-004` removes the path.
 				console.info(
 					"[demo] pre-carrier snapshot converted on restore",
 					admitted.diagnostics,
 				);
 			} else {
-				// The canonical shape. Note that it arrives under BOTH kinds
-				// today — `"ok"` for a snapshot carrying the routing marker,
-				// `"migrated"` with nothing converted for one without it —
-				// which is the marker-driven classification `v2-guard.ts`
-				// documents and `p7-002` retires.
+				// The canonical shape — `"ok"`, by reference, since `p7-002`
+				// made the classification sidecar-driven rather than
+				// marker-driven.
 				console.info("[demo] canonical snapshot restored");
 			}
 			dispatch({ type: "setData", data: admitted.data });

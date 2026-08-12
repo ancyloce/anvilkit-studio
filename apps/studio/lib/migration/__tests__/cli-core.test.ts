@@ -87,10 +87,17 @@ const legacyDoc = (slug: string): DemoPageData =>
 		zones: {},
 	}) as unknown as DemoPageData;
 
+/**
+ * An already-canonical document: no sidecar, and since `p7-002` no
+ * version marker either — a canonical document is recognised by what it
+ * lacks, not by a stamp it carries. `rootProps`' own `version` is the
+ * author-facing product version and is deliberately left in place: it
+ * is not on a carrier, so finalization must not touch it.
+ */
 const v2Doc = (slug: string, label = "v2-draft"): DemoPageData =>
 	({
 		content: [{ type: "Box", props: { id: "box-1", label } }],
-		root: { props: rootProps(slug, { authoringSchemaVersion: 2 }) },
+		root: { props: rootProps(slug) },
 		zones: {},
 	}) as unknown as DemoPageData;
 
@@ -181,7 +188,10 @@ describe("migrateStore — §10.3", () => {
 		const record = await deps.storage.getBySlug("p1");
 		const published = propsOfRoot(record?.published);
 		expect(published[ANVILKIT_AUTHORING_KEY]).toBeUndefined();
-		expect(published.authoringSchemaVersion).toBe(2);
+		// `p7-002`: the migration leaves NO version marker behind. It also
+		// leaves the author-facing product version alone.
+		expect(published.authoringSchemaVersion).toBeUndefined();
+		expect(published.version).toBe("1.0.0");
 		// The §5.1 carrier landed on the node.
 		const publishedDoc = record?.published as
 			| { content: { props: Record<string, unknown> }[] }
@@ -271,9 +281,14 @@ describe("migrateStore — §10.3", () => {
 		});
 		expect(report.written).toBe(1);
 		const record = await deps.storage.getBySlug("p1");
-		// Published migrated to v2…
-		expect(propsOfRoot(record?.published).authoringSchemaVersion).toBe(2);
-		// …and the divergent v2 draft survived byte-equal.
+		// Published converted: sidecar gone, no marker in its place.
+		expect(
+			propsOfRoot(record?.published)[ANVILKIT_AUTHORING_KEY],
+		).toBeUndefined();
+		expect(
+			propsOfRoot(record?.published).authoringSchemaVersion,
+		).toBeUndefined();
+		// …and the divergent canonical draft survived byte-equal.
 		expect(hashPayload(record?.draft)).toBe(hashPayload(draft));
 	});
 

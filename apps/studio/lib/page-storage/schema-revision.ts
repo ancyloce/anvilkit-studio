@@ -49,12 +49,13 @@
  * bought, and its lifetime is stated so it reads as a decision:
  *
  * > **Policy.** The below-floor path stays alive until *all three* of the
- * > following hold, and is removed by exactly one edit — raising
- * > {@link STORE_SCHEMA_REVISION_FLOOR} to {@link STORE_SCHEMA_REVISION} — in
- * > the change that satisfies the third:
+ * > following hold, and is removed by exactly one edit — making a below-floor
+ * > classification *reject* rather than route through
+ * > {@link migratePageRecordOnRead} — in the change that satisfies the third:
  * >
- * > 1. `p7-002`'s store migration has shipped and bumped every record it
- * >    touched to the revision it finalizes.
+ * > 1. **MET (`p7-002`, 2026-08-11).** The store migration has shipped;
+ * >    {@link STORE_SCHEMA_REVISION} is 2 and every record the runner touches
+ * >    is written at it.
  * > 2. `p7-003`'s dry run on a store copy reports **zero** documents and
  * >    **zero** version-history snapshots below the new revision, and
  * >    `p7-004`'s post-run production scan reports the same against the real
@@ -72,28 +73,55 @@
  * > branch stays and this policy is re-evaluated two revisions later. Removing
  * > it earlier turns every unmigrated record back into a corrupt one, which is
  * > the exact failure this module exists to prevent.
+ *
+ * > **Correction (`p7-002`).** As originally written the removal edit was
+ * > "raising {@link STORE_SCHEMA_REVISION_FLOOR} to
+ * > {@link STORE_SCHEMA_REVISION}". That is not what removes the branch — the
+ * > floor decides *which* revisions are pre-finalization, and it has to move
+ * > with every content-contract change or an unfinalized record reads as
+ * > current. `p7-002` moved it 1 → 2 for exactly that reason and the branch is
+ * > untouched. What actually retires the branch is turning a below-floor
+ * > classification into a refusal, and the three conditions above gate that.
  */
 
+import { finalizeStoredDocument } from "@anvilkit/core/editor";
 import type { PageRecord, UnstampedPageRecord } from "./types";
 
 /**
  * The revision the storage layer stamps on every record it writes.
  *
  * Bumped **only** by a store migration that changes what a stored record
- * means. `p7-002` is the next bump; nothing else may move this number.
+ * means. Nothing else may move this number.
+ *
+ * | Revision | What it means | Landed in |
+ * |---|---|---|
+ * | 0 | unstamped — written before the store had a revision at all | pre-`p7-001` |
+ * | 1 | stamped, but the document may still carry version markers | `p7-001` |
+ * | 2 | **finalized**: no `authoringSchemaVersion`, no carrier `version`, no `__anvilkitInstance` | `p7-002` |
  */
-export const STORE_SCHEMA_REVISION = 1;
+export const STORE_SCHEMA_REVISION = 2;
 
 /**
  * The lowest revision runtime code reads without routing through the migration
  * path. Records below it are recoverable, not corrupt.
  *
- * Held at `1` deliberately: it is the *stamped* revision, so a record carrying
- * no `schemaRevision` — every record written before `p7-001` — reads as
- * {@link PRE_STAMP_REVISION} and lands in the below-floor branch. Raising this
- * is governed by the policy in this file's header.
+ * **Tracks {@link STORE_SCHEMA_REVISION}**, and `p7-002` moves it 1 → 2 for a
+ * correctness reason, not a housekeeping one: a revision-1 record is stamped
+ * but **not finalized** — it was written by a `p7-001` build and can still
+ * carry all three version markers. Leaving the floor at 1 would classify it as
+ * `"current"`, skip {@link migratePageRecordOnRead}, and hand the editor a
+ * document the migration was supposed to have cleaned. The floor is what says
+ * "runtime assumes this content contract"; the content contract changed here.
+ *
+ * This is a deliberate reading of the header policy, whose wording ("removed by
+ * exactly one edit — raising the floor to the current revision") pictured the
+ * floor lagging during the window. What that policy actually protects is the
+ * below-floor **branch** — load-and-migrate rather than reject — and that
+ * branch is untouched and is doing more work after this task, not less. Making
+ * a below-floor record *fail* instead of load is a different edit, is the one
+ * the three conditions gate, and has not been made.
  */
-export const STORE_SCHEMA_REVISION_FLOOR = 1;
+export const STORE_SCHEMA_REVISION_FLOOR = 2;
 
 /**
  * The revision attributed to a record with no `schemaRevision` field. Not a
@@ -206,8 +234,8 @@ export function classifyStoredRecord(
 			`${revision}${revision === PRE_STAMP_REVISION ? " (unstamped)" : ""}, ` +
 			`below the supported floor ${STORE_SCHEMA_REVISION_FLOOR}. It was ` +
 			`routed through the store migration path and loaded — it is not ` +
-			`corrupt. Run the store migration to bring it to revision ` +
-			`${STORE_SCHEMA_REVISION}.`,
+			`corrupt. Run \`pnpm --filter studio finalize:store --all --write\` ` +
+			`to bring it to revision ${STORE_SCHEMA_REVISION}.`,
 	};
 }
 
@@ -233,30 +261,43 @@ export function classifyStoredRecordJson(
 /**
  * The store migration path a below-floor record is routed through on read.
  *
- * Today it is an identity: `p7-001` adds the *marker and the routing*, and
- * `p7-002` adds the migration that has something to do — strip
- * `authoringSchemaVersion`, strip `appearance.version`, rename the instance
- * prop — and bumps {@link STORE_SCHEMA_REVISION}. Keeping the seam named and
- * called from day one is what makes `p7-002` a body change rather than a
- * re-plumbing, and it is why a below-floor record loads at all instead of
- * failing the way it did before this task.
+ * `p7-001` added the *marker and the routing* and left this an identity;
+ * `p7-002` filled in the body. It strips the three version markers from both
+ * payloads — `root.props.authoringSchemaVersion`, every carrier `version`, and
+ * the legacy `__anvilkitInstance` prop — through the one pure pass that also
+ * backs the store runner and the v1→v2 migration
+ * (`@anvilkit/core`'s `finalizeStoredDocument`). One definition of "finalized",
+ * three callers, so a document read on the fly and a document rewritten by the
+ * runner cannot disagree.
  *
  * On-read migration is **in memory only**; nothing is written back here. A
- * record is promoted on its next real write (every adapter write path stamps),
- * or wholesale by `p7-002`'s runner.
+ * record is promoted on its next real write (every adapter write path stamps
+ * {@link STORE_SCHEMA_REVISION}), or wholesale by the store-finalization runner
+ * (`apps/studio/scripts/finalize-store.ts`).
  *
- * The one thing it does today is make the returned record's type honest: a
- * below-floor record has no `schemaRevision` on disk, and handing a caller a
- * `PageRecord` whose required field is `undefined` at runtime is exactly the
- * kind of quiet lie that makes the next reader distrust the type. It carries
- * the revision it was **found** at, never the current one — a caller can still
- * tell an unmigrated record from a migrated one.
+ * **`schemaRevision` still carries the revision it was FOUND at**, never the
+ * current one — deliberately, and unchanged from `p7-001`. The record's
+ * *content* is finalized in memory; its *persisted* generation is not, and the
+ * field describes the record on disk. Reporting `STORE_SCHEMA_REVISION` here
+ * would tell a caller the store had been migrated when it had not, which is the
+ * one thing the field exists to answer.
+ *
+ * Structural sharing is preserved: a below-floor record whose payloads happen to
+ * be clean already comes back with the very same `draft`/`published`
+ * references, so routing costs an object spread rather than a document clone.
  */
 export function migratePageRecordOnRead(
 	record: PageRecord,
 	from: number,
 ): PageRecord {
-	return { ...record, schemaRevision: from };
+	const draft = finalizeStoredDocument(record.draft);
+	const published = finalizeStoredDocument(record.published);
+	return {
+		...record,
+		...(draft.changed ? { draft: draft.value } : {}),
+		...(published.changed ? { published: published.value } : {}),
+		schemaRevision: from,
+	};
 }
 
 /** Diagnostics already emitted, so a `list()` over N stale records warns N times, not N×reads. */

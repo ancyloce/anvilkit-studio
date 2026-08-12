@@ -17,37 +17,38 @@
  *   editor (§10.4 step 4 — failed records cannot enter the v2
  *   editor).
  *
- * ## Time-boxed: this whole module closes in `p7-002` / `p7-004`
+ * ## `p7-002` closed the version-marker tolerance; `p7-004` deletes
+ * this module
  *
  * PLAN-0026 §5 gives the canonical document **no version dimension**,
- * so the end state has exactly one shape and no guard. Two facts keep
- * this module alive until then, both verified 2026-08-10 and both
- * recorded here so the window reads as a decision rather than
- * inertia:
+ * so the end state has exactly one shape and no guard. Both of the
+ * facts that kept a *version tolerance* here are now settled:
  *
- * 1. **The classification is marker-driven, and the marker is still
- *    load-bearing.** `migrateToPuckNativeV2` answers `already-v2`
- *    only for a document carrying `root.props.authoringSchemaVersion`
- *    (`packages/runtime/core/src/migrations/puck-native-v2.ts:305`) —
- *    a key `p1-001` removed from the contract and no canonical writer
- *    emits. A canonical snapshot therefore classifies as `migrated`
- *    and the migration stamps the marker back on. That looks like a
- *    defect to remove, and it is **not safe to remove yet**: the
- *    legacy command port routes on the same marker
- *    (`core/src/react/editor/command-port.ts:387` and `:537`) and
- *    falls through to the *sidecar write path* without it, so a
- *    document stripped of the marker would gain a sidecar the first
- *    time a legacy command committed. The marker's last reader dies
- *    with the command engine in `p3-009`; the store loses it in
- *    `p7-002`; this module is deleted in `p7-004`. Until then the
- *    stamp is the safe behaviour, and `convertedLegacyState` on the
- *    `migrated` result is how a caller tells "nothing was converted"
- *    from "a pre-carrier snapshot was".
- * 2. **Both shapes must still be readable.** Snapshots written before
- *    the carrier cutover carry the sidecar; snapshots written since
- *    carry the canonical carriers, possibly with stale `version` keys
- *    that the `looseObject` schemas preserve and nothing reads. The
- *    tolerant parse is what accepts both, and `p7-002` closes it.
+ * 1. **Classification is no longer marker-driven.** Until `p7-002`,
+ *    `migrateToPuckNativeV2` answered `already-v2` only for a document
+ *    carrying `root.props.authoringSchemaVersion`, so a canonical
+ *    snapshot classified as `migrated` and the migration stamped the
+ *    marker back on. That was safe only because the legacy command
+ *    port routed on the same marker and fell through to the sidecar
+ *    write path without it. `p3-009` deleted the port; `p7-002`
+ *    deleted the stamp and moved the classification onto the fact that
+ *    decides it — **is there a `__anvilkit` sidecar to convert?** A
+ *    canonical document now returns `already-v2` and passes through by
+ *    reference. `convertedLegacyState` consequently means what it
+ *    says: it is `true` only when a pre-carrier snapshot was actually
+ *    converted.
+ * 2. **There is one document shape, and it has no version key.**
+ *    `p7-002`'s finalization pass runs inside the migration, so a
+ *    snapshot that still carried a stale `version`, an
+ *    `authoringSchemaVersion` or a `__anvilkitInstance` prop comes back
+ *    stripped rather than admitted as a second shape.
+ *
+ * What survives here is **not** a version tolerance. It is a
+ * *structural* one: a snapshot written before the carrier cutover
+ * still holds a `__anvilkit` sidecar, and converting it on read is the
+ * only reason this module exists. That form dies when `p7-004` runs
+ * the migration against production and deletes the migration layer,
+ * this module included.
  */
 
 import {
@@ -65,11 +66,13 @@ export type V2GuardResult =
 			/**
 			 * False when the guard converted **nothing** — no node state,
 			 * no orphan, no diagnostic and no root collection the input
-			 * did not already carry. That is what a canonical document
-			 * looks like coming out of a marker-driven classifier: the
-			 * only delta is the routing marker described in the file doc.
-			 * Callers use it so they do not report a canonical restore as
-			 * a legacy one.
+			 * did not already carry.
+			 *
+			 * Since `p7-002` a fully canonical document takes the `"ok"`
+			 * arm instead, so the remaining way to reach `"migrated"` with
+			 * this `false` is a document whose only delta was a version
+			 * marker the finalization pass stripped. Callers use it so they
+			 * do not report that as a legacy conversion.
 			 */
 			readonly convertedLegacyState: boolean;
 	  }
