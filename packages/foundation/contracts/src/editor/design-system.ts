@@ -4,10 +4,9 @@
  * Document-scoped, render-affecting state lives in DECLARED Puck root
  * props. There is one document form and it carries no version
  * vocabulary — neither these interfaces nor their schema mirrors have a
- * `version` member. Documents written before the rename may still carry
- * a stale `version` key; the schemas are `looseObject`, so it is
- * preserved as an unknown key and read by nothing, until `p7-002`
- * strips it from the store.
+ * `version` member. `p7-002` stripped the stale `version` key from
+ * every stored document; the schemas stay `looseObject` for generic
+ * forward compatibility, not for that key.
  *
  * `revision` deliberately does not exist here: Puck history owns
  * undo/redo and the page-storage record version owns cross-session

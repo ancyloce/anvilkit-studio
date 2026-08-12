@@ -15,21 +15,26 @@
  *
  * ---
  *
- * TOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE
- * (PLAN-0026 §5; PLAN-0028 `p1-006`).
+ * THE VERSION-KEY MIGRATION WINDOW IS CLOSED (`p7-002`).
+ * (PLAN-0026 §5; PLAN-0028 `p1-006`, closed by `p7-002`.)
  *
- * The canonical document has no version dimension. Until the store
- * migration runs in P7 (`p7-002`), a document written before
- * finalization may still carry a stale `version` key. These schemas
- * accept it — but only as *generic unknown-key preservation* falling
- * out of `looseObject`, never as a version branch. Nothing here reads
- * a `version` key to decide how to parse, and nothing may start:
- * a version branch in this directory is the sidecar returning under a
- * new name.
+ * The canonical document has no version dimension. `p1-006` removed the
+ * `version` literals from these schemas and left a stated window during
+ * which a stored document might still carry a stale `version` key;
+ * `p7-002`'s store migration stripped every one of them, so that window
+ * is closed and no document in contract carries the key any more.
  *
- * The window CLOSES in `p7-002`. When that task lands, this paragraph
- * and the tolerance it describes are removed together. Do not read
- * this as licence to keep supporting two document shapes.
+ * What remains is NOT the window. `looseObject` stays, because generic
+ * unknown-key preservation is a property PLAN-0026 §5 asks for on its
+ * own terms — forward compatibility, and compaction that never drops
+ * what it does not understand. A stale `version` arriving today is an
+ * out-of-contract artifact (see `finalize-document.ts` in
+ * `@anvilkit/core`), preserved by the same generic rule that preserves
+ * any other unknown key and read by nothing.
+ *
+ * The rule that has not changed: nothing here reads a `version` key to
+ * decide how to parse, and nothing may start. A version branch in this
+ * directory is the sidecar returning under a new name.
  *
  * `appearance.ts` — the canonical carrier — is already version-free
  * (`p1-001`). Seven `z.literal("1")` declarations survive elsewhere in
@@ -91,10 +96,10 @@ export {
 	DocumentComponentLibrarySchema,
 	EditorAnnotationSchema,
 	EditorAnnotationsSchema,
-	safeParseEditorAnnotations,
 	StyleTargetCapabilitySchema,
 	safeParseAppearance,
 	safeParseDesignSystem,
+	safeParseEditorAnnotations,
 	TargetAppearanceSchema,
 } from "./editor/appearance.js";
 export {

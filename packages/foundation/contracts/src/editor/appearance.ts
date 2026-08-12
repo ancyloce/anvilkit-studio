@@ -5,10 +5,10 @@
  * component props, keyed by named style target. There is one document
  * form and it carries no version vocabulary: these interfaces have no
  * `version` member, and the schema mirror does not require one.
- * Documents written before the rename may still carry a stale
- * `version` key — the schemas are `looseObject`, so it is preserved as
- * an unknown key and read by nothing, until `p7-002` strips it from
- * the store.
+ * `p7-002` stripped the stale `version` key from every stored
+ * document, so a document in contract no longer carries one; the
+ * schemas stay `looseObject` for generic forward compatibility, not
+ * for that key.
  *
  * Canonicalization rule (enforced by `@anvilkit/schema/editor`): an
  * appearance object with no effective content must canonicalize to

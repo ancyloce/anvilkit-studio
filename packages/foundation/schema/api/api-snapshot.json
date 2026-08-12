@@ -1498,7 +1498,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTHE VERSION-KEY MIGRATION WINDOW IS CLOSED ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n(PLAN-0026 §5; PLAN-0028 "
 									},
 									{
 										"kind": "code",
@@ -1506,7 +1514,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+										"text": ", closed by "
 									},
 									{
 										"kind": "code",
@@ -1514,7 +1522,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "), a document written before\nfinalization may still carry a stale "
+										"text": ".)\n\nThe canonical document has no version dimension. "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": " removed the\n"
 									},
 									{
 										"kind": "code",
@@ -1522,7 +1538,23 @@
 									},
 									{
 										"kind": "text",
-										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+										"text": " literals from these schemas and left a stated window during\nwhich a stored document might still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key;\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "'s store migration stripped every one of them, so that window\nis closed and no document in contract carries the key any more.\n\nWhat remains is NOT the window. "
 									},
 									{
 										"kind": "code",
@@ -1530,7 +1562,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ", never as a version branch. Nothing here reads\na "
+										"text": " stays, because generic\nunknown-key preservation is a property PLAN-0026 §5 asks for on its\nown terms — forward compatibility, and compaction that never drops\nwhat it does not understand. A stale "
 									},
 									{
 										"kind": "code",
@@ -1538,15 +1570,31 @@
 									},
 									{
 										"kind": "text",
-										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+										"text": " arriving today is an\nout-of-contract artifact (see "
 									},
 									{
 										"kind": "code",
-										"text": "`p7-002`"
+										"text": "`finalize-document.ts`"
 									},
 									{
 										"kind": "text",
-										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+										"text": " in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), preserved by the same generic rule that preserves\nany other unknown key and read by nothing.\n\nThe rule that has not changed: nothing here reads a "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to\ndecide how to parse, and nothing may start. A version branch in this\ndirectory is the sidecar returning under a new name.\n\n"
 									},
 									{
 										"kind": "code",
@@ -2472,7 +2520,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTHE VERSION-KEY MIGRATION WINDOW IS CLOSED ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n(PLAN-0026 §5; PLAN-0028 "
 									},
 									{
 										"kind": "code",
@@ -2480,7 +2536,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+										"text": ", closed by "
 									},
 									{
 										"kind": "code",
@@ -2488,7 +2544,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "), a document written before\nfinalization may still carry a stale "
+										"text": ".)\n\nThe canonical document has no version dimension. "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": " removed the\n"
 									},
 									{
 										"kind": "code",
@@ -2496,7 +2560,23 @@
 									},
 									{
 										"kind": "text",
-										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+										"text": " literals from these schemas and left a stated window during\nwhich a stored document might still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key;\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "'s store migration stripped every one of them, so that window\nis closed and no document in contract carries the key any more.\n\nWhat remains is NOT the window. "
 									},
 									{
 										"kind": "code",
@@ -2504,7 +2584,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ", never as a version branch. Nothing here reads\na "
+										"text": " stays, because generic\nunknown-key preservation is a property PLAN-0026 §5 asks for on its\nown terms — forward compatibility, and compaction that never drops\nwhat it does not understand. A stale "
 									},
 									{
 										"kind": "code",
@@ -2512,15 +2592,31 @@
 									},
 									{
 										"kind": "text",
-										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+										"text": " arriving today is an\nout-of-contract artifact (see "
 									},
 									{
 										"kind": "code",
-										"text": "`p7-002`"
+										"text": "`finalize-document.ts`"
 									},
 									{
 										"kind": "text",
-										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+										"text": " in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), preserved by the same generic rule that preserves\nany other unknown key and read by nothing.\n\nThe rule that has not changed: nothing here reads a "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to\ndecide how to parse, and nothing may start. A version branch in this\ndirectory is the sidecar returning under a new name.\n\n"
 									},
 									{
 										"kind": "code",
@@ -5480,7 +5576,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTHE VERSION-KEY MIGRATION WINDOW IS CLOSED ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n(PLAN-0026 §5; PLAN-0028 "
 									},
 									{
 										"kind": "code",
@@ -5488,7 +5592,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+										"text": ", closed by "
 									},
 									{
 										"kind": "code",
@@ -5496,7 +5600,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "), a document written before\nfinalization may still carry a stale "
+										"text": ".)\n\nThe canonical document has no version dimension. "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": " removed the\n"
 									},
 									{
 										"kind": "code",
@@ -5504,7 +5616,23 @@
 									},
 									{
 										"kind": "text",
-										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+										"text": " literals from these schemas and left a stated window during\nwhich a stored document might still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key;\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "'s store migration stripped every one of them, so that window\nis closed and no document in contract carries the key any more.\n\nWhat remains is NOT the window. "
 									},
 									{
 										"kind": "code",
@@ -5512,7 +5640,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ", never as a version branch. Nothing here reads\na "
+										"text": " stays, because generic\nunknown-key preservation is a property PLAN-0026 §5 asks for on its\nown terms — forward compatibility, and compaction that never drops\nwhat it does not understand. A stale "
 									},
 									{
 										"kind": "code",
@@ -5520,15 +5648,31 @@
 									},
 									{
 										"kind": "text",
-										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+										"text": " arriving today is an\nout-of-contract artifact (see "
 									},
 									{
 										"kind": "code",
-										"text": "`p7-002`"
+										"text": "`finalize-document.ts`"
 									},
 									{
 										"kind": "text",
-										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+										"text": " in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), preserved by the same generic rule that preserves\nany other unknown key and read by nothing.\n\nThe rule that has not changed: nothing here reads a "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to\ndecide how to parse, and nothing may start. A version branch in this\ndirectory is the sidecar returning under a new name.\n\n"
 									},
 									{
 										"kind": "code",
@@ -8085,7 +8229,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTHE VERSION-KEY MIGRATION WINDOW IS CLOSED ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n(PLAN-0026 §5; PLAN-0028 "
 									},
 									{
 										"kind": "code",
@@ -8093,7 +8245,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+										"text": ", closed by "
 									},
 									{
 										"kind": "code",
@@ -8101,7 +8253,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "), a document written before\nfinalization may still carry a stale "
+										"text": ".)\n\nThe canonical document has no version dimension. "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": " removed the\n"
 									},
 									{
 										"kind": "code",
@@ -8109,7 +8269,23 @@
 									},
 									{
 										"kind": "text",
-										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+										"text": " literals from these schemas and left a stated window during\nwhich a stored document might still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key;\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "'s store migration stripped every one of them, so that window\nis closed and no document in contract carries the key any more.\n\nWhat remains is NOT the window. "
 									},
 									{
 										"kind": "code",
@@ -8117,7 +8293,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ", never as a version branch. Nothing here reads\na "
+										"text": " stays, because generic\nunknown-key preservation is a property PLAN-0026 §5 asks for on its\nown terms — forward compatibility, and compaction that never drops\nwhat it does not understand. A stale "
 									},
 									{
 										"kind": "code",
@@ -8125,15 +8301,31 @@
 									},
 									{
 										"kind": "text",
-										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+										"text": " arriving today is an\nout-of-contract artifact (see "
 									},
 									{
 										"kind": "code",
-										"text": "`p7-002`"
+										"text": "`finalize-document.ts`"
 									},
 									{
 										"kind": "text",
-										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+										"text": " in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), preserved by the same generic rule that preserves\nany other unknown key and read by nothing.\n\nThe rule that has not changed: nothing here reads a "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to\ndecide how to parse, and nothing may start. A version branch in this\ndirectory is the sidecar returning under a new name.\n\n"
 									},
 									{
 										"kind": "code",
@@ -8723,7 +8915,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTHE VERSION-KEY MIGRATION WINDOW IS CLOSED ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n(PLAN-0026 §5; PLAN-0028 "
 									},
 									{
 										"kind": "code",
@@ -8731,7 +8931,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+										"text": ", closed by "
 									},
 									{
 										"kind": "code",
@@ -8739,7 +8939,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "), a document written before\nfinalization may still carry a stale "
+										"text": ".)\n\nThe canonical document has no version dimension. "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": " removed the\n"
 									},
 									{
 										"kind": "code",
@@ -8747,7 +8955,23 @@
 									},
 									{
 										"kind": "text",
-										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+										"text": " literals from these schemas and left a stated window during\nwhich a stored document might still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key;\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "'s store migration stripped every one of them, so that window\nis closed and no document in contract carries the key any more.\n\nWhat remains is NOT the window. "
 									},
 									{
 										"kind": "code",
@@ -8755,7 +8979,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ", never as a version branch. Nothing here reads\na "
+										"text": " stays, because generic\nunknown-key preservation is a property PLAN-0026 §5 asks for on its\nown terms — forward compatibility, and compaction that never drops\nwhat it does not understand. A stale "
 									},
 									{
 										"kind": "code",
@@ -8763,15 +8987,31 @@
 									},
 									{
 										"kind": "text",
-										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+										"text": " arriving today is an\nout-of-contract artifact (see "
 									},
 									{
 										"kind": "code",
-										"text": "`p7-002`"
+										"text": "`finalize-document.ts`"
 									},
 									{
 										"kind": "text",
-										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+										"text": " in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), preserved by the same generic rule that preserves\nany other unknown key and read by nothing.\n\nThe rule that has not changed: nothing here reads a "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to\ndecide how to parse, and nothing may start. A version branch in this\ndirectory is the sidecar returning under a new name.\n\n"
 									},
 									{
 										"kind": "code",
@@ -9273,7 +9513,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTHE VERSION-KEY MIGRATION WINDOW IS CLOSED ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n(PLAN-0026 §5; PLAN-0028 "
 									},
 									{
 										"kind": "code",
@@ -9281,7 +9529,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+										"text": ", closed by "
 									},
 									{
 										"kind": "code",
@@ -9289,7 +9537,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "), a document written before\nfinalization may still carry a stale "
+										"text": ".)\n\nThe canonical document has no version dimension. "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": " removed the\n"
 									},
 									{
 										"kind": "code",
@@ -9297,7 +9553,23 @@
 									},
 									{
 										"kind": "text",
-										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+										"text": " literals from these schemas and left a stated window during\nwhich a stored document might still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key;\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "'s store migration stripped every one of them, so that window\nis closed and no document in contract carries the key any more.\n\nWhat remains is NOT the window. "
 									},
 									{
 										"kind": "code",
@@ -9305,7 +9577,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ", never as a version branch. Nothing here reads\na "
+										"text": " stays, because generic\nunknown-key preservation is a property PLAN-0026 §5 asks for on its\nown terms — forward compatibility, and compaction that never drops\nwhat it does not understand. A stale "
 									},
 									{
 										"kind": "code",
@@ -9313,15 +9585,31 @@
 									},
 									{
 										"kind": "text",
-										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+										"text": " arriving today is an\nout-of-contract artifact (see "
 									},
 									{
 										"kind": "code",
-										"text": "`p7-002`"
+										"text": "`finalize-document.ts`"
 									},
 									{
 										"kind": "text",
-										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+										"text": " in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), preserved by the same generic rule that preserves\nany other unknown key and read by nothing.\n\nThe rule that has not changed: nothing here reads a "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to\ndecide how to parse, and nothing may start. A version branch in this\ndirectory is the sidecar returning under a new name.\n\n"
 									},
 									{
 										"kind": "code",
@@ -11556,7 +11844,7 @@
 					"defaultValue": "..."
 				},
 				{
-					"id": 69,
+					"id": 66,
 					"name": "StyleTargetCapabilitySchema",
 					"variant": "declaration",
 					"kind": 32,
@@ -11619,7 +11907,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTHE VERSION-KEY MIGRATION WINDOW IS CLOSED ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n(PLAN-0026 §5; PLAN-0028 "
 									},
 									{
 										"kind": "code",
@@ -11627,7 +11923,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+										"text": ", closed by "
 									},
 									{
 										"kind": "code",
@@ -11635,7 +11931,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "), a document written before\nfinalization may still carry a stale "
+										"text": ".)\n\nThe canonical document has no version dimension. "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": " removed the\n"
 									},
 									{
 										"kind": "code",
@@ -11643,7 +11947,23 @@
 									},
 									{
 										"kind": "text",
-										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+										"text": " literals from these schemas and left a stated window during\nwhich a stored document might still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key;\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "'s store migration stripped every one of them, so that window\nis closed and no document in contract carries the key any more.\n\nWhat remains is NOT the window. "
 									},
 									{
 										"kind": "code",
@@ -11651,7 +11971,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ", never as a version branch. Nothing here reads\na "
+										"text": " stays, because generic\nunknown-key preservation is a property PLAN-0026 §5 asks for on its\nown terms — forward compatibility, and compaction that never drops\nwhat it does not understand. A stale "
 									},
 									{
 										"kind": "code",
@@ -11659,15 +11979,31 @@
 									},
 									{
 										"kind": "text",
-										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+										"text": " arriving today is an\nout-of-contract artifact (see "
 									},
 									{
 										"kind": "code",
-										"text": "`p7-002`"
+										"text": "`finalize-document.ts`"
 									},
 									{
 										"kind": "text",
-										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+										"text": " in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), preserved by the same generic rule that preserves\nany other unknown key and read by nothing.\n\nThe rule that has not changed: nothing here reads a "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to\ndecide how to parse, and nothing may start. A version branch in this\ndirectory is the sidecar returning under a new name.\n\n"
 									},
 									{
 										"kind": "code",
@@ -11996,14 +12332,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 70,
+									"id": 67,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 71,
+											"id": 68,
 											"name": "label",
 											"variant": "declaration",
 											"kind": 1024,
@@ -12021,7 +12357,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 72,
+											"id": 69,
 											"name": "properties",
 											"variant": "declaration",
 											"kind": 1024,
@@ -12093,7 +12429,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 73,
+											"id": 70,
 											"name": "responsive",
 											"variant": "declaration",
 											"kind": 1024,
@@ -12127,9 +12463,9 @@
 										{
 											"title": "Properties",
 											"children": [
-												71,
-												72,
-												73
+												68,
+												69,
+												70
 											]
 										}
 									]
@@ -12215,7 +12551,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTHE VERSION-KEY MIGRATION WINDOW IS CLOSED ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n(PLAN-0026 §5; PLAN-0028 "
 									},
 									{
 										"kind": "code",
@@ -12223,7 +12567,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+										"text": ", closed by "
 									},
 									{
 										"kind": "code",
@@ -12231,7 +12575,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "), a document written before\nfinalization may still carry a stale "
+										"text": ".)\n\nThe canonical document has no version dimension. "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": " removed the\n"
 									},
 									{
 										"kind": "code",
@@ -12239,7 +12591,23 @@
 									},
 									{
 										"kind": "text",
-										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+										"text": " literals from these schemas and left a stated window during\nwhich a stored document might still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key;\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "'s store migration stripped every one of them, so that window\nis closed and no document in contract carries the key any more.\n\nWhat remains is NOT the window. "
 									},
 									{
 										"kind": "code",
@@ -12247,7 +12615,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ", never as a version branch. Nothing here reads\na "
+										"text": " stays, because generic\nunknown-key preservation is a property PLAN-0026 §5 asks for on its\nown terms — forward compatibility, and compaction that never drops\nwhat it does not understand. A stale "
 									},
 									{
 										"kind": "code",
@@ -12255,15 +12623,31 @@
 									},
 									{
 										"kind": "text",
-										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+										"text": " arriving today is an\nout-of-contract artifact (see "
 									},
 									{
 										"kind": "code",
-										"text": "`p7-002`"
+										"text": "`finalize-document.ts`"
 									},
 									{
 										"kind": "text",
-										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+										"text": " in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), preserved by the same generic rule that preserves\nany other unknown key and read by nothing.\n\nThe rule that has not changed: nothing here reads a "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to\ndecide how to parse, and nothing may start. A version branch in this\ndirectory is the sidecar returning under a new name.\n\n"
 									},
 									{
 										"kind": "code",
@@ -14131,7 +14515,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTHE VERSION-KEY MIGRATION WINDOW IS CLOSED ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n(PLAN-0026 §5; PLAN-0028 "
 									},
 									{
 										"kind": "code",
@@ -14139,7 +14531,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+										"text": ", closed by "
 									},
 									{
 										"kind": "code",
@@ -14147,7 +14539,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "), a document written before\nfinalization may still carry a stale "
+										"text": ".)\n\nThe canonical document has no version dimension. "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": " removed the\n"
 									},
 									{
 										"kind": "code",
@@ -14155,7 +14555,23 @@
 									},
 									{
 										"kind": "text",
-										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+										"text": " literals from these schemas and left a stated window during\nwhich a stored document might still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key;\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "'s store migration stripped every one of them, so that window\nis closed and no document in contract carries the key any more.\n\nWhat remains is NOT the window. "
 									},
 									{
 										"kind": "code",
@@ -14163,7 +14579,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ", never as a version branch. Nothing here reads\na "
+										"text": " stays, because generic\nunknown-key preservation is a property PLAN-0026 §5 asks for on its\nown terms — forward compatibility, and compaction that never drops\nwhat it does not understand. A stale "
 									},
 									{
 										"kind": "code",
@@ -14171,15 +14587,31 @@
 									},
 									{
 										"kind": "text",
-										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+										"text": " arriving today is an\nout-of-contract artifact (see "
 									},
 									{
 										"kind": "code",
-										"text": "`p7-002`"
+										"text": "`finalize-document.ts`"
 									},
 									{
 										"kind": "text",
-										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+										"text": " in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), preserved by the same generic rule that preserves\nany other unknown key and read by nothing.\n\nThe rule that has not changed: nothing here reads a "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to\ndecide how to parse, and nothing may start. A version branch in this\ndirectory is the sidecar returning under a new name.\n\n"
 									},
 									{
 										"kind": "code",
@@ -15589,7 +16021,7 @@
 					]
 				},
 				{
-					"id": 74,
+					"id": 71,
 					"name": "safeParseAppearance",
 					"variant": "declaration",
 					"kind": 64,
@@ -15650,7 +16082,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTHE VERSION-KEY MIGRATION WINDOW IS CLOSED ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n(PLAN-0026 §5; PLAN-0028 "
 									},
 									{
 										"kind": "code",
@@ -15658,7 +16098,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+										"text": ", closed by "
 									},
 									{
 										"kind": "code",
@@ -15666,7 +16106,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "), a document written before\nfinalization may still carry a stale "
+										"text": ".)\n\nThe canonical document has no version dimension. "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": " removed the\n"
 									},
 									{
 										"kind": "code",
@@ -15674,7 +16122,23 @@
 									},
 									{
 										"kind": "text",
-										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+										"text": " literals from these schemas and left a stated window during\nwhich a stored document might still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key;\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "'s store migration stripped every one of them, so that window\nis closed and no document in contract carries the key any more.\n\nWhat remains is NOT the window. "
 									},
 									{
 										"kind": "code",
@@ -15682,7 +16146,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ", never as a version branch. Nothing here reads\na "
+										"text": " stays, because generic\nunknown-key preservation is a property PLAN-0026 §5 asks for on its\nown terms — forward compatibility, and compaction that never drops\nwhat it does not understand. A stale "
 									},
 									{
 										"kind": "code",
@@ -15690,15 +16154,31 @@
 									},
 									{
 										"kind": "text",
-										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+										"text": " arriving today is an\nout-of-contract artifact (see "
 									},
 									{
 										"kind": "code",
-										"text": "`p7-002`"
+										"text": "`finalize-document.ts`"
 									},
 									{
 										"kind": "text",
-										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+										"text": " in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), preserved by the same generic rule that preserves\nany other unknown key and read by nothing.\n\nThe rule that has not changed: nothing here reads a "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to\ndecide how to parse, and nothing may start. A version branch in this\ndirectory is the sidecar returning under a new name.\n\n"
 									},
 									{
 										"kind": "code",
@@ -16018,14 +16498,14 @@
 					},
 					"signatures": [
 						{
-							"id": 75,
+							"id": 72,
 							"name": "safeParseAppearance",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
 							"parameters": [
 								{
-									"id": 76,
+									"id": 73,
 									"name": "value",
 									"variant": "param",
 									"kind": 32768,
@@ -16486,7 +16966,7 @@
 					]
 				},
 				{
-					"id": 77,
+					"id": 74,
 					"name": "safeParseDesignSystem",
 					"variant": "declaration",
 					"kind": 64,
@@ -16547,7 +17027,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTHE VERSION-KEY MIGRATION WINDOW IS CLOSED ("
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n(PLAN-0026 §5; PLAN-0028 "
 									},
 									{
 										"kind": "code",
@@ -16555,7 +17043,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
+										"text": ", closed by "
 									},
 									{
 										"kind": "code",
@@ -16563,7 +17051,15 @@
 									},
 									{
 										"kind": "text",
-										"text": "), a document written before\nfinalization may still carry a stale "
+										"text": ".)\n\nThe canonical document has no version dimension. "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": " removed the\n"
 									},
 									{
 										"kind": "code",
@@ -16571,7 +17067,23 @@
 									},
 									{
 										"kind": "text",
-										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
+										"text": " literals from these schemas and left a stated window during\nwhich a stored document might still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key;\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "'s store migration stripped every one of them, so that window\nis closed and no document in contract carries the key any more.\n\nWhat remains is NOT the window. "
 									},
 									{
 										"kind": "code",
@@ -16579,7 +17091,7 @@
 									},
 									{
 										"kind": "text",
-										"text": ", never as a version branch. Nothing here reads\na "
+										"text": " stays, because generic\nunknown-key preservation is a property PLAN-0026 §5 asks for on its\nown terms — forward compatibility, and compaction that never drops\nwhat it does not understand. A stale "
 									},
 									{
 										"kind": "code",
@@ -16587,7 +17099,456 @@
 									},
 									{
 										"kind": "text",
-										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
+										"text": " arriving today is an\nout-of-contract artifact (see "
+									},
+									{
+										"kind": "code",
+										"text": "`finalize-document.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), preserved by the same generic rule that preserves\nany other unknown key and read by nothing.\n\nThe rule that has not changed: nothing here reads a "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to\ndecide how to parse, and nothing may start. A version branch in this\ndirectory is the sidecar returning under a new name.\n\n"
+									},
+									{
+										"kind": "code",
+										"text": "`appearance.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " — the canonical carrier — is already version-free\n("
+									},
+									{
+										"kind": "code",
+										"text": "`p1-001`"
+									},
+									{
+										"kind": "text",
+										"text": "). Seven "
+									},
+									{
+										"kind": "code",
+										"text": "`z.literal(\"1\")`"
+									},
+									{
+										"kind": "text",
+										"text": " declarations survive elsewhere in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`./editor/`"
+									},
+									{
+										"kind": "text",
+										"text": ", in two groups. Both are deliberate; neither is dead\nvocabulary someone forgot.\n\nGROUP 1 — the legacy "
+									},
+									{
+										"kind": "code",
+										"text": "`__anvilkit`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar, not the canonical\ndocument.\n\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p3-009`"
+									},
+									{
+										"kind": "text",
+										"text": " deleted "
+									},
+									{
+										"kind": "code",
+										"text": "`packages/runtime/core/src/editor/read-write.ts`"
+									},
+									{
+										"kind": "text",
+										"text": "\nand re-ran "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": "'s consumer check. The prediction that this would\nfree "
+									},
+									{
+										"kind": "code",
+										"text": "`envelope.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`compact.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " did **not** hold, for two\nindependent reasons, so all four modules are RETAINED:\n\n1. "
+									},
+									{
+										"kind": "code",
+										"text": "`compact.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " is imported by "
+									},
+									{
+										"kind": "code",
+										"text": "`canonical-serialize.ts:20`"
+									},
+									{
+										"kind": "text",
+										"text": ", which\n   "
+									},
+									{
+										"kind": "code",
+										"text": "`p8-006`"
+									},
+									{
+										"kind": "text",
+										"text": " owns — it was never "
+									},
+									{
+										"kind": "code",
+										"text": "`read-write.ts`"
+									},
+									{
+										"kind": "text",
+										"text": "'s to free.\n2. The sidecar reader itself survives, re-homed as\n   "
+									},
+									{
+										"kind": "code",
+										"text": "`packages/runtime/core/src/migrations/legacy-sidecar.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ". The\n   v1→v2 migration's whole job is to read a legacy sidecar, so it is\n   a second production consumer of "
+									},
+									{
+										"kind": "code",
+										"text": "`detectAuthoringVersion`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n   "
+									},
+									{
+										"kind": "code",
+										"text": "`safeParseAuthoringState`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`normalizeAuthoringState`"
+									},
+									{
+										"kind": "text",
+										"text": ". "
+									},
+									{
+										"kind": "code",
+										"text": "`p7-004`"
+									},
+									{
+										"kind": "text",
+										"text": "\n   deletes it with the migration.\n\nRetiring this group is therefore one change, owned by "
+									},
+									{
+										"kind": "code",
+										"text": "`p8-006`"
+									},
+									{
+										"kind": "text",
+										"text": " /\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-004`"
+									},
+									{
+										"kind": "text",
+										"text": ", and it is a **breaking** change to this published barrel\nneeding its own changeset — not four independent prunes:\n\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`envelope.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keeps its literal because "
+									},
+									{
+										"kind": "code",
+										"text": "`detectAuthoringVersion`"
+									},
+									{
+										"kind": "text",
+										"text": "\n  is what classifies an "
+									},
+									{
+										"kind": "code",
+										"text": "`unsupported-major`"
+									},
+									{
+										"kind": "text",
+										"text": " sidecar into read-only\n  safe mode. That literal is the DD-0019 invariant-9 guard that\n  stops a future-major sidecar being parsed and then overwritten;\n  removing it converts a refusal into silent data loss.\n- "
+									},
+									{
+										"kind": "code",
+										"text": "`authoring-state.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " and "
+									},
+									{
+										"kind": "code",
+										"text": "`node.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " keep theirs because they\n  validate that same sidecar, which genuinely *is* version 1.\n\nGROUP 2 — "
+									},
+									{
+										"kind": "code",
+										"text": "`components.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts`"
+									},
+									{
+										"kind": "text",
+										"text": ". These *are* canonical document sub-shapes\nand their literals are scheduled to go, but they cannot go from this\npackage alone: each schema is annotated "
+									},
+									{
+										"kind": "code",
+										"text": "`z.ZodType<T>`"
+									},
+									{
+										"kind": "text",
+										"text": " against a\ncontracts interface that still declares "
+									},
+									{
+										"kind": "code",
+										"text": "`readonly version: \"1\"`"
+									},
+									{
+										"kind": "text",
+										"text": "\n("
+									},
+									{
+										"kind": "code",
+										"text": "`contracts/src/editor/components.ts:88`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`interactions.ts:105`"
+									},
+									{
+										"kind": "text",
+										"text": ",\n"
+									},
+									{
+										"kind": "code",
+										"text": "`bindings.ts:59`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`style-definitions.ts:30`"
+									},
+									{
+										"kind": "text",
+										"text": "). "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-002`"
+									},
+									{
+										"kind": "text",
+										"text": " renamed those\ntypes but was scoped to renames only. Dropping the literal here\nalone is a hard "
+									},
+									{
+										"kind": "code",
+										"text": "`TS2322`"
+									},
+									{
+										"kind": "text",
+										"text": " — verified 2026-08-06 by doing it:\n\"Property 'version' is missing ... but required in type 'Binding'\".\nContracts and schema must drop it in one change, together with every\nfresh-object-literal construction site (excess-property checking\nmakes each one an error), several of which live in submodules.\nTracked as a follow-up on "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": "; not silently deferred."
+									}
+								]
+							}
+						]
+					},
+					"signatures": [
+						{
+							"id": 75,
+							"name": "safeParseDesignSystem",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"parameters": [
+								{
+									"id": 76,
+									"name": "value",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "unknown"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "zod",
+									"packagePath": "v4/classic/parse.d.cts",
+									"qualifiedName": "ZodSafeParseResult"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/contracts",
+											"packagePath": "src/editor/design-system.ts",
+											"qualifiedName": "DesignSystem"
+										},
+										"name": "DesignSystem",
+										"package": "@anvilkit/contracts"
+									}
+								],
+								"name": "ZodSafeParseResult",
+								"package": "zod"
+							}
+						}
+					]
+				},
+				{
+					"id": 77,
+					"name": "safeParseEditorAnnotations",
+					"variant": "declaration",
+					"kind": 64,
+					"flags": {},
+					"comment": {
+						"summary": [],
+						"blockTags": [
+							{
+								"tag": "@file",
+								"content": [
+									{
+										"kind": "text",
+										"text": "Barrel for "
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/schema/editor`"
+									},
+									{
+										"kind": "text",
+										"text": " — versioned zod\nvalidation, compaction, migration, and canonical serialization for\nthe AnvilKit Core visual editor sidecar (DD-0019; PLAN-0020\nCORE-P0-005A..F, CORE-P0-006).\n\nResolves through the package's existing "
+									},
+									{
+										"kind": "code",
+										"text": "`./*`"
+									},
+									{
+										"kind": "text",
+										"text": " wildcard export as\n"
+									},
+									{
+										"kind": "code",
+										"text": "`dist/editor.js`"
+									},
+									{
+										"kind": "text",
+										"text": "; deep module imports\n("
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/schema/editor/<module>`"
+									},
+									{
+										"kind": "text",
+										"text": ") resolve the same way.\n\nTypes come from "
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/contracts/editor`"
+									},
+									{
+										"kind": "text",
+										"text": "; this package owns the\n**runtime** validation surface. Object schemas are "
+									},
+									{
+										"kind": "code",
+										"text": "`looseObject`"
+									},
+									{
+										"kind": "text",
+										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTHE VERSION-KEY MIGRATION WINDOW IS CLOSED ("
 									},
 									{
 										"kind": "code",
@@ -16595,7 +17556,95 @@
 									},
 									{
 										"kind": "text",
-										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
+										"text": ").\n(PLAN-0026 §5; PLAN-0028 "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": ", closed by "
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": ".)\n\nThe canonical document has no version dimension. "
+									},
+									{
+										"kind": "code",
+										"text": "`p1-006`"
+									},
+									{
+										"kind": "text",
+										"text": " removed the\n"
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " literals from these schemas and left a stated window during\nwhich a stored document might still carry a stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key;\n"
+									},
+									{
+										"kind": "code",
+										"text": "`p7-002`"
+									},
+									{
+										"kind": "text",
+										"text": "'s store migration stripped every one of them, so that window\nis closed and no document in contract carries the key any more.\n\nWhat remains is NOT the window. "
+									},
+									{
+										"kind": "code",
+										"text": "`looseObject`"
+									},
+									{
+										"kind": "text",
+										"text": " stays, because generic\nunknown-key preservation is a property PLAN-0026 §5 asks for on its\nown terms — forward compatibility, and compaction that never drops\nwhat it does not understand. A stale "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " arriving today is an\nout-of-contract artifact (see "
+									},
+									{
+										"kind": "code",
+										"text": "`finalize-document.ts`"
+									},
+									{
+										"kind": "text",
+										"text": " in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), preserved by the same generic rule that preserves\nany other unknown key and read by nothing.\n\nThe rule that has not changed: nothing here reads a "
+									},
+									{
+										"kind": "code",
+										"text": "`version`"
+									},
+									{
+										"kind": "text",
+										"text": " key to\ndecide how to parse, and nothing may start. A version branch in this\ndirectory is the sidecar returning under a new name.\n\n"
 									},
 									{
 										"kind": "code",
@@ -16916,479 +17965,6 @@
 					"signatures": [
 						{
 							"id": 78,
-							"name": "safeParseDesignSystem",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"parameters": [
-								{
-									"id": 79,
-									"name": "value",
-									"variant": "param",
-									"kind": 32768,
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "unknown"
-									}
-								}
-							],
-							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "zod",
-									"packagePath": "v4/classic/parse.d.cts",
-									"qualifiedName": "ZodSafeParseResult"
-								},
-								"typeArguments": [
-									{
-										"type": "reference",
-										"target": {
-											"packageName": "@anvilkit/contracts",
-											"packagePath": "src/editor/design-system.ts",
-											"qualifiedName": "DesignSystem"
-										},
-										"name": "DesignSystem",
-										"package": "@anvilkit/contracts"
-									}
-								],
-								"name": "ZodSafeParseResult",
-								"package": "zod"
-							}
-						}
-					]
-				},
-				{
-					"id": 66,
-					"name": "safeParseEditorAnnotations",
-					"variant": "declaration",
-					"kind": 64,
-					"flags": {},
-					"comment": {
-						"summary": [],
-						"blockTags": [
-							{
-								"tag": "@file",
-								"content": [
-									{
-										"kind": "text",
-										"text": "Barrel for "
-									},
-									{
-										"kind": "code",
-										"text": "`@anvilkit/schema/editor`"
-									},
-									{
-										"kind": "text",
-										"text": " — versioned zod\nvalidation, compaction, migration, and canonical serialization for\nthe AnvilKit Core visual editor sidecar (DD-0019; PLAN-0020\nCORE-P0-005A..F, CORE-P0-006).\n\nResolves through the package's existing "
-									},
-									{
-										"kind": "code",
-										"text": "`./*`"
-									},
-									{
-										"kind": "text",
-										"text": " wildcard export as\n"
-									},
-									{
-										"kind": "code",
-										"text": "`dist/editor.js`"
-									},
-									{
-										"kind": "text",
-										"text": "; deep module imports\n("
-									},
-									{
-										"kind": "code",
-										"text": "`@anvilkit/schema/editor/<module>`"
-									},
-									{
-										"kind": "text",
-										"text": ") resolve the same way.\n\nTypes come from "
-									},
-									{
-										"kind": "code",
-										"text": "`@anvilkit/contracts/editor`"
-									},
-									{
-										"kind": "text",
-										"text": "; this package owns the\n**runtime** validation surface. Object schemas are "
-									},
-									{
-										"kind": "code",
-										"text": "`looseObject`"
-									},
-									{
-										"kind": "text",
-										"text": "\nthroughout: unknown keys are preserved for forward compatibility\nand compaction never drops them.\n\n---\n\nTOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE\n(PLAN-0026 §5; PLAN-0028 "
-									},
-									{
-										"kind": "code",
-										"text": "`p1-006`"
-									},
-									{
-										"kind": "text",
-										"text": ").\n\nThe canonical document has no version dimension. Until the store\nmigration runs in P7 ("
-									},
-									{
-										"kind": "code",
-										"text": "`p7-002`"
-									},
-									{
-										"kind": "text",
-										"text": "), a document written before\nfinalization may still carry a stale "
-									},
-									{
-										"kind": "code",
-										"text": "`version`"
-									},
-									{
-										"kind": "text",
-										"text": " key. These schemas\naccept it — but only as *generic unknown-key preservation* falling\nout of "
-									},
-									{
-										"kind": "code",
-										"text": "`looseObject`"
-									},
-									{
-										"kind": "text",
-										"text": ", never as a version branch. Nothing here reads\na "
-									},
-									{
-										"kind": "code",
-										"text": "`version`"
-									},
-									{
-										"kind": "text",
-										"text": " key to decide how to parse, and nothing may start:\na version branch in this directory is the sidecar returning under a\nnew name.\n\nThe window CLOSES in "
-									},
-									{
-										"kind": "code",
-										"text": "`p7-002`"
-									},
-									{
-										"kind": "text",
-										"text": ". When that task lands, this paragraph\nand the tolerance it describes are removed together. Do not read\nthis as licence to keep supporting two document shapes.\n\n"
-									},
-									{
-										"kind": "code",
-										"text": "`appearance.ts`"
-									},
-									{
-										"kind": "text",
-										"text": " — the canonical carrier — is already version-free\n("
-									},
-									{
-										"kind": "code",
-										"text": "`p1-001`"
-									},
-									{
-										"kind": "text",
-										"text": "). Seven "
-									},
-									{
-										"kind": "code",
-										"text": "`z.literal(\"1\")`"
-									},
-									{
-										"kind": "text",
-										"text": " declarations survive elsewhere in\n"
-									},
-									{
-										"kind": "code",
-										"text": "`./editor/`"
-									},
-									{
-										"kind": "text",
-										"text": ", in two groups. Both are deliberate; neither is dead\nvocabulary someone forgot.\n\nGROUP 1 — the legacy "
-									},
-									{
-										"kind": "code",
-										"text": "`__anvilkit`"
-									},
-									{
-										"kind": "text",
-										"text": " sidecar, not the canonical\ndocument.\n\n"
-									},
-									{
-										"kind": "code",
-										"text": "`p3-009`"
-									},
-									{
-										"kind": "text",
-										"text": " deleted "
-									},
-									{
-										"kind": "code",
-										"text": "`packages/runtime/core/src/editor/read-write.ts`"
-									},
-									{
-										"kind": "text",
-										"text": "\nand re-ran "
-									},
-									{
-										"kind": "code",
-										"text": "`p1-006`"
-									},
-									{
-										"kind": "text",
-										"text": "'s consumer check. The prediction that this would\nfree "
-									},
-									{
-										"kind": "code",
-										"text": "`envelope.ts`"
-									},
-									{
-										"kind": "text",
-										"text": " and "
-									},
-									{
-										"kind": "code",
-										"text": "`compact.ts`"
-									},
-									{
-										"kind": "text",
-										"text": " did **not** hold, for two\nindependent reasons, so all four modules are RETAINED:\n\n1. "
-									},
-									{
-										"kind": "code",
-										"text": "`compact.ts`"
-									},
-									{
-										"kind": "text",
-										"text": " is imported by "
-									},
-									{
-										"kind": "code",
-										"text": "`canonical-serialize.ts:20`"
-									},
-									{
-										"kind": "text",
-										"text": ", which\n   "
-									},
-									{
-										"kind": "code",
-										"text": "`p8-006`"
-									},
-									{
-										"kind": "text",
-										"text": " owns — it was never "
-									},
-									{
-										"kind": "code",
-										"text": "`read-write.ts`"
-									},
-									{
-										"kind": "text",
-										"text": "'s to free.\n2. The sidecar reader itself survives, re-homed as\n   "
-									},
-									{
-										"kind": "code",
-										"text": "`packages/runtime/core/src/migrations/legacy-sidecar.ts`"
-									},
-									{
-										"kind": "text",
-										"text": ". The\n   v1→v2 migration's whole job is to read a legacy sidecar, so it is\n   a second production consumer of "
-									},
-									{
-										"kind": "code",
-										"text": "`detectAuthoringVersion`"
-									},
-									{
-										"kind": "text",
-										"text": ",\n   "
-									},
-									{
-										"kind": "code",
-										"text": "`safeParseAuthoringState`"
-									},
-									{
-										"kind": "text",
-										"text": " and "
-									},
-									{
-										"kind": "code",
-										"text": "`normalizeAuthoringState`"
-									},
-									{
-										"kind": "text",
-										"text": ". "
-									},
-									{
-										"kind": "code",
-										"text": "`p7-004`"
-									},
-									{
-										"kind": "text",
-										"text": "\n   deletes it with the migration.\n\nRetiring this group is therefore one change, owned by "
-									},
-									{
-										"kind": "code",
-										"text": "`p8-006`"
-									},
-									{
-										"kind": "text",
-										"text": " /\n"
-									},
-									{
-										"kind": "code",
-										"text": "`p7-004`"
-									},
-									{
-										"kind": "text",
-										"text": ", and it is a **breaking** change to this published barrel\nneeding its own changeset — not four independent prunes:\n\n- "
-									},
-									{
-										"kind": "code",
-										"text": "`envelope.ts`"
-									},
-									{
-										"kind": "text",
-										"text": " keeps its literal because "
-									},
-									{
-										"kind": "code",
-										"text": "`detectAuthoringVersion`"
-									},
-									{
-										"kind": "text",
-										"text": "\n  is what classifies an "
-									},
-									{
-										"kind": "code",
-										"text": "`unsupported-major`"
-									},
-									{
-										"kind": "text",
-										"text": " sidecar into read-only\n  safe mode. That literal is the DD-0019 invariant-9 guard that\n  stops a future-major sidecar being parsed and then overwritten;\n  removing it converts a refusal into silent data loss.\n- "
-									},
-									{
-										"kind": "code",
-										"text": "`authoring-state.ts`"
-									},
-									{
-										"kind": "text",
-										"text": " and "
-									},
-									{
-										"kind": "code",
-										"text": "`node.ts`"
-									},
-									{
-										"kind": "text",
-										"text": " keep theirs because they\n  validate that same sidecar, which genuinely *is* version 1.\n\nGROUP 2 — "
-									},
-									{
-										"kind": "code",
-										"text": "`components.ts`"
-									},
-									{
-										"kind": "text",
-										"text": ", "
-									},
-									{
-										"kind": "code",
-										"text": "`interactions.ts`"
-									},
-									{
-										"kind": "text",
-										"text": ", "
-									},
-									{
-										"kind": "code",
-										"text": "`bindings.ts`"
-									},
-									{
-										"kind": "text",
-										"text": ",\n"
-									},
-									{
-										"kind": "code",
-										"text": "`style-definitions.ts`"
-									},
-									{
-										"kind": "text",
-										"text": ". These *are* canonical document sub-shapes\nand their literals are scheduled to go, but they cannot go from this\npackage alone: each schema is annotated "
-									},
-									{
-										"kind": "code",
-										"text": "`z.ZodType<T>`"
-									},
-									{
-										"kind": "text",
-										"text": " against a\ncontracts interface that still declares "
-									},
-									{
-										"kind": "code",
-										"text": "`readonly version: \"1\"`"
-									},
-									{
-										"kind": "text",
-										"text": "\n("
-									},
-									{
-										"kind": "code",
-										"text": "`contracts/src/editor/components.ts:88`"
-									},
-									{
-										"kind": "text",
-										"text": ", "
-									},
-									{
-										"kind": "code",
-										"text": "`interactions.ts:105`"
-									},
-									{
-										"kind": "text",
-										"text": ",\n"
-									},
-									{
-										"kind": "code",
-										"text": "`bindings.ts:59`"
-									},
-									{
-										"kind": "text",
-										"text": ", "
-									},
-									{
-										"kind": "code",
-										"text": "`style-definitions.ts:30`"
-									},
-									{
-										"kind": "text",
-										"text": "). "
-									},
-									{
-										"kind": "code",
-										"text": "`p1-002`"
-									},
-									{
-										"kind": "text",
-										"text": " renamed those\ntypes but was scoped to renames only. Dropping the literal here\nalone is a hard "
-									},
-									{
-										"kind": "code",
-										"text": "`TS2322`"
-									},
-									{
-										"kind": "text",
-										"text": " — verified 2026-08-06 by doing it:\n\"Property 'version' is missing ... but required in type 'Binding'\".\nContracts and schema must drop it in one change, together with every\nfresh-object-literal construction site (excess-property checking\nmakes each one an error), several of which live in submodules.\nTracked as a follow-up on "
-									},
-									{
-										"kind": "code",
-										"text": "`p1-006`"
-									},
-									{
-										"kind": "text",
-										"text": "; not silently deferred."
-									}
-								]
-							}
-						]
-					},
-					"signatures": [
-						{
-							"id": 67,
 							"name": "safeParseEditorAnnotations",
 							"variant": "signature",
 							"kind": 4096,
@@ -17411,7 +17987,7 @@
 							},
 							"parameters": [
 								{
-									"id": 68,
+									"id": 79,
 									"name": "value",
 									"variant": "param",
 									"kind": 32768,
@@ -17717,7 +18293,7 @@
 						171,
 						466,
 						467,
-						69,
+						66,
 						80,
 						476,
 						477,
@@ -17748,11 +18324,11 @@
 						120,
 						368,
 						358,
-						74,
+						71,
 						201,
 						84,
+						74,
 						77,
-						66,
 						172
 					]
 				}
@@ -19476,52 +20052,52 @@
 		"66": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/editor/appearance.ts",
-			"qualifiedName": "safeParseEditorAnnotations"
-		},
-		"67": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/editor/appearance.ts",
-			"qualifiedName": "safeParseEditorAnnotations"
-		},
-		"68": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/editor/appearance.ts",
-			"qualifiedName": "value"
-		},
-		"69": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/editor/appearance.ts",
 			"qualifiedName": "StyleTargetCapabilitySchema"
 		},
-		"70": {
+		"67": {
 			"packageName": "zod",
 			"packagePath": "v4/core/util.d.cts",
 			"qualifiedName": "__type"
 		},
-		"71": {
+		"68": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/editor/appearance.ts",
 			"qualifiedName": "label"
 		},
-		"72": {
+		"69": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/editor/appearance.ts",
 			"qualifiedName": "properties"
 		},
-		"73": {
+		"70": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/editor/appearance.ts",
 			"qualifiedName": "responsive"
 		},
-		"74": {
+		"71": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/editor/appearance.ts",
 			"qualifiedName": "safeParseAppearance"
 		},
-		"75": {
+		"72": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/editor/appearance.ts",
 			"qualifiedName": "safeParseAppearance"
+		},
+		"73": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/editor/appearance.ts",
+			"qualifiedName": "value"
+		},
+		"74": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/editor/appearance.ts",
+			"qualifiedName": "safeParseDesignSystem"
+		},
+		"75": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/editor/appearance.ts",
+			"qualifiedName": "safeParseDesignSystem"
 		},
 		"76": {
 			"packageName": "@anvilkit/schema",
@@ -19531,12 +20107,12 @@
 		"77": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/editor/appearance.ts",
-			"qualifiedName": "safeParseDesignSystem"
+			"qualifiedName": "safeParseEditorAnnotations"
 		},
 		"78": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/editor/appearance.ts",
-			"qualifiedName": "safeParseDesignSystem"
+			"qualifiedName": "safeParseEditorAnnotations"
 		},
 		"79": {
 			"packageName": "@anvilkit/schema",

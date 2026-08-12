@@ -64,8 +64,10 @@ describe("appearance schema (P1-01)", () => {
 		// unknown key that `looseObject` preserves. This replaces the old
 		// "rejects a wrong version literal" assertion, whose behaviour was
 		// deliberately removed in `p1-001`: a canonical, version-free
-		// appearance had to stop failing validation. Tolerance is a
-		// time-boxed migration window that closes in `p7-002`.
+		// appearance had to stop failing validation. `p7-002` stripped the
+		// key from the store, so what this asserts now is the general
+		// `looseObject` rule — an unknown key survives a round trip — not
+		// a migration window.
 		const stale = {
 			version: "1",
 			targets: { root: { hidden: { base: true } } },

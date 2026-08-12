@@ -262,10 +262,11 @@ export function listUsedEditorFeatures(
 	const records = Object.values(authoring.nodes);
 
 	// Carrier signals, collected once (`p2-007`). Every check below is
-	// `sidecar || carrier`: BOTH document forms exist until the store
-	// migration in `p7-002`, so detecting from only one of them is how
-	// the gate went blind. Dropping the sidecar half now would move the
-	// silent failure rather than fix it.
+	// `sidecar || carrier`. `p7-002` removed the version markers from
+	// the canonical form, but the sidecar form is only retired once the
+	// migration has RUN against production and the migration layer is
+	// deleted (`p7-004`) — so detecting from only the carrier half would
+	// still blind the gate on a document that has not been through it.
 	const carrier: CarrierSignals = {
 		responsive: false,
 		tokens: false,
@@ -516,17 +517,15 @@ function collectCarrierSignals(
 		signals.bindings = true;
 	}
 
-	// Node prop: the component-instance link. Both spellings are read
-	// while the `p7-002` rename is in flight (time-boxed, see
-	// `@anvilkit/core`'s `document-model/materialize.ts`).
-	for (const key of ["anvilComponentInstance", "__anvilkitInstance"]) {
-		const instance = record[key];
-		if (typeof instance === "object" && instance !== null) {
-			const link = instance as Record<string, unknown>;
-			if (typeof link.definitionId === "string") {
-				signals.localComponents = true;
-				if (nonEmptyRecord(link.variantSelection)) signals.variants = true;
-			}
+	// Node prop: the component-instance link. One spelling — `p3-003`
+	// renamed the write side and `p7-002` renamed the last stored
+	// occurrence, so there is no second key left to scan for.
+	const instance = record.anvilComponentInstance;
+	if (typeof instance === "object" && instance !== null) {
+		const link = instance as Record<string, unknown>;
+		if (typeof link.definitionId === "string") {
+			signals.localComponents = true;
+			if (nonEmptyRecord(link.variantSelection)) signals.variants = true;
 		}
 	}
 
@@ -565,8 +564,8 @@ const NO_SIDECAR: AuthoringStateV1 = Object.freeze({
  * nothing.
  *
  * Additive on purpose — {@link listUsedEditorFeatures} keeps its
- * signature, so pre-finalization callers that genuinely hold a sidecar
- * are unaffected until `p7-002` retires that form.
+ * signature, so callers that genuinely hold a sidecar are unaffected
+ * until `p7-004` retires that form with the migration layer.
  */
 export function listUsedDocumentFeatures(
 	document: EditorFeatureScanDocument | null | undefined,
