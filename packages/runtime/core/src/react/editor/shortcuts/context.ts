@@ -22,7 +22,7 @@
  *
  * Wrap and unwrap have no commit helper — they are structural
  * transforms with no `Data`-level equivalent in `PuckApi` — so they
- * keep `native-tree.ts`'s pure transforms and perform the identical
+ * keep the editor tree layer's pure transforms and perform the identical
  * single `setData` dispatch here, through the shared {@link commitTree}
  * below. One intent, one history entry, no second write path.
  */
@@ -165,7 +165,7 @@ export function buildShortcutContext(
 				return; // no eligible container declared (§18 rule)
 			}
 			const { createStableIdAllocator, wrapNode } = await import(
-				"../native-tree.js"
+				"../../../editor/tree/transforms.js"
 			);
 			// ONE allocator for this wrap, created OUTSIDE the transform:
 			// `commitTree` re-runs it when the document moved, and the
@@ -198,7 +198,7 @@ export function buildShortcutContext(
 			if (primary === undefined) {
 				return;
 			}
-			const { unwrapNode } = await import("../native-tree.js");
+			const { unwrapNode } = await import("../../../editor/tree/transforms.js");
 			commitTree(bridge, (data, config) => unwrapNode(data, primary, config));
 		},
 		selectParent: () => {

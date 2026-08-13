@@ -14,7 +14,7 @@
 
 import type { Config, Data } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
-import { unwrapNode, wrapNode } from "../native-tree.js";
+import { unwrapNode, wrapNode } from "../../../editor/tree/transforms.js";
 
 const config = {
 	root: { fields: {} },

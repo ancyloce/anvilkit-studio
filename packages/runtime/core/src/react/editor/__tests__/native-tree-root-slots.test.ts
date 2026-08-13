@@ -8,7 +8,7 @@
 
 import type { Config } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
-import { duplicateNode, removeNode } from "../native-tree.js";
+import { duplicateNode, removeNode } from "../../../editor/tree/transforms.js";
 
 /**
  * Slot identity comes from the config, not from the value shape
