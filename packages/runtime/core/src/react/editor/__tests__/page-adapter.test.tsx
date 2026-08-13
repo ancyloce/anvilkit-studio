@@ -12,9 +12,10 @@ import type {
 	EditorPageAdapter,
 	EditorPageDescriptor,
 } from "@anvilkit/contracts/editor";
-import { renderHook, waitFor } from "@testing-library/react";
-import type { ReactNode } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, renderHook, waitFor } from "@testing-library/react";
+import { type ReactNode, useEffect } from "react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { createStudioEditorBridge } from "../bridge.js";
 import { usePageAdapter } from "../pages/use-page-adapter.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
 
@@ -24,22 +25,33 @@ const PAGES: readonly EditorPageDescriptor[] = [
 ];
 
 /**
- * A bridge carrying only what the hook reads. The hook must not reach
- * for the command port at all, so nothing else is provided — if it
- * ever does, this test crashes rather than quietly passing.
+ * Mirror the real lazy-runtime ordering: chrome renders against an
+ * inert bridge first, then `EditorRoot` installs `editorConfig` in an
+ * effect and notifies subscribers.
  */
 function wrapperFor(
 	adapter: EditorPageAdapter | undefined,
 ): (props: { children: ReactNode }) => ReactNode {
-	const bridge = {
-		editorConfig: adapter === undefined ? {} : { pageAdapter: adapter },
-	} as never;
-	return ({ children }) => (
-		<StudioEditorBridgeContext value={bridge}>
-			{children}
-		</StudioEditorBridgeContext>
-	);
+	const bridge = createStudioEditorBridge();
+	return function LazyEditorConfig({ children }) {
+		useEffect(() => {
+			bridge.editorConfig =
+				adapter === undefined ? {} : { pageAdapter: adapter };
+			bridge.notifyStyles();
+			return () => {
+				bridge.editorConfig = null;
+				bridge.notifyStyles();
+			};
+		}, []);
+		return (
+			<StudioEditorBridgeContext value={bridge}>
+				{children}
+			</StudioEditorBridgeContext>
+		);
+	};
 }
+
+afterEach(cleanup);
 
 describe("usePageAdapter", () => {
 	it("is hidden — null — when the host configured no adapter", () => {

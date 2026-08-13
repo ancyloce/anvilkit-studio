@@ -55,6 +55,11 @@ import type {
 } from "@anvilkit/contracts/editor";
 import type { ComponentData, Config, Data, PuckApi } from "@puckeditor/core";
 import { makeEditorError } from "../../../editor/diagnostics.js";
+import {
+	dispatchOneIntent,
+	failureStatus,
+	type IntentOutcome,
+} from "../../../puck/commit-protocol.js";
 import { resolveStyleTargets } from "../../../puck/component-metadata.js";
 import {
 	documentBreakpoints,
@@ -113,6 +118,14 @@ const NO_PROPERTIES: ReadonlySet<AuthorableStyleProperty> = new Set();
  * the INPUT document, because a partially-applied gesture is a document
  * state no user asked for.
  */
+/**
+ * `applyCanvasAppearanceOps`'s result, tagged with the status the shared
+ * commit protocol dispatches on (review 0036 M-2).
+ */
+interface CanvasAppearanceOutcome extends IntentOutcome {
+	readonly changedNodeIds: readonly string[];
+}
+
 export function applyCanvasAppearanceOps(
 	data: Data,
 	config: Config,
@@ -181,39 +194,34 @@ export function commitCanvasAppearance(
 			],
 		};
 	}
-	const current = api.appState.data as Data;
 	const config = api.config as Config;
-	const applied = applyCanvasAppearanceOps(
-		current,
-		config,
-		input.layer,
-		input.ops,
-	);
-	if (applied.errors.length > 0) {
+	// `applyCanvasAppearanceOps` reports by shape rather than by status, so
+	// it is adapted onto the shared commit protocol's outcome here.
+	const attempt = dispatchOneIntent<CanvasAppearanceOutcome>(api, (data) => {
+		const applied = applyCanvasAppearanceOps(
+			data,
+			config,
+			input.layer,
+			input.ops,
+		);
+		if (applied.errors.length > 0) {
+			return { ...applied, data, status: "rejected" };
+		}
 		return {
-			status: "rejected",
+			...applied,
+			status: applied.data === data ? "noop" : "updated",
+		};
+	});
+	if (!attempt.committed) {
+		return {
+			status: failureStatus(attempt.outcome),
 			changedNodeIds: NO_IDS,
-			errors: applied.errors,
+			errors: attempt.outcome.errors,
 		};
 	}
-	if (applied.data === current) {
-		return { status: "noop", changedNodeIds: NO_IDS, errors: NO_ERRORS };
-	}
-	api.dispatch({
-		type: "setData",
-		recordHistory: true,
-		// Functional updater: if the document moved between validation and
-		// the reducer running, re-derive the same intent against the newer
-		// one rather than clobbering it.
-		data: (previous: Data) =>
-			previous === current
-				? applied.data
-				: applyCanvasAppearanceOps(previous, config, input.layer, input.ops)
-						.data,
-	} as Parameters<PuckApi["dispatch"]>[0]);
 	return {
 		status: "committed",
-		changedNodeIds: applied.changedNodeIds,
+		changedNodeIds: attempt.outcome.changedNodeIds,
 		errors: NO_ERRORS,
 	};
 }

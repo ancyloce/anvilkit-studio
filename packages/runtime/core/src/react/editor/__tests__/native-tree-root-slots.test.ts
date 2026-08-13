@@ -6,8 +6,23 @@
  * delete, wrap) silently no-oping on such documents.
  */
 
+import type { Config } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import { duplicateNode, removeNode } from "../native-tree.js";
+
+/**
+ * Slot identity comes from the config, not from the value shape
+ * (review 0036 M-6), so these documents need one. `root.children` is
+ * the root slot under test; every type the slot holds must be
+ * registered or Puck's `walkTree` refuses to recurse it.
+ */
+const config = {
+	root: { fields: { children: { type: "slot" } } },
+	components: {
+		Navbar: { fields: {}, render: () => null },
+		Hero: { fields: {}, render: () => null },
+	},
+} as unknown as Config;
 
 /** The root slot's children, whatever the document shape. */
 function rootChildren(data: unknown): readonly { props: { id: string } }[] {
@@ -33,7 +48,7 @@ function rootSlotData() {
 
 describe("native tree ops over root slot props", () => {
 	it("duplicates a node held in a root slot", () => {
-		const result = duplicateNode(rootSlotData(), "hero-1");
+		const result = duplicateNode(rootSlotData(), "hero-1", config);
 		if (result === null) {
 			throw new Error("expected a duplicate result");
 		}
@@ -44,7 +59,7 @@ describe("native tree ops over root slot props", () => {
 	});
 
 	it("removes a node held in a root slot", () => {
-		const next = removeNode(rootSlotData(), "navbar-1");
+		const next = removeNode(rootSlotData(), "navbar-1", config);
 		if (next === null) {
 			throw new Error("expected a removal result");
 		}
@@ -58,7 +73,7 @@ describe("native tree ops over root slot props", () => {
 			root: { props: { title: "Home" } },
 			content: [{ type: "Hero", props: { id: "hero-1" } }],
 		} as never;
-		const result = duplicateNode(data, "hero-1");
+		const result = duplicateNode(data, "hero-1", config);
 		if (result === null) {
 			throw new Error("expected a duplicate result");
 		}

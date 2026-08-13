@@ -70,9 +70,9 @@ import { StudioErrorBoundary } from "./StudioErrorBoundary";
 import { StudioProviderStack } from "./StudioProviderStack";
 import { writeStudioLog } from "./studio-log";
 import { useKeyEventGuard } from "./use-key-event-guard";
+import { useStableEditorConfig } from "./use-shallow-stable";
 
 import {
-	EMPTY_DATA,
 	type StudioLogger,
 	type StudioProps,
 	useStudioController,
@@ -126,7 +126,6 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 ): ReactElement | null {
 	const {
 		puckConfig,
-		data,
 		ui,
 		viewports,
 		onBack,
@@ -170,8 +169,10 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 		editorBridge,
 		sidebarRegistryStore,
 		resolvedStoreId,
+		dataRef,
 		rootRef,
 	} = useStudioController(props);
+	const stableEditor = useStableEditorConfig(props.editor);
 
 	// RX-a: memoize the chrome viewport projection and the
 	// `ChromePropsProvider` value so chrome consumers (toolbar / publish /
@@ -331,7 +332,6 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 	// controller's runtime is deliberately non-generic, so its outputs
 	// come back as the broad default; these localized casts are the
 	// generic→default boundary (mirrors use-studio-controller.ts).
-	// `EMPTY_DATA` is a structurally-valid empty `Data` for any config.
 	type PuckDataFor = UserGenerics<UserConfig>["UserData"];
 	// P6-01 (PLAN-0025 §8.5/§11.3): config decoration is GONE. Since
 	// Phase 3 every component emits its official target attributes in
@@ -341,7 +341,15 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 	const puckElement = (
 		<Puck<UserConfig>
 			config={puckConfig}
-			data={data ?? (EMPTY_DATA as PuckDataFor)}
+			// Puck reads `data` ONCE, in a `useState` initializer — it is an
+			// initial seed, not a controlled value. Mount from the shell's
+			// live document (seeded from the `data` prop, advanced by every
+			// `onChange`) rather than the raw prop, so that when
+			// `<StudioErrorBoundary>` catches a chrome crash and the user
+			// hits Retry, `<Puck>` remounts on the work in progress instead
+			// of silently reverting to the document as it was at first
+			// mount (review 0036 H-5).
+			data={dataRef.current as PuckDataFor}
 			overrides={mergedOverrides as Partial<PuckOverrides<UserConfig>>}
 			onChange={handleChange as (data: PuckDataFor) => void}
 			onPublish={handlePublish as (data: PuckDataFor) => void}
@@ -358,7 +366,7 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 	// and nothing is imported — unless `editor.features.enabled`.
 	const editorWrappedPuck = (
 		<StudioEditorMount
-			editor={isAnvilkit ? props.editor : undefined}
+			editor={isAnvilkit ? stableEditor : undefined}
 			bridge={editorBridge}
 			editorSlot={isAnvilkit ? props.editorSlot : undefined}
 		>

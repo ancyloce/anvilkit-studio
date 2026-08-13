@@ -50,6 +50,7 @@ import type {
 	NodeOverridePatch,
 } from "@anvilkit/contracts/editor";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { randomId } from "@/shared/node-id";
 import type { InstanceOverrideEdit } from "../../../puck/update-instance-overrides.js";
 import {
 	commitDetachInstance,
@@ -60,6 +61,7 @@ import { useShellSelection } from "../composition/use-shell-selection.js";
 import { useOptionalDocumentModel } from "../use-document-model.js";
 import {
 	useComponentEditorRuntime,
+	useComponentWriterGateGetter,
 	usePuckApiGetter,
 } from "./editor-runtime.js";
 
@@ -214,6 +216,7 @@ export function useComponentInstance(): ComponentInstanceModel | null {
 	const selection = useShellSelection();
 	const runtime = useComponentEditorRuntime();
 	const getPuckApi = usePuckApiGetter();
+	const getWriterGateError = useComponentWriterGateGetter();
 	const [diagnostics, setDiagnostics] =
 		useState<readonly EditorError[]>(NO_ERRORS);
 
@@ -345,12 +348,12 @@ export function useComponentInstance(): ComponentInstanceModel | null {
 			return { status: "rejected", errors: NO_ERRORS };
 		}
 		const result = commitDetachInstance(
-			{ getPuckApi: () => api },
+			{ getPuckApi: () => api, getWriterGateError },
 			[nodeId],
-			() => crypto.randomUUID(),
+			() => randomId(),
 		);
 		return record({ status: result.status, errors: result.errors });
-	}, [nodeId, getPuckApi, record]);
+	}, [nodeId, getPuckApi, getWriterGateError, record]);
 
 	const definitionId = instance?.definitionId;
 	const editDefinition = useCallback(() => {

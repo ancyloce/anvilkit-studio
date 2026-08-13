@@ -69,6 +69,7 @@ import {
 	usePuckApiGetter,
 } from "./editor-runtime.js";
 import { scopedDefinitionId } from "./scope.js";
+import { randomId } from "@/shared/node-id";
 
 export { MAX_EXPRESSIBLE_COMBINATIONS };
 
@@ -193,12 +194,12 @@ export function useVariantAuthoring(): VariantAuthoring | null {
 			return commit({
 				kind: "add-axis",
 				axis: {
-					id: crypto.randomUUID(),
+					id: randomId(),
 					name: trimmed,
 					// A new axis starts with one option so the model stays
 					// expressible: an axis with zero options would collapse the
 					// combination product to nothing.
-					options: [{ id: crypto.randomUUID(), name: "Default" }],
+					options: [{ id: randomId(), name: "Default" }],
 				},
 			});
 		},
@@ -239,7 +240,7 @@ export function useVariantAuthoring(): VariantAuthoring | null {
 			return commit({
 				kind: "add-option",
 				axisId,
-				option: { id: crypto.randomUUID(), name: trimmed },
+				option: { id: randomId(), name: trimmed },
 			});
 		},
 		[commit],

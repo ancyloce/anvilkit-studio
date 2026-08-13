@@ -48,6 +48,7 @@ import {
 	type DesignSystemCommitDeps,
 } from "../../../puck/update-design-system.js";
 import { useOptionalStudioEditorInternals } from "./toolbar-internals.js";
+import { randomId } from "@/shared/node-id";
 
 /**
  * Every node's `appearance` carrier in the live document, by node id.
@@ -180,7 +181,7 @@ function nextBreakpointDefaults(
 	const width = Math.max(240, (narrowest?.maxWidth ?? 1024) - 160);
 	breakpointSeq += 1;
 	return {
-		id: `bp-${crypto.randomUUID().slice(0, 8)}`,
+		id: `bp-${randomId().slice(0, 8)}`,
 		label: `Breakpoint ${breakpointSeq}`,
 		maxWidth: width,
 		order: existing.length,

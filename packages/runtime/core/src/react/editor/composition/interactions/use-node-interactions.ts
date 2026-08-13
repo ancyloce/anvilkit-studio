@@ -47,6 +47,7 @@ import { readEditorMetadataFor } from "../../../../puck/component-metadata.js";
 import { useDocumentModel } from "../../use-document-model.js";
 import { useInteractionsCommit } from "../use-carrier-commits.js";
 import { useShellSelection } from "../use-shell-selection.js";
+import { randomId } from "@/shared/node-id";
 
 /** A node offered by the action target picker. */
 export interface InteractionTargetOption {
@@ -181,7 +182,7 @@ export function useNodeInteractions(): NodeInteractionsState {
 			if (primaryId === null) return;
 			const interaction: Interaction = {
 				version: "1",
-				id: crypto.randomUUID(),
+				id: randomId(),
 				name,
 				// The carrier lives on the node's own props, so the source is
 				// the owner by construction — but §16 declares the member, so

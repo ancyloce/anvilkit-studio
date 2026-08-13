@@ -65,6 +65,7 @@ import {
 	type DesignSystemTokenRow,
 	readDesignSystem,
 } from "./read-design-system.js";
+import { randomId } from "@/shared/node-id";
 
 /** What the Design System panel needs. */
 export interface DesignSystemPanelState extends DesignSystemProjection {
@@ -227,7 +228,7 @@ export function useDesignSystemPanel(): DesignSystemPanelState {
 			apply((current) => {
 				const base = current ?? EMPTY_DESIGN_SYSTEM;
 				const token: DesignToken = {
-					id: crypto.randomUUID(),
+					id: randomId(),
 					// A dotted name becomes the path, so `color.brand.500`
 					// groups under `color.brand` exactly as the author typed it.
 					path: name.split(".").filter((segment) => segment !== ""),
@@ -307,7 +308,7 @@ export function useDesignSystemPanel(): DesignSystemPanelState {
 				const timestamp = new Date().toISOString();
 				const definition: StyleDefinition = {
 					version: "1",
-					id: crypto.randomUUID(),
+					id: randomId(),
 					name: trimmed,
 					appliesTo: "any",
 					createdAt: timestamp,

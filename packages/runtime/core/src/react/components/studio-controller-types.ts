@@ -110,9 +110,21 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 */
 	readonly puckConfig: UserConfig;
 	/**
-	 * Initial Puck page data. Forwarded to `<Puck>` verbatim and
-	 * also captured into a ref so {@link StudioPluginContext.getData}
-	 * returns the latest snapshot.
+	 * The document to open with — **initial only** (review 0036 L-3).
+	 *
+	 * Puck reads its `data` prop exactly once, in a `useState`
+	 * initializer, so changing this after mount does not change what the
+	 * editor shows. The shell honours that: this value seeds the live
+	 * document and every subsequent change comes from Puck's `onChange`,
+	 * which is also what {@link StudioPluginContext.getData} reports and
+	 * what `<Puck>` re-mounts from after an error-boundary reset.
+	 *
+	 * The shell used to also copy this prop into that live document
+	 * whenever its identity changed, which meant an inline
+	 * `data={{…}}` overwrote the author's in-progress work with the
+	 * initial document on every parent render — while the editor kept
+	 * showing the real one. To open a different document, remount
+	 * `<Studio>` with a new React `key`.
 	 */
 	readonly data?: PuckDataFor<UserConfig>;
 	/**
@@ -426,5 +438,19 @@ export interface StudioControllerState {
 	readonly editorBridge: StudioEditorBridge;
 	readonly sidebarRegistryStore: SidebarRegistryStoreApi;
 	readonly resolvedStoreId: string;
+	/**
+	 * The newest document the shell knows about: seeded from the `data`
+	 * prop and advanced on every Puck `onChange`.
+	 *
+	 * This — not the raw `data` prop — is what `<Puck>` must mount from
+	 * (review 0036 H-5). Puck reads `data` exactly once, in a `useState`
+	 * initializer, so the prop is an *initial* seed rather than a
+	 * controlled value. That distinction is invisible while `<Puck>`
+	 * mounts once, and load-bearing the moment it remounts: after
+	 * `<StudioErrorBoundary>` catches a chrome crash and the user hits
+	 * Retry, mounting from the prop would restore the document as it was
+	 * at first mount and silently discard the whole session's edits.
+	 */
+	readonly dataRef: RefObject<PuckData>;
 	readonly rootRef: RefObject<HTMLDivElement | null>;
 }

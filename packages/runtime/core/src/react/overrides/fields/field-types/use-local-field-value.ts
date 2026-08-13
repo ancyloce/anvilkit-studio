@@ -69,10 +69,17 @@ export function useLocalFieldValue<T>(
 	// but defeats memoization further down the tree.
 	const formatRef = useRef(format);
 	const onCommitRef = useRef(onCommit);
+	// `parse` is boxed for the same reason as the other two, which it was
+	// not: leaving it in `onInputChange`'s dep array meant an inline
+	// `parse` (the natural way to write one) re-created the handler on
+	// every render, defeating the very memoization these refs exist to
+	// preserve (review 0036 L-8).
+	const parseRef = useRef(parse);
 	useEffect(() => {
 		formatRef.current = format;
 		onCommitRef.current = onCommit;
-	}, [format, onCommit]);
+		parseRef.current = parse;
+	}, [format, onCommit, parse]);
 
 	useEffect(() => {
 		if (!focusedRef.current) {
@@ -80,14 +87,11 @@ export function useLocalFieldValue<T>(
 		}
 	}, [externalValue]);
 
-	const onInputChange = useCallback(
-		(raw: string) => {
-			setDisplayValue(raw);
-			const result = parse(raw);
-			if (result.ok) onCommitRef.current(result.value);
-		},
-		[parse],
-	);
+	const onInputChange = useCallback((raw: string) => {
+		setDisplayValue(raw);
+		const result = parseRef.current(raw);
+		if (result.ok) onCommitRef.current(result.value);
+	}, []);
 
 	const onFocus = useCallback(() => {
 		focusedRef.current = true;

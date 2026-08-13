@@ -43,6 +43,7 @@ import { readEditorMetadataFor } from "../../../../puck/component-metadata.js";
 import { useDocumentModel } from "../../use-document-model.js";
 import { useBindingsCommit } from "../use-carrier-commits.js";
 import { useShellSelection } from "../use-shell-selection.js";
+import { randomId } from "@/shared/node-id";
 
 /** What the Data panel needs. */
 export interface NodeBindingsState {
@@ -106,7 +107,7 @@ export function useNodeBindings(): NodeBindingsState {
 			if (primaryId === null) return;
 			const binding: Binding = {
 				version: "1",
-				id: crypto.randomUUID(),
+				id: randomId(),
 				// The carrier lives on the node's own props, so the owner is
 				// the node by construction — but §19 declares the member, so
 				// it is written rather than left to be inferred.

@@ -18,9 +18,10 @@
 
 import type {
 	DataSourceDescriptor,
+	EditorDataSourceAdapter,
 	PreviewDataRequest,
 } from "@anvilkit/contracts/editor";
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useState, useSyncExternalStore } from "react";
 import {
 	fetchPreviewData,
 	type PreviewDataResult,
@@ -45,8 +46,7 @@ export type DataSourceListState =
  * adapter that returns nothing means "connected, nothing to bind".
  */
 export function useDataSources(): DataSourceListState {
-	const bridge = use(StudioEditorBridgeContext);
-	const adapter = bridge?.editorConfig?.dataSourceAdapter;
+	const adapter = useDataSourceAdapter();
 	const [state, setState] = useState<DataSourceListState>({ status: "idle" });
 
 	useEffect(() => {
@@ -93,8 +93,7 @@ export function useDataSources(): DataSourceListState {
 export function usePreviewData(
 	request: PreviewDataRequest | null,
 ): PreviewDataResult | null {
-	const bridge = use(StudioEditorBridgeContext);
-	const adapter = bridge?.editorConfig?.dataSourceAdapter;
+	const adapter = useDataSourceAdapter();
 	const [result, setResult] = useState<PreviewDataResult | null>(null);
 
 	// Serialized so a caller passing a fresh object literal each render
@@ -122,4 +121,28 @@ export function usePreviewData(
 	}, [adapter, key]);
 
 	return result;
+}
+
+/** The live host adapter, including lazy `EditorRoot` installation. */
+function useDataSourceAdapter(): EditorDataSourceAdapter | undefined {
+	const bridge = use(StudioEditorBridgeContext);
+	const version = useSyncExternalStore(
+		bridge === null ? noopSubscribe : bridge.subscribe,
+		bridge === null ? zero : bridge.getVersion,
+		bridge === null ? zero : bridge.getVersion,
+	);
+	void version;
+	return bridge?.editorConfig?.dataSourceAdapter;
+}
+
+function noopSubscribe(): () => void {
+	return noop;
+}
+
+function noop(): void {
+	// The no-bridge store never changes.
+}
+
+function zero(): number {
+	return 0;
 }

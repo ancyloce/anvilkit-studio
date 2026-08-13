@@ -21,6 +21,7 @@
 import type { EditorError } from "@anvilkit/contracts/editor";
 import type { PuckApi } from "@puckeditor/core";
 import { useCallback, useMemo } from "react";
+import { randomId } from "@/shared/node-id";
 import {
 	commitCreateComponent,
 	validateCreateComponentSelection,
@@ -28,6 +29,7 @@ import {
 import { useShellSelection } from "../composition/use-shell-selection.js";
 import {
 	useComponentEditorRuntime,
+	useComponentWriterGateGetter,
 	usePuckApiGetter,
 } from "./editor-runtime.js";
 
@@ -75,6 +77,7 @@ export function useCreateComponent(): CreateComponentAction | null {
 	const selection = useShellSelection();
 	const runtime = useComponentEditorRuntime();
 	const getPuckApi = usePuckApiGetter();
+	const getWriterGateError = useComponentWriterGateGetter();
 	const selectedNodeIds = selection.nodeIds;
 
 	const create = useCallback(
@@ -99,13 +102,13 @@ export function useCreateComponent(): CreateComponentAction | null {
 				return { status: "rejected", errors };
 			}
 
-			const instanceNodeId = crypto.randomUUID();
+			const instanceNodeId = randomId();
 			const result = commitCreateComponent(
-				{ getPuckApi: getPuck },
+				{ getPuckApi: getPuck, getWriterGateError },
 				{
 					nodeIds: captured,
 					name,
-					definitionId: crypto.randomUUID(),
+					definitionId: randomId(),
 					instanceNodeId,
 					timestamp: new Date().toISOString(),
 				},
@@ -124,7 +127,7 @@ export function useCreateComponent(): CreateComponentAction | null {
 				errors: result.errors.length > 0 ? result.errors : errors,
 			};
 		},
-		[getPuckApi, runtime, selectedNodeIds],
+		[getPuckApi, getWriterGateError, runtime, selectedNodeIds],
 	);
 
 	return useMemo(() => {

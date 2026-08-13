@@ -57,6 +57,7 @@ import {
 	usePuckApiGetter,
 } from "./editor-runtime.js";
 import { scopedDefinitionId } from "./scope.js";
+import { randomId } from "@/shared/node-id";
 
 /** Referencing node ids carried on a row, capped like the diagnostics. */
 const INSTANCE_ID_REPORT_CAP = 50;
@@ -236,7 +237,7 @@ export function useComponentLibrary(): ComponentLibrary {
 			if (definition === undefined || api === null) {
 				return { status: "rejected" };
 			}
-			const instanceNodeId = crypto.randomUUID();
+			const instanceNodeId = randomId();
 			const result = commitInsertNode(
 				{ getPuckApi: () => api },
 				{
@@ -312,7 +313,7 @@ export function useComponentLibrary(): ComponentLibrary {
 			const result = commitDetachAllAndDeleteDefinition(
 				{ getPuckApi: () => api },
 				definitionId,
-				() => crypto.randomUUID(),
+				() => randomId(),
 			);
 			return { status: result.status, errors: result.errors };
 		},

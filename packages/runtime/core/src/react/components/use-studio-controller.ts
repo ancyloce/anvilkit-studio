@@ -103,6 +103,10 @@ import type {
 	StudioProps,
 } from "./studio-controller-types.js";
 import { type StudioLogger, writeStudioLog } from "./studio-log.js";
+import {
+	useShallowStable,
+	useStableEditorConfig,
+} from "./use-shallow-stable.js";
 
 // The controller's type surface (`StudioProps`, `CompiledStudioRuntime`,
 // `ChromeAssets`, `StudioControllerState`, the internal `StoredRuntime` /
@@ -122,6 +126,9 @@ export type {
 // public `@anvilkit/core/react` surface (`{ StudioLogger }`, threaded
 // through `Studio.tsx`) is unchanged.
 export type { StudioLogger };
+
+/** Puck's root chrome slot — a component type, not a render callback. */
+type PuckSlotRender = NonNullable<Partial<PuckOverrides>["puck"]>;
 
 const FALLBACK_STORE_ID_PREFIX = "anvilkit";
 export const DEFAULT_CHROME_MODE: StudioChromeMode = "anvilkit";
@@ -343,14 +350,20 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 
 	// generic→default boundary: `data` is `PuckDataFor<UserConfig>`;
 	// the ref + lifecycle/`getData()` operate on the broad default.
+	// The live document. SEEDED from `data`, then owned exclusively by
+	// `handleChange` — Puck's `onChange` is the only thing that advances
+	// it (review 0036 L-3).
+	//
+	// A layout effect used to re-copy the prop here whenever its identity
+	// changed. That looked like keeping the ref fresh, but Puck ignores
+	// `data` after mount, so the prop is the STALE side: an inline
+	// `data={{…}}` overwrote the author's work with the initial document
+	// on every parent render, and `ctx.getData()` then disagreed with
+	// what the editor was showing. Dropping the sync makes one writer
+	// authoritative and removes the caveat from the H-5 remount fix.
 	const dataRef = useRef<PuckData>(
 		(data as PuckData | undefined) ?? EMPTY_DATA,
 	);
-	useLayoutEffect(() => {
-		if (data !== undefined) {
-			dataRef.current = data as PuckData;
-		}
-	}, [data]);
 
 	// Latest `plugins`/`config` behind refs (same rationale as `loggerRef`
 	// below): the compile effect re-runs only when `compileKey` changes —
@@ -372,13 +385,14 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// unconditionally (a tiny inert object when the editor flag is off)
 	// so hook order never depends on `props.editor`.
 	const [editorBridge] = useState(createStudioEditorBridge);
-	const editorEnabled = isAnvilkit && props.editor?.features?.enabled === true;
+	const stableEditor = useStableEditorConfig(props.editor);
+	const editorEnabled = isAnvilkit && stableEditor?.features?.enabled === true;
 	// The `ctx.editor` facade (CORE-P1A-003). Frozen at mount like
 	// `storeId`: the editor feature is a mount-level decision — hosts
 	// re-target by key-remounting `<Studio>`, never by toggling the
 	// flag in place (verified convention).
 	const [pluginEditorApi] = useState(() =>
-		isAnvilkit && props.editor?.features?.enabled === true
+		isAnvilkit && stableEditor?.features?.enabled === true
 			? createPluginEditorFacade(editorBridge)
 			: undefined,
 	);
@@ -531,6 +545,10 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// recompile changes. It drives the compile effect's single dependency
 	// and is stored alongside the runtime, so the derived `activeCompiled`
 	// can mask a runtime built for a now-superseded key.
+	// `aiHost` needs no stabilization: it is a deprecated endpoint STRING,
+	// so its identity is its value and an "unstable but equivalent" one
+	// cannot exist. (Review 0036 H-4 named it alongside `overrides`; that
+	// was wrong — only `overrides`, an object of components, could churn.)
 	const compileKey = useMemo(
 		() => ({
 			pluginsFingerprint,
@@ -904,6 +922,26 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		};
 	}, [activeCompiled, exportStore, aiStore]);
 
+	// Host `overrides` gets the same tolerance `plugins`/`config` already
+	// have (review 0036 H-4): an inline `overrides={{ header: MyHeader }}`
+	// is a fresh object every parent render holding the SAME `MyHeader`,
+	// and only its identity was making the composition below recompute.
+	const stableConsumerOverrides = useShallowStable(consumerOverrides);
+
+	// The composed `puck` slot, behind one component whose identity is
+	// frozen for the lifetime of the mount. See the memo below for why
+	// Puck makes that identity load-bearing.
+	const puckSlotRef = useRef<PuckSlotRender | null>(null);
+	const [stablePuckSlot] = useState<PuckSlotRender>(
+		() => (props: { readonly children: ReactNode }) =>
+			// Puck's `RenderFunc` must return an element, so the
+			// nothing-composed-yet fallback is a Fragment rather than raw
+			// children — the same passthrough Puck's own `DefaultOverride` is.
+			puckSlotRef.current === null
+				? createElement(Fragment, null, props.children)
+				: puckSlotRef.current(props),
+	);
+
 	const mergedOverrides = useMemo<Partial<PuckOverrides>>(() => {
 		const base: Partial<PuckOverrides>[] = [];
 		if (isAnvilkit && activeChromeAssets !== null) {
@@ -912,9 +950,9 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		if (activeCompiled !== null) {
 			base.push(...activeCompiled.runtime.overrides);
 		}
-		if (consumerOverrides !== undefined) {
+		if (stableConsumerOverrides !== undefined) {
 			// generic→default boundary: merge operates structurally.
-			base.push(consumerOverrides as Partial<PuckOverrides>);
+			base.push(stableConsumerOverrides as Partial<PuckOverrides>);
 		}
 		// Puck-API binder is outermost-of-all so it always runs
 		// `useGetPuck()` inside the Puck subtree; composed (not
@@ -940,14 +978,30 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 					children,
 				),
 		});
-		return mergeOverrides(base);
+		const composed = mergeOverrides(base);
+		// Hand the composed slot to the mount-stable delegate rather than to
+		// Puck (review 0036 H-4). Puck resolves the editor's root wrapper as
+		// `CustomPuck = useMemo(() => overrides.puck || DefaultOverride,
+		// [overrides])` — a COMPONENT TYPE. `mergeOverrides` mints a new
+		// function for every composed key, so recomputing this memo used to
+		// change that type and make React unmount and remount the entire
+		// Puck subtree: canvas iframe, inspector, every field's local
+		// buffer, focus and scroll position.
+		//
+		// The ref write during render is what keeps the delegate current for
+		// the very render that produced the new composition — a layout
+		// effect would land a commit too late. It is idempotent, so a
+		// StrictMode double-render or a discarded pass writes the same value.
+		puckSlotRef.current = composed.puck ?? null;
+		return { ...composed, puck: stablePuckSlot };
 	}, [
 		activeCompiled,
-		consumerOverrides,
+		stableConsumerOverrides,
 		isAnvilkit,
 		activeChromeAssets,
 		editorEnabled,
 		editorBridge,
+		stablePuckSlot,
 	]);
 
 	// generic→default boundary: the public callbacks are typed against
@@ -1155,6 +1209,9 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		editorBridge,
 		sidebarRegistryStore,
 		resolvedStoreId,
+		// The view mounts `<Puck>` from this, not from the `data` prop —
+		// see the field docs on `StudioControllerState` (review 0036 H-5).
+		dataRef,
 		rootRef,
 	};
 }

@@ -19,16 +19,39 @@ import { useEffect } from "react";
  * Puck reads it. Real `KeyboardEvent`s expose `getModifierState` on their
  * prototype, so the `typeof` check leaves them untouched. A shimmed event
  * also has no usable `code`, so Puck's hotkey lookup no-ops on it.
+ *
+ * ### This is a workaround, and the real fix is upstream
+ *
+ * The defect is in `@puckeditor/core@0.23.0`: its `monitorHotkeys`
+ * document listener calls `e.getModifierState("AltGraph")` with no
+ * feature check, so any synthetic `keydown`/`keyup` that is a plain
+ * `Event` crashes the editor. Nothing in this package can narrow the
+ * guard further — Puck listens on `document`, so every bubbling key
+ * event is in scope, and the shim has to be installed before Puck's
+ * handler reads the property.
+ *
+ * Delete this hook once Puck guards that call; it exists only to keep a
+ * browser extension from taking the editor down (review 0036 L-9).
  */
 export function useKeyEventGuard(): void {
 	useEffect(() => {
 		const patch = (event: Event): void => {
 			const candidate = event as Event & Partial<KeyboardEvent>;
-			if (typeof candidate.getModifierState !== "function") {
-				(
-					candidate as { getModifierState: KeyboardEvent["getModifierState"] }
-				).getModifierState = () => false;
+			if (typeof candidate.getModifierState === "function") {
+				return;
 			}
+			// Defined rather than assigned so the shim is non-enumerable:
+			// this is someone else's event object, and it should not gain a
+			// visible own property that `{...event}`, a serializer, or a
+			// devtools inspector would report as part of the event
+			// (review 0036 L-9). `configurable` so a later handler can undo
+			// it if it ever wants to.
+			Object.defineProperty(candidate, "getModifierState", {
+				value: () => false,
+				enumerable: false,
+				configurable: true,
+				writable: true,
+			});
 		};
 		document.addEventListener("keydown", patch, true);
 		document.addEventListener("keyup", patch, true);

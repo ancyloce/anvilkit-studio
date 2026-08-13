@@ -59,6 +59,24 @@ export function useReactivePuck<T>(selector: (snapshot: PuckSnapshot) => T): T {
  * bare — optional enhancements like the reset affordance degrade to
  * `fallback` instead of crashing the field.
  */
+/**
+ * Puck's own signal for "used outside `<Puck>`".
+ *
+ * Matched on the message because Puck throws a plain `Error` — there is
+ * no typed error to test for. Kept deliberately loose (`usePuck` +
+ * `<Puck>`) so a wording tweak upstream does not silently turn absence
+ * into a re-thrown crash, and narrow enough that a selector bug does not
+ * masquerade as absence. Verified against `createUsePuck` and
+ * `useGetPuck` in `@puckeditor/core@0.23.0`, which throw
+ * "usePuck must be used inside <Puck>." and
+ * "usePuckGet must be used inside <Puck>." respectively.
+ */
+function isMissingPuckProvider(error: unknown): boolean {
+	const message =
+		error instanceof Error ? error.message : typeof error === "string" ? error : "";
+	return message.includes("usePuck") && message.includes("<Puck>");
+}
+
 export function useOptionalReactivePuck<T>(
 	selector: (snapshot: PuckSnapshot) => T,
 	fallback: T,
@@ -66,7 +84,17 @@ export function useOptionalReactivePuck<T>(
 	try {
 		// biome-ignore lint/correctness/useHookAtTopLevel: Puck's usePuck throws from useContext (its first hook) when no provider exists, and a component instance can never gain/lose the provider without remounting — hook order is stable in both environments (see file doc above).
 		return useReactivePuck(selector);
-	} catch {
+	} catch (error) {
+		// Only "there is no <Puck> here" degrades to the fallback. A bug
+		// INSIDE the selector — which runs after zustand's
+		// `useSyncExternalStore`, so it lands in this same catch — used to
+		// be indistinguishable from absence, and the UI showed `fallback`
+		// forever with nothing logged (review 0036 L-2). Anything that is
+		// not the provider-absent signal is re-thrown so an error boundary
+		// can see it.
+		if (!isMissingPuckProvider(error)) {
+			throw error;
+		}
 		return fallback;
 	}
 }

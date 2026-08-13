@@ -27,7 +27,14 @@
  */
 
 import type { EditorPageAdapter } from "@anvilkit/contracts/editor";
-import { use, useCallback, useEffect, useRef, useState } from "react";
+import {
+	use,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+	useSyncExternalStore,
+} from "react";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
 
 /** A page as the navigator renders it. */
@@ -55,6 +62,15 @@ export interface PageNavigationState {
  */
 export function usePageAdapter(): PageNavigationState | null {
 	const bridge = use(StudioEditorBridgeContext);
+	// `EditorRoot` installs `editorConfig` after chrome can already be
+	// mounted. Subscribe to the bridge so that null-at-mount becomes the
+	// configured adapter as soon as the lazy editor runtime is ready.
+	const version = useSyncExternalStore(
+		bridge === null ? noopSubscribe : bridge.subscribe,
+		bridge === null ? zero : bridge.getVersion,
+		bridge === null ? zero : bridge.getVersion,
+	);
+	void version;
 	const adapter = bridge?.editorConfig?.pageAdapter;
 	const [pages, setPages] = useState<readonly PageRow[]>([]);
 	const [status, setStatus] = useState<"loading" | "ready" | "failed">(
@@ -141,6 +157,18 @@ export function usePageAdapter(): PageNavigationState | null {
 		...(adapter.rename === undefined ? {} : { rename }),
 		refresh,
 	};
+}
+
+function noopSubscribe(): () => void {
+	return noop;
+}
+
+function noop(): void {
+	// The no-bridge store never changes.
+}
+
+function zero(): number {
+	return 0;
 }
 
 function requireCreate(

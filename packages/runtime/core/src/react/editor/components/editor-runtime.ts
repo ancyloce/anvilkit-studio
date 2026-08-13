@@ -36,6 +36,7 @@
  * states for itself.
  */
 
+import type { EditorError } from "@anvilkit/contracts/editor";
 import type { PuckApi } from "@puckeditor/core";
 import { useGetPuck } from "@puckeditor/core";
 import { use, useCallback, useMemo, useSyncExternalStore } from "react";
@@ -135,6 +136,18 @@ export function usePuckApiGetter(): () => PuckApi | null {
 		}
 		return bridge?.getPuckApi() ?? null;
 	}, [getPuck, bridge]);
+}
+
+/**
+ * A live collaboration writer-gate getter for commit-helper deps.
+ *
+ * The returned callback deliberately reads the bridge at invocation time.
+ * An affordance can render while writers are open and be invoked after a
+ * capability transition closes them; the commit layer must see the latter.
+ */
+export function useComponentWriterGateGetter(): () => EditorError | null {
+	const bridge = use(StudioEditorBridgeContext);
+	return useCallback(() => bridge?.getWriterGateError() ?? null, [bridge]);
 }
 
 function noopSubscribe(): () => void {

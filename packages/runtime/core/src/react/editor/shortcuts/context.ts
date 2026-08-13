@@ -27,7 +27,8 @@
  * below. One intent, one history entry, no second write path.
  */
 
-import type { PuckApi, Data as PuckData } from "@puckeditor/core";
+import type { Config, PuckApi, Data as PuckData } from "@puckeditor/core";
+import { dispatchOneIntent } from "../../../puck/commit-protocol.js";
 import { readEditorMetadata } from "../../../puck/component-metadata.js";
 import {
 	commitDeleteNodes,
@@ -82,7 +83,7 @@ function tryConfigComponents(
  */
 function commitTree(
 	bridge: StudioEditorBridge,
-	transform: (data: PuckData) => PuckData | null,
+	transform: (data: PuckData, config: Config) => PuckData | null,
 ): void {
 	if (bridge.getWriterGateError() !== null) {
 		return;
@@ -91,19 +92,26 @@ function commitTree(
 	if (api === null) {
 		return;
 	}
-	const current = api.appState.data as PuckData;
-	const next = transform(current);
-	if (next === null || next === current) {
-		return;
-	}
-	api.dispatch({
-		type: "setData",
-		recordHistory: true,
-		// Functional updater: re-derive against a document that moved
-		// between read and reduce rather than clobbering it.
-		data: (previous: PuckData) =>
-			previous === current ? next : (transform(previous) ?? previous),
-	} as unknown as Parameters<PuckApi["dispatch"]>[0]);
+	// The tree transforms resolve slots from the config, so it is threaded
+	// from the live api rather than asked of the caller — it cannot drift
+	// from the document being transformed (review 0036 H-3).
+	const config = api.config as Config;
+	// The shared commit protocol (review 0036 M-2): nothing is dispatched
+	// unless a real change is going to land, so a wrap/unwrap that turns
+	// out to be a no-op leaves no empty undo entry behind. `null` from
+	// `transform` and a `walkTree` throw both read as "nothing to do" —
+	// a shortcut must not throw out of a key handler.
+	dispatchOneIntent(api, (data) => {
+		let next: PuckData | null;
+		try {
+			next = transform(data, config);
+		} catch {
+			return { data, status: "rejected" as const, errors: [] };
+		}
+		return next === null || next === data
+			? { data, status: "noop" as const, errors: [] }
+			: { data: next, status: "updated" as const, errors: [] };
+	});
 }
 
 /** Build the §18 command context over the live bridge. */
@@ -152,14 +160,24 @@ export function buildShortcutContext(
 			if (container === null) {
 				return; // no eligible container declared (§18 rule)
 			}
-			const { wrapNode } = await import("../native-tree.js");
+			const { createStableIdAllocator, wrapNode } = await import(
+				"../native-tree.js"
+			);
+			// ONE allocator for this wrap, created OUTSIDE the transform:
+			// `commitTree` re-runs it when the document moved, and the
+			// container id below is what the selection follows (review 0036
+			// M-1). Without this the retry wraps into a different container
+			// than the one we then select.
+			const allocate = createStableIdAllocator();
 			let containerId: string | null = null;
-			commitTree(bridge, (data) => {
+			commitTree(bridge, (data, config) => {
 				const wrapped = wrapNode(
 					data,
 					primary,
 					container.type,
 					container.slotName,
+					config,
+					allocate,
 				);
 				if (wrapped === null) {
 					return null;
@@ -177,7 +195,7 @@ export function buildShortcutContext(
 				return;
 			}
 			const { unwrapNode } = await import("../native-tree.js");
-			commitTree(bridge, (data) => unwrapNode(data, primary));
+			commitTree(bridge, (data, config) => unwrapNode(data, primary, config));
 		},
 		selectParent: () => {
 			try {

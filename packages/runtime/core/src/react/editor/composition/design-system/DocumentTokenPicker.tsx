@@ -55,6 +55,7 @@ import { useDocumentModel } from "../../use-document-model.js";
 import { useDesignSystemCommit } from "../use-design-system-commit.js";
 import { readTokenChoices, type TokenChoice } from "./read-design-system.js";
 import { rememberToken, useTokenRecents } from "./token-recents.js";
+import { randomId } from "@/shared/node-id";
 
 const ORIGIN_LABEL_KEY = {
 	document: "studio.editor.tokens.origin.document",
@@ -178,7 +179,7 @@ function TokenChoices({
 	const createFromLiteral = (): void => {
 		const trimmed = name.trim();
 		if (trimmed.length === 0 || currentLiteral === undefined) return;
-		const tokenId = crypto.randomUUID();
+		const tokenId = randomId();
 		const result = commit((current) => {
 			const base = current ?? {
 				breakpoints: [],

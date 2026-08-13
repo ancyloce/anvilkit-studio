@@ -22,6 +22,7 @@ import {
 import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { EditorI18nProvider } from "@/state/editor-i18n-context";
+import { createStudioEditorBridge } from "../bridge.js";
 import { PageNavigator } from "../pages/PageNavigator.js";
 import { StudioEditorBridgeContext } from "../use-studio-editor.js";
 
@@ -34,9 +35,8 @@ function show(
 	adapter: EditorPageAdapter | undefined,
 	activePageId?: string,
 ): void {
-	const bridge = {
-		editorConfig: adapter === undefined ? {} : { pageAdapter: adapter },
-	} as never;
+	const bridge = createStudioEditorBridge();
+	bridge.editorConfig = adapter === undefined ? {} : { pageAdapter: adapter };
 	render(
 		<EditorI18nProvider>
 			<StudioEditorBridgeContext value={bridge}>
