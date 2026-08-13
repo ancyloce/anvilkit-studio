@@ -492,8 +492,15 @@ export function createLifecycleManager(
 		event: LifecycleEventName,
 		ctx: StudioPluginContext,
 		payload: PuckData | undefined,
+		/**
+		 * The observers to notify. Callers that awaited something first
+		 * pass a snapshot taken BEFORE the await — `dispose()` clears the
+		 * live sets, and an `onDestroy` observer must still hear about the
+		 * teardown that disposed them (review 0036 M-5).
+		 */
+		observers: Iterable<LifecycleSubscriber> = subscribers[event],
 	): void {
-		for (const handler of subscribers[event]) {
+		for (const handler of observers) {
 			try {
 				handler(ctx, payload);
 			} catch (error) {
@@ -597,12 +604,25 @@ export function createLifecycleManager(
 
 		// Every other event: run in parallel and log-then-swallow any
 		// rejections.
+		//
+		// Snapshot the observers BEFORE awaiting. The shell tears down with
+		// `advanceTo("destroyed") → emit("onDestroy") → dispose()`, all
+		// synchronous, so `dispose()` always wins the race against these
+		// hooks settling — it had already cleared the subscriber sets and
+		// set `disposed` by the time the code below ran (review 0036 M-5).
+		const observers = [...subscribers[event]];
 		const settled = await Promise.allSettled(
 			registrations.map((registration) =>
 				invokeHook(event, registration, ctx, payload),
 			),
 		);
-		if (disposed) {
+		// A dispose racing `onDestroy` is expected — it is emitted BECAUSE
+		// the runtime is going away — so it is not a reason to go quiet.
+		// Without this exemption a plugin whose `onDestroy` rejected had its
+		// error swallowed with no log on every single unmount, contradicting
+		// this file's own documented error contract, and no `onDestroy`
+		// observer ever fired.
+		if (disposed && event !== "onDestroy") {
 			return;
 		}
 
@@ -623,7 +643,7 @@ export function createLifecycleManager(
 			}
 		}
 
-		fireSubscribers(event, ctx, payload);
+		fireSubscribers(event, ctx, payload, observers);
 	}
 
 	function dispose(): void {
