@@ -11,8 +11,8 @@
  */
 
 import type { useGetPuck } from "@puckeditor/core";
-import { commitInsertNode } from "../../../../../puck/update-tree.js";
-import type { WriterGateDep } from "../../../../../puck/writer-gate.js";
+import { commitInsertNode } from "../../../../puck/update-tree.js";
+import type { WriterGateDep } from "../../../../puck/writer-gate.js";
 
 export type PuckSnapshot = ReturnType<ReturnType<typeof useGetPuck>>;
 

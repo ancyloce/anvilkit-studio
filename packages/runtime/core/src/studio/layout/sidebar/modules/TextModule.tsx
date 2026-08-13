@@ -19,10 +19,10 @@
  */
 
 import { type ReactNode, useCallback, useMemo, useState } from "react";
-import { useCopyCategoryFilter } from "@/state/slices/editor-ui-selectors";
-import { useSidebarRegistry } from "@/state/sidebar-registry/use-sidebar-registry";
 import { useInsertSnippet } from "@/layout/sidebar/commands/use-insert-snippet";
 import { useTextSelection } from "@/layout/sidebar/commands/use-text-selection";
+import { useSidebarRegistry } from "@/state/sidebar-registry/use-sidebar-registry";
+import { useCopyCategoryFilter } from "@/state/slices/editor-ui-selectors";
 import type { StudioCopySnippet, StudioCopySnippetPack } from "@/types/sidebar";
 import { SnippetList } from "./text/SnippetList";
 import { TextFilterStrip } from "./text/TextFilterStrip";

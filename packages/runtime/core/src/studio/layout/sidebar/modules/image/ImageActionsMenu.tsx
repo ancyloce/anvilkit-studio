@@ -14,14 +14,13 @@
 
 import { FolderPlus, Plus, Upload } from "lucide-react";
 import { type ReactNode } from "react";
-
+import { Button } from "@/primitives/button";
 import {
 	Menu,
 	MenuItem,
 	MenuPanel,
 	MenuTrigger,
 } from "@/primitives/vendor/animate-ui/components/base/menu";
-import { Button } from "@/primitives/button";
 import { useMsg } from "@/state/editor-i18n-context";
 
 export interface ImageActionsMenuProps {

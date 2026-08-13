@@ -35,15 +35,13 @@ function renderAction(icon: string): HTMLElement {
 
 describe("HeaderActionButton", () => {
 	// Names in the curated ICON_REGISTRY resolve case/separator-blind.
-	it.each([
-		"sparkles",
-		"download",
-		"Sparkles",
-		"up-load",
-	])("renders a lucide icon for %s", (icon) => {
-		const container = renderAction(icon);
-		expect(container.querySelector("svg")).not.toBeNull();
-	});
+	it.each(["sparkles", "download", "Sparkles", "up-load"])(
+		"renders a lucide icon for %s",
+		(icon) => {
+			const container = renderAction(icon);
+			expect(container.querySelector("svg")).not.toBeNull();
+		},
+	);
 
 	// A name outside the curated registry resolves to no icon (the
 	// label still renders) — the deliberate tree-shaking narrowing.

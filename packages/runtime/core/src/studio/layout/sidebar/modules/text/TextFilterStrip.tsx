@@ -13,8 +13,8 @@ import { type ReactNode } from "react";
 
 import { ToggleGroup, ToggleGroupItem } from "@/primitives/toggle-group";
 import { useMsg } from "@/state/editor-i18n-context";
-import type { CopyCategoryFilter } from "@/state/slices/editor-ui-store";
 import { useCopyCategoryFilter } from "@/state/slices/editor-ui-selectors";
+import type { CopyCategoryFilter } from "@/state/slices/editor-ui-store";
 
 export function TextFilterStrip(): ReactNode {
 	const msg = useMsg();

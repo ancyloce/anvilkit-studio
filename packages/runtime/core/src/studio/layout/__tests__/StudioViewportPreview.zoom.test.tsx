@@ -134,38 +134,39 @@ const WORKSPACE_WIDTH = 2000;
 const WORKSPACE_HEIGHT = 800;
 
 describe("StudioViewportPreview zoom stage geometry", () => {
-	it.each([
-		0.5, 0.75, 1, 1.25, 2,
-	])("sizes the zoom stage to naturalSize * %s zoom", (zoom) => {
-		const { container } = render(
-			<Setup>
-				<ZoomHarness
-					zoom={zoom}
-					viewportId="desktop"
-					contentHeight={FRAME_NATURAL_HEIGHT}
-				/>
-			</Setup>,
-		);
+	it.each([0.5, 0.75, 1, 1.25, 2])(
+		"sizes the zoom stage to naturalSize * %s zoom",
+		(zoom) => {
+			const { container } = render(
+				<Setup>
+					<ZoomHarness
+						zoom={zoom}
+						viewportId="desktop"
+						contentHeight={FRAME_NATURAL_HEIGHT}
+					/>
+				</Setup>,
+			);
 
-		const frameEl = container.querySelector("[data-ak-canvas-frame]");
-		const workspaceEl = frameEl?.parentElement?.parentElement;
-		expect(frameEl).not.toBeNull();
-		expect(workspaceEl).not.toBeNull();
+			const frameEl = container.querySelector("[data-ak-canvas-frame]");
+			const workspaceEl = frameEl?.parentElement?.parentElement;
+			expect(frameEl).not.toBeNull();
+			expect(workspaceEl).not.toBeNull();
 
-		// Width comes from a real `ResizeObserver` on the workspace;
-		// height comes from the store (`contentHeight` above) — the
-		// canvas frame's own box is never observed (see the file doc:
-		// an iframe never auto-grows to its content, so that would be
-		// circular).
-		fireResize(workspaceEl as Element, WORKSPACE_WIDTH, WORKSPACE_HEIGHT);
+			// Width comes from a real `ResizeObserver` on the workspace;
+			// height comes from the store (`contentHeight` above) — the
+			// canvas frame's own box is never observed (see the file doc:
+			// an iframe never auto-grows to its content, so that would be
+			// circular).
+			fireResize(workspaceEl as Element, WORKSPACE_WIDTH, WORKSPACE_HEIGHT);
 
-		const stage = container.querySelector(
-			"[data-ak-zoom-stage]",
-		) as HTMLElement;
-		expect(stage).not.toBeNull();
-		expect(stage.style.width).toBe(`${DESKTOP_NATURAL_WIDTH * zoom}px`);
-		expect(stage.style.height).toBe(`${FRAME_NATURAL_HEIGHT * zoom}px`);
-	});
+			const stage = container.querySelector(
+				"[data-ak-zoom-stage]",
+			) as HTMLElement;
+			expect(stage).not.toBeNull();
+			expect(stage.style.width).toBe(`${DESKTOP_NATURAL_WIDTH * zoom}px`);
+			expect(stage.style.height).toBe(`${FRAME_NATURAL_HEIGHT * zoom}px`);
+		},
+	);
 
 	// Regression: the canvas frame must carry an explicit `height` (not
 	// just `min-height`) equal to the real content height reported from

@@ -27,7 +27,14 @@ import {
 	Rows,
 	Type,
 } from "lucide-react";
-import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import {
+	type ReactNode,
+	use,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import { useStudioPagesSourceOrDefault } from "@/context/pages-source";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
@@ -37,6 +44,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/primitives/dropdown-menu";
+import { Input } from "@/primitives/input";
 import { ScrollArea } from "@/primitives/scroll-area";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-context";
@@ -46,11 +54,9 @@ import type {
 	StudioLayerQuickAdd,
 	StudioLayerQuickAddInserter,
 } from "@/types/sidebar";
-import { Input } from "@/primitives/input";
 import { AccessibilityIssuesMount } from "../../../../../../react/editor/a11y/AccessibilityIssuesMount.js";
 import { ComponentCanvasPanel } from "../../../../../../react/editor/components/ComponentCanvasPanel.js";
 import { StudioEditorBridgeContext } from "../../../../../../react/editor/use-studio-editor.js";
-import { use } from "react";
 import { useEditorLayers } from "../hooks/use-editor-layers";
 import { useSourceList } from "../hooks/use-source-list";
 import { LayerTree } from "./LayerTree";

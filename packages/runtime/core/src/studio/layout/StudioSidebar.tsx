@@ -20,13 +20,13 @@ import {
 	useDrawerCollapsed,
 } from "@/state/slices/editor-ui-selectors";
 import type { EditorTab } from "@/state/slices/editor-ui-store";
+import { ComponentsModule } from "./sidebar/modules/ComponentsModule";
 import { CopilotModule } from "./sidebar/modules/CopilotModule";
 import { DesignSystemModule } from "./sidebar/modules/DesignSystemModule";
 import { HistoryModule } from "./sidebar/modules/HistoryModule";
 import { ImageModule } from "./sidebar/modules/ImageModule";
 import { InsertModule } from "./sidebar/modules/InsertModule";
 import { LayerModule } from "./sidebar/modules/LayerModule";
-import { ComponentsModule } from "./sidebar/modules/ComponentsModule";
 import { SeoModule } from "./sidebar/modules/SeoModule";
 import { TextModule } from "./sidebar/modules/TextModule";
 import {

@@ -29,13 +29,16 @@
  */
 
 import {
+	type PuckApi,
 	type ComponentData as PuckComponentData,
 	useGetPuck,
 } from "@puckeditor/core";
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 import { toast } from "sonner";
 import { useMsg } from "@/state/editor-i18n-context";
 import { readEditorMetadata } from "../../puck/component-metadata.js";
+import { commitReplaceNodeProps } from "../../puck/update-tree.js";
+import { StudioEditorBridgeContext } from "../../react/editor/use-studio-editor.js";
 import {
 	type CanvasDropKind,
 	hasCanvasDropPayload,
@@ -122,6 +125,7 @@ function resolveComponentElementAt(
 export function useCanvasDropController(doc: Document | undefined): void {
 	const getPuck = useGetPuck();
 	const msg = useMsg();
+	const editorBridge = use(StudioEditorBridgeContext);
 
 	useEffect(() => {
 		if (doc === undefined) return;
@@ -295,12 +299,20 @@ export function useCanvasDropController(doc: Document | undefined): void {
 			}
 
 			const snapshot = getPuck();
-			const selector = snapshot.getSelectorForId(target.id);
-			if (selector === undefined) {
-				// Race: node moved/removed between dragover and drop.
-				toast.warning(msg(warnKey));
-				return;
-			}
+			const commitProps = (
+				updateProps: (
+					props: Readonly<Record<string, unknown>>,
+				) => Readonly<Record<string, unknown>>,
+			): void => {
+				commitReplaceNodeProps(
+					{
+						getPuckApi: () => getPuck() as PuckApi,
+						getWriterGateError: () =>
+							editorBridge?.getWriterGateError() ?? null,
+					},
+					{ nodeId: target.id, updateProps },
+				);
+			};
 
 			const targetItem = target.item;
 			const value = payload.kind === "text" ? payload.body : payload.url;
@@ -326,27 +338,23 @@ export function useCanvasDropController(doc: Document | undefined): void {
 					? (declaredMeta?.inlineText?.[0]?.propPath ?? null)
 					: (declaredMeta?.images?.[0]?.srcPropPath ?? null);
 			if (declaredTarget !== null) {
-				let declaredProps = setPropAtPath(
-					targetItem.props,
-					toDeclaredPath(declaredTarget),
-					value,
-				);
-				if (payload.kind === "image" && payload.alt !== "") {
-					const altPath =
-						declaredMeta?.images?.[0]?.altPropPath;
-					if (altPath !== undefined) {
-						declaredProps = setPropAtPath(
-							declaredProps,
-							toDeclaredPath(altPath),
-							payload.alt,
-						);
+				commitProps((currentProps) => {
+					let declaredProps = setPropAtPath(
+						currentProps,
+						toDeclaredPath(declaredTarget),
+						value,
+					);
+					if (payload.kind === "image" && payload.alt !== "") {
+						const altPath = declaredMeta?.images?.[0]?.altPropPath;
+						if (altPath !== undefined) {
+							declaredProps = setPropAtPath(
+								declaredProps,
+								toDeclaredPath(altPath),
+								payload.alt,
+							);
+						}
 					}
-				}
-				snapshot.dispatch({
-					type: "replace",
-					destinationIndex: selector.index,
-					destinationZone: selector.zone,
-					data: { ...targetItem, props: declaredProps },
+					return declaredProps;
 				});
 				return;
 			}
@@ -374,54 +382,51 @@ export function useCanvasDropController(doc: Document | undefined): void {
 					hitUrl === null ? null : findUrlPropPath(targetItem.props, hitUrl);
 			}
 
-			let nextProps: { id: string } & Record<string, unknown>;
 			if (path !== null) {
-				nextProps = setPropAtPath(targetItem.props, path, value);
-				// Keep an existing alt/title companion (sibling of the
-				// replaced image prop) in sync. Never *adds* a prop.
-				if (payload.kind === "image" && payload.alt !== "") {
-					const parent = path.slice(0, -1);
-					const parentObj = getAtPath(nextProps, parent);
-					if (parentObj !== null && typeof parentObj === "object") {
-						for (const companion of IMAGE_ALT_COMPANIONS) {
-							if (Object.hasOwn(parentObj, companion)) {
-								nextProps = setPropAtPath(
-									nextProps,
-									[...parent, companion],
-									payload.alt,
-								);
+				commitProps((currentProps) => {
+					let committed = setPropAtPath(currentProps, path, value);
+					// Keep an existing alt/title companion (sibling of the
+					// replaced image prop) in sync. Never *adds* a prop.
+					if (payload.kind === "image" && payload.alt !== "") {
+						const parent = path.slice(0, -1);
+						const parentObj = getAtPath(committed, parent);
+						if (parentObj !== null && typeof parentObj === "object") {
+							for (const companion of IMAGE_ALT_COMPANIONS) {
+								if (Object.hasOwn(parentObj, companion)) {
+									committed = setPropAtPath(
+										committed,
+										[...parent, companion],
+										payload.alt,
+									);
+								}
 							}
 						}
 					}
-				}
-			} else {
-				// 2. Fallback — top-level candidate prop (the prior
-				//    heuristic; keeps bare Text/Image + bg-image-only
-				//    components working when value matching can't pin a
-				//    prop, e.g. empty/duplicated values).
-				const prop =
-					payload.kind === "text"
-						? resolveTextTargetProp(targetItem, snapshot.config)
-						: resolveImageTargetProp(targetItem, snapshot.config);
-				if (prop === null) {
-					toast.warning(msg(warnKey));
-					return;
-				}
-				nextProps = { ...targetItem.props, [prop]: value };
+					return committed;
+				});
+				return;
+			}
+
+			// 2. Fallback — top-level candidate prop (the prior heuristic;
+			// keeps bare Text/Image + bg-image-only components working).
+			const prop =
+				payload.kind === "text"
+					? resolveTextTargetProp(targetItem, snapshot.config)
+					: resolveImageTargetProp(targetItem, snapshot.config);
+			if (prop === null) {
+				toast.warning(msg(warnKey));
+				return;
+			}
+			commitProps((currentProps) => {
+				const committed = { ...currentProps, [prop]: value };
 				if (payload.kind === "image" && payload.alt !== "") {
 					for (const companion of IMAGE_ALT_COMPANIONS) {
-						if (Object.hasOwn(targetItem.props, companion)) {
-							nextProps[companion] = payload.alt;
+						if (Object.hasOwn(currentProps, companion)) {
+							committed[companion] = payload.alt;
 						}
 					}
 				}
-			}
-
-			snapshot.dispatch({
-				type: "replace",
-				destinationIndex: selector.index,
-				destinationZone: selector.zone,
-				data: { ...targetItem, props: nextProps },
+				return committed;
 			});
 		};
 
@@ -437,5 +442,5 @@ export function useCanvasDropController(doc: Document | undefined): void {
 			cancelFlush();
 			clearHighlight();
 		};
-	}, [doc, getPuck, msg]);
+	}, [doc, editorBridge, getPuck, msg]);
 }

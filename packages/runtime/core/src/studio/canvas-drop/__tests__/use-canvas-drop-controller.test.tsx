@@ -6,10 +6,13 @@
  * `state/__tests__/useInsertSnippet.test.tsx`.
  */
 
+import type { Data } from "@puckeditor/core";
 import { cleanup, renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EditorI18nProvider } from "@/state/editor-i18n-context";
+import { createStudioEditorBridge } from "../../../react/editor/bridge.js";
+import { StudioEditorBridgeContext } from "../../../react/editor/use-studio-editor.js";
 import { encodeDropPayload } from "../drag-payload";
 import {
 	DROP_TARGET_ATTR,
@@ -20,16 +23,44 @@ import { createDataTransfer, makeDragEvent } from "./data-transfer-double";
 const dispatch = vi.fn();
 const getItemById = vi.fn();
 const getSelectorForId = vi.fn();
+let committedData: Data | undefined;
 const snapshot = {
 	dispatch,
 	getItemById,
 	getSelectorForId,
-	config: { components: { Text: { fields: { text: { type: "text" } } } } },
+	config: {
+		root: { fields: {} },
+		components: { Text: { fields: { text: { type: "text" } } } },
+	},
+	get appState() {
+		const ids = Array.from(
+			document.querySelectorAll<HTMLElement>("[data-puck-component]"),
+		)
+			.map((element) => element.getAttribute("data-puck-component"))
+			.filter((id): id is string => id !== null);
+		const items = ids
+			.map((id) => getItemById(id))
+			.filter((item): item is Record<string, unknown> => item !== undefined);
+		for (const item of items) {
+			const type = item["type"];
+			const components = snapshot.config.components as Record<string, unknown>;
+			if (typeof type === "string" && !Object.hasOwn(components, type)) {
+				components[type] = { fields: {} };
+			}
+		}
+		return {
+			data: {
+				root: { props: {} },
+				content: items,
+			},
+		};
+	},
 };
 
 const toastWarning = vi.fn();
 
-vi.mock("@puckeditor/core", () => ({
+vi.mock("@puckeditor/core", async (importOriginal) => ({
+	...(await importOriginal<typeof import("@puckeditor/core")>()),
 	useGetPuck: () => () => snapshot,
 }));
 
@@ -75,6 +106,15 @@ function rectAt(left: number, top: number, w: number, h: number): DOMRect {
 let target: HTMLDivElement;
 
 beforeEach(() => {
+	committedData = undefined;
+	dispatch.mockImplementation(
+		(action: { data: Data | ((previous: Data) => Data) }) => {
+			committedData =
+				typeof action.data === "function"
+					? action.data(snapshot.appState.data as Data)
+					: action.data;
+		},
+	);
 	target = document.createElement("div");
 	target.setAttribute("data-puck-component", "t-1");
 	target.getBoundingClientRect = () => RECT;
@@ -109,6 +149,17 @@ function dropText(body = "Dropped copy."): void {
 	document.dispatchEvent(makeDragEvent("drop", dt, { clientX: 5, clientY: 5 }));
 }
 
+function committedProps(nodeId = "t-1"): Record<string, unknown> {
+	const item = (
+		committedData?.content as
+			| readonly { props?: Record<string, unknown> }[]
+			| undefined
+	)?.find((entry) => entry.props?.id === nodeId);
+	if (item?.props === undefined)
+		throw new Error("Expected committed node props");
+	return item.props;
+}
+
 describe("useCanvasDropController", () => {
 	it("dispatches a Puck replace targeting the dropped-onto component", () => {
 		getItemById.mockReturnValue({
@@ -121,18 +172,37 @@ describe("useCanvasDropController", () => {
 		dropText();
 
 		expect(dispatch).toHaveBeenCalledTimes(1);
-		const action = dispatch.mock.calls[0]?.[0] as {
-			type: string;
-			destinationIndex: number;
-			destinationZone: string;
-			data: { props: Record<string, unknown> };
-		};
-		expect(action.type).toBe("replace");
-		expect(action.destinationIndex).toBe(2);
-		expect(action.destinationZone).toBe("default-zone");
-		expect(action.data.props["text"]).toBe("Dropped copy.");
-		expect(action.data.props["id"]).toBe("t-1");
+		const action = dispatch.mock.calls[0]?.[0] as { type: string };
+		expect(action.type).toBe("setData");
+		expect(committedProps()["text"]).toBe("Dropped copy.");
+		expect(committedProps()["id"]).toBe("t-1");
 		expect(toastWarning).not.toHaveBeenCalled();
+	});
+
+	it("refuses the drop at the live collaboration writer gate", () => {
+		getItemById.mockReturnValue({
+			type: "Text",
+			props: { id: "t-1", text: "old" },
+		});
+		const bridge = createStudioEditorBridge();
+		bridge.getWriterGateError = () => ({
+			code: "EDITOR_COLLAB_ENCODING_UNSUPPORTED",
+			message: "writers closed",
+			severity: "error",
+			recoverable: true,
+		});
+		const gatedWrapper = ({ children }: { children: ReactNode }) => (
+			<StudioEditorBridgeContext value={bridge}>
+				<EditorI18nProvider>{children}</EditorI18nProvider>
+			</StudioEditorBridgeContext>
+		);
+
+		renderHook(() => useCanvasDropController(document), {
+			wrapper: gatedWrapper,
+		});
+		dropText();
+
+		expect(dispatch).not.toHaveBeenCalled();
 	});
 
 	it("resolves the component via geometry when Puck's overlay is on top (the production bug)", () => {
@@ -154,13 +224,10 @@ describe("useCanvasDropController", () => {
 		dropText("Replaced past overlay.");
 
 		expect(dispatch).toHaveBeenCalledTimes(1);
-		const action = dispatch.mock.calls[0]?.[0] as {
-			type: string;
-			data: { props: Record<string, unknown> };
-		};
-		expect(action.type).toBe("replace");
-		expect(action.data.props["text"]).toBe("Replaced past overlay.");
-		expect(action.data.props["id"]).toBe("t-1");
+		const action = dispatch.mock.calls[0]?.[0] as { type: string };
+		expect(action.type).toBe("setData");
+		expect(committedProps()["text"]).toBe("Replaced past overlay.");
+		expect(committedProps()["id"]).toBe("t-1");
 		expect(toastWarning).not.toHaveBeenCalled();
 	});
 
@@ -206,11 +273,8 @@ describe("useCanvasDropController", () => {
 			makeDragEvent("drop", dt, { clientX: 5, clientY: 5 }),
 		);
 
-		const last = dispatch.mock.calls.at(-1)?.[0] as {
-			data: { props: Record<string, unknown> };
-		};
-		expect(last.data.props["id"]).toBe("inner-1");
-		expect(last.data.props["text"]).toBe("nested");
+		expect(committedProps("inner-1")["id"]).toBe("inner-1");
+		expect(committedProps("inner-1")["text"]).toBe("nested");
 	});
 
 	it("warns and does not dispatch on an incompatible target", () => {
@@ -337,11 +401,7 @@ describe("useCanvasDropController", () => {
 		dropAt({ kind: "text", body: "NEW BODY" }, 5, 60);
 
 		expect(dispatch).toHaveBeenCalledTimes(1);
-		const action = dispatch.mock.calls[0]?.[0] as
-			| { data: { props: Record<string, unknown> } }
-			| undefined;
-		if (!action) throw new Error("Expected canvas dispatch");
-		const props = action.data.props;
+		const props = committedProps();
 		expect(props["description"]).toBe("NEW BODY");
 		expect(props["headline"]).toBe("Old headline");
 		expect(toastWarning).not.toHaveBeenCalled();
@@ -364,11 +424,7 @@ describe("useCanvasDropController", () => {
 		renderHook(() => useCanvasDropController(document), { wrapper });
 		dropAt({ kind: "text", body: "Team" }, 5, 5);
 
-		const action = dispatch.mock.calls[0]?.[0] as
-			| { data: { props: { plans: { name: string }[] } } }
-			| undefined;
-		if (!action) throw new Error("Expected canvas dispatch");
-		const props = action.data.props;
+		const props = committedProps() as { plans: { name: string }[] };
 		expect(props.plans[1]?.name).toBe("Team");
 		expect(props.plans[0]?.name).toBe("Free");
 	});
@@ -387,11 +443,9 @@ describe("useCanvasDropController", () => {
 		renderHook(() => useCanvasDropController(document), { wrapper });
 		dropAt({ kind: "image", url: "/new.png", alt: "New alt" }, 5, 5);
 
-		const action = dispatch.mock.calls[0]?.[0] as
-			| { data: { props: { gallery: { src: string; alt: string }[] } } }
-			| undefined;
-		if (!action) throw new Error("Expected canvas dispatch");
-		const props = action.data.props;
+		const props = committedProps() as {
+			gallery: { src: string; alt: string }[];
+		};
 		expect(props.gallery[0]?.src).toBe("/new.png");
 		expect(props.gallery[0]?.alt).toBe("New alt");
 	});
@@ -422,14 +476,11 @@ describe("useCanvasDropController", () => {
 			renderHook(() => useCanvasDropController(document), { wrapper });
 			dropText("Declared body");
 
-			const action = dispatch.mock.calls[0]?.[0] as {
-				data: { props: Record<string, unknown> };
-			};
 			// The declared propPath received the drop; the heuristic's
 			// pick (`text`) was left alone — it stays the fallback for
 			// undeclared components only.
-			expect(action.data.props["subtitle"]).toBe("Declared body");
-			expect(action.data.props["text"]).toBe("old");
+			expect(committedProps()["subtitle"]).toBe("Declared body");
+			expect(committedProps()["text"]).toBe("old");
 		} finally {
 			components["Text"] = original;
 		}
@@ -465,11 +516,8 @@ describe("useCanvasDropController", () => {
 				5,
 			);
 
-			const action = dispatch.mock.calls[0]?.[0] as {
-				data: { props: Record<string, unknown> };
-			};
-			expect(action.data.props["cover"]).toBe("/declared.png");
-			expect(action.data.props["coverAlt"]).toBe("Declared alt");
+			expect(committedProps()["cover"]).toBe("/declared.png");
+			expect(committedProps()["coverAlt"]).toBe("Declared alt");
 		} finally {
 			components["Text"] = original;
 		}
@@ -486,11 +534,7 @@ describe("useCanvasDropController", () => {
 		renderHook(() => useCanvasDropController(document), { wrapper });
 		dropAt({ kind: "text", body: "FALLBACK" }, 5, 5);
 
-		const action = dispatch.mock.calls[0]?.[0] as
-			| { data: { props: Record<string, unknown> } }
-			| undefined;
-		if (!action) throw new Error("Expected canvas dispatch");
-		const props = action.data.props;
+		const props = committedProps();
 		expect(props["text"]).toBe("FALLBACK");
 		expect(toastWarning).not.toHaveBeenCalled();
 	});

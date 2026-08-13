@@ -54,8 +54,10 @@ import {
 } from "../../../../../../puck/update-annotations.js";
 import { commitAppearanceUpdate } from "../../../../../../puck/update-appearance.js";
 import type { EditorSelectionController } from "../../../../../../react/editor/selection.js";
-import { StudioEditorBridgeContext } from "../../../../../../react/editor/use-studio-editor.js";
-import { useOptionalStudioEditor } from "../../../../../../react/editor/use-studio-editor.js";
+import {
+	StudioEditorBridgeContext,
+	useOptionalStudioEditor,
+} from "../../../../../../react/editor/use-studio-editor.js";
 
 /** The outcome of one layers write. */
 export interface LayersWriteResult {

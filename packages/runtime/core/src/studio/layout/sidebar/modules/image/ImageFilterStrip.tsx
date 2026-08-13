@@ -10,8 +10,8 @@ import { type ReactNode } from "react";
 
 import { ToggleGroup, ToggleGroupItem } from "@/primitives/toggle-group";
 import { useMsg } from "@/state/editor-i18n-context";
-import type { AssetCategoryFilter } from "@/state/slices/editor-ui-store";
 import { useAssetCategoryFilter } from "@/state/slices/editor-ui-selectors";
+import type { AssetCategoryFilter } from "@/state/slices/editor-ui-store";
 
 export function ImageFilterStrip(): ReactNode {
 	const msg = useMsg();

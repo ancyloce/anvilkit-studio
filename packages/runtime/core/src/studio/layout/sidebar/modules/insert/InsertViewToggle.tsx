@@ -12,8 +12,8 @@ import type { ReactNode } from "react";
 import { ToggleGroup, ToggleGroupItem } from "@/primitives/toggle-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-context";
-import type { ComponentViewMode } from "@/state/slices/editor-ui-store";
 import { useComponentViewMode } from "@/state/slices/editor-ui-selectors";
+import type { ComponentViewMode } from "@/state/slices/editor-ui-store";
 
 export function InsertViewToggle(): ReactNode {
 	const msg = useMsg();

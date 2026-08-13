@@ -25,7 +25,6 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import { PageNavigator } from "../../../../../../react/editor/pages/PageNavigator.js";
 import { useStudioPagesSourceOrDefault } from "@/context/pages-source";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
@@ -34,6 +33,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { Windowed } from "@/primitives/windowed";
 import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioPage } from "@/types/pages";
+import { PageNavigator } from "../../../../../../react/editor/pages/PageNavigator.js";
 import { AddPageDialog } from "./AddPageDialog";
 import { BulkDeletePagesDialog } from "./BulkDeletePagesDialog";
 import { PageRow, type SelectModifiers } from "./PageRow";

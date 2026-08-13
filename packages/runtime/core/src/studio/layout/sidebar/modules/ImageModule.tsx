@@ -28,7 +28,6 @@ import {
 	useState,
 } from "react";
 import { toast } from "sonner";
-import { StudioEditorBridgeContext } from "../../../../../react/editor/use-studio-editor.js";
 import {
 	appendComponentToRoot,
 	generateNodeId,
@@ -47,6 +46,7 @@ import type {
 	StudioAssetTheme,
 	StudioAssetUploadEvent,
 } from "@/types/sidebar";
+import { StudioEditorBridgeContext } from "../../../../react/editor/use-studio-editor.js";
 import { AssetGrid, type UploadingTile } from "./image/AssetGrid";
 import {
 	assetsInDisplayOrder,

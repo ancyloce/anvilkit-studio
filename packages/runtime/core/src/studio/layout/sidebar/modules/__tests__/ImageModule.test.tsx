@@ -7,6 +7,7 @@
  * overflow menu surfaces all four built-in actions.
  */
 
+import type { Data } from "@puckeditor/core";
 import {
 	cleanup,
 	fireEvent,
@@ -15,7 +16,7 @@ import {
 	waitFor,
 } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ImageModule } from "@/layout/sidebar/modules/ImageModule";
 import {
 	SidebarHeaderActionsProvider,
@@ -29,16 +30,25 @@ import {
 	type SidebarRegistryStoreApi,
 } from "@/state/index";
 import type { StudioAsset, StudioAssetSource } from "@/types/sidebar";
+import { createStudioEditorBridge } from "../../../../../react/editor/bridge.js";
+import { StudioEditorBridgeContext } from "../../../../../react/editor/use-studio-editor.js";
 
 const dispatch = vi.fn();
 const mockPuckSnapshot = {
-	config: { components: {} as Record<string, unknown> },
-	appState: { data: { content: [] as unknown[] } },
+	config: {
+		root: { fields: {} },
+		components: {} as Record<string, unknown>,
+	},
+	appState: {
+		data: { root: { props: {} }, content: [] as unknown[] } as Data,
+	},
 	dispatch,
 	selectedItem: null,
 };
+const editorBridge = createStudioEditorBridge();
 
-vi.mock("@puckeditor/core", () => ({
+vi.mock("@puckeditor/core", async (importOriginal) => ({
+	...(await importOriginal<typeof import("@puckeditor/core")>()),
 	useGetPuck: () => () => mockPuckSnapshot,
 }));
 
@@ -57,6 +67,17 @@ afterEach(() => {
 	mockPuckSnapshot.appState.data.content = [];
 });
 
+beforeEach(() => {
+	dispatch.mockImplementation(
+		(action: { data: Data | ((previous: Data) => Data) }) => {
+			mockPuckSnapshot.appState.data =
+				typeof action.data === "function"
+					? action.data(mockPuckSnapshot.appState.data)
+					: action.data;
+		},
+	);
+});
+
 function Setup({
 	children,
 	registry,
@@ -66,17 +87,19 @@ function Setup({
 }): ReactElement {
 	const store = registry ?? createSidebarRegistryStore();
 	return (
-		<EditorI18nProvider>
-			<EditorUiStoreProvider
-				storeId={`image-${Math.random().toString(36).slice(2)}`}
-			>
-				<SidebarRegistryProvider value={store}>
-					<SidebarHeaderActionsProvider>
-						{children}
-					</SidebarHeaderActionsProvider>
-				</SidebarRegistryProvider>
-			</EditorUiStoreProvider>
-		</EditorI18nProvider>
+		<StudioEditorBridgeContext value={editorBridge}>
+			<EditorI18nProvider>
+				<EditorUiStoreProvider
+					storeId={`image-${Math.random().toString(36).slice(2)}`}
+				>
+					<SidebarRegistryProvider value={store}>
+						<SidebarHeaderActionsProvider>
+							{children}
+						</SidebarHeaderActionsProvider>
+					</SidebarRegistryProvider>
+				</EditorUiStoreProvider>
+			</EditorI18nProvider>
+		</StudioEditorBridgeContext>
 	);
 }
 
@@ -339,15 +362,16 @@ describe("ImageModule", () => {
 		expect(dispatch).toHaveBeenCalledTimes(1);
 		const action = dispatch.mock.calls[0]?.[0] as {
 			readonly type: string;
-			readonly data: {
-				readonly content: ReadonlyArray<{
-					readonly type: string;
-					readonly props: Record<string, unknown>;
-				}>;
-			};
+			readonly data: (previous: Data) => Data;
 		};
 		expect(action.type).toBe("setData");
-		const inserted = action.data.content[0];
+		expect(action.data).toEqual(expect.any(Function));
+		const inserted = (
+			mockPuckSnapshot.appState.data.content as ReadonlyArray<{
+				readonly type: string;
+				readonly props: Record<string, unknown>;
+			}>
+		)[0];
 		expect(inserted?.type).toBe("Image");
 		expect(inserted?.props["src"]).toBe("asset://png-1");
 		expect(inserted?.props["alt"]).toBe("photo.png");

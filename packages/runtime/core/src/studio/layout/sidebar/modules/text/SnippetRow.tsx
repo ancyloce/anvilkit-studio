@@ -12,8 +12,8 @@ import { type DragEvent, type ReactNode } from "react";
 import { encodeDropPayload } from "@/canvas-drop";
 import { Button } from "@/primitives/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
-import type { StudioCopySnippet } from "@/types/sidebar";
 import { cn } from "@/shared/cn";
+import type { StudioCopySnippet } from "@/types/sidebar";
 
 export interface SnippetRowProps {
 	readonly snippet: StudioCopySnippet;
