@@ -146,18 +146,19 @@ export interface DesignSystemCommitResult {
  * breakpoint leaves `designSystem.breakpoints` *and* every node's
  * layered override at that breakpoint is merged to base or discarded.
  * Those are one author intent and must be one undo, but they touch a
- * root prop and the content tree — so the caller pre-applies the node
- * rewrite to a document and hands it in here, and the root-prop write
- * lands on top of it inside the same `setData`.
+ * root prop and the content tree — so the caller supplies the pure
+ * document rewrite and the root-prop write lands on top of it inside
+ * the same `setData` functional updater.
  *
- * `base` MUST be derived from the live document by a pure rewrite; the
- * functional updater re-derives nothing about it, so a caller that
- * passes a stale document would clobber a concurrent edit. Callers
- * that have no node-level half use {@link commitDesignSystemUpdate}.
+ * `rewrite` is rerun if Puck presents a newer document during dispatch,
+ * so a concurrent edit is preserved rather than replaced by a stale
+ * precomputed base. It must be pure and return its input by reference
+ * when it makes no change. Callers that have no node-level half use
+ * {@link commitDesignSystemUpdate}.
  */
 export function commitDesignSystemUpdateOver(
 	deps: DesignSystemCommitDeps,
-	base: Data,
+	rewrite: (data: Data) => Data,
 	update: UpdateDesignSystemInput["update"],
 ): DesignSystemCommitResult {
 	const gate = writerGateError(deps);
@@ -165,20 +166,22 @@ export function commitDesignSystemUpdateOver(
 		return { status: "rejected", errors: [gate] };
 	}
 	const api = deps.getPuckApi();
-	const current = api.appState.data as Data;
-	const result = updateDesignSystemInData({ data: base, update });
-	if (result.status === "rejected") {
-		return { status: "rejected", errors: result.errors };
+	const attempt = dispatchOneIntent<UpdateDesignSystemResult>(api, (data) => {
+		const rewritten = rewrite(data);
+		const result = updateDesignSystemInData({ data: rewritten, update });
+		if (result.status !== "noop") {
+			return result;
+		}
+		return rewritten === data
+			? result
+			: { data: rewritten, status: "updated", errors: [] };
+	});
+	if (!attempt.committed) {
+		return {
+			status: failureStatus(attempt.outcome),
+			errors: attempt.outcome.errors,
+		};
 	}
-	const next = result.status === "updated" ? result.data : base;
-	if (next === current) {
-		return { status: "noop", errors: [] };
-	}
-	api.dispatch({
-		type: "setData",
-		recordHistory: true,
-		data: next,
-	} as Parameters<PuckApi["dispatch"]>[0]);
 	return { status: "committed", errors: [] };
 }
 

@@ -53,10 +53,10 @@
 import type { EditorError } from "@anvilkit/contracts/editor";
 import type { Config, Data, PuckApi } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
-import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 import {
 	collectSubtreeIds,
 	containerZoneId,
+	indexNodeLocations,
 	isComponentNode,
 	type PuckTreeNode,
 	parseZoneId,
@@ -70,6 +70,7 @@ import {
 	type NodeIdAllocator,
 	removeNode,
 } from "../react/editor/native-tree.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 import { isNodeLocked } from "./update-annotations.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 
@@ -358,19 +359,13 @@ export interface TreeCommitResult {
  */
 function permits(
 	api: PuckApi,
-	nodeId: string,
+	item: unknown,
 	permission: "delete" | "duplicate" | "drag",
 ): boolean {
 	const get = (api as { getPermissions?: unknown }).getPermissions;
 	// No `getPermissions` at all, or a node Puck cannot find, is genuinely
 	// "no opinion" — there is nothing to honour.
 	if (typeof get !== "function") return true;
-	let item: unknown;
-	try {
-		item = api.getItemById?.(nodeId);
-	} catch {
-		return true;
-	}
 	if (item === undefined || item === null) return true;
 	try {
 		const permissions = (
@@ -397,8 +392,7 @@ function permits(
  * isn't. Now that the carrier exists, a locked node cannot be moved or
  * deleted through this surface.
  */
-function lockedAmong(api: PuckApi, nodeIds: readonly string[]): string[] {
-	const data = api.appState.data as Data;
+function lockedAmong(data: Data, nodeIds: readonly string[]): string[] {
 	return nodeIds.filter((id) => isNodeLocked(data, id));
 }
 
@@ -422,7 +416,7 @@ function walkFailure(error: unknown): EditorError {
 
 function commit(
 	deps: TreeCommitDeps,
-	run: (data: Data, config: Config) => UpdateTreeResult,
+	run: (data: Data, config: Config, api: PuckApi) => UpdateTreeResult,
 ): TreeCommitResult {
 	const gate = writerGateError(deps);
 	if (gate !== null) {
@@ -436,7 +430,7 @@ function commit(
 	// outcome the protocol understands.
 	const attempt = dispatchOneIntent<UpdateTreeResult>(api, (data) => {
 		try {
-			return run(data, config);
+			return run(data, config, api);
 		} catch (error) {
 			return {
 				data,
@@ -475,19 +469,35 @@ function denied(nodeIds: readonly string[], what: string): TreeCommitResult {
 	};
 }
 
+/** A denial expressed as a pure transform outcome for retry handling. */
+function deniedInData(
+	data: Data,
+	nodeIds: readonly string[],
+	what: string,
+): UpdateTreeResult {
+	return {
+		data,
+		status: "rejected",
+		createdNodeIds: NO_IDS,
+		errors: denied(nodeIds, what).errors,
+	};
+}
+
 /** Delete a whole selection as ONE history entry. */
 export function commitDeleteNodes(
 	deps: TreeCommitDeps,
 	nodeIds: readonly string[],
 ): TreeCommitResult {
-	const api = deps.getPuckApi();
-	const locked = lockedAmong(api, nodeIds);
-	if (locked.length > 0) return denied(locked, "delete");
-	const blocked = nodeIds.filter((id) => !permits(api, id, "delete"));
-	if (blocked.length > 0) return denied(blocked, "delete");
-	return commit(deps, (data, config) =>
-		deleteNodesInData(data, nodeIds, config),
-	);
+	return commit(deps, (data, config, api) => {
+		const locked = lockedAmong(data, nodeIds);
+		if (locked.length > 0) return deniedInData(data, locked, "delete");
+		const locations = indexNodeLocations(data, config);
+		const blocked = nodeIds.filter(
+			(id) => !permits(api, locations.get(id)?.node, "delete"),
+		);
+		if (blocked.length > 0) return deniedInData(data, blocked, "delete");
+		return deleteNodesInData(data, nodeIds, config);
+	});
 }
 
 /** Duplicate a whole selection as ONE history entry. */
@@ -499,7 +509,15 @@ export function commitDuplicateNodes(
 	// A locked node may be duplicated (the COPY is not locked), but the
 	// source must not be mutated — duplication does not mutate it, so
 	// only the Puck-level permission applies here.
-	const blocked = nodeIds.filter((id) => !permits(api, id, "duplicate"));
+	const blocked = nodeIds.filter((id) => {
+		let item: unknown;
+		try {
+			item = api.getItemById?.(id);
+		} catch {
+			return false;
+		}
+		return !permits(api, item, "duplicate");
+	});
 	if (blocked.length > 0) return denied(blocked, "duplicate");
 	// ONE allocator for this intent, created OUTSIDE `run` (review 0036
 	// M-1). `commit`'s functional updater re-runs `run` against a document
@@ -518,16 +536,16 @@ export function commitReorderNode(
 	deps: TreeCommitDeps,
 	input: Omit<ReorderNodeInput, "data" | "config">,
 ): TreeCommitResult {
-	const api = deps.getPuckApi();
-	if (lockedAmong(api, [input.nodeId]).length > 0) {
-		return denied([input.nodeId], "reorder");
-	}
-	if (!permits(api, input.nodeId, "drag")) {
-		return denied([input.nodeId], "reorder");
-	}
-	return commit(deps, (data, config) =>
-		reorderNodeInData({ ...input, data, config }),
-	);
+	return commit(deps, (data, config, api) => {
+		if (lockedAmong(data, [input.nodeId]).length > 0) {
+			return deniedInData(data, [input.nodeId], "reorder");
+		}
+		const item = indexNodeLocations(data, config).get(input.nodeId)?.node;
+		if (!permits(api, item, "drag")) {
+			return deniedInData(data, [input.nodeId], "reorder");
+		}
+		return reorderNodeInData({ ...input, data, config });
+	});
 }
 
 /** Insert a node as ONE history entry. */

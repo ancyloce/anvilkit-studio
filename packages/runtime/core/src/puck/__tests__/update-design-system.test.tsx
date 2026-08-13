@@ -15,6 +15,7 @@ import * as React from "react";
 import { afterEach, describe, expect, it } from "vitest";
 import {
 	commitDesignSystemUpdate,
+	commitDesignSystemUpdateOver,
 	updateDesignSystemInData,
 } from "../update-design-system.js";
 
@@ -183,5 +184,68 @@ describe("commitDesignSystemUpdate against a live <Puck> (P2-05)", () => {
 		});
 		expect(second?.status).toBe("noop");
 		expect(dispatches).toBe(1);
+	});
+});
+
+describe("commitDesignSystemUpdateOver retry", () => {
+	it("re-derives both halves over a concurrent document edit", () => {
+		const initial = docWith({ title: "Initial", designSystem });
+		const concurrentDesignSystem: DesignSystem = {
+			...designSystem,
+			tokenModes: {
+				...designSystem.tokenModes,
+				dark: { id: "dark", name: "Dark" },
+			},
+		};
+		const concurrent = {
+			...initial,
+			content: [
+				...(initial.content ?? []),
+				{ type: "Box", props: { id: "box-2", label: "Concurrent" } },
+			],
+			root: {
+				props: { title: "Concurrent", designSystem: concurrentDesignSystem },
+			},
+		} as Data;
+		let committed: Data | null = null;
+		let rewriteRuns = 0;
+		const api = {
+			appState: { data: initial },
+			dispatch: (action: { data: (previous: Data) => Data }) => {
+				committed = action.data(concurrent);
+			},
+		} as unknown as PuckApi;
+
+		const result = commitDesignSystemUpdateOver(
+			{ getPuckApi: () => api },
+			(data) => {
+				rewriteRuns += 1;
+				return {
+					...data,
+					content: (data.content ?? []).map((node) => ({
+						...node,
+						props: { ...node.props, breakpointCleanup: true },
+					})),
+				};
+			},
+			(current) => ({ ...(current as DesignSystem), breakpoints: [] }),
+		);
+
+		expect(result.status).toBe("committed");
+		expect(rewriteRuns).toBe(2);
+		const landed = committed as unknown as {
+			content: Array<{ props: Record<string, unknown> }>;
+			root: { props: { title: string; designSystem: DesignSystem } };
+		};
+		expect(landed.root.props.title).toBe("Concurrent");
+		expect(landed.root.props.designSystem.tokenModes.dark?.name).toBe("Dark");
+		expect(landed.root.props.designSystem.breakpoints).toEqual([]);
+		expect(landed.content.map((node) => node.props.id)).toEqual([
+			"box-1",
+			"box-2",
+		]);
+		expect(
+			landed.content.every((node) => node.props.breakpointCleanup === true),
+		).toBe(true);
 	});
 });
