@@ -22,8 +22,8 @@ import { safeParseDesignSystem } from "@anvilkit/schema/editor";
 import type { Data, PuckApi } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
-import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
+import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 
 /** Input to {@link updateDesignSystemInData}. */
 export interface UpdateDesignSystemInput {

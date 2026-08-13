@@ -60,9 +60,9 @@ describe("updateDesignSystemInData (P2-05)", () => {
 			result.data as unknown as { root: { props: Record<string, unknown> } }
 		).root.props;
 		expect(rootProps.title).toBe("Page");
-		expect(
-			(rootProps.designSystem as DesignSystem).tokenModes.dark?.name,
-		).toBe("Dark");
+		expect((rootProps.designSystem as DesignSystem).tokenModes.dark?.name).toBe(
+			"Dark",
+		);
 	});
 
 	it("never mutates its input", () => {
