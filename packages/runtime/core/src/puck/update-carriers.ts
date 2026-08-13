@@ -45,9 +45,9 @@ import { walkTree } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { interactionsWriteErrors } from "../editor/interactions/validate.js";
 import { deepEqualJson } from "../editor/patch.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 import { readEditorMetadataFor } from "./component-metadata.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
-import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 
 /** The two array-shaped node carriers this module writes. */
 export type NodeCarrier = "interactions" | "bindings";
@@ -343,7 +343,7 @@ function commit(
 ): CarrierCommitResult {
 	const gate = writerGateError(deps);
 	if (gate !== null) {
-		return { status: "rejected", changedNodeIds: NO_IDS,  errors: [gate] };
+		return { status: "rejected", changedNodeIds: NO_IDS, errors: [gate] };
 	}
 	const api = deps.getPuckApi();
 	const config = api.config as Config;

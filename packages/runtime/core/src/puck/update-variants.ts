@@ -60,13 +60,13 @@ import {
 } from "../document-model/materialize.js";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 import {
 	parseComponentInstance,
 	parseComponentLibrary,
 } from "./read-appearance.js";
 import { withComponentLibrary } from "./update-component-library.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
-import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 
 /**
  * The maximum expressible combinations an authored model may offer.
@@ -858,7 +858,7 @@ function commit(
 ): VariantCommitResult {
 	const gate = writerGateError(deps);
 	if (gate !== null) {
-		return { status: "rejected", resolvedNodeIds: NO_IDS,  errors: [gate] };
+		return { status: "rejected", resolvedNodeIds: NO_IDS, errors: [gate] };
 	}
 	const api = deps.getPuckApi();
 	const config = api.config as Config;

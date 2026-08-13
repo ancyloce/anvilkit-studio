@@ -49,9 +49,9 @@ import { readDocument } from "../document-model/index.js";
 import { materializeInstance } from "../document-model/materialize.js";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 import { parseComponentLibrary } from "./read-appearance.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
-import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 
 /** Referencing node ids carried on a diagnostic, capped (§14.6). */
 const INSTANCE_ID_REPORT_CAP = 50;

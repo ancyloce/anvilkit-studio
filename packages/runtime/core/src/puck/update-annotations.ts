@@ -36,9 +36,9 @@ import { EDITOR_ANNOTATIONS_PROP } from "@anvilkit/contracts/editor";
 import type { Data, PuckApi } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 import { parseEditorAnnotations } from "./read-appearance.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
-import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 
 /** One annotation intent. */
 export type AnnotationEdit =
@@ -135,7 +135,9 @@ export function updateAnnotationsInData(
 	const nextEntry = applyEdit(current[input.edit.nodeId], input.edit);
 	const { [input.edit.nodeId]: _gone, ...rest } = current;
 	const nextMap: Record<string, EditorAnnotation> =
-		nextEntry === undefined ? rest : { ...rest, [input.edit.nodeId]: nextEntry };
+		nextEntry === undefined
+			? rest
+			: { ...rest, [input.edit.nodeId]: nextEntry };
 	const next: EditorAnnotations | undefined =
 		Object.keys(nextMap).length === 0 ? undefined : nextMap;
 

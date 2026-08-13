@@ -211,7 +211,6 @@ export function resolveStyleTargetsFor(
 	return targets;
 }
 
-
 /**
  * Convenience over {@link readEditorMetadata} for the common case of
  * looking a component up in a Puck `Config` by type.

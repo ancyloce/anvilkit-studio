@@ -40,13 +40,13 @@ import type { Config, Data, PuckApi } from "@puckeditor/core";
 import { walkTree } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 import {
 	AUTHORABLE_PROPERTY_LOCATIONS,
 	resolveStyleTargets,
 } from "./component-metadata.js";
 import { documentBreakpoints } from "./read-appearance.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
-import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 
 /** One appearance mutation applied at the active layer. */
 export type AppearancePatch =
