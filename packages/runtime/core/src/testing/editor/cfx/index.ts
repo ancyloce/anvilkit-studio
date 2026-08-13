@@ -14,6 +14,6 @@ export {
 	CFX_IDS,
 	CFX_TOKEN_IDS,
 	type CfxFixture,
-	cfxFixture,
 	type CfxId,
+	cfxFixture,
 } from "./manifest.js";

@@ -33,27 +33,32 @@ describe("core studio.* locale packs", () => {
 		["zh", "发布", "语言"],
 		["ja", "公開", "言語"],
 		["ko", "게시", "언어"],
-	])("lazy-loads the %s chrome pack on locale switch", async (locale, publish, language) => {
-		const storeId = `core-pack-${locale}`;
-		const bundle = createEditorStore({ storeId });
-		const wrapper = ({ children }: { children: ReactNode }) => (
-			<EditorStoreProvider storeId={storeId} store={bundle}>
-				<EditorI18nProvider>{children}</EditorI18nProvider>
-			</EditorStoreProvider>
-		);
-		const { result } = renderHook(() => useMsg(), { wrapper });
-		await waitFor(() => expect(typeof result.current).toBe("function"));
+	])(
+		"lazy-loads the %s chrome pack on locale switch",
+		async (locale, publish, language) => {
+			const storeId = `core-pack-${locale}`;
+			const bundle = createEditorStore({ storeId });
+			const wrapper = ({ children }: { children: ReactNode }) => (
+				<EditorStoreProvider storeId={storeId} store={bundle}>
+					<EditorI18nProvider>{children}</EditorI18nProvider>
+				</EditorStoreProvider>
+			);
+			const { result } = renderHook(() => useMsg(), { wrapper });
+			await waitFor(() => expect(typeof result.current).toBe("function"));
 
-		// English baseline before the switch.
-		expect(result.current("studio.publish")).toBe("Publish");
+			// English baseline before the switch.
+			expect(result.current("studio.publish")).toBe("Publish");
 
-		act(() => {
-			bundle.locale.getState().setLocale(locale);
-		});
+			act(() => {
+				bundle.locale.getState().setLocale(locale);
+			});
 
-		await waitFor(() => expect(result.current("studio.publish")).toBe(publish));
-		expect(result.current("studio.language.label")).toBe(language);
-	});
+			await waitFor(() =>
+				expect(result.current("studio.publish")).toBe(publish),
+			);
+			expect(result.current("studio.language.label")).toBe(language);
+		},
+	);
 
 	it("stays English for a locale with no pack (graceful fallback)", async () => {
 		const storeId = "core-pack-none";

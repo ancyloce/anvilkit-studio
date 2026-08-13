@@ -20,15 +20,15 @@
  */
 
 import type {
-	BreakpointDefinition,
 	AnvilComponentMetadata,
+	BreakpointDefinition,
 	NodeAuthoringStateV1,
 } from "@anvilkit/contracts/editor";
+import type { Data } from "@puckeditor/core";
 import {
 	ANVILKIT_AUTHORING_KEY,
 	type LegacyAuthoringState as AuthoringStateV1,
 } from "../../migrations/legacy-sidecar.js";
-import type { Data } from "@puckeditor/core";
 import type { EditorCapabilityRegistry } from "../../types/editor-api.js";
 
 /** Component types the profiles cycle through (mixed capabilities). */

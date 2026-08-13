@@ -23,7 +23,11 @@
  * second answer to the same question.
  */
 
-import type { Binding, Interaction, JsonValue } from "@anvilkit/contracts/editor";
+import type {
+	Binding,
+	Interaction,
+	JsonValue,
+} from "@anvilkit/contracts/editor";
 import type { DocumentModel } from "../document-model/index.js";
 import type { AnnotationEdit } from "../puck/update-annotations.js";
 import type { CarrierCommitResult } from "../puck/update-carriers.js";
@@ -35,7 +39,10 @@ import type { VariantModelEdit } from "../puck/update-variants.js";
 /** Outcome shared by every `EditorApi.commit.*` call. */
 export interface EditorCommitOutcome {
 	readonly status: "committed" | "noop" | "rejected";
-	readonly errors: readonly { readonly code: string; readonly message: string }[];
+	readonly errors: readonly {
+		readonly code: string;
+		readonly message: string;
+	}[];
 }
 
 /**
@@ -43,7 +50,9 @@ export interface EditorCommitOutcome {
  * exactly one history-recording `setData`.
  */
 export interface EditorCommitApi {
-	readonly componentLibrary: (edit: ComponentLibraryEdit) => EditorCommitOutcome;
+	readonly componentLibrary: (
+		edit: ComponentLibraryEdit,
+	) => EditorCommitOutcome;
 	readonly variantModel: (
 		definitionId: string,
 		edit: VariantModelEdit,
@@ -125,5 +134,8 @@ export type EditorIntent =
 /** Outcome of resolving one intent. */
 export interface EditorIntentOutcome {
 	readonly status: "committed" | "noop" | "rejected";
-	readonly errors: readonly { readonly code: string; readonly message: string }[];
+	readonly errors: readonly {
+		readonly code: string;
+		readonly message: string;
+	}[];
 }

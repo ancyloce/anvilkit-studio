@@ -8,10 +8,7 @@
  * transparency (cached output byte-identical to cold output).
  */
 
-import type {
-	AnvilAppearance,
-	DesignSystem,
-} from "@anvilkit/contracts/editor";
+import type { AnvilAppearance, DesignSystem } from "@anvilkit/contracts/editor";
 import type { Config, Data } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import { anvilRootAttrs, anvilTargetAttrs } from "../../../puck/targets.js";

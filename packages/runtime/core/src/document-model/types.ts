@@ -20,8 +20,8 @@ import type {
 	ComponentInstanceState,
 	DesignSystem,
 	DocumentComponentLibrary,
-	InlineTextTarget,
 	EditorAnnotations,
+	InlineTextTarget,
 	Interaction,
 } from "@anvilkit/contracts/editor";
 import type { Config } from "@puckeditor/core";

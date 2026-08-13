@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file i18n message context for Studio chrome (PRD §4.1, §10).
  *

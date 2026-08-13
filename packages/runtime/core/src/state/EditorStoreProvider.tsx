@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `<EditorStoreProvider>` — single-gate provider for the four
  * per-`<Studio>` editor stores (provider-consolidation Phase 2).

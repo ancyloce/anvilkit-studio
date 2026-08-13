@@ -313,12 +313,8 @@ describe("perf profiles are fixed inputs", () => {
 
 	it("declares mixed capabilities so scans have real work", () => {
 		const profile = buildPerfProfile("1k");
-		expect(
-			profile.capabilities.forComponent("Image")?.images,
-		).toBeDefined();
-		expect(
-			profile.capabilities.forComponent("Box")?.images,
-		).toBeUndefined();
+		expect(profile.capabilities.forComponent("Image")?.images).toBeDefined();
+		expect(profile.capabilities.forComponent("Box")?.images).toBeUndefined();
 		expect(profile.capabilities.forComponent("Unknown")).toBeUndefined();
 	});
 });

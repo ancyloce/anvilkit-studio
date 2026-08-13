@@ -11,14 +11,12 @@ import type {
 	DesignToken,
 	NodeAuthoringStateV1,
 } from "@anvilkit/contracts/editor";
-import {
-	EDITOR_COUNT_LIMITS,
-} from "@anvilkit/contracts/editor";
+import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
+import type { Data, Config as PuckConfig } from "@puckeditor/core";
 import {
 	ANVILKIT_AUTHORING_KEY,
 	type LegacyAuthoringState as AuthoringStateV1,
 } from "../../migrations/legacy-sidecar.js";
-import type { Data, Config as PuckConfig } from "@puckeditor/core";
 
 /** Sizing knobs for {@link buildAuthoringStateAtLimits}. */
 export interface LimitFixtureOptions {

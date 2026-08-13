@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file Per-`<Studio>` provider + selector hook for the AI store.
  * See `ThemeStoreProvider` for the shared pattern rationale.

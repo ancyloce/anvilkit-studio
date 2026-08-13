@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `useRehydratedStore` — shared per-`<Studio>` store lifecycle:
  * lazy create (keyed by `storeId`), explicit deferred rehydration, and

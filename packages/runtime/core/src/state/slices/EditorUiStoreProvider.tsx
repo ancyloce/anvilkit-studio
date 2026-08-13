@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file React context provider for the per-instance editor UI store.
  *

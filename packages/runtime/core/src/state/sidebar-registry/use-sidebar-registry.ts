@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file React selector hook for the per-instance sidebar registry.
  *

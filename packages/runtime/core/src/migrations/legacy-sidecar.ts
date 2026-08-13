@@ -47,9 +47,7 @@ export const ANVILKIT_AUTHORING_KEY = "__anvilkit" as const;
  * would be a third structural mirror of a shape scheduled for
  * deletion.
  */
-export type LegacyAuthoringState = ReturnType<
-	typeof createEmptyAuthoringState
->;
+export type LegacyAuthoringState = ReturnType<typeof createEmptyAuthoringState>;
 
 /** The result of reading the authoring sidecar from Puck data. */
 export interface LegacySidecarRead {

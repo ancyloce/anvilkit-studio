@@ -448,15 +448,12 @@ describe("isCoreVersionCompatible — malformed input", () => {
 		}
 	});
 
-	it.each<[string]>([
-		["1.2.3.4"],
-		["v1.2.3"],
-		["abc"],
-		[""],
-		[".1.2"],
-	])("rejects malformed installed version %s", (installed) => {
-		expect(isCoreVersionCompatible("^1.2.3", installed)).toBe(false);
-	});
+	it.each<[string]>([["1.2.3.4"], ["v1.2.3"], ["abc"], [""], [".1.2"]])(
+		"rejects malformed installed version %s",
+		(installed) => {
+			expect(isCoreVersionCompatible("^1.2.3", installed)).toBe(false);
+		},
+	);
 
 	it("trims surrounding whitespace before parsing the range", () => {
 		// Trailing / leading whitespace is plausible operator-error

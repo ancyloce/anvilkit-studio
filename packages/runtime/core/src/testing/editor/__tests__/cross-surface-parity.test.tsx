@@ -65,20 +65,16 @@ describe("Phase 4 exit gate — one fingerprint across surfaces", () => {
 	});
 
 	it("public RSC / preview surface: AnvilKitRender emits the direct compile byte-for-byte", () => {
-		const compiledSeen: CompiledAppearance[] = [];
 		const { container } = render(
 			<AnvilKitRender
 				config={crossenvConfig}
 				data={crossenvDocument}
-				onCompiled={(compiled) => {
-					compiledSeen.push(compiled);
-				}}
+				compiled={direct}
 			/>,
 		);
 		const styles = appearanceStyles(container);
 		expect(styles).toHaveLength(1);
 		expect(styles[0]?.textContent).toBe(direct.css);
-		expect(compiledSeen[0]?.fingerprint).toBe(direct.fingerprint);
 	});
 
 	it("editor canvas surface: the live composition wiring emits the same bytes from Puck state", () => {

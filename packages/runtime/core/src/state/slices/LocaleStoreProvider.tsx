@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file Per-`<Studio>` provider + selector hooks for the locale store.
  *

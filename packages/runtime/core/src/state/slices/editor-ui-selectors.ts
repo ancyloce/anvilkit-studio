@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file Selector hooks for the editor UI store.
  *

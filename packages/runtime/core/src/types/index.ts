@@ -32,6 +32,13 @@ export type {
 	StudioPluginEditorApi,
 } from "./editor-api.js";
 export type {
+	EditorApi,
+	EditorCommitApi,
+	EditorCommitOutcome,
+	EditorIntent,
+	EditorIntentOutcome,
+} from "./editor-api-v2.js";
+export type {
 	DataSchema,
 	DataSourceDescriptor,
 	EditorDataSourceAdapter,
@@ -124,10 +131,3 @@ export type {
 	StudioSeoPanel,
 	StudioSidebarUnregister,
 } from "./sidebar.js";
-export type {
-	EditorApi,
-	EditorCommitApi,
-	EditorCommitOutcome,
-	EditorIntent,
-	EditorIntentOutcome,
-} from "./editor-api-v2.js";
