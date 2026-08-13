@@ -12,7 +12,12 @@
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab",
-		"includes": ["**", "!**/*.snap.json", "!**/api/api-snapshot*.json"]
+		"includes": [
+			"**",
+			"!**/*.snap.json",
+			"!**/api/api-snapshot*.json",
+			"!**/__goldens__/*.css"
+		]
 	},
 	"linter": {
 		"enabled": true,
