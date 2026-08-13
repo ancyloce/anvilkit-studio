@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `PropertyResetButton` — the label-row reset affordance for
  * fields whose component config declares a reliable default (see

@@ -18,13 +18,12 @@
  */
 
 import type { StudioEditorConfig } from "@anvilkit/contracts/editor";
-import { lazy, type ReactNode, Suspense, useEffect, useState } from "react";
 import type { Data as PuckData } from "@puckeditor/core";
+import { lazy, type ReactNode, Suspense, useEffect, useState } from "react";
 import {
 	documentBreakpoints,
 	type EditorFeatureScanDocument,
 } from "../../editor/index.js";
-import { createEditorApi } from "./editor-api.js";
 import { useStudioPluginContext } from "../../studio/context/plugin-context.js";
 import { createDomAccessibilityScanner } from "./a11y/dom-rules/index.js";
 import type { StudioEditorBridge } from "./bridge.js";
@@ -41,6 +40,7 @@ import {
 	type EditorPerfMetrics,
 	perfOverlayEnabled,
 } from "./diagnostics/perf-metrics.js";
+import { createEditorApi } from "./editor-api.js";
 import { createInlineEditController } from "./inline/controller.js";
 import { RichTextSurfaceMount } from "./inline/RichTextSurfaceMount.js";
 import { InteractionRuntimeMount } from "./interactions/InteractionRuntimeMount.js";

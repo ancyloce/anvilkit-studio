@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file Public barrel for `@anvilkit/core/react/overrides`.
  *

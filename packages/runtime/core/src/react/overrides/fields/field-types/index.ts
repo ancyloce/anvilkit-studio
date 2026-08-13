@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file Field-type registry. Shape matches Puck's
  * `Partial<FieldRenderFunctions>` so it slots straight into

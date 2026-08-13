@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `ComponentOverlay` — Puck `componentOverlay` override.
  *

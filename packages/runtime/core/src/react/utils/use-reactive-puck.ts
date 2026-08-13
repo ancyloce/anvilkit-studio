@@ -73,7 +73,11 @@ export function useReactivePuck<T>(selector: (snapshot: PuckSnapshot) => T): T {
  */
 function isMissingPuckProvider(error: unknown): boolean {
 	const message =
-		error instanceof Error ? error.message : typeof error === "string" ? error : "";
+		error instanceof Error
+			? error.message
+			: typeof error === "string"
+				? error
+				: "";
 	return message.includes("usePuck") && message.includes("<Puck>");
 }
 

@@ -1,6 +1,6 @@
 /**
- * @file Regression tests for review 0036 M-7 — rendering must be able
- * to be side-effect-free.
+ * @file Regression tests for reviews 0036 M-7 and 0037 P2-9 — render
+ * must never report through a callback or console side effect.
  *
  * `AnvilKitRender` compiled the appearance in its render body and then
  * called `onCompiled` (or `console.warn`) from there too. That violates
@@ -61,7 +61,10 @@ const data = {
 	zones: {},
 } as unknown as Data;
 
-afterEach(cleanup);
+afterEach(() => {
+	cleanup();
+	vi.restoreAllMocks();
+});
 
 describe("AnvilKitRender — a pre-compiled render is pure (0036 M-7)", () => {
 	it("does not compile, cache or report when `compiled` is supplied", () => {
@@ -106,16 +109,20 @@ describe("AnvilKitRender — a pre-compiled render is pure (0036 M-7)", () => {
 		}
 	});
 
-	it("still compiles internally when `compiled` is omitted", () => {
+	it("still compiles internally without reporting from StrictMode render", () => {
 		const onCompiled = vi.fn();
+		const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
 		const view = render(
-			<AnvilKitRender config={config} data={data} onCompiled={onCompiled} />,
+			<React.StrictMode>
+				<AnvilKitRender config={config} data={data} onCompiled={onCompiled} />
+			</React.StrictMode>,
 		);
 		expect(
 			view.container.querySelector("[data-testid=box-render]"),
 		).not.toBeNull();
-		// The legacy seam still works for callers that have not migrated.
-		expect(onCompiled).toHaveBeenCalled();
+		// Before P2-9 StrictMode invoked the callback twice from render.
+		expect(onCompiled).not.toHaveBeenCalled();
+		expect(warn).not.toHaveBeenCalled();
 	});
 
 	it("produces identical markup either way", () => {

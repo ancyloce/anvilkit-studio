@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `EditorDrawer` — Puck `drawer` override entry point.
  *

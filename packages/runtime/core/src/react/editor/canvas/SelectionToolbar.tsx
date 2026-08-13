@@ -36,9 +36,9 @@ import type {
 	ResponsiveLayerRef,
 } from "@anvilkit/contracts/editor";
 import type {
-	Data as PuckDataType,
 	PuckApi,
 	Config as PuckConfig,
+	Data as PuckDataType,
 } from "@puckeditor/core";
 import {
 	type ReactNode,

@@ -51,6 +51,7 @@ import type {
 	TokenValue,
 } from "@anvilkit/contracts/editor";
 import { useCallback, useMemo, useState } from "react";
+import { randomId } from "@/shared/node-id";
 import { readNodeField } from "../../../../document-model/index.js";
 import { ROOT_STYLE_TARGET_ID } from "../../../../puck/targets.js";
 import { FALLBACK_TOKEN_MODE } from "../../tokens/token-mode.js";
@@ -65,7 +66,6 @@ import {
 	type DesignSystemTokenRow,
 	readDesignSystem,
 } from "./read-design-system.js";
-import { randomId } from "@/shared/node-id";
 
 /** What the Design System panel needs. */
 export interface DesignSystemPanelState extends DesignSystemProjection {

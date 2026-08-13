@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `InspectorSection` — a collapsible property group for the
  * inspector (task Phase 7).

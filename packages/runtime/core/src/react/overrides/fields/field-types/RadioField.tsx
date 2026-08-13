@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file Default renderer for Puck `radio` fields. Built on the
  * ToggleGroup primitive — Base UI's exclusive-select semantics

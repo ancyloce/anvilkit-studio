@@ -1,7 +1,9 @@
 /**
  * @file CORE-P1B-011 — DOM accessibility rules: fixture per rule,
  * incremental scanner (mutation-idle debounce + 2 s full-scan
- * throttle + manual bypass), and the ≤100 ms @1k-nodes budget.
+ * throttle + manual bypass), and deterministic 1k-node scale coverage.
+ * Wall-clock measurements belong in the opt-in `bench:editor` surface,
+ * never in the jsdom unit gate (review 0037 P2-11).
  */
 
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -91,16 +93,23 @@ describe("evaluateDomRules (CORE-P1B-011)", () => {
 		);
 	});
 
-	it("stays under the ≤100 ms budget at 1k nodes", () => {
+	it("evaluates all 1k nodes with deterministic issue output", () => {
 		const html = Array.from({ length: 1000 }, (_, index) =>
 			index % 5 === 0
-				? `<button id="b-${index}">go</button>`
+				? `<input id="i-${index}" />`
 				: `<p id="p-${index}">text</p>`,
 		).join("");
 		const doc = docWith(html);
-		const startedAt = performance.now();
-		evaluateDomRules(doc);
-		expect(performance.now() - startedAt).toBeLessThan(100);
+		const issues = evaluateDomRules(doc);
+		const missingLabels = issues.filter(
+			(issue) => issue.rule === "missing-label",
+		);
+
+		expect(doc.body.querySelectorAll("input, p")).toHaveLength(1000);
+		expect(missingLabels).toHaveLength(200);
+		expect(new Set(missingLabels.map((issue) => issue.fingerprint)).size).toBe(
+			200,
+		);
 	});
 });
 

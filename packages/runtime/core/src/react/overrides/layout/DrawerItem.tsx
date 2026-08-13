@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `DrawerItem` — single component card in the insert drawer.
  *
@@ -24,10 +26,10 @@ import { Component as GenericComponentIcon } from "lucide-react";
 import { type ReactNode, useMemo, useState } from "react";
 
 import { StudioErrorBoundary } from "@/components/StudioErrorBoundary";
-import { readComponentPresentation } from "@/utils/component-presentation";
-import { useReactivePuck } from "@/utils/use-reactive-puck";
 import { Item, ItemContent, ItemHeader, ItemTitle } from "@/primitives";
 import { useComponentViewMode } from "@/state/slices/editor-ui-selectors";
+import { readComponentPresentation } from "@/utils/component-presentation";
+import { useReactivePuck } from "@/utils/use-reactive-puck";
 
 export interface DrawerItemProps {
 	readonly name: string;

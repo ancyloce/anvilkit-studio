@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file Default renderer for Puck `select` fields. Built on the Base
  * UI Select primitive for richer keyboard / search behavior.

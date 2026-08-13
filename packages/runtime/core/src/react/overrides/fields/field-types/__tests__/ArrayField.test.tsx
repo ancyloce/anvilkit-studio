@@ -338,6 +338,71 @@ describe("ArrayField", () => {
 		expect(next[2]).toBe(items[2]);
 	});
 
+	it("keeps a focused local draft with its logical row through reorder", () => {
+		function Harness() {
+			const [items, setItems] = useState<readonly Record<string, unknown>[]>([
+				{ name: "First", price: "$1" },
+				{ name: "Second", price: "$2" },
+			]);
+			return (
+				<ArrayField
+					// biome-ignore lint/suspicious/noExplicitAny: test fixture
+					field={PLAN_FIELD as any}
+					value={items}
+					onChange={(next) => {
+						const candidate = next as readonly Record<string, unknown>[];
+						// Keep a typed local draft ahead of the durable value, but accept
+						// the reorder itself so React has to move the stateful row.
+						if (candidate[0]?.name === "Second") setItems(candidate);
+					}}
+					name="plans"
+				/>
+			);
+		}
+
+		render(<Harness />);
+		fireEvent.click(screen.getByRole("button", { name: "Edit Second" }));
+		const input = screen.getByLabelText("Name") as HTMLInputElement;
+		input.focus();
+		fireEvent.change(input, { target: { value: "Second draft" } });
+		expect(input).toHaveValue("Second draft");
+
+		fireEvent.keyDown(screen.getByLabelText("Reorder Second"), {
+			key: "ArrowUp",
+		});
+
+		expect(screen.getByLabelText("Name")).toBe(input);
+		expect(input).toHaveValue("Second draft");
+		expect(document.activeElement).toBe(input);
+	});
+
+	it("honors a Puck _arrayId across replacement objects", () => {
+		const renderField = (item: Record<string, unknown>) => (
+			<ArrayField
+				// biome-ignore lint/suspicious/noExplicitAny: test fixture
+				field={PLAN_FIELD as any}
+				value={[item]}
+				onChange={vi.fn()}
+				name="plans"
+			/>
+		);
+		const { rerender } = render(
+			renderField({ _arrayId: "puck-row-1", name: "First", price: "$1" }),
+		);
+		fireEvent.click(screen.getByRole("button", { name: "Edit First" }));
+		const input = screen.getByLabelText("Name") as HTMLInputElement;
+		input.focus();
+		fireEvent.change(input, { target: { value: "First draft" } });
+
+		rerender(
+			renderField({ _arrayId: "puck-row-1", name: "First", price: "$2" }),
+		);
+
+		expect(screen.getByLabelText("Name")).toBe(input);
+		expect(input).toHaveValue("First draft");
+		expect(document.activeElement).toBe(input);
+	});
+
 	it("reorders items by dragging a row handle", () => {
 		const onChange = vi.fn();
 		const items = [

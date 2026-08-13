@@ -27,9 +27,9 @@
 
 import type { Interaction } from "@anvilkit/contracts/editor";
 import type { ReactNode } from "react";
+import { Button } from "@/primitives/button";
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
-import { Button } from "@/primitives/button";
 import {
 	buildInteractionTimeline,
 	reorderActions,
@@ -126,9 +126,7 @@ export function TimelinePanel({
 									variant="ghost"
 									size="sm"
 									className="h-4 px-1 text-[10px]"
-									disabled={
-										row.actionIndex === interaction.actions.length - 1
-									}
+									disabled={row.actionIndex === interaction.actions.length - 1}
 									aria-label={msg("studio.editor.timeline.moveDown")}
 									onClick={() =>
 										onReorder({

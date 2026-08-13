@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `ActionBar` — Puck `actionBar` override.
  *

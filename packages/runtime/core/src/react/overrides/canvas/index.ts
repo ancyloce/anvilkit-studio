@@ -1,3 +1,5 @@
+"use client";
+
 export { ActionBar, type ActionBarOverrideProps } from "./ActionBar";
 export { CanvasIframe, type CanvasIframeOverrideProps } from "./CanvasIframe";
 export { CanvasPreview } from "./CanvasPreview";

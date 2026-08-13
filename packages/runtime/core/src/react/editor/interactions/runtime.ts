@@ -37,8 +37,8 @@
  */
 
 import type {
-	InteractionAction,
 	Interaction,
+	InteractionAction,
 	MotionTransition,
 } from "@anvilkit/contracts/editor";
 import { animate } from "motion";

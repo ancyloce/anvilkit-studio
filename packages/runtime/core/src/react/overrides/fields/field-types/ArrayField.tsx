@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file Default renderer for Puck `array` fields.
  *
@@ -42,6 +44,7 @@ import {
 } from "@/primitives/vendor/animate-ui/primitives/base/popover";
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
+import { useStableListItemKeys } from "../../../utils/use-stable-list-item-keys";
 import { ExternalField } from "./ExternalField";
 import { NumberField } from "./NumberField";
 import { RadioField } from "./RadioField";
@@ -355,7 +358,7 @@ function ItemFieldsPanel({
 
 				return (
 					<NestedField
-						key={subPath}
+						key={subName}
 						field={nestedField}
 						value={item[subName]}
 						onChange={(nextValue, uiState) =>
@@ -567,6 +570,7 @@ export function ArrayField({
 }: ArrayFieldRendererProps): ReactNode {
 	const msg = useMsg();
 	const items = toArray(value);
+	const { keys: itemKeys, inheritKey } = useStableListItemKeys(items);
 	const [openIndex, setOpenIndex] = useState<number | null>(null);
 	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 	const [dropIndex, setDropIndex] = useState<number | null>(null);
@@ -607,10 +611,12 @@ export function ArrayField({
 			const item = items[index];
 			if (item === undefined || item[subName] === nextValue) return;
 			const copy = items.slice();
-			copy[index] = { ...item, [subName]: nextValue };
+			const replacement = { ...item, [subName]: nextValue };
+			inheritKey(item, replacement);
+			copy[index] = replacement;
 			update(copy, uiState);
 		},
-		[items, update],
+		[items, inheritKey, update],
 	);
 
 	const add = useCallback((): void => {
@@ -759,8 +765,7 @@ export function ArrayField({
 				>
 					{items.map((item, index) => (
 						<ArrayRow
-							// biome-ignore lint/suspicious/noArrayIndexKey: array fields are reordered by index, not by item id; the index IS the identity here.
-							key={index}
+							key={itemKeys[index]}
 							field={field}
 							fieldName={fieldName}
 							id={id}

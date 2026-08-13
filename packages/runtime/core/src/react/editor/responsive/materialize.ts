@@ -43,7 +43,10 @@ import {
 } from "../../../puck/update-design-system.js";
 
 /** Whether `layer` is writable against `data` without materializing. */
-export function layerIsDeclared(data: Data, layer: ResponsiveLayerRef): boolean {
+export function layerIsDeclared(
+	data: Data,
+	layer: ResponsiveLayerRef,
+): boolean {
 	return (
 		layer === "base" ||
 		documentBreakpoints(data).some((breakpoint) => breakpoint.id === layer)

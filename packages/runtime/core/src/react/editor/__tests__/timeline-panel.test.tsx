@@ -9,8 +9,8 @@
 
 import type {
 	AnimationStep,
-	InteractionAction,
 	Interaction,
+	InteractionAction,
 	MotionTransition,
 } from "@anvilkit/contracts/editor";
 import { cleanup, render, screen } from "@testing-library/react";

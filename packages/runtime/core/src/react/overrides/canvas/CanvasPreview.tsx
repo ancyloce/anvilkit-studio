@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `CanvasPreview` — Puck `preview` override.
  *

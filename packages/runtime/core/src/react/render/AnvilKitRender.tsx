@@ -75,20 +75,14 @@ export interface AnvilKitRenderProps<
 	 */
 	readonly compiled?: CompiledAppearance;
 	/**
-	 * Observability seam (§9.2 step 6): receives the full compilation
-	 * result, diagnostics included. When omitted, non-empty diagnostics
-	 * are surfaced through `console.warn` — the live path may not
-	 * silently discard them (§7.4).
+	 * Retained only for source compatibility. Render-phase reporting is
+	 * unsafe under StrictMode and concurrent rendering, while this
+	 * component deliberately has no effects so it remains RSC-safe.
+	 * This callback is therefore never invoked.
 	 *
-	 * @deprecated Pass {@link AnvilKitRenderProps.compiled} instead and
-	 * inspect the result directly. This component is deliberately
-	 * hook-free so it stays RSC-safe, which means there is no effect to
-	 * defer this callback into: on the internal-compile path it is
-	 * invoked **during render**, so React may call it more than once per
-	 * commit (StrictMode) or for a render it then discards (concurrent
-	 * rendering). It must therefore be idempotent and free of side
-	 * effects — a constraint the `compiled` prop removes entirely
-	 * (review 0036 M-7).
+	 * @deprecated Compile outside React, pass
+	 * {@link AnvilKitRenderProps.compiled}, and inspect that result at the
+	 * call site for diagnostics or observability (review 0037 P2-9).
 	 */
 	readonly onCompiled?: (compiled: CompiledAppearance) => void;
 }
@@ -116,7 +110,6 @@ export function AnvilKitRender<
 	metadata,
 	cache,
 	compiled: precompiled,
-	onCompiled,
 }: AnvilKitRenderProps<UserConfig, G>): ReactNode {
 	// The clean path: the caller compiled outside React, so this render
 	// computes nothing, mutates no cache, and reports to no one
@@ -124,18 +117,6 @@ export function AnvilKitRender<
 	const compiled =
 		precompiled ??
 		compileDocumentAppearance({ data, config, tokenMode, cache });
-	if (precompiled === undefined) {
-		// Legacy internal-compile path. Both branches below are side
-		// effects in render — see the `onCompiled` deprecation note.
-		if (onCompiled !== undefined) {
-			onCompiled(compiled);
-		} else if (compiled.diagnostics.length > 0) {
-			console.warn(
-				`[anvilkit] appearance compiler reported ${compiled.diagnostics.length} diagnostic(s) for the rendered document`,
-				compiled.diagnostics,
-			);
-		}
-	}
 	return (
 		<div {...documentRootAttributes(compiled)}>
 			<style

@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `DimensionControl` — unit-aware editor for `text` fields that
  * carry CSS dimension strings (`"100px"`, `"1.5rem"`, `"auto"`).

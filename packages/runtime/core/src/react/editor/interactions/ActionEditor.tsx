@@ -279,9 +279,7 @@ export function ActionEditor({
 						<Checkbox
 							id="ak-action-newtab"
 							checked={draft.newTab}
-							onCheckedChange={(checked) =>
-								patch({ newTab: checked === true })
-							}
+							onCheckedChange={(checked) => patch({ newTab: checked === true })}
 							data-testid="ak-action-newtab"
 						/>
 						<Label htmlFor="ak-action-newtab" className="text-[11px]">

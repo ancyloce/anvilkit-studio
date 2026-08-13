@@ -9,10 +9,7 @@
  * phase exit gate.
  */
 
-import type {
-	AnvilAppearance,
-	DesignSystem,
-} from "@anvilkit/contracts/editor";
+import type { AnvilAppearance, DesignSystem } from "@anvilkit/contracts/editor";
 import type { Config, Data, PuckApi } from "@puckeditor/core";
 import { Puck, useGetPuck } from "@puckeditor/core";
 import { act, cleanup, render } from "@testing-library/react";

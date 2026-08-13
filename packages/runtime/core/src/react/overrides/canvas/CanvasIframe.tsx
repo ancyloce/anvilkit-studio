@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `CanvasIframe` — Puck `iframe` override.
  *

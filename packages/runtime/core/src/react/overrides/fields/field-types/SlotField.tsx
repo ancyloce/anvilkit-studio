@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file Default renderer for Puck `slot` fields. Slots are
  * Puck-managed drop zones; the override just frames the area so it

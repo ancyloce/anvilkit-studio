@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `EditorOutline` — sidebar outline tab body.
  *

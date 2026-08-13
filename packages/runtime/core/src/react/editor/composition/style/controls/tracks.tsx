@@ -45,6 +45,7 @@ import {
 } from "@/primitives/select";
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
+import { useStableListItemKeys } from "../../../../utils/use-stable-list-item-keys.js";
 import { InspectorFieldShell } from "../../../inspector/InspectorFieldShell.js";
 import { fieldValue, type StyleFieldHandle } from "./handle.js";
 import { DEFAULT_LENGTH_UNITS } from "./LengthControl.js";
@@ -270,6 +271,7 @@ export function GridTracksControl({
 }: GridTracksControlProps): ReactNode {
 	const msg = useMsg();
 	const tracks = fieldValue(field.state) ?? [];
+	const { keys: trackKeys, inheritKey } = useStableListItemKeys(tracks);
 
 	const write = (next: readonly GridTrack[]): void => {
 		if (next.length === 0) {
@@ -290,12 +292,12 @@ export function GridTracksControl({
 			<div className="flex flex-col gap-1" data-testid={testId}>
 				{tracks.map((track, index) => (
 					<TrackRow
-						// biome-ignore lint/suspicious/noArrayIndexKey: grid tracks have no identity beyond order.
-						key={index}
+						key={trackKeys[index]}
 						track={track}
-						onChange={(next) =>
-							write(tracks.map((entry, at) => (at === index ? next : entry)))
-						}
+						onChange={(next) => {
+							inheritKey(track, next);
+							write(tracks.map((entry, at) => (at === index ? next : entry)));
+						}}
 						onRemove={() => write(tracks.filter((_, at) => at !== index))}
 					/>
 				))}

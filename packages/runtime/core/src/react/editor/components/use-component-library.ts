@@ -43,6 +43,7 @@ import type {
 	EditorError,
 } from "@anvilkit/contracts/editor";
 import { use, useCallback, useMemo } from "react";
+import { randomId } from "@/shared/node-id";
 import { writeComponentInstanceProp } from "../../../document-model/materialize.js";
 import { COMPONENT_FRAME_TYPE } from "../../../puck/create-component.js";
 import type { ComponentLibraryEdit } from "../../../puck/update-component-library.js";
@@ -57,7 +58,6 @@ import {
 	usePuckApiGetter,
 } from "./editor-runtime.js";
 import { scopedDefinitionId } from "./scope.js";
-import { randomId } from "@/shared/node-id";
 
 /** Referencing node ids carried on a row, capped like the diagnostics. */
 const INSTANCE_ID_REPORT_CAP = 50;

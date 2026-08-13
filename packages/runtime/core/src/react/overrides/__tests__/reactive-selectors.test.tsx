@@ -56,8 +56,8 @@ vi.mock("@puckeditor/core", () => ({
 
 import { ComponentOverlay } from "@/overrides/canvas/ComponentOverlay";
 import { EditorOutline } from "@/overrides/layout/EditorOutline";
-import { useBreadcrumbs } from "@/utils/breadcrumbs";
 import { EditorI18nProvider } from "@/state/index";
+import { useBreadcrumbs } from "@/utils/breadcrumbs";
 
 function freshState(): MockPuckState {
 	return {

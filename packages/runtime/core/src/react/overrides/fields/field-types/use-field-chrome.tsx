@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `useFieldChrome()` — shared presentation adoption for the
  * simple field-type renderers (text / textarea / number / select /

@@ -50,9 +50,9 @@
  */
 
 import type {
+	PuckApi,
 	Config as PuckConfig,
 	Data as PuckData,
-	PuckApi,
 } from "@puckeditor/core";
 import {
 	collectAppearanceNodes,
@@ -60,7 +60,10 @@ import {
 	readTargetHidden,
 } from "../../../puck/read-appearance.js";
 import { ROOT_STYLE_TARGET_ID } from "../../../puck/targets.js";
-import { commitAnnotationUpdate, isNodeLocked } from "../../../puck/update-annotations.js";
+import {
+	commitAnnotationUpdate,
+	isNodeLocked,
+} from "../../../puck/update-annotations.js";
 import { commitAppearanceUpdate } from "../../../puck/update-appearance.js";
 import type { StudioEditorBridge } from "../bridge.js";
 import {

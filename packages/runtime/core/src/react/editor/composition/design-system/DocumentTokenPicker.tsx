@@ -48,6 +48,7 @@ import { Input } from "@/primitives/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/primitives/popover";
 import { ScrollArea } from "@/primitives/scroll-area";
 import { cn } from "@/shared/cn";
+import { randomId } from "@/shared/node-id";
 import { useMsg } from "@/state/editor-i18n-context";
 import { formatTokenLiteral } from "../../tokens/token-literal-text.js";
 import { FALLBACK_TOKEN_MODE } from "../../tokens/token-mode.js";
@@ -55,7 +56,6 @@ import { useDocumentModel } from "../../use-document-model.js";
 import { useDesignSystemCommit } from "../use-design-system-commit.js";
 import { readTokenChoices, type TokenChoice } from "./read-design-system.js";
 import { rememberToken, useTokenRecents } from "./token-recents.js";
-import { randomId } from "@/shared/node-id";
 
 const ORIGIN_LABEL_KEY = {
 	document: "studio.editor.tokens.origin.document",

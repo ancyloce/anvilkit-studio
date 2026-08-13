@@ -153,7 +153,10 @@ export function createEditorSelectionController(
 	const resolveTarget = (next: EditorSelectionState): EditorSelectionState => {
 		if (next.targetId === undefined || declaredTargets === null) return next;
 		const primary = next.primaryId;
-		if (primary !== undefined && declaredTargets(primary).includes(next.targetId)) {
+		if (
+			primary !== undefined &&
+			declaredTargets(primary).includes(next.targetId)
+		) {
 			return next;
 		}
 		const { targetId: _dangling, ...rest } = next;

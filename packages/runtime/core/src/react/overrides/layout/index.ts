@@ -1,3 +1,5 @@
+"use client";
+
 export { DrawerItem, type DrawerItemProps } from "./DrawerItem";
 export { EditorDrawer, type EditorDrawerProps } from "./EditorDrawer";
 export { EditorOutline } from "./EditorOutline";

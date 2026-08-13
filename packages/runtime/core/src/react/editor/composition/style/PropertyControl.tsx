@@ -444,8 +444,49 @@ export interface StylePropertyControlProps {
 	readonly property: AuthorableStyleProperty;
 }
 
-/** One granted property, read and committed at the target address. */
-export function StylePropertyControl({
+/**
+ * Canonical React identity for one field address.
+ *
+ * Selection order is not field identity, so node ids are sorted. The
+ * property completes the selector (`field: "property"`) and keeps two
+ * controls at the same target/layer distinct.
+ */
+function propertyAddressKey(
+	address: StyleFieldAddress,
+	property: AuthorableStyleProperty,
+): string {
+	return JSON.stringify([
+		[...address.nodeIds].sort(),
+		address.targetId,
+		address.layer,
+		"property",
+		property,
+	]);
+}
+
+/**
+ * One granted property, keyed by its full field address.
+ *
+ * The controls below own transient drafts at several nesting depths
+ * (colors, numbers, lengths, edges, tracks, paints, borders, corners,
+ * shadows, and filters). Remounting this subtree on an address change
+ * resets every such draft even when the new field has the same durable
+ * value. Their value-keyed effects remain useful for external updates,
+ * undo, and reset at the SAME address.
+ */
+export function StylePropertyControl(
+	props: StylePropertyControlProps,
+): ReactNode {
+	return (
+		<StylePropertyControlAtAddress
+			key={propertyAddressKey(props.address, props.property)}
+			{...props}
+		/>
+	);
+}
+
+/** The state-owning control subtree for one stable address. */
+function StylePropertyControlAtAddress({
 	address,
 	property,
 }: StylePropertyControlProps): ReactNode {

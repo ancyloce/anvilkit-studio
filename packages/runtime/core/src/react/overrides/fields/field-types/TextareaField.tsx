@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file Default renderer for Puck `textarea` fields.
  */

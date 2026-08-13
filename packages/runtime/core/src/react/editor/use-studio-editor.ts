@@ -13,8 +13,8 @@
  */
 
 import type { EditorDiagnosticPort } from "@anvilkit/contracts/editor";
-import type { EditorApi } from "../../types/editor-api-v2.js";
 import { createContext, use, useSyncExternalStore } from "react";
+import type { EditorApi } from "../../types/editor-api-v2.js";
 import type { StudioEditorBridge } from "./bridge.js";
 import type { StudioViewportController } from "./responsive/viewport-controller.js";
 import type { EditorSelectionController } from "./selection.js";

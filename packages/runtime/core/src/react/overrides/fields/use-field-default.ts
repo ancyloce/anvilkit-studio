@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `useFieldDefault()` — resolves a field's configured default
  * value for the reset affordance (DESIGN.md-aligned "modified state"

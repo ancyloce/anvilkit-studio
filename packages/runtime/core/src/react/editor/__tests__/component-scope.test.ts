@@ -5,9 +5,7 @@
  * (DD-DEC-010; DD-0019 §14.4, §10.6; freeze §6).
  */
 
-import type {
-	EditorSelectionState,
-} from "@anvilkit/contracts/editor";
+import type { EditorSelectionState } from "@anvilkit/contracts/editor";
 import { describe, expect, it } from "vitest";
 import {
 	componentScope,
@@ -30,7 +28,9 @@ function fakeSelection(
 		},
 		deps: {
 			getSelection: () => state,
-			setDefinitionScope: (definitionScope: EditorSelectionState["definitionScope"]) => {
+			setDefinitionScope: (
+				definitionScope: EditorSelectionState["definitionScope"],
+			) => {
 				// §10.6: a scope change always clears the selection.
 				state = { ...state, definitionScope, selectedIds: [] };
 			},
@@ -77,7 +77,11 @@ describe("enter / exit (DD-DEC-010)", () => {
 	});
 
 	it("exiting from page scope is a noop", () => {
-		const selection = fakeSelection({ selectedIds: ["a"], definitionScope: "page", mode: "page" });
+		const selection = fakeSelection({
+			selectedIds: ["a"],
+			definitionScope: "page",
+			mode: "page",
+		});
 		const controller = createEditorScopeController(selection.deps);
 		controller.exitScope();
 		expect(selection.state.selectedIds).toEqual(["a"]);
@@ -85,7 +89,11 @@ describe("enter / exit (DD-DEC-010)", () => {
 	});
 
 	it("switching between component scopes does not resurrect a stale selection", () => {
-		const selection = fakeSelection({ selectedIds: ["a"], definitionScope: "page", mode: "page" });
+		const selection = fakeSelection({
+			selectedIds: ["a"],
+			definitionScope: "page",
+			mode: "page",
+		});
 		const controller = createEditorScopeController(selection.deps);
 		controller.enterComponent("one");
 		controller.enterComponent("two");
@@ -103,7 +111,11 @@ describe("enter / exit (DD-DEC-010)", () => {
 		// guarantee expressed as a structural fact.
 		const calls: string[] = [];
 		const controller = createEditorScopeController({
-			getSelection: () => ({ selectedIds: [], definitionScope: "page" , mode: "page"}),
+			getSelection: () => ({
+				selectedIds: [],
+				definitionScope: "page",
+				mode: "page",
+			}),
 			setDefinitionScope: () => calls.push("setDefinitionScope"),
 			selectMany: () => calls.push("selectMany"),
 		});

@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file Focus-aware local-value buffer for AnvilKit field-type
  * overrides.

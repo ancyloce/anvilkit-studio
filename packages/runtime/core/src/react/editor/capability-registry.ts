@@ -34,8 +34,8 @@ import {
 	type EditorFeatureScanDocument,
 	listUsedDocumentFeatures,
 } from "../../editor/index.js";
-import type { EditorCapabilityRegistry } from "../../types/editor-api.js";
 import { readEditorMetadata } from "../../puck/component-metadata.js";
+import type { EditorCapabilityRegistry } from "../../types/editor-api.js";
 
 /** Dependencies of the registry — thunks so tests need no `<Studio>`. */
 export interface CapabilityRegistryDeps {

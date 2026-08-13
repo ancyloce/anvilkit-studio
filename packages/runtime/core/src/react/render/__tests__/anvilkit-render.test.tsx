@@ -6,15 +6,14 @@
  * the same `Data` + `Config` (§9.2 step 5 — compiler and `<Render>`
  * can never see different documents), the CSP nonce propagates
  * (§7.4), the wrapper exposes the stable `data-ak-document` /
- * `data-ak-token-mode` page root, and compiler diagnostics are never
- * silently discarded (§9.2 step 6).
+ * `data-ak-token-mode` page root, and diagnostics remain available to
+ * callers that compile outside render (§9.2 step 6).
  */
 
 import type { Config, Data } from "@puckeditor/core";
 import { cleanup, render } from "@testing-library/react";
 import * as React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { CompiledAppearance } from "../../../style-compiler/compile.js";
 import { compileDocumentAppearance } from "../../../style-compiler/compile.js";
 import { AnvilKitRender } from "../AnvilKitRender.js";
 
@@ -140,47 +139,24 @@ describe("AnvilKitRender (P4-01, §9.1)", () => {
 		).toBe("dark");
 	});
 
-	it("hands the full compilation result (fingerprint included) to onCompiled", () => {
-		const seen: CompiledAppearance[] = [];
+	it("retains onCompiled as a source-compatible no-op", () => {
+		const onCompiled = vi.fn();
 		render(
-			<AnvilKitRender
-				config={config}
-				data={data}
-				onCompiled={(compiled) => {
-					seen.push(compiled);
-				}}
-			/>,
+			<React.StrictMode>
+				<AnvilKitRender config={config} data={data} onCompiled={onCompiled} />
+			</React.StrictMode>,
 		);
-		const direct = compileDocumentAppearance({ data, config });
-		expect(seen).toHaveLength(1);
-		expect(seen[0]?.fingerprint).toBe(direct.fingerprint);
-		expect(seen[0]?.css).toBe(direct.css);
+		expect(onCompiled).not.toHaveBeenCalled();
 	});
 
-	it("surfaces diagnostics through console.warn when no onCompiled observer is given", () => {
+	it("leaves diagnostic reporting to the caller, outside render", () => {
 		const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
 		render(<AnvilKitRender config={config} data={dataWithUnknownTarget} />);
-		expect(warn).toHaveBeenCalled();
+		expect(warn).not.toHaveBeenCalled();
 		const direct = compileDocumentAppearance({
 			data: dataWithUnknownTarget,
 			config,
 		});
 		expect(direct.diagnostics.length).toBeGreaterThan(0);
-	});
-
-	it("does not console.warn when an onCompiled observer owns diagnostics surfacing", () => {
-		const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
-		const diagnostics: CompiledAppearance["diagnostics"][] = [];
-		render(
-			<AnvilKitRender
-				config={config}
-				data={dataWithUnknownTarget}
-				onCompiled={(compiled) => {
-					diagnostics.push(compiled.diagnostics);
-				}}
-			/>,
-		);
-		expect(warn).not.toHaveBeenCalled();
-		expect(diagnostics[0]?.length).toBeGreaterThan(0);
 	});
 });

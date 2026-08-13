@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file `FieldsPanel` — Puck `fields` override.
  *
@@ -49,9 +51,6 @@ import {
 	readFieldPresentation,
 } from "@/overrides/fields/field-presentation";
 import { InspectorSection } from "@/overrides/layout/InspectorSection";
-import { useBreadcrumbs } from "@/utils/breadcrumbs";
-import { readComponentPresentation } from "@/utils/component-presentation";
-import { useReactivePuck } from "@/utils/use-reactive-puck";
 import { Button } from "@/primitives/button";
 import {
 	DropdownMenu,
@@ -61,6 +60,9 @@ import {
 } from "@/primitives/dropdown-menu";
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
+import { useBreadcrumbs } from "@/utils/breadcrumbs";
+import { readComponentPresentation } from "@/utils/component-presentation";
+import { useReactivePuck } from "@/utils/use-reactive-puck";
 import { useEditorTreeActions } from "../../editor/tree-actions.js";
 
 interface ItemSelector {

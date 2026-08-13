@@ -73,8 +73,8 @@ import {
 	triggerChoice,
 } from "../interactions/interaction-summary.js";
 import { usePageAdapter } from "../pages/use-page-adapter.js";
-import { useNodeInteractions } from "./interactions/use-node-interactions.js";
 import type { StudioInspectorPanel } from "./inspector-panel.js";
+import { useNodeInteractions } from "./interactions/use-node-interactions.js";
 
 /** The Interactions tab body. Must render inside `<Puck>`. */
 export function InteractionsPanel(): ReactNode {

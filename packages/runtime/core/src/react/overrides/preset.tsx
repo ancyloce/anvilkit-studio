@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @file Default override preset (PRD §3.5).
  *

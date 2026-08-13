@@ -1,3 +1,5 @@
+"use client";
+
 // Barrel for `@anvilkit/core/react`.
 //
 // Populated by:

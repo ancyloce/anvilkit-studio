@@ -42,12 +42,12 @@ import type {
 	VariantAxis,
 } from "@anvilkit/contracts/editor";
 import { useCallback, useMemo, useState } from "react";
+import { randomId } from "@/shared/node-id";
 import { resolveInteraction } from "../../../../editor/index.js";
 import { readEditorMetadataFor } from "../../../../puck/component-metadata.js";
 import { useDocumentModel } from "../../use-document-model.js";
 import { useInteractionsCommit } from "../use-carrier-commits.js";
 import { useShellSelection } from "../use-shell-selection.js";
-import { randomId } from "@/shared/node-id";
 
 /** A node offered by the action target picker. */
 export interface InteractionTargetOption {

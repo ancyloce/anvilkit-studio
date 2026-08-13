@@ -57,6 +57,7 @@ import type {
 } from "@anvilkit/contracts/editor";
 import { EDITOR_COUNT_LIMITS } from "@anvilkit/contracts/editor";
 import { useCallback, useMemo } from "react";
+import { randomId } from "@/shared/node-id";
 import type { VariantModelEdit } from "../../../puck/update-variants.js";
 import {
 	commitVariantModelUpdate,
@@ -69,7 +70,6 @@ import {
 	usePuckApiGetter,
 } from "./editor-runtime.js";
 import { scopedDefinitionId } from "./scope.js";
-import { randomId } from "@/shared/node-id";
 
 export { MAX_EXPRESSIBLE_COMBINATIONS };
 

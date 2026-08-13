@@ -39,11 +39,11 @@ import type {
 	SafeExpression,
 } from "@anvilkit/contracts/editor";
 import { useCallback, useMemo, useState } from "react";
+import { randomId } from "@/shared/node-id";
 import { readEditorMetadataFor } from "../../../../puck/component-metadata.js";
 import { useDocumentModel } from "../../use-document-model.js";
 import { useBindingsCommit } from "../use-carrier-commits.js";
 import { useShellSelection } from "../use-shell-selection.js";
-import { randomId } from "@/shared/node-id";
 
 /** What the Data panel needs. */
 export interface NodeBindingsState {

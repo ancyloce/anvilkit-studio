@@ -99,7 +99,16 @@ export { CompositionCanvas } from "./composition/CompositionCanvas.js";
 // so `p4-009` can populate `StudioPuckLayout`'s roster without editing
 // the panels themselves.
 export { DATA_PANEL, DataPanel } from "./composition/DataPanel.js";
-export { DESIGN_SYSTEM_PANEL } from "./composition/DesignSystemPanel.js";
+// `p3-009` performed the re-point this comment used to defer to
+// `p4-009`: the legacy `./tokens/DesignSystemPanel.js` was a pure
+// command-port consumer and died with the port, so the canonical
+// `./composition/DesignSystemPanel.js` — which exports the SAME name
+// and is what `studio/layout/sidebar/modules/ComponentsModule.tsx`
+// now mounts — is the only one left. No public rename.
+export {
+	DESIGN_SYSTEM_PANEL,
+	DesignSystemPanel,
+} from "./composition/DesignSystemPanel.js";
 export {
 	type NodeBindingsState,
 	useNodeBindings,
@@ -209,13 +218,6 @@ export {
 	EDITOR_SHORTCUT_KEYMAP,
 	type EditorShortcutBinding,
 } from "./shortcuts/registry.js";
-// `p3-009` performed the re-point this comment used to defer to
-// `p4-009`: the legacy `./tokens/DesignSystemPanel.js` was a pure
-// command-port consumer and died with the port, so the canonical
-// `./composition/DesignSystemPanel.js` — which exports the SAME name
-// and is what `studio/layout/sidebar/modules/ComponentsModule.tsx`
-// now mounts — is the only one left. No public rename.
-export { DesignSystemPanel } from "./composition/DesignSystemPanel.js";
 export {
 	useDocumentModel,
 	useNodeField,
