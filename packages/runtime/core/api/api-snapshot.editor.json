@@ -18912,7 +18912,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Delete every node in a selection, in ONE document update.\n\nUnknown ids are skipped rather than failing the whole operation —\na selection can go stale between render and click, and refusing the\nother two deletions because one id vanished would be worse than\ndoing what the user asked for the ids that still exist."
+								"text": "Delete every node in a selection, in ONE document update.\n\nTree intents are atomic: if any selected id is absent, reject without\ndeleting the remaining nodes. This matches carrier and create-component\nwrites and prevents a stale mixed selection from partially succeeding."
 							}
 						]
 					},

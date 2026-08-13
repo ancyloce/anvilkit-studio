@@ -144,6 +144,62 @@ export function slotFieldNames(
 	return Object.keys(fields).filter((key) => fields[key]?.type === "slot");
 }
 
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+	if (typeof value !== "object" || value === null || Array.isArray(value)) {
+		return false;
+	}
+	const prototype = Object.getPrototypeOf(value);
+	return prototype === Object.prototype || prototype === null;
+}
+
+/**
+ * Reconcile Puck's eagerly rebuilt walk result with the input tree.
+ *
+ * `walkTree` creates a fresh object for every visited node, even when only one
+ * distant container changed. Reusing every structurally unchanged branch keeps
+ * selector caches and React consumers scoped to the actual edit. Component
+ * arrays match prior nodes by stable id so reorder/insert/delete operations also
+ * retain the moved and surviving node objects rather than only same-index peers.
+ */
+function shareUnchangedReferences(original: unknown, next: unknown): unknown {
+	if (Object.is(original, next)) {
+		return original;
+	}
+	if (Array.isArray(original) && Array.isArray(next)) {
+		const originalsById = new Map<string, PuckTreeNode>();
+		for (const entry of original) {
+			if (isComponentNode(entry)) {
+				const id = nodeId(entry);
+				if (id !== undefined) originalsById.set(id, entry);
+			}
+		}
+		let unchanged = original.length === next.length;
+		const reconciled = next.map((entry, index) => {
+			const id = isComponentNode(entry) ? nodeId(entry) : undefined;
+			const prior = id === undefined ? original[index] : originalsById.get(id);
+			const shared = shareUnchangedReferences(prior, entry);
+			if (!Object.is(shared, original[index])) unchanged = false;
+			return shared;
+		});
+		return unchanged ? original : reconciled;
+	}
+	if (isPlainRecord(original) && isPlainRecord(next)) {
+		const originalKeys = Object.keys(original);
+		const nextKeys = Object.keys(next);
+		let unchanged = originalKeys.length === nextKeys.length;
+		const reconciled: Record<string, unknown> = {};
+		for (const key of nextKeys) {
+			const shared = shareUnchangedReferences(original[key], next[key]);
+			reconciled[key] = shared;
+			if (!Object.hasOwn(original, key) || !Object.is(shared, original[key])) {
+				unchanged = false;
+			}
+		}
+		return unchanged ? original : reconciled;
+	}
+	return next;
+}
+
 /**
  * Map every containment array in the document through `transform`.
  *
@@ -240,9 +296,9 @@ export function transformContainers(
 		const { zones: _dropped, ...rest } = next as PuckData & {
 			zones?: PuckZones;
 		};
-		return rest as PuckData;
+		return shareUnchangedReferences(data, rest) as PuckData;
 	}
-	return next;
+	return shareUnchangedReferences(data, next) as PuckData;
 }
 
 /** Collect a node's subtree ids (self + declared slots + legacy zones). */
