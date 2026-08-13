@@ -22,12 +22,14 @@ import type { useGetPuck } from "@puckeditor/core";
 
 export type PuckSnapshot = ReturnType<ReturnType<typeof useGetPuck>>;
 
-/** Stable-enough unique id for a freshly inserted node. */
-export function generateNodeId(componentName: string): string {
-	return typeof crypto !== "undefined" && "randomUUID" in crypto
-		? `${componentName}-${crypto.randomUUID().slice(0, 8)}`
-		: `${componentName}-${Date.now().toString(36)}`;
-}
+/**
+ * Unique id for a freshly inserted node.
+ *
+ * Re-exported from `@/shared/node-id` so existing importers are
+ * unchanged; the generator itself moved there when its insecure-origin
+ * fallback turned out to collide (review 0036 M-3).
+ */
+export { generateNodeId } from "@/shared/node-id";
 
 /**
  * Append a component node (with caller-supplied props) to the root
