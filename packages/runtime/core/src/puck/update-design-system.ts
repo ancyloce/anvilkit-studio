@@ -23,6 +23,7 @@ import type { Data, PuckApi } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 
 /** Input to {@link updateDesignSystemInData}. */
 export interface UpdateDesignSystemInput {
@@ -190,21 +191,14 @@ export function commitDesignSystemUpdate(
 		return { status: "rejected", errors: [gate] };
 	}
 	const api = deps.getPuckApi();
-	const current = api.appState.data as Data;
-	const result = updateDesignSystemInData({ data: current, update });
-	if (result.status !== "updated") {
+	const attempt = dispatchOneIntent<UpdateDesignSystemResult>(api, (data) =>
+		updateDesignSystemInData({ data, update }),
+	);
+	if (!attempt.committed) {
 		return {
-			status: result.status === "noop" ? "noop" : "rejected",
-			errors: result.errors,
+			status: failureStatus(attempt.outcome),
+			errors: attempt.outcome.errors,
 		};
 	}
-	api.dispatch({
-		type: "setData",
-		recordHistory: true,
-		data: (previous: Data) =>
-			previous === current
-				? result.data
-				: updateDesignSystemInData({ data: previous, update }).data,
-	} as Parameters<PuckApi["dispatch"]>[0]);
 	return { status: "committed", errors: [] };
 }

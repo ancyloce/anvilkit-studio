@@ -50,7 +50,9 @@ import {
 	type PuckTreeNode,
 	transformContainers,
 } from "../editor/tree/nodes.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 import { withComponentLibrary } from "./update-component-library.js";
+import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 
 /**
  * The editor-owned wrapper type used when a multi-node selection has
@@ -70,7 +72,7 @@ export interface CreateComponentInput {
 	readonly config: Config;
 	readonly nodeIds: readonly string[];
 	readonly name: string;
-	/** Caller-generated (`crypto.randomUUID()`), never derived here. */
+	/** Caller-generated (`randomId()`), never derived here. */
 	readonly definitionId: string;
 	readonly instanceNodeId: string;
 	/** ISO timestamp; never read from a clock here (freeze D-7). */
@@ -144,7 +146,7 @@ export function validateCreateComponentSelection(
 		];
 	}
 
-	const locations = indexNodeLocations(data);
+	const locations = indexNodeLocations(data, config);
 	const missing = nodeIds.filter((id) => !locations.has(id));
 	if (missing.length > 0) {
 		errors.push(
@@ -307,7 +309,7 @@ export function createComponentFromSelectionInData(
 		return { data: input.data, status: "rejected", errors };
 	}
 
-	const locations = indexNodeLocations(input.data);
+	const locations = indexNodeLocations(input.data, input.config);
 	const selected = input.nodeIds
 		.map((id) => locations.get(id))
 		.filter((location) => location !== undefined);
@@ -364,34 +366,38 @@ export function createComponentFromSelectionInData(
 
 	const removing = new Set(input.nodeIds);
 	const firstId = ordered[0]?.node.props.id;
-	const withInstance = transformContainers(input.data, (items) => {
-		if (
-			!items.some(
-				(entry) =>
+	const withInstance = transformContainers(
+		input.data,
+		input.config,
+		(items) => {
+			if (
+				!items.some(
+					(entry) =>
+						isComponentNode(entry) &&
+						typeof entry.props.id === "string" &&
+						removing.has(entry.props.id),
+				)
+			) {
+				return items;
+			}
+			const next: unknown[] = [];
+			for (const entry of items) {
+				if (
 					isComponentNode(entry) &&
 					typeof entry.props.id === "string" &&
-					removing.has(entry.props.id),
-			)
-		) {
-			return items;
-		}
-		const next: unknown[] = [];
-		for (const entry of items) {
-			if (
-				isComponentNode(entry) &&
-				typeof entry.props.id === "string" &&
-				removing.has(entry.props.id)
-			) {
-				// The instance takes the first selected node's slot.
-				if (entry.props.id === firstId) {
-					next.push(instanceNode);
+					removing.has(entry.props.id)
+				) {
+					// The instance takes the first selected node's slot.
+					if (entry.props.id === firstId) {
+						next.push(instanceNode);
+					}
+					continue;
 				}
-				continue;
+				next.push(entry);
 			}
-			next.push(entry);
-		}
-		return next;
-	});
+			return next;
+		},
+	);
 
 	const model = readDocument(input.data, input.config);
 	const nextData = withComponentLibrary(withInstance, {
@@ -405,7 +411,7 @@ export function createComponentFromSelectionInData(
 }
 
 /** Dependencies of {@link commitCreateComponent}. */
-export interface CreateComponentCommitDeps {
+export interface CreateComponentCommitDeps extends WriterGateDep {
 	readonly getPuckApi: () => PuckApi;
 }
 
@@ -443,34 +449,26 @@ export function commitCreateComponent(
 	deps: CreateComponentCommitDeps,
 	request: CreateComponentRequest,
 ): CreateComponentCommitResult {
+	const gate = writerGateError(deps);
+	if (gate !== null) {
+		return { status: "rejected", errors: [gate] };
+	}
 	const api = deps.getPuckApi();
-	const current = api.appState.data as Data;
 	const config = api.config as Config;
-	const result = createComponentFromSelectionInData({
-		...request,
-		data: current,
-		config,
-	});
-	if (result.status !== "updated") {
+	const attempt = dispatchOneIntent<CreateComponentResult>(api, (data) =>
+		createComponentFromSelectionInData({ ...request, data, config }),
+	);
+	if (!attempt.committed) {
 		return {
-			status: result.status === "noop" ? "noop" : "rejected",
-			errors: result.errors,
+			status: failureStatus(attempt.outcome),
+			errors: attempt.outcome.errors,
 		};
 	}
-	api.dispatch({
-		type: "setData",
-		recordHistory: true,
-		data: (previous: Data) =>
-			previous === current
-				? result.data
-				: createComponentFromSelectionInData({ ...request, data: previous, config })
-						.data,
-	} as Parameters<PuckApi["dispatch"]>[0]);
 	return {
 		status: "committed",
 		errors: NO_ERRORS,
-		...(result.definition !== undefined
-			? { definition: result.definition }
+		...(attempt.outcome.definition !== undefined
+			? { definition: attempt.outcome.definition }
 			: {}),
 		instanceNodeId: request.instanceNodeId,
 	};

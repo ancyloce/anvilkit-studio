@@ -47,6 +47,7 @@ import { interactionsWriteErrors } from "../editor/interactions/validate.js";
 import { deepEqualJson } from "../editor/patch.js";
 import { readEditorMetadataFor } from "./component-metadata.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 
 /** The two array-shaped node carriers this module writes. */
 export type NodeCarrier = "interactions" | "bindings";
@@ -345,25 +346,20 @@ function commit(
 		return { status: "rejected", changedNodeIds: NO_IDS,  errors: [gate] };
 	}
 	const api = deps.getPuckApi();
-	const current = api.appState.data as Data;
 	const config = api.config as Config;
-	const result = run(current, config);
-	if (result.status !== "updated") {
+	const attempt = dispatchOneIntent<UpdateCarrierResult>(api, (data) =>
+		run(data, config),
+	);
+	if (!attempt.committed) {
 		return {
-			status: result.status === "noop" ? "noop" : "rejected",
+			status: failureStatus(attempt.outcome),
 			changedNodeIds: NO_IDS,
-			errors: result.errors,
+			errors: attempt.outcome.errors,
 		};
 	}
-	api.dispatch({
-		type: "setData",
-		recordHistory: true,
-		data: (previous: Data) =>
-			previous === current ? result.data : run(previous, config).data,
-	} as Parameters<PuckApi["dispatch"]>[0]);
 	return {
 		status: "committed",
-		changedNodeIds: result.changedNodeIds,
+		changedNodeIds: attempt.outcome.changedNodeIds,
 		errors: [],
 	};
 }

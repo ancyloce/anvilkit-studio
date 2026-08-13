@@ -46,6 +46,7 @@ import {
 } from "./component-metadata.js";
 import { documentBreakpoints } from "./read-appearance.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 
 /** One appearance mutation applied at the active layer. */
 export type AppearancePatch =
@@ -444,26 +445,19 @@ export function commitAppearanceUpdate(
 		return { status: "rejected", changedNodeIds: [], errors: [gate] };
 	}
 	const api = deps.getPuckApi();
-	const current = api.appState.data as Data;
-	const result = updateAppearanceInData({ ...input, data: current });
-	if (result.status !== "updated") {
+	const attempt = dispatchOneIntent<UpdateAppearanceResult>(api, (data) =>
+		updateAppearanceInData({ ...input, data }),
+	);
+	if (!attempt.committed) {
 		return {
-			status: result.status === "noop" ? "noop" : "rejected",
+			status: failureStatus(attempt.outcome),
 			changedNodeIds: [],
-			errors: result.errors,
+			errors: attempt.outcome.errors,
 		};
 	}
-	api.dispatch({
-		type: "setData",
-		recordHistory: true,
-		data: (previous: Data) =>
-			previous === current
-				? result.data
-				: updateAppearanceInData({ ...input, data: previous }).data,
-	} as Parameters<PuckApi["dispatch"]>[0]);
 	return {
 		status: "committed",
-		changedNodeIds: result.changedNodeIds,
+		changedNodeIds: attempt.outcome.changedNodeIds,
 		errors: [],
 	};
 }

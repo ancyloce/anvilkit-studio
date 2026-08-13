@@ -66,6 +66,7 @@ import {
 } from "./read-appearance.js";
 import { withComponentLibrary } from "./update-component-library.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 
 /**
  * The maximum expressible combinations an authored model may offer.
@@ -860,30 +861,25 @@ function commit(
 		return { status: "rejected", resolvedNodeIds: NO_IDS,  errors: [gate] };
 	}
 	const api = deps.getPuckApi();
-	const current = api.appState.data as Data;
 	const config = api.config as Config;
-	const result = run(current, config);
-	if (result.status !== "updated") {
+	const attempt = dispatchOneIntent<UpdateVariantResult>(api, (data) =>
+		run(data, config),
+	);
+	if (!attempt.committed) {
 		return {
-			status: result.status === "noop" ? "noop" : "rejected",
+			status: failureStatus(attempt.outcome),
 			resolvedNodeIds: NO_IDS,
-			errors: result.errors,
+			errors: attempt.outcome.errors,
 		};
 	}
-	api.dispatch({
-		type: "setData",
-		recordHistory: true,
-		data: (previous: Data) =>
-			previous === current ? result.data : run(previous, config).data,
-	} as Parameters<PuckApi["dispatch"]>[0]);
 	return {
 		status: "committed",
-		resolvedNodeIds: result.resolvedNodeIds,
+		resolvedNodeIds: attempt.outcome.resolvedNodeIds,
 		// Warnings survive a successful commit — `CFX-C11`'s dropped
 		// overrides are reported *because* the switch went through. A
 		// hard error would have forced `rejected` above, so anything
 		// reaching here is advisory by construction.
-		errors: result.errors,
+		errors: attempt.outcome.errors,
 	};
 }
 

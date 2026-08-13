@@ -9,13 +9,30 @@
  * intermediate vocabulary, so nothing about a tree operation could
  * become a parallel IR (rule 5).
  *
+ * ## Zones address SLOTS, not the legacy zone map
+ *
+ * A zone id is `"<parentId>:<propName>"`, which is exactly Puck's own
+ * `walkTree` coordinate pair — `"root:default-zone"` for top-level
+ * content, `"<nodeId>:<slot>"` for a slot. Resolution goes through
+ * `transformContainers`, so a slot zone lands in the owner's
+ * `props.<slot>` where Puck renders it.
+ *
+ * This file used to enumerate containers as "`data.content` plus
+ * `data.zones`" and write there. `data.zones` is Puck's **legacy
+ * DropZone map**: a node inserted into `data.zones["abc:content"]` is
+ * invisible to a slot-field container, and Puck's `migrate()` throws on
+ * entries it cannot place. Reorder had the mirror bug — a node living
+ * in `props.<slot>` was simply not found, so a legitimate move reported
+ * `EDITOR_NODE_NOT_FOUND` (review 0036 H-2).
+ *
  * ## The zone trap
  *
  * Puck's root zone is **`"root:default-zone"`**. A dispatch using the
- * bare `"default-zone"` silently targets nothing — it does not throw,
- * it just does not apply, which is the worst possible failure mode for
- * a tree edit. Every entry point here normalizes through
- * {@link normalizeZone} rather than trusting its caller.
+ * bare `"default-zone"` silently targets nothing, which is the worst
+ * possible failure mode for a tree edit. Every entry point here
+ * normalizes through {@link normalizeZone} rather than trusting its
+ * caller. An unresolvable zone is now **rejected** rather than
+ * conjured into existence.
  *
  * ## Multi-node operations are ONE history entry
  *
@@ -26,20 +43,34 @@
  *
  * ## Duplicating an instance yields an instance
  *
- * The subtree transforms come from `react/editor/native-tree.ts`,
- * which is carrier-agnostic (it takes `Data` and nothing else) and is
- * not on `p3-009`'s delete list. Duplication remaps **node** ids only;
- * the component-instance link references a `definitionId` and
- * definition-node ids, neither of which are page node ids — so a
- * duplicated instance stays an instance of the same definition rather
- * than silently becoming a detached copy.
+ * The subtree transforms come from `react/editor/native-tree.ts`.
+ * Duplication remaps **node** ids only; the component-instance link
+ * references a `definitionId` and definition-node ids, neither of which
+ * are page node ids — so a duplicated instance stays an instance of the
+ * same definition rather than silently becoming a detached copy.
  */
 
 import type { EditorError } from "@anvilkit/contracts/editor";
-import type { Data, PuckApi } from "@puckeditor/core";
+import type { Config, Data, PuckApi } from "@puckeditor/core";
 import { makeEditorError } from "../editor/diagnostics.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
+import {
+	collectSubtreeIds,
+	containerZoneId,
+	isComponentNode,
+	type PuckTreeNode,
+	parseZoneId,
+	nodeId as readNodeId,
+	transformContainers,
+	zonesOf,
+} from "../editor/tree/nodes.js";
+import {
+	createStableIdAllocator,
+	duplicateNode,
+	type NodeIdAllocator,
+	removeNode,
+} from "../react/editor/native-tree.js";
 import { isNodeLocked } from "./update-annotations.js";
-import { duplicateNode, removeNode } from "../react/editor/native-tree.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
 
 /** Puck's root zone, in the only form `dispatch` honours. */
@@ -50,7 +81,8 @@ export const ROOT_ZONE = "root:default-zone";
  *
  * A bare `"default-zone"` (or an omitted zone) becomes
  * {@link ROOT_ZONE}. Slot zones (`"<nodeId>:<slotName>"`) already carry
- * their owner and pass through unchanged.
+ * their owner and pass through unchanged — and now actually resolve to
+ * that owner's slot prop.
  */
 export function normalizeZone(zone: string | undefined): string {
 	if (zone === undefined || zone === "" || zone === "default-zone") {
@@ -75,6 +107,26 @@ function noop(data: Data): UpdateTreeResult {
 	return { data, status: "noop", createdNodeIds: NO_IDS, errors: [] };
 }
 
+function rejected(data: Data, error: EditorError): UpdateTreeResult {
+	return { data, status: "rejected", createdNodeIds: NO_IDS, errors: [error] };
+}
+
+/** The error for a zone id that does not resolve to a container. */
+function unknownZone(zone: string): EditorError {
+	return makeEditorError(
+		"EDITOR_NODE_NOT_FOUND",
+		`zone "${zone}" does not resolve to a slot in this document; a slot zone must be "<nodeId>:<slotName>" naming a slot the component declares`,
+		{ details: { zone } },
+	);
+}
+
+/** Index of `targetId` within `items`, or `-1`. */
+function indexOfNode(items: readonly unknown[], targetId: string): number {
+	return items.findIndex(
+		(entry) => isComponentNode(entry) && readNodeId(entry) === targetId,
+	);
+}
+
 /**
  * Delete every node in a selection, in ONE document update.
  *
@@ -86,13 +138,14 @@ function noop(data: Data): UpdateTreeResult {
 export function deleteNodesInData(
 	data: Data,
 	nodeIds: readonly string[],
+	config: Config,
 ): UpdateTreeResult {
 	let next = data;
 	let changed = false;
 	for (const nodeId of nodeIds) {
-		const removed = removeNode(next as never, nodeId);
+		const removed = removeNode(next, nodeId, config);
 		if (removed === null) continue;
-		next = removed as unknown as Data;
+		next = removed;
 		changed = true;
 	}
 	return changed
@@ -106,17 +159,23 @@ export function deleteNodesInData(
  * Each copy gets fresh ids for its whole subtree; component-instance
  * links inside a copied subtree survive, so duplicating an instance
  * produces a second instance of the same definition.
+ *
+ * Pass `allocate` to make the ids reproducible across repeated calls for
+ * the same intent — {@link commitDuplicateNodes} does, because its retry
+ * path re-runs this against a newer document.
  */
 export function duplicateNodesInData(
 	data: Data,
 	nodeIds: readonly string[],
+	config: Config,
+	allocate?: NodeIdAllocator,
 ): UpdateTreeResult {
 	let next = data;
 	const createdNodeIds: string[] = [];
 	for (const nodeId of nodeIds) {
-		const copied = duplicateNode(next as never, nodeId);
+		const copied = duplicateNode(next, nodeId, config, allocate);
 		if (copied === null) continue;
-		next = copied.data as unknown as Data;
+		next = copied.data;
 		createdNodeIds.push(copied.newRootId);
 	}
 	return createdNodeIds.length > 0
@@ -127,29 +186,12 @@ export function duplicateNodesInData(
 /** Input to {@link reorderNodeInData}. */
 export interface ReorderNodeInput {
 	readonly data: Data;
+	/** The live Puck config — the authority on which props are slots. */
+	readonly config: Config;
 	readonly nodeId: string;
 	/** Destination zone; normalized, so a bare name is accepted. */
 	readonly zone?: string;
 	readonly toIndex: number;
-}
-
-function zoneEntries(data: Data): Record<string, unknown[]> {
-	const zones = (data as { zones?: Record<string, unknown[]> }).zones ?? {};
-	return {
-		[ROOT_ZONE]: [...((data.content ?? []) as unknown[])],
-		...Object.fromEntries(
-			Object.entries(zones).map(([key, value]) => [key, [...value]]),
-		),
-	};
-}
-
-function withZones(data: Data, zones: Record<string, unknown[]>): Data {
-	const { [ROOT_ZONE]: root, ...rest } = zones;
-	return {
-		...data,
-		content: (root ?? []) as Data["content"],
-		zones: rest as Data["zones"],
-	} as Data;
 }
 
 /**
@@ -157,42 +199,81 @@ function withZones(data: Data, zones: Record<string, unknown[]>): Data {
  *
  * Reordering across zones is a remove-then-insert on the same document,
  * so it stays one update and therefore one history entry.
+ *
+ * Moving a node into its own subtree is rejected: it would detach the
+ * branch from the document entirely.
  */
 export function reorderNodeInData(input: ReorderNodeInput): UpdateTreeResult {
-	const zone = normalizeZone(input.zone);
-	const zones = zoneEntries(input.data);
+	const targetZone = normalizeZone(input.zone);
+
+	// Pass 1 — locate the node and the container it currently sits in.
 	let moved: unknown;
-	for (const [key, items] of Object.entries(zones)) {
-		const index = items.findIndex(
-			(item) =>
-				(item as { props?: { id?: unknown } }).props?.id === input.nodeId,
-		);
-		if (index === -1) continue;
+	let sourceZone: string | undefined;
+	let sourceIndex = -1;
+	transformContainers(input.data, input.config, (items, at) => {
+		if (moved !== undefined) return items;
+		const index = indexOfNode(items, input.nodeId);
+		if (index === -1) return items;
 		moved = items[index];
-		items.splice(index, 1);
-		zones[key] = items;
-		break;
+		sourceZone = containerZoneId(at);
+		sourceIndex = index;
+		return items;
+	});
+	if (moved === undefined || sourceZone === undefined) {
+		return rejected(
+			input.data,
+			makeEditorError(
+				"EDITOR_NODE_NOT_FOUND",
+				`node "${input.nodeId}" is not in the document`,
+				{ details: { nodeId: input.nodeId } },
+			),
+		);
 	}
-	if (moved === undefined) {
-		return {
-			data: input.data,
-			status: "rejected",
-			createdNodeIds: NO_IDS,
-			errors: [
-				makeEditorError(
-					"EDITOR_NODE_NOT_FOUND",
-					`node "${input.nodeId}" is not in the document`,
-					{ details: { nodeId: input.nodeId } },
-				),
-			],
-		};
+
+	// A node cannot become its own ancestor's child.
+	const subtreeIds = new Set<string>();
+	collectSubtreeIds(
+		moved as PuckTreeNode,
+		input.config,
+		zonesOf(input.data),
+		subtreeIds,
+	);
+	if (subtreeIds.has(parseZoneId(targetZone).parentId)) {
+		return rejected(
+			input.data,
+			makeEditorError(
+				"EDITOR_COMPONENT_CYCLE",
+				`node "${input.nodeId}" cannot be moved into its own subtree`,
+				{ details: { nodeId: input.nodeId, zone: targetZone } },
+			),
+		);
 	}
-	const target = zones[zone] ?? [];
-	const clamped = Math.max(0, Math.min(input.toIndex, target.length));
-	target.splice(clamped, 0, moved);
-	zones[zone] = target;
+
+	// Pass 2 — remove from the source container and insert into the
+	// target. When they are the same container both happen to the same
+	// array, which is what makes an in-place reorder one operation.
+	let sawTarget = false;
+	const next = transformContainers(input.data, input.config, (items, at) => {
+		const zone = containerZoneId(at);
+		const isSource = zone === sourceZone;
+		const isTarget = zone === targetZone;
+		if (!isSource && !isTarget) return items;
+		let out: readonly unknown[] = items;
+		if (isSource) {
+			out = [...out.slice(0, sourceIndex), ...out.slice(sourceIndex + 1)];
+		}
+		if (isTarget) {
+			sawTarget = true;
+			const clamped = Math.max(0, Math.min(input.toIndex, out.length));
+			out = [...out.slice(0, clamped), moved, ...out.slice(clamped)];
+		}
+		return out;
+	});
+	if (!sawTarget) {
+		return rejected(input.data, unknownZone(targetZone));
+	}
 	return {
-		data: withZones(input.data, zones),
+		data: next,
 		status: "updated",
 		createdNodeIds: NO_IDS,
 		errors: [],
@@ -202,6 +283,8 @@ export function reorderNodeInData(input: ReorderNodeInput): UpdateTreeResult {
 /** Input to {@link insertNodeInData}. */
 export interface InsertNodeInput {
 	readonly data: Data;
+	/** The live Puck config — the authority on which props are slots. */
+	readonly config: Config;
 	readonly type: string;
 	/** Caller-generated id — never derived here. */
 	readonly nodeId: string;
@@ -210,22 +293,34 @@ export interface InsertNodeInput {
 	readonly props?: Readonly<Record<string, unknown>>;
 }
 
-/** Insert a new node into a zone at an index. */
+/**
+ * Insert a new node into a zone at an index.
+ *
+ * A zone that does not resolve to a container is rejected. It used to
+ * be conjured into `data.zones`, which produced a node no renderer
+ * would ever show (review 0036 H-2).
+ */
 export function insertNodeInData(input: InsertNodeInput): UpdateTreeResult {
-	const zone = normalizeZone(input.zone);
-	const zones = zoneEntries(input.data);
-	const target = zones[zone] ?? [];
-	const clamped = Math.max(
-		0,
-		Math.min(input.index ?? target.length, target.length),
-	);
-	target.splice(clamped, 0, {
-		type: input.type,
-		props: { ...(input.props ?? {}), id: input.nodeId },
+	const targetZone = normalizeZone(input.zone);
+	let inserted = false;
+	const next = transformContainers(input.data, input.config, (items, at) => {
+		if (inserted || containerZoneId(at) !== targetZone) return items;
+		inserted = true;
+		const clamped = Math.max(
+			0,
+			Math.min(input.index ?? items.length, items.length),
+		);
+		const node = {
+			type: input.type,
+			props: { ...(input.props ?? {}), id: input.nodeId },
+		};
+		return [...items.slice(0, clamped), node, ...items.slice(clamped)];
 	});
-	zones[zone] = target;
+	if (!inserted) {
+		return rejected(input.data, unknownZone(targetZone));
+	}
 	return {
-		data: withZones(input.data, zones),
+		data: next,
 		status: "updated",
 		createdNodeIds: [input.nodeId],
 		errors: [],
@@ -247,11 +342,19 @@ export interface TreeCommitResult {
 /**
  * Ask Puck whether an operation is permitted on a node.
  *
- * A denial must **prevent** the operation, never be worked around —
- * so an explicit `false` rejects. An API without `getPermissions`, or
- * one that throws mid-transition, is treated as "no opinion" rather
- * than as a denial, matching how the rest of the editor treats
- * advisory Puck lookups during render.
+ * A denial must **prevent** the operation, never be worked around — so
+ * an explicit `false` rejects, and so does a resolver that throws
+ * (review 0036 L-4). Only a genuinely absent opinion — no
+ * `getPermissions`, or a node Puck cannot find — passes.
+ *
+ * KNOWN GAP: Puck resolves per-component permissions asynchronously into
+ * `resolvedPermissions`, falling back to the global set until that
+ * lands, and this reads whatever is cached at call time. A component
+ * whose `resolvePermissions` would deny an operation can therefore be
+ * permitted if resolution has not run yet. Closing it needs an async
+ * commit path (`refreshPermissions` returns nothing to await), which is
+ * a redesign rather than a fix; Puck's own delete affordances have the
+ * same characteristic.
  */
 function permits(
 	api: PuckApi,
@@ -259,16 +362,29 @@ function permits(
 	permission: "delete" | "duplicate" | "drag",
 ): boolean {
 	const get = (api as { getPermissions?: unknown }).getPermissions;
+	// No `getPermissions` at all, or a node Puck cannot find, is genuinely
+	// "no opinion" — there is nothing to honour.
 	if (typeof get !== "function") return true;
+	let item: unknown;
 	try {
-		const item = api.getItemById?.(nodeId);
-		if (item === undefined || item === null) return true;
+		item = api.getItemById?.(nodeId);
+	} catch {
+		return true;
+	}
+	if (item === undefined || item === null) return true;
+	try {
 		const permissions = (
 			get as (input: { item: unknown }) => Record<string, unknown>
 		).call(api, { item });
 		return permissions?.[permission] !== false;
 	} catch {
-		return true;
+		// A THROWING permission resolver is not "no opinion" — it is an
+		// unanswered question, and this file's own rule is that a denial
+		// must prevent the operation. Failing open here meant a host whose
+		// resolver threw silently got every guarded operation allowed
+		// (review 0036 L-4). Refusing is recoverable — the author retries;
+		// allowing a denied delete is not.
+		return false;
 	}
 }
 
@@ -286,33 +402,61 @@ function lockedAmong(api: PuckApi, nodeIds: readonly string[]): string[] {
 	return nodeIds.filter((id) => isNodeLocked(data, id));
 }
 
+/**
+ * The error for a document carrying a component type the config does
+ * not describe.
+ *
+ * Puck's `walkTree` refuses to recurse a slot whose child type is
+ * unregistered, and `walkAppState` rejects the same document — so the
+ * editor could not be rendering it. Surfacing it beats letting the
+ * throw escape into a click handler.
+ */
+function walkFailure(error: unknown): EditorError {
+	return makeEditorError(
+		"EDITOR_CAPABILITY_UNSUPPORTED",
+		`the document contains a component the config does not describe, so its tree cannot be walked: ${
+			error instanceof Error ? error.message : String(error)
+		}`,
+	);
+}
+
 function commit(
 	deps: TreeCommitDeps,
-	run: (data: Data) => UpdateTreeResult,
+	run: (data: Data, config: Config) => UpdateTreeResult,
 ): TreeCommitResult {
 	const gate = writerGateError(deps);
 	if (gate !== null) {
-		return { status: "rejected", createdNodeIds: NO_IDS,  errors: [gate] };
+		return { status: "rejected", createdNodeIds: NO_IDS, errors: [gate] };
 	}
 	const api = deps.getPuckApi();
-	const current = api.appState.data as Data;
-	const result = run(current);
-	if (result.status !== "updated") {
+	const config = api.config as Config;
+	// A throw from `walkTree` (a component the config does not describe)
+	// must not escape into a click handler, and must not take down Puck's
+	// reducer on the retry either — so it is folded into a rejected
+	// outcome the protocol understands.
+	const attempt = dispatchOneIntent<UpdateTreeResult>(api, (data) => {
+		try {
+			return run(data, config);
+		} catch (error) {
+			return {
+				data,
+				status: "rejected",
+				createdNodeIds: NO_IDS,
+				errors: [walkFailure(error)],
+			};
+		}
+	});
+	if (!attempt.committed) {
 		return {
-			status: result.status === "noop" ? "noop" : "rejected",
+			status: failureStatus(attempt.outcome),
 			createdNodeIds: NO_IDS,
-			errors: result.errors,
+			errors: attempt.outcome.errors,
 		};
 	}
-	api.dispatch({
-		type: "setData",
-		recordHistory: true,
-		data: (previous: Data) =>
-			previous === current ? result.data : run(previous).data,
-	} as Parameters<PuckApi["dispatch"]>[0]);
+	// Ids come off the run that actually landed, not the speculative one.
 	return {
 		status: "committed",
-		createdNodeIds: result.createdNodeIds,
+		createdNodeIds: attempt.outcome.createdNodeIds,
 		errors: [],
 	};
 }
@@ -341,7 +485,9 @@ export function commitDeleteNodes(
 	if (locked.length > 0) return denied(locked, "delete");
 	const blocked = nodeIds.filter((id) => !permits(api, id, "delete"));
 	if (blocked.length > 0) return denied(blocked, "delete");
-	return commit(deps, (data) => deleteNodesInData(data, nodeIds));
+	return commit(deps, (data, config) =>
+		deleteNodesInData(data, nodeIds, config),
+	);
 }
 
 /** Duplicate a whole selection as ONE history entry. */
@@ -355,13 +501,22 @@ export function commitDuplicateNodes(
 	// only the Puck-level permission applies here.
 	const blocked = nodeIds.filter((id) => !permits(api, id, "duplicate"));
 	if (blocked.length > 0) return denied(blocked, "duplicate");
-	return commit(deps, (data) => duplicateNodesInData(data, nodeIds));
+	// ONE allocator for this intent, created OUTSIDE `run` (review 0036
+	// M-1). `commit`'s functional updater re-runs `run` against a document
+	// that moved between validation and the reducer; without a stable
+	// allocator that retry mints different ids than the `createdNodeIds`
+	// already returned here, and the caller selects a node that is not in
+	// the committed document.
+	const allocate = createStableIdAllocator();
+	return commit(deps, (data, config) =>
+		duplicateNodesInData(data, nodeIds, config, allocate),
+	);
 }
 
 /** Reorder one node as ONE history entry. */
 export function commitReorderNode(
 	deps: TreeCommitDeps,
-	input: Omit<ReorderNodeInput, "data">,
+	input: Omit<ReorderNodeInput, "data" | "config">,
 ): TreeCommitResult {
 	const api = deps.getPuckApi();
 	if (lockedAmong(api, [input.nodeId]).length > 0) {
@@ -370,13 +525,17 @@ export function commitReorderNode(
 	if (!permits(api, input.nodeId, "drag")) {
 		return denied([input.nodeId], "reorder");
 	}
-	return commit(deps, (data) => reorderNodeInData({ ...input, data }));
+	return commit(deps, (data, config) =>
+		reorderNodeInData({ ...input, data, config }),
+	);
 }
 
 /** Insert a node as ONE history entry. */
 export function commitInsertNode(
 	deps: TreeCommitDeps,
-	input: Omit<InsertNodeInput, "data">,
+	input: Omit<InsertNodeInput, "data" | "config">,
 ): TreeCommitResult {
-	return commit(deps, (data) => insertNodeInData({ ...input, data }));
+	return commit(deps, (data, config) =>
+		insertNodeInData({ ...input, data, config }),
+	);
 }

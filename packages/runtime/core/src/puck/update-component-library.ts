@@ -51,6 +51,7 @@ import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
 import { parseComponentLibrary } from "./read-appearance.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 
 /** Referencing node ids carried on a diagnostic, capped (§14.6). */
 const INSTANCE_ID_REPORT_CAP = 50;
@@ -414,22 +415,15 @@ export function commitComponentLibraryUpdate(
 		return { status: "rejected", errors: [gate] };
 	}
 	const api = deps.getPuckApi();
-	const current = api.appState.data as Data;
 	const config = api.config as Config;
-	const result = updateComponentLibraryInData({ data: current, config, edit });
-	if (result.status !== "updated") {
+	const attempt = dispatchOneIntent<UpdateComponentLibraryResult>(api, (data) =>
+		updateComponentLibraryInData({ data, config, edit }),
+	);
+	if (!attempt.committed) {
 		return {
-			status: result.status === "noop" ? "noop" : "rejected",
-			errors: result.errors,
+			status: failureStatus(attempt.outcome),
+			errors: attempt.outcome.errors,
 		};
 	}
-	api.dispatch({
-		type: "setData",
-		recordHistory: true,
-		data: (previous: Data) =>
-			previous === current
-				? result.data
-				: updateComponentLibraryInData({ data: previous, config, edit }).data,
-	} as Parameters<PuckApi["dispatch"]>[0]);
 	return { status: "committed", errors: [] };
 }

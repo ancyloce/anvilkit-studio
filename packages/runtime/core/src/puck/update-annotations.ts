@@ -38,6 +38,7 @@ import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
 import { parseEditorAnnotations } from "./read-appearance.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 
 /** One annotation intent. */
 export type AnnotationEdit =
@@ -199,21 +200,14 @@ export function commitAnnotationUpdate(
 		return { status: "rejected", errors: [gate] };
 	}
 	const api = deps.getPuckApi();
-	const current = api.appState.data as Data;
-	const result = updateAnnotationsInData({ data: current, edit });
-	if (result.status !== "updated") {
+	const attempt = dispatchOneIntent<UpdateAnnotationsResult>(api, (data) =>
+		updateAnnotationsInData({ data, edit }),
+	);
+	if (!attempt.committed) {
 		return {
-			status: result.status === "noop" ? "noop" : "rejected",
-			errors: result.errors,
+			status: failureStatus(attempt.outcome),
+			errors: attempt.outcome.errors,
 		};
 	}
-	api.dispatch({
-		type: "setData",
-		recordHistory: true,
-		data: (previous: Data) =>
-			previous === current
-				? result.data
-				: updateAnnotationsInData({ data: previous, edit }).data,
-	} as Parameters<PuckApi["dispatch"]>[0]);
 	return { status: "committed", errors: [] };
 }

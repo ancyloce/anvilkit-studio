@@ -37,6 +37,11 @@ import {
 } from "../document-model/materialize.js";
 import { makeEditorError } from "../editor/diagnostics.js";
 import { deepEqualJson } from "../editor/patch.js";
+import {
+	createStableIdAllocator,
+	type NodeIdAllocator,
+} from "../react/editor/native-tree.js";
+import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 import { parseComponentLibrary } from "./read-appearance.js";
 import {
 	countDefinitionInstances,
@@ -307,11 +312,13 @@ export interface DetachInstanceInput {
 /** Give every node in a materialized subtree a brand-new id. */
 function withFreshIds(
 	node: SerializablePuckNode,
-	generateId: (type: string) => string,
+	allocateId: NodeIdAllocator,
 	assigned: string[],
 ): SerializablePuckNode {
 	const props: Record<string, JsonValue> = { ...node.props };
-	const freshId = generateId(node.type);
+	const sourceId =
+		typeof node.props.id === "string" ? node.props.id : undefined;
+	const freshId = allocateId(node.type, sourceId);
 	props.id = freshId;
 	assigned.push(freshId);
 	// A detached node is a plain node: nothing points back at the
@@ -327,7 +334,7 @@ function withFreshIds(
 			typeof (entry as { type?: unknown }).type === "string"
 				? (withFreshIds(
 						entry as unknown as SerializablePuckNode,
-						generateId,
+						allocateId,
 						assigned,
 					) as unknown as JsonValue)
 				: entry,
@@ -353,6 +360,14 @@ export interface DetachInstanceResult extends UpdateInstanceOverridesResult {
  */
 export function detachInstanceInData(
 	input: DetachInstanceInput,
+): DetachInstanceResult {
+	return detachInstanceWithAllocator(input, (type) => input.generateId(type));
+}
+
+/** Internal replay-aware detach path; the public pure helper stays unchanged. */
+function detachInstanceWithAllocator(
+	input: DetachInstanceInput,
+	allocateId: NodeIdAllocator,
 ): DetachInstanceResult {
 	const errors: EditorError[] = [];
 	const replacements: Record<string, string> = {};
@@ -386,7 +401,7 @@ export function detachInstanceInData(
 				);
 				return item;
 			}
-			const fresh = withFreshIds(result.node, input.generateId, assignedIds);
+			const fresh = withFreshIds(result.node, allocateId, assignedIds);
 			replacements[nodeId] = fresh.props.id as string;
 			changedNodeIds.push(nodeId);
 			return { ...item, ...fresh } as typeof item;
@@ -444,25 +459,21 @@ function commit(
 		return { status: "rejected", changedNodeIds: NO_IDS, errors: [gate] };
 	}
 	const api = deps.getPuckApi();
-	const current = api.appState.data as Data;
 	const config = api.config as Config;
-	const result = run(current, config);
-	if (result.status !== "updated") {
+	const attempt = dispatchOneIntent<UpdateInstanceOverridesResult>(
+		api,
+		(data) => run(data, config),
+	);
+	if (!attempt.committed) {
 		return {
-			status: result.status === "noop" ? "noop" : "rejected",
+			status: failureStatus(attempt.outcome),
 			changedNodeIds: NO_IDS,
-			errors: result.errors,
+			errors: attempt.outcome.errors,
 		};
 	}
-	api.dispatch({
-		type: "setData",
-		recordHistory: true,
-		data: (previous: Data) =>
-			previous === current ? result.data : run(previous, config).data,
-	} as Parameters<PuckApi["dispatch"]>[0]);
 	return {
 		status: "committed",
-		changedNodeIds: result.changedNodeIds,
+		changedNodeIds: attempt.outcome.changedNodeIds,
 		errors: [],
 	};
 }
@@ -484,8 +495,16 @@ export function commitDetachInstance(
 	nodeIds: readonly string[],
 	generateId: (type: string) => string,
 ): InstanceCommitResult {
+	// ONE allocator for this intent, created OUTSIDE `run`. The commit
+	// protocol may replay the detach against a document that moved before
+	// Puck reduced the action; materialized runtime ids provide stable,
+	// per-instance source keys for every node in the detached subtree.
+	const allocateId = createStableIdAllocator(generateId);
 	return commit(deps, (data, config) =>
-		detachInstanceInData({ data, config, nodeIds, generateId }),
+		detachInstanceWithAllocator(
+			{ data, config, nodeIds, generateId },
+			allocateId,
+		),
 	);
 }
 
