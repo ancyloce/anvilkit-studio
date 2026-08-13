@@ -137,7 +137,12 @@ describe("Phase 4 exit gate — one fingerprint across surfaces", () => {
 		expect(source).toContain(
 			'import { CompiledAppearanceMount } from "../../editor/composition/CompiledAppearanceMount.js";',
 		);
-		expect(source).toContain("<CompiledAppearanceMount />");
+		// The frame document goes with it: the feed marks that document's
+		// root so the canvas identifies itself the way a production page
+		// does (review 0036 L-6).
+		expect(source).toContain(
+			"<CompiledAppearanceMount document={iframeDoc} />",
+		);
 	});
 
 	it("suppresses nothing: the wiring never mutates the document it styles", () => {

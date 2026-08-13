@@ -40,6 +40,7 @@ import { Input } from "@/primitives/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/primitives/popover";
 import { Switch } from "@/primitives/switch";
 import { cn } from "@/shared/cn";
+import { randomId } from "@/shared/node-id";
 import { useMsg } from "@/state/editor-i18n-context";
 import { documentBreakpoints } from "../../../puck/read-appearance.js";
 import {
@@ -48,7 +49,6 @@ import {
 	type DesignSystemCommitDeps,
 } from "../../../puck/update-design-system.js";
 import { useOptionalStudioEditorInternals } from "./toolbar-internals.js";
-import { randomId } from "@/shared/node-id";
 
 /**
  * Every node's `appearance` carrier in the live document, by node id.
@@ -137,7 +137,8 @@ export function applyBreakpointRemoval(
 		return next;
 	};
 	const rewriteAppearance = (appearance: unknown): unknown => {
-		if (appearance === null || typeof appearance !== "object") return appearance;
+		if (appearance === null || typeof appearance !== "object")
+			return appearance;
 		const parsed = appearance as {
 			targets?: Record<string, Record<string, unknown>>;
 		};
@@ -167,9 +168,7 @@ export function applyBreakpointRemoval(
 		return { ...node, props: nextProps };
 	};
 	const nextContent = (data.content ?? []).map(visit);
-	return changed
-		? ({ ...data, content: nextContent } as PuckData)
-		: data;
+	return changed ? ({ ...data, content: nextContent } as PuckData) : data;
 }
 
 let breakpointSeq = 0;
@@ -273,21 +272,14 @@ function BreakpointEditor({
 	 * dispatched first as its own `setData`… no: that would be TWO undo
 	 * steps for one intent. Instead the node rewrite is folded into the
 	 * SAME functional update by committing it through the design-system
-	 * helper's `update` closure over a document we have already
-	 * rewritten — see `commitSet`.
+	 * helper's functional updater, which reruns the document rewrite if
+	 * Puck presents a newer document during dispatch — see `commitSet`.
 	 */
 	const commitSet = (
 		next: readonly BreakpointDefinition[],
 		removedOverrides?: Readonly<Record<string, "merge-to-base" | "discard">>,
 	): void => {
-		const api = commitDeps.getPuckApi();
-		if (api === null) return;
-		let document = api.appState.data as PuckData;
-		for (const [breakpointId, mode] of Object.entries(
-			removedOverrides ?? {},
-		)) {
-			document = applyBreakpointRemoval(document, breakpointId, mode);
-		}
+		const removals = Object.entries(removedOverrides ?? {});
 		const nextDesignSystem = (
 			current: DesignSystem | undefined,
 		): DesignSystem => ({
@@ -297,13 +289,19 @@ function BreakpointEditor({
 			styleDefinitions: current?.styleDefinitions ?? {},
 			breakpoints: next,
 		});
-		if (document !== (api.appState.data as PuckData)) {
-			// Node carriers changed too: write both halves in ONE dispatch by
-			// handing the helper a document that already carries the node
-			// rewrite. `commitDesignSystemUpdate` reads `api.appState.data`,
-			// so the rewrite is applied here and the root prop by the helper,
-			// against the same `setData`.
-			commitDesignSystemUpdateOver(commitDeps, document, nextDesignSystem);
+		if (removals.length > 0) {
+			// Node carriers and the root prop are one intent. The rewrite stays
+			// inside the functional updater so a retry preserves concurrent edits.
+			commitDesignSystemUpdateOver(
+				commitDeps,
+				(data) =>
+					removals.reduce<PuckData>(
+						(document, [breakpointId, mode]) =>
+							applyBreakpointRemoval(document, breakpointId, mode),
+						data,
+					),
+				nextDesignSystem,
+			);
 			return;
 		}
 		commitDesignSystemUpdate(commitDeps, nextDesignSystem);
