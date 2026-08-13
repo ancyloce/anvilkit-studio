@@ -27,7 +27,7 @@
 				"hooks": [
 					{
 						"type": "command",
-						"command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; [ -n \"$f\" ] && pnpm biome check --write --files-ignore-unknown=true \"$f\"; } 2>/dev/null || true"
+						"command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; [ -n \"$f\" ] || exit 0; b=\"$CLAUDE_PROJECT_DIR/node_modules/.bin/biome\"; if [ -n \"$CLAUDE_PROJECT_DIR\" ] && [ -x \"$b\" ]; then \"$b\" check --write --files-ignore-unknown=true \"$f\"; else pnpm biome check --write --files-ignore-unknown=true \"$f\"; fi; } 2>/dev/null || true"
 					},
 					{
 						"type": "command",
