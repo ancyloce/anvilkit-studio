@@ -69,9 +69,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 113,
+							"line": 115,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L113"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L115"
 						}
 					],
 					"type": {
@@ -134,9 +134,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 137,
+							"line": 139,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L137"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L139"
 						}
 					],
 					"type": {
@@ -244,9 +244,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 129,
+							"line": 131,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L129"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L131"
 						}
 					],
 					"type": {
@@ -297,9 +297,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 145,
+							"line": 147,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L145"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L147"
 						}
 					],
 					"type": {
@@ -383,9 +383,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 171,
+							"line": 173,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L171"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L173"
 						}
 					],
 					"type": {
@@ -566,9 +566,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 123,
+							"line": 125,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L123"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L125"
 						}
 					],
 					"type": {
@@ -656,9 +656,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 161,
+							"line": 163,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L161"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L163"
 						}
 					],
 					"type": {
@@ -684,9 +684,9 @@
 			"sources": [
 				{
 					"fileName": "state/editor-i18n-context.tsx",
-					"line": 112,
+					"line": 114,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L112"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L114"
 				}
 			]
 		},
@@ -1618,9 +1618,9 @@
 			"sources": [
 				{
 					"fileName": "state/editor-i18n-context.tsx",
-					"line": 178,
+					"line": 180,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L178"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L180"
 				}
 			],
 			"signatures": [
@@ -1633,9 +1633,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 178,
+							"line": 180,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L178"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L180"
 						}
 					],
 					"parameters": [
@@ -2070,9 +2070,9 @@
 			"sources": [
 				{
 					"fileName": "state/editor-i18n-context.tsx",
-					"line": 386,
+					"line": 388,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L386"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L388"
 				}
 			],
 			"signatures": [
@@ -2101,9 +2101,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 386,
+							"line": 388,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L386"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx#L388"
 						}
 					],
 					"type": {
@@ -2167,9 +2167,9 @@
 			"sources": [
 				{
 					"fileName": "state/slices/LocaleStoreProvider.tsx",
-					"line": 110,
+					"line": 112,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/LocaleStoreProvider.tsx#L110"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/LocaleStoreProvider.tsx#L112"
 				}
 			],
 			"signatures": [
@@ -2238,9 +2238,9 @@
 					"sources": [
 						{
 							"fileName": "state/slices/LocaleStoreProvider.tsx",
-							"line": 110,
+							"line": 112,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/LocaleStoreProvider.tsx#L110"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/LocaleStoreProvider.tsx#L112"
 						}
 					],
 					"type": {
