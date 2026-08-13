@@ -20,6 +20,7 @@
 import { useGetPuck } from "@puckeditor/core";
 import {
 	type ReactNode,
+	use,
 	useCallback,
 	useEffect,
 	useMemo,
@@ -27,6 +28,7 @@ import {
 	useState,
 } from "react";
 import { toast } from "sonner";
+import { StudioEditorBridgeContext } from "../../../../../react/editor/use-studio-editor.js";
 import {
 	appendComponentToRoot,
 	generateNodeId,
@@ -80,6 +82,7 @@ function filterToKinds(filter: string): readonly StudioAssetKind[] | undefined {
 
 function useImageModuleElement(): ReactNode {
 	const msg = useMsg();
+	const editorBridge = use(StudioEditorBridgeContext);
 	const source = useSidebarRegistry((state) => state.assetSource);
 	const pluginActionMap = useSidebarRegistry((state) => state.assetActions);
 	const [filter] = useAssetCategoryFilter();
@@ -425,16 +428,21 @@ function useImageModuleElement(): ReactNode {
 			// Centralized, zone-preserving append against the latest
 			// snapshot (review finding M2). No-ops if the component is
 			// not registered in the live Puck config.
-			appendComponentToRoot(getPuck(), componentName, {
-				id: generateNodeId(componentName),
-				...kindToPropsForInsert(
-					insertable.kind,
-					insertable.url,
-					insertable.name,
-				),
-			});
+			appendComponentToRoot(
+				getPuck(),
+				componentName,
+				{
+					id: generateNodeId(componentName),
+					...kindToPropsForInsert(
+						insertable.kind,
+						insertable.url,
+						insertable.name,
+					),
+				},
+				() => editorBridge?.getWriterGateError() ?? null,
+			);
 		},
-		[getPuck, msg, source],
+		[editorBridge, getPuck, msg, source],
 	);
 
 	// A plain tile click clears the selection and inserts; `meta`/`ctrl` toggles
