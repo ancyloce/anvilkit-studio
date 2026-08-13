@@ -221,9 +221,7 @@ async function main() {
 	console.error(
 		"DD-0019 §19 guarantees binding expressions never execute arbitrary",
 	);
-	console.error(
-		"JavaScript, and §29 prohibits dynamic code, arbitrary markup",
-	);
+	console.error("JavaScript, and §29 prohibits dynamic code, arbitrary markup");
 	console.error(
 		'injection, and unvalidated postMessage("*"). A prohibited primitive',
 	);

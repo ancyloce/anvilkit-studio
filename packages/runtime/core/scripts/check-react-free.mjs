@@ -2,18 +2,15 @@
 /**
  * @file `check-react-free` — quality gate for `core-015`.
  *
- * Enforces architecture §7: **`src/runtime/` and `src/config/schema.ts`
- * must never import `react` or `react-dom`.** Those two regions are the
- * React-free plugin engine and the authoritative Zod schema; any React
- * import sneaking in would couple pure-logic code to React's render
- * tree and break Node-only consumers (SSR pipelines, CLI plugin
- * authors, tests that never mount `<Studio>`).
+ * Enforces the package's React-free source boundaries: `src/runtime/`,
+ * `src/editor/`, `src/puck/`, and `src/config/schema.ts`. The sole
+ * exception is `src/puck/fields/authoring-fields.tsx`, an intentional
+ * React adapter exported only through `@anvilkit/core/react/editor`.
  *
- * The check walks every `.ts` / `.tsx` file under `src/runtime/` and
- * the single file `src/config/schema.ts`, reads them as text, and
- * scans for any `from 'react'`, `from "react"`, `from 'react-dom'`,
- * or `from "react-dom"` line. A match prints the offending file +
- * line and exits non-zero so CI fails the PR.
+ * In those regions the gate rejects direct React imports, `"use
+ * client"` directives, and local imports into `src/react/`. The last
+ * rule catches a pure module reaching through a client-marked adapter,
+ * which a package-name-only scan misses (review 0037 P2-5).
  *
  * Implemented in plain Node (no `ripgrep` dependency) so it runs on
  * any CI image — `ubuntu-latest` sometimes ships without `rg` and we
@@ -44,7 +41,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const PACKAGE_ROOT = resolve(__dirname, "..");
 const RUNTIME_DIR = resolve(PACKAGE_ROOT, "src/runtime");
+const EDITOR_DIR = resolve(PACKAGE_ROOT, "src/editor");
+const PUCK_DIR = resolve(PACKAGE_ROOT, "src/puck");
 const SCHEMA_FILE = resolve(PACKAGE_ROOT, "src/config/schema.ts");
+const PUCK_REACT_ADAPTER = resolve(PUCK_DIR, "fields/authoring-fields.tsx");
 
 /**
  * Matches:
@@ -61,6 +61,13 @@ const SCHEMA_FILE = resolve(PACKAGE_ROOT, "src/config/schema.ts");
  */
 const REACT_IMPORT_PATTERN =
 	/\bfrom\s+['"](react|react-dom)(\/[^'"]*)?['"]|\bimport\s*\(\s*['"](react|react-dom)(\/[^'"]*)?['"]/;
+
+/** A React-free module must not reach into the local client layer. */
+const LOCAL_REACT_LAYER_IMPORT_PATTERN =
+	/\bfrom\s+['"][^'"]*\/react(?:\/[^'"]*)?['"]|\bimport\s*\(\s*['"][^'"]*\/react(?:\/[^'"]*)?['"]/;
+
+/** Client directives belong at React entry points, never in pure layers. */
+const USE_CLIENT_DIRECTIVE_PATTERN = /^\s*['"]use client['"];?\s*$/;
 
 /**
  * Browser-only globals the React-free runtime must never reference. A
@@ -119,7 +126,11 @@ async function scanFile(filePath) {
 	const hits = [];
 	for (let i = 0; i < lines.length; i += 1) {
 		const line = lines[i];
-		if (REACT_IMPORT_PATTERN.test(line)) {
+		if (
+			REACT_IMPORT_PATTERN.test(line) ||
+			LOCAL_REACT_LAYER_IMPORT_PATTERN.test(line) ||
+			USE_CLIENT_DIRECTIVE_PATTERN.test(line)
+		) {
 			hits.push({ line: i + 1, text: line.trim() });
 		}
 	}
@@ -218,6 +229,19 @@ async function main() {
 		}
 	}
 
+	// The editor engine and Puck commit layer are React-free. The one
+	// authoring-fields adapter is intentionally React-backed and exported
+	// only from the React editor subpath, so keep the exception exact.
+	for (const dir of [EDITOR_DIR, PUCK_DIR]) {
+		for await (const file of walkSourceFiles(dir)) {
+			if (file === PUCK_REACT_ADAPTER) continue;
+			const hits = await scanFile(file);
+			if (hits.length > 0) {
+				offenders.push({ file, hits });
+			}
+		}
+	}
+
 	// Check the single schema file.
 	try {
 		const schemaHits = await scanFile(SCHEMA_FILE);
@@ -241,7 +265,7 @@ async function main() {
 
 	if (offenders.length === 0 && domOffenders.length === 0) {
 		console.log(
-			"check-react-free: OK — no React imports in src/runtime/ or src/config/schema.ts, and no DOM globals in src/runtime/",
+			"check-react-free: OK — runtime/editor/puck boundaries contain no React imports, client directives, or local React-layer imports; no DOM globals in src/runtime/",
 		);
 		return;
 	}
@@ -251,7 +275,7 @@ async function main() {
 	if (offenders.length > 0) {
 		console.error("");
 		console.error(
-			"The following files import `react` or `react-dom` but belong to the React-free layer:",
+			"The following files import React, declare a client boundary, or reach into src/react/ from a React-free layer:",
 		);
 		console.error("");
 		for (const { file, hits } of offenders) {
