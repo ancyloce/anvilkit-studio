@@ -1,6 +1,7 @@
 /**
  * @file Pure Puck-tree primitives (PLAN-0020 CORE-P2-004; extracted
- * from `react/editor/native-tree.ts`, CORE-P1A-016/P1B; slot-addressing
+ * from the former `react/editor/native-tree.ts`, CORE-P1A-016/P1B;
+ * slot-addressing
  * consolidated per review 0036 H-2/H-3/M-6).
  *
  * ## Where Puck actually keeps children
@@ -288,7 +289,7 @@ export function collectSubtreeIds(
  * `generateId` receives the SOURCE node's id alongside its type. That
  * is what lets a caller hand in an allocator which is stable across
  * repeated runs of the same intent — see `createStableIdAllocator` in
- * `react/editor/native-tree.ts` (review 0036 M-1).
+ * `editor/tree/transforms.ts` (review 0036 M-1).
  */
 export function cloneSubtree(
 	node: PuckTreeNode,

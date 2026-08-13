@@ -26,7 +26,7 @@ import {
 	ROOT_ZONE,
 	reorderNodeInData,
 } from "../../../puck/update-tree.js";
-import { setNodeProp } from "../../../react/editor/native-tree.js";
+import { setNodeProp } from "../transforms.js";
 
 const config = {
 	root: { fields: {} },
