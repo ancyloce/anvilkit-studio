@@ -62,6 +62,7 @@ import {
 } from "@/studio/ui/merge-studio-ui";
 import { useThemeSync } from "@/theme/use-theme-sync";
 import { StudioEditorMount } from "../editor/StudioEditorMount.js";
+import { PuckSlotProvider } from "./puck-slot-context";
 import {
 	composePluginProviders,
 	splitOverlaysByPlacement,
@@ -157,6 +158,9 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 		liveStudioConfig,
 		chromeAssets,
 		mergedOverrides,
+		puckSlot,
+		puckSeedData,
+		preparePuckRemount,
 		handleChange,
 		handlePublish,
 		handlePublishClick,
@@ -169,7 +173,6 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 		editorBridge,
 		sidebarRegistryStore,
 		resolvedStoreId,
-		dataRef,
 		rootRef,
 	} = useStudioController(props);
 	const stableEditor = useStableEditorConfig(props.editor);
@@ -255,17 +258,22 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 		[onError, logger],
 	);
 	const renderRuntimeError = useCallback(
-		(error: unknown, reset: () => void): ReactNode =>
-			errorFallback !== undefined ? (
+		(error: unknown, reset: () => void): ReactNode => {
+			const retryRuntime = (): void => {
+				preparePuckRemount();
+				reset();
+			};
+			return errorFallback !== undefined ? (
 				typeof errorFallback === "function" ? (
 					errorFallback(error)
 				) : (
 					errorFallback
 				)
 			) : (
-				<StudioErrorScreen error={error} onRetry={reset} />
-			),
-		[errorFallback],
+				<StudioErrorScreen error={error} onRetry={retryRuntime} />
+			);
+		},
+		[errorFallback, preparePuckRemount],
 	);
 
 	// Loading state. A host-supplied `loading` node always wins. When
@@ -339,25 +347,27 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 	// compiled-appearance mount — the same undecorated `Config` serves
 	// the editor, preview, production, and export (§1 condition 3).
 	const puckElement = (
-		<Puck<UserConfig>
-			config={puckConfig}
-			// Puck reads `data` ONCE, in a `useState` initializer — it is an
-			// initial seed, not a controlled value. Mount from the shell's
-			// live document (seeded from the `data` prop, advanced by every
-			// `onChange`) rather than the raw prop, so that when
-			// `<StudioErrorBoundary>` catches a chrome crash and the user
-			// hits Retry, `<Puck>` remounts on the work in progress instead
-			// of silently reverting to the document as it was at first
-			// mount (review 0036 H-5).
-			data={dataRef.current as PuckDataFor}
-			overrides={mergedOverrides as Partial<PuckOverrides<UserConfig>>}
-			onChange={handleChange as (data: PuckDataFor) => void}
-			onPublish={handlePublish as (data: PuckDataFor) => void}
-			plugins={[...compiled.runtime.puckPlugins] as PuckPlugin<UserConfig>[]}
-			ui={puckUi}
-			onAction={handleAction}
-			viewports={viewports}
-		/>
+		<PuckSlotProvider value={puckSlot}>
+			<Puck<UserConfig>
+				config={puckConfig}
+				// Puck reads `data` ONCE, in a `useState` initializer — it is an
+				// initial seed, not a controlled value. Mount from the shell's
+				// live document (seeded from the `data` prop, advanced by every
+				// `onChange`) rather than the raw prop, so that when
+				// `<StudioErrorBoundary>` catches a chrome crash and the user
+				// hits Retry, `<Puck>` remounts on the work in progress instead
+				// of silently reverting to the document as it was at first
+				// mount (review 0036 H-5).
+				data={puckSeedData as PuckDataFor}
+				overrides={mergedOverrides as Partial<PuckOverrides<UserConfig>>}
+				onChange={handleChange as (data: PuckDataFor) => void}
+				onPublish={handlePublish as (data: PuckDataFor) => void}
+				plugins={[...compiled.runtime.puckPlugins] as PuckPlugin<UserConfig>[]}
+				ui={puckUi}
+				onAction={handleAction}
+				viewports={viewports}
+			/>
+		</PuckSlotProvider>
 	);
 	// Flag-gated lazy editor runtime (CORE-P0-012/CORE-P1A-001): the
 	// mount WRAPS `<Puck>` so the editor contexts (`useStudioEditor()`,

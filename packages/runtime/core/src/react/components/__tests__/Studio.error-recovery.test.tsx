@@ -11,9 +11,8 @@
  *
  * Mounting from the raw `data` prop therefore restored the document as
  * it was at first mount and silently threw away the whole session's
- * edits. The shell now mounts from `dataRef` — seeded from the prop,
- * advanced by every `onChange` — so Retry resumes on the work in
- * progress.
+ * edits. The shell snapshots its live document into a render-safe mount
+ * seed immediately before Retry, so recovery resumes on the work in progress.
  *
  * The Puck mock mirrors the one semantic that matters here: `data` is
  * read exactly once, at mount.
@@ -161,17 +160,14 @@ describe("<Studio> — crash recovery preserves the document (0036 H-5)", () => 
 
 			await view.findByTestId("puck-mock");
 
-			// React re-renders the boundary's subtree more than once while
-			// recovering, so the mount COUNT is an implementation detail of
-			// React's error path. The invariant is what each mount was
-			// seeded with: the first from the prop, and every mount after
-			// the edit from the live document. Before the fix all of them
-			// were INITIAL_DOC — the session's work, silently discarded.
+			// React may speculatively retry the failed subtree with its previous
+			// seed before it commits the fallback. The mount COUNT and those
+			// discarded attempts are implementation details. The successful mount
+			// after the user's Retry must use the explicit live-document snapshot.
+			// Before the fix the final seed was INITIAL_DOC — the session's work,
+			// silently discarded.
 			expect(puck.mounts.length).toBeGreaterThan(1);
 			expect(puck.mounts.at(-1)).toEqual(EDITED_DOC);
-			for (const seed of puck.mounts.slice(1)) {
-				expect(seed).toEqual(EDITED_DOC);
-			}
 		} finally {
 			consoleError.mockRestore();
 		}

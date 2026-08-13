@@ -402,6 +402,12 @@ export interface StudioControllerState {
 	readonly liveStudioConfig: StudioConfig | null;
 	readonly chromeAssets: ChromeAssets | null;
 	readonly mergedOverrides: Partial<PuckOverrides>;
+	/** Current root-slot composition supplied to the mount-stable Puck slot. */
+	readonly puckSlot: NonNullable<Partial<PuckOverrides>["puck"]> | null;
+	/** Initial document for the next Puck mount; never read from a ref in render. */
+	readonly puckSeedData: PuckData;
+	/** Snapshot the latest live document before an error-boundary remount. */
+	readonly preparePuckRemount: () => void;
 	readonly handleChange: (next: PuckData) => void;
 	readonly handlePublish: (next: PuckData) => void;
 	/**
@@ -442,14 +448,9 @@ export interface StudioControllerState {
 	 * The newest document the shell knows about: seeded from the `data`
 	 * prop and advanced on every Puck `onChange`.
 	 *
-	 * This — not the raw `data` prop — is what `<Puck>` must mount from
-	 * (review 0036 H-5). Puck reads `data` exactly once, in a `useState`
-	 * initializer, so the prop is an *initial* seed rather than a
-	 * controlled value. That distinction is invisible while `<Puck>`
-	 * mounts once, and load-bearing the moment it remounts: after
-	 * `<StudioErrorBoundary>` catches a chrome crash and the user hits
-	 * Retry, mounting from the prop would restore the document as it was
-	 * at first mount and silently discard the whole session's edits.
+	 * Imperative consumers and callbacks read this live document. Render code
+	 * must use {@link puckSeedData}; the ref is snapshotted into that state by
+	 * {@link preparePuckRemount} before an error-boundary retry.
 	 */
 	readonly dataRef: RefObject<PuckData>;
 	readonly rootRef: RefObject<HTMLDivElement | null>;

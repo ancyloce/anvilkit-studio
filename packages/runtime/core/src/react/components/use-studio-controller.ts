@@ -93,6 +93,7 @@ import {
 	stripReactiveConfig,
 } from "./plugin-fingerprint.js";
 import { runPublishPipeline } from "./publish-pipeline.js";
+import { StablePuckSlot } from "./puck-slot-context.js";
 import { createShellPluginContext } from "./shell-plugin-context.js";
 import type {
 	ChromeAssets,
@@ -126,9 +127,6 @@ export type {
 // public `@anvilkit/core/react` surface (`{ StudioLogger }`, threaded
 // through `Studio.tsx`) is unchanged.
 export type { StudioLogger };
-
-/** Puck's root chrome slot — a component type, not a render callback. */
-type PuckSlotRender = NonNullable<Partial<PuckOverrides>["puck"]>;
 
 const FALLBACK_STORE_ID_PREFIX = "anvilkit";
 export const DEFAULT_CHROME_MODE: StudioChromeMode = "anvilkit";
@@ -364,6 +362,17 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	const dataRef = useRef<PuckData>(
 		(data as PuckData | undefined) ?? EMPTY_DATA,
 	);
+	// Puck consumes `data` only as an initial mount seed. Keep that seed in
+	// React state so Studio never reads a mutable ref during render. Ordinary
+	// edits advance `dataRef` without rerendering the shell; an error-boundary
+	// retry explicitly snapshots the live document into this state immediately
+	// before the Puck subtree remounts.
+	const [puckSeedData, setPuckSeedData] = useState<PuckData>(
+		() => dataRef.current,
+	);
+	const preparePuckRemount = useCallback((): void => {
+		setPuckSeedData(dataRef.current);
+	}, []);
 
 	// Latest `plugins`/`config` behind refs (same rationale as `loggerRef`
 	// below): the compile effect re-runs only when `compileKey` changes —
@@ -928,21 +937,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// and only its identity was making the composition below recompute.
 	const stableConsumerOverrides = useShallowStable(consumerOverrides);
 
-	// The composed `puck` slot, behind one component whose identity is
-	// frozen for the lifetime of the mount. See the memo below for why
-	// Puck makes that identity load-bearing.
-	const puckSlotRef = useRef<PuckSlotRender | null>(null);
-	const [stablePuckSlot] = useState<PuckSlotRender>(
-		() => (props: { readonly children: ReactNode }) =>
-			// Puck's `RenderFunc` must return an element, so the
-			// nothing-composed-yet fallback is a Fragment rather than raw
-			// children — the same passthrough Puck's own `DefaultOverride` is.
-			puckSlotRef.current === null
-				? createElement(Fragment, null, props.children)
-				: puckSlotRef.current(props),
-	);
-
-	const mergedOverrides = useMemo<Partial<PuckOverrides>>(() => {
+	const overrideComposition = useMemo(() => {
 		const base: Partial<PuckOverrides>[] = [];
 		if (isAnvilkit && activeChromeAssets !== null) {
 			base.push(activeChromeAssets.studioOverrides);
@@ -979,7 +974,8 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 				),
 		});
 		const composed = mergeOverrides(base);
-		// Hand the composed slot to the mount-stable delegate rather than to
+		// Hand the composed slot to the context-backed stable component rather
+		// than directly to
 		// Puck (review 0036 H-4). Puck resolves the editor's root wrapper as
 		// `CustomPuck = useMemo(() => overrides.puck || DefaultOverride,
 		// [overrides])` — a COMPONENT TYPE. `mergeOverrides` mints a new
@@ -988,12 +984,13 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		// Puck subtree: canvas iframe, inspector, every field's local
 		// buffer, focus and scroll position.
 		//
-		// The ref write during render is what keeps the delegate current for
-		// the very render that produced the new composition — a layout
-		// effect would land a commit too late. It is idempotent, so a
-		// StrictMode double-render or a discarded pass writes the same value.
-		puckSlotRef.current = composed.puck ?? null;
-		return { ...composed, puck: stablePuckSlot };
+		// `StablePuckSlot` reads the current delegate from a provider above
+		// Puck. Context delivers the value from this exact render without a
+		// render-phase ref write, and the component type remains constant.
+		return {
+			mergedOverrides: { ...composed, puck: StablePuckSlot },
+			puckSlot: composed.puck ?? null,
+		};
 	}, [
 		activeCompiled,
 		stableConsumerOverrides,
@@ -1001,8 +998,8 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		activeChromeAssets,
 		editorEnabled,
 		editorBridge,
-		stablePuckSlot,
 	]);
+	const { mergedOverrides, puckSlot } = overrideComposition;
 
 	// generic→default boundary: the public callbacks are typed against
 	// `PuckDataFor<UserConfig>`; internally Puck hands us the broad
@@ -1197,6 +1194,9 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		liveStudioConfig,
 		chromeAssets: activeChromeAssets,
 		mergedOverrides,
+		puckSlot,
+		puckSeedData,
+		preparePuckRemount,
 		handleChange,
 		handlePublish,
 		handlePublishClick,
@@ -1209,8 +1209,6 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		editorBridge,
 		sidebarRegistryStore,
 		resolvedStoreId,
-		// The view mounts `<Puck>` from this, not from the `data` prop —
-		// see the field docs on `StudioControllerState` (review 0036 H-5).
 		dataRef,
 		rootRef,
 	};
