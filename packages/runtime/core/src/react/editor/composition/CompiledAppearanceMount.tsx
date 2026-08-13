@@ -30,11 +30,24 @@ const AppearanceIframeOverride = lazy(() =>
 	})),
 );
 
+/** Props for {@link CompiledAppearanceMount}. */
+export interface CompiledAppearanceMountProps {
+	/**
+	 * The canvas frame's `Document`, forwarded from Puck's `iframe`
+	 * override. The feed marks its `<body>` as the document root so the
+	 * editor canvas identifies itself the way a production page does
+	 * (review 0036 L-6).
+	 */
+	readonly document?: Document;
+}
+
 /** Mount the lazy compiled-appearance feed inside the canvas frame. */
-export function CompiledAppearanceMount(): ReactNode {
+export function CompiledAppearanceMount({
+	document: frameDocument,
+}: CompiledAppearanceMountProps = {}): ReactNode {
 	return (
 		<Suspense fallback={null}>
-			<AppearanceIframeOverride />
+			<AppearanceIframeOverride frameDocument={frameDocument} />
 		</Suspense>
 	);
 }

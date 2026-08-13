@@ -77,6 +77,7 @@ import {
 } from "@/overrides/theme/iframe-theme";
 import { useMsg } from "@/state/editor-i18n-context";
 import { useCanvasRootHeight } from "@/state/slices/editor-ui-selectors";
+import { useKeyEventGuard } from "../../components/use-key-event-guard.js";
 import { useCanvasDocumentSync } from "../../editor/canvas/use-canvas-document-sync.js";
 import { CompiledAppearanceMount } from "../../editor/composition/CompiledAppearanceMount.js";
 
@@ -170,6 +171,13 @@ export function CanvasIframe({
 	// Editor canvas registry feed (CORE-P1B-001): a no-op unless the
 	// editor feature is enabled.
 	useCanvasDocumentSync(iframeDoc);
+
+	// Puck monitors hotkeys on the FRAME document as well as the host
+	// one, with the same unguarded `getModifierState` call — so the
+	// canvas needs the same shim `<Studio>` installs upstairs, or an
+	// extension injecting into the canvas crashes the editor
+	// (review 0036 L-9).
+	useKeyEventGuard(iframeDoc ?? null);
 
 	// Puck renders the canvas `<iframe>` itself and gives it no `title`,
 	// which axe reports as a serious `frame-title` violation: a screen
@@ -332,7 +340,7 @@ export function CanvasIframe({
 			    beside it served sidecar documents and was deleted with the
 			    sidecar — it was the second CSS emitter, and contract rule 3
 			    permits exactly one. */}
-			<CompiledAppearanceMount />
+			<CompiledAppearanceMount document={iframeDoc} />
 			{children}
 		</>
 	);

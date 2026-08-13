@@ -28,7 +28,11 @@
  */
 
 import type { Config, PuckApi, Data as PuckData } from "@puckeditor/core";
-import { dispatchOneIntent } from "../../../puck/commit-protocol.js";
+import {
+	type CommitAttempt,
+	dispatchOneIntent,
+	type IntentOutcome,
+} from "../../../puck/commit-protocol.js";
 import { readEditorMetadata } from "../../../puck/component-metadata.js";
 import {
 	commitDeleteNodes,
@@ -84,13 +88,13 @@ function tryConfigComponents(
 function commitTree(
 	bridge: StudioEditorBridge,
 	transform: (data: PuckData, config: Config) => PuckData | null,
-): void {
+): CommitAttempt<IntentOutcome> | null {
 	if (bridge.getWriterGateError() !== null) {
-		return;
+		return null;
 	}
 	const api: PuckApi | null = bridge.getPuckApi();
 	if (api === null) {
-		return;
+		return null;
 	}
 	// The tree transforms resolve slots from the config, so it is threaded
 	// from the live api rather than asked of the caller — it cannot drift
@@ -101,7 +105,7 @@ function commitTree(
 	// out to be a no-op leaves no empty undo entry behind. `null` from
 	// `transform` and a `walkTree` throw both read as "nothing to do" —
 	// a shortcut must not throw out of a key handler.
-	dispatchOneIntent(api, (data) => {
+	return dispatchOneIntent(api, (data) => {
 		let next: PuckData | null;
 		try {
 			next = transform(data, config);
@@ -170,7 +174,7 @@ export function buildShortcutContext(
 			// than the one we then select.
 			const allocate = createStableIdAllocator();
 			let containerId: string | null = null;
-			commitTree(bridge, (data, config) => {
+			const attempt = commitTree(bridge, (data, config) => {
 				const wrapped = wrapNode(
 					data,
 					primary,
@@ -185,7 +189,7 @@ export function buildShortcutContext(
 				containerId = wrapped.containerId;
 				return wrapped.data;
 			});
-			if (containerId !== null) {
+			if (attempt?.committed === true && containerId !== null) {
 				bridge.selection?.select(containerId);
 			}
 		},

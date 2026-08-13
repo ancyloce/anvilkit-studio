@@ -30,6 +30,7 @@ import type { ReactNode } from "react";
 import type { AppearanceCompilerCache } from "../../style-compiler/cache.js";
 import type { CompiledAppearance } from "../../style-compiler/compile.js";
 import { compileDocumentAppearance } from "../../style-compiler/compile.js";
+import { documentRootAttributes } from "../../style-compiler/document-root.js";
 
 export interface AnvilKitRenderProps<
 	UserConfig extends Config = Config,
@@ -99,6 +100,10 @@ export interface AnvilKitRenderProps<
  * so exports and parity tooling can key off one stable page root; the
  * embedded `<style data-anvilkit-appearance>` is the document's ONLY
  * appearance injection point.
+ *
+ * Both attributes come from the shared `documentRootAttributes` so the
+ * editor canvas marks its own root identically (review 0036 L-6) — the
+ * carrier differs per consumer, the vocabulary does not.
  */
 export function AnvilKitRender<
 	UserConfig extends Config = Config,
@@ -132,7 +137,7 @@ export function AnvilKitRender<
 		}
 	}
 	return (
-		<div data-ak-document="" data-ak-token-mode={compiled.tokenMode}>
+		<div {...documentRootAttributes(compiled)}>
 			<style
 				nonce={nonce}
 				data-anvilkit-appearance=""
