@@ -3,10 +3,7 @@
  * DD-0019 §19).
  */
 
-import type {
-	Binding,
-	JsonValue,
-} from "@anvilkit/contracts/editor";
+import type { Binding, JsonValue } from "@anvilkit/contracts/editor";
 import { describe, expect, it } from "vitest";
 import {
 	buildRepeatContexts,
@@ -16,7 +13,6 @@ import {
 	repeatExportBlockers,
 	resolveVisibility,
 } from "../index.js";
-
 
 function binding(patch: Partial<Binding> = {}): Binding {
 	return {

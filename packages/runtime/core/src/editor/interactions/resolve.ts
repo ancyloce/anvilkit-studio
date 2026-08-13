@@ -24,8 +24,8 @@
  */
 
 import type {
-	InteractionAction,
 	Interaction,
+	InteractionAction,
 } from "@anvilkit/contracts/editor";
 
 /** A reference an interaction makes to a node in the tree. */

@@ -13,10 +13,7 @@
  * component to match on.
  */
 
-import type {
-	DesignToken,
-	StyleDefinition,
-} from "@anvilkit/contracts/editor";
+import type { DesignToken, StyleDefinition } from "@anvilkit/contracts/editor";
 
 /** Namespace prefixes, kept distinct so the two spaces cannot collide. */
 const TOKEN_PREFIX = "--ak-tok";

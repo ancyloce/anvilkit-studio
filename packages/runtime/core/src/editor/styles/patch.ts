@@ -7,10 +7,7 @@
  * was validated is exactly what lands.
  */
 
-import type {
-	EditorPatch,
-	StyleDefinition,
-} from "@anvilkit/contracts/editor";
+import type { EditorPatch, StyleDefinition } from "@anvilkit/contracts/editor";
 import { applyEditorPatch } from "../patch.js";
 
 /**
