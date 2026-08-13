@@ -3,7 +3,7 @@ title: "EditorApi"
 description: "@anvilkit/core · EditorApi"
 ---
 
-Defined in: [runtime/core/src/types/editor-api-v2.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L78)
+Defined in: [runtime/core/src/types/editor-api-v2.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L87)
 
 The whole public editor surface for plugins and AI.
 
@@ -11,7 +11,7 @@ The whole public editor surface for plugins and AI.
 
 | Property | Modifier | Type | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="commit"&gt;&lt;/a&gt; `commit` | `readonly` | [`EditorCommitApi`](EditorCommitApi.md) | [runtime/core/src/types/editor-api-v2.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L83) |
+| &lt;a id="commit"&gt;&lt;/a&gt; `commit` | `readonly` | [`EditorCommitApi`](EditorCommitApi.md) | [runtime/core/src/types/editor-api-v2.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L92) |
 
 ## Methods
 
@@ -21,7 +21,7 @@ The whole public editor surface for plugins and AI.
 readDocument(): DocumentModel;
 ```
 
-Defined in: [runtime/core/src/types/editor-api-v2.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L80)
+Defined in: [runtime/core/src/types/editor-api-v2.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L89)
 
 The current document projection. Never a mutable handle.
 
@@ -37,7 +37,7 @@ The current document projection. Never a mutable handle.
 subscribe(listener): () => void;
 ```
 
-Defined in: [runtime/core/src/types/editor-api-v2.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L82)
+Defined in: [runtime/core/src/types/editor-api-v2.ts:91](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L91)
 
 Change notification. Returns an unsubscribe function.
 

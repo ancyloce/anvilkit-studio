@@ -1,0 +1,30 @@
+---
+title: "CanvasNodeRenderer"
+description: "@anvilkit/canvas-editor · CanvasNodeRenderer"
+---
+
+```ts
+const CanvasNodeRenderer: MemoExoticComponent<(__namedParameters) => Element | null>;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/stage/CanvasNodeRenderer.tsx:2083](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stage/CanvasNodeRenderer.tsx#L2083)
+
+MEMOISED on the `node` prop (K-5). react-konva re-renders its ENTIRE bridged
+child tree on every render of the component that owns `<CanvasStage>` —
+`StageWrap` calls `updateContainer(<Bridge>{children}</Bridge>)` from a
+`useLayoutEffect` with no dependency array — so without a bail-out here a
+single-node edit re-ran every node's render function, and every one of them
+then handed Konva a fresh gradient/dash/clip object to re-apply (K-3).
+
+Reference equality on `node` is a SOUND key precisely because the IR is
+updated immutably: an edit allocates new objects only along the changed
+path, so untouched siblings keep their identity and bail out. The resolved
+geometry layer already leans on the same property (see
+useResolvedGeometry).
+
+What memo does NOT block, and must not: context reads
+(`IsolationRenderContext`, brand kit, assets) and the `useSyncExternalStore`
+subscriptions inside useFieldPreviewMerge / useRenderRecord
+still re-render this node on their own when their value changes. So a
+resolver re-run, a field preview, or entering isolation all still repaint,
+node-by-node, without the whole tree going with them.

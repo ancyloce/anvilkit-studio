@@ -7,7 +7,7 @@ description: "@anvilkit/canvas-editor · exportStageContentDataURL"
 function exportStageContentDataURL(stage, options?): string;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/render/export-stage.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/render/export-stage.ts#L55)
+Defined in: [packages/capabilities/canvas/editor/src/render/export-stage.ts:146](https://github.com/ancyloce/anvilkit-studio/blob/main/src/render/export-stage.ts#L146)
 
 Serialize a live editor stage to a data URL with the editor-only chrome
 layers hidden and the viewport's live pan/zoom neutralized, so the exported
@@ -29,6 +29,10 @@ CHROME\_GROUP\_NAMES) get the same hide/restore treatment via
 restored the same way. Stages that don't expose `getLayers`/`find`/
 `scale`/`position` (e.g. unit-test fakes) skip whichever step they don't
 support.
+
+The capture RECTANGLE is passed explicitly (surfaceRect) rather than
+left to Konva's content-bounding-box default, which is what actually bounds
+the output to the page — see that function for why the default is wrong here.
 
 ## Parameters
 

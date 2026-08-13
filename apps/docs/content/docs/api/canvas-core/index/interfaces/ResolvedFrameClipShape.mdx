@@ -3,7 +3,7 @@ title: "ResolvedFrameClipShape"
 description: "@anvilkit/canvas-core · ResolvedFrameClipShape"
 ---
 
-Defined in: [ir/frame-clip.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L40)
+Defined in: [ir/frame-clip.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L44)
 
 A frame's clip, fully resolved: is it clipping, to what, and on whose authority.
 
@@ -11,9 +11,9 @@ A frame's clip, fully resolved: is it clipping, to what, and on whose authority.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="clipped"&gt;&lt;/a&gt; `clipped` | `readonly` | `boolean` | Is the frame clipping at all? `false` whenever `clip !== true`, in which case every other field describes geometry that is present but inert — `shape` is *not* a second, silent clipping trigger (ADR 0008 decision 2). | [ir/frame-clip.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L46) |
-| &lt;a id="cornerradii"&gt;&lt;/a&gt; `cornerRadii?` | `readonly` | [`CanvasCornerRadii`](CanvasCornerRadii.md) | Per-corner radii, resolved. Present only for `kind: "rect"` when the frame sets them. | [ir/frame-clip.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L56) |
-| &lt;a id="degradation"&gt;&lt;/a&gt; `degradation?` | `readonly` | [`FrameClipDegradation`](../type-aliases/FrameClipDegradation) | Why the declared shape was rejected. Present if and only if `source` is `"degraded"`. | [ir/frame-clip.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L59) |
-| &lt;a id="radius"&gt;&lt;/a&gt; `radius?` | `readonly` | `number` | Uniform corner radius, resolved. Present only for `kind: "rect"` with a positive `radius` and no `cornerRadii` — the two existing clip paths both let per-corner radii win outright, and both ignore a zero radius. | [ir/frame-clip.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L54) |
-| &lt;a id="shape"&gt;&lt;/a&gt; `shape` | `readonly` | [`CanvasFrameShape`](../type-aliases/CanvasFrameShape) | The geometry to clip to. Never absent: an unshaped frame resolves to `{ kind: "rect" }`. | [ir/frame-clip.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L48) |
-| &lt;a id="source"&gt;&lt;/a&gt; `source` | `readonly` | [`FrameClipShapeSource`](../type-aliases/FrameClipShapeSource) | - | [ir/frame-clip.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L57) |
+| &lt;a id="clipped"&gt;&lt;/a&gt; `clipped` | `readonly` | `boolean` | Is the frame clipping at all? `false` whenever `clip !== true`, in which case every other field describes geometry that is present but inert — `shape` is *not* a second, silent clipping trigger (ADR 0008 decision 2). | [ir/frame-clip.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L50) |
+| &lt;a id="cornerradii"&gt;&lt;/a&gt; `cornerRadii?` | `readonly` | [`CanvasCornerRadii`](CanvasCornerRadii.md) | Per-corner radii, resolved. Present only for `kind: "rect"` when the frame sets them. | [ir/frame-clip.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L60) |
+| &lt;a id="degradation"&gt;&lt;/a&gt; `degradation?` | `readonly` | [`FrameClipDegradation`](../type-aliases/FrameClipDegradation) | Why the declared shape was rejected. Present if and only if `source` is `"degraded"`. | [ir/frame-clip.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L63) |
+| &lt;a id="radius"&gt;&lt;/a&gt; `radius?` | `readonly` | `number` | Uniform corner radius, resolved. Present only for `kind: "rect"` with a positive `radius` and no `cornerRadii` — the two existing clip paths both let per-corner radii win outright, and both ignore a zero radius. | [ir/frame-clip.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L58) |
+| &lt;a id="shape"&gt;&lt;/a&gt; `shape` | `readonly` | [`CanvasFrameShape`](../type-aliases/CanvasFrameShape) | The geometry to clip to. Never absent: an unshaped frame resolves to `{ kind: "rect" }`. | [ir/frame-clip.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L52) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source` | `readonly` | [`FrameClipShapeSource`](../type-aliases/FrameClipShapeSource) | - | [ir/frame-clip.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/frame-clip.ts#L61) |

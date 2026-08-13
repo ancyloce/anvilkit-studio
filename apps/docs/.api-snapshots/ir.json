@@ -258,9 +258,9 @@
               "sources": [
                 {
                   "fileName": "editor/index.ts",
-                  "line": 637,
+                  "line": 636,
                   "character": 10,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L637"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L636"
                 }
               ],
               "type": {
@@ -289,9 +289,9 @@
           "sources": [
             {
               "fileName": "editor/index.ts",
-              "line": 631,
+              "line": 630,
               "character": 17,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L631"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L630"
             }
           ]
         },
@@ -304,9 +304,9 @@
           "sources": [
             {
               "fileName": "editor/index.ts",
-              "line": 624,
+              "line": 623,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L624"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L623"
             }
           ],
           "signatures": [
@@ -374,9 +374,9 @@
               "sources": [
                 {
                   "fileName": "editor/index.ts",
-                  "line": 624,
+                  "line": 623,
                   "character": 16,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L624"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L623"
                 }
               ],
               "parameters": [
@@ -427,9 +427,9 @@
           "sources": [
             {
               "fileName": "editor/index.ts",
-              "line": 571,
+              "line": 570,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L571"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L570"
             }
           ],
           "signatures": [
@@ -469,24 +469,24 @@
                   },
                   {
                     "kind": "text",
-                    "text": " keeps its\nsignature, so pre-finalization callers that genuinely hold a sidecar\nare unaffected until "
+                    "text": " keeps its\nsignature, so callers that genuinely hold a sidecar are unaffected\nuntil "
                   },
                   {
                     "kind": "code",
-                    "text": "`p7-002`"
+                    "text": "`p7-004`"
                   },
                   {
                     "kind": "text",
-                    "text": " retires that form."
+                    "text": " retires that form with the migration layer."
                   }
                 ]
               },
               "sources": [
                 {
                   "fileName": "editor/index.ts",
-                  "line": 571,
+                  "line": 570,
                   "character": 16,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L571"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L570"
                 }
               ],
               "parameters": [
@@ -888,9 +888,9 @@
           "sources": [
             {
               "fileName": "editor/index.ts",
-              "line": 646,
+              "line": 645,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L646"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L645"
             }
           ],
           "signatures": [
@@ -911,9 +911,9 @@
               "sources": [
                 {
                   "fileName": "editor/index.ts",
-                  "line": 646,
+                  "line": 645,
                   "character": 16,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L646"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L645"
                 }
               ],
               "parameters": [

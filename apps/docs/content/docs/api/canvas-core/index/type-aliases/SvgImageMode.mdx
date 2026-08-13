@@ -7,8 +7,22 @@ description: "@anvilkit/canvas-core · SvgImageMode"
 type SvgImageMode = "auto" | "embed" | "reference";
 ```
 
-Defined in: [serialize/svg.ts:1492](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L1492)
+Defined in: [serialize/svg.ts:1504](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L1504)
 
-- `auto` (default): inline `data:` URIs, reference everything else.
+- `auto` (default): inline `data:` URIs, reference everything else — with ONE
+  exception, below.
 - `embed`: fetch + base64-embed remote URIs (requires `fetchAsset`).
-- `reference`: always emit `href` referencing the original URI.
+- `reference`: always emit `href` referencing the original URI. The only mode
+  that never invokes `fetchAsset`.
+
+THE `auto` EXCEPTION, stated here because callers were reading "reference
+everything else" as "never calls me": a browser-local URI (`blob:`,
+`filesystem:`) has no href worth emitting — the handle resolves in exactly one
+session on one machine — so under `auto` and `embed` alike, a supplied
+`fetchAsset` IS consulted for those, and the fetched bytes are inlined as a
+sanitized `data:` URI (cp1-006). Without a fetcher, or under `reference`, they
+drop with `UNSAFE_URI` as any other blocked scheme does. This is what makes
+`@anvilkit/canvas-editor`'s default SVG export carry browser-local images
+without switching to `embed` and thereby fetching every REMOTE image too.
+Passing `fetchAsset` is therefore consent to be called on the default path;
+a caller that wants no I/O at all passes `reference` or omits the fetcher.

@@ -7,9 +7,18 @@ description: "@anvilkit/canvas-core · assertCanvasIRInvariants"
 function assertCanvasIRInvariants(ir): void;
 ```
 
-Defined in: [ir/invariants.ts:320](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L320)
+Defined in: [ir/invariants.ts:384](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L384)
 
-Throwing wrapper around [validateCanvasIRInvariants](validateCanvasIRInvariants.md) for a hard trust-boundary check.
+Throwing wrapper around [validateCanvasIRInvariants](validateCanvasIRInvariants.md) for a hard
+trust-boundary check.
+
+Throws on `"error"` issues ONLY. A `"warning"` is a document this build can
+process — it renders, it round-trips, it is merely degraded somewhere — and
+rejecting one here would turn the forward-compatibility the `looseObject`
+schemas and the never-throwing clip resolver were built for into a hard
+failure at the one place documents arrive from other peers. Callers that want
+every issue, warnings included, call [validateCanvasIRInvariants](validateCanvasIRInvariants.md)
+directly; the thrown error carries the errors that caused the rejection.
 
 ## Parameters
 

@@ -7,7 +7,7 @@ description: "@anvilkit/ir · listUsedDocumentFeatures"
 function listUsedDocumentFeatures(document): readonly EditorFeatureId[];
 ```
 
-Defined in: [editor/index.ts:571](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L571)
+Defined in: [editor/index.ts:570](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/editor/index.ts#L570)
 
 Feature scan for a **canonical carrier document** — the entry point
 a caller uses when there is no sidecar to read (`p2-007`).
@@ -19,8 +19,8 @@ documents that have no sidecar, to feed a scan that then reported
 nothing.
 
 Additive on purpose — [listUsedEditorFeatures](listUsedEditorFeatures.md) keeps its
-signature, so pre-finalization callers that genuinely hold a sidecar
-are unaffected until `p7-002` retires that form.
+signature, so callers that genuinely hold a sidecar are unaffected
+until `p7-004` retires that form with the migration layer.
 
 ## Parameters
 

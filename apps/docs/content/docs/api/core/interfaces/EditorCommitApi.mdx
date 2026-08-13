@@ -3,7 +3,7 @@ title: "EditorCommitApi"
 description: "@anvilkit/core · EditorCommitApi"
 ---
 
-Defined in: [runtime/core/src/types/editor-api-v2.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L45)
+Defined in: [runtime/core/src/types/editor-api-v2.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L52)
 
 The commit surface — one method per intent family, each resolving to
 exactly one history-recording `setData`.
@@ -12,13 +12,13 @@ exactly one history-recording `setData`.
 
 | Property | Modifier | Type | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="annotation"&gt;&lt;/a&gt; `annotation` | `readonly` | (`edit`) =&gt; [`EditorCommitOutcome`](EditorCommitOutcome.md) | [runtime/core/src/types/editor-api-v2.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L72) |
-| &lt;a id="bindings"&gt;&lt;/a&gt; `bindings` | `readonly` | (`nodeId`, `update`) =&gt; `CarrierCommitResult` | [runtime/core/src/types/editor-api-v2.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L63) |
-| &lt;a id="componentlibrary"&gt;&lt;/a&gt; `componentLibrary` | `readonly` | (`edit`) =&gt; [`EditorCommitOutcome`](EditorCommitOutcome.md) | [runtime/core/src/types/editor-api-v2.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L46) |
-| &lt;a id="deletenodes"&gt;&lt;/a&gt; `deleteNodes` | `readonly` | (`nodeIds`) =&gt; `TreeCommitResult` | [runtime/core/src/types/editor-api-v2.ts:73](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L73) |
-| &lt;a id="duplicatenodes"&gt;&lt;/a&gt; `duplicateNodes` | `readonly` | (`nodeIds`) =&gt; `TreeCommitResult` | [runtime/core/src/types/editor-api-v2.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L74) |
-| &lt;a id="inlinetext"&gt;&lt;/a&gt; `inlineText` | `readonly` | (`input`) =&gt; `CarrierCommitResult` | [runtime/core/src/types/editor-api-v2.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L67) |
-| &lt;a id="instanceoverride"&gt;&lt;/a&gt; `instanceOverride` | `readonly` | (`nodeIds`, `edit`) =&gt; [`EditorCommitOutcome`](EditorCommitOutcome.md) | [runtime/core/src/types/editor-api-v2.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L55) |
-| &lt;a id="instanceselection"&gt;&lt;/a&gt; `instanceSelection` | `readonly` | (`nodeIds`, `selection`) =&gt; [`EditorCommitOutcome`](EditorCommitOutcome.md) | [runtime/core/src/types/editor-api-v2.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L51) |
-| &lt;a id="interactions"&gt;&lt;/a&gt; `interactions` | `readonly` | (`nodeId`, `update`) =&gt; `CarrierCommitResult` | [runtime/core/src/types/editor-api-v2.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L59) |
-| &lt;a id="variantmodel"&gt;&lt;/a&gt; `variantModel` | `readonly` | (`definitionId`, `edit`) =&gt; [`EditorCommitOutcome`](EditorCommitOutcome.md) | [runtime/core/src/types/editor-api-v2.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L47) |
+| &lt;a id="annotation"&gt;&lt;/a&gt; `annotation` | `readonly` | (`edit`) =&gt; [`EditorCommitOutcome`](EditorCommitOutcome.md) | [runtime/core/src/types/editor-api-v2.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L81) |
+| &lt;a id="bindings"&gt;&lt;/a&gt; `bindings` | `readonly` | (`nodeId`, `update`) =&gt; `CarrierCommitResult` | [runtime/core/src/types/editor-api-v2.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L72) |
+| &lt;a id="componentlibrary"&gt;&lt;/a&gt; `componentLibrary` | `readonly` | (`edit`) =&gt; [`EditorCommitOutcome`](EditorCommitOutcome.md) | [runtime/core/src/types/editor-api-v2.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L53) |
+| &lt;a id="deletenodes"&gt;&lt;/a&gt; `deleteNodes` | `readonly` | (`nodeIds`) =&gt; `TreeCommitResult` | [runtime/core/src/types/editor-api-v2.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L82) |
+| &lt;a id="duplicatenodes"&gt;&lt;/a&gt; `duplicateNodes` | `readonly` | (`nodeIds`) =&gt; `TreeCommitResult` | [runtime/core/src/types/editor-api-v2.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L83) |
+| &lt;a id="inlinetext"&gt;&lt;/a&gt; `inlineText` | `readonly` | (`input`) =&gt; `CarrierCommitResult` | [runtime/core/src/types/editor-api-v2.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L76) |
+| &lt;a id="instanceoverride"&gt;&lt;/a&gt; `instanceOverride` | `readonly` | (`nodeIds`, `edit`) =&gt; [`EditorCommitOutcome`](EditorCommitOutcome.md) | [runtime/core/src/types/editor-api-v2.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L64) |
+| &lt;a id="instanceselection"&gt;&lt;/a&gt; `instanceSelection` | `readonly` | (`nodeIds`, `selection`) =&gt; [`EditorCommitOutcome`](EditorCommitOutcome.md) | [runtime/core/src/types/editor-api-v2.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L60) |
+| &lt;a id="interactions"&gt;&lt;/a&gt; `interactions` | `readonly` | (`nodeId`, `update`) =&gt; `CarrierCommitResult` | [runtime/core/src/types/editor-api-v2.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L68) |
+| &lt;a id="variantmodel"&gt;&lt;/a&gt; `variantModel` | `readonly` | (`definitionId`, `edit`) =&gt; [`EditorCommitOutcome`](EditorCommitOutcome.md) | [runtime/core/src/types/editor-api-v2.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/editor-api-v2.ts#L56) |

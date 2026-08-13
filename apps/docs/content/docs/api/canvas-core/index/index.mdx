@@ -275,6 +275,7 @@ description: "@anvilkit/canvas-core · index"
 | [MeasuredText](interfaces/MeasuredText.md) | - |
 | [MoveNodeOptions](interfaces/MoveNodeOptions.md) | Restricts a mutation to one tree — a page's, or a Component Source's (plan 0023 M3-01, LC-CMD). Absent = every page, the pre-component behavior, so every existing call site keeps its exact semantics. |
 | [NormalizeTypographyOptions](interfaces/NormalizeTypographyOptions.md) | - |
+| [NormalizeUriOptions](interfaces/NormalizeUriOptions.md) | - |
 | [ParentOfResult](interfaces/ParentOfResult.md) | - |
 | [PdfRasterPage](interfaces/PdfRasterPage.md) | - |
 | [PdfSerializeOptions](interfaces/PdfSerializeOptions.md) | - |
@@ -394,6 +395,7 @@ description: "@anvilkit/canvas-core · index"
 | [CanvasImageAdjustmentPresetId](type-aliases/CanvasImageAdjustmentPresetId.md) | - |
 | [CanvasImageFitMode](type-aliases/CanvasImageFitMode.md) | FR-094 image fit modes (B-02, PRD 0012 §9.5). Absent means `"stretch"` — the pre-B-02 rendering — so existing documents need no migration. |
 | [CanvasInvariantIssueCode](type-aliases/CanvasInvariantIssueCode.md) | Semantic invariant validation (P0-6) — deliberately separate from `ir/validators.ts`'s Zod schemas. A schema checks SHAPE (is `id` a non-empty string, is `pages` an array with &gt;= 1 element); it cannot express whole-document facts like "every node id is unique" or "every `assetId` a node references exists in `ir.assets`" — those require walking the tree and cross-referencing, which is exactly what this module does. |
+| [CanvasInvariantSeverity](type-aliases/CanvasInvariantSeverity.md) | How much an issue means. |
 | [CanvasIRMutationCode](type-aliases/CanvasIRMutationCode.md) | - |
 | [CanvasIRVersion](type-aliases/CanvasIRVersion.md) | Every CanvasIR schema version this build can read. Documents at older versions are forward-migrated on read (`migrateCanvasIR`/`runtime.migrate`); `CanvasIR["version"]` — the version this build writes — is always the newest member. |
 | [CanvasKnownCapability](type-aliases/CanvasKnownCapability.md) | Capabilities THIS build knows how to honour. |
@@ -422,7 +424,7 @@ description: "@anvilkit/canvas-core · index"
 | [CanvasUnknownNode](type-aliases/CanvasUnknownNode.md) | A node whose `type` discriminant is not necessarily a built-in kind. |
 | [CanvasVerticalAlign](type-aliases/CanvasVerticalAlign.md) | FR-081 vertical text alignment within a fixed-height box. |
 | [CreateAudioOptions](type-aliases/CreateAudioOptions.md) | - |
-| [FrameClipDegradation](type-aliases/FrameClipDegradation.md) | Why a declared [CanvasFrameShape](type-aliases/CanvasFrameShape.md) could not be honoured. Both cases are reachable at runtime even though [CanvasFrameShapeSchema](variables/CanvasFrameShapeSchema.md) rejects them: nodes are routinely constructed in TypeScript without going through the schema, and the IR's `looseObject` posture means a newer peer's shape kind survives a round-trip through a build that has never heard of it. |
+| [FrameClipDegradation](type-aliases/FrameClipDegradation.md) | Why a declared [CanvasFrameShape](type-aliases/CanvasFrameShape.md) could not be honoured. Every case is reachable at runtime even though [CanvasFrameShapeSchema](variables/CanvasFrameShapeSchema.md) rejects some of them: nodes are routinely constructed in TypeScript without going through the schema, the schema itself only requires a non-empty `d`, and the IR's `looseObject` posture means a newer peer's shape kind survives a round-trip through a build that has never heard of it. |
 | [FrameClipShapeSource](type-aliases/FrameClipShapeSource.md) | Where the resolved geometry came from. |
 | [FramePlaceholderKind](type-aliases/FramePlaceholderKind.md) | What a frame stands in for until real content is dropped into it. |
 | [InstantiateTemplateWarningCode](type-aliases/InstantiateTemplateWarningCode.md) | - |
@@ -433,7 +435,7 @@ description: "@anvilkit/canvas-core · index"
 | [RichTextWrap](type-aliases/RichTextWrap.md) | Where lines may break. `"none"` lays every paragraph out on a single line. |
 | [SnapAxis](type-aliases/SnapAxis.md) | - |
 | [SvgFetchAsset](type-aliases/SvgFetchAsset.md) | Fetch raw bytes for a remote/relative asset URI (only needed to embed). |
-| [SvgImageMode](type-aliases/SvgImageMode.md) | - `auto` (default): inline `data:` URIs, reference everything else. - `embed`: fetch + base64-embed remote URIs (requires `fetchAsset`). - `reference`: always emit `href` referencing the original URI. |
+| [SvgImageMode](type-aliases/SvgImageMode.md) | - `auto` (default): inline `data:` URIs, reference everything else — with ONE exception, below. - `embed`: fetch + base64-embed remote URIs (requires `fetchAsset`). - `reference`: always emit `href` referencing the original URI. The only mode that never invokes `fetchAsset`. |
 | [SvgResolveBrandToken](type-aliases/SvgResolveBrandToken.md) | Resolve a `BrandTokenRef` to a concrete value: a fill (color/gradient) for a `"color"` token, or a font-family string for a `"font"` token. Core never calls this itself with a default — it is the host's brand-kit lookup, injected. Return `undefined` (or omit the option) to leave a token unresolved; the serializer degrades deterministically and records `BRAND_TOKEN_UNRESOLVED`, never throws. |
 | [SvgWarningCode](type-aliases/SvgWarningCode.md) | - |
 | [TemplateColorSlotProperty](type-aliases/TemplateColorSlotProperty.md) | Which fill-bearing property on the target node a [TemplateColorSlot](interfaces/TemplateColorSlot.md) controls. |
@@ -613,6 +615,7 @@ description: "@anvilkit/canvas-core · index"
 | [buildDetachCommand](functions/buildDetachCommand.md) | Resolve the instance fully and allocate a persistent id for every node the detach will materialize. Throws (nothing applied) when the expansion is unsafe — missing Source or a degraded boundary — mirroring the command's own guard so a plan that builds is a plan that applies. |
 | [buildExternalSnapshotIndex](functions/buildExternalSnapshotIndex.md) | - |
 | [canonicalVariantKey](functions/canonicalVariantKey.md) | Encode one selection as a stable string. |
+| [canvasInvariantErrors](functions/canvasInvariantErrors.md) | The issues that make a document unprocessable — see [CanvasInvariantSeverity](type-aliases/CanvasInvariantSeverity.md). |
 | [childrenBoundsFromExtents](functions/childrenBoundsFromExtents.md) | Width/height of the box covering every extent AND the local origin (0,0) — the shared children-bounds math for container creation (`node.group`, the editor's wrap flows). Anchoring to the origin keeps positive-coordinate content measuring from 0 while rotated/scaled content that spills into negative coordinates is still fully covered. |
 | [collectNestedComponentIds](functions/collectNestedComponentIds.md) | Direct nested component references inside one Source tree (sorted, deduped). |
 | [commandToChange](functions/commandToChange.md) | Derive the change record for a single command, or `null` when there is no meaningful granular record (a `batch` — its sub-commands are mapped individually by `applyCommands`). Pure: reads only the command. |
@@ -695,6 +698,7 @@ description: "@anvilkit/canvas-core · index"
 | [nodeCarriesLayoutIntent](functions/nodeCarriesLayoutIntent.md) | Does this node carry layout intent that a reader must understand `layout.auto.v1` to honour? |
 | [nodeWorldAabb](functions/nodeWorldAabb.md) | World-space axis-aligned bounding box of a node, accounting for its rotation/scale/skew. Pass `parentMatrix` to place a node nested under a transformed ancestor; omit it for top-level (world-space) nodes. |
 | [normalizeTypography](functions/normalizeTypography.md) | Applies a brand typography preset's `fontSize`/`fontWeight` uniformly to every `text` node (unlike [applyBrandColors](functions/applyBrandColors.md)/[replaceFonts](functions/replaceFonts.md), which only formalize an already-matching value, this one overwrites — "normalize" means bringing every text element onto the same scale, not linking an existing coincidental match). Font family is untouched — that's [replaceFonts](functions/replaceFonts.md)' concern. |
+| [normalizeUri](functions/normalizeUri.md) | Returns a safe URI, or `undefined` when the scheme is not allowlisted. Scheme-less (relative or protocol-relative `//…`) refs and `http(s)` are allowed; `data:` URIs are allowed only when `allowSafeDataImage` is set and the payload is a known raster image type; everything else is dropped. |
 | [omitEmptyComponents](functions/omitEmptyComponents.md) | - |
 | [pageCarriesLayoutIntent](functions/pageCarriesLayoutIntent.md) | Does any node on this page carry layout intent (see [nodeCarriesLayoutIntent](functions/nodeCarriesLayoutIntent.md))? One `walkPage` pass; used by consumers that need to know whether stored geometry alone can be trusted for a page — e.g. the SVG serializer deciding whether to warn `LAYOUT_UNRESOLVED`. |
 | [pageOf](functions/pageOf.md) | - |

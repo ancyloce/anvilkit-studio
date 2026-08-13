@@ -7,7 +7,7 @@ description: "@anvilkit/canvas-editor · Grid"
 function Grid(): Element | null;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/stage/Grid.tsx:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stage/Grid.tsx#L71)
+Defined in: [packages/capabilities/canvas/editor/src/stage/Grid.tsx:184](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stage/Grid.tsx#L184)
 
 FR-112 grid overlay for the LIVE stage. Renders page-bounded main lines
 every `gridSize` px and (when `gridSubdivisions > 1`) sub-lines at
@@ -17,14 +17,8 @@ one screen pixel like `GuideLayoutOverlay`'s guides. Visibility
 (`gridEnabled`) is INDEPENDENT of snapping (`snapToGridEnabled`) — hiding
 the grid does not turn grid snap off (see `viewport-store.ts`).
 
-PERFORMANCE — line-count budget: one Konva `<Line>` per grid line is the
-house style (page-bounded Line lists, not a single sceneFunc Shape), so the
-node count must stay bounded for tiny grid sizes on large pages. Strategy:
-with `step = gridSize`, first DROP the sub-grid whenever
-`maxPageDimension / (step / subdivisions)` exceeds MAX\_GRID\_LINES,
-then COARSEN the main step (double it repeatedly) until
-`maxPageDimension / step` fits the budget. Coarsened lines still sit on
-grid multiples, so what remains is an honest (sparser) view of the grid.
+Geometry lives in computeGridGeometry; each tier paints as one
+GridTier node rather than one node per line.
 
 Chrome only: wrapped in `<Group name={GRID_CHROME_GROUP_NAME} listening={false}>`
 so `export-stage.ts` can hide it during live-stage serialization; the

@@ -31,21 +31,26 @@ and compaction never drops them.
 
 ---
 
-TOLERANCE IS A TIME-BOXED MIGRATION WINDOW, NOT A DESIGN FEATURE
-(PLAN-0026 §5; PLAN-0028 `p1-006`).
+THE VERSION-KEY MIGRATION WINDOW IS CLOSED (`p7-002`).
+(PLAN-0026 §5; PLAN-0028 `p1-006`, closed by `p7-002`.)
 
-The canonical document has no version dimension. Until the store
-migration runs in P7 (`p7-002`), a document written before
-finalization may still carry a stale `version` key. These schemas
-accept it — but only as *generic unknown-key preservation* falling
-out of `looseObject`, never as a version branch. Nothing here reads
-a `version` key to decide how to parse, and nothing may start:
-a version branch in this directory is the sidecar returning under a
-new name.
+The canonical document has no version dimension. `p1-006` removed the
+`version` literals from these schemas and left a stated window during
+which a stored document might still carry a stale `version` key;
+`p7-002`'s store migration stripped every one of them, so that window
+is closed and no document in contract carries the key any more.
 
-The window CLOSES in `p7-002`. When that task lands, this paragraph
-and the tolerance it describes are removed together. Do not read
-this as licence to keep supporting two document shapes.
+What remains is NOT the window. `looseObject` stays, because generic
+unknown-key preservation is a property PLAN-0026 §5 asks for on its
+own terms — forward compatibility, and compaction that never drops
+what it does not understand. A stale `version` arriving today is an
+out-of-contract artifact (see `finalize-document.ts` in
+`@anvilkit/core`), preserved by the same generic rule that preserves
+any other unknown key and read by nothing.
+
+The rule that has not changed: nothing here reads a `version` key to
+decide how to parse, and nothing may start. A version branch in this
+directory is the sidecar returning under a new name.
 
 `appearance.ts` — the canonical carrier — is already version-free
 (`p1-001`). Seven `z.literal("1")` declarations survive elsewhere in
@@ -53,8 +58,25 @@ this as licence to keep supporting two document shapes.
 vocabulary someone forgot.
 
 GROUP 1 — the legacy `__anvilkit` sidecar, not the canonical
-document. Retained until `p3-009` deletes their last production
-consumer, `packages/runtime/core/src/editor/read-write.ts`:
+document.
+
+`p3-009` deleted `packages/runtime/core/src/editor/read-write.ts`
+and re-ran `p1-006`'s consumer check. The prediction that this would
+free `envelope.ts` and `compact.ts` did **not** hold, for two
+independent reasons, so all four modules are RETAINED:
+
+1. `compact.ts` is imported by `canonical-serialize.ts:20`, which
+   `p8-006` owns — it was never `read-write.ts`'s to free.
+2. The sidecar reader itself survives, re-homed as
+   `packages/runtime/core/src/migrations/legacy-sidecar.ts`. The
+   v1→v2 migration's whole job is to read a legacy sidecar, so it is
+   a second production consumer of `detectAuthoringVersion`,
+   `safeParseAuthoringState` and `normalizeAuthoringState`. `p7-004`
+   deletes it with the migration.
+
+Retiring this group is therefore one change, owned by `p8-006` /
+`p7-004`, and it is a **breaking** change to this published barrel
+needing its own changeset — not four independent prunes:
 
 - `envelope.ts` keeps its literal because `detectAuthoringVersion`
   is what classifies an `unsupported-major` sidecar into read-only

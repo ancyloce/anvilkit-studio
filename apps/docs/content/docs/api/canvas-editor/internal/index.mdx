@@ -111,6 +111,7 @@ description: "@anvilkit/canvas-editor · index"
 | [aiBrushTool](variables/aiBrushTool.md) | I1-7 `ai-brush` tool (PRD FR-009: "Hover-select → contextual AI action menu"). Click-selects the image node under the pointer and hands it to the host as an `ai-brush-select` intent so the host can surface contextual AI actions (variation / inpaint / bg-remove) for it. Only image nodes are valid AI-action targets; clicks on other nodes or empty stage are no-ops. Commits nothing to the IR/history — intent is not a command. |
 | [aiImageTool](variables/aiImageTool.md) | I1-7 `ai-image` tool (PRD FR-009: "Drag → marquee + prompt input → text-to-image"). Drags a marquee region and, on pointerup, hands the bounds to the host as an `ai-image-marquee` intent — the host's AI panel supplies the prompt input and runs the generation. The tool itself commits nothing to the IR/history (intent is not a command), mirroring how the selection marquee never touches `historyStore`. Reuses the `"marquee"` draft kind so `<DraftRenderer>` shows the region preview for free. |
 | [CanvasAssetsContext](variables/CanvasAssetsContext.md) | The asset table the stage renders against. |
+| [CanvasNodeRenderer](variables/CanvasNodeRenderer.md) | MEMOISED on the `node` prop (K-5). react-konva re-renders its ENTIRE bridged child tree on every render of the component that owns `<CanvasStage>` — `StageWrap` calls `updateContainer(<Bridge>{children}</Bridge>)` from a `useLayoutEffect` with no dependency array — so without a bail-out here a single-node edit re-ran every node's render function, and every one of them then handed Konva a fresh gradient/dash/clip object to re-apply (K-3). |
 | [CanvasToastContext](variables/CanvasToastContext.md) | - |
 | [ChromeIcons](variables/ChromeIcons.md) | Action icons shared by the stage bar, floating toolbar, and zoom control. |
 | [DEFAULT\_GRID\_SIZE](variables/DEFAULT_GRID_SIZE.md) | - |
@@ -147,7 +148,6 @@ description: "@anvilkit/canvas-editor · index"
 | [cancelPenPath](functions/cancelPenPath.md) | Abandon the in-progress pen path without committing. |
 | [canGroupSelection](functions/canGroupSelection.md) | True when the current selection can be grouped: at least two nodes, all present on the active page and sharing the same immediate parent group. Cross-parent grouping is intentionally unsupported (see `node.group`). |
 | [canUngroupSelection](functions/canUngroupSelection.md) | True when at least one selected node is a non-root group that can be dissolved. |
-| [CanvasNodeRenderer](functions/CanvasNodeRenderer.md) | - |
 | [CanvasStage](functions/CanvasStage.md) | - |
 | [CanvasToastHost](functions/CanvasToastHost.md) | Workspace toast host (A-09): mounts the `@anvilkit/ui/toast` primitive (Base UI manager + viewport) and provides the editor's [CanvasToaster](interfaces/CanvasToaster.md) seam so the action layer and panels can fire feedback. One manager per workspace instance — multiple editors on a page don't share stacks. The full FR-170 surface (queueing policies, loading toasts) lands in B-05. |
 | [CanvasTransformer](functions/CanvasTransformer.md) | - |

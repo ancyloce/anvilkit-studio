@@ -1,0 +1,27 @@
+---
+title: "CanvasInvariantSeverity"
+description: "@anvilkit/canvas-core · CanvasInvariantSeverity"
+---
+
+```ts
+type CanvasInvariantSeverity = "error" | "warning";
+```
+
+Defined in: [ir/invariants.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/invariants.ts#L69)
+
+How much an issue means.
+
+`"error"` is structural corruption — a document a reader cannot process
+correctly. Duplicate ids make every walker silently resolve to the wrong node;
+a non-group page root breaks the tree's shape; a dangling asset reference
+points at bytes that are not there. Rejecting those at a trust boundary is the
+point of [assertCanvasIRInvariants](../functions/assertCanvasIRInvariants).
+
+`"warning"` is a document that IS processable, reported because a human should
+know. `unsupported-frame-clip-shape` is the whole reason this distinction
+exists: `resolveFrameClipShape` is documented as "pure, total, and never
+throwing — a frame it cannot honour degrades rather than failing", and the
+IR's `looseObject` posture exists so "a newer peer's shape kind survives a
+round-trip through a build that has never heard of it". Throwing on one would
+reject exactly the forward-compatible documents both of those were built to
+let through, and would do it with the same violence as real corruption.
