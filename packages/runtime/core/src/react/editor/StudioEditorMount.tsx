@@ -22,6 +22,7 @@
 import type { StudioEditorConfig } from "@anvilkit/contracts/editor";
 import { lazy, type ReactNode, Suspense } from "react";
 import type { StudioEditorBridge } from "./bridge.js";
+import { TokenRecentsProvider } from "./composition/design-system/token-recents.js";
 import { EditorSurfaceSlot } from "./EditorSurfaceSlot.js";
 import { StudioEditorBridgeContext } from "./use-studio-editor.js";
 
@@ -63,15 +64,17 @@ export function StudioEditorMount({
 	// mount, and binding evaluation rides the official resolveData
 	// adapter.
 	return (
-		<StudioEditorBridgeContext value={bridge}>
-			{children}
-			{/* Persistent host/plugin chrome (CORE-P3-008). A sibling of
+		<TokenRecentsProvider>
+			<StudioEditorBridgeContext value={bridge}>
+				{children}
+				{/* Persistent host/plugin chrome (CORE-P3-008). A sibling of
 			    the Puck subtree, not a child of any popover or rail
 			    module, so a multi-step flow survives menu churn. */}
-			<EditorSurfaceSlot hostSlot={editorSlot} />
-			<Suspense fallback={null}>
-				<EditorRoot editor={editor} bridge={bridge} />
-			</Suspense>
-		</StudioEditorBridgeContext>
+				<EditorSurfaceSlot hostSlot={editorSlot} />
+				<Suspense fallback={null}>
+					<EditorRoot editor={editor} bridge={bridge} />
+				</Suspense>
+			</StudioEditorBridgeContext>
+		</TokenRecentsProvider>
 	);
 }

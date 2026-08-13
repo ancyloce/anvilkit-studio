@@ -55,7 +55,7 @@ import { FALLBACK_TOKEN_MODE } from "../../tokens/token-mode.js";
 import { useDocumentModel } from "../../use-document-model.js";
 import { useDesignSystemCommit } from "../use-design-system-commit.js";
 import { readTokenChoices, type TokenChoice } from "./read-design-system.js";
-import { rememberToken, useTokenRecents } from "./token-recents.js";
+import { useRememberToken, useTokenRecents } from "./token-recents.js";
 
 const ORIGIN_LABEL_KEY = {
 	document: "studio.editor.tokens.origin.document",
@@ -136,6 +136,7 @@ function TokenChoices({
 	const model = useDocumentModel();
 	const commit = useDesignSystemCommit();
 	const recentIds = useTokenRecents();
+	const rememberToken = useRememberToken();
 	const [search, setSearch] = useState("");
 	const [name, setName] = useState("");
 

@@ -1,70 +1,85 @@
 "use client";
 
 /**
- * @file The session's most-recently-applied tokens (ADR 0005 Part 2 §4
- * — "one picker pattern", of which recents is one element).
+ * @file Per-Studio recently-applied design tokens.
  *
- * **Moved here by `p4-003`, unchanged.** It previously lived inside
- * `tokens/use-token-picker.ts`, which binds to the editor bridge and
- * dies with it. Two pickers now exist while the shell is promoted (the
- * bridge-bound one in the inspector controls, the canonical one in the
- * Design System panel) and they must share ONE recents list — a second
- * module-level array would give the same author two different "recent"
- * answers depending on which surface they opened.
- *
- * Deliberately module state, not the persisted UI store: recents are a
- * convenience that must not survive a reload as durable document data,
- * and adding a slice to the versioned `editor-ui-store` would force a
- * persist migration for throwaway state.
- *
- * Exposed as a `useSyncExternalStore` source rather than a bare array —
- * a mutated module array is invisible to React, so pickers would keep
- * rendering a stale list until some unrelated state change happened to
- * re-run their memo.
+ * Recents are ephemeral UI convenience state: they survive picker churn inside
+ * one Studio mount, but neither persist across reloads nor leak between two
+ * editors rendered in the same browser realm.
  */
 
-import { useSyncExternalStore } from "react";
+import {
+	createContext,
+	createElement,
+	type ReactNode,
+	useContext,
+	useState,
+	useSyncExternalStore,
+} from "react";
 
 /** How many recently-applied tokens a picker offers. */
 export const RECENT_TOKEN_LIMIT = 5;
 
-let recentTokenIds: readonly string[] = [];
-const listeners = new Set<() => void>();
+interface TokenRecentsStore {
+	readonly subscribe: (listener: () => void) => () => void;
+	readonly getSnapshot: () => readonly string[];
+	readonly remember: (tokenId: string) => void;
+}
 
-function subscribe(listener: () => void): () => void {
-	listeners.add(listener);
-	return () => {
-		listeners.delete(listener);
+function createTokenRecentsStore(): TokenRecentsStore {
+	let recentTokenIds: readonly string[] = [];
+	const listeners = new Set<() => void>();
+	return {
+		subscribe(listener) {
+			listeners.add(listener);
+			return () => listeners.delete(listener);
+		},
+		getSnapshot: () => recentTokenIds,
+		remember(tokenId) {
+			recentTokenIds = [
+				tokenId,
+				...recentTokenIds.filter((id) => id !== tokenId),
+			].slice(0, RECENT_TOKEN_LIMIT);
+			for (const listener of listeners) listener();
+		},
 	};
 }
 
-function getSnapshot(): readonly string[] {
-	return recentTokenIds;
-}
+const TokenRecentsContext = createContext<TokenRecentsStore | null>(null);
 
-function setRecents(next: readonly string[]): void {
-	recentTokenIds = next;
-	for (const listener of listeners) {
-		listener();
-	}
-}
-
-/** Record a token as just-applied, newest first, deduplicated. */
-export function rememberToken(tokenId: string): void {
-	setRecents(
-		[tokenId, ...recentTokenIds.filter((id) => id !== tokenId)].slice(
-			0,
-			RECENT_TOKEN_LIMIT,
-		),
+/** Own one ephemeral recents store for one Studio editor mount. */
+export function TokenRecentsProvider({
+	children,
+}: {
+	readonly children: ReactNode;
+}): ReactNode {
+	const [store] = useState(createTokenRecentsStore);
+	return createElement(
+		TokenRecentsContext.Provider,
+		{ value: store },
+		children,
 	);
 }
 
-/** Test seam: clear the session recents. */
-export function clearTokenRecents(): void {
-	setRecents([]);
+function useTokenRecentsStore(): TokenRecentsStore {
+	const store = useContext(TokenRecentsContext);
+	if (store === null) {
+		throw new Error("token recents require a TokenRecentsProvider");
+	}
+	return store;
 }
 
-/** The session recents, newest first. */
+/** Stable callback that records a token in the current Studio mount. */
+export function useRememberToken(): (tokenId: string) => void {
+	return useTokenRecentsStore().remember;
+}
+
+/** This Studio mount's recents, newest first. */
 export function useTokenRecents(): readonly string[] {
-	return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+	const store = useTokenRecentsStore();
+	return useSyncExternalStore(
+		store.subscribe,
+		store.getSnapshot,
+		store.getSnapshot,
+	);
 }
