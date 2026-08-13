@@ -3480,9 +3480,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 163,
+							"line": 175,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L163"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L175"
 						}
 					],
 					"type": {
@@ -3568,9 +3568,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 331,
+							"line": 343,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L331"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L343"
 						}
 					],
 					"type": {
@@ -3624,9 +3624,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 169,
+							"line": 181,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L169"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L181"
 						}
 					],
 					"type": {
@@ -3684,9 +3684,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 139,
+							"line": 151,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L139"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L151"
 						}
 					],
 					"type": {
@@ -5435,15 +5435,31 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Initial Puck page data. Forwarded to "
+								"text": "The document to open with — **initial only** (review 0036 L-3).\n\nPuck reads its "
 							},
 							{
 								"kind": "code",
-								"text": "`<Puck>`"
+								"text": "`data`"
 							},
 							{
 								"kind": "text",
-								"text": " verbatim and\nalso captured into a ref so "
+								"text": " prop exactly once, in a "
+							},
+							{
+								"kind": "code",
+								"text": "`useState`"
+							},
+							{
+								"kind": "text",
+								"text": "\ninitializer, so changing this after mount does not change what the\neditor shows. The shell honours that: this value seeds the live\ndocument and every subsequent change comes from Puck's "
+							},
+							{
+								"kind": "code",
+								"text": "`onChange`"
+							},
+							{
+								"kind": "text",
+								"text": ",\nwhich is also what "
 							},
 							{
 								"kind": "inline-tag",
@@ -5457,16 +5473,48 @@
 							},
 							{
 								"kind": "text",
-								"text": "\nreturns the latest snapshot."
+								"text": " reports and\nwhat "
+							},
+							{
+								"kind": "code",
+								"text": "`<Puck>`"
+							},
+							{
+								"kind": "text",
+								"text": " re-mounts from after an error-boundary reset.\n\nThe shell used to also copy this prop into that live document\nwhenever its identity changed, which meant an inline\n"
+							},
+							{
+								"kind": "code",
+								"text": "`data={{…}}`"
+							},
+							{
+								"kind": "text",
+								"text": " overwrote the author's in-progress work with the\ninitial document on every parent render — while the editor kept\nshowing the real one. To open a different document, remount\n"
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": " with a new React "
+							},
+							{
+								"kind": "code",
+								"text": "`key`"
+							},
+							{
+								"kind": "text",
+								"text": "."
 							}
 						]
 					},
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 117,
+							"line": 129,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L117"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L129"
 						}
 					],
 					"type": {
@@ -5580,9 +5628,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 360,
+							"line": 372,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L360"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L372"
 						}
 					],
 					"type": {
@@ -5690,9 +5738,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 264,
+							"line": 276,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L264"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L276"
 						}
 					],
 					"type": {
@@ -5735,9 +5783,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 349,
+							"line": 361,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L349"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L361"
 						}
 					],
 					"type": {
@@ -5852,9 +5900,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 238,
+							"line": 250,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L238"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L250"
 						}
 					],
 					"type": {
@@ -5889,9 +5937,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 202,
+							"line": 214,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L202"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L214"
 						}
 					],
 					"type": {
@@ -5919,9 +5967,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 198,
+							"line": 210,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L198"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L210"
 						}
 					],
 					"type": {
@@ -5949,9 +5997,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 200,
+							"line": 212,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L200"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L212"
 						}
 					],
 					"type": {
@@ -6050,9 +6098,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 322,
+							"line": 334,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L322"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L334"
 						}
 					],
 					"type": {
@@ -6087,9 +6135,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 269,
+							"line": 281,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L269"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L281"
 						}
 					],
 					"type": {
@@ -6178,9 +6226,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 287,
+							"line": 299,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L287"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L299"
 						}
 					],
 					"type": {
@@ -6244,9 +6292,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 177,
+							"line": 189,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L177"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L189"
 						}
 					],
 					"type": {
@@ -6348,9 +6396,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 194,
+							"line": 206,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L194"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L206"
 						}
 					],
 					"type": {
@@ -6413,9 +6461,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 150,
+							"line": 162,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L150"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L162"
 						}
 					],
 					"type": {
@@ -6528,9 +6576,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 340,
+							"line": 352,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L340"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L352"
 						}
 					],
 					"type": {
@@ -6606,9 +6654,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 229,
+							"line": 241,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L229"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L241"
 						}
 					],
 					"type": {
@@ -6729,9 +6777,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 300,
+							"line": 312,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L300"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L312"
 						}
 					],
 					"type": {
@@ -6799,9 +6847,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 222,
+							"line": 234,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L222"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L234"
 						}
 					],
 					"type": {
@@ -6883,9 +6931,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 155,
+							"line": 167,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L155"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L167"
 						}
 					],
 					"type": {
@@ -7017,9 +7065,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 214,
+							"line": 226,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L214"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L226"
 						}
 					],
 					"type": {
@@ -7085,9 +7133,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 196,
+							"line": 208,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L196"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L208"
 						}
 					],
 					"type": {
@@ -7155,9 +7203,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 145,
+							"line": 157,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L145"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L157"
 						}
 					],
 					"type": {
@@ -7230,9 +7278,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 274,
+							"line": 286,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L274"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L286"
 						}
 					],
 					"type": {
@@ -7311,9 +7359,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 130,
+							"line": 142,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L130"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L142"
 						}
 					],
 					"type": {
@@ -7605,9 +7653,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 192,
+							"line": 204,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L192"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L204"
 						}
 					],
 					"type": {
@@ -7659,9 +7707,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 175,
+							"line": 187,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L175"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L187"
 						}
 					],
 					"type": {
@@ -7715,9 +7763,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 179,
+							"line": 191,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L179"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L191"
 						}
 					],
 					"type": {
@@ -9799,9 +9847,9 @@
 			"sources": [
 				{
 					"fileName": "packages/runtime/core/src/react/components/Studio.tsx",
-					"line": 474,
+					"line": 480,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L474"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L480"
 				}
 			],
 			"signatures": [
@@ -9814,9 +9862,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/Studio.tsx",
-							"line": 474,
+							"line": 480,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L474"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L480"
 						}
 					],
 					"typeParameters": [
