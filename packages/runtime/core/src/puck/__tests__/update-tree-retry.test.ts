@@ -25,7 +25,7 @@ import { indexNodeLocations } from "../../editor/tree/nodes.js";
 import {
 	createStableIdAllocator,
 	wrapNode,
-} from "../../react/editor/native-tree.js";
+} from "../../editor/tree/transforms.js";
 import {
 	commitDeleteNodes,
 	commitDuplicateNodes,

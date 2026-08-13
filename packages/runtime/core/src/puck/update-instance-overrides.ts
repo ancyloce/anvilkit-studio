@@ -40,7 +40,7 @@ import { deepEqualJson } from "../editor/patch.js";
 import {
 	createStableIdAllocator,
 	type NodeIdAllocator,
-} from "../react/editor/native-tree.js";
+} from "../editor/tree/transforms.js";
 import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 import { parseComponentLibrary } from "./read-appearance.js";
 import {

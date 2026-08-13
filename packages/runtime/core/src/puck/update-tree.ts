@@ -43,7 +43,7 @@
  *
  * ## Duplicating an instance yields an instance
  *
- * The subtree transforms come from `react/editor/native-tree.ts`.
+ * The subtree transforms come from the React-free editor tree layer.
  * Duplication remaps **node** ids only; the component-instance link
  * references a `definitionId` and definition-node ids, neither of which
  * are page node ids — so a duplicated instance stays an instance of the
@@ -69,7 +69,7 @@ import {
 	duplicateNode,
 	type NodeIdAllocator,
 	removeNode,
-} from "../react/editor/native-tree.js";
+} from "../editor/tree/transforms.js";
 import { dispatchOneIntent, failureStatus } from "./commit-protocol.js";
 import { isNodeLocked } from "./update-annotations.js";
 import { type WriterGateDep, writerGateError } from "./writer-gate.js";
@@ -328,6 +328,55 @@ export function insertNodeInData(input: InsertNodeInput): UpdateTreeResult {
 	};
 }
 
+/** Input to {@link replaceNodePropsInData}. */
+export interface ReplaceNodePropsInput {
+	readonly data: Data;
+	readonly config: Config;
+	readonly nodeId: string;
+	/** Pure prop edit, re-run against the node that actually reaches Puck. */
+	readonly updateProps: (
+		props: Readonly<Record<string, unknown>>,
+		node: PuckTreeNode,
+	) => Readonly<Record<string, unknown>>;
+}
+
+/** Replace one node's props without moving it or changing its type. */
+export function replaceNodePropsInData(
+	input: ReplaceNodePropsInput,
+): UpdateTreeResult {
+	let replaced = false;
+	let changed = false;
+	const next = transformContainers(input.data, input.config, (items) =>
+		items.map((entry) => {
+			if (
+				replaced ||
+				!isComponentNode(entry) ||
+				readNodeId(entry) !== input.nodeId
+			) {
+				return entry;
+			}
+			replaced = true;
+			const props = input.updateProps(entry.props, entry);
+			if (props === entry.props) return entry;
+			changed = true;
+			return { ...entry, props };
+		}),
+	);
+	if (!replaced) {
+		return rejected(
+			input.data,
+			makeEditorError(
+				"EDITOR_NODE_NOT_FOUND",
+				`node "${input.nodeId}" does not exist in the current document`,
+				{ nodeIds: [input.nodeId] },
+			),
+		);
+	}
+	return changed
+		? { data: next, status: "updated", createdNodeIds: NO_IDS, errors: [] }
+		: noop(input.data);
+}
+
 /** Dependencies of the tree commit helpers. */
 export interface TreeCommitDeps extends WriterGateDep {
 	readonly getPuckApi: () => PuckApi;
@@ -360,7 +409,7 @@ export interface TreeCommitResult {
 function permits(
 	api: PuckApi,
 	item: unknown,
-	permission: "delete" | "duplicate" | "drag",
+	permission: "delete" | "duplicate" | "drag" | "edit",
 ): boolean {
 	const get = (api as { getPermissions?: unknown }).getPermissions;
 	// No `getPermissions` at all, or a node Puck cannot find, is genuinely
@@ -379,6 +428,20 @@ function permits(
 		// resolver threw silently got every guarded operation allowed
 		// (review 0036 L-4). Refusing is recoverable — the author retries;
 		// allowing a denied delete is not.
+		return false;
+	}
+}
+
+/** Ask Puck whether a component type may be inserted. */
+function permitsInsert(api: PuckApi, type: string): boolean {
+	const get = (api as { getPermissions?: unknown }).getPermissions;
+	if (typeof get !== "function") return true;
+	try {
+		const permissions = (
+			get as (input: { type: string }) => Record<string, unknown>
+		).call(api, { type });
+		return permissions?.insert !== false;
+	} catch {
 		return false;
 	}
 }
@@ -553,7 +616,34 @@ export function commitInsertNode(
 	deps: TreeCommitDeps,
 	input: Omit<InsertNodeInput, "data" | "config">,
 ): TreeCommitResult {
-	return commit(deps, (data, config) =>
-		insertNodeInData({ ...input, data, config }),
-	);
+	return commit(deps, (data, config, api) => {
+		const target = parseZoneId(normalizeZone(input.zone));
+		if (
+			target.parentId !== "root" &&
+			lockedAmong(data, [target.parentId]).length > 0
+		) {
+			return deniedInData(data, [target.parentId], "insert");
+		}
+		if (!permitsInsert(api, input.type)) {
+			return deniedInData(data, [input.nodeId], "insert");
+		}
+		return insertNodeInData({ ...input, data, config });
+	});
+}
+
+/** Replace one node's props as ONE history entry. */
+export function commitReplaceNodeProps(
+	deps: TreeCommitDeps,
+	input: Omit<ReplaceNodePropsInput, "data" | "config">,
+): TreeCommitResult {
+	return commit(deps, (data, config, api) => {
+		if (lockedAmong(data, [input.nodeId]).length > 0) {
+			return deniedInData(data, [input.nodeId], "edit");
+		}
+		const item = indexNodeLocations(data, config).get(input.nodeId)?.node;
+		if (!permits(api, item, "edit")) {
+			return deniedInData(data, [input.nodeId], "edit");
+		}
+		return replaceNodePropsInData({ ...input, data, config });
+	});
 }
