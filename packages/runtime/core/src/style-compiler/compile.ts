@@ -70,6 +70,17 @@ export interface CompiledAppearance {
 	readonly targetManifest: Readonly<Record<string, readonly string[]>>;
 	/** Cross-surface content fingerprint (css + diagnostic codes). */
 	readonly fingerprint: string;
+	/**
+	 * The token mode this compilation actually used — `input.tokenMode`
+	 * when given, otherwise the design system's `defaultTokenMode`.
+	 *
+	 * Reported because the caller cannot re-derive it: resolving the
+	 * default requires the parsed design system. `AnvilKitRender` used to
+	 * guess `tokenMode ?? "default"` for its page-root attribute, which
+	 * misreported the mode whenever a design system declared a different
+	 * default (review 0036 L-5).
+	 */
+	readonly tokenMode: string;
 }
 
 const EMPTY_DESIGN_SYSTEM: DesignSystem = {
@@ -433,5 +444,6 @@ export function compileDocumentAppearance(
 		fingerprint: fingerprintOf(
 			`${css}\u0000${diagnostics.map((entry) => entry.code).join(",")}`,
 		),
+		tokenMode,
 	};
 }
