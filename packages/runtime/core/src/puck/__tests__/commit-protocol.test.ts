@@ -46,12 +46,14 @@ interface Dispatched {
  */
 function fakeApi(document: Data) {
 	const dispatched: Dispatched[] = [];
+	let written = document;
 	let appStateReads = 0;
 	const target = {
 		appState: { data: document },
 		config: { root: { fields: {} }, components: {} },
 		dispatch: (action: Dispatched) => {
 			dispatched.push(action);
+			written = action.data(document);
 		},
 	};
 	const api = new Proxy(target, {
@@ -60,7 +62,12 @@ function fakeApi(document: Data) {
 			return Reflect.get(current, property, receiver);
 		},
 	}) as unknown as PuckApi;
-	return { api, dispatched, appStateReads: () => appStateReads };
+	return {
+		api,
+		dispatched,
+		appStateReads: () => appStateReads,
+		written: () => written,
+	};
 }
 
 /** A run that always reports `updated`, swapping in `next`. */
@@ -72,7 +79,7 @@ describe("dispatchOneIntent — honest outcomes (0036 M-2)", () => {
 	it("dispatches and reports committed on the ordinary path", () => {
 		const start = docWith("a");
 		const next = docWith("b");
-		const { api, dispatched } = fakeApi(start);
+		const { api, dispatched, written } = fakeApi(start);
 
 		const attempt = dispatchOneIntent(api, alwaysUpdates(next));
 
@@ -80,8 +87,7 @@ describe("dispatchOneIntent — honest outcomes (0036 M-2)", () => {
 		expect(attempt.outcome.status).toBe("updated");
 		expect(dispatched).toHaveLength(1);
 		expect(dispatched[0]?.recordHistory).toBe(true);
-		// The reducer applying the updater yields the new document.
-		expect(dispatched[0]?.data(start)).toBe(next);
+		expect(written()).toBe(next);
 	});
 
 	it("reads one stable PuckApi snapshot before dispatch", () => {
@@ -238,6 +244,26 @@ describe("dispatchOneIntent — honest outcomes (0036 M-2)", () => {
 		expect(attempt.committed).toBe(true);
 		// Not `from-first` — the caller must report what the document got.
 		expect(attempt.outcome.createdNodeIds).toEqual(["from-retry"]);
+	});
+
+	it("fails closed when an adapter defers the functional updater", () => {
+		const start = docWith("a");
+		const next = docWith("b");
+		let deferred: ((previous: Data) => Data) | undefined;
+		const api = {
+			appState: { data: start },
+			config: {},
+			dispatch: (action: Dispatched) => {
+				deferred = action.data;
+			},
+		} as unknown as PuckApi;
+
+		expect(() => dispatchOneIntent(api, alwaysUpdates(next))).toThrow(
+			"Puck dispatch must apply setData functional updaters synchronously",
+		);
+		// The queued reducer escaped the call, but is inert: it cannot land a
+		// write after the caller was told the dispatch contract was invalid.
+		expect(deferred?.(start)).toBe(start);
 	});
 });
 

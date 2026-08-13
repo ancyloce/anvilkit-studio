@@ -42,8 +42,9 @@
  * **During the dispatch**, Puck applies actions synchronously
  * (`dispatch: (action) => set((s) => …)` in its app store), so the
  * updater's real outcome is readable by the time `dispatch()` returns.
- * It is captured and handed back, so the caller reports what actually
- * landed rather than what it hoped would.
+ * The protocol verifies that contract: a dispatcher that defers the
+ * updater is rejected immediately, and the escaped updater is disabled
+ * so it cannot mutate the document after the caller received a result.
  *
  * A caller must not retain a `PuckApi` snapshot across asynchronous
  * work. It must retrieve the current API immediately before invoking a
@@ -105,13 +106,20 @@ export function dispatchOneIntent<TOutcome extends IntentOutcome>(
 		return { outcome: first, committed: false };
 	}
 
-	// Puck's functional-updater window. `dispatch` reduces synchronously,
-	// so `outcome` is settled by the time it returns.
+	// Puck's functional-updater window. Enforce the public API's synchronous
+	// reduction contract instead of optimistically returning the first run if
+	// a non-Puck adapter queues the reducer for later.
 	let outcome = first;
+	let reduced = false;
+	let acceptsReduction = true;
 	api.dispatch({
 		type: "setData",
 		recordHistory: true,
 		data: (previous: Data) => {
+			if (!acceptsReduction) {
+				return previous;
+			}
+			reduced = true;
 			if (previous === current) {
 				return first.data;
 			}
@@ -120,6 +128,12 @@ export function dispatchOneIntent<TOutcome extends IntentOutcome>(
 			return retried.status === "updated" ? retried.data : previous;
 		},
 	} as Parameters<PuckApi["dispatch"]>[0]);
+	acceptsReduction = false;
+	if (!reduced) {
+		throw new Error(
+			"Puck dispatch must apply setData functional updaters synchronously",
+		);
+	}
 
 	return { outcome, committed: outcome.status === "updated" };
 }

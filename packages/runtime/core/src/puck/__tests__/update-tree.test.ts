@@ -22,6 +22,8 @@
 import type { Config, Data } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import {
+	deleteNodesInData,
+	duplicateNodesInData,
 	insertNodeInData,
 	normalizeZone,
 	ROOT_ZONE,
@@ -88,7 +90,48 @@ describe("normalizeZone", () => {
 	});
 });
 
+describe("multi-node intents — missing target policy", () => {
+	it.each([
+		["delete", deleteNodesInData],
+		["duplicate", duplicateNodesInData],
+	] as const)(
+		"rejects an atomic %s when any selected node is missing",
+		(_, run) => {
+			const source = doc();
+			const result = run(source, ["t-2", "missing"], config);
+			expect(result.status).toBe("rejected");
+			expect(result.data).toBe(source);
+			expect(result.errors[0]).toMatchObject({
+				code: "EDITOR_NODE_NOT_FOUND",
+				nodeIds: ["missing"],
+			});
+		},
+	);
+});
+
 describe("insertNodeInData — slot addressing (0036 H-2)", () => {
+	it("preserves every untouched sibling and descendant reference", () => {
+		const source = doc();
+		const section = source.content[0];
+		const topLevelSibling = source.content[1];
+		const nestedSibling = (
+			section as { props: { content: readonly unknown[] } }
+		).props.content[0];
+
+		const result = insertNodeInData({
+			data: source,
+			config,
+			type: "Text",
+			nodeId: "new-1",
+			zone: "sec-1:content",
+		});
+
+		expect(result.status).toBe("updated");
+		expect(result.data.content[0]).not.toBe(section);
+		expect(result.data.content[1]).toBe(topLevelSibling);
+		expect(slotOf(result.data)[0]).toBe(nestedSibling);
+	});
+
 	it("inserts into the owner's slot prop, not the legacy zone map", () => {
 		const result = insertNodeInData({
 			data: doc(),

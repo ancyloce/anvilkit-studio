@@ -62,29 +62,31 @@ function allIds(data: Data): string[] {
 	return [...indexNodeLocations(data, config).keys()];
 }
 
-/** The functional updater Puck's reducer would run, plus the result. */
-function commitAndCapture(nodeIds: readonly string[]) {
+/** Run the functional updater synchronously, as the public Puck API does. */
+function commitAndCapture(
+	nodeIds: readonly string[],
+	previous: "snapshot" | "moved" = "moved",
+) {
 	const current = doc();
-	const dispatched: { data: (previous: Data) => Data }[] = [];
+	let committed: Data | undefined;
 	const api = {
 		appState: { data: current },
 		config,
 		dispatch: (action: { data: (previous: Data) => Data }) => {
-			dispatched.push(action);
+			committed = action.data(previous === "snapshot" ? current : doc());
 		},
 	} as unknown as PuckApi;
 
 	const result = commitDuplicateNodes({ getPuckApi: () => api }, nodeIds);
-	const updater = dispatched[0]?.data;
-	if (updater === undefined) {
-		throw new Error("expected one dispatch carrying a functional updater");
+	if (committed === undefined) {
+		throw new Error("expected the functional updater to run");
 	}
-	return { result, updater, current };
+	return { result, committed };
 }
 
 describe("commitDuplicateNodes — retry reproduces the reported ids (0036 M-1)", () => {
 	it("commits the ids it returned even when the document moved", () => {
-		const { result, updater } = commitAndCapture(["sec-1"]);
+		const { result, committed } = commitAndCapture(["sec-1"]);
 		expect(result.status).toBe("committed");
 		const reported = result.createdNodeIds[0];
 		expect(reported).toBeDefined();
@@ -92,37 +94,22 @@ describe("commitDuplicateNodes — retry reproduces the reported ids (0036 M-1)"
 		// A concurrent write landed between validation and the reducer: the
 		// updater receives a DIFFERENT document object, so it takes the
 		// re-run branch.
-		const moved = doc();
-		const committed = updater(moved);
-
 		// Before the fix the retry minted a fresh UUID here, so the id the
 		// caller had already been handed — and selects — was absent.
 		expect(allIds(committed)).toContain(reported as string);
 	});
 
-	it("is stable no matter how many times the updater runs", () => {
-		const { result, updater } = commitAndCapture(["sec-1"]);
-		const reported = result.createdNodeIds[0] as string;
-
-		const first = allIds(updater(doc()));
-		const second = allIds(updater(doc()));
-		expect(first).toContain(reported);
-		expect(second).toContain(reported);
-		expect(first).toEqual(second);
-	});
-
 	it("takes the fast path unchanged when the document did not move", () => {
-		const { result, updater, current } = commitAndCapture(["sec-1"]);
-		const committed = updater(current);
+		const { result, committed } = commitAndCapture(["sec-1"], "snapshot");
 		expect(allIds(committed)).toContain(result.createdNodeIds[0] as string);
 	});
 
 	it("reproduces ids for a whole multi-node selection", () => {
-		const { result, updater } = commitAndCapture(["sec-1", "t-2"]);
+		const { result, committed } = commitAndCapture(["sec-1", "t-2"]);
 		expect(result.createdNodeIds).toHaveLength(2);
-		const committed = allIds(updater(doc()));
+		const committedIds = allIds(committed);
 		for (const id of result.createdNodeIds) {
-			expect(committed).toContain(id);
+			expect(committedIds).toContain(id);
 		}
 	});
 });
@@ -146,9 +133,10 @@ describe("commitDeleteNodes — honest outcome on conflict (0036 M-2)", () => {
 		return { api, dispatched };
 	}
 
-	it("reports noop when the reducer receives a document where the node is gone", () => {
+	it("rejects when the reducer receives a document where the node is gone", () => {
 		// The author deletes `t-2`; a collaborator's write lands first and
-		// has already removed it. Re-deriving finds nothing to do.
+		// has already removed it. Re-deriving applies the same strict missing-
+		// target policy as carrier and create-component writes.
 		const withNode = doc();
 		const withoutNode = {
 			root: { props: { title: "Home" } },
@@ -166,10 +154,8 @@ describe("commitDeleteNodes — honest outcome on conflict (0036 M-2)", () => {
 		const { api, dispatched } = movingApi(withNode, withoutNode);
 		const result = commitDeleteNodes({ getPuckApi: () => api }, ["t-2"]);
 
-		// Before the honest-outcome fix this reported `committed`. The action
-		// has already entered Puck before its functional updater can observe
-		// the move, so one dispatch is expected even though the retry is noop.
-		expect(result.status).toBe("noop");
+		expect(result.status).toBe("rejected");
+		expect(result.errors[0]?.code).toBe("EDITOR_NODE_NOT_FOUND");
 		expect(dispatched).toHaveLength(1);
 	});
 

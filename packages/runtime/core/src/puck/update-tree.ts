@@ -121,6 +121,26 @@ function unknownZone(zone: string): EditorError {
 	);
 }
 
+/** Reject an atomic tree intent when any requested node is absent. */
+function rejectMissingNodes(
+	data: Data,
+	nodeIds: readonly string[],
+	config: Config,
+	operation: string,
+): UpdateTreeResult | null {
+	const locations = indexNodeLocations(data, config);
+	const missing = nodeIds.filter((id) => !locations.has(id));
+	if (missing.length === 0) return null;
+	return rejected(
+		data,
+		makeEditorError(
+			"EDITOR_NODE_NOT_FOUND",
+			`${operation} targets nodes that are not in the document`,
+			{ nodeIds: missing, details: { kind: "node", operation } },
+		),
+	);
+}
+
 /** Index of `targetId` within `items`, or `-1`. */
 function indexOfNode(items: readonly unknown[], targetId: string): number {
 	return items.findIndex(
@@ -131,16 +151,17 @@ function indexOfNode(items: readonly unknown[], targetId: string): number {
 /**
  * Delete every node in a selection, in ONE document update.
  *
- * Unknown ids are skipped rather than failing the whole operation —
- * a selection can go stale between render and click, and refusing the
- * other two deletions because one id vanished would be worse than
- * doing what the user asked for the ids that still exist.
+ * Tree intents are atomic: if any selected id is absent, reject without
+ * deleting the remaining nodes. This matches carrier and create-component
+ * writes and prevents a stale mixed selection from partially succeeding.
  */
 export function deleteNodesInData(
 	data: Data,
 	nodeIds: readonly string[],
 	config: Config,
 ): UpdateTreeResult {
+	const missing = rejectMissingNodes(data, nodeIds, config, "delete");
+	if (missing !== null) return missing;
 	let next = data;
 	let changed = false;
 	for (const nodeId of nodeIds) {
@@ -171,6 +192,8 @@ export function duplicateNodesInData(
 	config: Config,
 	allocate?: NodeIdAllocator,
 ): UpdateTreeResult {
+	const missing = rejectMissingNodes(data, nodeIds, config, "duplicate");
+	if (missing !== null) return missing;
 	let next = data;
 	const createdNodeIds: string[] = [];
 	for (const nodeId of nodeIds) {
