@@ -130,6 +130,11 @@ Unsplash パスをこのベースに追加します。そのため、プロキ�
 相対ベースと `https://example.com/api/unsplash` のような絶対ベースの両方を
 サポートします。
 
+`unsplash.rehostOnPick: true` を設定すると、選択した画像をダウンロードし、設定済みの
+アップローダーを通してから挿入します。生成されたローカルアセットは Unsplash の
+帰属メタデータを保持し、必須のダウンロードトリガーも引き続き実行します。既定値は
+準拠した Unsplash ホットリンクのままです。
+
 ### プラグインコンテキスト上の命令型 API
 
 | 関数                   | シグネチャ                                      | 目的                                                       |
@@ -359,12 +364,16 @@ function getRequiredCsp(options: RequiredCspOptions): RequiredCsp;
 | コンポーネント        | 主な props                                    |
 | --------------------- | --------------------------------------------- |
 | `UploadButton`        | `{ onUpload, onProgress?, disabled? }`        |
-| `AssetBrowser`        | `{ registry, onSelect, maxWidth? }`           |
+| `AssetBrowser`        | `{ assets, onInsert, categories?, facets?, onFilterChange? }` |
 | `AssetCommandPalette` | `{ registry, onSelect }`                      |
 | `MetadataPanel`       | `{ asset, registry, onClose }`                |
 | `ReplaceAssetDialog`  | `{ asset, onReplace, onCancel }`              |
 | `DeleteAssetDialog`   | `{ asset, onDelete, onCancel }`               |
-| `AssetManagerUI`      | `{ registry, plugin, maxWidth? }`（複合）     |
+| `AssetManagerUI`      | `{ uploader, registry, categories?, facets?, onFilterChange? }`（複合） |
+
+設定したカテゴリとファセットのコントロールは遅延読み込みされます。ローカル定義は
+AND 合成で絞り込み、provider カテゴリとリモートファセットは発行される
+`AssetFilter` に残るため、ソース側でルーティングできます。
 
 `UploadProgressSnapshot` は `{ inFlight: number; completed: number }` です。
 

@@ -88,6 +88,10 @@ function createAssetManagerPlugin(options: AssetManagerOptions): StudioPlugin;
 `Client-ID`를 주입해야 합니다. `/api/unsplash` 같은 상대 기본 경로와
 `https://example.com/api/unsplash` 같은 절대 기본 경로를 모두 지원합니다.
 
+`unsplash.rehostOnPick: true`를 설정하면 선택한 이미지를 다운로드한 뒤 구성된 업로더를
+통해 삽입합니다. 생성된 로컬 에셋은 Unsplash 저작자 표시 메타데이터를 유지하며 필수
+다운로드 트리거도 계속 실행합니다. 기본값은 규정을 준수하는 Unsplash 핫링크입니다.
+
 ### 플러그인 컨텍스트의 명령형 API
 
 | 함수                   | 시그니처                                        | 목적                                                       |
@@ -317,12 +321,16 @@ function getRequiredCsp(options: RequiredCspOptions): RequiredCsp;
 | 컴포넌트              | 주요 props                                    |
 | --------------------- | --------------------------------------------- |
 | `UploadButton`        | `{ onUpload, onProgress?, disabled? }`        |
-| `AssetBrowser`        | `{ registry, onSelect, maxWidth? }`           |
+| `AssetBrowser`        | `{ assets, onInsert, categories?, facets?, onFilterChange? }` |
 | `AssetCommandPalette` | `{ registry, onSelect }`                      |
 | `MetadataPanel`       | `{ asset, registry, onClose }`                |
 | `ReplaceAssetDialog`  | `{ asset, onReplace, onCancel }`              |
 | `DeleteAssetDialog`   | `{ asset, onDelete, onCancel }`               |
-| `AssetManagerUI`      | `{ registry, plugin, maxWidth? }`(복합)       |
+| `AssetManagerUI`      | `{ uploader, registry, categories?, facets?, onFilterChange? }`(복합) |
+
+구성된 카테고리 및 패싯 컨트롤은 지연 로드됩니다. 로컬 정의는 AND 조합으로 필터링되며,
+provider 카테고리와 원격 패싯은 소스가 라우팅할 수 있도록 방출되는 `AssetFilter`에
+유지됩니다.
 
 `UploadProgressSnapshot`은 `{ inFlight: number; completed: number }`입니다.
 

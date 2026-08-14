@@ -129,6 +129,10 @@ function createAssetManagerPlugin(options: AssetManagerOptions): StudioPlugin;
 `Client-ID`。相对基础路径（如 `/api/unsplash`）和绝对基础路径（如
 `https://example.com/api/unsplash`）均受支持。
 
+设置 `unsplash.rehostOnPick: true` 后，选中的图片会先下载并通过已配置的上传器，
+再插入编辑器。生成的本地资源会保留 Unsplash 署名元数据，并继续触发强制下载
+追踪；默认行为仍是符合规范的 Unsplash 热链接。
+
 ### 插件上下文上的命令式 API
 
 | 函数                   | 签名                                            | 用途                                                       |
@@ -358,12 +362,15 @@ function getRequiredCsp(options: RequiredCspOptions): RequiredCsp;
 | 组件                  | 关键 props                                    |
 | --------------------- | --------------------------------------------- |
 | `UploadButton`        | `{ onUpload, onProgress?, disabled? }`        |
-| `AssetBrowser`        | `{ registry, onSelect, maxWidth? }`           |
+| `AssetBrowser`        | `{ assets, onInsert, categories?, facets?, onFilterChange? }` |
 | `AssetCommandPalette` | `{ registry, onSelect }`                      |
 | `MetadataPanel`       | `{ asset, registry, onClose }`                |
 | `ReplaceAssetDialog`  | `{ asset, onReplace, onCancel }`              |
 | `DeleteAssetDialog`   | `{ asset, onDelete, onCancel }`               |
-| `AssetManagerUI`      | `{ registry, plugin, maxWidth? }`（复合）     |
+| `AssetManagerUI`      | `{ uploader, registry, categories?, facets?, onFilterChange? }`（复合） |
+
+已配置的分类和分面控件会按需加载。本地定义使用 AND 组合进行过滤；provider 分类和
+远程分面会保留在发出的 `AssetFilter` 中，由数据源负责路由。
 
 `UploadProgressSnapshot` 为 `{ inFlight: number; completed: number }`。
 
