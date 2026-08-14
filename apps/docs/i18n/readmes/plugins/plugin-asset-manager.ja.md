@@ -82,6 +82,13 @@ function createAssetManagerPlugin(options: AssetManagerOptions): StudioPlugin;
 | `sniffContent`              | `boolean`                                      | `false`   | `true` のとき、マジックバイトの内容が宣言された `file.type` と矛盾するファイルを拒否します（MIME/拡張子を超えた多層防御）。 |
 | `onAssetDeleted`            | `(asset: UploadResult) => void \| Promise<void>` | none    | デフォルトソース経由でアセットが削除されたときに発火するライフサイクル hook。ここでバックエンドオブジェクトを解放してください（`blob:` URL は自動的に取り消されます）。 |
 
+`unsplash.proxyEndpoint` は検索専用ルートではなく、API のベースパスです。
+provider は、必須の `/photos/:id/download` ダウンロードトリガーを含むすべての
+Unsplash パスをこのベースに追加します。そのため、プロキシは各パスを転送し、
+サーバー側で `Client-ID` を注入する必要があります。`/api/unsplash` のような
+相対ベースと `https://example.com/api/unsplash` のような絶対ベースの両方を
+サポートします。
+
 ### プラグインコンテキスト上の命令型 API
 
 | 関数                   | シグネチャ                                      | 目的                                                       |

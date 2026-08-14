@@ -123,6 +123,12 @@ function createAssetManagerPlugin(options: AssetManagerOptions): StudioPlugin;
 | `sniffContent`              | `boolean`                                      | `false`   | 为 `true` 时，拒绝其魔数字节内容与所声明 `file.type` 相矛盾的文件（在 MIME/扩展名之上的纵深防御）。 |
 | `onAssetDeleted`            | `(asset: UploadResult) => void \| Promise<void>` | none    | 当资源经由默认来源被删除时触发的生命周期 hook；在此释放后端对象（`blob:` URL 会被自动撤销）。 |
 
+`unsplash.proxyEndpoint` 是 API 基础路径，而不是仅用于搜索的路由。provider
+会将所有 Unsplash 路径追加到该地址，包括强制要求的
+`/photos/:id/download` 下载触发器，因此代理必须转发这些路径，并在服务端注入
+`Client-ID`。相对基础路径（如 `/api/unsplash`）和绝对基础路径（如
+`https://example.com/api/unsplash`）均受支持。
+
 ### 插件上下文上的命令式 API
 
 | 函数                   | 签名                                            | 用途                                                       |

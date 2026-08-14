@@ -123,6 +123,12 @@ function createAssetManagerPlugin(options: AssetManagerOptions): StudioPlugin;
 | `sniffContent`              | `boolean`                                      | `false`   | When `true`, reject a file whose magic-byte content contradicts its declared `file.type` (defense-in-depth beyond MIME/extension). |
 | `onAssetDeleted`            | `(asset: UploadResult) => void \| Promise<void>` | none    | Lifecycle hook fired when an asset is deleted via the default source; release backend objects here (`blob:` URLs are auto-revoked). |
 
+`unsplash.proxyEndpoint` is an API base, not a search-only route. The provider
+appends every Unsplash path to it, including the mandatory
+`/photos/:id/download` trigger, so the proxy must forward those paths and inject
+the `Client-ID` server-side. Both relative bases such as `/api/unsplash` and
+absolute bases such as `https://example.com/api/unsplash` are supported.
+
 ### Imperative API on the plugin context
 
 | Function               | Signature                                       | Purpose                                                    |

@@ -123,6 +123,12 @@ function createAssetManagerPlugin(options: AssetManagerOptions): StudioPlugin;
 | `sniffContent`              | `boolean`                                      | `false`   | `true`일 때, 매직 바이트 내용이 선언된 `file.type`과 모순되는 파일을 거부합니다(MIME/확장자를 넘어선 심층 방어). |
 | `onAssetDeleted`            | `(asset: UploadResult) => void \| Promise<void>` | none    | 기본 소스를 통해 에셋이 삭제될 때 발화하는 라이프사이클 hook. 여기서 백엔드 객체를 해제하세요(`blob:` URL은 자동으로 취소됩니다). |
 
+`unsplash.proxyEndpoint`는 검색 전용 라우트가 아니라 API 기본 경로입니다. provider는
+필수 `/photos/:id/download` 다운로드 트리거를 포함한 모든 Unsplash 경로를 이
+기본 경로에 추가합니다. 따라서 프록시는 해당 경로를 전달하고 서버 측에서
+`Client-ID`를 주입해야 합니다. `/api/unsplash` 같은 상대 기본 경로와
+`https://example.com/api/unsplash` 같은 절대 기본 경로를 모두 지원합니다.
+
 ### 플러그인 컨텍스트의 명령형 API
 
 | 함수                   | 시그니처                                        | 목적                                                       |
