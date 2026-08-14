@@ -41,7 +41,7 @@ import { Studio } from "@anvilkit/core";
 
 ## 指南
 
-> **Alpha（`0.1.11`）。** 在 `v1.0` 之前公共接口仍可能变动。CI 中强制执行的包体积预算：headless 入口 ≤ 8 KB gzip，UI 子路径 ≤ 12 KB gzip，Unsplash 子路径 ≤ 4 KB gzip。
+> **Alpha（`0.1.11`）。** 在 `v1.0` 之前公共接口仍可能变动。CI 中强制执行的包体积预算：headless 初始分块 ≤ 17 KB gzip，UI 初始分块 ≤ 12 KB gzip，Unsplash 子路径 ≤ 4 KB gzip。
 
 面向 Anvilkit Studio 的无界面资源管理器插件。宿主提供上传后端；插件负责校验、注册、搜索、IR 时解析、CSP 指引，以及（可选地）用于上传 + 浏览体验的 React UI。专为可插拔的生产后端（S3、GCS、自定义 HTTP）设计，并对每个适配器响应都强制执行严格的信任边界。
 
@@ -121,7 +121,7 @@ function createAssetManagerPlugin(options: AssetManagerOptions): StudioPlugin;
 | `transformResolver`         | `TransformResolver`                            | none      | 将 `AssetTransform` 映射为派生 URL（你的图片 CDN）。参见 [资源变换](#asset-transformations--variants)。 |
 | `dedupe`                    | `boolean`                                      | `false`   | 为 `true` 时，对上传进行哈希（SHA-256），并复用内容相同的已有资源而非重新上传。 |
 | `sniffContent`              | `boolean`                                      | `false`   | 为 `true` 时，拒绝其魔数字节内容与所声明 `file.type` 相矛盾的文件（在 MIME/扩展名之上的纵深防御）。 |
-| `onAssetDeleted`            | `(asset: UploadResult) => void \| Promise<void>` | none    | 当资源经由默认来源被删除时触发的生命周期 hook；在此释放后端对象（`blob:` URL 会被自动撤销）。 |
+| `onAssetDeleted`            | `(asset: UploadResult) => void \| Promise<void>` | none    | 当资源经由默认来源被删除或其 URL 被替换时触发的生命周期 hook；在此释放旧的后端对象（`blob:` URL 会被自动撤销）。 |
 
 `unsplash.proxyEndpoint` 是 API 基础路径，而不是仅用于搜索的路由。provider
 会将所有 Unsplash 路径追加到该地址，包括强制要求的
@@ -565,7 +565,7 @@ alpha 时期的 `urlAllowlist?: readonly string[]` 字段已被移除。
 3. **接线 CSP。** 调用 `getRequiredCsp(...)` 并将结果合并到你的 `connect-src` / `img-src` / `media-src` 构建器中。增删适配器时重新运行。
 4. **选择持久化方案。** 插件状态在内存中；宿主在服务端存储 `publicUrl` 并在启动时重新填充。
 5. **监控。** 订阅 `asset-manager:error` 事件总线信封以捕获上传失败，并从你的导出流水线记录 `AssetResolutionError.code`，使 `ASSET_NOT_FOUND` / `ASSET_URL_REJECTED` / `ASSET_VALIDATION_FAILED` 得到各自独立的告警。
-6. **锁定包体积。** `.size-limit.json` 将 headless 入口保持在 8 KB gzip 以下、UI 子路径在 12 KB 以下。CI 对两者都设置门禁。
+6. **锁定包体积。** `.size-limit.mjs` 将 headless 初始分块保持在 17 KB gzip 以下、UI 初始分块保持在 12 KB 以下。CI 对两者都设置门禁。
 
 ### 可选 UI 是独立入口
 

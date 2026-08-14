@@ -41,7 +41,7 @@ import { Studio } from "@anvilkit/core";
 
 ## 가이드
 
-> **Alpha(`0.1.11`).** `v1.0` 이전에는 공개 표면이 아직 바뀔 수 있습니다. CI에서 강제되는 번들 예산: headless 진입점 ≤ 8 KB gzip, UI 서브경로 ≤ 12 KB gzip, Unsplash 서브경로 ≤ 4 KB gzip.
+> **Alpha(`0.1.11`).** `v1.0` 이전에는 공개 표면이 아직 바뀔 수 있습니다. CI에서 강제되는 번들 예산: headless 초기 청크 ≤ 17 KB gzip, UI 초기 청크 ≤ 12 KB gzip, Unsplash 서브경로 ≤ 4 KB gzip.
 
 Anvilkit Studio를 위한 헤드리스 에셋 관리자 플러그인입니다. 호스트가 업로드 백엔드를 제공하며, 플러그인은 검증, 등록, 검색, IR 시점 해석, CSP 가이던스, 그리고 (선택적으로) 업로드 + 탐색 경험을 위한 React UI를 담당합니다. 모든 어댑터 응답에 대해 엄격한 신뢰 경계를 강제하면서, 교체 가능한 프로덕션 백엔드(S3, GCS, 커스텀 HTTP)를 위해 설계되었습니다.
 
@@ -121,7 +121,7 @@ function createAssetManagerPlugin(options: AssetManagerOptions): StudioPlugin;
 | `transformResolver`         | `TransformResolver`                            | none      | `AssetTransform`을 파생 URL(여러분의 이미지 CDN)로 매핑합니다. [에셋 변환](#asset-transformations--variants)을 참조하세요. |
 | `dedupe`                    | `boolean`                                      | `false`   | `true`일 때 업로드를 해시(SHA-256)하고, 재업로드 대신 같은 내용의 기존 에셋을 재사용합니다. |
 | `sniffContent`              | `boolean`                                      | `false`   | `true`일 때, 매직 바이트 내용이 선언된 `file.type`과 모순되는 파일을 거부합니다(MIME/확장자를 넘어선 심층 방어). |
-| `onAssetDeleted`            | `(asset: UploadResult) => void \| Promise<void>` | none    | 기본 소스를 통해 에셋이 삭제될 때 발화하는 라이프사이클 hook. 여기서 백엔드 객체를 해제하세요(`blob:` URL은 자동으로 취소됩니다). |
+| `onAssetDeleted`            | `(asset: UploadResult) => void \| Promise<void>` | none    | 기본 소스를 통해 에셋이 삭제되거나 URL이 교체될 때 발화하는 라이프사이클 hook. 여기서 이전 백엔드 객체를 해제하세요(`blob:` URL은 자동으로 취소됩니다). |
 
 `unsplash.proxyEndpoint`는 검색 전용 라우트가 아니라 API 기본 경로입니다. provider는
 필수 `/photos/:id/download` 다운로드 트리거를 포함한 모든 Unsplash 경로를 이
@@ -566,7 +566,7 @@ alpha 시절의 `urlAllowlist?: readonly string[]` 필드는 제거되었습니�
 3. **CSP를 배선하세요.** `getRequiredCsp(...)`를 호출하고 그 결과를 여러분의 `connect-src` / `img-src` / `media-src` 빌더에 병합하세요. 어댑터를 추가하거나 제거하면 다시 실행하세요.
 4. **영속화 방안을 선택하세요.** 플러그인 상태는 메모리 내에 있습니다. 호스트가 `publicUrl`을 서버 측에 저장하고 부팅 시 다시 시드합니다.
 5. **모니터링하세요.** 업로드 실패를 위해 `asset-manager:error` 이벤트 버스 엔벨로프를 구독하고, 여러분의 내보내기 파이프라인에서 `AssetResolutionError.code`를 로깅하여 `ASSET_NOT_FOUND` / `ASSET_URL_REJECTED` / `ASSET_VALIDATION_FAILED`가 각각 별도의 알림을 받도록 하세요.
-6. **번들을 잠그세요.** `.size-limit.json`은 headless 진입점을 8 KB gzip 미만, UI 서브경로를 12 KB 미만으로 유지합니다. CI가 둘 다에 게이트를 겁니다.
+6. **번들을 잠그세요.** `.size-limit.mjs`는 headless 초기 청크를 17 KB gzip 미만, UI 초기 청크를 12 KB 미만으로 유지합니다. CI가 둘 다에 게이트를 겁니다.
 
 ### 선택적 UI는 별도 진입점
 

@@ -1,6 +1,6 @@
 # @anvilkit/plugin-asset-manager
 
-> **Alpha（`0.1.11`）。** `v1.0` までは公開サーフェスがまだ変わる可能性があります。CI で強制されるバンドル予算：headless エントリ ≤ 8 KB gzip、UI サブパス ≤ 12 KB gzip、Unsplash サブパス ≤ 4 KB gzip。
+> **Alpha（`0.1.11`）。** `v1.0` までは公開サーフェスがまだ変わる可能性があります。CI で強制されるバンドル予算：headless 初期チャンク ≤ 17 KB gzip、UI 初期チャンク ≤ 12 KB gzip、Unsplash サブパス ≤ 4 KB gzip。
 
 Anvilkit Studio 向けのヘッドレスなアセット管理プラグインです。ホストがアップロードバックエンドを提供し、プラグインは検証、登録、検索、IR 時の解決、CSP のガイダンス、そして（任意で）アップロード + 閲覧体験のための React UI を担います。厳格な信頼境界をすべてのアダプターレスポンスに対して強制しつつ、差し替え可能な本番バックエンド（S3、GCS、カスタム HTTP）向けに設計されています。
 
@@ -80,7 +80,7 @@ function createAssetManagerPlugin(options: AssetManagerOptions): StudioPlugin;
 | `transformResolver`         | `TransformResolver`                            | none      | `AssetTransform` を派生 URL（あなたの画像 CDN）にマッピングします。[アセット変換](#asset-transformations--variants)を参照。 |
 | `dedupe`                    | `boolean`                                      | `false`   | `true` のとき、アップロードをハッシュ化（SHA-256）し、同じ内容の既存アセットを再アップロードの代わりに再利用します。 |
 | `sniffContent`              | `boolean`                                      | `false`   | `true` のとき、マジックバイトの内容が宣言された `file.type` と矛盾するファイルを拒否します（MIME/拡張子を超えた多層防御）。 |
-| `onAssetDeleted`            | `(asset: UploadResult) => void \| Promise<void>` | none    | デフォルトソース経由でアセットが削除されたときに発火するライフサイクル hook。ここでバックエンドオブジェクトを解放してください（`blob:` URL は自動的に取り消されます）。 |
+| `onAssetDeleted`            | `(asset: UploadResult) => void \| Promise<void>` | none    | デフォルトソース経由でアセットが削除されたとき、または URL が置き換えられたときに発火するライフサイクル hook。ここで古いバックエンドオブジェクトを解放してください（`blob:` URL は自動的に取り消されます）。 |
 
 `unsplash.proxyEndpoint` は検索専用ルートではなく、API のベースパスです。
 provider は、必須の `/photos/:id/download` ダウンロードトリガーを含むすべての
@@ -527,7 +527,7 @@ alpha 時代の `urlAllowlist?: readonly string[]` フィールドは削除さ�
 3. **CSP を配線する。** `getRequiredCsp(...)` を呼び、その結果をあなたの `connect-src` / `img-src` / `media-src` ビルダーにマージしてください。アダプターを追加または削除したら再実行してください。
 4. **永続化方針を選ぶ。** プラグインの状態はメモリ内です。ホストが `publicUrl` をサーバー側に保存し、起動時に再シードします。
 5. **監視する。** アップロード失敗のために `asset-manager:error` イベントバスのエンベロープを購読し、エクスポートパイプラインから `AssetResolutionError.code` をログして、`ASSET_NOT_FOUND` / `ASSET_URL_REJECTED` / `ASSET_VALIDATION_FAILED` が個別にアラートされるようにしてください。
-6. **バンドルをロックダウンする。** `.size-limit.json` は headless エントリを 8 KB gzip 未満、UI サブパスを 12 KB 未満に保ちます。CI が両方にゲートをかけます。
+6. **バンドルをロックダウンする。** `.size-limit.mjs` は headless 初期チャンクを 17 KB gzip 未満、UI 初期チャンクを 12 KB 未満に保ちます。CI が両方にゲートをかけます。
 
 ### 任意の UI は別エントリ
 
