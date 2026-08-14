@@ -235,7 +235,7 @@ interface CreateStudioAssetSourceOptions {
     options?: UploadAdapterOptions,
   ) => Promise<UploadResult>;
   readonly getThumbnail?: (entry: UploadResult) => string | undefined;
-  readonly maxConcurrentUploads?: number; // default 3
+  readonly maxConcurrentUploads?: number; // 正の整数、デフォルト 3
 }
 ```
 
@@ -510,7 +510,7 @@ alpha 時代の `urlAllowlist?: readonly string[]` フィールドは削除さ�
 
 ### バッチアップロードの挙動
 
-`StudioAssetSource.upload(files)` は最大で `maxConcurrentUploads`（デフォルト 3）件のアップロードを並列に実行します。ファイルごとの失敗はリスナー経由で `error` エンベロープとして現れます。返される promise は成功したサブセットで解決し、**スローしません**。フェイルファストのセマンティクスが必要なホストは `maxConcurrentUploads: 1` を渡せます。アダプターからの `AbortError` はバッチ全体を中止します——保留中のファイルはスケジュールされません。
+`StudioAssetSource.upload(files)` は最大で `maxConcurrentUploads`（デフォルト 3）件のアップロードを並列に実行します。値は正の整数でなければならず、`NaN`、無限大、ゼロ、負数、小数を指定するとソース作成時に `RangeError` がスローされます。ファイルごとの失敗はリスナー経由で `error` エンベロープとして現れます。返される promise は成功したサブセットで解決し、**スローしません**。フェイルファストのセマンティクスが必要なホストは `maxConcurrentUploads: 1` を渡せます。アダプターからの `AbortError` はバッチ全体を中止します——保留中のファイルはスケジュールされません。
 
 ### 永続化はホスト所有
 

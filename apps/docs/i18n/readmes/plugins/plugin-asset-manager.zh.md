@@ -233,7 +233,7 @@ interface CreateStudioAssetSourceOptions {
     options?: UploadAdapterOptions,
   ) => Promise<UploadResult>;
   readonly getThumbnail?: (entry: UploadResult) => string | undefined;
-  readonly maxConcurrentUploads?: number; // default 3
+  readonly maxConcurrentUploads?: number; // 正整数，默认 3
 }
 ```
 
@@ -507,7 +507,7 @@ alpha 时期的 `urlAllowlist?: readonly string[]` 字段已被移除。
 
 ### 批量上传行为
 
-`StudioAssetSource.upload(files)` 会并行运行至多 `maxConcurrentUploads`（默认 3）个上传。单文件失败会经由监听器以 `error` 信封形式呈现；返回的 promise 以成功的子集 resolve，并**不会抛出**。需要快速失败语义的宿主可传入 `maxConcurrentUploads: 1`。来自适配器的 `AbortError` 会中止整个批次——待处理的文件不会被调度。
+`StudioAssetSource.upload(files)` 会并行运行至多 `maxConcurrentUploads`（默认 3）个上传。该值必须是正整数；`NaN`、无穷大、零、负数或小数会在创建数据源时抛出 `RangeError`。单文件失败会经由监听器以 `error` 信封形式呈现；返回的 promise 以成功的子集 resolve，并**不会抛出**。需要快速失败语义的宿主可传入 `maxConcurrentUploads: 1`。来自适配器的 `AbortError` 会中止整个批次——待处理的文件不会被调度。
 
 ### 持久化归宿主所有
 
