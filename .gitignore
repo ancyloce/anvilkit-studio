@@ -58,7 +58,13 @@ output
 !/docs/adr/
 !/docs/policies/
 !/docs/migration/
-!/docs/security/
+# Three more entry-point targets. `README.md`, `CONTRIBUTING.md`,
+# `CHANGELOG.md` and the published `apps/docs` component-authoring guide
+# (all four locales) link to these exact paths — the a11y baseline as a
+# `blob/main` GitHub permalink — so ignoring them serves 404s to readers.
+!/docs/a11y-baseline.md
+!/docs/beta-feedback/
+!/docs/announcements/
 
 .idea/
 .gstack/
