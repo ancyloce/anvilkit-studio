@@ -49,3 +49,6 @@
 [submodule "packages/analytics/react"]
 	path = packages/capabilities/analytics/react
 	url = https://github.com/ancyloce/anvilkit-analytics-react.git
+[submodule "packages/extensions/plugins/plugin-code-editor"]
+	path = packages/extensions/plugins/plugin-code-editor
+	url = https://github.com/ancyloce/anvilkit-plugin-code-editor.git
