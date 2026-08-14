@@ -221,7 +221,7 @@ jobs:
       # Covers the publishable runtime + plugin + component packages.
       # I2-6 added the canvas packages (canvas-core, canvas-editor,
       # plugin-ai-image, plugin-canvas-studio); I2-3 added plugin-export-canvas.
-      # Each package ships its own `.size-limit.json` with a tuned budget.
+      # Each package ships its own `.size-limit.*` config with a tuned budget.
       # Every component `.size-limit.json` carries TWO entries — the JS
       # `dist/index.js` budget and a `dist/styles.css` gzip budget (12 KB) —
       # so this one step gates both. The CSS budget guards against a component

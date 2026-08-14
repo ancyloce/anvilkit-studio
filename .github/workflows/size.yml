@@ -2,7 +2,7 @@ name: Size
 
 # phase4-016: bundle-size budgets per publishable package.
 # The `Bundle-size budgets` step in ci.yml is the hard gate — it
-# enforces per-package limits from each `.size-limit.json`.
+# enforces per-package limits from each `.size-limit.*` config.
 # This workflow adds the PR comment / size diff visualisation via
 # `andresz1/size-limit-action`, which compares the PR branch against
 # the base branch and posts a table to the PR.
