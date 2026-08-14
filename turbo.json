@@ -57,7 +57,7 @@
 		},
 		"size": {
 			"dependsOn": ["build"],
-			"inputs": ["dist/**", ".size-limit.json", "package.json"],
+			"inputs": ["dist/**", ".size-limit.*", "package.json"],
 			"outputs": []
 		},
 		"docs:build": {
