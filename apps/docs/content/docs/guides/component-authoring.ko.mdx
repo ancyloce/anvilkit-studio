@@ -105,8 +105,8 @@ const renderButton: ComponentConfig<ButtonProps>["render"] = ({
 | `textarea`  | 여러 행 문자열(부제목, 설명, 본문).                                | `@anvilkit/section`의 `description`.          |
 | `number`    | 숫자 입력(열 개수, 간격 단위, 카운트).                            | `@anvilkit/bento-grid`의 열 개수.            |
 | `email`     | 이메일 주소 —— Puck이 UI에서 형식을 검증합니다.                   | `@anvilkit/input`의 기본 `type`.             |
-| `radio`     | 인라인 분할 선택지로 렌더링하려는 작은 열거형(≤ 약 4개 값).       | `@anvilkit/button`의 `variant`, `disabled`.  |
-| `select`    | 몇 개를 넘는 값을 가진 열거형, 드롭다운으로 표시됨.               | `@anvilkit/bento-grid`의 `gap`, `radius`.    |
+| `radio`     | 인라인 분할 선택지로 렌더링하려는 작은 열거형(≤ 약 4개 값).       | `@anvilkit/button`의 `disabled`, `openInNewTab`. |
+| `select`    | 몇 개를 넘는 값을 가진 열거형, 드롭다운으로 표시됨.               | `@anvilkit/button`의 `variant`; `@anvilkit/bento-grid`의 `gap`. |
 | `array`     | 반복 가능한 항목의 정렬된 목록(링크, 카드, 등급, 기능).          | `@anvilkit/navbar`의 `items`, `actions`.     |
 | `object`    | 이질적인 중첩 형태(logo 텍스트 + 이미지 + href).                 | `@anvilkit/navbar`의 `logo`.                 |
 
@@ -124,11 +124,16 @@ export const buttonFields = {
 		label: "Label",
 	},
 	variant: {
-		type: "radio",
+		type: "select",
 		label: "Variant",
 		options: [
 			{ label: "Primary", value: "primary" },
 			{ label: "Secondary", value: "secondary" },
+			{ label: "Default", value: "default" },
+			{ label: "Destructive", value: "destructive" },
+			{ label: "Outline", value: "outline" },
+			{ label: "Ghost", value: "ghost" },
+			{ label: "Link", value: "link" },
 		],
 	},
 	href: {

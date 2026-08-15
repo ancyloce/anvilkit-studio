@@ -105,8 +105,8 @@ const renderButton: ComponentConfig<ButtonProps>["render"] = ({
 | `textarea`  | 多行字符串（副标题、描述、正文）。                                    | `@anvilkit/section` 的 `description`。        |
 | `number`    | 数值输入（列数、间距单位、计数）。                                    | `@anvilkit/bento-grid` 的列数。              |
 | `email`     | 电子邮件地址 —— Puck 在 UI 中验证格式。                              | `@anvilkit/input` 默认的 `type`。            |
-| `radio`     | 小型枚举（≤ 约 4 个值），希望以内联分段选项形式渲染。               | `@anvilkit/button` 的 `variant`、`disabled`。|
-| `select`    | 值多于少数几个的枚举，以下拉菜单形式显示。                            | `@anvilkit/bento-grid` 的 `gap`、`radius`。  |
+| `radio`     | 小型枚举（≤ 约 4 个值），希望以内联分段选项形式渲染。               | `@anvilkit/button` 的 `disabled`、`openInNewTab`。|
+| `select`    | 值多于少数几个的枚举，以下拉菜单形式显示。                            | `@anvilkit/button` 的 `variant`；`@anvilkit/bento-grid` 的 `gap`。 |
 | `array`     | 可重复项的有序列表（链接、卡片、套餐层级、特性）。                    | `@anvilkit/navbar` 的 `items`、`actions`。   |
 | `object`    | 异构的嵌套形状（logo 文本 + 图片 + href）。                          | `@anvilkit/navbar` 的 `logo`。               |
 
@@ -124,11 +124,16 @@ export const buttonFields = {
 		label: "Label",
 	},
 	variant: {
-		type: "radio",
+		type: "select",
 		label: "Variant",
 		options: [
 			{ label: "Primary", value: "primary" },
 			{ label: "Secondary", value: "secondary" },
+			{ label: "Default", value: "default" },
+			{ label: "Destructive", value: "destructive" },
+			{ label: "Outline", value: "outline" },
+			{ label: "Ghost", value: "ghost" },
+			{ label: "Link", value: "link" },
 		],
 	},
 	href: {

@@ -105,8 +105,8 @@ field that models the data — `radio` over `select` for small enums,
 | `textarea`  | Multi-line string (subtitle, description, body copy).                  | `@anvilkit/section` `description`.           |
 | `number`    | Numeric input (column count, spacing units, counts).                   | `@anvilkit/bento-grid` column count.         |
 | `email`     | Email address — Puck validates the format in the UI.                   | `@anvilkit/input` default `type`.            |
-| `radio`     | Small enum (≤ ~4 values) you want rendered inline as segmented choices.| `@anvilkit/button` `variant`, `disabled`.    |
-| `select`    | Enum with more than a handful of values, shown as a dropdown.          | `@anvilkit/bento-grid` `gap`, `radius`.      |
+| `radio`     | Small enum (≤ ~4 values) you want rendered inline as segmented choices.| `@anvilkit/button` `disabled`, `openInNewTab`. |
+| `select`    | Enum with more than a handful of values, shown as a dropdown.          | `@anvilkit/button` `variant`; `@anvilkit/bento-grid` `gap`. |
 | `array`     | Ordered list of repeatable items (links, cards, tiers, features).      | `@anvilkit/navbar` `items`, `actions`.       |
 | `object`    | Heterogeneous nested shape (logo text + image + href).                 | `@anvilkit/navbar` `logo`.                   |
 
@@ -124,11 +124,16 @@ export const buttonFields = {
 		label: "Label",
 	},
 	variant: {
-		type: "radio",
+		type: "select",
 		label: "Variant",
 		options: [
 			{ label: "Primary", value: "primary" },
 			{ label: "Secondary", value: "secondary" },
+			{ label: "Default", value: "default" },
+			{ label: "Destructive", value: "destructive" },
+			{ label: "Outline", value: "outline" },
+			{ label: "Ghost", value: "ghost" },
+			{ label: "Link", value: "link" },
 		],
 	},
 	href: {

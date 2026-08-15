@@ -86,20 +86,27 @@ describe("§1 — The contract", () => {
 // ---------------------------------------------------------------------------
 
 describe("§2 — Field types", () => {
-	it("Button's worked example uses text + radio exactly", () => {
+	it("Button's worked example uses text + radio + select exactly", () => {
 		expect(fields.label.type).toBe("text");
 		expect(fields.href?.type).toBe("text");
-		expect(fields.variant?.type).toBe("radio");
+		// `variant` widened to the 7-value select by PRD 0022 FR-002
+		// (marketing pair + shadcn vocabulary; "secondary" shared).
+		expect(fields.variant?.type).toBe("select");
 		expect(fields.disabled?.type).toBe("radio");
 		expect(fields.openInNewTab?.type).toBe("radio");
 
 		const variant = fields.variant as {
-			type: "radio";
+			type: "select";
 			options: { label: string; value: string }[];
 		};
 		expect(variant.options.map((o) => o.value)).toEqual([
 			"primary",
 			"secondary",
+			"default",
+			"destructive",
+			"outline",
+			"ghost",
+			"link",
 		]);
 	});
 

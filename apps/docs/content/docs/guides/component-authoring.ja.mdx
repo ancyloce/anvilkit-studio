@@ -105,8 +105,8 @@ const renderButton: ComponentConfig<ButtonProps>["render"] = ({
 | `textarea`  | 複数行の文字列（サブタイトル、説明、本文）。                          | `@anvilkit/section` の `description`。        |
 | `number`    | 数値入力（列数、間隔単位、カウント）。                                | `@anvilkit/bento-grid` の列数。              |
 | `email`     | メールアドレス —— Puck が UI でフォーマットを検証します。            | `@anvilkit/input` のデフォルト `type`。      |
-| `radio`     | 小さな列挙（≤ 約 4 値）で、セグメント化された選択肢としてインライン表示したいもの。 | `@anvilkit/button` の `variant`、`disabled`。|
-| `select`    | 少数より多くの値を持つ列挙で、ドロップダウンとして表示されるもの。    | `@anvilkit/bento-grid` の `gap`、`radius`。  |
+| `radio`     | 小さな列挙（≤ 約 4 値）で、セグメント化された選択肢としてインライン表示したいもの。 | `@anvilkit/button` の `disabled`、`openInNewTab`。|
+| `select`    | 少数より多くの値を持つ列挙で、ドロップダウンとして表示されるもの。    | `@anvilkit/button` の `variant`；`@anvilkit/bento-grid` の `gap`。 |
 | `array`     | 繰り返し可能な項目の順序付きリスト（リンク、カード、ティア、機能）。  | `@anvilkit/navbar` の `items`、`actions`。   |
 | `object`    | 異種混在のネストされた形状（logo テキスト + 画像 + href）。          | `@anvilkit/navbar` の `logo`。               |
 
@@ -124,11 +124,16 @@ export const buttonFields = {
 		label: "Label",
 	},
 	variant: {
-		type: "radio",
+		type: "select",
 		label: "Variant",
 		options: [
 			{ label: "Primary", value: "primary" },
 			{ label: "Secondary", value: "secondary" },
+			{ label: "Default", value: "default" },
+			{ label: "Destructive", value: "destructive" },
+			{ label: "Outline", value: "outline" },
+			{ label: "Ghost", value: "ghost" },
+			{ label: "Link", value: "link" },
 		],
 	},
 	href: {
