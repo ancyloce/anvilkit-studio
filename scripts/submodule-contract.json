@@ -1,9 +1,14 @@
 {
-	"description": "Retained-submodule contract (restructure plan Phase 5; docs/architecture/repository-structure.md §Retained Submodule Contract). Records, per .gitmodules entry, what every retained submodule must provide: owners, engine metadata, peer ranges, required commands, and versioning policy. Validated by scripts/check-submodule-contracts.mjs in CI (clean-clone + package gates). Owners stay explicitly 'unknown' until CODEOWNERS or equivalent evidence exists (plan §4/§27).",
-	"gitlinkProcess": "Gitlink bumps land as dedicated superproject commits after the submodule commit is pushed to its remote; path moves use a dedicated PR that updates .gitmodules and gitlinks atomically and passes the clean-clone workflow (plan §18).",
+	"description": "Retained-submodule contract (restructure plan Phase 5; docs/architecture/repository-structure.md \u00a7Retained Submodule Contract). Records, per .gitmodules entry, what every retained submodule must provide: owners, engine metadata, peer ranges, required commands, and versioning policy. Validated by scripts/check-submodule-contracts.mjs in CI (clean-clone + package gates). Owners stay explicitly 'unknown' until CODEOWNERS or equivalent evidence exists (plan \u00a74/\u00a727).",
+	"gitlinkProcess": "Gitlink bumps land as dedicated superproject commits after the submodule commit is pushed to its remote; path moves use a dedicated PR that updates .gitmodules and gitlinks atomically and passes the clean-clone workflow (plan \u00a718).",
 	"defaults": {
-		"owners": { "repository": "unknown", "release": "unknown" },
-		"engines": { "node": ">=18" },
+		"owners": {
+			"repository": "unknown",
+			"release": "unknown"
+		},
+		"engines": {
+			"node": ">=18"
+		},
 		"packageManager": "pnpm@11.20.0",
 		"typescript": "7.0.2",
 		"requiredScripts": [
@@ -21,7 +26,12 @@
 			"url": "https://github.com/ancyloce/anvilkit-components.git",
 			"npmAccess": "private",
 			"versioning": "independent",
-			"requiredScripts": ["build", "lint", "typecheck", "test"],
+			"requiredScripts": [
+				"build",
+				"lint",
+				"typecheck",
+				"test"
+			],
 			"peers": {}
 		},
 		"packages/extensions/plugins/plugin-ai-copilot": {
@@ -156,7 +166,9 @@
 			"url": "https://github.com/ancyloce/anvilkit-canvas-editor.git",
 			"npmAccess": "public",
 			"versioning": "independent",
-			"peers": { "react": ">=19.0.0" }
+			"peers": {
+				"react": ">=19.0.0"
+			}
 		},
 		"packages/capabilities/analytics/core": {
 			"name": "@anvilkit/analytics-core",
@@ -170,7 +182,19 @@
 			"url": "https://github.com/ancyloce/anvilkit-analytics-react.git",
 			"npmAccess": "public",
 			"versioning": "independent",
-			"peers": { "react": ">=19.0.0" }
+			"peers": {
+				"react": ">=19.0.0"
+			}
+		},
+		"packages/extensions/plugins/plugin-code-editor": {
+			"name": "@anvilkit/plugin-code-editor",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-code-editor.git",
+			"npmAccess": "public",
+			"versioning": "independent",
+			"peers": {
+				"react": ">=19.0.0",
+				"@puckeditor/core": "^0.23.0"
+			}
 		}
 	},
 	"knownGaps": [
