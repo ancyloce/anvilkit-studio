@@ -1,0 +1,46 @@
+{
+	"name": "component-editor",
+	"version": "0.1.0",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev": "next dev --webpack -p 3200",
+		"build": "next build --webpack",
+		"start": "next start -p 3200",
+		"lint": "pnpm exec biome lint .",
+		"typecheck": "next typegen && tsc --noEmit",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"@anvilkit/badge": "workspace:*",
+		"@anvilkit/button": "workspace:*",
+		"@anvilkit/card": "workspace:*",
+		"@anvilkit/core": "workspace:*",
+		"@anvilkit/input": "workspace:*",
+		"@anvilkit/plugin-design-system": "workspace:*",
+		"@anvilkit/plugin-export-html": "workspace:*",
+		"@anvilkit/plugin-export-react": "workspace:*",
+		"@anvilkit/schema": "workspace:*",
+		"@anvilkit/select": "workspace:*",
+		"@anvilkit/separator": "workspace:*",
+		"@anvilkit/ui": "workspace:*",
+		"@anvilkit/validator": "workspace:*",
+		"@puckeditor/core": "^0.23.0",
+		"lucide-react": "^1.30.0",
+		"next": "^16.3.0",
+		"react": "^19.2.8",
+		"react-dom": "^19.2.8"
+	},
+	"devDependencies": {
+		"@anvilkit/biome-config": "workspace:*",
+		"@anvilkit/tailwind-config": "workspace:*",
+		"@anvilkit/typescript-config": "workspace:*",
+		"@anvilkit/vitest-config": "workspace:*",
+		"@testing-library/react": "^16.3.2",
+		"@types/node": "^26.2.0",
+		"@types/react": "^19.2.18",
+		"@types/react-dom": "19.2.4",
+		"typescript": "7.0.2",
+		"vitest": "^4.1.10"
+	}
+}

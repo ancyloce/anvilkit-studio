@@ -1,0 +1,7 @@
+@import "@anvilkit/tailwind-config/shadcn";
+
+@source "./**/*.{ts,tsx}";
+@source "../lib/**/*.{ts,tsx}";
+@source "../../../packages/runtime/ui/src/**/*.{ts,tsx}";
+@source "../../../packages/runtime/core/src/react/studio/**/*.{ts,tsx}";
+@source "../../../packages/runtime/core/src/react/overrides/**/*.{ts,tsx}";

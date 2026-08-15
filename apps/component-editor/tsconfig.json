@@ -1,0 +1,27 @@
+{
+	"extends": "@anvilkit/typescript-config/nextjs.json",
+	"compilerOptions": {
+		"ignoreDeprecations": "6.0",
+		"paths": {
+			"@/*": ["./*"],
+			"@anvilkit/ui": ["../../packages/runtime/ui/src/index.ts"],
+			"@anvilkit/ui/*": ["../../packages/runtime/ui/src/*"],
+			"@anvilkit/*": ["../../packages/extensions/components/src/*/src/index.ts"]
+		},
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"strictNullChecks": true
+	},
+	"include": [
+		"**/*.ts",
+		"**/*.tsx",
+		"next-env.d.ts",
+		"next.config.js",
+		".next/types/routes.d.ts",
+		".next/types/validator.ts"
+	],
+	"exclude": ["node_modules"]
+}
