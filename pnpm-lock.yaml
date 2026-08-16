@@ -180,6 +180,139 @@ importers:
         specifier: ^5.0.14
         version: 5.0.14(@types/react@19.2.18)(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
 
+  apps/component-editor:
+    dependencies:
+      '@anvilkit/accordion':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/accordion
+      '@anvilkit/alert':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/alert
+      '@anvilkit/avatar':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/avatar
+      '@anvilkit/badge':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/badge
+      '@anvilkit/button':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/button
+      '@anvilkit/card':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/card
+      '@anvilkit/checkbox':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/checkbox
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../packages/runtime/core
+      '@anvilkit/input':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/input
+      '@anvilkit/label':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/label
+      '@anvilkit/plugin-ai-copilot':
+        specifier: workspace:*
+        version: link:../../packages/extensions/plugins/plugin-ai-copilot
+      '@anvilkit/plugin-code-editor':
+        specifier: workspace:*
+        version: link:../../packages/extensions/plugins/plugin-code-editor
+      '@anvilkit/plugin-design-system':
+        specifier: workspace:*
+        version: link:../../packages/extensions/plugins/plugin-design-system
+      '@anvilkit/plugin-export-html':
+        specifier: workspace:*
+        version: link:../../packages/extensions/plugins/plugin-export-html
+      '@anvilkit/plugin-export-react':
+        specifier: workspace:*
+        version: link:../../packages/extensions/plugins/plugin-export-react
+      '@anvilkit/progress':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/progress
+      '@anvilkit/schema':
+        specifier: workspace:*
+        version: link:../../packages/foundation/schema
+      '@anvilkit/select':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/select
+      '@anvilkit/separator':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/separator
+      '@anvilkit/slider':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/slider
+      '@anvilkit/switch':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/switch
+      '@anvilkit/table':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/table
+      '@anvilkit/tabs':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/tabs
+      '@anvilkit/textarea':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/textarea
+      '@anvilkit/tooltip':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/tooltip
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../packages/runtime/ui
+      '@anvilkit/validator':
+        specifier: workspace:*
+        version: link:../../packages/foundation/validator
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      lucide-react:
+        specifier: ^1.30.0
+        version: 1.30.0(react@19.2.8)
+      next:
+        specifier: ^16.3.0
+        version: 16.3.0(@babel/core@7.29.7(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../packages/tooling/configs/biome
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../packages/tooling/configs/tailwind
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../packages/tooling/configs/vitest
+      '@playwright/test':
+        specifier: ^1.59.1
+        version: 1.61.0
+      '@testing-library/react':
+        specifier: ^16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@types/node':
+        specifier: ^26.2.0
+        version: 26.2.0
+      '@types/react':
+        specifier: ^19.2.18
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: 19.2.4
+        version: 19.2.4(@types/react@19.2.18)
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(@vitest/coverage-v8@4.1.10)(happy-dom@20.10.6)(jsdom@30.0.1)(vite@8.1.0(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.11)(yaml@2.9.0))
+
   apps/docs:
     dependencies:
       '@anvilkit/bento-grid':
@@ -918,6 +1051,82 @@ importers:
         specifier: ^4.1.10
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(@vitest/coverage-v8@4.1.10)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.11)(yaml@2.9.0))
 
+  packages/extensions/components/src/accordion:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/alert:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/avatar:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/badge:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
   packages/extensions/components/src/bento-grid:
     dependencies:
       '@puckeditor/core':
@@ -968,6 +1177,44 @@ importers:
       '@anvilkit/analytics-react':
         specifier: workspace:*
         version: link:../../../../capabilities/analytics/react
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/card:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/checkbox:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
       '@anvilkit/tailwind-config':
         specifier: workspace:*
         version: link:../../../../tooling/configs/tailwind
@@ -1051,6 +1298,25 @@ importers:
         specifier: workspace:*
         version: link:../../../../runtime/ui
 
+  packages/extensions/components/src/label:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
   packages/extensions/components/src/logo-clouds:
     dependencies:
       '@puckeditor/core':
@@ -1114,6 +1380,25 @@ importers:
         specifier: workspace:*
         version: link:../../../../runtime/ui
 
+  packages/extensions/components/src/progress:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
   packages/extensions/components/src/section:
     dependencies:
       '@puckeditor/core':
@@ -1133,7 +1418,159 @@ importers:
         specifier: workspace:*
         version: link:../../../../runtime/ui
 
+  packages/extensions/components/src/select:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/separator:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/slider:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
   packages/extensions/components/src/statistics:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/switch:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/table:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/tabs:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/textarea:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/tooltip:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
@@ -1440,6 +1877,85 @@ importers:
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(@vitest/coverage-v8@4.1.10)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.11)(yaml@2.9.0))
+
+  packages/extensions/plugins/plugin-code-editor:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@codemirror/lang-javascript':
+        specifier: ^6.2.4
+        version: 6.2.5
+      '@codemirror/lint':
+        specifier: ^6.8.5
+        version: 6.9.7
+      '@codemirror/state':
+        specifier: ^6.5.2
+        version: 6.7.1
+      '@codemirror/view':
+        specifier: ^6.38.1
+        version: 6.43.8
+      jsonrepair:
+        specifier: ^3.15.0
+        version: 3.15.0
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      '@rsbuild/plugin-react':
+        specifier: ^2.1.0
+        version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
+      '@rslib/core':
+        specifier: ^0.23.2
+        version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@types/node':
+        specifier: ^26.2.0
+        version: 26.2.0
+      '@types/react':
+        specifier: ^19.2.18
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: 19.2.4
+        version: 19.2.4(@types/react@19.2.18)
+      jsdom:
+        specifier: ^30.0.1
+        version: 30.0.1
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(supports-color@7.2.0)(typescript@7.0.2)
+      publint:
+        specifier: ^0.3.23
+        version: 0.3.23
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(@vitest/coverage-v8@4.1.10)(happy-dom@20.10.6)(jsdom@30.0.1)(vite@8.1.0(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.11)(yaml@2.9.0))
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
 
   packages/extensions/plugins/plugin-collab-ui:
     dependencies:
@@ -3185,6 +3701,24 @@ packages:
   '@clack/prompts@0.8.2':
     resolution: {integrity: sha512-6b9Ab2UiZwJYA9iMyboYyW9yJvAO9V753ZhS+DHKEjZRKAxPPOb7MXXu84lsPFG+vZt6FRFniZ8rXi+zCIw4yQ==}
 
+  '@codemirror/autocomplete@6.20.3':
+    resolution: {integrity: sha512-tlosUqb+3BbxCxZdu4tKeRghPFC+QM7q4X5YhKV2eCmPG+1r2F3f4AaSz5sCrFqUtX4Jh20VFTKecl16MgiV9g==}
+
+  '@codemirror/lang-javascript@6.2.5':
+    resolution: {integrity: sha512-zD4e5mS+50htS7F+TYjBPsiIFGanfVqg4HyUz6WNFikgOPf2BgKlx+TQedI1w6n/IqRBVBbBWmGFdLB/7uxO4A==}
+
+  '@codemirror/language@6.12.4':
+    resolution: {integrity: sha512-1q4PaT+o6PbgpkJt4Q8Fv5XJxTy4FUZ4MWETtyiDw3J0Pyr9E2vqcKL+k9wcvjNTIsauxvE7OfmWj3FRPHQ76A==}
+
+  '@codemirror/lint@6.9.7':
+    resolution: {integrity: sha512-28/+iWLYxKxsvGYhSYL7zaCZqLz5+FFFDq9tVsvGv9kv8RY4fFAchJ5WX9M3YrrRlTIsECjsXPqeNgnSmNP2dg==}
+
+  '@codemirror/state@6.7.1':
+    resolution: {integrity: sha512-9QzNDgE4EYDnAHfrTlR2lwiPciiOymLtwKK+8yHQzCc7GXhAP9xdEbEJFy2IWB1j9UGUl9BsgMmTo/ImA02T7A==}
+
+  '@codemirror/view@6.43.8':
+    resolution: {integrity: sha512-qtItTDssZ/5GFfi94hrILu9j/VUeFPDPkhovEfmWFj2ipTxnzPB8DdHgfbb8HYTzLTYhrndKmyQxXUz/PDLenw==}
+
   '@csstools/color-helpers@6.0.2':
     resolution: {integrity: sha512-LMGQLS9EuADloEFkcTBR3BwV/CGHV7zyDxVRtVDTwdI2Ca4it0CCVTT9wCkxSgokjE5Ho41hEPgb8OEUwoXr6Q==}
     engines: {node: '>=20.19.0'}
@@ -4237,6 +4771,18 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
+  '@lezer/common@1.5.2':
+    resolution: {integrity: sha512-sxQE460fPZyU3sdc8lafxiPwJHBzZRy/udNFynGQky1SePYBdhkBl1kOagA9uT3pxR8K09bOrmTUqA9wb/PjSQ==}
+
+  '@lezer/highlight@1.2.3':
+    resolution: {integrity: sha512-qXdH7UqTvGfdVBINrgKhDsVTJTxactNNxLk7+UMwZhU13lMHaOBlJe9Vqp907ya56Y3+ed2tlqzys7jDkTmW0g==}
+
+  '@lezer/javascript@1.5.4':
+    resolution: {integrity: sha512-vvYx3MhWqeZtGPwDStM2dwgljd5smolYD2lR2UyFcHfxbBQebqx8yjmFmxtJ/E6nN6u1D9srOiVWm3Rb4tmcUA==}
+
+  '@lezer/lr@1.4.10':
+    resolution: {integrity: sha512-rnCpTIBafOx4mRp43xOxDJbFipJm/c0cia/V5TiGlhmMa+wsSdoGmUN3w5Bqrks/09Q/D4tNAmWaT8p6NRi77A==}
+
   '@lifeomic/attempt@3.1.0':
     resolution: {integrity: sha512-QZqem4QuAnAyzfz+Gj5/+SLxqwCAw2qmt7732ZXodr6VDWGeYLG6w1i/vYLa55JQM9wRuBKLmXmiZ2P0LtE5rw==}
 
@@ -4245,6 +4791,9 @@ packages:
 
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
+
+  '@marijn/find-cluster-break@1.0.3':
+    resolution: {integrity: sha512-FY+MKLBoTsLNJF/eLWaOsXGdz6uh3Iu1axjPf6TUq92IYumcTcXWHoS747JARLkcdlJ/Waiaxc5wQfFO8jC6NA==}
 
   '@mdx-js/mdx@3.1.1':
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
@@ -7018,6 +7567,9 @@ packages:
       typescript:
         optional: true
 
+  crelt@1.0.7:
+    resolution: {integrity: sha512-aK6BbWfhf4U/wCcLHKPJl/xa6VkVstRaPywWtMKGwuOLc/wZTyQYuoxgvZnNsBvv7Kg3YTBQYYBCggcviQczuA==}
+
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
@@ -8360,6 +8912,10 @@ packages:
   jsonfile@6.2.1:
     resolution: {integrity: sha512-zwOTdL3rFQ/lRdBnntKVOX6k5cKJwEc1HdilT71BWEu7J41gXIB2MRp+vxduPSwZJPWBxEzv4yH1wYLJGUHX4Q==}
 
+  jsonrepair@3.15.0:
+    resolution: {integrity: sha512-wy8OTjwsJwQRnQJkKnMJJ9vcytRdBPAgIF/Hy6+s1dAj42BHMKiyL8JzEieIl3JY7idt8eyHwBWTO8mh/+mtwA==}
+    hasBin: true
+
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
@@ -8589,11 +9145,6 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
-
-  lucide-react@1.28.0:
-    resolution: {integrity: sha512-fARAFJULsGuDDydjp6+6blekG/sBIM29TerzLjc9bQUKAcEfrSc4ZQKb25KRz4OMKd87cZTb5dgq0w/T6KufVg==}
-    peerDependencies:
-      react: 19.2.8
 
   lucide-react@1.30.0:
     resolution: {integrity: sha512-tUIr2jXLbWpCkdtH8XP7P7YppM9ueWgTky99lpWDY6z5REs6B+O6ZQ3U5tHkUUY59ANyOv/PBcs8E4Fe3KO3eA==}
@@ -9947,6 +10498,9 @@ packages:
   stubborn-utils@1.0.2:
     resolution: {integrity: sha512-zOh9jPYI+xrNOyisSelgym4tolKTJCQd5GBhK0+0xJvcYDcwlOoxF/rnFKQ2KRZknXSG9jWAp66fwP6AxN9STg==}
 
+  style-mod@4.1.3:
+    resolution: {integrity: sha512-i/n8VsZydrugj3Iuzll8+x/00GH2vnYsk1eomD8QiRrSAeW6ItbCQDtfXCeJHd0iwiNagqjQkvpvREEPtW3IoQ==}
+
   style-to-js@1.1.21:
     resolution: {integrity: sha512-RjQetxJrrUJLQPHbLku6U/ocGtzyjbJMP9lCNK7Ag0CNh690nSH8woqWH9u16nMjYBAok+i7JO1NP2pOy8IsPQ==}
 
@@ -11252,6 +11806,49 @@ snapshots:
       picocolors: 1.1.1
       sisteransi: 1.0.5
 
+  '@codemirror/autocomplete@6.20.3':
+    dependencies:
+      '@codemirror/language': 6.12.4
+      '@codemirror/state': 6.7.1
+      '@codemirror/view': 6.43.8
+      '@lezer/common': 1.5.2
+
+  '@codemirror/lang-javascript@6.2.5':
+    dependencies:
+      '@codemirror/autocomplete': 6.20.3
+      '@codemirror/language': 6.12.4
+      '@codemirror/lint': 6.9.7
+      '@codemirror/state': 6.7.1
+      '@codemirror/view': 6.43.8
+      '@lezer/common': 1.5.2
+      '@lezer/javascript': 1.5.4
+
+  '@codemirror/language@6.12.4':
+    dependencies:
+      '@codemirror/state': 6.7.1
+      '@codemirror/view': 6.43.8
+      '@lezer/common': 1.5.2
+      '@lezer/highlight': 1.2.3
+      '@lezer/lr': 1.4.10
+      style-mod: 4.1.3
+
+  '@codemirror/lint@6.9.7':
+    dependencies:
+      '@codemirror/state': 6.7.1
+      '@codemirror/view': 6.43.8
+      crelt: 1.0.7
+
+  '@codemirror/state@6.7.1':
+    dependencies:
+      '@marijn/find-cluster-break': 1.0.3
+
+  '@codemirror/view@6.43.8':
+    dependencies:
+      '@codemirror/state': 6.7.1
+      crelt: 1.0.7
+      style-mod: 4.1.3
+      w3c-keyname: 2.2.8
+
   '@csstools/color-helpers@6.0.2': {}
 
   '@csstools/color-helpers@6.1.0': {}
@@ -12045,6 +12642,22 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
+  '@lezer/common@1.5.2': {}
+
+  '@lezer/highlight@1.2.3':
+    dependencies:
+      '@lezer/common': 1.5.2
+
+  '@lezer/javascript@1.5.4':
+    dependencies:
+      '@lezer/common': 1.5.2
+      '@lezer/highlight': 1.2.3
+      '@lezer/lr': 1.4.10
+
+  '@lezer/lr@1.4.10':
+    dependencies:
+      '@lezer/common': 1.5.2
+
   '@lifeomic/attempt@3.1.0': {}
 
   '@manypkg/find-root@1.1.0':
@@ -12062,6 +12675,8 @@ snapshots:
       fs-extra: 8.1.0
       globby: 11.1.0
       read-yaml-file: 1.1.0
+
+  '@marijn/find-cluster-break@1.0.3': {}
 
   '@mdx-js/mdx@3.1.1(supports-color@7.2.0)':
     dependencies:
@@ -14119,7 +14734,7 @@ snapshots:
       obug: 2.1.3
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(@vitest/coverage-v8@4.1.10)(happy-dom@20.10.6)(jsdom@30.0.1)(vite@6.4.3(@types/node@26.2.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.11)(yaml@2.9.0))
+      vitest: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(@vitest/coverage-v8@4.1.10)(happy-dom@20.10.6)(jsdom@30.0.1)(vite@8.1.0(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.11)(yaml@2.9.0))
 
   '@vitest/expect@4.1.10':
     dependencies:
@@ -14192,7 +14807,7 @@ snapshots:
       '@vue/shared': 3.5.38
       estree-walker: 2.0.2
       magic-string: 0.30.21
-      postcss: 8.5.19
+      postcss: 8.5.23
       source-map-js: 1.2.1
 
   '@vue/compiler-ssr@3.5.38':
@@ -14574,6 +15189,8 @@ snapshots:
     optionalDependencies:
       typescript: 7.0.2
 
+  crelt@1.0.7: {}
+
   cross-spawn@7.0.6:
     dependencies:
       path-key: 3.1.1
@@ -14701,11 +15318,11 @@ snapshots:
     dependencies:
       node-source-walk: 7.0.2
 
-  detective-postcss@8.0.4(postcss@8.5.19):
+  detective-postcss@8.0.4(postcss@8.5.23):
     dependencies:
       is-url-superb: 4.0.0
-      postcss: 8.5.19
-      postcss-values-parser: 6.0.2(postcss@8.5.19)
+      postcss: 8.5.23
+      postcss-values-parser: 6.0.2(postcss@8.5.23)
 
   detective-sass@6.0.2:
     dependencies:
@@ -15403,7 +16020,7 @@ snapshots:
       '@radix-ui/react-tabs': 1.1.15(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       class-variance-authority: 0.7.1
       fumadocs-core: 16.10.5(@mdx-js/mdx@3.1.1(supports-color@7.2.0))(@tanstack/react-router@1.170.16(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/react@19.2.18)(lucide-react@1.30.0(react@19.2.8))(next@16.3.0(@babel/core@7.29.7(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@7.2.0)(zod@4.4.3)
-      lucide-react: 1.28.0(react@19.2.8)
+      lucide-react: 1.30.0(react@19.2.8)
       motion: 12.42.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next-themes: 0.4.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react: 19.2.8
@@ -15932,6 +16549,8 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
+  jsonrepair@3.15.0: {}
+
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
@@ -16100,10 +16719,6 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
-
-  lucide-react@1.28.0(react@19.2.8):
-    dependencies:
-      react: 19.2.8
 
   lucide-react@1.30.0(react@19.2.8):
     dependencies:
@@ -17118,11 +17733,11 @@ snapshots:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
-  postcss-values-parser@6.0.2(postcss@8.5.19):
+  postcss-values-parser@6.0.2(postcss@8.5.23):
     dependencies:
       color-name: 1.1.4
       is-url-superb: 4.0.0
-      postcss: 8.5.19
+      postcss: 8.5.23
       quote-unquote: 1.0.0
 
   postcss@8.5.19:
@@ -17165,7 +17780,7 @@ snapshots:
       detective-amd: 6.1.0
       detective-cjs: 6.1.1
       detective-es6: 5.0.2
-      detective-postcss: 8.0.4(postcss@8.5.19)
+      detective-postcss: 8.0.4(postcss@8.5.23)
       detective-sass: 6.0.2
       detective-scss: 5.0.2
       detective-stylus: 5.0.1
@@ -17173,7 +17788,7 @@ snapshots:
       detective-vue2: 2.3.0(supports-color@7.2.0)(typescript@7.0.2)
       module-definition: 6.0.2
       node-source-walk: 7.0.2
-      postcss: 8.5.19
+      postcss: 8.5.23
       typescript: 7.0.2
     transitivePeerDependencies:
       - supports-color
@@ -18012,6 +18627,8 @@ snapshots:
 
   stubborn-utils@1.0.2: {}
 
+  style-mod@4.1.3: {}
+
   style-to-js@1.1.21:
     dependencies:
       style-to-object: 1.0.14
@@ -18387,9 +19004,9 @@ snapshots:
 
   vite@8.1.0(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.11)(yaml@2.9.0):
     dependencies:
-      lightningcss: 1.32.0
+      lightningcss: 1.33.0
       picomatch: 4.0.4
-      postcss: 8.5.19
+      postcss: 8.5.23
       rolldown: 1.1.2
       tinyglobby: 0.2.17
     optionalDependencies:
