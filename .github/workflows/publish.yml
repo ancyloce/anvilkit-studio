@@ -163,7 +163,18 @@ jobs:
             echo "Changesets pre-release mode: INACTIVE (dist-tag = latest)"
           fi
           echo "Pending changesets:"
-          ls -la .changeset/*.md 2>/dev/null | grep -v README.md || echo "  (none)"
+          shopt -s nullglob
+          changesets=()
+          for changeset in .changeset/*.md; do
+            if [[ "$changeset" != ".changeset/README.md" ]]; then
+              changesets+=("$changeset")
+            fi
+          done
+          if ((${#changesets[@]})); then
+            ls -la -- "${changesets[@]}"
+          else
+            echo "  (none)"
+          fi
 
       # Phase 5: release gates are discovered from workspace manifests,
       # not a hardcoded package list (plan §20). The root `check:all`
