@@ -26,12 +26,10 @@
 			"url": "https://github.com/ancyloce/anvilkit-components.git",
 			"npmAccess": "private",
 			"versioning": "independent",
-			"requiredScripts": [
-				"build",
-				"lint",
-				"typecheck",
-				"test"
-			],
+			"engines": {
+				"node": ">=22"
+			},
+			"requiredScripts": ["build", "lint", "typecheck", "test"],
 			"peers": {}
 		},
 		"packages/extensions/plugins/plugin-ai-copilot": {
