@@ -335,10 +335,11 @@ describe("migrateStore — §10.3", () => {
 			write: true,
 			selection: { all: true },
 		});
-		expect(
-			propsOfRoot((await deps.storage.getBySlug("p1"))?.published)
-				.authoringSchemaVersion,
-		).toBe(2);
+		const migratedRoot = propsOfRoot(
+			(await deps.storage.getBySlug("p1"))?.published,
+		);
+		expect(migratedRoot[ANVILKIT_AUTHORING_KEY]).toBeUndefined();
+		expect(migratedRoot.authoringSchemaVersion).toBeUndefined();
 
 		const restore = await restoreFromManifest(deps, manifest);
 		expect(restore).toEqual({ restored: 1, missing: 0 });

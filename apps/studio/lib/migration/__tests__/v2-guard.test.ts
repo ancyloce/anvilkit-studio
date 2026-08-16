@@ -53,7 +53,7 @@ describe("guardDocumentForV2Editor (P5-06, §10.4)", () => {
 	it("passes a v2 document through untouched", () => {
 		const doc = {
 			content: [],
-			root: { props: { authoringSchemaVersion: 2 } },
+			root: { props: {} },
 			zones: {},
 		} as unknown as Data;
 		const result = guardDocumentForV2Editor(doc, config);
@@ -72,7 +72,7 @@ describe("guardDocumentForV2Editor (P5-06, §10.4)", () => {
 		if (result.kind === "migrated") {
 			const rootProps = result.data.root.props as Record<string, unknown>;
 			expect(rootProps[ANVILKIT_AUTHORING_KEY]).toBeUndefined();
-			expect(rootProps.authoringSchemaVersion).toBe(2);
+			expect(rootProps.authoringSchemaVersion).toBeUndefined();
 			const node = (
 				result.data.content[0] as { props: Record<string, unknown> }
 			).props;
