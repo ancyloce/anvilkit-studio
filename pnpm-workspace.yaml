@@ -58,8 +58,8 @@ minimumReleaseAgeExclude:
   - '@turbo/windows-64@2.9.15 || 2.10.7 || 2.10.10'
   - '@turbo/windows-arm64@2.9.15 || 2.10.7 || 2.10.10'
   - turbo@2.9.15 || 2.10.7 || 2.10.10
-  - deslop-js@0.5.8 || 0.9.1 || 0.9.3 || 0.9.8
-  - oxlint-plugin-react-doctor@0.2.14 || 0.5.8 || 0.9.1 || 0.9.3 || 0.9.8
+  - deslop-js@0.5.8 || 0.9.1 || 0.9.3 || 0.9.8 || 0.9.12
+  - oxlint-plugin-react-doctor@0.2.14 || 0.5.8 || 0.9.1 || 0.9.3 || 0.9.8 || 0.9.12
   - react-doctor@0.2.14 || 0.5.8 || 0.9.1 || 0.9.12
   # Transitive deps newly resolved by the fresh lockfile (the @base-ui/react
   # 1.6.0 bump re-resolved the tree), each published inside pnpm's 24h
@@ -194,6 +194,25 @@ minimumReleaseAgeExclude:
   - tsx@4.23.11
   - undici@8.10.0
   - yjs@13.6.32
+  - '@axe-core/playwright@4.13.0'
+  - '@changesets/apply-release-plan@8.0.0'
+  - '@changesets/assemble-release-plan@7.0.0'
+  - '@changesets/changelog-git@1.0.0'
+  - '@changesets/cli@3.0.0'
+  - '@changesets/config@4.0.0'
+  - '@changesets/errors@1.0.0'
+  - '@changesets/get-dependents-graph@3.0.0'
+  - '@changesets/git@4.0.0'
+  - '@changesets/parse@1.0.0'
+  - '@changesets/pre@3.0.0'
+  - '@changesets/read@1.0.0'
+  - '@changesets/should-skip-package@1.0.0'
+  - '@changesets/types@7.0.0'
+  - '@changesets/write@1.0.0'
+  - '@testing-library/jest-dom@7.0.1'
+  - konva@10.3.1
+  - react-resizable-panels@4.12.3
+  - zustand@5.0.15
 patchedDependencies:
   "@base-ui/react@1.6.0": packages/extensions/components/patches/@base-ui__react@1.6.0.patch
 
