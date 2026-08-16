@@ -53,6 +53,6 @@ The presets reference `vitest`, `jsdom`, and `@testing-library/jest-dom` but do 
 - `vitest` ^4.1.4
 - `@vitest/coverage-v8` ^4.1.4 (optional, only if `--coverage` is used)
 - `jsdom` ^29.0.0 (only required by the `react-library` preset)
-- `@testing-library/jest-dom` ^6.9.1 (only required by the `react-library` preset)
+- `@testing-library/jest-dom` ^7.0.1 (only required by the `react-library` preset)
 
 For React component tests, consumers also install `@testing-library/react`, `@testing-library/dom`, and `@testing-library/user-event` directly.
