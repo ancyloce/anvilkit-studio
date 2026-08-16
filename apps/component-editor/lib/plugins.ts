@@ -69,7 +69,9 @@ const lazyReactExportPlugin: StudioPlugin = lazyPlugin(
 const designSystemPlugin: StudioPlugin = createDesignSystemPlugin();
 
 const codeEditorPlugin: StudioPlugin = createCodeEditorPlugin({
-	projections: ["json"],
+	// JSON is editable; TSX is the P1-08 read-only canonical projection
+	// (design 0022 §8.4). Writing TSX arrives behind the P2 `tsxWrite` flag.
+	projections: ["json", "tsx"],
 });
 
 /**
@@ -79,7 +81,7 @@ const codeEditorPlugin: StudioPlugin = createCodeEditorPlugin({
  * either per render would re-register every plugin on each recompile).
  */
 const codeEditorPluginOpen: StudioPlugin = createCodeEditorPlugin({
-	projections: ["json"],
+	projections: ["json", "tsx"],
 	initiallyOpen: true,
 });
 

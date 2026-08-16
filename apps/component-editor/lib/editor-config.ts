@@ -1,10 +1,22 @@
+import { createAccordionConfig } from "@anvilkit/accordion";
+import { createAlertConfig } from "@anvilkit/alert";
+import { createAvatarConfig } from "@anvilkit/avatar";
 import { createBadgeConfig } from "@anvilkit/badge";
 import { createButtonConfig } from "@anvilkit/button";
 import { createCardConfig } from "@anvilkit/card";
+import { createCheckboxConfig } from "@anvilkit/checkbox";
 import { withBindingResolution } from "@anvilkit/core/editor";
 import { createInputConfig } from "@anvilkit/input";
+import { createLabelConfig } from "@anvilkit/label";
+import { createProgressConfig } from "@anvilkit/progress";
 import { createSelectConfig } from "@anvilkit/select";
 import { createSeparatorConfig } from "@anvilkit/separator";
+import { createSliderConfig } from "@anvilkit/slider";
+import { createSwitchConfig } from "@anvilkit/switch";
+import { createTableConfig } from "@anvilkit/table";
+import { createTabsConfig } from "@anvilkit/tabs";
+import { createTextareaConfig } from "@anvilkit/textarea";
+import { createTooltipConfig } from "@anvilkit/tooltip";
 import type { Config, Fields } from "@puckeditor/core";
 
 /**
@@ -59,20 +71,54 @@ export function createComponentEditorConfig(locale?: string): Config {
 		categories: {
 			inputs: {
 				title: "Inputs",
-				components: ["Button", "Input", "Select"],
+				components: [
+					"Button",
+					"Checkbox",
+					"Input",
+					"Label",
+					"Select",
+					"Slider",
+					"Switch",
+					"Textarea",
+				],
 			},
 			display: {
 				title: "Display",
-				components: ["Badge", "Card", "Separator"],
+				components: [
+					"Alert",
+					"Avatar",
+					"Badge",
+					"Card",
+					"Progress",
+					"Separator",
+					"Table",
+					"Tooltip",
+				],
+			},
+			layout: {
+				title: "Layout",
+				components: ["Accordion", "Tabs"],
 			},
 		},
 		components: {
+			Accordion: createAccordionConfig(options),
+			Alert: createAlertConfig(options),
+			Avatar: createAvatarConfig(options),
 			Badge: createBadgeConfig(options),
 			Button: createButtonConfig(options),
 			Card: createCardConfig(options),
+			Checkbox: createCheckboxConfig(options),
 			Input: createInputConfig(options),
+			Label: createLabelConfig(options),
+			Progress: createProgressConfig(options),
 			Select: createSelectConfig(options),
 			Separator: createSeparatorConfig(options),
+			Slider: createSliderConfig(options),
+			Switch: createSwitchConfig(options),
+			Table: createTableConfig(options),
+			Tabs: createTabsConfig(options),
+			Textarea: createTextareaConfig(options),
+			Tooltip: createTooltipConfig(options),
 		},
 		root: {
 			fields: editorRootFields,

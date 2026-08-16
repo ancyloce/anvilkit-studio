@@ -110,4 +110,41 @@ describe("compiled appearance travels with the document (P0-06)", () => {
 			).toBe(true);
 		}
 	});
+
+	it("array-nested slot children are stamped on both surfaces (DOC-01 §3.8)", () => {
+		const fixture = CORPUS_V0.find((f) => f.name === "array-nested slots");
+		if (fixture === undefined) throw new Error("fixture missing");
+		const markup = renderToStaticMarkup(
+			createElement(Render, { config, data: fixture.data }),
+		);
+		const stamps = targetStamps(markup);
+		// The slot lives inside an ARRAY ITEM, the one nesting shape the P0
+		// corpus could not reach — a child lost here would be invisible to
+		// every other assertion in this file.
+		for (const id of ["tabs-nested", "badge-tab-1", "accordion-nested"]) {
+			expect(
+				stamps.some((stamp) => stamp.startsWith(`${id}#`)),
+				`${id} missing from the array-nested render`,
+			).toBe(true);
+		}
+	});
+});
+
+describe("corpus coverage (P1-13)", () => {
+	it("exercises every registered wrapper", () => {
+		// The corpus is derived from the config, so this asserts the
+		// derivation rather than a hand-kept list — a wrapper registered in
+		// the editor is parity-tested from that moment on.
+		const covered = new Set<string>();
+		for (const fixture of CORPUS_V0) {
+			for (const node of fixture.data.content) covered.add(node.type);
+		}
+		for (const type of Object.keys(config.components)) {
+			expect(
+				covered.has(type),
+				`${type} is absent from the parity corpus`,
+			).toBe(true);
+		}
+		expect(Object.keys(config.components)).toHaveLength(18);
+	});
 });

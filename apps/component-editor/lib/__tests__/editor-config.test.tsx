@@ -14,13 +14,31 @@ import {
 	createComponentEditorConfig,
 } from "../editor-config";
 
+/**
+ * The registered catalogue, kept sorted. PLAN-0036 grows this list one
+ * wrapper batch at a time (P0 six → P1-04 batch 1 → P1-05/06), and the
+ * assertion below stays an EXACT set comparison so a wrapper can never
+ * be added to the app without being declared here.
+ */
 const COMPONENT_TYPES = [
+	"Accordion",
+	"Alert",
+	"Avatar",
 	"Badge",
 	"Button",
 	"Card",
+	"Checkbox",
 	"Input",
+	"Label",
+	"Progress",
 	"Select",
 	"Separator",
+	"Slider",
+	"Switch",
+	"Table",
+	"Tabs",
+	"Textarea",
+	"Tooltip",
 ] as const;
 
 /** One node per registered type, in one document. */
@@ -46,7 +64,7 @@ const documentOfEveryComponent = (): Data =>
 	}) as unknown as Data;
 
 describe("component-editor config assembly (P0-02)", () => {
-	it("registers exactly the six P0 wrappers", () => {
+	it("registers exactly the declared wrapper catalogue", () => {
 		expect(Object.keys(componentEditorConfig.components).sort()).toEqual([
 			...COMPONENT_TYPES,
 		]);

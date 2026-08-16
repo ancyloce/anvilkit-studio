@@ -26,20 +26,22 @@ const defaultsOf = (type: string): Record<string, unknown> =>
 		unknown
 	>;
 
-/** Every registered wrapper once, at its defaults. */
+/**
+ * Every registered wrapper once, at its defaults.
+ *
+ * Derived from the config rather than listed by hand (P1-13): a wrapper
+ * added to the editor is covered by the parity suite the moment it is
+ * registered, which is what stops the corpus from silently lagging the
+ * catalogue as it did between P0 and P1.
+ */
 const allComponents: Data = {
 	root: { props: rootProps("All components", "all-components") },
-	content: [
-		{ type: "Badge", props: { ...defaultsOf("Badge"), id: "badge-1" } },
-		{ type: "Button", props: { ...defaultsOf("Button"), id: "button-1" } },
-		{ type: "Card", props: { ...defaultsOf("Card"), id: "card-1" } },
-		{ type: "Input", props: { ...defaultsOf("Input"), id: "input-1" } },
-		{ type: "Select", props: { ...defaultsOf("Select"), id: "select-1" } },
-		{
-			type: "Separator",
-			props: { ...defaultsOf("Separator"), id: "separator-1" },
-		},
-	],
+	content: Object.keys(componentEditorConfig.components)
+		.sort()
+		.map((type) => ({
+			type,
+			props: { ...defaultsOf(type), id: `${type.toLowerCase()}-1` },
+		})),
 	zones: {},
 } as unknown as Data;
 
@@ -100,8 +102,120 @@ const authoredAppearance: Data = {
 	zones: {},
 } as unknown as Data;
 
+/**
+ * Array-nested slots (DOC-01 §3.8): Tabs and Accordion carry a slot INSIDE
+ * each array item, which is the one nesting shape the P0 corpus could not
+ * cover because neither wrapper existed yet.
+ */
+const arrayNestedSlots: Data = {
+	root: { props: rootProps("Array-nested slots", "array-nested-slots") },
+	content: [
+		{
+			type: "Tabs",
+			props: {
+				...defaultsOf("Tabs"),
+				id: "tabs-nested",
+				items: [
+					{
+						label: "Overview",
+						content: [
+							{
+								type: "Badge",
+								props: { ...defaultsOf("Badge"), id: "badge-tab-1" },
+							},
+						],
+					},
+					{ label: "Details", content: [] },
+				],
+			},
+		},
+		{
+			type: "Accordion",
+			props: {
+				...defaultsOf("Accordion"),
+				id: "accordion-nested",
+				items: [
+					{
+						title: "What is included?",
+						content: [
+							{
+								type: "Separator",
+								props: { ...defaultsOf("Separator"), id: "separator-panel-1" },
+							},
+						],
+					},
+				],
+			},
+		},
+	],
+	zones: {},
+} as unknown as Data;
+
+/**
+ * Authored animation on the visible `animation` field — the other declared
+ * carrier surface, which reaches the DOM as classes and custom properties
+ * rather than through the compiled stylesheet.
+ */
+const authoredAnimation: Data = {
+	root: { props: rootProps("Authored animation", "authored-animation") },
+	content: [
+		{
+			type: "Badge",
+			props: {
+				...defaultsOf("Badge"),
+				id: "badge-animated",
+				animation: {
+					preset: "fade-in",
+					durationMs: 400,
+					delayMs: 100,
+					easing: "ease-out",
+				},
+			},
+		},
+	],
+	zones: {},
+} as unknown as Data;
+
+/**
+ * Deeply nested slots: a Card inside a Card's slot, to prove nesting depth
+ * itself does not break target stamping on either surface.
+ */
+const deepNesting: Data = {
+	root: { props: rootProps("Deep nesting", "deep-nesting") },
+	content: [
+		{
+			type: "Card",
+			props: {
+				...defaultsOf("Card"),
+				id: "card-outer",
+				title: "Outer",
+				content: [
+					{
+						type: "Card",
+						props: {
+							...defaultsOf("Card"),
+							id: "card-inner",
+							title: "Inner",
+							content: [
+								{
+									type: "Badge",
+									props: { ...defaultsOf("Badge"), id: "badge-deep" },
+								},
+							],
+						},
+					},
+				],
+			},
+		},
+	],
+	zones: {},
+} as unknown as Data;
+
 export const CORPUS_V0: readonly CorpusFixture[] = [
 	{ name: "all components", data: allComponents },
 	{ name: "nested slots", data: nestedSlots },
+	{ name: "array-nested slots", data: arrayNestedSlots },
+	{ name: "deep nesting", data: deepNesting },
 	{ name: "authored appearance", data: authoredAppearance },
+	{ name: "authored animation", data: authoredAnimation },
 ];
