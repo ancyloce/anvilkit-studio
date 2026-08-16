@@ -16,6 +16,8 @@ const nextConfig = {
 		"@anvilkit/card",
 		"@anvilkit/core",
 		"@anvilkit/input",
+		"@anvilkit/plugin-ai-copilot",
+		"@anvilkit/plugin-code-editor",
 		"@anvilkit/plugin-design-system",
 		"@anvilkit/plugin-export-html",
 		"@anvilkit/plugin-export-react",

@@ -9,7 +9,10 @@
 		"start": "next start -p 3200",
 		"lint": "pnpm exec biome lint .",
 		"typecheck": "next typegen && tsc --noEmit",
-		"test": "vitest run"
+		"test": "vitest run",
+		"check:chunk-split": "node scripts/check-chunk-split.mjs",
+		"e2e": "playwright test",
+		"e2e:install": "playwright install --with-deps chromium"
 	},
 	"dependencies": {
 		"@anvilkit/badge": "workspace:*",
@@ -17,6 +20,8 @@
 		"@anvilkit/card": "workspace:*",
 		"@anvilkit/core": "workspace:*",
 		"@anvilkit/input": "workspace:*",
+		"@anvilkit/plugin-ai-copilot": "workspace:*",
+		"@anvilkit/plugin-code-editor": "workspace:*",
 		"@anvilkit/plugin-design-system": "workspace:*",
 		"@anvilkit/plugin-export-html": "workspace:*",
 		"@anvilkit/plugin-export-react": "workspace:*",
@@ -36,6 +41,7 @@
 		"@anvilkit/tailwind-config": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
+		"@playwright/test": "^1.59.1",
 		"@testing-library/react": "^16.3.2",
 		"@types/node": "^26.2.0",
 		"@types/react": "^19.2.18",

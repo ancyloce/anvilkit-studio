@@ -11,13 +11,22 @@ export const runtime = "nodejs";
  */
 export default async function EditorPage({
 	params,
+	searchParams,
 }: {
 	params: Promise<{ pageId: string }>;
+	searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
 	const { pageId } = await params;
+	const query = await searchParams;
 	const storage = await getPageStorage();
 	const record = await storage.getById(pageId);
 	const initialData = record?.draft ?? record?.published ?? emptyDocument();
 
-	return <EditorMount pageId={pageId} initialData={initialData} />;
+	return (
+		<EditorMount
+			pageId={pageId}
+			initialData={initialData}
+			codePanelOpen={query.code === "1"}
+		/>
+	);
 }

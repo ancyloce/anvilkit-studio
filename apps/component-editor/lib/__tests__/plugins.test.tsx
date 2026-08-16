@@ -17,6 +17,9 @@ import { componentEditorPlugins } from "../plugins";
 describe("component-editor plugin roster (P0-04)", () => {
 	it("keeps the design §1.4 order and a stable array identity", () => {
 		expect(componentEditorPlugins.map((plugin) => plugin.meta.id)).toEqual([
+			// Code editor first: later plugins' overrides compose around it.
+			"anvilkit-plugin-code-editor",
+			"anvilkit-plugin-ai-copilot",
 			"anvilkit-plugin-export-html",
 			"anvilkit-plugin-export-react",
 			"anvilkit-plugin-design-system",
