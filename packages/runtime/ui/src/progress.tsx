@@ -8,12 +8,24 @@ function Progress({
   className,
   children,
   value,
+  min = 0,
+  max = 100,
   ...props
 }: ProgressPrimitive.Root.Props) {
+  const clampedValue = value == null ? null : Math.min(max, Math.max(min, value))
+  const percentage =
+    clampedValue == null || max <= min
+      ? undefined
+      : ((clampedValue - min) / (max - min)) * 100
+
   return (
     <ProgressPrimitive.Root
-      value={value}
+      value={clampedValue}
+      min={min}
+      max={max}
       data-slot="progress"
+      data-state={clampedValue == null ? "indeterminate" : "determinate"}
+      aria-valuenow={percentage}
       className={cn("flex flex-wrap gap-3", className)}
       {...props}
     >

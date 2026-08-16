@@ -37,6 +37,8 @@ function DialogOverlay({
   )
 }
 
+const DialogBackdrop = DialogOverlay
+
 function DialogContent({
   className,
   children,
@@ -146,6 +148,7 @@ function DialogDescription({
 
 export {
   Dialog,
+  DialogBackdrop,
   DialogClose,
   DialogContent,
   DialogDescription,
