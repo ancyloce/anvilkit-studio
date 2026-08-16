@@ -99,13 +99,19 @@ describe("§2 — Field types", () => {
 			type: "select";
 			options: { label: string; value: string }[];
 		};
+		// Order note (PLAN-0036 P1-03): the marketing pair stays first and
+		// hand-authored — it has no `buttonVariants` counterpart — while the
+		// shadcn half is now CODEGEN output taken in upstream source order
+		// (DOC-01 §3.2, guarded by `check:fields-drift`). That moved
+		// `outline`/`ghost`/`destructive` relative to the old hand-written
+		// list; the value SET is unchanged.
 		expect(variant.options.map((o) => o.value)).toEqual([
 			"primary",
 			"secondary",
 			"default",
-			"destructive",
 			"outline",
 			"ghost",
+			"destructive",
 			"link",
 		]);
 	});
