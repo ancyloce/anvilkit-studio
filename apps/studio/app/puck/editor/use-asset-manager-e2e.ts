@@ -62,7 +62,8 @@ export function useAssetManagerE2E(): UseAssetManagerE2EResult {
 	async function handleAssetManagerFileChange(
 		event: ChangeEvent<HTMLInputElement>,
 	) {
-		const file = event.currentTarget.files?.[0];
+		const input = event.currentTarget;
+		const file = input.files?.[0];
 		if (!file) {
 			return;
 		}
@@ -104,7 +105,7 @@ export function useAssetManagerE2E(): UseAssetManagerE2EResult {
 				error instanceof Error ? error.message : String(error),
 			);
 		} finally {
-			event.currentTarget.value = "";
+			input.value = "";
 		}
 	}
 
