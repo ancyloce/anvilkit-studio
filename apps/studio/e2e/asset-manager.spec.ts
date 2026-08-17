@@ -17,6 +17,9 @@ const PNG_BUFFER = Buffer.from(
 test("asset-manager resolver rewrites safe uploads and strips hostile URLs", async ({
 	page,
 }) => {
+	const pageErrors: string[] = [];
+	page.on("pageerror", (error) => pageErrors.push(String(error)));
+
 	await page.goto("/puck/editor?e2e=asset-manager");
 
 	await expect(page.getByTestId("asset-manager-e2e")).toBeVisible();
@@ -89,6 +92,7 @@ test("asset-manager resolver rewrites safe uploads and strips hostile URLs", asy
 	await expect(page.getByTestId("asset-manager-react-warnings")).toContainText(
 		"ASSET_UNRESOLVED",
 	);
+	expect(pageErrors).toEqual([]);
 });
 
 const HARDENING_FIXTURES = [
