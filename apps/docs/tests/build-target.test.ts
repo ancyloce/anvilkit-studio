@@ -2,10 +2,11 @@ import { describe, expect, it } from "vitest";
 import { resolveDocsBuildTarget } from "../build-target";
 
 describe("resolveDocsBuildTarget", () => {
-	it("keeps prerendering for the default static deployment", () => {
+	it("bounds prerendering for the default Vercel deployment", () => {
 		expect(resolveDocsBuildTarget()).toEqual({
 			nitroPreset: "vercel",
 			prerender: true,
+			crawlLinks: false,
 		});
 	});
 
@@ -13,6 +14,7 @@ describe("resolveDocsBuildTarget", () => {
 		expect(resolveDocsBuildTarget("node-server")).toEqual({
 			nitroPreset: "node-server",
 			prerender: false,
+			crawlLinks: false,
 		});
 	});
 
@@ -20,6 +22,7 @@ describe("resolveDocsBuildTarget", () => {
 		expect(resolveDocsBuildTarget("cloudflare-module")).toEqual({
 			nitroPreset: "cloudflare-module",
 			prerender: true,
+			crawlLinks: false,
 		});
 	});
 });

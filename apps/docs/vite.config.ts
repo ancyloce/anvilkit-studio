@@ -23,20 +23,18 @@ export default defineConfig({
 		mdx(),
 		tailwindcss(),
 		tanstackStart({
-			// Seed the localized home pages. The language switcher navigates via JS
-			// (not a crawlable <a href>), so the prerender crawler never discovers
-			// the `/zh`, `/ja`, `/ko` trees on its own. Seeding the localized homes
-			// lets the crawler walk each localized sidebar from there, giving the
-			// non-default locales the same static coverage as the default one.
+			// Seed the localized home pages. The language switcher navigates via JS,
+			// so these routes are not found by automatic static-route discovery.
 			pages: [{ path: "/zh" }, { path: "/ja" }, { path: "/ko" }],
 			prerender: {
 				// The Docker node-server renders on demand. Avoid retaining the full
 				// localized crawl graph in memory while building that image.
 				enabled: docsBuildTarget.prerender,
-				// Crawl links for full static coverage, but a link to a
-				// not-yet-migrated page must not fail the build during the
-				// phased content migration. Flip to true once all 257 pages
-				// land, to turn broken internal links back into a hard gate.
+				// Generated API pages contain thousands of relative cross-links. The
+				// crawler retains every discovered variant until the build completes,
+				// which exhausts the CI heap. Static routes are still auto-discovered;
+				// dynamic docs routes are rendered by Nitro on demand.
+				crawlLinks: docsBuildTarget.crawlLinks,
 				failOnError: false,
 			},
 		}),
