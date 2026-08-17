@@ -4,7 +4,10 @@ import react from "@vitejs/plugin-react";
 import mdx from "fumadocs-mdx/vite";
 import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
+import { resolveDocsBuildTarget } from "./build-target";
 import { collabRelayVitePlugin } from "./integrations/collab-relay.mjs";
+
+const docsBuildTarget = resolveDocsBuildTarget(process.env.NITRO_PRESET);
 
 export default defineConfig({
 	// Expose PUBLIC_* env vars to client code (Astro parity) so the playground's
@@ -27,7 +30,9 @@ export default defineConfig({
 			// non-default locales the same static coverage as the default one.
 			pages: [{ path: "/zh" }, { path: "/ja" }, { path: "/ko" }],
 			prerender: {
-				enabled: true,
+				// The Docker node-server renders on demand. Avoid retaining the full
+				// localized crawl graph in memory while building that image.
+				enabled: docsBuildTarget.prerender,
 				// Crawl links for full static coverage, but a link to a
 				// not-yet-migrated page must not fail the build during the
 				// phased content migration. Flip to true once all 257 pages
@@ -42,7 +47,7 @@ export default defineConfig({
 		// Vercel/CI build is unchanged because the env var is unset there. See:
 		// https://tanstack.com/start/latest/docs/framework/react/guide/hosting
 		nitro({
-			preset: process.env.NITRO_PRESET ?? "vercel",
+			preset: docsBuildTarget.nitroPreset,
 		}),
 	],
 	resolve: {
