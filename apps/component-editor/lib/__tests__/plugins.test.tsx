@@ -7,12 +7,14 @@
 import type { StudioPlugin } from "@anvilkit/core";
 import { Studio } from "@anvilkit/core";
 import type { Config, Data } from "@puckeditor/core";
-import { render, waitFor } from "@testing-library/react";
+import { cleanup, render, waitFor } from "@testing-library/react";
 import { createElement } from "react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { createComponentEditorConfig } from "../editor-config";
 import { emptyDocument } from "../empty-document";
 import { componentEditorPlugins } from "../plugins";
+
+afterEach(cleanup);
 
 describe("component-editor plugin roster (P0-04)", () => {
 	it("keeps the design §1.4 order and a stable array identity", () => {

@@ -62,6 +62,22 @@ describe("generation provider port (P0-19)", () => {
 		expect((section.artifact as { sectionId: string }).sectionId).toBe(
 			"section-1",
 		);
+
+		const refinement = await provider.refineSelection?.({
+			kind: "refine",
+			instruction: "Short headline",
+			whitelist: ["Card"],
+			selection: {
+				nodeIds: ["card-1"],
+				currentNodes: [{ id: "card-1", type: "Card", props: {} }],
+			},
+		});
+		expect(refinement?.runId).toMatch(/^refine-/);
+		expect(refinement?.artifact).toEqual({
+			intents: [
+				{ kind: "rename-node", nodeId: "card-1", name: "Short headline" },
+			],
+		});
 	});
 
 	it("streams progress events that never carry the payload", async () => {

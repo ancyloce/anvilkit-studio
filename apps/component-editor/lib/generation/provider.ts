@@ -7,6 +7,8 @@
  * single caller: swapping providers must touch nothing outside this file.
  */
 
+import type { PageIRNode } from "@anvilkit/core/types";
+
 export type GenerationProviderId = "agent-service" | "mock" | "puck-cloud";
 
 export interface OutlineRequest {
@@ -29,6 +31,18 @@ export interface SectionRequest {
 export interface PageRequest {
 	readonly prompt: string;
 	readonly whitelist: readonly string[];
+	readonly locale?: string;
+	readonly signal?: AbortSignal;
+}
+
+export interface RefineRequest {
+	readonly kind: "refine";
+	readonly instruction: string;
+	readonly whitelist: readonly string[];
+	readonly selection: {
+		readonly nodeIds: readonly string[];
+		readonly currentNodes: readonly PageIRNode[];
+	};
 	readonly locale?: string;
 	readonly signal?: AbortSignal;
 }
@@ -56,6 +70,8 @@ export interface GenerationProvider {
 	generateSection(request: SectionRequest): Promise<ProviderResult>;
 	/** Single-shot fallback for providers that do not stage a plan. */
 	generatePage?(request: PageRequest): Promise<ProviderResult>;
+	/** Non-structural edits expressed in the frozen EditorIntent vocabulary. */
+	refineSelection?(request: RefineRequest): Promise<ProviderResult>;
 	/** Progress stream for a run; absent when a provider cannot report one. */
 	events?(runId: string): AsyncIterable<RunEvent>;
 }

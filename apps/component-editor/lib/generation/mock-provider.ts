@@ -4,6 +4,7 @@ import type {
 	OutlineRequest,
 	PageRequest,
 	ProviderResult,
+	RefineRequest,
 	RunEvent,
 	SectionRequest,
 } from "./provider";
@@ -67,6 +68,18 @@ export function createMockProvider(
 		async generatePage(request: PageRequest): Promise<ProviderResult> {
 			const ir = await generatePage(request.prompt, undefined as never);
 			return { runId: nextRunId("page"), artifact: ir };
+		},
+
+		async refineSelection(request: RefineRequest): Promise<ProviderResult> {
+			const nodeId = request.selection.nodeIds[0];
+			const name = request.instruction.trim() || "Refined node";
+			return {
+				runId: nextRunId("refine"),
+				artifact: {
+					intents:
+						nodeId === undefined ? [] : [{ kind: "rename-node", nodeId, name }],
+				},
+			};
 		},
 
 		async *events(runId: string): AsyncIterable<RunEvent> {

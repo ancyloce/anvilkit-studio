@@ -11,6 +11,7 @@ export type {
 	OutlineRequest,
 	PageRequest,
 	ProviderResult,
+	RefineRequest,
 	RunEvent,
 	SectionRequest,
 } from "./provider";

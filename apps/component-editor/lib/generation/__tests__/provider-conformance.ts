@@ -72,6 +72,25 @@ export function runProviderConformance(options: ConformanceOptions): void {
 		expect(result).toHaveProperty("artifact");
 	});
 
+	it("C-1 wire fidelity: a declared refineSelection returns an untrusted artifact", async () => {
+		const provider = create();
+		if (provider.refineSelection === undefined) return;
+
+		const result = await provider.refineSelection({
+			kind: "refine",
+			instruction: "make the card concise",
+			whitelist: REQUEST.whitelist,
+			selection: {
+				nodeIds: ["card-1"],
+				currentNodes: [{ id: "card-1", type: "Card", props: {} }],
+			},
+		});
+		expect(typeof result.runId).toBe("string");
+		expect(result).toHaveProperty("artifact");
+		expect(result).not.toHaveProperty("valid");
+		expect(result).not.toHaveProperty("errors");
+	});
+
 	it("C-5 cancellation: an already-aborted signal produces no work", async () => {
 		const controller = new AbortController();
 		controller.abort();
@@ -120,5 +139,27 @@ export function runProviderConformance(options: ConformanceOptions): void {
 		const a = await create().generateSection({ ...REQUEST, sectionId: "s1" });
 		const b = await create().generateSection({ ...REQUEST, sectionId: "s1" });
 		expect(JSON.stringify(a.artifact)).toBe(JSON.stringify(b.artifact));
+
+		const firstProvider = create();
+		const secondProvider = create();
+		if (
+			firstProvider.refineSelection !== undefined &&
+			secondProvider.refineSelection !== undefined
+		) {
+			const request = {
+				kind: "refine" as const,
+				instruction: "rename",
+				whitelist: REQUEST.whitelist,
+				selection: {
+					nodeIds: ["card-1"],
+					currentNodes: [{ id: "card-1", type: "Card", props: {} }],
+				},
+			};
+			const first = await firstProvider.refineSelection(request);
+			const second = await secondProvider.refineSelection(request);
+			expect(JSON.stringify(first.artifact)).toBe(
+				JSON.stringify(second.artifact),
+			);
+		}
 	});
 }

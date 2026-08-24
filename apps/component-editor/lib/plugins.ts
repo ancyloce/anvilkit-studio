@@ -4,10 +4,10 @@ import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
 import { createCodeEditorPlugin } from "@anvilkit/plugin-code-editor";
 import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
 import { FileCode, FileCode2 } from "lucide-react";
+import { createElement } from "react";
 import { componentEditorConfig } from "./editor-config";
 import { createCopilotGenerators } from "./generation/copilot-wiring";
 import { createGenerationProvider } from "./generation/index";
-import { createElement } from "react";
 
 /**
  * Plugin roster for the component editor (design 0022 §1.4).
@@ -69,9 +69,10 @@ const lazyReactExportPlugin: StudioPlugin = lazyPlugin(
 const designSystemPlugin: StudioPlugin = createDesignSystemPlugin();
 
 const codeEditorPlugin: StudioPlugin = createCodeEditorPlugin({
-	// JSON is editable; TSX is the P1-08 read-only canonical projection
-	// (design 0022 §8.4). Writing TSX arrives behind the P2 `tsxWrite` flag.
+	// This dedicated editor is the opt-in P2 host. The factory default stays
+	// false, so every other consumer retains the P1 read-only projection.
 	projections: ["json", "tsx"],
+	tsxWrite: true,
 });
 
 /**
@@ -82,6 +83,7 @@ const codeEditorPlugin: StudioPlugin = createCodeEditorPlugin({
  */
 const codeEditorPluginOpen: StudioPlugin = createCodeEditorPlugin({
 	projections: ["json", "tsx"],
+	tsxWrite: true,
 	initiallyOpen: true,
 });
 
@@ -92,7 +94,7 @@ const codeEditorPluginOpen: StudioPlugin = createCodeEditorPlugin({
  * generation leaves the document untouched.
  */
 const aiCopilotPlugin: StudioPlugin = createAiCopilotPlugin({
-	...createCopilotGenerators(createGenerationProvider()),
+	...createCopilotGenerators(createGenerationProvider(), componentEditorConfig),
 	puckConfig: componentEditorConfig,
 }) as unknown as StudioPlugin;
 
