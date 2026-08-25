@@ -13,6 +13,10 @@ const LOADERS: Record<string, () => Promise<Record<string, unknown>>> = {
 		await import("@anvilkit/bento-grid/styles.css");
 		return import("@anvilkit/bento-grid");
 	},
+	Blockquote: async () => {
+		await import("@anvilkit/blockquote/styles.css");
+		return import("@anvilkit/blockquote");
+	},
 	BlogList: async () => {
 		await import("@anvilkit/blog-list/styles.css");
 		return import("@anvilkit/blog-list");
@@ -20,6 +24,26 @@ const LOADERS: Record<string, () => Promise<Record<string, unknown>>> = {
 	Button: async () => {
 		await import("@anvilkit/button/styles.css");
 		return import("@anvilkit/button");
+	},
+	Code: async () => {
+		await import("@anvilkit/code/styles.css");
+		return import("@anvilkit/code");
+	},
+	Columns: async () => {
+		await import("@anvilkit/columns/styles.css");
+		return import("@anvilkit/columns");
+	},
+	Container: async () => {
+		await import("@anvilkit/container/styles.css");
+		return import("@anvilkit/container");
+	},
+	Grid: async () => {
+		await import("@anvilkit/grid/styles.css");
+		return import("@anvilkit/grid");
+	},
+	Heading: async () => {
+		await import("@anvilkit/heading/styles.css");
+		return import("@anvilkit/heading");
 	},
 	Helps: async () => {
 		await import("@anvilkit/helps/styles.css");
@@ -29,9 +53,25 @@ const LOADERS: Record<string, () => Promise<Record<string, unknown>>> = {
 		await import("@anvilkit/hero/styles.css");
 		return import("@anvilkit/hero");
 	},
+	Icon: async () => {
+		await import("@anvilkit/icon/styles.css");
+		return import("@anvilkit/icon");
+	},
+	Image: async () => {
+		await import("@anvilkit/image/styles.css");
+		return import("@anvilkit/image");
+	},
 	Input: async () => {
 		await import("@anvilkit/input/styles.css");
 		return import("@anvilkit/input");
+	},
+	Link: async () => {
+		await import("@anvilkit/link/styles.css");
+		return import("@anvilkit/link");
+	},
+	List: async () => {
+		await import("@anvilkit/list/styles.css");
+		return import("@anvilkit/list");
 	},
 	LogoClouds: async () => {
 		await import("@anvilkit/logo-clouds/styles.css");
@@ -45,13 +85,33 @@ const LOADERS: Record<string, () => Promise<Record<string, unknown>>> = {
 		await import("@anvilkit/pricing-minimal/styles.css");
 		return import("@anvilkit/pricing-minimal");
 	},
+	RichText: async () => {
+		await import("@anvilkit/rich-text/styles.css");
+		return import("@anvilkit/rich-text");
+	},
 	Section: async () => {
 		await import("@anvilkit/section/styles.css");
 		return import("@anvilkit/section");
 	},
+	Spacer: async () => {
+		await import("@anvilkit/spacer/styles.css");
+		return import("@anvilkit/spacer");
+	},
+	Stack: async () => {
+		await import("@anvilkit/stack/styles.css");
+		return import("@anvilkit/stack");
+	},
 	Statistics: async () => {
 		await import("@anvilkit/statistics/styles.css");
 		return import("@anvilkit/statistics");
+	},
+	Text: async () => {
+		await import("@anvilkit/text/styles.css");
+		return import("@anvilkit/text");
+	},
+	Video: async () => {
+		await import("@anvilkit/video/styles.css");
+		return import("@anvilkit/video");
 	},
 };
 

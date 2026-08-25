@@ -4,7 +4,7 @@ description: "Anvilkit Puck 네이티브 Button 컴포넌트."
 ---
 
 <div className="anvilkit-component-meta">
-	<code>@anvilkit/button</code> <span>·</span> <span>v0.2.2</span> <span>·</span> <a href="/playground">플레이그라운드에서 사용해 보기 →</a>
+	<code>@anvilkit/button</code> <span>·</span> <span>v0.2.4</span> <span>·</span> <a href="/playground">플레이그라운드에서 사용해 보기 →</a>
 </div>
 
 ## 라이브 미리보기
@@ -106,20 +106,28 @@ shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니�
 
 | 필드 | 타입 | 기본값 |
 |-------|------|---------|
+| `appearance` | custom | — |
+| `interactions` | custom | — |
+| `bindings` | custom | — |
 | `label` | text | `"Save changes"` |
-| `variant` | radio ("primary" \| "secondary") | `"primary"` |
+| `preset` | radio ("marketing" \| "system") | `"marketing"` |
+| `variant` | select ("primary" \| "secondary" \| "default" \| "outline" \| "ghost" \| "destructive" \| "link") | `"primary"` |
+| `size` | select ("default" \| "xs" \| "sm" \| "lg") | — |
 | `href` | text | `""` |
 | `openInNewTab` | radio (false \| true) | `false` |
 | `disabled` | radio (false \| true) | `false` |
 | `trackClick` | radio (false \| true) | `false` |
 | `eventName` | text | — |
 | `eventProps` | object | — |
+| `animation` | object | — |
+| `classNames` | object | — |
 
 ## 기본 속성
 
 ```json
 {
   "label": "Save changes",
+  "preset": "marketing",
   "variant": "primary",
   "disabled": false,
   "href": "",
@@ -137,13 +145,70 @@ shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니�
     "componentName": "Button",
     "componentSlug": "button",
     "packageName": "@anvilkit/button",
-    "packageVersion": "0.2.2",
+    "packageVersion": "0.2.4",
     "scaffoldType": "content",
     "schemaVersion": 1,
-    "suggestedCategory": "actions"
+    "suggestedCategory": "actions",
+    "anvilkit": {
+      "editor": {
+        "styleTargets": {
+          "root": {
+            "label": "Button",
+            "responsive": true,
+            "properties": [
+              "display",
+              "position",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap",
+              "minHeight",
+              "maxHeight",
+              "inset",
+              "overflow",
+              "cursor",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          }
+        },
+        "inlineText": [
+          {
+            "id": "label",
+            "propPath": "label",
+            "format": "plain"
+          }
+        ],
+        "interactions": true,
+        "bindings": true
+      }
+    }
   },
   "defaultProps": {
     "label": "Save changes",
+    "preset": "marketing",
     "variant": "primary",
     "disabled": false,
     "href": "",
@@ -151,12 +216,38 @@ shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니�
     "trackClick": false
   },
   "fields": {
+    "appearance": {
+      "type": "custom",
+      "visible": false
+    },
+    "interactions": {
+      "type": "custom",
+      "visible": false
+    },
+    "bindings": {
+      "type": "custom",
+      "visible": false
+    },
     "label": {
       "type": "text",
       "label": "Label"
     },
-    "variant": {
+    "preset": {
       "type": "radio",
+      "label": "Preset",
+      "options": [
+        {
+          "label": "Marketing",
+          "value": "marketing"
+        },
+        {
+          "label": "System",
+          "value": "system"
+        }
+      ]
+    },
+    "variant": {
+      "type": "select",
       "label": "Variant",
       "options": [
         {
@@ -166,6 +257,48 @@ shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니�
         {
           "label": "Secondary",
           "value": "secondary"
+        },
+        {
+          "label": "Default",
+          "value": "default"
+        },
+        {
+          "label": "Outline",
+          "value": "outline"
+        },
+        {
+          "label": "Ghost",
+          "value": "ghost"
+        },
+        {
+          "label": "Destructive",
+          "value": "destructive"
+        },
+        {
+          "label": "Link",
+          "value": "link"
+        }
+      ]
+    },
+    "size": {
+      "type": "select",
+      "label": "Size",
+      "options": [
+        {
+          "label": "Default",
+          "value": "default"
+        },
+        {
+          "label": "Extra small",
+          "value": "xs"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
         }
       ]
     },
@@ -230,6 +363,84 @@ shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니�
         "placement": {
           "type": "text",
           "label": "Placement"
+        }
+      }
+    },
+    "animation": {
+      "type": "object",
+      "label": "Animation",
+      "objectFields": {
+        "preset": {
+          "type": "select",
+          "label": "Preset",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "Fade in",
+              "value": "fade-in"
+            },
+            {
+              "label": "Slide up",
+              "value": "slide-up"
+            },
+            {
+              "label": "Slide down",
+              "value": "slide-down"
+            },
+            {
+              "label": "Zoom in",
+              "value": "zoom-in"
+            }
+          ]
+        },
+        "durationMs": {
+          "type": "number",
+          "label": "Duration (ms)",
+          "min": 0
+        },
+        "delayMs": {
+          "type": "number",
+          "label": "Delay (ms)",
+          "min": 0
+        },
+        "easing": {
+          "type": "select",
+          "label": "Easing",
+          "options": [
+            {
+              "label": "ease",
+              "value": "ease"
+            },
+            {
+              "label": "ease-in",
+              "value": "ease-in"
+            },
+            {
+              "label": "ease-out",
+              "value": "ease-out"
+            },
+            {
+              "label": "ease-in-out",
+              "value": "ease-in-out"
+            },
+            {
+              "label": "linear",
+              "value": "linear"
+            }
+          ]
+        }
+      }
+    },
+    "classNames": {
+      "type": "object",
+      "label": "Custom classes",
+      "objectFields": {
+        "root": {
+          "type": "text",
+          "label": "Button"
         }
       }
     }

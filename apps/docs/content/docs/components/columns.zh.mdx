@@ -1,0 +1,348 @@
+---
+title: Columns
+description: "Anvilkit Puck 原生 Columns 组件。"
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/columns</code> <span>·</span> <span>v0.1.0</span> <span>·</span> <a href="/playground">在演练场中试用 →</a>
+</div>
+
+## 实时预览
+
+<ComponentPreview name="Columns" />
+
+A Puck-native repeatable multi-column layout with an independent slot in each
+column.
+
+```tsx
+import { Columns, componentConfig } from "@anvilkit/columns";
+
+export function Example() {
+  return (
+    <Columns
+      columns={[
+        { label: "One", content: <p>First</p> },
+        { label: "Two", content: <p>Second</p> },
+      ]}
+    />
+  );
+}
+
+export const puckComponent = componentConfig;
+```
+
+Authors can manage two to four columns and choose the collapse breakpoint,
+gap, and alignment. The repeated column elements share a stable `column`
+authoring target.
+
+## 属性参考
+
+派生自该组件的 Puck `fields` 模式。
+
+| 字段 | 类型 | 默认值 |
+|-------|------|---------|
+| `appearance` | custom | — |
+| `interactions` | custom | — |
+| `bindings` | custom | — |
+| `columns` | array | `[{"label":"Column 1","content":[]},{"label":"Column 2","c…` |
+| `gap` | select ("none" \| "sm" \| "md" \| "lg") | `"md"` |
+| `collapseAt` | select ("never" \| "sm" \| "md" \| "lg") | `"md"` |
+| `alignment` | radio ("stretch" \| "start" \| "center" \| "end") | `"stretch"` |
+| `animation` | object | — |
+| `classNames` | object | — |
+
+## 默认属性
+
+```json
+{
+  "columns": [
+    {
+      "label": "Column 1",
+      "content": []
+    },
+    {
+      "label": "Column 2",
+      "content": []
+    }
+  ],
+  "gap": "md",
+  "collapseAt": "md",
+  "alignment": "stretch"
+}
+```
+
+## Puck 配置
+
+```json
+{
+  "label": "Columns",
+  "metadata": {
+    "componentName": "Columns",
+    "componentSlug": "columns",
+    "packageName": "@anvilkit/columns",
+    "packageVersion": "0.1.0",
+    "scaffoldType": "layout",
+    "schemaVersion": 1,
+    "suggestedCategory": "layout",
+    "anvilkit": {
+      "editor": {
+        "styleTargets": {
+          "root": {
+            "label": "Columns",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "rowGap",
+              "columnGap",
+              "columns",
+              "rows",
+              "minHeight",
+              "maxHeight",
+              "overflow"
+            ]
+          },
+          "column": {
+            "label": "Column",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap",
+              "minHeight",
+              "maxHeight",
+              "overflow"
+            ]
+          }
+        },
+        "interactions": true,
+        "bindings": true
+      }
+    }
+  },
+  "defaultProps": {
+    "columns": [
+      {
+        "label": "Column 1",
+        "content": []
+      },
+      {
+        "label": "Column 2",
+        "content": []
+      }
+    ],
+    "gap": "md",
+    "collapseAt": "md",
+    "alignment": "stretch"
+  },
+  "fields": {
+    "appearance": {
+      "type": "custom",
+      "visible": false
+    },
+    "interactions": {
+      "type": "custom",
+      "visible": false
+    },
+    "bindings": {
+      "type": "custom",
+      "visible": false
+    },
+    "columns": {
+      "type": "array",
+      "label": "Columns",
+      "min": 2,
+      "max": 4,
+      "defaultItemProps": "[[Function]]",
+      "getItemSummary": "[[Function]]",
+      "arrayFields": {
+        "label": {
+          "type": "text",
+          "label": "Label"
+        },
+        "content": {
+          "type": "slot",
+          "label": "Content"
+        }
+      }
+    },
+    "gap": {
+      "type": "select",
+      "label": "Gap",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }
+      ]
+    },
+    "collapseAt": {
+      "type": "select",
+      "label": "Collapse at",
+      "options": [
+        {
+          "label": "Never",
+          "value": "never"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }
+      ]
+    },
+    "alignment": {
+      "type": "radio",
+      "label": "Alignment",
+      "options": [
+        {
+          "label": "Stretch",
+          "value": "stretch"
+        },
+        {
+          "label": "Start",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "End",
+          "value": "end"
+        }
+      ]
+    },
+    "animation": {
+      "type": "object",
+      "label": "Animation",
+      "objectFields": {
+        "preset": {
+          "type": "select",
+          "label": "Preset",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "Fade in",
+              "value": "fade-in"
+            },
+            {
+              "label": "Slide up",
+              "value": "slide-up"
+            },
+            {
+              "label": "Slide down",
+              "value": "slide-down"
+            },
+            {
+              "label": "Zoom in",
+              "value": "zoom-in"
+            }
+          ]
+        },
+        "durationMs": {
+          "type": "number",
+          "label": "Duration (ms)",
+          "min": 0
+        },
+        "delayMs": {
+          "type": "number",
+          "label": "Delay (ms)",
+          "min": 0
+        },
+        "easing": {
+          "type": "select",
+          "label": "Easing",
+          "options": [
+            {
+              "label": "ease",
+              "value": "ease"
+            },
+            {
+              "label": "ease-in",
+              "value": "ease-in"
+            },
+            {
+              "label": "ease-out",
+              "value": "ease-out"
+            },
+            {
+              "label": "ease-in-out",
+              "value": "ease-in-out"
+            },
+            {
+              "label": "linear",
+              "value": "linear"
+            }
+          ]
+        }
+      }
+    },
+    "classNames": {
+      "type": "object",
+      "label": "Custom classes",
+      "objectFields": {
+        "root": {
+          "type": "text",
+          "label": "Columns"
+        },
+        "column": {
+          "type": "text",
+          "label": "Column"
+        }
+      }
+    }
+  }
+}
+```

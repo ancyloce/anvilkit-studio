@@ -1,0 +1,315 @@
+---
+title: Container
+description: "Anvilkit Puck ネイティブの Container コンポーネント。"
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/container</code> <span>·</span> <span>v0.1.0</span> <span>·</span> <a href="/playground">プレイグラウンドで試す →</a>
+</div>
+
+## ライブプレビュー
+
+<ComponentPreview name="Container" />
+
+A Puck-native single-slot container with maximum-width, padding, and logical
+alignment controls.
+
+```tsx
+import { Container, componentConfig } from "@anvilkit/container";
+
+export function Example() {
+  return <Container content={<p>Nested content</p>} maxWidth="lg" />;
+}
+
+export const puckComponent = componentConfig;
+```
+
+The Puck config exposes `content` as a slot and stamps stable `root` and
+`content` authoring targets. Start/end alignment uses logical margins, so the
+component also behaves correctly in right-to-left layouts.
+
+## プロパティリファレンス
+
+コンポーネントの Puck `fields` スキーマから導出されます。
+
+| フィールド | 型 | デフォルト |
+|-------|------|---------|
+| `appearance` | custom | — |
+| `interactions` | custom | — |
+| `bindings` | custom | — |
+| `content` | slot | `[]` |
+| `maxWidth` | select ("sm" \| "md" \| "lg" \| "xl" \| "full") | `"lg"` |
+| `padding` | radio ("none" \| "sm" \| "md" \| "lg") | `"md"` |
+| `alignment` | radio ("start" \| "center" \| "end" \| "stretch") | `"center"` |
+| `animation` | object | — |
+| `classNames` | object | — |
+
+## デフォルトプロパティ
+
+```json
+{
+  "content": [],
+  "maxWidth": "lg",
+  "padding": "md",
+  "alignment": "center"
+}
+```
+
+## Puck 設定
+
+```json
+{
+  "label": "Container",
+  "metadata": {
+    "componentName": "Container",
+    "componentSlug": "container",
+    "packageName": "@anvilkit/container",
+    "packageVersion": "0.1.0",
+    "scaffoldType": "layout",
+    "schemaVersion": 1,
+    "suggestedCategory": "layout",
+    "anvilkit": {
+      "editor": {
+        "styleTargets": {
+          "root": {
+            "label": "Container",
+            "responsive": true,
+            "properties": [
+              "display",
+              "position",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap",
+              "minHeight",
+              "maxHeight",
+              "inset",
+              "overflow"
+            ]
+          },
+          "content": {
+            "label": "Content",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap",
+              "minHeight",
+              "maxHeight",
+              "overflow"
+            ]
+          }
+        },
+        "interactions": true,
+        "bindings": true
+      }
+    }
+  },
+  "defaultProps": {
+    "content": [],
+    "maxWidth": "lg",
+    "padding": "md",
+    "alignment": "center"
+  },
+  "fields": {
+    "appearance": {
+      "type": "custom",
+      "visible": false
+    },
+    "interactions": {
+      "type": "custom",
+      "visible": false
+    },
+    "bindings": {
+      "type": "custom",
+      "visible": false
+    },
+    "content": {
+      "type": "slot",
+      "label": "Content"
+    },
+    "maxWidth": {
+      "type": "select",
+      "label": "Maximum width",
+      "options": [
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        },
+        {
+          "label": "Extra large",
+          "value": "xl"
+        },
+        {
+          "label": "Full width",
+          "value": "full"
+        }
+      ]
+    },
+    "padding": {
+      "type": "radio",
+      "label": "Padding",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "Small",
+          "value": "sm"
+        },
+        {
+          "label": "Medium",
+          "value": "md"
+        },
+        {
+          "label": "Large",
+          "value": "lg"
+        }
+      ]
+    },
+    "alignment": {
+      "type": "radio",
+      "label": "Alignment",
+      "options": [
+        {
+          "label": "Start",
+          "value": "start"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "End",
+          "value": "end"
+        },
+        {
+          "label": "Stretch",
+          "value": "stretch"
+        }
+      ]
+    },
+    "animation": {
+      "type": "object",
+      "label": "Animation",
+      "objectFields": {
+        "preset": {
+          "type": "select",
+          "label": "Preset",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "Fade in",
+              "value": "fade-in"
+            },
+            {
+              "label": "Slide up",
+              "value": "slide-up"
+            },
+            {
+              "label": "Slide down",
+              "value": "slide-down"
+            },
+            {
+              "label": "Zoom in",
+              "value": "zoom-in"
+            }
+          ]
+        },
+        "durationMs": {
+          "type": "number",
+          "label": "Duration (ms)",
+          "min": 0
+        },
+        "delayMs": {
+          "type": "number",
+          "label": "Delay (ms)",
+          "min": 0
+        },
+        "easing": {
+          "type": "select",
+          "label": "Easing",
+          "options": [
+            {
+              "label": "ease",
+              "value": "ease"
+            },
+            {
+              "label": "ease-in",
+              "value": "ease-in"
+            },
+            {
+              "label": "ease-out",
+              "value": "ease-out"
+            },
+            {
+              "label": "ease-in-out",
+              "value": "ease-in-out"
+            },
+            {
+              "label": "linear",
+              "value": "linear"
+            }
+          ]
+        }
+      }
+    },
+    "classNames": {
+      "type": "object",
+      "label": "Custom classes",
+      "objectFields": {
+        "root": {
+          "type": "text",
+          "label": "Container"
+        },
+        "content": {
+          "type": "text",
+          "label": "Content"
+        }
+      }
+    }
+  }
+}
+```

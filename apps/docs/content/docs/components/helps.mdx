@@ -116,11 +116,16 @@ Derived from the component's Puck `fields` schema.
 
 | Field | Type | Default |
 |-------|------|---------|
+| `appearance` | custom | — |
+| `interactions` | custom | — |
+| `bindings` | custom | — |
 | `message` | textarea | `"We're grateful for the amazing open-source community\nth…` |
 | `buttonLabel` | text | `"Become a contributor"` |
 | `buttonHref` | text | `"/contribute"` |
 | `buttonOpenInNewTab` | radio (false \| true) | `false` |
 | `avatars` | array | `[{"name":"Alice Johnson","imageUrl":"https://images.unspl…` |
+| `animation` | object | — |
+| `classNames` | object | — |
 
 ## Default props
 
@@ -172,7 +177,184 @@ Derived from the component's Puck `fields` schema.
     "packageVersion": "0.2.1",
     "scaffoldType": "content",
     "schemaVersion": 1,
-    "suggestedCategory": "marketing"
+    "suggestedCategory": "marketing",
+    "anvilkit": {
+      "editor": {
+        "styleTargets": {
+          "root": {
+            "label": "Helps",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "minHeight",
+              "maxHeight",
+              "overflow"
+            ]
+          },
+          "content": {
+            "label": "Content",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap",
+              "minHeight",
+              "maxHeight",
+              "overflow"
+            ]
+          },
+          "message": {
+            "label": "Message",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "maxWidth",
+              "margin",
+              "padding",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          },
+          "avatarGroup": {
+            "label": "Avatar group",
+            "responsive": true,
+            "properties": [
+              "width",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "gap",
+              "justifyContent",
+              "opacity",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap",
+              "minHeight",
+              "maxHeight"
+            ]
+          },
+          "avatar": {
+            "label": "Avatar",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "minHeight",
+              "maxHeight",
+              "overflow"
+            ]
+          },
+          "actions": {
+            "label": "Actions",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "maxWidth",
+              "margin",
+              "padding",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "opacity",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap"
+            ]
+          },
+          "button": {
+            "label": "Button",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap",
+              "minHeight",
+              "maxHeight",
+              "overflow",
+              "cursor",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          }
+        },
+        "interactions": true,
+        "bindings": true
+      }
+    }
   },
   "defaultProps": {
     "message": "We're grateful for the amazing open-source community\nthat helps make our project better every day.",
@@ -208,6 +390,18 @@ Derived from the component's Puck `fields` schema.
     ]
   },
   "fields": {
+    "appearance": {
+      "type": "custom",
+      "visible": false
+    },
+    "interactions": {
+      "type": "custom",
+      "visible": false
+    },
+    "bindings": {
+      "type": "custom",
+      "visible": false
+    },
     "message": {
       "type": "textarea",
       "label": "Message"
@@ -255,6 +449,108 @@ Derived from the component's Puck `fields` schema.
         "initials": {
           "type": "text",
           "label": "Fallback initials"
+        }
+      }
+    },
+    "animation": {
+      "type": "object",
+      "label": "Animation",
+      "objectFields": {
+        "preset": {
+          "type": "select",
+          "label": "Preset",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "Fade in",
+              "value": "fade-in"
+            },
+            {
+              "label": "Slide up",
+              "value": "slide-up"
+            },
+            {
+              "label": "Slide down",
+              "value": "slide-down"
+            },
+            {
+              "label": "Zoom in",
+              "value": "zoom-in"
+            }
+          ]
+        },
+        "durationMs": {
+          "type": "number",
+          "label": "Duration (ms)",
+          "min": 0
+        },
+        "delayMs": {
+          "type": "number",
+          "label": "Delay (ms)",
+          "min": 0
+        },
+        "easing": {
+          "type": "select",
+          "label": "Easing",
+          "options": [
+            {
+              "label": "ease",
+              "value": "ease"
+            },
+            {
+              "label": "ease-in",
+              "value": "ease-in"
+            },
+            {
+              "label": "ease-out",
+              "value": "ease-out"
+            },
+            {
+              "label": "ease-in-out",
+              "value": "ease-in-out"
+            },
+            {
+              "label": "linear",
+              "value": "linear"
+            }
+          ]
+        }
+      }
+    },
+    "classNames": {
+      "type": "object",
+      "label": "Custom classes",
+      "objectFields": {
+        "root": {
+          "type": "text",
+          "label": "Helps"
+        },
+        "content": {
+          "type": "text",
+          "label": "Content"
+        },
+        "message": {
+          "type": "text",
+          "label": "Message"
+        },
+        "avatarGroup": {
+          "type": "text",
+          "label": "Avatar group"
+        },
+        "avatar": {
+          "type": "text",
+          "label": "Avatar"
+        },
+        "actions": {
+          "type": "text",
+          "label": "Actions"
+        },
+        "button": {
+          "type": "text",
+          "label": "Button"
         }
       }
     }

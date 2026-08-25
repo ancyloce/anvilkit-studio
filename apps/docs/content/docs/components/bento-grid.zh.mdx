@@ -114,9 +114,14 @@ const config: Config<{ BentoGrid: BentoGridProps }> = {
 
 | 字段 | 类型 | 默认值 |
 |-------|------|---------|
+| `appearance` | custom | — |
+| `interactions` | custom | — |
+| `bindings` | custom | — |
 | `theme` | select ("system" \| "light" \| "dark") | `"dark"` |
 | `platform` | select ("adaptive" \| "mobile" \| "tablet" \| "desktop") | `"adaptive"` |
 | `items` | array | `[{"icon":"brain","title":"Simple Agent Workflows","descri…` |
+| `animation` | object | — |
+| `classNames` | object | — |
 
 ## 默认属性
 
@@ -177,7 +182,156 @@ const config: Config<{ BentoGrid: BentoGridProps }> = {
     "packageVersion": "0.2.2",
     "scaffoldType": "content",
     "schemaVersion": 1,
-    "suggestedCategory": "marketing"
+    "suggestedCategory": "marketing",
+    "anvilkit": {
+      "editor": {
+        "styleTargets": {
+          "root": {
+            "label": "Bento grid",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "borderRadius",
+              "opacity",
+              "minHeight",
+              "maxHeight",
+              "overflow"
+            ]
+          },
+          "items": {
+            "label": "Card grid",
+            "responsive": true,
+            "properties": [
+              "display",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "margin",
+              "padding",
+              "background",
+              "borderRadius",
+              "opacity",
+              "rowGap",
+              "columnGap",
+              "columns",
+              "rows",
+              "overflow"
+            ]
+          },
+          "card": {
+            "label": "Card",
+            "responsive": true,
+            "properties": [
+              "display",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "height",
+              "padding",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap",
+              "minHeight",
+              "maxHeight",
+              "overflow"
+            ]
+          },
+          "cardIcon": {
+            "label": "Card icon",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "height",
+              "margin",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "color",
+              "minHeight",
+              "maxHeight",
+              "overflow"
+            ]
+          },
+          "cardTitle": {
+            "label": "Card title",
+            "responsive": true,
+            "properties": [
+              "display",
+              "margin",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          },
+          "cardDescription": {
+            "label": "Card description",
+            "responsive": true,
+            "properties": [
+              "display",
+              "maxWidth",
+              "margin",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          },
+          "cardCta": {
+            "label": "Card CTA",
+            "responsive": true,
+            "properties": [
+              "display",
+              "margin",
+              "padding",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "cursor",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          }
+        },
+        "interactions": true,
+        "bindings": true
+      }
+    }
   },
   "defaultProps": {
     "items": [
@@ -222,6 +376,18 @@ const config: Config<{ BentoGrid: BentoGridProps }> = {
     "theme": "dark"
   },
   "fields": {
+    "appearance": {
+      "type": "custom",
+      "visible": false
+    },
+    "interactions": {
+      "type": "custom",
+      "visible": false
+    },
+    "bindings": {
+      "type": "custom",
+      "visible": false
+    },
     "theme": {
       "type": "select",
       "label": "Theme",
@@ -383,6 +549,108 @@ const config: Config<{ BentoGrid: BentoGridProps }> = {
               "value": true
             }
           ]
+        }
+      }
+    },
+    "animation": {
+      "type": "object",
+      "label": "Animation",
+      "objectFields": {
+        "preset": {
+          "type": "select",
+          "label": "Preset",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "Fade in",
+              "value": "fade-in"
+            },
+            {
+              "label": "Slide up",
+              "value": "slide-up"
+            },
+            {
+              "label": "Slide down",
+              "value": "slide-down"
+            },
+            {
+              "label": "Zoom in",
+              "value": "zoom-in"
+            }
+          ]
+        },
+        "durationMs": {
+          "type": "number",
+          "label": "Duration (ms)",
+          "min": 0
+        },
+        "delayMs": {
+          "type": "number",
+          "label": "Delay (ms)",
+          "min": 0
+        },
+        "easing": {
+          "type": "select",
+          "label": "Easing",
+          "options": [
+            {
+              "label": "ease",
+              "value": "ease"
+            },
+            {
+              "label": "ease-in",
+              "value": "ease-in"
+            },
+            {
+              "label": "ease-out",
+              "value": "ease-out"
+            },
+            {
+              "label": "ease-in-out",
+              "value": "ease-in-out"
+            },
+            {
+              "label": "linear",
+              "value": "linear"
+            }
+          ]
+        }
+      }
+    },
+    "classNames": {
+      "type": "object",
+      "label": "Custom classes",
+      "objectFields": {
+        "root": {
+          "type": "text",
+          "label": "Bento grid"
+        },
+        "items": {
+          "type": "text",
+          "label": "Card grid"
+        },
+        "card": {
+          "type": "text",
+          "label": "Card"
+        },
+        "cardIcon": {
+          "type": "text",
+          "label": "Card icon"
+        },
+        "cardTitle": {
+          "type": "text",
+          "label": "Card title"
+        },
+        "cardDescription": {
+          "type": "text",
+          "label": "Card description"
+        },
+        "cardCta": {
+          "type": "text",
+          "label": "Card CTA"
         }
       }
     }

@@ -1,0 +1,291 @@
+---
+title: Code
+description: "Anvilkit Puck 네이티브 Code 컴포넌트."
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/code</code> <span>·</span> <span>v0.1.0</span> <span>·</span> <a href="/playground">플레이그라운드에서 사용해 보기 →</a>
+</div>
+
+## 라이브 미리보기
+
+<ComponentPreview name="Code" />
+
+A Puck-native semantic code block with language metadata and optional line
+numbers. It renders authored code as text; it never injects it as HTML.
+
+## Install
+
+```sh
+pnpm add @anvilkit/code @puckeditor/core
+```
+
+## Usage
+
+```tsx
+import { Code, componentConfig } from "@anvilkit/code";
+
+export function Example() {
+  return (
+    <Code
+      code={'const message = "Hello, AnvilKit";'}
+      language="typescript"
+      showLineNumbers
+    />
+  );
+}
+
+export const puckComponent = componentConfig;
+```
+
+The Puck config provides structured language and line-number controls,
+localized labels, and stable `root` and `code` authoring targets.
+
+## 속성 레퍼런스
+
+컴포넌트의 Puck `fields` 스키마에서 파생됩니다.
+
+| 필드 | 타입 | 기본값 |
+|-------|------|---------|
+| `appearance` | custom | — |
+| `interactions` | custom | — |
+| `bindings` | custom | — |
+| `code` | textarea | `"const message = \"Hello, AnvilKit\";"` |
+| `language` | select ("plain" \| "html" \| "css" \| "javascript" \| "typescript" \| "json" \| "shell") | `"typescript"` |
+| `showLineNumbers` | radio (true \| false) | `true` |
+| `animation` | object | — |
+| `classNames` | object | — |
+
+## 기본 속성
+
+```json
+{
+  "code": "const message = \"Hello, AnvilKit\";",
+  "language": "typescript",
+  "showLineNumbers": true
+}
+```
+
+## Puck 설정
+
+```json
+{
+  "label": "Code",
+  "metadata": {
+    "componentName": "Code",
+    "componentSlug": "code",
+    "packageName": "@anvilkit/code",
+    "packageVersion": "0.1.0",
+    "scaffoldType": "content",
+    "schemaVersion": 1,
+    "suggestedCategory": "typography",
+    "anvilkit": {
+      "editor": {
+        "styleTargets": {
+          "root": {
+            "label": "Code block",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "minHeight",
+              "maxHeight",
+              "overflow"
+            ]
+          },
+          "code": {
+            "label": "Code",
+            "responsive": true,
+            "properties": [
+              "display",
+              "margin",
+              "maxWidth",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "textWrap"
+            ]
+          }
+        },
+        "inlineText": [
+          {
+            "id": "code",
+            "propPath": "code",
+            "format": "plain"
+          }
+        ],
+        "interactions": true,
+        "bindings": true
+      }
+    }
+  },
+  "defaultProps": {
+    "code": "const message = \"Hello, AnvilKit\";",
+    "language": "typescript",
+    "showLineNumbers": true
+  },
+  "fields": {
+    "appearance": {
+      "type": "custom",
+      "visible": false
+    },
+    "interactions": {
+      "type": "custom",
+      "visible": false
+    },
+    "bindings": {
+      "type": "custom",
+      "visible": false
+    },
+    "code": {
+      "type": "textarea",
+      "label": "Code"
+    },
+    "language": {
+      "type": "select",
+      "label": "Language",
+      "options": [
+        {
+          "label": "Plain text",
+          "value": "plain"
+        },
+        {
+          "label": "HTML",
+          "value": "html"
+        },
+        {
+          "label": "CSS",
+          "value": "css"
+        },
+        {
+          "label": "JavaScript",
+          "value": "javascript"
+        },
+        {
+          "label": "TypeScript",
+          "value": "typescript"
+        },
+        {
+          "label": "JSON",
+          "value": "json"
+        },
+        {
+          "label": "Shell",
+          "value": "shell"
+        }
+      ]
+    },
+    "showLineNumbers": {
+      "type": "radio",
+      "label": "Line numbers",
+      "options": [
+        {
+          "label": "Show",
+          "value": true
+        },
+        {
+          "label": "Hide",
+          "value": false
+        }
+      ]
+    },
+    "animation": {
+      "type": "object",
+      "label": "Animation",
+      "objectFields": {
+        "preset": {
+          "type": "select",
+          "label": "Preset",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "Fade in",
+              "value": "fade-in"
+            },
+            {
+              "label": "Slide up",
+              "value": "slide-up"
+            },
+            {
+              "label": "Slide down",
+              "value": "slide-down"
+            },
+            {
+              "label": "Zoom in",
+              "value": "zoom-in"
+            }
+          ]
+        },
+        "durationMs": {
+          "type": "number",
+          "label": "Duration (ms)",
+          "min": 0
+        },
+        "delayMs": {
+          "type": "number",
+          "label": "Delay (ms)",
+          "min": 0
+        },
+        "easing": {
+          "type": "select",
+          "label": "Easing",
+          "options": [
+            {
+              "label": "ease",
+              "value": "ease"
+            },
+            {
+              "label": "ease-in",
+              "value": "ease-in"
+            },
+            {
+              "label": "ease-out",
+              "value": "ease-out"
+            },
+            {
+              "label": "ease-in-out",
+              "value": "ease-in-out"
+            },
+            {
+              "label": "linear",
+              "value": "linear"
+            }
+          ]
+        }
+      }
+    },
+    "classNames": {
+      "type": "object",
+      "label": "Custom classes",
+      "objectFields": {
+        "root": {
+          "type": "text",
+          "label": "Code block"
+        },
+        "code": {
+          "type": "text",
+          "label": "Code"
+        }
+      }
+    }
+  }
+}
+```

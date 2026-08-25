@@ -1,0 +1,277 @@
+---
+title: Blockquote
+description: "Anvilkit Puck ネイティブの Blockquote コンポーネント。"
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/blockquote</code> <span>·</span> <span>v0.1.0</span> <span>·</span> <a href="/playground">プレイグラウンドで試す →</a>
+</div>
+
+## ライブプレビュー
+
+<ComponentPreview name="Blockquote" />
+
+A semantic Puck blockquote with editable quote and citation fields.
+
+## Install
+
+```sh
+pnpm add @anvilkit/blockquote @puckeditor/core
+```
+
+## Usage
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import {
+  Blockquote,
+  componentConfig,
+  type BlockquoteProps,
+} from "@anvilkit/blockquote";
+
+const config: Config<{ Blockquote: BlockquoteProps }> = {
+  components: { Blockquote: componentConfig },
+};
+
+export function Example() {
+  return (
+    <Blockquote
+      quote="Good tools make ambitious ideas easier to express."
+      citation="The AnvilKit team"
+    />
+  );
+}
+```
+
+The Puck config exposes plain-text fields, localized authoring labels, stable
+`root`, `quote`, and `citation` style targets, bindings, interactions,
+per-target classes, and entrance animation settings.
+
+## プロパティリファレンス
+
+コンポーネントの Puck `fields` スキーマから導出されます。
+
+| フィールド | 型 | デフォルト |
+|-------|------|---------|
+| `appearance` | custom | — |
+| `interactions` | custom | — |
+| `bindings` | custom | — |
+| `quote` | textarea | `"Good tools make ambitious ideas easier to express."` |
+| `citation` | text | `"The AnvilKit team"` |
+| `animation` | object | — |
+| `classNames` | object | — |
+
+## デフォルトプロパティ
+
+```json
+{
+  "quote": "Good tools make ambitious ideas easier to express.",
+  "citation": "The AnvilKit team"
+}
+```
+
+## Puck 設定
+
+```json
+{
+  "label": "Blockquote",
+  "metadata": {
+    "componentName": "Blockquote",
+    "componentSlug": "blockquote",
+    "packageName": "@anvilkit/blockquote",
+    "packageVersion": "0.1.0",
+    "scaffoldType": "content",
+    "schemaVersion": 1,
+    "suggestedCategory": "typography",
+    "anvilkit": {
+      "editor": {
+        "styleTargets": {
+          "root": {
+            "label": "Blockquote",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "margin",
+              "padding",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity"
+            ]
+          },
+          "quote": {
+            "label": "Quote",
+            "responsive": true,
+            "properties": [
+              "display",
+              "margin",
+              "maxWidth",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          },
+          "citation": {
+            "label": "Citation",
+            "responsive": true,
+            "properties": [
+              "display",
+              "margin",
+              "maxWidth",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          }
+        },
+        "inlineText": [
+          {
+            "id": "quote",
+            "propPath": "quote",
+            "format": "plain"
+          },
+          {
+            "id": "citation",
+            "propPath": "citation",
+            "format": "plain"
+          }
+        ],
+        "interactions": true,
+        "bindings": true
+      }
+    }
+  },
+  "defaultProps": {
+    "quote": "Good tools make ambitious ideas easier to express.",
+    "citation": "The AnvilKit team"
+  },
+  "fields": {
+    "appearance": {
+      "type": "custom",
+      "visible": false
+    },
+    "interactions": {
+      "type": "custom",
+      "visible": false
+    },
+    "bindings": {
+      "type": "custom",
+      "visible": false
+    },
+    "quote": {
+      "type": "textarea",
+      "label": "Quote"
+    },
+    "citation": {
+      "type": "text",
+      "label": "Citation"
+    },
+    "animation": {
+      "type": "object",
+      "label": "Animation",
+      "objectFields": {
+        "preset": {
+          "type": "select",
+          "label": "Preset",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "Fade in",
+              "value": "fade-in"
+            },
+            {
+              "label": "Slide up",
+              "value": "slide-up"
+            },
+            {
+              "label": "Slide down",
+              "value": "slide-down"
+            },
+            {
+              "label": "Zoom in",
+              "value": "zoom-in"
+            }
+          ]
+        },
+        "durationMs": {
+          "type": "number",
+          "label": "Duration (ms)",
+          "min": 0
+        },
+        "delayMs": {
+          "type": "number",
+          "label": "Delay (ms)",
+          "min": 0
+        },
+        "easing": {
+          "type": "select",
+          "label": "Easing",
+          "options": [
+            {
+              "label": "ease",
+              "value": "ease"
+            },
+            {
+              "label": "ease-in",
+              "value": "ease-in"
+            },
+            {
+              "label": "ease-out",
+              "value": "ease-out"
+            },
+            {
+              "label": "ease-in-out",
+              "value": "ease-in-out"
+            },
+            {
+              "label": "linear",
+              "value": "linear"
+            }
+          ]
+        }
+      }
+    },
+    "classNames": {
+      "type": "object",
+      "label": "Custom classes",
+      "objectFields": {
+        "root": {
+          "type": "text",
+          "label": "Blockquote"
+        },
+        "quote": {
+          "type": "text",
+          "label": "Quote"
+        },
+        "citation": {
+          "type": "text",
+          "label": "Citation"
+        }
+      }
+    }
+  }
+}
+```

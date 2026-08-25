@@ -6,20 +6,39 @@
 // stylesheet must be loaded by the host or the overlay renders blank.
 import "@anvilkit/canvas-editor/styles.css";
 import "@anvilkit/bento-grid/styles.css";
+import "@anvilkit/blockquote/styles.css";
 import "@anvilkit/blog-list/styles.css";
+import "@anvilkit/code/styles.css";
+import "@anvilkit/columns/styles.css";
+import "@anvilkit/container/styles.css";
+import "@anvilkit/grid/styles.css";
+import "@anvilkit/heading/styles.css";
 import "@anvilkit/helps/styles.css";
 import "@anvilkit/hero/styles.css";
+import "@anvilkit/icon/styles.css";
+import "@anvilkit/image/styles.css";
+import "@anvilkit/link/styles.css";
+import "@anvilkit/list/styles.css";
 import "@anvilkit/logo-clouds/styles.css";
 import "@anvilkit/navbar/styles.css";
 import "@anvilkit/pricing-minimal/styles.css";
+import "@anvilkit/rich-text/styles.css";
 import "@anvilkit/section/styles.css";
+import "@anvilkit/spacer/styles.css";
+import "@anvilkit/stack/styles.css";
 import "@anvilkit/statistics/styles.css";
+import "@anvilkit/text/styles.css";
+import "@anvilkit/video/styles.css";
 import "@anvilkit/core/styles.css";
 
 import {
 	type BentoGridProps,
 	componentConfig as bentoGridComponentConfig,
 } from "@anvilkit/bento-grid";
+import {
+	type BlockquoteProps,
+	componentConfig as blockquoteComponentConfig,
+} from "@anvilkit/blockquote";
 import {
 	type BlogListProps,
 	componentConfig as blogListComponentConfig,
@@ -28,8 +47,28 @@ import {
 	type ButtonProps,
 	componentConfig as buttonComponentConfig,
 } from "@anvilkit/button";
+import {
+	type CodeProps,
+	componentConfig as codeComponentConfig,
+} from "@anvilkit/code";
+import {
+	type ColumnsProps,
+	componentConfig as columnsComponentConfig,
+} from "@anvilkit/columns";
+import {
+	type ContainerProps,
+	componentConfig as containerComponentConfig,
+} from "@anvilkit/container";
 import type { StudioPlugin } from "@anvilkit/core";
 import { Studio, StudioLoadingScreen } from "@anvilkit/core";
+import {
+	type GridProps,
+	componentConfig as gridComponentConfig,
+} from "@anvilkit/grid";
+import {
+	type HeadingProps,
+	componentConfig as headingComponentConfig,
+} from "@anvilkit/heading";
 import {
 	type HelpsProps,
 	componentConfig as helpsComponentConfig,
@@ -40,10 +79,26 @@ import {
 	defaultProps as heroDefaultProps,
 } from "@anvilkit/hero";
 import {
+	type IconProps,
+	componentConfig as iconComponentConfig,
+} from "@anvilkit/icon";
+import {
+	type ImageProps,
+	componentConfig as imageComponentConfig,
+} from "@anvilkit/image";
+import {
 	type InputProps,
 	componentConfig as inputComponentConfig,
 } from "@anvilkit/input";
 import { puckDataToIR } from "@anvilkit/ir";
+import {
+	type LinkProps,
+	componentConfig as linkComponentConfig,
+} from "@anvilkit/link";
+import {
+	type ListProps,
+	componentConfig as listComponentConfig,
+} from "@anvilkit/list";
 import {
 	type LogoCloudsProps,
 	componentConfig as logoCloudsComponentConfig,
@@ -65,13 +120,33 @@ import {
 	componentConfig as pricingMinimalComponentConfig,
 } from "@anvilkit/pricing-minimal";
 import {
+	type RichTextProps,
+	componentConfig as richTextComponentConfig,
+} from "@anvilkit/rich-text";
+import {
 	type SectionProps,
 	componentConfig as sectionComponentConfig,
 } from "@anvilkit/section";
 import {
+	type SpacerProps,
+	componentConfig as spacerComponentConfig,
+} from "@anvilkit/spacer";
+import {
+	type StackProps,
+	componentConfig as stackComponentConfig,
+} from "@anvilkit/stack";
+import {
 	type StatisticsProps,
 	componentConfig as statisticsComponentConfig,
 } from "@anvilkit/statistics";
+import {
+	type TextProps,
+	componentConfig as textComponentConfig,
+} from "@anvilkit/text";
+import {
+	type VideoProps,
+	componentConfig as videoComponentConfig,
+} from "@anvilkit/video";
 import type { Config, Data } from "@puckeditor/core";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -90,15 +165,30 @@ import { PlaygroundHeader } from "./playground/playground-header";
 type PlaygroundComponents = {
 	BentoGrid: BentoGridProps;
 	BlogList: BlogListProps;
+	Blockquote: BlockquoteProps;
 	Button: ButtonProps;
+	Code: CodeProps;
+	Columns: ColumnsProps;
+	Container: ContainerProps;
+	Grid: GridProps;
+	Heading: HeadingProps;
 	Hero: HeroProps;
 	Helps: HelpsProps;
+	Icon: IconProps;
+	Image: ImageProps;
 	Input: InputProps;
+	Link: LinkProps;
+	List: ListProps;
 	LogoClouds: LogoCloudsProps;
 	Navbar: NavbarProps;
 	PricingMinimal: PricingMinimalProps;
+	RichText: RichTextProps;
 	Section: SectionProps;
+	Spacer: SpacerProps;
+	Stack: StackProps;
 	Statistics: StatisticsProps;
+	Text: TextProps;
+	Video: VideoProps;
 };
 
 const playgroundConfig: Config<PlaygroundComponents> = {
@@ -117,21 +207,45 @@ const playgroundConfig: Config<PlaygroundComponents> = {
 				"LogoClouds",
 			],
 		},
-		actions: { title: "Actions", components: ["Button"] },
+		actions: { title: "Actions", components: ["Button", "Link"] },
 		forms: { title: "Forms", components: ["Input"] },
+		typography: {
+			title: "Typography",
+			components: ["Heading", "Text", "RichText", "Blockquote", "Code", "List"],
+		},
+		layout: {
+			title: "Layout",
+			components: ["Container", "Spacer", "Stack", "Grid", "Columns"],
+		},
+		media: { title: "Media", components: ["Image", "Video", "Icon"] },
 	},
 	components: {
 		BentoGrid: bentoGridComponentConfig,
 		BlogList: blogListComponentConfig,
+		Blockquote: blockquoteComponentConfig,
 		Button: buttonComponentConfig,
+		Code: codeComponentConfig,
+		Columns: columnsComponentConfig,
+		Container: containerComponentConfig,
+		Grid: gridComponentConfig,
+		Heading: headingComponentConfig,
 		Hero: heroComponentConfig,
 		Helps: helpsComponentConfig,
+		Icon: iconComponentConfig,
+		Image: imageComponentConfig,
 		Input: inputComponentConfig,
+		Link: linkComponentConfig,
+		List: listComponentConfig,
 		LogoClouds: logoCloudsComponentConfig,
 		Navbar: navbarComponentConfig,
 		PricingMinimal: pricingMinimalComponentConfig,
+		RichText: richTextComponentConfig,
 		Section: sectionComponentConfig,
+		Spacer: spacerComponentConfig,
+		Stack: stackComponentConfig,
 		Statistics: statisticsComponentConfig,
+		Text: textComponentConfig,
+		Video: videoComponentConfig,
 	},
 };
 

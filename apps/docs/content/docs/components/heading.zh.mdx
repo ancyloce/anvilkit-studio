@@ -1,0 +1,317 @@
+---
+title: Heading
+description: "Anvilkit Puck 原生 Heading 组件。"
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/heading</code> <span>·</span> <span>v0.1.0</span> <span>·</span> <a href="/playground">在演练场中试用 →</a>
+</div>
+
+## 实时预览
+
+<ComponentPreview name="Heading" />
+
+A semantic, responsive Puck-native heading with selectable `h1`–`h6` levels.
+
+## Install
+
+```sh
+pnpm add @anvilkit/heading @puckeditor/core
+```
+
+## Usage
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import {
+  Heading,
+  componentConfig,
+  defaultProps,
+  type HeadingProps,
+} from "@anvilkit/heading";
+
+const config: Config<{
+  Heading: HeadingProps;
+}> = {
+  components: {
+    Heading: componentConfig,
+  },
+};
+
+const data = {
+  root: {},
+  content: [
+    {
+      type: "Heading",
+      props: {
+        id: "heading-1",
+        ...defaultProps,
+      },
+    },
+  ],
+};
+
+export function Example() {
+  return <Heading text="Build something remarkable" level="h1" />;
+}
+```
+
+## Authoring surface (PLAN-0025 §6 / PLAN-0027)
+
+`src/config.ts` declares `metadata.anvilkit.editor` (no `version` field — the
+contract is structural) with a
+`styleTargets` map. Every declared target id is stamped on a real element via
+`anvilTargetAttrs(id, '<target>')` (the root uses `anvilRootAttrs(id)`), in
+every render branch and in every mode — edit mode may change affordances, never
+the target structure. Extend the map only together with the matching stamp and
+the `heading.targets.<targetId>` label in all four catalogs.
+
+Two authored props ride the same targets:
+
+- `classNames?: Record<string, string>` — Tailwind passthrough per target id,
+  merged **after** the base classes so authored classes win. A class only takes
+  effect if the host page's compiled CSS contains it.
+- `animation?: { preset, durationMs?, delayMs?, easing? }` — entrance preset
+  applied to the root through `animationAttrs()`; the keyframes live in
+  `src/styles.css` behind `@media (prefers-reduced-motion: no-preference)`.
+
+Neither is stamped into `defaultProps`. The hidden `appearance`/`interactions`/
+`bindings` carriers come from `...authoringFields`; `src/authoring.ts` is a
+verbatim per-package copy locked by the workspace `authoring-contract` suite.
+
+## 属性参考
+
+派生自该组件的 Puck `fields` 模式。
+
+| 字段 | 类型 | 默认值 |
+|-------|------|---------|
+| `appearance` | custom | — |
+| `interactions` | custom | — |
+| `bindings` | custom | — |
+| `text` | text | `"Build something remarkable"` |
+| `level` | select ("h1" \| "h2" \| "h3" \| "h4" \| "h5" \| "h6") | `"h2"` |
+| `alignment` | radio ("left" \| "center" \| "right") | `"left"` |
+| `animation` | object | — |
+| `classNames` | object | — |
+
+## 默认属性
+
+```json
+{
+  "text": "Build something remarkable",
+  "level": "h2",
+  "alignment": "left"
+}
+```
+
+## Puck 配置
+
+```json
+{
+  "label": "Heading",
+  "metadata": {
+    "componentName": "Heading",
+    "componentSlug": "heading",
+    "packageName": "@anvilkit/heading",
+    "packageVersion": "0.1.0",
+    "scaffoldType": "content",
+    "schemaVersion": 1,
+    "suggestedCategory": "typography",
+    "anvilkit": {
+      "editor": {
+        "styleTargets": {
+          "root": {
+            "label": "Heading",
+            "responsive": true,
+            "properties": [
+              "display",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          }
+        },
+        "inlineText": [
+          {
+            "id": "root",
+            "propPath": "text",
+            "format": "plain"
+          }
+        ],
+        "interactions": true,
+        "bindings": true
+      }
+    }
+  },
+  "defaultProps": {
+    "text": "Build something remarkable",
+    "level": "h2",
+    "alignment": "left"
+  },
+  "fields": {
+    "appearance": {
+      "type": "custom",
+      "visible": false
+    },
+    "interactions": {
+      "type": "custom",
+      "visible": false
+    },
+    "bindings": {
+      "type": "custom",
+      "visible": false
+    },
+    "text": {
+      "type": "text",
+      "label": "Text"
+    },
+    "level": {
+      "type": "select",
+      "label": "Level",
+      "options": [
+        {
+          "label": "Heading 1",
+          "value": "h1"
+        },
+        {
+          "label": "Heading 2",
+          "value": "h2"
+        },
+        {
+          "label": "Heading 3",
+          "value": "h3"
+        },
+        {
+          "label": "Heading 4",
+          "value": "h4"
+        },
+        {
+          "label": "Heading 5",
+          "value": "h5"
+        },
+        {
+          "label": "Heading 6",
+          "value": "h6"
+        }
+      ]
+    },
+    "alignment": {
+      "type": "radio",
+      "label": "Alignment",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    "animation": {
+      "type": "object",
+      "label": "Animation",
+      "objectFields": {
+        "preset": {
+          "type": "select",
+          "label": "Preset",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "Fade in",
+              "value": "fade-in"
+            },
+            {
+              "label": "Slide up",
+              "value": "slide-up"
+            },
+            {
+              "label": "Slide down",
+              "value": "slide-down"
+            },
+            {
+              "label": "Zoom in",
+              "value": "zoom-in"
+            }
+          ]
+        },
+        "durationMs": {
+          "type": "number",
+          "label": "Duration (ms)",
+          "min": 0
+        },
+        "delayMs": {
+          "type": "number",
+          "label": "Delay (ms)",
+          "min": 0
+        },
+        "easing": {
+          "type": "select",
+          "label": "Easing",
+          "options": [
+            {
+              "label": "ease",
+              "value": "ease"
+            },
+            {
+              "label": "ease-in",
+              "value": "ease-in"
+            },
+            {
+              "label": "ease-out",
+              "value": "ease-out"
+            },
+            {
+              "label": "ease-in-out",
+              "value": "ease-in-out"
+            },
+            {
+              "label": "linear",
+              "value": "linear"
+            }
+          ]
+        }
+      }
+    },
+    "classNames": {
+      "type": "object",
+      "label": "Custom classes",
+      "objectFields": {
+        "root": {
+          "type": "text",
+          "label": "Heading"
+        }
+      }
+    }
+  }
+}
+```

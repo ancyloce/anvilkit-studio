@@ -114,7 +114,12 @@ shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니�
 
 | 필드 | 타입 | 기본값 |
 |-------|------|---------|
+| `appearance` | custom | — |
+| `interactions` | custom | — |
+| `bindings` | custom | — |
 | `posts` | array | `[{"title":"How Dev AI?","description":"Introducing Acme.a…` |
+| `animation` | object | — |
+| `classNames` | object | — |
 
 ## 기본 속성
 
@@ -170,7 +175,144 @@ shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니�
     "packageVersion": "0.2.2",
     "scaffoldType": "content",
     "schemaVersion": 1,
-    "suggestedCategory": "marketing"
+    "suggestedCategory": "marketing",
+    "anvilkit": {
+      "editor": {
+        "styleTargets": {
+          "root": {
+            "label": "Blog list",
+            "responsive": true,
+            "properties": [
+              "display",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "rowGap",
+              "columnGap",
+              "columns",
+              "rows",
+              "minHeight",
+              "maxHeight",
+              "overflow"
+            ]
+          },
+          "card": {
+            "label": "Card",
+            "responsive": true,
+            "properties": [
+              "display",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "height",
+              "padding",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap",
+              "minHeight",
+              "maxHeight",
+              "overflow",
+              "cursor"
+            ]
+          },
+          "cardImage": {
+            "label": "Card image",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "maxWidth",
+              "height",
+              "margin",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "minHeight",
+              "maxHeight",
+              "filter",
+              "blendMode"
+            ]
+          },
+          "cardMeta": {
+            "label": "Card meta",
+            "responsive": true,
+            "properties": [
+              "display",
+              "margin",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          },
+          "cardTitle": {
+            "label": "Card title",
+            "responsive": true,
+            "properties": [
+              "display",
+              "margin",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          },
+          "cardDescription": {
+            "label": "Card description",
+            "responsive": true,
+            "properties": [
+              "display",
+              "margin",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          }
+        },
+        "interactions": true,
+        "bindings": true
+      }
+    }
   },
   "defaultProps": {
     "posts": [
@@ -210,6 +352,18 @@ shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니�
     ]
   },
   "fields": {
+    "appearance": {
+      "type": "custom",
+      "visible": false
+    },
+    "interactions": {
+      "type": "custom",
+      "visible": false
+    },
+    "bindings": {
+      "type": "custom",
+      "visible": false
+    },
     "posts": {
       "type": "array",
       "label": "Posts",
@@ -271,6 +425,104 @@ shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니�
         "relativeLabel": {
           "type": "text",
           "label": "Relative label"
+        }
+      }
+    },
+    "animation": {
+      "type": "object",
+      "label": "Animation",
+      "objectFields": {
+        "preset": {
+          "type": "select",
+          "label": "Preset",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "Fade in",
+              "value": "fade-in"
+            },
+            {
+              "label": "Slide up",
+              "value": "slide-up"
+            },
+            {
+              "label": "Slide down",
+              "value": "slide-down"
+            },
+            {
+              "label": "Zoom in",
+              "value": "zoom-in"
+            }
+          ]
+        },
+        "durationMs": {
+          "type": "number",
+          "label": "Duration (ms)",
+          "min": 0
+        },
+        "delayMs": {
+          "type": "number",
+          "label": "Delay (ms)",
+          "min": 0
+        },
+        "easing": {
+          "type": "select",
+          "label": "Easing",
+          "options": [
+            {
+              "label": "ease",
+              "value": "ease"
+            },
+            {
+              "label": "ease-in",
+              "value": "ease-in"
+            },
+            {
+              "label": "ease-out",
+              "value": "ease-out"
+            },
+            {
+              "label": "ease-in-out",
+              "value": "ease-in-out"
+            },
+            {
+              "label": "linear",
+              "value": "linear"
+            }
+          ]
+        }
+      }
+    },
+    "classNames": {
+      "type": "object",
+      "label": "Custom classes",
+      "objectFields": {
+        "root": {
+          "type": "text",
+          "label": "Blog list"
+        },
+        "card": {
+          "type": "text",
+          "label": "Card"
+        },
+        "cardImage": {
+          "type": "text",
+          "label": "Card image"
+        },
+        "cardMeta": {
+          "type": "text",
+          "label": "Card meta"
+        },
+        "cardTitle": {
+          "type": "text",
+          "label": "Card title"
+        },
+        "cardDescription": {
+          "type": "text",
+          "label": "Card description"
         }
       }
     }

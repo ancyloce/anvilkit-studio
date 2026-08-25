@@ -39,16 +39,31 @@ function localizedReadme(
 
 const SLUGS = [
 	"bento-grid",
+	"blockquote",
 	"blog-list",
 	"button",
+	"code",
+	"columns",
+	"container",
+	"grid",
+	"heading",
 	"helps",
 	"hero",
+	"icon",
+	"image",
 	"input",
+	"link",
+	"list",
 	"logo-clouds",
 	"navbar",
 	"pricing-minimal",
+	"rich-text",
 	"section",
+	"spacer",
+	"stack",
 	"statistics",
+	"text",
+	"video",
 ] as const;
 
 type Slug = (typeof SLUGS)[number];
@@ -229,12 +244,37 @@ function evalLiteralWithResolver(
 				fail(slug, `${lbl}: cyclical resolution of "${name}"`);
 			resolving.add(name);
 			try {
-				return evalLiteralCore(
-					locals.get(name)!,
-					resolver,
-					slug,
-					`${lbl}←${name}`,
-				);
+				const initializer = locals.get(name)!;
+				if (
+					ts.isArrowFunction(initializer) ||
+					ts.isFunctionExpression(initializer)
+				) {
+					return (...args: unknown[]): unknown => {
+						const paramCtx: Record<string, unknown> = { ...ctx };
+						initializer.parameters.forEach((parameter, index) => {
+							if (ts.isIdentifier(parameter.name)) {
+								paramCtx[parameter.name.text] = args[index];
+							}
+						});
+						const expression = ts.isBlock(initializer.body)
+							? initializer.body.statements.find(ts.isReturnStatement)
+									?.expression
+							: initializer.body;
+						if (!expression) {
+							fail(slug, `${lbl}: function "${name}" has no return expression`);
+						}
+						return evalLiteralWithResolver(
+							expression,
+							slug,
+							`${lbl}←${name}()`,
+							imports,
+							baseDir,
+							paramCtx,
+							sf,
+						);
+					};
+				}
+				return evalLiteralCore(initializer, resolver, slug, `${lbl}←${name}`);
 			} finally {
 				resolving.delete(name);
 			}
@@ -242,17 +282,35 @@ function evalLiteralWithResolver(
 		const fnDecl = fns?.get(name);
 		if (fnDecl) {
 			// Local helper like `buildFields(t)`: evaluate its single return
-			// expression with call arguments bound to the parameter names.
+			// expression with call arguments bound to the parameter names. Resolve
+			// preceding local consts in order so optional host adapters can select
+			// their static branch without executing component code.
 			return (...args: unknown[]): unknown => {
-				const ret = fnDecl.body?.statements.find(
-					ts.isReturnStatement,
-				)?.expression;
+				const statements = fnDecl.body?.statements ?? [];
+				const ret = statements.find(ts.isReturnStatement)?.expression;
 				if (!ret)
 					fail(slug, `${lbl}: function "${name}" has no return expression`);
 				const paramCtx: Record<string, unknown> = { ...ctx };
 				fnDecl.parameters.forEach((p, i) => {
 					if (ts.isIdentifier(p.name)) paramCtx[p.name.text] = args[i];
 				});
+				for (const statement of statements) {
+					if (ts.isReturnStatement(statement)) break;
+					if (!ts.isVariableStatement(statement)) continue;
+					for (const declaration of statement.declarationList.declarations) {
+						if (!ts.isIdentifier(declaration.name) || !declaration.initializer)
+							continue;
+						paramCtx[declaration.name.text] = evalLiteralWithResolver(
+							declaration.initializer,
+							slug,
+							`${lbl}←${name}().${declaration.name.text}`,
+							imports,
+							baseDir,
+							paramCtx,
+							sf,
+						);
+					}
+				}
 				return evalLiteralWithResolver(
 					ret,
 					slug,
@@ -328,7 +386,19 @@ function evalLiteralCore(
 		return obj;
 	}
 	if (ts.isArrayLiteralExpression(node)) {
-		return node.elements.map((el, i) => recur(el, `${label}[${i}]`));
+		const values: unknown[] = [];
+		for (const [index, element] of node.elements.entries()) {
+			if (ts.isSpreadElement(element)) {
+				const spread = recur(element.expression, `${label}[${index}].<spread>`);
+				if (!Array.isArray(spread)) {
+					fail(slug, `${label}: array spread of non-array`);
+				}
+				values.push(...spread);
+			} else {
+				values.push(recur(element, `${label}[${index}]`));
+			}
+		}
+		return values;
 	}
 	if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node))
 		return node.text;
@@ -344,6 +414,13 @@ function evalLiteralCore(
 		if (node.operator === ts.SyntaxKind.ExclamationToken) return !v;
 		fail(slug, `${label}: unsupported prefix operator`);
 	}
+	if (ts.isConditionalExpression(node)) {
+		const condition = recur(node.condition, `${label}.condition`);
+		return recur(
+			condition ? node.whenTrue : node.whenFalse,
+			condition ? `${label}.whenTrue` : `${label}.whenFalse`,
+		);
+	}
 	if (ts.isIdentifier(node)) {
 		if (node.text === "undefined") return undefined;
 		return resolve(node.text, label);
@@ -351,6 +428,16 @@ function evalLiteralCore(
 	if (ts.isPropertyAccessExpression(node)) {
 		const obj = recur(node.expression, label) as Record<string, unknown>;
 		return obj?.[node.name.text];
+	}
+	if (ts.isElementAccessExpression(node)) {
+		const obj = recur(node.expression, label) as Record<
+			string | number,
+			unknown
+		>;
+		const key = recur(node.argumentExpression, `${label}.key`) as
+			| string
+			| number;
+		return obj?.[key];
 	}
 	if (ts.isTemplateExpression(node)) {
 		let s = node.head.text;
@@ -361,6 +448,31 @@ function evalLiteralCore(
 		return s;
 	}
 	if (ts.isCallExpression(node)) {
+		const evaluateCallback = (
+			callback: ts.Expression | undefined,
+			args: readonly unknown[],
+			callbackLabel: string,
+		): unknown => {
+			if (
+				callback === undefined ||
+				(!ts.isArrowFunction(callback) && !ts.isFunctionExpression(callback))
+			) {
+				fail(slug, `${callbackLabel}: expected a static callback`);
+			}
+			const body = ts.isBlock(callback.body)
+				? callback.body.statements.find(ts.isReturnStatement)?.expression
+				: callback.body;
+			if (!body)
+				fail(slug, `${callbackLabel}: callback has no return expression`);
+			const scopedResolve: IdentifierResolver = (name, lbl) => {
+				const parameterIndex = callback.parameters.findIndex(
+					(parameter) =>
+						ts.isIdentifier(parameter.name) && parameter.name.text === name,
+				);
+				return parameterIndex >= 0 ? args[parameterIndex] : resolve(name, lbl);
+			};
+			return evalLiteralCore(body, scopedResolve, slug, callbackLabel);
+		};
 		// Calls like `createT()` / `buildFields(defaultT)` / `t("key")` where the
 		// callee resolves to a statically-known function (seeded in ctx or a
 		// local function declaration).
@@ -376,6 +488,34 @@ function evalLiteralCore(
 				slug,
 				`${label}: call target "${node.expression.text}" is not statically evaluable`,
 			);
+		}
+		if (ts.isPropertyAccessExpression(node.expression)) {
+			const source = recur(node.expression.expression, `${label}.mapSource`);
+			const method = node.expression.name.text;
+			if (method === "includes" && Array.isArray(source)) {
+				const sought = recur(node.arguments[0], `${label}.includesValue`);
+				return source.includes(sought);
+			}
+			if (method === "map" && Array.isArray(source)) {
+				return source.map((value, index) =>
+					evaluateCallback(
+						node.arguments[0],
+						[value, index, source],
+						`${label}[${index}]`,
+					),
+				);
+			}
+			if (method === "filter" && Array.isArray(source)) {
+				return source.filter((value, index) =>
+					Boolean(
+						evaluateCallback(
+							node.arguments[0],
+							[value, index, source],
+							`${label}[${index}]`,
+						),
+					),
+				);
+			}
 		}
 		fail(slug, `${label}: unsupported call expression`);
 	}
@@ -410,6 +550,52 @@ function parseComponent(slug: Slug): ComponentInfo {
 
 	const ctx: Record<string, unknown> = {
 		packageJson: { name: pkgJson.name, version: pkgJson.version },
+		animationField: (labels: Record<string, unknown>) => {
+			const presetOptions = labels.presetOptions as Record<string, string>;
+			return {
+				type: "object",
+				label: labels.label,
+				objectFields: {
+					preset: {
+						type: "select",
+						label: labels.preset,
+						options: [
+							"none",
+							"fade-in",
+							"slide-up",
+							"slide-down",
+							"zoom-in",
+						].map((value) => ({ label: presetOptions[value], value })),
+					},
+					durationMs: { type: "number", label: labels.duration, min: 0 },
+					delayMs: { type: "number", label: labels.delay, min: 0 },
+					easing: {
+						type: "select",
+						label: labels.easing,
+						options: [
+							"ease",
+							"ease-in",
+							"ease-out",
+							"ease-in-out",
+							"linear",
+						].map((value) => ({ label: value, value })),
+					},
+				},
+			};
+		},
+		classNamesField: (
+			targets: Array<{ id: string; label: string }>,
+			label?: string,
+		) => ({
+			type: "object",
+			label,
+			objectFields: Object.fromEntries(
+				targets.map((target) => [
+					target.id,
+					{ type: "text", label: target.label },
+				]),
+			),
+		}),
 	};
 
 	// The i18n factory pattern exports `fields = buildFields(createT())`. Docs
@@ -584,8 +770,7 @@ const T: Record<
 			"Auto-generated catalog of every @anvilkit/* Puck-native component package.",
 		indexLead:
 			"This catalog is regenerated from each component's `metadata` export and `README.md`\non every docs build — see `apps/docs/scripts/generate-component-pages.ts`.",
-		indexPlayground:
-			"Prefer to explore interactively? [Open the playground](/playground) to drop any of\nthese 11 components onto a live Puck canvas.",
+		indexPlayground: `Prefer to explore interactively? [Open the playground](/playground) to drop any of\nthese ${SLUGS.length} components onto a live Puck canvas.`,
 		indexAuthoring:
 			"Writing your own? Start with the [component authoring guide](/guides/component-authoring).",
 		colComponent: "Component",
@@ -606,8 +791,7 @@ const T: Record<
 		sectionDesc: "自动生成的所有 @anvilkit/* Puck 原生组件包目录。",
 		indexLead:
 			"此目录在每次构建文档时，都会根据每个组件的 `metadata` 导出和 `README.md`\n重新生成 —— 参见 `apps/docs/scripts/generate-component-pages.ts`。",
-		indexPlayground:
-			"想要交互式探索？[打开演练场](/playground) 即可将这 11 个组件中的任意一个\n拖放到实时的 Puck 画布上。",
+		indexPlayground: `想要交互式探索？[打开演练场](/playground) 即可将这 ${SLUGS.length} 个组件中的任意一个\n拖放到实时的 Puck 画布上。`,
 		indexAuthoring:
 			"想编写自己的组件？请从 [组件编写指南](/zh/guides/component-authoring) 开始。",
 		colComponent: "组件",
@@ -629,8 +813,7 @@ const T: Record<
 			"すべての @anvilkit/* Puck ネイティブコンポーネントパッケージの自動生成カタログ。",
 		indexLead:
 			"このカタログは、ドキュメントをビルドするたびに各コンポーネントの `metadata` エクスポートと `README.md` から\n再生成されます — `apps/docs/scripts/generate-component-pages.ts` を参照してください。",
-		indexPlayground:
-			"インタラクティブに試したいですか？[プレイグラウンドを開く](/playground)と、これら 11 個の\nコンポーネントを実際の Puck キャンバスに配置できます。",
+		indexPlayground: `インタラクティブに試したいですか？[プレイグラウンドを開く](/playground)と、これら ${SLUGS.length} 個の\nコンポーネントを実際の Puck キャンバスに配置できます。`,
 		indexAuthoring:
 			"独自に作成しますか？[コンポーネント作成ガイド](/ja/guides/component-authoring)から始めてください。",
 		colComponent: "コンポーネント",
@@ -652,8 +835,7 @@ const T: Record<
 			"모든 @anvilkit/* Puck 네이티브 컴포넌트 패키지의 자동 생성 카탈로그.",
 		indexLead:
 			"이 카탈로그는 문서를 빌드할 때마다 각 컴포넌트의 `metadata` 익스포트와 `README.md`에서\n다시 생성됩니다 — `apps/docs/scripts/generate-component-pages.ts` 참조.",
-		indexPlayground:
-			"인터랙티브하게 살펴보고 싶으신가요? [플레이그라운드 열기](/playground)에서 이 11개\n컴포넌트를 실제 Puck 캔버스에 끌어다 놓아 보세요.",
+		indexPlayground: `인터랙티브하게 살펴보고 싶으신가요? [플레이그라운드 열기](/playground)에서 이 ${SLUGS.length}개\n컴포넌트를 실제 Puck 캔버스에 끌어다 놓아 보세요.`,
 		indexAuthoring:
 			"직접 작성하시나요? [컴포넌트 작성 가이드](/ko/guides/component-authoring)부터 시작하세요.",
 		colComponent: "컴포넌트",

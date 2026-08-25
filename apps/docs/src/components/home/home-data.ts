@@ -9,6 +9,11 @@ export const COMPONENTS: Array<{ slug: string; pkg: string; blurb: string }> = [
 		blurb: "Responsive bento-style grid layout.",
 	},
 	{
+		slug: "blockquote",
+		pkg: "@anvilkit/blockquote",
+		blurb: "Semantic quotations with optional citations.",
+	},
+	{
 		slug: "blog-list",
 		pkg: "@anvilkit/blog-list",
 		blurb: "Paginated blog post list.",
@@ -18,6 +23,31 @@ export const COMPONENTS: Array<{ slug: string; pkg: string; blurb: string }> = [
 		pkg: "@anvilkit/button",
 		blurb: "Primary, secondary, and ghost variants.",
 	},
+	{
+		slug: "code",
+		pkg: "@anvilkit/code",
+		blurb: "Escaped code blocks with optional line numbers.",
+	},
+	{
+		slug: "columns",
+		pkg: "@anvilkit/columns",
+		blurb: "Responsive multi-column slot layout.",
+	},
+	{
+		slug: "container",
+		pkg: "@anvilkit/container",
+		blurb: "Bounded content container with a Puck slot.",
+	},
+	{
+		slug: "grid",
+		pkg: "@anvilkit/grid",
+		blurb: "Responsive grid layout with a Puck slot.",
+	},
+	{
+		slug: "heading",
+		pkg: "@anvilkit/heading",
+		blurb: "Semantic heading levels and visual sizes.",
+	},
 	{ slug: "helps", pkg: "@anvilkit/helps", blurb: "Help / FAQ accordion." },
 	{
 		slug: "hero",
@@ -25,9 +55,29 @@ export const COMPONENTS: Array<{ slug: string; pkg: string; blurb: string }> = [
 		blurb: "Configurable hero section with CTAs.",
 	},
 	{
+		slug: "icon",
+		pkg: "@anvilkit/icon",
+		blurb: "Accessible dependency-free interface glyphs.",
+	},
+	{
+		slug: "image",
+		pkg: "@anvilkit/image",
+		blurb: "Responsive images with captions and asset references.",
+	},
+	{
 		slug: "input",
 		pkg: "@anvilkit/input",
 		blurb: "Text input with label and validation.",
+	},
+	{
+		slug: "link",
+		pkg: "@anvilkit/link",
+		blurb: "Editor-safe links with semantic styles.",
+	},
+	{
+		slug: "list",
+		pkg: "@anvilkit/list",
+		blurb: "Ordered and unordered repeatable lists.",
 	},
 	{
 		slug: "logo-clouds",
@@ -45,14 +95,39 @@ export const COMPONENTS: Array<{ slug: string; pkg: string; blurb: string }> = [
 		blurb: "Minimal three-tier pricing table.",
 	},
 	{
+		slug: "rich-text",
+		pkg: "@anvilkit/rich-text",
+		blurb: "Puck-native structured rich text.",
+	},
+	{
 		slug: "section",
 		pkg: "@anvilkit/section",
 		blurb: "Generic content section wrapper.",
 	},
 	{
+		slug: "spacer",
+		pkg: "@anvilkit/spacer",
+		blurb: "Responsive vertical rhythm control.",
+	},
+	{
+		slug: "stack",
+		pkg: "@anvilkit/stack",
+		blurb: "Flexible row or column slot layout.",
+	},
+	{
 		slug: "statistics",
 		pkg: "@anvilkit/statistics",
 		blurb: "Metrics / stat highlight block.",
+	},
+	{
+		slug: "text",
+		pkg: "@anvilkit/text",
+		blurb: "Paragraph text with semantic visual variants.",
+	},
+	{
+		slug: "video",
+		pkg: "@anvilkit/video",
+		blurb: "Caption-ready responsive video playback.",
 	},
 ];
 

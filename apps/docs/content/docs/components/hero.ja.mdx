@@ -122,6 +122,9 @@ shadcn CSS 変数トークンによりライトテーマとダークテーマに
 
 | フィールド | 型 | デフォルト |
 |-------|------|---------|
+| `appearance` | custom | — |
+| `interactions` | custom | — |
+| `bindings` | custom | — |
 | `announcementLabel` | text | `"We raised $69M pre seed"` |
 | `announcementHref` | text | `""` |
 | `announcementOpenInNewTab` | radio (false \| true) | `false` |
@@ -133,6 +136,8 @@ shadcn CSS 変数トークンによりライトテーマとダークテーマに
 | `windowsLabel` | text | `"Download for Windows"` |
 | `windowsHref` | text | `"/download/windows"` |
 | `windowsOpenInNewTab` | radio (false \| true) | `false` |
+| `animation` | object | — |
+| `classNames` | object | — |
 
 ## デフォルトプロパティ
 
@@ -164,7 +169,194 @@ shadcn CSS 変数トークンによりライトテーマとダークテーマに
     "packageVersion": "0.2.2",
     "scaffoldType": "content",
     "schemaVersion": 1,
-    "suggestedCategory": "marketing"
+    "suggestedCategory": "marketing",
+    "anvilkit": {
+      "editor": {
+        "styleTargets": {
+          "root": {
+            "label": "Hero",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "minHeight",
+              "maxHeight",
+              "overflow"
+            ]
+          },
+          "content": {
+            "label": "Content",
+            "responsive": true,
+            "properties": [
+              "display",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "margin",
+              "padding",
+              "background",
+              "opacity",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap",
+              "minHeight",
+              "maxHeight",
+              "zIndex"
+            ]
+          },
+          "badge": {
+            "label": "Announcement badge",
+            "responsive": true,
+            "properties": [
+              "display",
+              "gap",
+              "height",
+              "margin",
+              "padding",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap",
+              "minHeight",
+              "maxHeight",
+              "overflow",
+              "cursor",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          },
+          "headline": {
+            "label": "Headline",
+            "responsive": true,
+            "properties": [
+              "display",
+              "margin",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          },
+          "description": {
+            "label": "Description",
+            "responsive": true,
+            "properties": [
+              "display",
+              "margin",
+              "maxWidth",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "textAlign",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          },
+          "actions": {
+            "label": "Actions",
+            "responsive": true,
+            "properties": [
+              "display",
+              "gap",
+              "alignItems",
+              "justifyContent",
+              "width",
+              "maxWidth",
+              "margin",
+              "padding",
+              "opacity",
+              "direction",
+              "wrap",
+              "rowGap",
+              "columnGap"
+            ]
+          },
+          "cta": {
+            "label": "CTA buttons",
+            "responsive": true,
+            "properties": [
+              "display",
+              "width",
+              "minWidth",
+              "maxWidth",
+              "height",
+              "padding",
+              "background",
+              "border",
+              "borderRadius",
+              "boxShadow",
+              "opacity",
+              "color",
+              "fontFamily",
+              "fontSize",
+              "fontWeight",
+              "lineHeight",
+              "letterSpacing",
+              "minHeight",
+              "maxHeight",
+              "overflow",
+              "cursor",
+              "textDecoration",
+              "textTransform",
+              "textWrap"
+            ]
+          }
+        },
+        "inlineText": [
+          {
+            "id": "headline",
+            "propPath": "headline",
+            "format": "plain"
+          },
+          {
+            "id": "description",
+            "propPath": "description",
+            "format": "plain"
+          }
+        ],
+        "interactions": true,
+        "bindings": true
+      }
+    }
   },
   "defaultProps": {
     "announcementLabel": "We raised $69M pre seed",
@@ -180,6 +372,18 @@ shadcn CSS 変数トークンによりライトテーマとダークテーマに
     "windowsOpenInNewTab": false
   },
   "fields": {
+    "appearance": {
+      "type": "custom",
+      "visible": false
+    },
+    "interactions": {
+      "type": "custom",
+      "visible": false
+    },
+    "bindings": {
+      "type": "custom",
+      "visible": false
+    },
     "announcementLabel": {
       "type": "text",
       "label": "Announcement label"
@@ -253,6 +457,108 @@ shadcn CSS 変数トークンによりライトテーマとダークテーマに
           "value": true
         }
       ]
+    },
+    "animation": {
+      "type": "object",
+      "label": "Animation",
+      "objectFields": {
+        "preset": {
+          "type": "select",
+          "label": "Preset",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "Fade in",
+              "value": "fade-in"
+            },
+            {
+              "label": "Slide up",
+              "value": "slide-up"
+            },
+            {
+              "label": "Slide down",
+              "value": "slide-down"
+            },
+            {
+              "label": "Zoom in",
+              "value": "zoom-in"
+            }
+          ]
+        },
+        "durationMs": {
+          "type": "number",
+          "label": "Duration (ms)",
+          "min": 0
+        },
+        "delayMs": {
+          "type": "number",
+          "label": "Delay (ms)",
+          "min": 0
+        },
+        "easing": {
+          "type": "select",
+          "label": "Easing",
+          "options": [
+            {
+              "label": "ease",
+              "value": "ease"
+            },
+            {
+              "label": "ease-in",
+              "value": "ease-in"
+            },
+            {
+              "label": "ease-out",
+              "value": "ease-out"
+            },
+            {
+              "label": "ease-in-out",
+              "value": "ease-in-out"
+            },
+            {
+              "label": "linear",
+              "value": "linear"
+            }
+          ]
+        }
+      }
+    },
+    "classNames": {
+      "type": "object",
+      "label": "Custom classes",
+      "objectFields": {
+        "root": {
+          "type": "text",
+          "label": "Hero"
+        },
+        "content": {
+          "type": "text",
+          "label": "Content"
+        },
+        "badge": {
+          "type": "text",
+          "label": "Announcement badge"
+        },
+        "headline": {
+          "type": "text",
+          "label": "Headline"
+        },
+        "description": {
+          "type": "text",
+          "label": "Description"
+        },
+        "actions": {
+          "type": "text",
+          "label": "Actions"
+        },
+        "cta": {
+          "type": "text",
+          "label": "CTA buttons"
+        }
+      }
     }
   }
 }

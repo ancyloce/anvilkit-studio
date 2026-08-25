@@ -15,7 +15,7 @@ export function PlaygroundHeader({
 					Try AnvilKit without cloning the repo
 				</h1>
 				<p className="anvilkit-playground__lede">
-					Drag any of the 11 <code>@anvilkit/*</code> components into the
+					Drag any of the 26 <code>@anvilkit/*</code> components into the
 					canvas, then explore the full plugin surface live in the editor:
 					HTML/React export, the mock AI copilot, the asset manager, design
 					system, version history, and Canvas Studio. Add <code>?collab=1</code>{" "}
