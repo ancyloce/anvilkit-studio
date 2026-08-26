@@ -164,7 +164,6 @@ export default function EditorRoot({
 			viewport.setBreakpoints(documentBreakpoints(data as PuckData));
 		};
 		syncViewportBreakpoints();
-		const unsubscribeViewportSync = bridge.subscribe(syncViewportBreakpoints);
 		// Persistent collab-gate diagnostic (§7.4: "neither system is
 		// silently disabled"): recomputed on every bridge change so a
 		// recompile's new capability list re-derives it; deduped by
@@ -234,13 +233,12 @@ export default function EditorRoot({
 			getActiveLayer: () => viewport.getState().activeBreakpoint,
 			getViewportWidth: () => viewport.getState().viewportWidth,
 		};
-		// Every Puck data change wakes the runtime: the viewport's
-		// breakpoint list is document state now, and a live inline session
-		// must re-check whether the document moved under it.
+		// Breakpoints are document state, so refresh them once per Puck data
+		// change. `notifyDataChange()` owns the single subscriber wake; the
+		// inline controller already listens to that wake and does not need a
+		// second explicit interrupt here.
 		bridge.onDataChange = () => {
 			syncViewportBreakpoints();
-			bridge.inline?.handleExternalInterrupt();
-			bridge.notifyStyles();
 		};
 		bridge.onPuckSelectedChange = selection.handlePuckSelectedChange;
 		refreshCollabGate();
@@ -248,7 +246,6 @@ export default function EditorRoot({
 		bridge.notifyStyles();
 		return () => {
 			unsubscribeGate();
-			unsubscribeViewportSync();
 			// Guard on identity: a StrictMode re-run or a newer mount may
 			// already have installed its own runtime.
 			if (bridge.api === api) {

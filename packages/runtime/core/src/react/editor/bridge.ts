@@ -260,6 +260,13 @@ export function createStudioEditorBridge(): StudioEditorBridge {
 		},
 		notifyDataChange: (data) => {
 			dataVersion += 1;
+			// A Puck data change can affect both authored styles and general
+			// editor state. Advance every relevant snapshot before invoking the
+			// runtime callback, then wake subscribers exactly once. Previously the
+			// callback called `notifyStyles()` (first wake) and this method woke a
+			// second time, multiplying every keystroke across the editor surface.
+			styleVersion += 1;
+			version += 1;
 			bridge.onDataChange?.(data);
 			// Wake prop-watching subscribers even when the sidecar slot is
 			// untouched (the port only notifies on sidecar identity change).
