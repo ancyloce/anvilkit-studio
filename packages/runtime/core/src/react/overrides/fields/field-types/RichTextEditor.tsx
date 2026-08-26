@@ -8,7 +8,7 @@
  * is emitted as a separate async chunk and never counts against the `<Studio>`
  * entry or chrome bundle budgets (both measure entry chunks only). The field
  * value is a serializable **HTML string** — read as the editor's initial
- * content and emitted via `onChange` on every edit.
+ * content and emitted via coalesced `onChange` commits while typing.
  *
  * Scope: ships TipTap's `StarterKit` only (paragraphs, headings, bold/italic,
  * strike, code, blockquote, bullet/ordered lists, horizontal rule). HTML using
@@ -22,14 +22,15 @@ import "./rich-text-editor.css";
 import type { Editor } from "@tiptap/react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { Bold, Heading2, Italic, List, ListOrdered } from "lucide-react";
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useMsg } from "@/state/editor-i18n-context";
 import { createTiptapExtensions } from "../../../editor/inline/tiptap-contract.js";
+import { createRichTextCommitBuffer } from "./rich-text-commit-buffer";
 
 export interface RichTextEditorProps {
 	/** Current value — an HTML string (the field's serialized content). */
 	readonly value: string;
-	/** Emitted with the updated HTML on every edit. */
+	/** Emitted with coalesced HTML updates while typing and flushed on blur. */
 	readonly onChange: (html: string) => void;
 	readonly readOnly?: boolean;
 	/** Forwarded to the contenteditable element so the field label's `for` resolves. */
@@ -108,6 +109,22 @@ export default function RichTextEditor({
 	readOnly = false,
 	id,
 }: RichTextEditorProps): ReactNode {
+	const onChangeRef = useRef(onChange);
+	const emittedValuesRef = useRef(new Set<string>());
+	const [commitBuffer] = useState(() =>
+		createRichTextCommitBuffer((html) => {
+			const emittedValues = emittedValuesRef.current;
+			// Parent echoes can arrive after the editor has already advanced to a
+			// newer local value. Remember a small bounded set so those echoes do not
+			// reset TipTap and move the caret backwards.
+			if (emittedValues.size >= 32) {
+				emittedValues.clear();
+			}
+			emittedValues.add(html);
+			onChangeRef.current(html);
+		}),
+	);
+
 	const editor = useEditor({
 		// Shared schema source (CORE-P1B-009D): the SAME extension set as
 		// the canvas inline surface — the two can never drift.
@@ -123,20 +140,31 @@ export default function RichTextEditor({
 					? { class: "ak-richtext-content", id }
 					: { class: "ak-richtext-content" },
 		},
-		onUpdate: ({ editor: instance }) => onChange(instance.getHTML()),
+		onUpdate: ({ editor: instance }) => commitBuffer.schedule(instance),
+		onBlur: () => commitBuffer.flush(),
+		onDestroy: () => commitBuffer.flush(),
 	});
 
+	useEffect(() => {
+		onChangeRef.current = onChange;
+	}, [onChange]);
+
 	// Sync an externally-changed value into the editor without clobbering the
-	// caret on echoes: when our own `onUpdate` round-trips the value back, it
-	// already equals `getHTML()`, so we skip `setContent`.
+	// caret on delayed echoes from a coalesced commit. A genuinely external
+	// value supersedes any pending local update.
 	useEffect(() => {
 		if (editor === null) {
 			return;
 		}
+		if (emittedValuesRef.current.delete(value)) {
+			return;
+		}
 		if (value !== editor.getHTML()) {
+			emittedValuesRef.current.clear();
+			commitBuffer.cancel();
 			editor.commands.setContent(value, { emitUpdate: false });
 		}
-	}, [editor, value]);
+	}, [commitBuffer, editor, value]);
 
 	useEffect(() => {
 		editor?.setEditable(!readOnly);
