@@ -15,30 +15,44 @@ import {
 } from "../editor-config";
 
 /**
- * The registered catalogue, kept sorted. PLAN-0036 grows this list one
- * wrapper batch at a time (P0 six → P1-04 batch 1 → P1-05/06), and the
- * assertion below stays an EXACT set comparison so a wrapper can never
- * be added to the app without being declared here.
+ * The registered catalogue, kept sorted. The assertion below stays an EXACT
+ * set comparison so a shared component can never be added to the app without
+ * being declared here.
  */
 const COMPONENT_TYPES = [
 	"Accordion",
 	"Alert",
 	"Avatar",
 	"Badge",
+	"Blockquote",
 	"Button",
 	"Card",
 	"Checkbox",
+	"Code",
+	"Columns",
+	"Container",
+	"Grid",
+	"Heading",
+	"Icon",
+	"Image",
 	"Input",
 	"Label",
+	"Link",
+	"List",
 	"Progress",
+	"RichText",
 	"Select",
 	"Separator",
 	"Slider",
+	"Spacer",
+	"Stack",
 	"Switch",
 	"Table",
 	"Tabs",
+	"Text",
 	"Textarea",
 	"Tooltip",
+	"Video",
 ] as const;
 
 /** One node per registered type, in one document. */

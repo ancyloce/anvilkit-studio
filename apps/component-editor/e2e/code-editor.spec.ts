@@ -231,7 +231,9 @@ test.describe("code editor panel", () => {
 		page,
 	}) => {
 		await page.goto(EDITOR_URL);
-		const toggle = page.getByRole("button", { name: "Code", exact: true });
+		const toggle = page
+			.getByRole("banner")
+			.getByRole("button", { name: "Code", exact: true });
 		await toggle.focus();
 		await expect(toggle).toBeFocused();
 		await page.keyboard.press("Enter");

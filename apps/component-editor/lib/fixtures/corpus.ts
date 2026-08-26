@@ -2,9 +2,9 @@ import type { Data } from "@puckeditor/core";
 import { componentEditorConfig } from "../editor-config";
 
 /**
- * Parity fixture corpus v0 (plan 0036 P0-06): the six P0 wrappers plus one
- * nested-slot document. Grows to the full 18-wrapper corpus at P1-13 and
- * becomes a required CI gate at P3-03.
+ * Parity fixture corpus v0 (plan 0036 P0-06), now expanded to cover the full
+ * 33-wrapper catalog plus one nested-slot document. This remains the required
+ * CI parity gate established at P3-03.
  */
 
 export interface CorpusFixture {

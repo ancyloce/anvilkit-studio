@@ -80,12 +80,37 @@ const OMITTED_FIELD_NAMES = new Set([
 const OMITTED_FIELD_TYPES = new Set(["custom", "external"]);
 
 /**
+ * A Puck Config is assembled once per editor locale and treated as immutable.
+ * Schema derivation deliberately unrolls the component union, so repeating it
+ * for every prompt scales poorly as the shared catalog grows. Cache derived,
+ * read-only artifacts by Config identity while allowing old locale configs to
+ * be collected normally.
+ */
+const catalogCache = new WeakMap<Config, AiGenerationContext>();
+const schemaCache = new WeakMap<Config, ReturnType<typeof deriveSchemas>>();
+const renderedCatalogCache = new WeakMap<Config, string>();
+
+/**
  * The catalog. A thin, intention-revealing alias over the shared builder —
  * the whitelist is exactly `Object.keys(config.components)`, so nothing
  * else in the app needs to list component names.
  */
 export function buildCatalog(config: Config): AiGenerationContext {
-	return configToAiContext(config);
+	const cached = catalogCache.get(config);
+	if (cached !== undefined) return cached;
+
+	const catalog = configToAiContext(config);
+	catalogCache.set(config, catalog);
+	return catalog;
+}
+
+function schemasOf(config: Config): ReturnType<typeof deriveSchemas> {
+	const cached = schemaCache.get(config);
+	if (cached !== undefined) return cached;
+
+	const schemas = deriveSchemas(config);
+	schemaCache.set(config, schemas);
+	return schemas;
 }
 
 /** Component type names the model may use. */
@@ -133,6 +158,12 @@ export function renderCatalog(
 	config: Config,
 	context: AiGenerationContext = buildCatalog(config),
 ): string {
+	const defaultContext = buildCatalog(config);
+	if (context === defaultContext) {
+		const cached = renderedCatalogCache.get(config);
+		if (cached !== undefined) return cached;
+	}
+
 	// The shared, already-sorted slot index — the same helper the rest of
 	// the workspace uses to answer "which fields are slots".
 	const slotIndex = identifySlotFields(config);
@@ -174,7 +205,9 @@ export function renderCatalog(
 		},
 	);
 
-	return blocks.join("\n\n");
+	const rendered = blocks.join("\n\n");
+	if (context === defaultContext) renderedCatalogCache.set(config, rendered);
+	return rendered;
 }
 
 /** DOC-02 §6.1 — one paragraph per run kind, no persona filler. */
@@ -227,7 +260,7 @@ export function buildPromptBundle(options: PromptBundleOptions): PromptBundle {
 	const { config, kind, locale, theme, extraRules } = options;
 	const catalogData = buildCatalog(config);
 	// FR-C13: the SAME gate the code editor validates with.
-	const { jsonSchema } = deriveSchemas(config);
+	const { jsonSchema } = schemasOf(config);
 
 	const rules = [renderRules(locale), ...(extraRules ?? [])].join("\n");
 

@@ -145,6 +145,6 @@ describe("corpus coverage (P1-13)", () => {
 				`${type} is absent from the parity corpus`,
 			).toBe(true);
 		}
-		expect(Object.keys(config.components)).toHaveLength(18);
+		expect(Object.keys(config.components)).toHaveLength(33);
 	});
 });

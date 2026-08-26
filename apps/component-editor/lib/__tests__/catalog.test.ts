@@ -24,18 +24,19 @@ describe("buildCatalog", () => {
 		);
 	});
 
-	it("covers all 18 wrappers", () => {
-		expect(whitelistOf(componentEditorConfig)).toHaveLength(18);
+	it("covers all 33 wrappers", () => {
+		expect(whitelistOf(componentEditorConfig)).toHaveLength(33);
 	});
 
 	it("is deterministic and name-sorted", () => {
-		const names = buildCatalog(componentEditorConfig).availableComponents.map(
+		const first = buildCatalog(componentEditorConfig);
+		const second = buildCatalog(componentEditorConfig);
+		const names = first.availableComponents.map(
 			(component) => component.componentName,
 		);
 		expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
-		expect(JSON.stringify(buildCatalog(componentEditorConfig))).toBe(
-			JSON.stringify(buildCatalog(componentEditorConfig)),
-		);
+		expect(JSON.stringify(first)).toBe(JSON.stringify(second));
+		expect(second).toBe(first);
 	});
 });
 
@@ -94,6 +95,7 @@ describe("buildPromptBundle (DOC-02 §6.1–6.4)", () => {
 			kind: "page",
 		});
 		expect(renderSystemPrompt(a)).toBe(renderSystemPrompt(b));
+		expect(b.jsonSchema).toBe(a.jsonSchema);
 	});
 
 	it("carries all four system blocks in §6 order", () => {
@@ -187,6 +189,6 @@ describe("buildPromptBundle (DOC-02 §6.1–6.4)", () => {
 			config: componentEditorConfig,
 			kind: "page",
 		});
-		expect(bundle.catalogData.availableComponents).toHaveLength(18);
+		expect(bundle.catalogData.availableComponents).toHaveLength(33);
 	});
 });

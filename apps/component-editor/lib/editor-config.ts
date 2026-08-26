@@ -2,21 +2,36 @@ import { createAccordionConfig } from "@anvilkit/accordion";
 import { createAlertConfig } from "@anvilkit/alert";
 import { createAvatarConfig } from "@anvilkit/avatar";
 import { createBadgeConfig } from "@anvilkit/badge";
+import { createBlockquoteConfig } from "@anvilkit/blockquote";
 import { createButtonConfig } from "@anvilkit/button";
 import { createCardConfig } from "@anvilkit/card";
 import { createCheckboxConfig } from "@anvilkit/checkbox";
+import { createCodeConfig } from "@anvilkit/code";
+import { createColumnsConfig } from "@anvilkit/columns";
+import { createContainerConfig } from "@anvilkit/container";
 import { withBindingResolution } from "@anvilkit/core/editor";
+import { createGridConfig } from "@anvilkit/grid";
+import { createHeadingConfig } from "@anvilkit/heading";
+import { createIconConfig } from "@anvilkit/icon";
+import { createImageConfig } from "@anvilkit/image";
 import { createInputConfig } from "@anvilkit/input";
 import { createLabelConfig } from "@anvilkit/label";
+import { createLinkConfig } from "@anvilkit/link";
+import { createListConfig } from "@anvilkit/list";
 import { createProgressConfig } from "@anvilkit/progress";
+import { createRichTextConfig } from "@anvilkit/rich-text";
 import { createSelectConfig } from "@anvilkit/select";
 import { createSeparatorConfig } from "@anvilkit/separator";
 import { createSliderConfig } from "@anvilkit/slider";
+import { createSpacerConfig } from "@anvilkit/spacer";
+import { createStackConfig } from "@anvilkit/stack";
 import { createSwitchConfig } from "@anvilkit/switch";
 import { createTableConfig } from "@anvilkit/table";
 import { createTabsConfig } from "@anvilkit/tabs";
+import { createTextConfig } from "@anvilkit/text";
 import { createTextareaConfig } from "@anvilkit/textarea";
 import { createTooltipConfig } from "@anvilkit/tooltip";
+import { createVideoConfig } from "@anvilkit/video";
 import type { Config, Fields } from "@puckeditor/core";
 
 /**
@@ -72,7 +87,6 @@ export function createComponentEditorConfig(locale?: string): Config {
 			inputs: {
 				title: "Inputs",
 				components: [
-					"Button",
 					"Checkbox",
 					"Input",
 					"Label",
@@ -81,6 +95,10 @@ export function createComponentEditorConfig(locale?: string): Config {
 					"Switch",
 					"Textarea",
 				],
+			},
+			actions: {
+				title: "Actions",
+				components: ["Button", "Link"],
 			},
 			display: {
 				title: "Display",
@@ -97,7 +115,30 @@ export function createComponentEditorConfig(locale?: string): Config {
 			},
 			layout: {
 				title: "Layout",
-				components: ["Accordion", "Tabs"],
+				components: [
+					"Accordion",
+					"Tabs",
+					"Container",
+					"Spacer",
+					"Stack",
+					"Grid",
+					"Columns",
+				],
+			},
+			typography: {
+				title: "Typography",
+				components: [
+					"Heading",
+					"Text",
+					"RichText",
+					"Blockquote",
+					"Code",
+					"List",
+				],
+			},
+			media: {
+				title: "Media",
+				components: ["Image", "Video", "Icon"],
 			},
 		},
 		components: {
@@ -105,20 +146,35 @@ export function createComponentEditorConfig(locale?: string): Config {
 			Alert: createAlertConfig(options),
 			Avatar: createAvatarConfig(options),
 			Badge: createBadgeConfig(options),
+			Blockquote: createBlockquoteConfig(options),
 			Button: createButtonConfig(options),
 			Card: createCardConfig(options),
 			Checkbox: createCheckboxConfig(options),
+			Code: createCodeConfig(options),
+			Columns: createColumnsConfig(options),
+			Container: createContainerConfig(options),
+			Grid: createGridConfig(options),
+			Heading: createHeadingConfig(options),
+			Icon: createIconConfig(options),
+			Image: createImageConfig(options),
 			Input: createInputConfig(options),
 			Label: createLabelConfig(options),
+			Link: createLinkConfig(options),
+			List: createListConfig(options),
 			Progress: createProgressConfig(options),
+			RichText: createRichTextConfig(options),
 			Select: createSelectConfig(options),
 			Separator: createSeparatorConfig(options),
 			Slider: createSliderConfig(options),
+			Spacer: createSpacerConfig(options),
+			Stack: createStackConfig(options),
 			Switch: createSwitchConfig(options),
 			Table: createTableConfig(options),
 			Tabs: createTabsConfig(options),
+			Text: createTextConfig(options),
 			Textarea: createTextareaConfig(options),
 			Tooltip: createTooltipConfig(options),
+			Video: createVideoConfig(options),
 		},
 		root: {
 			fields: editorRootFields,
