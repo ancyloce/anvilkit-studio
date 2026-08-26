@@ -21,6 +21,8 @@ pnpmfileChecksum: sha256-QebiUg+J8waCX55NWB8a4KJvoqpyJ9XYcSfujRyTSmQ=
 
 patchedDependencies:
   '@base-ui/react@1.6.0': 137dc5c443082af2ad6222389cbc434b3946a982230a110cfe3dd67feccf23cd
+  '@dnd-kit/react@0.4.0': 8ac6cf0e720a1076703eb63c0da4945d147dc24fbd91002abc3d7b59ae63faae
+  '@puckeditor/core@0.23.0': f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557
 
 importers:
 
@@ -91,7 +93,7 @@ importers:
         version: 3.0.0
       '@puckeditor/core':
         specifier: 0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -194,6 +196,9 @@ importers:
       '@anvilkit/badge':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/badge
+      '@anvilkit/blockquote':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/blockquote
       '@anvilkit/button':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/button
@@ -203,15 +208,42 @@ importers:
       '@anvilkit/checkbox':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/checkbox
+      '@anvilkit/code':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/code
+      '@anvilkit/columns':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/columns
+      '@anvilkit/container':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/container
       '@anvilkit/core':
         specifier: workspace:*
         version: link:../../packages/runtime/core
+      '@anvilkit/grid':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/grid
+      '@anvilkit/heading':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/heading
+      '@anvilkit/icon':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/icon
+      '@anvilkit/image':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/image
       '@anvilkit/input':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/input
       '@anvilkit/label':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/label
+      '@anvilkit/link':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/link
+      '@anvilkit/list':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/list
       '@anvilkit/plugin-ai-copilot':
         specifier: workspace:*
         version: link:../../packages/extensions/plugins/plugin-ai-copilot
@@ -230,6 +262,9 @@ importers:
       '@anvilkit/progress':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/progress
+      '@anvilkit/rich-text':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/rich-text
       '@anvilkit/schema':
         specifier: workspace:*
         version: link:../../packages/foundation/schema
@@ -242,6 +277,12 @@ importers:
       '@anvilkit/slider':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/slider
+      '@anvilkit/spacer':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/spacer
+      '@anvilkit/stack':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/stack
       '@anvilkit/switch':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/switch
@@ -251,6 +292,9 @@ importers:
       '@anvilkit/tabs':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/tabs
+      '@anvilkit/text':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/text
       '@anvilkit/textarea':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/textarea
@@ -263,9 +307,12 @@ importers:
       '@anvilkit/validator':
         specifier: workspace:*
         version: link:../../packages/foundation/validator
+      '@anvilkit/video':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/video
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       lucide-react:
         specifier: ^1.31.0
         version: 1.31.0(react@19.2.8)
@@ -324,6 +371,9 @@ importers:
       '@anvilkit/bento-grid':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/bento-grid
+      '@anvilkit/blockquote':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/blockquote
       '@anvilkit/blog-list':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/blog-list
@@ -336,24 +386,51 @@ importers:
       '@anvilkit/canvas-templates':
         specifier: workspace:*
         version: link:../../packages/extensions/templates/canvas
+      '@anvilkit/code':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/code
       '@anvilkit/collab-ui':
         specifier: workspace:*
         version: link:../../packages/extensions/plugins/plugin-collab-ui
+      '@anvilkit/columns':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/columns
+      '@anvilkit/container':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/container
       '@anvilkit/core':
         specifier: workspace:*
         version: link:../../packages/runtime/core
+      '@anvilkit/grid':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/grid
+      '@anvilkit/heading':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/heading
       '@anvilkit/helps':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/helps
       '@anvilkit/hero':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/hero
+      '@anvilkit/icon':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/icon
+      '@anvilkit/image':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/image
       '@anvilkit/input':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/input
       '@anvilkit/ir':
         specifier: workspace:*
         version: link:../../packages/foundation/ir
+      '@anvilkit/link':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/link
+      '@anvilkit/list':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/list
       '@anvilkit/logo-clouds':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/logo-clouds
@@ -387,15 +464,30 @@ importers:
       '@anvilkit/pricing-minimal':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/pricing-minimal
+      '@anvilkit/rich-text':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/rich-text
       '@anvilkit/section':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/section
+      '@anvilkit/spacer':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/spacer
+      '@anvilkit/stack':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/stack
       '@anvilkit/statistics':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/statistics
       '@anvilkit/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/tooling/configs/tailwind
+      '@anvilkit/text':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/text
+      '@anvilkit/video':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/video
       '@gsap/react':
         specifier: ^2.1.2
         version: 2.1.2(gsap@3.15.0)(react@19.2.8)
@@ -407,7 +499,7 @@ importers:
         version: 3.1.18
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@tanstack/react-router':
         specifier: ^1.170.0
         version: 1.170.16(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -510,7 +602,7 @@ importers:
         version: link:../../packages/runtime/ui
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       next:
         specifier: ^16.3.0
         version: 16.3.0(@babel/core@7.29.7(supports-color@7.2.0))(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -554,6 +646,9 @@ importers:
       '@anvilkit/bento-grid':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/bento-grid
+      '@anvilkit/blockquote':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/blockquote
       '@anvilkit/blog-list':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/blog-list
@@ -569,24 +664,51 @@ importers:
       '@anvilkit/canvas-templates':
         specifier: workspace:*
         version: link:../../packages/extensions/templates/canvas
+      '@anvilkit/code':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/code
       '@anvilkit/collab-ui':
         specifier: workspace:*
         version: link:../../packages/extensions/plugins/plugin-collab-ui
+      '@anvilkit/columns':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/columns
+      '@anvilkit/container':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/container
       '@anvilkit/core':
         specifier: workspace:*
         version: link:../../packages/runtime/core
+      '@anvilkit/grid':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/grid
+      '@anvilkit/heading':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/heading
       '@anvilkit/helps':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/helps
       '@anvilkit/hero':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/hero
+      '@anvilkit/icon':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/icon
+      '@anvilkit/image':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/image
       '@anvilkit/input':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/input
       '@anvilkit/ir':
         specifier: workspace:*
         version: link:../../packages/foundation/ir
+      '@anvilkit/link':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/link
+      '@anvilkit/list':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/list
       '@anvilkit/logo-clouds':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/logo-clouds
@@ -629,21 +751,36 @@ importers:
       '@anvilkit/pricing-minimal':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/pricing-minimal
+      '@anvilkit/rich-text':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/rich-text
       '@anvilkit/schema':
         specifier: workspace:*
         version: link:../../packages/foundation/schema
       '@anvilkit/section':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/section
+      '@anvilkit/spacer':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/spacer
+      '@anvilkit/stack':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/stack
       '@anvilkit/statistics':
         specifier: workspace:*
         version: link:../../packages/extensions/components/src/statistics
+      '@anvilkit/text':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/text
       '@anvilkit/ui':
         specifier: workspace:*
         version: link:../../packages/runtime/ui
       '@anvilkit/validator':
         specifier: workspace:*
         version: link:../../packages/foundation/validator
+      '@anvilkit/video':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/video
       '@gsap/react':
         specifier: ^2.1.2
         version: 2.1.2(gsap@3.15.0)(react@19.2.8)
@@ -652,7 +789,7 @@ importers:
         version: 4.4.0(y-protocols@1.0.7(yjs@13.6.32))(yjs@13.6.32)
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       better-sqlite3:
         specifier: ^13.0.3
         version: 13.0.3
@@ -1025,7 +1162,7 @@ importers:
         version: 3.0.0
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -1061,7 +1198,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1080,7 +1217,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1099,7 +1236,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1118,7 +1255,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1137,7 +1274,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       lucide-react:
         specifier: ^1.31.0
         version: 1.31.0(react@19.2.8)
@@ -1152,11 +1289,30 @@ importers:
         specifier: workspace:*
         version: link:../../../../tooling/configs/tailwind
 
+  packages/extensions/components/src/blockquote:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
   packages/extensions/components/src/blog-list:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1172,7 +1328,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1194,7 +1350,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1213,7 +1369,64 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/code:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/columns:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/container:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1232,7 +1445,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1244,11 +1457,49 @@ importers:
         specifier: workspace:*
         version: link:../../../../tooling/configs/tailwind
 
+  packages/extensions/components/src/grid:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/heading:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
   packages/extensions/components/src/helps:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       lucide-react:
         specifier: ^1.31.0
         version: 1.31.0(react@19.2.8)
@@ -1270,7 +1521,45 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/icon:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/image:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1289,7 +1578,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1308,7 +1597,45 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/link:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/list:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1327,7 +1654,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1346,7 +1673,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       lucide-react:
         specifier: ^1.31.0
         version: 1.31.0(react@19.2.8)
@@ -1368,7 +1695,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       lucide-react:
         specifier: ^1.31.0
         version: 1.31.0(react@19.2.8)
@@ -1390,7 +1717,26 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/rich-text:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1409,7 +1755,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1428,7 +1774,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1447,7 +1793,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1466,7 +1812,45 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/spacer:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/stack:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1485,7 +1869,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1504,7 +1888,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1523,7 +1907,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1542,7 +1926,26 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/text:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1561,7 +1964,7 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1580,7 +1983,26 @@ importers:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+      react:
+        specifier: 19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/video:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.23.0
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       react:
         specifier: 19.2.8
         version: 19.2.8
@@ -1624,7 +2046,7 @@ importers:
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -1694,7 +2116,7 @@ importers:
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -1770,7 +2192,7 @@ importers:
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -1849,7 +2271,7 @@ importers:
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -1919,7 +2341,7 @@ importers:
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -2016,7 +2438,7 @@ importers:
         version: 4.4.0(y-protocols@1.0.7(yjs@13.6.32))(yjs@13.6.32)
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -2104,7 +2526,7 @@ importers:
         version: 4.4.0(y-protocols@1.0.7(yjs@13.6.32))(yjs@13.6.32)
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2174,7 +2596,7 @@ importers:
         version: 2.5.8
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -2244,7 +2666,7 @@ importers:
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2290,7 +2712,7 @@ importers:
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2345,7 +2767,7 @@ importers:
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2394,7 +2816,7 @@ importers:
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -2479,7 +2901,7 @@ importers:
         version: link:../../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2682,7 +3104,7 @@ importers:
         version: link:../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2734,7 +3156,7 @@ importers:
         version: link:../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2783,7 +3205,7 @@ importers:
         version: link:../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -2886,7 +3308,7 @@ importers:
         version: link:../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rslib/core':
         specifier: ^0.23.2
         version: 0.23.2(core-js@3.49.0)(typescript@7.0.2)
@@ -3004,7 +3426,7 @@ importers:
         version: link:../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.23.0
-        version: 0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.1.5(core-js@3.49.0))(@rspack/core@2.1.3(@swc/helpers@0.5.23))
@@ -11993,7 +12415,7 @@ snapshots:
       '@dnd-kit/abstract': 0.4.0
       tslib: 2.8.1
 
-  '@dnd-kit/react@0.4.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@dnd-kit/react@0.4.0(patch_hash=8ac6cf0e720a1076703eb63c0da4945d147dc24fbd91002abc3d7b59ae63faae)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@dnd-kit/abstract': 0.4.0
       '@dnd-kit/dom': 0.4.0
@@ -13168,13 +13590,13 @@ snapshots:
     dependencies:
       tinyexec: 1.2.4
 
-  '@puckeditor/core@0.23.0(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))':
+  '@puckeditor/core@0.23.0(patch_hash=f9098c0fd5035abd6723dc388eb3b82d6f370fbb04ce1892b709288acc6ea557)(@floating-ui/dom@1.8.0)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))':
     dependencies:
       '@dnd-kit/abstract': 0.4.0
       '@dnd-kit/dom': 0.4.0
       '@dnd-kit/geometry': 0.4.0
       '@dnd-kit/helpers': 0.4.0
-      '@dnd-kit/react': 0.4.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@dnd-kit/react': 0.4.0(patch_hash=8ac6cf0e720a1076703eb63c0da4945d147dc24fbd91002abc3d7b59ae63faae)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@dnd-kit/state': 0.4.0
       '@radix-ui/react-popover': 1.1.17(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@tanstack/react-virtual': 3.14.9(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -14901,7 +15323,7 @@ snapshots:
       obug: 2.1.3
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(@vitest/coverage-v8@4.1.10)(happy-dom@20.10.6)(jsdom@30.0.1)(vite@8.1.0(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.11)(yaml@2.9.0))
+      vitest: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(@vitest/coverage-v8@4.1.10)(happy-dom@20.10.6)(jsdom@30.0.1)(vite@6.4.3(@types/node@26.2.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.11)(yaml@2.9.0))
 
   '@vitest/expect@4.1.10':
     dependencies:

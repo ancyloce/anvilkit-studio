@@ -214,6 +214,15 @@ minimumReleaseAgeExclude:
   - zustand@5.0.15
 patchedDependencies:
   "@base-ui/react@1.6.0": packages/extensions/components/patches/@base-ui__react@1.6.0.patch
+  # Puck 0.23 pins @dnd-kit/react 0.4.0. Its signal hooks subscribe in an
+  # effect and call setState during DragDropProvider's startTransition,
+  # crossing React 19's ten-fiber guard on drawer drags. Keep the version
+  # pinned by Puck and adapt those subscriptions to useSyncExternalStore.
+  '@dnd-kit/react@0.4.0': tooling/pnpm-patches/@dnd-kit__react@0.4.0.patch
+  # Puck's field walker must treat undeclared props and non-structural fields
+  # as opaque. Its drawer also keeps insertions blocked behind a drop animation;
+  # disable that animation so the canvas unlocks as soon as the pointer drops.
+  '@puckeditor/core@0.23.0': tooling/pnpm-patches/@puckeditor__core@0.23.0.patch
 
 overrides:
   react: 19.2.8
