@@ -320,7 +320,7 @@ export default function PuckEditorPage() {
 	// PLAN-0025 P3-F (§8.5/§11.3): the host injects NO capabilities.
 	// Every registered demo component now declares its own genuine
 	// metadata (v2 `metadata.anvilkit.editor` from the packages and the
-	// demo-local Image; three packages also keep their own v1 blocks
+	// shared Image package; three packages also keep their own v1 blocks
 	// until cutover). Components without a declaration honestly show
 	// the editor's empty states — fabricating support is prohibited.
 

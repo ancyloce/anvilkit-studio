@@ -4,6 +4,10 @@ import {
 	createBentoGridConfig,
 } from "@anvilkit/bento-grid";
 import {
+	type BlockquoteProps,
+	createBlockquoteConfig,
+} from "@anvilkit/blockquote";
+import {
 	type BlogListProps,
 	defaultProps as blogListDefaultProps,
 	createBlogListConfig,
@@ -13,30 +17,24 @@ import {
 	defaultProps as buttonDefaultProps,
 	createButtonConfig,
 } from "@anvilkit/button";
+import { type CodeProps, createCodeConfig } from "@anvilkit/code";
+import { type ColumnsProps, createColumnsConfig } from "@anvilkit/columns";
+import {
+	type ContainerProps,
+	createContainerConfig,
+} from "@anvilkit/container";
 import type {
 	StudioPlugin,
 	StudioPluginMeta,
 	StudioSidebarUnregister,
 } from "@anvilkit/core";
-import type {
-	AnvilAppearance,
-	Binding,
-	Interaction,
-} from "@anvilkit/core/editor";
-import {
-	anvilRootAttrs,
-	anvilTargetAttrs,
-	withBindingResolution,
-} from "@anvilkit/core/editor";
-import {
-	appearanceField,
-	bindingsField,
-	interactionsField,
-} from "@anvilkit/core/react/editor";
+import { withBindingResolution } from "@anvilkit/core/editor";
 import {
 	createDesignBlockConfig,
 	type DesignBlockProps,
 } from "@anvilkit/design-block";
+import { createGridConfig, type GridProps } from "@anvilkit/grid";
+import { createHeadingConfig, type HeadingProps } from "@anvilkit/heading";
 import {
 	createHelpsConfig,
 	type HelpsProps,
@@ -47,11 +45,15 @@ import {
 	type HeroProps,
 	defaultProps as heroDefaultProps,
 } from "@anvilkit/hero";
+import { createIconConfig, type IconProps } from "@anvilkit/icon";
+import { createImageConfig, type ImageProps } from "@anvilkit/image";
 import {
 	createInputConfig,
 	type InputProps,
 	defaultProps as inputDefaultProps,
 } from "@anvilkit/input";
+import { createLinkConfig, type LinkProps } from "@anvilkit/link";
+import { createListConfig, type ListProps } from "@anvilkit/list";
 import {
 	createLogoCloudsConfig,
 	type LogoCloudsProps,
@@ -67,115 +69,54 @@ import {
 	type PricingMinimalProps,
 	defaultProps as pricingMinimalDefaultProps,
 } from "@anvilkit/pricing-minimal";
+import { createRichTextConfig, type RichTextProps } from "@anvilkit/rich-text";
 import type { PageRootProps } from "@anvilkit/schema";
 import {
 	createSectionConfig,
 	type SectionProps,
 	defaultProps as sectionDefaultProps,
 } from "@anvilkit/section";
+import { createSpacerConfig, type SpacerProps } from "@anvilkit/spacer";
+import { createStackConfig, type StackProps } from "@anvilkit/stack";
 import {
 	createStatisticsConfig,
 	type StatisticsProps,
 	defaultProps as statisticsDefaultProps,
 } from "@anvilkit/statistics";
-import type { ComponentConfig, Config, Data, Fields } from "@puckeditor/core";
-import { createElement } from "react";
+import { createTextConfig, type TextProps } from "@anvilkit/text";
+import { createVideoConfig, type VideoProps } from "@anvilkit/video";
+import type { Config, Data, Fields } from "@puckeditor/core";
 
 import { demoCopySnippetPack } from "./demo-copy-snippet-pack";
-
-/** Minimal media component — the insert target for `kindToComponentName("image")`. */
-export type ImageProps = {
-	src: string;
-	alt: string;
-	/** PLAN-0025 §5.1 authoring carriers (declared hidden fields). */
-	appearance?: AnvilAppearance;
-	interactions?: readonly Interaction[];
-	bindings?: readonly Binding[];
-};
 
 export type DemoComponents = {
 	BentoGrid: BentoGridProps;
 	BlogList: BlogListProps;
+	Blockquote: BlockquoteProps;
 	Button: ButtonProps;
+	Code: CodeProps;
+	Columns: ColumnsProps;
+	Container: ContainerProps;
 	DesignBlock: DesignBlockProps;
+	Grid: GridProps;
+	Heading: HeadingProps;
 	Hero: HeroProps;
 	Helps: HelpsProps;
+	Icon: IconProps;
 	Image: ImageProps;
 	Input: InputProps;
+	Link: LinkProps;
+	List: ListProps;
 	LogoClouds: LogoCloudsProps;
 	Navbar: NavbarProps;
 	PricingMinimal: PricingMinimalProps;
+	RichText: RichTextProps;
 	Section: SectionProps;
+	Spacer: SpacerProps;
+	Stack: StackProps;
 	Statistics: StatisticsProps;
-};
-
-/**
- * A deliberately tiny media component so the asset-manager sidebar's tile-click
- * insert (`kindToComponentName("image") === "Image"`) resolves to a registered
- * component. The `src` carries an `asset://<id>` reference that the export
- * resolver rewrites to a real URL at publish time.
- *
- * PLAN-0025 P3-A adoption: a stable `<figure>` root (§6.4 — the bare `<img>`
- * had no wrapper to stamp) carrying the root target, the `<img>` as the
- * `media` target, hidden §5.3 authoring fields from core, and metadata v2.
- * The former hard-coded inline `maxWidth/height/display` styles are now
- * component-layer utility classes so authored appearance can override them
- * (§6.5 "Image required adjustments").
- */
-const imageComponentConfig: ComponentConfig<ImageProps> = {
-	label: "Image",
-	fields: {
-		src: { type: "text" },
-		alt: { type: "text" },
-		appearance: appearanceField,
-		interactions: interactionsField,
-		bindings: bindingsField,
-	},
-	defaultProps: { src: "", alt: "" },
-	metadata: {
-		anvilkit: {
-			editor: {
-				version: "2",
-				styleTargets: {
-					root: {
-						label: "Image",
-						responsive: true,
-						properties: [
-							"display",
-							"width",
-							"maxWidth",
-							"height",
-							"margin",
-							"padding",
-						],
-					},
-					media: {
-						label: "Media",
-						responsive: true,
-						properties: [
-							"width",
-							"maxWidth",
-							"height",
-							"borderRadius",
-							"boxShadow",
-							"opacity",
-						],
-					},
-				},
-			},
-		},
-	},
-	render: ({ id, src, alt }) =>
-		createElement(
-			"figure",
-			{ ...anvilRootAttrs(id), className: "m-0 block" },
-			createElement("img", {
-				...anvilTargetAttrs(id, "media"),
-				src,
-				alt,
-				className: "block h-auto max-w-full",
-			}),
-		),
+	Text: TextProps;
+	Video: VideoProps;
 };
 
 export const demoDataSearchParam = "data";
@@ -229,8 +170,7 @@ const demoRootFields = {
  * Build the demo Puck config for a locale. Component field/option labels
  * resolve from each package's bundled catalogs (en/zh/ja/ko) via its
  * `create<Name>Config({ locale })` factory; unknown locales fall back to
- * English per key. Category titles and the demo-local `Image` component
- * are host-owned strings and stay English.
+ * English per key. Category titles remain host-owned strings.
  */
 export function createDemoConfig(
 	locale?: string,
@@ -261,11 +201,26 @@ export function createDemoConfig(
 			},
 			actions: {
 				title: "Actions",
-				components: ["Button"],
+				components: ["Button", "Link"],
 			},
 			forms: {
 				title: "Forms",
 				components: ["Input"],
+			},
+			typography: {
+				title: "Typography",
+				components: [
+					"Heading",
+					"Text",
+					"RichText",
+					"Blockquote",
+					"Code",
+					"List",
+				],
+			},
+			layout: {
+				title: "Layout",
+				components: ["Container", "Spacer", "Stack", "Grid", "Columns"],
 			},
 			canvas: {
 				title: "Canvas",
@@ -273,23 +228,37 @@ export function createDemoConfig(
 			},
 			media: {
 				title: "Media",
-				components: ["Image"],
+				components: ["Image", "Video", "Icon"],
 			},
 		},
 		components: {
 			BentoGrid: createBentoGridConfig(options),
 			BlogList: createBlogListConfig(options),
+			Blockquote: createBlockquoteConfig(options),
 			Button: createButtonConfig(options),
+			Code: createCodeConfig(options),
+			Columns: createColumnsConfig(options),
+			Container: createContainerConfig(options),
 			DesignBlock: createDesignBlockConfig(options),
+			Grid: createGridConfig(options),
+			Heading: createHeadingConfig(options),
 			Hero: createHeroConfig(options),
 			Helps: createHelpsConfig(options),
-			Image: imageComponentConfig,
+			Icon: createIconConfig(options),
+			Image: createImageConfig(options),
 			Input: createInputConfig(options),
+			Link: createLinkConfig(options),
+			List: createListConfig(options),
 			LogoClouds: createLogoCloudsConfig(options),
 			Navbar: createNavbarConfig(options),
 			PricingMinimal: createPricingMinimalConfig(options),
+			RichText: createRichTextConfig(options),
 			Section: createSectionConfig(options),
+			Spacer: createSpacerConfig(options),
+			Stack: createStackConfig(options),
 			Statistics: createStatisticsConfig(options),
+			Text: createTextConfig(options),
+			Video: createVideoConfig(options),
 		},
 		root: {
 			fields: demoRootFields,
