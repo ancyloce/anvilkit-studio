@@ -123,17 +123,25 @@ export async function loadPublishedRender(
 	if (seo?.description !== undefined) jsonLdData.description = seo.description;
 	if (seo?.canonical !== undefined) jsonLdData.url = seo.canonical;
 
-	// §9.2 steps 4–5 (PLAN-0025): first the existing dataSource
-	// resolution (`remote_csv` directives into plain props — the
-	// component never fetches), then Puck's official `resolveAllData`,
-	// which runs the binding-resolution `resolveData` hooks wired into
-	// `demoConfig` (P4-04). The returned document is THE document: the
-	// routes hand exactly this value to `<AnvilKitRender>`, whose
-	// compiler and `<Render>` therefore can never see different data.
-	const sourced = await resolveDataSources(page);
-	const resolved = await resolveAllData<DemoComponents, PageRootProps>(
-		sourced,
-		demoConfig,
-	);
+	const resolved = await resolveDocument(page);
 	return { pageId, resolved, jsonLd: jsonLdData };
+}
+
+/**
+ * §9.2 steps 4–5 (PLAN-0025): first the existing dataSource resolution
+ * (`remote_csv` directives into plain props — the component never fetches),
+ * then Puck's official `resolveAllData`, which runs the binding-resolution
+ * `resolveData` hooks wired into `demoConfig` (P4-04). The returned document
+ * is THE document: callers hand exactly this value to `<AnvilKitRender>`,
+ * whose compiler and `<Render>` therefore can never see different data.
+ *
+ * Shared rather than inlined per caller because a second surface now renders
+ * documents that did not come from the page store (the headless artifact
+ * render). If the two resolved differently, a preview would be evidence about
+ * a different document than the published route serves — which is the whole
+ * thing a preview is supposed to rule out.
+ */
+export async function resolveDocument(page: DemoPageData): Promise<DemoPageData> {
+	const sourced = await resolveDataSources(page);
+	return resolveAllData<DemoComponents, PageRootProps>(sourced, demoConfig);
 }
