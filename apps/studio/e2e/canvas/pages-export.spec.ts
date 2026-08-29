@@ -1,4 +1,4 @@
-import { statSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { expect, type Page, test } from "@playwright/test";
 
 /**
@@ -55,40 +55,69 @@ test.describe("Canvas Studio — pages + export (PRD §9.2)", () => {
 		).toHaveCount(1);
 	});
 
-	test("#6 export PNG (size > 0) + JSON; reload restores state", async ({
+	test("#6 all seven built-in formats download valid browser artifacts; reload restores state", async ({
 		page,
 	}) => {
+		test.setTimeout(240_000);
 		const pageId = `e2e-export-${Date.now()}`;
 		await gotoCanvas(page, pageId);
 
-		// B-09 (FR-154): export moved from a popover to the full dialog — open
-		// it from the header, pick a format card, then run. PNG → a non-empty
-		// file (rasterized live).
+		// PLAN-0039 E2 browser regression: execute every built-in format through
+		// the real dialog. This covers the browser encoders, live Konva raster,
+		// offscreen PDF rasterizer, core SVG/PDF serializers, and JSON path.
 		await page.getByTestId("workspace-export").click();
 		await expect(page.getByTestId("export-dialog")).toBeVisible();
-		await page.getByTestId("export-format-png").click();
-		const [png] = await Promise.all([
-			page.waitForEvent("download"),
-			page.getByTestId("export-run").click(),
-		]);
-		const pngPath = await png.path();
-		expect(pngPath ? statSync(pngPath).size : 0).toBeGreaterThan(0);
+		const formats = [
+			{ id: "png", filename: /\.png$/, signature: "png" },
+			{ id: "jpeg", filename: /\.jpe?g$/, signature: "jpeg" },
+			{ id: "webp", filename: /\.webp$/, signature: "webp" },
+			{ id: "svg", filename: /\.svg$/, signature: "svg" },
+			{ id: "pdf", filename: /\.pdf$/, signature: "pdf" },
+			{ id: "pdf-print", filename: /\.print\.pdf$/, signature: "pdf" },
+			{ id: "json", filename: /\.json$/, signature: "json" },
+		] as const;
 
-		// A finished run keeps the dialog open ("Export complete") — dismiss it,
-		// reopen, then JSON (whole-document serialized IR, B-04); reload reads
-		// it back from localStorage.
-		await page.keyboard.press("Escape");
-		await expect(page.getByTestId("export-dialog")).toBeHidden();
-		await page.getByTestId("workspace-export").click();
-		await expect(page.getByTestId("export-dialog")).toBeVisible();
-		await page.getByTestId("export-format-json").click();
-		const [json] = await Promise.all([
-			page.waitForEvent("download"),
-			page.getByTestId("export-run").click(),
-		]);
-		const jsonPath = await json.path();
-		expect(jsonPath ? statSync(jsonPath).size : 0).toBeGreaterThan(0);
+		for (const format of formats) {
+			await page.getByTestId(`export-format-${format.id}`).click();
+			const [download] = await Promise.all([
+				page.waitForEvent("download"),
+				page.getByTestId("export-run").click(),
+			]);
+			expect(download.suggestedFilename()).toMatch(format.filename);
+			const artifactPath = await download.path();
+			expect(artifactPath).not.toBeNull();
+			const bytes = readFileSync(artifactPath as string);
+			expect(bytes.byteLength).toBeGreaterThan(0);
 
+			switch (format.signature) {
+				case "png":
+					expect(bytes.subarray(0, 8).toString("hex")).toBe(
+						"89504e470d0a1a0a",
+					);
+					break;
+				case "jpeg":
+					expect(bytes.subarray(0, 3).toString("hex")).toBe("ffd8ff");
+					break;
+				case "webp":
+					expect(bytes.subarray(0, 4).toString("ascii")).toBe("RIFF");
+					expect(bytes.subarray(8, 12).toString("ascii")).toBe("WEBP");
+					break;
+				case "svg":
+					expect(bytes.toString("utf8")).toContain("<svg");
+					break;
+				case "pdf":
+					expect(bytes.subarray(0, 4).toString("ascii")).toBe("%PDF");
+					break;
+				case "json": {
+					const ir = JSON.parse(bytes.toString("utf8"));
+					expect(ir.pages).toHaveLength(1);
+					break;
+				}
+			}
+		}
+
+		// The whole-document JSON path above also persists the current IR; reload
+		// reads it back from the route's localStorage adapter.
 		await page.reload();
 		await expect(page.getByTestId("canvas-workspace-root")).toBeVisible({
 			timeout: 30_000,

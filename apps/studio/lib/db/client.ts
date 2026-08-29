@@ -47,7 +47,7 @@ export function ensureSchema(connection: Database.Database): void {
 
 function resolveDbPath(): string {
 	return resolve(
-		process.cwd(),
+		/* turbopackIgnore: true */ process.cwd(),
 		process.env.ANVILKIT_PAGE_STORAGE_SQLITE_PATH ?? ".anvilkit/pages.sqlite",
 	);
 }

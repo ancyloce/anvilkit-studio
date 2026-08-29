@@ -45,7 +45,7 @@ function createAdapter(): PageStorageAdapter {
 	}
 	if (backend === "filesystem") {
 		const dir = resolve(
-			process.cwd(),
+			/* turbopackIgnore: true */ process.cwd(),
 			process.env.ANVILKIT_PAGE_STORAGE_DIR ?? ".anvilkit/pages",
 		);
 		return new FileSystemPageStorageAdapter({ dir });
