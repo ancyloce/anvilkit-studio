@@ -39,7 +39,7 @@ test.describe("Canvas Studio AI image", () => {
 	// to, and that the absence of a token is a graceful degradation to the mock
 	// rather than an error state. The two halves are deliberately not
 	// duplicated: nothing here re-asserts a 503.
-	test("mock provider: upscale surfaces a result asset, and the UI reaches no paid provider", async ({
+	test("mock provider: text-to-image surfaces a result asset, and the UI reaches no paid provider", async ({
 		page,
 	}) => {
 		// Unique page id per CLAUDE.md test-infra guidance.
@@ -74,8 +74,8 @@ test.describe("Canvas Studio AI image", () => {
 
 		// With no NEXT_PUBLIC_AI_IMAGE_REAL the demo uses the deterministic mock
 		// provider, so this runs offline with no Replicate token.
-		await page.getByTestId("ai-image-op-upscale").click();
-		await page.getByTestId("ai-image-source").fill("demo-source");
+		await page.getByTestId("ai-image-op-text-to-image").click();
+		await page.getByTestId("ai-image-prompt").fill("a calm harbour at dawn");
 
 		const run = page.getByTestId("ai-image-run");
 		await expect(run).toBeEnabled();
@@ -117,10 +117,7 @@ test.describe("Canvas Studio AI image", () => {
 		await expect(page.getByTestId("ai-image-run")).toBeEnabled();
 		await expect(page.getByTestId("ai-image-error")).toHaveCount(0);
 
-		// NOTE for `cp5-R04` (ADR 0009 follow-up F-5): the panel advertises every
-		// op in `OP_ORDER` because `apps/studio` supplies no
-		// `AiProviderCapabilities`, while only five routes exist. That gap is a
-		// contract question, not a leak, so it is recorded here rather than
-		// asserted — pinning today's op count would freeze the defect.
+		// E7 capability discovery keeps the live task list aligned with the
+		// selected mock/real adapter, so unsupported routes are never advertised.
 	});
 });

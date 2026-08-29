@@ -8,7 +8,10 @@
  * that a real provider is configured, so the secret never reaches the
  * client bundle.
  */
-import type { AiImageProvider } from "@anvilkit/canvas-core";
+import type {
+	AiImageProvider,
+	AiImageProviderDescriptor,
+} from "@anvilkit/canvas-core";
 import { createMockAiImageProvider } from "@anvilkit/plugin-ai-image/mock";
 import {
 	type CreateReplicateImageProviderOptions,
@@ -29,4 +32,39 @@ export function selectAiImageProvider(
 		return createReplicateImageProvider(options);
 	}
 	return createMockAiImageProvider({ delayMs: 400 });
+}
+
+/**
+ * Capability discovery kept next to provider selection so the panel can never
+ * advertise an operation that the selected transport cannot execute.
+ */
+export function selectAiImageProviderDescriptor(): AiImageProviderDescriptor {
+	const shared = {
+		constraints: {
+			maxPromptCharacters: 4_000,
+			maxWidth: 4_096,
+			maxHeight: 4_096,
+			maxPixels: 16_777_216,
+		},
+	} as const;
+	if (isRealAiImageEnabled()) {
+		return {
+			providerId: "replicate",
+			displayName: "Replicate",
+			capabilities: [
+				{ kind: "text-to-image", available: true, ...shared },
+				{ kind: "bg-remove", available: true, ...shared },
+			],
+		};
+	}
+	return {
+		providerId: "anvilkit-mock",
+		displayName: "AnvilKit offline mock",
+		capabilities: [
+			{ kind: "text-to-image", available: true, ...shared },
+			{ kind: "bg-remove", available: true, ...shared },
+			{ kind: "object-erase", available: true, ...shared },
+			{ kind: "generative-expand", available: true, ...shared },
+		],
+	};
 }

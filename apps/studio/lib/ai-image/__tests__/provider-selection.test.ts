@@ -36,6 +36,7 @@ import type { AiRouteErrorBody } from "../../../app/api/canvas/ai/_lib/replicate
 import {
 	isRealAiImageEnabled,
 	selectAiImageProvider,
+	selectAiImageProviderDescriptor,
 } from "../provider-selection";
 
 /** The exact body `runImageRoute` returns when `REPLICATE_API_TOKEN` is unset. */
@@ -127,6 +128,22 @@ describe("isRealAiImageEnabled", () => {
 });
 
 describe("selectAiImageProvider — mock is the default (zero-cost, offline)", () => {
+	it("advertises the four E7 image tasks with normalized constraints", () => {
+		vi.stubEnv("NEXT_PUBLIC_AI_IMAGE_REAL", undefined);
+		const descriptor = selectAiImageProviderDescriptor();
+
+		expect(descriptor.providerId).toBe("anvilkit-mock");
+		expect(descriptor.capabilities.map(({ kind }) => kind)).toEqual([
+			"text-to-image",
+			"bg-remove",
+			"object-erase",
+			"generative-expand",
+		]);
+		expect(descriptor.capabilities[0]?.constraints?.maxPromptCharacters).toBe(
+			4_000,
+		);
+	});
+
 	it("returns the mock provider and performs no request when the flag is unset", async () => {
 		vi.stubEnv("NEXT_PUBLIC_AI_IMAGE_REAL", undefined);
 		const { calls, fetchImpl } = createRouteStub();
@@ -144,6 +161,13 @@ describe("selectAiImageProvider — mock is the default (zero-cost, offline)", (
 });
 
 describe("selectAiImageProvider — the flag selects the real provider", () => {
+	it("only advertises operations backed by real routes", () => {
+		vi.stubEnv("NEXT_PUBLIC_AI_IMAGE_REAL", "1");
+		expect(
+			selectAiImageProviderDescriptor().capabilities.map(({ kind }) => kind),
+		).toEqual(["text-to-image", "bg-remove"]);
+	});
+
 	it('routes the job to /api/canvas/ai/<kind> when the flag is exactly "1"', async () => {
 		vi.stubEnv("NEXT_PUBLIC_AI_IMAGE_REAL", "1");
 		const { calls, fetchImpl } = createRouteStub();
