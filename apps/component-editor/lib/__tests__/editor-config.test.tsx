@@ -6,9 +6,9 @@
 
 import type { Data } from "@puckeditor/core";
 import { Render } from "@puckeditor/core";
-import { render } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 import { createElement } from "react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import {
 	componentEditorConfig,
 	createComponentEditorConfig,
@@ -54,6 +54,8 @@ const COMPONENT_TYPES = [
 	"Tooltip",
 	"Video",
 ] as const;
+
+afterEach(cleanup);
 
 /** One node per registered type, in one document. */
 const documentOfEveryComponent = (): Data =>
