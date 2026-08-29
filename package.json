@@ -12,7 +12,7 @@
 		"changeset": "changeset",
 		"changeset:status": "changeset status",
 		"publint": "turbo run publint --concurrency=1",
-		"check:all": "node scripts/check-banned-identifiers.mjs --advisory && turbo run check:all --concurrency=4",
+		"check:all": "node scripts/check-banned-identifiers.mjs --advisory && pnpm build && turbo run check:all --concurrency=1 --filter=@anvilkit/plugin-code-editor --only && turbo run check:all --concurrency=4 --filter=\"!@anvilkit/plugin-code-editor\" --only",
 		"check:banned-identifiers": "node scripts/check-banned-identifiers.mjs",
 		"check:ledger": "node scripts/check-ledger-coverage.mjs",
 		"check:push": "turbo run check:all --concurrency=4 --filter=\"[${ANVILKIT_CHECK_BASE:-origin/main}]\"",
