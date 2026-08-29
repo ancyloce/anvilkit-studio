@@ -42,7 +42,7 @@ export const Route = createFileRoute("/$")({
 });
 
 const serverLoader = createServerFn({ method: "GET" })
-	.inputValidator((input: { slugs: string[]; locale: string }) => input)
+	.validator((input: { slugs: string[]; locale: string }) => input)
 	.handler(async ({ data: { slugs, locale } }) => {
 		const page = source.getPage(slugs, locale);
 		if (!page) throw notFound();

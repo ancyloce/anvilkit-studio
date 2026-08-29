@@ -287,7 +287,9 @@ function evalLiteralWithResolver(
 			// their static branch without executing component code.
 			return (...args: unknown[]): unknown => {
 				const statements = fnDecl.body?.statements ?? [];
-				const ret = statements.find(ts.isReturnStatement)?.expression;
+				const ret = fnDecl.body?.statements.find(
+					ts.isReturnStatement,
+				)?.expression;
 				if (!ret)
 					fail(slug, `${lbl}: function "${name}" has no return expression`);
 				const paramCtx: Record<string, unknown> = { ...ctx };

@@ -17,6 +17,13 @@ export default defineConfig({
 		port: 4321,
 		host: "0.0.0.0",
 	},
+	build: {
+		// Generated API reference pages and the browser collection's lazy-import
+		// registry are route-isolated but intentionally exceed Vite's generic
+		// 500 kB raw-size default. The current largest chunk is 948 kB raw
+		// (123 kB gzip), so 1 MiB keeps a narrow regression ceiling.
+		chunkSizeWarningLimit: 1024,
+	},
 	plugins: [
 		// Embedded Hocuspocus relay for /playground?collab=1 (dev/preview only).
 		collabRelayVitePlugin(),
