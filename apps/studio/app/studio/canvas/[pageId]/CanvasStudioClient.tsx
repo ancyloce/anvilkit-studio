@@ -5,6 +5,7 @@ import {
 	type CanvasIR,
 	createCanvasIR,
 	createPage,
+	findNode,
 } from "@anvilkit/canvas-core";
 import {
 	type BrandKit,
@@ -40,6 +41,7 @@ import {
 import {
 	isRealAiImageEnabled,
 	selectAiImageProvider,
+	selectAiImageProviderDescriptor,
 } from "@/lib/ai-image/provider-selection";
 import { createDataUrlCanvasUploader } from "@/lib/canvas-asset-uploader";
 
@@ -140,6 +142,10 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 		const provider = selectAiImageProvider({ getAssetUrl, upload });
 		return createAiJobClient({ provider });
 	}, [getAssetUrl, upload]);
+	const providerDescriptor = useMemo(
+		() => selectAiImageProviderDescriptor(),
+		[],
+	);
 
 	// The image tool's asset picker. Returns the seeded host image asset id so
 	// placing an image needs no UI picker in the demo (PRD §9.2 #1/#2).
@@ -147,6 +153,7 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 
 	// The active artboard, mirrored out of `<CanvasStudio onActivePageChange>`.
 	const activePageRef = useRef<string>(pageId);
+	const editorApiRef = useRef<CanvasStudioStableValue | null>(null);
 	// cp5-R03: the selected node, mirrored out of `<CanvasStudio
 	// onSelectionChange>`. Both a ref and state, for two different readers: the
 	// ref feeds `getLayerContext`, which is read at job time and must be current
@@ -164,7 +171,18 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 		const artboardId = activePageRef.current;
 		if (!artboardId) return null;
 		const nodeId = selectedNodeIdRef.current;
-		return { artboardId, ...(nodeId ? { selectedNodeId: nodeId } : {}) };
+		if (!nodeId) return { artboardId };
+		const selected = editorApiRef.current
+			? findNode(editorApiRef.current.getIR(), nodeId)?.node
+			: undefined;
+		return {
+			artboardId,
+			selectedNodeId: nodeId,
+			...(selected ? { selectedNodeKind: selected.type } : {}),
+			...(selected?.type === "image"
+				? { selectedAssetId: selected.assetId }
+				: {}),
+		};
 	}, []);
 
 	// cp5-R03: the AI result → canvas commit, i.e. the last mile.
@@ -181,7 +199,6 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 	// Throwing is deliberate: `useAiImage` catches whatever `commit` throws and
 	// renders it in the panel's error line, so a commit that cannot happen is
 	// visible rather than a silent no-op.
-	const editorApiRef = useRef<CanvasStudioStableValue | null>(null);
 	const commitAiResult = useCallback<CommitCanvasCommandFn<void>>(
 		(replace) => {
 			const editor = editorApiRef.current;
@@ -314,6 +331,7 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 					<AiImagePanel
 						jobClient={jobClient}
 						getLayerContext={getLayerContext}
+						providerDescriptor={providerDescriptor}
 						commit={commitAiResult}
 					/>
 				</aside>
