@@ -26,9 +26,34 @@ import type {
 	CanvasImageReplaceCommand,
 	CanvasIR,
 } from "@anvilkit/canvas-core";
+import { createImage, findNode, parentOf } from "@anvilkit/canvas-core";
+import type {
+	AiImageApplyMode,
+	AiImageResultPreview,
+} from "@anvilkit/plugin-ai-image/react";
 
 /** Undo-history label for the AI commit, mirroring the drag-to-replace one. */
 export const AI_REPLACE_BATCH_LABEL = "Replace image";
+export const AI_INSERT_COPY_BATCH_LABEL = "Insert AI image";
+
+export interface AiImageApplyDocument {
+	getIR(): CanvasIR;
+	commitBatch(commands: readonly CanvasCommand[], label?: string): CanvasIR;
+}
+
+export interface BuildAiImageApplyCommandsOptions {
+	readonly ir: CanvasIR;
+	readonly preview: AiImageResultPreview;
+	readonly mode: AiImageApplyMode;
+	readonly asset: CanvasAssetRef | undefined;
+	/** Deterministic seam for tests; production uses the Core builder's id. */
+	readonly createNodeId?: () => string;
+}
+
+export interface ApplyAiImageResultOptions
+	extends Omit<BuildAiImageApplyCommandsOptions, "ir"> {
+	readonly document: AiImageApplyDocument;
+}
 
 export interface BuildAiImageReplaceCommandsOptions {
 	/** The document the commands will be applied to. */
@@ -76,4 +101,131 @@ export function buildAiImageReplaceCommands(
 		);
 	}
 	return [{ type: "asset.put", asset }, replace];
+}
+
+function resultAssetCommands(
+	ir: CanvasIR,
+	resultAssetId: string,
+	asset: CanvasAssetRef | undefined,
+): CanvasCommand[] {
+	if (ir.assets[resultAssetId]) return [];
+	if (!asset) {
+		throw new Error(
+			`AI result asset "${resultAssetId}" has no image data — nothing was committed.`,
+		);
+	}
+	if (asset.id !== resultAssetId) {
+		throw new Error(
+			`AI result asset id mismatch: result is "${resultAssetId}" but the resolved asset is "${asset.id}".`,
+		);
+	}
+	return [{ type: "asset.put", asset }];
+}
+
+/**
+ * Build the complete document mutation for an accepted preview. Nothing in
+ * this function mutates `ir`; callers can validate every prerequisite before
+ * the editor opens an undo transaction.
+ */
+export function buildAiImageApplyCommands(
+	options: BuildAiImageApplyCommandsOptions,
+): CanvasCommand[] {
+	const { ir, preview, mode, asset, createNodeId } = options;
+	const resultAssetId = preview.result.resultAssetId;
+	const put = resultAssetCommands(ir, resultAssetId, asset);
+
+	if (mode === "replace") {
+		const nodeId = preview.context.selectedNodeId;
+		const originalAssetId = preview.originalAssetId;
+		if (!nodeId || !originalAssetId) {
+			throw new Error(
+				"Replacing an AI image requires the original selected image.",
+			);
+		}
+		const selected = findNode(ir, nodeId)?.node;
+		if (selected?.type !== "image" || selected.assetId !== originalAssetId) {
+			throw new Error(
+				"The original image changed before the AI result was applied — nothing was committed.",
+			);
+		}
+		return [
+			...put,
+			{
+				type: "image.replace",
+				nodeId,
+				fromAssetId: originalAssetId,
+				toAssetId: resultAssetId,
+			},
+		];
+	}
+
+	const selectedResult = preview.context.selectedNodeId
+		? findNode(ir, preview.context.selectedNodeId)
+		: null;
+	const selectedImage =
+		selectedResult?.node.type === "image" ? selectedResult.node : null;
+	const page =
+		selectedResult?.page ??
+		ir.pages.find(({ id }) => id === preview.context.artboardId);
+	if (!page) {
+		throw new Error(
+			"The target page no longer exists — the AI result was not inserted.",
+		);
+	}
+	const parent = selectedImage ? parentOf(ir, selectedImage.id)?.parent : null;
+	const bounds = selectedImage?.bounds ?? {
+		width:
+			preview.context.bounds?.width ?? preview.result.metadata?.width ?? 512,
+		height:
+			preview.context.bounds?.height ?? preview.result.metadata?.height ?? 512,
+	};
+	const transform = selectedImage
+		? {
+				...selectedImage.transform,
+				x: selectedImage.transform.x + 24,
+				y: selectedImage.transform.y + 24,
+			}
+		: {
+				x: (preview.context.bounds?.x ?? 0) + 24,
+				y: (preview.context.bounds?.y ?? 0) + 24,
+			};
+	const node = createImage({
+		...(createNodeId ? { id: createNodeId() } : {}),
+		name: "AI image result",
+		assetId: resultAssetId,
+		bounds,
+		transform,
+		zIndex: selectedImage
+			? (selectedImage.zIndex ?? 0) + 1
+			: Math.max(-1, ...page.root.children.map(({ zIndex }) => zIndex ?? 0)) +
+				1,
+		alt: `AI ${preview.request.kind} result`,
+	});
+
+	return [
+		...put,
+		{
+			type: "node.create",
+			pageId: page.id,
+			parentId: parent?.id ?? page.root.id,
+			node,
+		},
+	];
+}
+
+/** Commit every accepted-result command through exactly one undo boundary. */
+export function applyAiImageResult(
+	options: ApplyAiImageResultOptions,
+): CanvasIR {
+	const { document, ...buildOptions } = options;
+	const commands = buildAiImageApplyCommands({
+		...buildOptions,
+		ir: document.getIR(),
+	});
+	return document.commitBatch(
+		commands,
+		options.mode === "replace"
+			? AI_REPLACE_BATCH_LABEL
+			: AI_INSERT_COPY_BATCH_LABEL,
+	);
 }

@@ -8,6 +8,7 @@
  */
 import {
 	applyCommand,
+	type CanvasCommand,
 	type CanvasImageNode,
 	type CanvasIR,
 	createCanvasIR,
@@ -16,10 +17,14 @@ import {
 	createPage,
 } from "@anvilkit/canvas-core";
 import { commitImageReplace } from "@anvilkit/plugin-ai-image/commit";
-import { describe, expect, it } from "vitest";
+import type { AiImageResultPreview } from "@anvilkit/plugin-ai-image/react";
+import { describe, expect, it, vi } from "vitest";
 
 import {
+	AI_INSERT_COPY_BATCH_LABEL,
 	AI_REPLACE_BATCH_LABEL,
+	applyAiImageResult,
+	buildAiImageApplyCommands,
 	buildAiImageReplaceCommands,
 } from "../ai-image/ai-image-commit";
 
@@ -73,6 +78,46 @@ function replaceCommandFromJob() {
 		fromAssetId: SOURCE_ASSET,
 		toAssetId: RESULT_ASSET,
 	});
+}
+
+function editingPreview(): AiImageResultPreview {
+	return {
+		request: { kind: "bg-remove", sourceAssetId: SOURCE_ASSET },
+		context: {
+			artboardId: "p1",
+			selectedNodeId: "img1",
+			selectedNodeKind: "image",
+			selectedAssetId: SOURCE_ASSET,
+		},
+		originalAssetId: SOURCE_ASSET,
+		result: {
+			jobId: "job-1",
+			status: "complete",
+			resultAssetId: RESULT_ASSET,
+			startedAt: 0,
+			finishedAt: 1,
+		},
+	};
+}
+
+function generationPreview(): AiImageResultPreview {
+	return {
+		request: { kind: "text-to-image", prompt: "a product photo" },
+		context: { artboardId: "p1" },
+		originalAssetId: null,
+		result: {
+			jobId: "job-2",
+			status: "complete",
+			resultAssetId: RESULT_ASSET,
+			startedAt: 0,
+			finishedAt: 1,
+			metadata: {
+				width: 640,
+				height: 480,
+				safety: { status: "approved" },
+			},
+		},
+	};
 }
 
 describe("buildAiImageReplaceCommands (cp5-R03)", () => {
@@ -175,5 +220,109 @@ describe("buildAiImageReplaceCommands (cp5-R03)", () => {
 				asset: { id: "some-other-asset", uri: RESULT_URI },
 			}),
 		).toThrow(/mismatch/);
+	});
+});
+
+describe("accepted AI result transactions (E7-T4)", () => {
+	it("applies asset insertion and replacement through exactly one batch", () => {
+		let current = seedIR();
+		const commitBatch = vi.fn(
+			(commands: readonly CanvasCommand[], label?: string) => {
+				current = applyCommand(current, {
+					type: "batch",
+					commands: [...commands],
+					...(label ? { label } : {}),
+				}).ir;
+				return current;
+			},
+		);
+
+		applyAiImageResult({
+			document: { getIR: () => current, commitBatch },
+			preview: editingPreview(),
+			mode: "replace",
+			asset: { id: RESULT_ASSET, uri: RESULT_URI },
+		});
+
+		expect(commitBatch).toHaveBeenCalledTimes(1);
+		expect(
+			commitBatch.mock.calls[0]?.[0].map((command) => command.type),
+		).toEqual(["asset.put", "image.replace"]);
+		expect(commitBatch.mock.calls[0]?.[1]).toBe(AI_REPLACE_BATCH_LABEL);
+		expect(imageNode(current).assetId).toBe(RESULT_ASSET);
+	});
+
+	it("inserts a generated copy without changing the original and one inverse undoes all of it", () => {
+		const ir = seedIR();
+		const commands = buildAiImageApplyCommands({
+			ir,
+			preview: generationPreview(),
+			mode: "insert-copy",
+			asset: { id: RESULT_ASSET, uri: RESULT_URI },
+			createNodeId: () => "ai-copy-1",
+		});
+		expect(commands.map((command) => command.type)).toEqual([
+			"asset.put",
+			"node.create",
+		]);
+
+		const applied = applyCommand(ir, {
+			type: "batch",
+			label: AI_INSERT_COPY_BATCH_LABEL,
+			commands,
+		});
+		expect(imageNode(applied.ir)).toEqual(imageNode(ir));
+		const inserted = applied.ir.pages[0]?.root.children[1];
+		expect(inserted).toMatchObject({
+			id: "ai-copy-1",
+			type: "image",
+			assetId: RESULT_ASSET,
+			bounds: { width: 640, height: 480 },
+			transform: { x: 24, y: 24 },
+		});
+		expect(applied.inverse.type).toBe("batch");
+
+		const undone = applyCommand(applied.ir, applied.inverse).ir;
+		expect(undone.pages[0]?.root.children).toHaveLength(1);
+		expect(imageNode(undone)).toEqual(imageNode(ir));
+		expect(undone.assets[RESULT_ASSET]).toBeUndefined();
+	});
+
+	it("copies selected-image geometry with an offset and preserves the source", () => {
+		const ir = seedIR();
+		const commands = buildAiImageApplyCommands({
+			ir,
+			preview: editingPreview(),
+			mode: "insert-copy",
+			asset: { id: RESULT_ASSET, uri: RESULT_URI },
+			createNodeId: () => "ai-copy-2",
+		});
+		const applied = applyCommand(ir, {
+			type: "batch",
+			commands,
+		}).ir;
+		const inserted = applied.pages[0]?.root.children[1];
+		expect(inserted).toMatchObject({
+			id: "ai-copy-2",
+			type: "image",
+			bounds: { width: 321, height: 123 },
+			transform: { x: 65, y: 91, rotation: 17 },
+			zIndex: 1,
+		});
+		expect(imageNode(applied)).toEqual(imageNode(ir));
+	});
+
+	it("fails closed when the selected original changed before acceptance", () => {
+		const ir = seedIR();
+		imageNode(ir).assetId = "newer-asset";
+		expect(() =>
+			buildAiImageApplyCommands({
+				ir,
+				preview: editingPreview(),
+				mode: "replace",
+				asset: { id: RESULT_ASSET, uri: RESULT_URI },
+			}),
+		).toThrow(/original image changed/);
+		expect(ir.assets[RESULT_ASSET]).toBeUndefined();
 	});
 });
