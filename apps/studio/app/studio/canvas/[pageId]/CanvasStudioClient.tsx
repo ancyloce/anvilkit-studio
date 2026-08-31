@@ -16,12 +16,21 @@ import {
 	createIndexedDbRecoveryAdapter,
 	type CanvasPersistenceAdapter as EditorPersistenceAdapter,
 } from "@anvilkit/canvas-editor";
-import type {
-	CommitCanvasCommandFn,
-	PostProcessUpload,
+import {
+	createAiJobClient,
+	type PostProcessUpload,
 } from "@anvilkit/plugin-ai-image";
-import { createAiJobClient } from "@anvilkit/plugin-ai-image";
-import { AiImagePanel } from "@anvilkit/plugin-ai-image/react";
+import {
+	createAiImageJobSessionCoordinator,
+	createMemoryAiImageJobSessionPersistence,
+	createStorageAiImageJobSessionPersistence,
+} from "@anvilkit/plugin-ai-image/job-session";
+import {
+	type AiImageApplyMode,
+	AiImagePanel,
+	type AiImageResultPreview,
+} from "@anvilkit/plugin-ai-image/react";
+import { createAiImageTelemetry } from "@anvilkit/plugin-ai-image/telemetry";
 import {
 	createAssetRegistry,
 	dataUrlUploader,
@@ -34,10 +43,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import "@anvilkit/canvas-editor/styles.css";
-import {
-	AI_REPLACE_BATCH_LABEL,
-	buildAiImageReplaceCommands,
-} from "@/lib/ai-image/ai-image-commit";
+import { applyAiImageResult } from "@/lib/ai-image/ai-image-commit";
 import {
 	isRealAiImageEnabled,
 	selectAiImageProvider,
@@ -123,6 +129,61 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 		[],
 	);
 	const [initialIR, setInitialIR] = useState<CanvasIR | null>(null);
+	const aiJobCoordinator = useMemo(
+		() =>
+			createAiImageJobSessionCoordinator({
+				promptRetentionMs: 5 * 60_000,
+				persistence:
+					typeof globalThis.localStorage === "undefined"
+						? createMemoryAiImageJobSessionPersistence()
+						: createStorageAiImageJobSessionPersistence({
+								storage: globalThis.localStorage,
+								namespace: "studio-canvas-ai-image",
+							}),
+			}),
+		[],
+	);
+	const aiImageTelemetry = useMemo(
+		() =>
+			createAiImageTelemetry({
+				emit: (event) => {
+					if (typeof globalThis.window !== "undefined") {
+						globalThis.window.dispatchEvent(
+							new CustomEvent("anvilkit:ai-image-telemetry", {
+								detail: event,
+							}),
+						);
+					}
+				},
+			}),
+		[],
+	);
+	const [aiOnline, setAiOnline] = useState(
+		typeof globalThis.navigator === "undefined"
+			? true
+			: globalThis.navigator.onLine,
+	);
+	useEffect(() => {
+		const updateOnline = (): void => setAiOnline(globalThis.navigator.onLine);
+		globalThis.addEventListener("online", updateOnline);
+		globalThis.addEventListener("offline", updateOnline);
+		return () => {
+			globalThis.removeEventListener("online", updateOnline);
+			globalThis.removeEventListener("offline", updateOnline);
+		};
+	}, []);
+	const aiJobSession = useMemo(
+		() => ({
+			documentId: pageId,
+			coordinator: aiJobCoordinator,
+			requiresNetwork: isRealAiImageEnabled(),
+			online: aiOnline,
+			// This standalone demo has no role service; integrated hosts pass their
+			// live authorization decision through the same seam.
+			permissionGranted: true,
+		}),
+		[aiJobCoordinator, aiOnline, pageId],
+	);
 
 	// AI-image wiring (task I1-11). A per-mount asset registry holds the
 	// generated images; the provider assetizes route output into it. The
@@ -154,6 +215,15 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 	// The active artboard, mirrored out of `<CanvasStudio onActivePageChange>`.
 	const activePageRef = useRef<string>(pageId);
 	const editorApiRef = useRef<CanvasStudioStableValue | null>(null);
+	const resolveAiPreviewUrl = useCallback(
+		(assetId: string): string | undefined =>
+			getAssetUrl(assetId) ??
+			editorApiRef.current?.getIR().assets[assetId]?.uri ??
+			(!isRealAiImageEnabled() && assetId.startsWith("mock-asset-")
+				? MOCK_AI_RESULT_DATA_URL
+				: undefined),
+		[getAssetUrl],
+	);
 	// cp5-R03: the selected node, mirrored out of `<CanvasStudio
 	// onSelectionChange>`. Both a ref and state, for two different readers: the
 	// ref feeds `getLayerContext`, which is read at job time and must be current
@@ -185,41 +255,37 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 		};
 	}, []);
 
-	// cp5-R03: the AI result → canvas commit, i.e. the last mile.
-	//
-	// `useAiImage` builds the `image.replace` itself (`commitImageReplace`) when
-	// a non-`text-to-image` job completes against the selected node, and hands
-	// it to this injected `commit`. The host's only job is to land it on the
-	// document — through the editor's OWN command pipeline, so the result is the
-	// same transaction FR-093 drag-to-replace commits: `image.replace` touches
-	// only `assetId` (bounds, transform and crop survive untouched), and the
-	// `asset.put` that registers the produced bytes rides in the same batch, so
-	// one undo reverts the whole thing.
-	//
-	// Throwing is deliberate: `useAiImage` catches whatever `commit` throws and
-	// renders it in the panel's error line, so a commit that cannot happen is
-	// visible rather than a silent no-op.
-	const commitAiResult = useCallback<CommitCanvasCommandFn<void>>(
-		(replace) => {
+	// The preview is accepted through one explicit host seam. Both replace and
+	// insert-copy register produced bytes and mutate the tree through exactly one
+	// `commitBatch`, so one undo restores the pre-AI document. The pure builder
+	// validates the live selection and result asset before history is touched.
+	const applyAiResultPreview = useCallback(
+		(preview: AiImageResultPreview, mode: AiImageApplyMode): void => {
 			const editor = editorApiRef.current;
 			if (!editor) {
 				throw new Error(
 					"Canvas editor is not mounted — the AI result was not committed.",
 				);
 			}
-			const uri =
-				getAssetUrl(replace.toAssetId) ??
-				(isRealAiImageEnabled() ? undefined : MOCK_AI_RESULT_DATA_URL);
-			const commands = buildAiImageReplaceCommands({
-				ir: editor.getIR(),
-				replace,
-				asset: uri ? { id: replace.toAssetId, uri } : undefined,
+			const resultAssetId = preview.result.resultAssetId;
+			const uri = resolveAiPreviewUrl(resultAssetId);
+			const metadata = preview.result.metadata;
+			applyAiImageResult({
+				document: editor,
+				preview,
+				mode,
+				asset: uri
+					? {
+							id: resultAssetId,
+							uri,
+							...(metadata?.mimeType ? { mimeType: metadata.mimeType } : {}),
+							...(metadata?.width ? { width: metadata.width } : {}),
+							...(metadata?.height ? { height: metadata.height } : {}),
+						}
+					: undefined,
 			});
-			const only = commands.length === 1 ? commands[0] : undefined;
-			if (only) editor.commit(only);
-			else editor.commitBatch(commands, AI_REPLACE_BATCH_LABEL);
 		},
-		[getAssetUrl],
+		[resolveAiPreviewUrl],
 	);
 
 	// PRD 0012 §15.16: hand persistence to the editor's built-in save pipeline
@@ -332,7 +398,10 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 						jobClient={jobClient}
 						getLayerContext={getLayerContext}
 						providerDescriptor={providerDescriptor}
-						commit={commitAiResult}
+						jobSession={aiJobSession}
+						telemetry={aiImageTelemetry}
+						applyResult={applyAiResultPreview}
+						resolveAssetUrl={resolveAiPreviewUrl}
 					/>
 				</aside>
 			</div>
