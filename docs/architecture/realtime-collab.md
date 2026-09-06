@@ -397,7 +397,7 @@ and its sources now sit under `src/utils/` rather than at `src/` root.
 - Yjs docs — [https://docs.yjs.dev/](https://docs.yjs.dev/) for
   general CRDT semantics. The plugin pins `yjs@^13.6.32` and
   `y-protocols@^1.0.7` as dependencies, and declares
-  `y-websocket@^3.0.0` plus `@hocuspocus/provider@^4.4.0` as peers.
+  `y-websocket@^3.1.0` plus `@hocuspocus/provider@^4.4.0` as peers.
 - y-protocols Awareness —
   [https://github.com/yjs/y-protocols](https://github.com/yjs/y-protocols).
 - Reference transport — `examples/y-websocket-server.mjs` under

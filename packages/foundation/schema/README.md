@@ -107,4 +107,4 @@ optional. Callers that know better can override per call by passing
 | Package            | Version   |
 | ------------------ | --------- |
 | `@puckeditor/core` | `^0.23.0` |
-| `zod`              | `^4.4.3`  |
+| `zod`              | `^4.5.4`  |

@@ -50,13 +50,13 @@ minimumReleaseAgeExclude:
   - '@vitest/spy@4.1.7'
   - '@vitest/utils@4.1.7'
   - vitest@4.1.7
-  - '@turbo/darwin-64@2.9.15 || 2.10.7 || 2.10.10'
-  - '@turbo/darwin-arm64@2.9.15 || 2.10.7 || 2.10.10'
-  - '@turbo/linux-64@2.9.15 || 2.10.7 || 2.10.10'
-  - '@turbo/linux-arm64@2.9.15 || 2.10.7 || 2.10.10'
-  - '@turbo/windows-64@2.9.15 || 2.10.7 || 2.10.10'
-  - '@turbo/windows-arm64@2.9.15 || 2.10.7 || 2.10.10'
-  - turbo@2.9.15 || 2.10.7 || 2.10.10
+  - '@turbo/darwin-64@2.9.15 || 2.10.7 || 2.10.12'
+  - '@turbo/darwin-arm64@2.9.15 || 2.10.7 || 2.10.12'
+  - '@turbo/linux-64@2.9.15 || 2.10.7 || 2.10.12'
+  - '@turbo/linux-arm64@2.9.15 || 2.10.7 || 2.10.12'
+  - '@turbo/windows-64@2.9.15 || 2.10.7 || 2.10.12'
+  - '@turbo/windows-arm64@2.9.15 || 2.10.7 || 2.10.12'
+  - turbo@2.9.15 || 2.10.7 || 2.10.12
   - deslop-js@0.5.8 || 0.9.1 || 0.9.3 || 0.9.8 || 0.9.12
   - oxlint-plugin-react-doctor@0.2.14 || 0.5.8 || 0.9.1 || 0.9.3 || 0.9.8 || 0.9.12
   - react-doctor@0.2.14 || 0.5.8 || 0.9.1 || 0.9.12
@@ -155,26 +155,26 @@ minimumReleaseAgeExclude:
   - '@oxlint/binding-win32-ia32-msvc@1.76.0'
   - '@oxlint/binding-win32-x64-msvc@1.76.0'
   - oxlint@1.76.0
-  - '@next/bundle-analyzer@16.2.12 || 16.3.0'
-  - '@next/env@16.2.12 || 16.3.0'
-  - '@next/swc-darwin-arm64@16.2.12 || 16.3.0'
-  - '@next/swc-darwin-x64@16.2.12 || 16.3.0'
-  - '@next/swc-linux-arm64-gnu@16.2.12 || 16.3.0'
-  - '@next/swc-linux-arm64-musl@16.2.12 || 16.3.0'
-  - '@next/swc-linux-x64-gnu@16.2.12 || 16.3.0'
-  - '@next/swc-linux-x64-musl@16.2.12 || 16.3.0'
-  - '@next/swc-win32-arm64-msvc@16.2.12 || 16.3.0'
-  - '@next/swc-win32-x64-msvc@16.2.12 || 16.3.0'
-  - next@16.2.12 || 16.3.0
-  - '@biomejs/biome@2.5.8'
-  - '@biomejs/cli-darwin-arm64@2.5.8'
-  - '@biomejs/cli-darwin-x64@2.5.8'
-  - '@biomejs/cli-linux-arm64-musl@2.5.8'
-  - '@biomejs/cli-linux-arm64@2.5.8'
-  - '@biomejs/cli-linux-x64-musl@2.5.8'
-  - '@biomejs/cli-linux-x64@2.5.8'
-  - '@biomejs/cli-win32-arm64@2.5.8'
-  - '@biomejs/cli-win32-x64@2.5.8'
+  - '@next/bundle-analyzer@16.2.12 || 16.3.4'
+  - '@next/env@16.2.12 || 16.3.4'
+  - '@next/swc-darwin-arm64@16.2.12 || 16.3.4'
+  - '@next/swc-darwin-x64@16.2.12 || 16.3.4'
+  - '@next/swc-linux-arm64-gnu@16.2.12 || 16.3.4'
+  - '@next/swc-linux-arm64-musl@16.2.12 || 16.3.4'
+  - '@next/swc-linux-x64-gnu@16.2.12 || 16.3.4'
+  - '@next/swc-linux-x64-musl@16.2.12 || 16.3.4'
+  - '@next/swc-win32-arm64-msvc@16.2.12 || 16.3.4'
+  - '@next/swc-win32-x64-msvc@16.2.12 || 16.3.4'
+  - next@16.2.12 || 16.3.4
+  - '@biomejs/biome@2.5.12'
+  - '@biomejs/cli-darwin-arm64@2.5.12'
+  - '@biomejs/cli-darwin-x64@2.5.12'
+  - '@biomejs/cli-linux-arm64-musl@2.5.12'
+  - '@biomejs/cli-linux-arm64@2.5.12'
+  - '@biomejs/cli-linux-x64-musl@2.5.12'
+  - '@biomejs/cli-linux-x64@2.5.12'
+  - '@biomejs/cli-win32-arm64@2.5.12'
+  - '@biomejs/cli-win32-x64@2.5.12'
   - '@shadcn/react@0.3.0'
   - '@shikijs/core@4.4.2'
   - '@shikijs/engine-javascript@4.4.2'
@@ -197,13 +197,13 @@ minimumReleaseAgeExclude:
   - '@changesets/apply-release-plan@8.0.0'
   - '@changesets/assemble-release-plan@7.0.0'
   - '@changesets/changelog-git@1.0.0'
-  - '@changesets/cli@3.0.0'
+  - '@changesets/cli@3.1.0'
   - '@changesets/config@4.0.0'
   - '@changesets/errors@1.0.0'
-  - '@changesets/get-dependents-graph@3.0.0'
+  - '@changesets/get-dependents-graph@3.1.0'
   - '@changesets/git@4.0.0'
   - '@changesets/parse@1.0.0'
-  - '@changesets/pre@3.0.0'
+  - '@changesets/pre@3.1.0'
   - '@changesets/read@1.0.0'
   - '@changesets/should-skip-package@1.0.0'
   - '@changesets/types@7.0.0'
@@ -212,17 +212,6 @@ minimumReleaseAgeExclude:
   - konva@10.3.1
   - react-resizable-panels@4.12.3
   - zustand@5.0.15
-patchedDependencies:
-  "@base-ui/react@1.6.0": packages/extensions/components/patches/@base-ui__react@1.6.0.patch
-  # Puck 0.23 pins @dnd-kit/react 0.4.0. Its signal hooks subscribe in an
-  # effect and call setState during DragDropProvider's startTransition,
-  # crossing React 19's ten-fiber guard on drawer drags. Keep the version
-  # pinned by Puck and adapt those subscriptions to useSyncExternalStore.
-  '@dnd-kit/react@0.4.0': tooling/pnpm-patches/@dnd-kit__react@0.4.0.patch
-  # Puck's field walker must treat undeclared props and non-structural fields
-  # as opaque. Its drawer also keeps insertions blocked behind a drop animation;
-  # disable that animation so the canvas unlocks as soon as the pointer drops.
-  '@puckeditor/core@0.23.0': tooling/pnpm-patches/@puckeditor__core@0.23.0.patch
 
 overrides:
   react: 19.2.8

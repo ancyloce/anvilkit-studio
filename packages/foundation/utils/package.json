@@ -60,18 +60,18 @@
 		"@anvilkit/biome-config": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
-		"@rslib/core": "^0.23.2",
+		"@rslib/core": "^1.0.0",
 		"@testing-library/jest-dom": "^7.0.1",
 		"@testing-library/react": "^16.3.2",
 		"@types/react": "^19.2.18",
 		"@types/react-dom": "19.2.4",
-		"@vitest/coverage-v8": "^4.1.10",
+		"@vitest/coverage-v8": "^5.0.0",
 		"jsdom": "^30.0.1",
 		"react": "^19.2.8",
 		"react-dom": "^19.2.8",
 		"typedoc": "^0.28.20",
 		"typedoc-plugin-markdown": "^4.12.0",
 		"typescript": "7.0.2",
-		"vitest": "^4.1.10"
+		"vitest": "^5.0.0"
 	}
 }

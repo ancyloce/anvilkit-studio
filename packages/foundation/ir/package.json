@@ -97,7 +97,7 @@
 	"dependencies": {
 		"@anvilkit/contracts": "workspace:*",
 		"@anvilkit/utils": "workspace:*",
-		"zod": "^4.4.3"
+		"zod": "^4.5.4"
 	},
 	"scripts": {
 		"build": "rslib build --lib esm && rslib build --lib cjs --no-clean",
@@ -123,7 +123,7 @@
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
 		"@puckeditor/core": "^0.23.0",
-		"@rslib/core": "^0.23.2",
+		"@rslib/core": "^1.0.0",
 		"@types/node": "^26.2.0",
 		"esbuild": "^0.28.1",
 		"fast-check": "^4.9.0",
@@ -132,6 +132,6 @@
 		"typedoc": "^0.28.20",
 		"typedoc-plugin-markdown": "^4.12.0",
 		"typescript": "7.0.2",
-		"vitest": "^4.1.10"
+		"vitest": "^5.0.0"
 	}
 }

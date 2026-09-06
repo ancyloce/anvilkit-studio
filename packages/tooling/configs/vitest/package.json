@@ -31,11 +31,11 @@
 		"@anvilkit/typescript-config": "workspace:*",
 		"@testing-library/jest-dom": "^7.0.1",
 		"typescript": "7.0.2",
-		"vitest": "^4.1.10"
+		"vitest": "^5.0.0"
 	},
 	"peerDependencies": {
 		"@testing-library/jest-dom": "^6.9.0",
 		"jsdom": "^29.0.0",
-		"vitest": "^4.1.10"
+		"vitest": "^5.0.0"
 	}
 }

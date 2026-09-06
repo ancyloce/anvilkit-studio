@@ -83,14 +83,14 @@
 		"konva": "^10.3.1",
 		"liquid-glass-web-react": "^0.1.1",
 		"lucide-react": "^1.31.0",
-		"next": "^16.3.0",
+		"next": "^16.3.4",
 		"react": "^19.2.8",
 		"react-dom": "^19.2.8",
-		"react-konva": "^19.2.5",
+		"react-konva": "^19.2.6",
 		"replicate": "^1.4.0",
 		"undici": "^8.10.0",
 		"y-protocols": "^1.0.7",
-		"y-websocket": "^3.0.0",
+		"y-websocket": "^3.1.0",
 		"yjs": "^13.6.32"
 	},
 	"devDependencies": {
@@ -100,7 +100,7 @@
 		"@anvilkit/vitest-config": "workspace:*",
 		"@axe-core/playwright": "^4.13.0",
 		"@hocuspocus/server": "^4.4.0",
-		"@next/bundle-analyzer": "^16.3.0",
+		"@next/bundle-analyzer": "^16.3.4",
 		"@playwright/test": "^1.59.1",
 		"@types/better-sqlite3": "^7.6.13",
 		"@types/node": "^26.2.0",
@@ -108,6 +108,6 @@
 		"@types/react-dom": "19.2.4",
 		"drizzle-kit": "^0.31.10",
 		"typescript": "7.0.2",
-		"vitest": "^4.1.10"
+		"vitest": "^5.0.0"
 	}
 }
