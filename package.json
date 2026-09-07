@@ -48,7 +48,7 @@
 		"@anvilkit/section": "workspace:*",
 		"@anvilkit/statistics": "workspace:*",
 		"@biomejs/biome": "^2.5.12",
-		"@changesets/cli": "^3.1.0",
+		"@changesets/cli": "^3.0.2",
 		"@puckeditor/core": "0.23.0",
 		"@rsbuild/plugin-react": "^2.1.0",
 		"@rslib/core": "^1.0.0",
