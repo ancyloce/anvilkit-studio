@@ -43,13 +43,13 @@ allowBuilds:
   sharp: false
 minimumReleaseAgeExclude:
   - '@vitest/expect@4.1.7'
-  - '@vitest/mocker@4.1.7'
+  - '@vitest/mocker@4.1.7 || 5.0.0'
   - '@vitest/pretty-format@4.1.7'
   - '@vitest/runner@4.1.7'
   - '@vitest/snapshot@4.1.7'
-  - '@vitest/spy@4.1.7'
+  - '@vitest/spy@4.1.7 || 5.0.0'
   - '@vitest/utils@4.1.7'
-  - vitest@4.1.7
+  - vitest@4.1.7 || 5.0.0
   - '@turbo/darwin-64@2.9.15 || 2.10.7 || 2.10.12'
   - '@turbo/darwin-arm64@2.9.15 || 2.10.7 || 2.10.12'
   - '@turbo/linux-64@2.9.15 || 2.10.7 || 2.10.12'
@@ -60,11 +60,6 @@ minimumReleaseAgeExclude:
   - deslop-js@0.5.8 || 0.9.1 || 0.9.3 || 0.9.8 || 0.9.12
   - oxlint-plugin-react-doctor@0.2.14 || 0.5.8 || 0.9.1 || 0.9.3 || 0.9.8 || 0.9.12
   - react-doctor@0.2.14 || 0.5.8 || 0.9.1 || 0.9.12
-  # Transitive deps newly resolved by the fresh lockfile (the @base-ui/react
-  # 1.6.0 bump re-resolved the tree), each published inside pnpm's 24h
-  # minimumReleaseAge embargo window. Mainstream packages; whitelist the exact
-  # pinned versions so install can proceed. nanoid pins two majors (3 + 5), so
-  # it must be a single union per the rule above.
   - '@dotenvx/dotenvx@1.75.1'
   - '@dotenvx/primitives@0.8.0'
   - nanoid@3.3.14 || 5.1.15
@@ -194,17 +189,17 @@ minimumReleaseAgeExclude:
   - undici@8.10.0
   - yjs@13.6.32
   - '@axe-core/playwright@4.13.0'
-  - '@changesets/apply-release-plan@8.0.0'
+  - '@changesets/apply-release-plan@8.0.0 || 8.1.0'
   - '@changesets/assemble-release-plan@7.0.0'
   - '@changesets/changelog-git@1.0.0'
   - '@changesets/cli@3.0.2'
   - '@changesets/config@4.0.0'
   - '@changesets/errors@1.0.0'
   - '@changesets/get-dependents-graph@3.1.0'
-  - '@changesets/git@4.0.0'
+  - '@changesets/git@4.0.0 || 4.0.1'
   - '@changesets/parse@1.0.0'
   - '@changesets/pre@3.1.0'
-  - '@changesets/read@1.0.0'
+  - '@changesets/read@1.0.0 || 1.0.1'
   - '@changesets/should-skip-package@1.0.0'
   - '@changesets/types@7.0.0'
   - '@changesets/write@1.0.0'
@@ -212,6 +207,27 @@ minimumReleaseAgeExclude:
   - konva@10.3.1
   - react-resizable-panels@4.12.3
   - zustand@5.0.15
+  - '@rsbuild/core@2.2.2'
+  - '@rslib/core@1.0.0'
+  - '@rspack/binding-darwin-arm64@2.2.2'
+  - '@rspack/binding-darwin-x64@2.2.2'
+  - '@rspack/binding-linux-arm64-gnu@2.2.2'
+  - '@rspack/binding-linux-arm64-musl@2.2.2'
+  - '@rspack/binding-linux-ppc64-gnu@2.2.2'
+  - '@rspack/binding-linux-riscv64-gnu@2.2.2'
+  - '@rspack/binding-linux-riscv64-musl@2.2.2'
+  - '@rspack/binding-linux-s390x-gnu@2.2.2'
+  - '@rspack/binding-linux-x64-gnu@2.2.2'
+  - '@rspack/binding-linux-x64-musl@2.2.2'
+  - '@rspack/binding-wasm32-wasi@2.2.2'
+  - '@rspack/binding-win32-arm64-msvc@2.2.2'
+  - '@rspack/binding-win32-ia32-msvc@2.2.2'
+  - '@rspack/binding-win32-x64-msvc@2.2.2'
+  - '@rspack/binding@2.2.2'
+  - '@rspack/core@2.2.2'
+  - '@vitest/coverage-v8@5.0.0'
+  - react-konva@19.2.6
+  - rsbuild-plugin-dts@1.0.0
 
 overrides:
   react: 19.2.8
