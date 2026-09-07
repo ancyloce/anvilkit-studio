@@ -12,7 +12,7 @@
 	"engines": {
 		"node": ">=20"
 	},
-	"packageManager": "pnpm@11.22.0",
+	"packageManager": "pnpm@12.3.4",
 	"dependencies": {
 		"@hocuspocus/extension-database": "4.4.0",
 		"@hocuspocus/extension-logger": "4.4.0",

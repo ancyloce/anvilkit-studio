@@ -80,7 +80,7 @@
 		"zod": "^4.5.4",
 		"zustand": "^5.0.15"
 	},
-	"packageManager": "pnpm@11.22.0",
+	"packageManager": "pnpm@12.3.4",
 	"engines": {
 		"node": ">=22.13"
 	}
