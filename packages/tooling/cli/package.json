@@ -56,7 +56,7 @@
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
 		"@rslib/core": "^1.0.0",
-		"@types/node": "^26.2.0",
+		"@types/node": "^26.4.1",
 		"madge": "^8.0.0",
 		"publint": "^0.3.23",
 		"typescript": "7.0.2",
