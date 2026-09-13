@@ -58,12 +58,16 @@ import { guardDocumentForV2Editor } from "@/lib/migration/v2-guard";
 import { PREVIEW_SLOT_SLUG } from "@/lib/page-link";
 import {
 	type PageRevisionConflict,
+	type PersistResult,
 	persistPage,
 	readStoredPage,
 	storedPageRevision,
 } from "@/lib/page-persistence";
 import { pageValidationPlugin } from "@/lib/page-validation-plugin";
-import { createPersistedPagesSource } from "@/lib/persisted-pages-source";
+import {
+	createPersistedPagesSource,
+	type PersistedPagesWriteAction,
+} from "@/lib/persisted-pages-source";
 import {
 	createDemoConfig,
 	createDemoData,
@@ -87,6 +91,32 @@ import { DemoToolsExportPanel } from "./demo-tools-export-panel";
 import { useAssetManagerE2E } from "./use-asset-manager-e2e";
 
 const editorShell = "flex flex-col min-h-svh [background:var(--demo-page-bg)]";
+
+// Titles of the notice a refused write shows, by the write that was refused.
+const WRITE_REFUSED_TITLE: Record<
+	"save" | "publish" | PersistedPagesWriteAction,
+	string
+> = {
+	save: "Draft not saved",
+	publish: "Page not published",
+	create: "Page not created",
+	rename: "Page not renamed",
+	settings: "Page settings not saved",
+	duplicate: "Page not duplicated",
+	delete: "Page not deleted",
+};
+
+function conflictMessage(conflict: PageRevisionConflict): string {
+	return `This page changed on the server after you opened it (you opened revision ${conflict.expectedPageRevision}; the server now holds revision ${conflict.currentPageRevision}). Nothing was written and your edits are still in the editor. Copy anything you need, then reload the page to continue from the latest version.`;
+}
+
+const REVISION_UNAVAILABLE_MESSAGE =
+	"The page's current revision could not be read from the server, so nothing was written. Your edits are still in the editor; reload the page and try again.";
+// One shared object, so a refused write is told apart by identity.
+const REVISION_UNAVAILABLE: PersistResult = {
+	ok: false,
+	issue: "page revision unavailable",
+};
 // `.Puck` is `@puckeditor/core`'s own root class — we don't render that
 // element, so it can only be reached via an arbitrary descendant selector.
 const editorPanel =
@@ -274,12 +304,84 @@ export default function PuckEditorPage() {
 	// the author sees; `null` until the first edit of the open page, when the
 	// page's own document (`publishedData`) is what there is to save.
 	const liveDataRef = useRef<Data<DemoComponents, PageRootProps> | null>(null);
-	// Why the last save/publish wrote nothing, shown above the editor. The
-	// edits stay in the editor; nothing is retried, overwritten or merged.
+	// Why the last write of a page (save, publish or a page-rail write) wrote
+	// nothing, shown above the editor. The edits stay in the editor; nothing
+	// is retried, overwritten or merged.
 	const [persistNotice, setPersistNotice] = useState<{
+		pageId: string;
 		title: string;
 		message: string;
 	} | null>(null);
+
+	/**
+	 * Every write of a page — Save draft, Publish to live and the page rail's
+	 * create/rename/settings/duplicate/delete — runs here: against the revision
+	 * the page's previous read or write settled on (a fresh read for a page
+	 * never opened), one write at a time per page, and the page's revision is
+	 * settled on the outcome: the revision the server returned on success, the
+	 * presented one otherwise (a conflict means the page moved on the server;
+	 * keeping the presented revision makes the next write conflict again until
+	 * the page is reopened, instead of overwriting). A page whose revision
+	 * could not be read is written nothing. Conflicts and unreadable revisions
+	 * are reported in the notice, named by the action.
+	 */
+	const guardedWrite = useCallback(
+		async (
+			pageId: string,
+			action: "save" | "publish" | PersistedPagesWriteAction,
+			perform: (expectedPageRevision: number) => Promise<PersistResult>,
+		): Promise<PersistResult> => {
+			const previous =
+				pageRevisionsRef.current.get(pageId) ??
+				readStoredPage(pageId).then(storedPageRevision);
+			const outcome = previous.then(
+				async (
+					expected,
+				): Promise<{ revision: number | null; result: PersistResult }> => {
+					if (expected === null) {
+						return { revision: null, result: REVISION_UNAVAILABLE };
+					}
+					const result = await perform(expected);
+					if (!result.ok) return { revision: expected, result };
+					// A delete returns no revision: the record is gone.
+					const revision =
+						action === "delete" ? null : (result.pageRevision ?? expected);
+					return { revision, result };
+				},
+			);
+			pageRevisionsRef.current.set(
+				pageId,
+				outcome.then(
+					(settled) => settled.revision,
+					() => null,
+				),
+			);
+			const { result } = await outcome;
+			if (result.ok) {
+				if (action === "delete") {
+					pageRevisionsRef.current.delete(pageId);
+					openedPagesRef.current.delete(pageId);
+				}
+				setPersistNotice((notice) =>
+					notice?.pageId === pageId ? null : notice,
+				);
+			} else if (result.conflict !== undefined) {
+				setPersistNotice({
+					pageId,
+					title: WRITE_REFUSED_TITLE[action],
+					message: conflictMessage(result.conflict),
+				});
+			} else if (result === REVISION_UNAVAILABLE) {
+				setPersistNotice({
+					pageId,
+					title: WRITE_REFUSED_TITLE[action],
+					message: REVISION_UNAVAILABLE_MESSAGE,
+				});
+			}
+			return result;
+		},
+		[],
+	);
 	const [assetManagerTestMode, setAssetManagerTestMode] = useState(false);
 	// `?e2e=demo-tools` surfaces the demo's auxiliary validation chrome — the
 	// HTML/React export buttons and the published-data snapshot — which the
@@ -463,6 +565,9 @@ export default function PuckEditorPage() {
 				// only `pageDataMap` (never `activePageIdRef`) — the source's
 				// first `list()` runs during render before `activePageIdRef` is set.
 				getRootProps: (id) => pageDataMap[id]?.root.props,
+				// The rail's writes present and settle the page revision like the
+				// editor's own saves (see `guardedWrite`).
+				guardedWrite,
 				updateRootProps: (id, patch) => {
 					const applyPatch = (
 						doc: Data<DemoComponents, PageRootProps>,
@@ -484,7 +589,7 @@ export default function PuckEditorPage() {
 					}
 				},
 			}),
-		[pageDataMap],
+		[pageDataMap, guardedWrite],
 	);
 
 	// Locale switcher: config-centric — `demoStudioConfig.i18n.showLocaleSwitch`
@@ -566,8 +671,10 @@ export default function PuckEditorPage() {
 	// write presents. A page with no record yet keeps its in-memory seed at
 	// revision 0; a failed read keeps the seed with no revision (saves refuse).
 	// Reopening a page already opened in this session keeps its document and
-	// its base revision (see `pageRevisionsRef`). Every open starts with no
-	// live edits and no stale notice.
+	// its base revision (see `pageRevisionsRef`). A page the rail is still
+	// writing (just created or duplicated) is read after that write settles,
+	// so it opens at its committed revision. Every open starts with no live
+	// edits and no stale notice.
 	useEffect(() => {
 		liveDataRef.current = null;
 		setPersistNotice(null);
@@ -577,7 +684,12 @@ export default function PuckEditorPage() {
 		}
 		setDocumentReady(false);
 		let cancelled = false;
-		const read = readStoredPage(activePageId);
+		const inFlight =
+			pageRevisionsRef.current.get(activePageId) ?? Promise.resolve(null);
+		const read = inFlight.then(
+			() => readStoredPage(activePageId),
+			() => readStoredPage(activePageId),
+		);
 		pageRevisionsRef.current.set(activePageId, read.then(storedPageRevision));
 		void read.then((page) => {
 			if (cancelled) return;
@@ -856,63 +968,27 @@ export default function PuckEditorPage() {
 		>;
 	}, []);
 
-	/** The revision the open page's next write must present (see `pageRevisionsRef`). */
-	function expectedRevisionFor(pageId: string): Promise<number | null> {
-		return (
-			pageRevisionsRef.current.get(pageId) ??
-			readStoredPage(pageId).then(storedPageRevision)
-		);
-	}
-
-	function conflictNotice(
-		action: "save" | "publish",
-		conflict: PageRevisionConflict,
-	): { title: string; message: string } {
-		return {
-			title: action === "save" ? "Draft not saved" : "Page not published",
-			message: `This page changed on the server after you opened it (you opened revision ${conflict.expectedPageRevision}; the server now holds revision ${conflict.currentPageRevision}). Nothing was written and your edits are still in the editor. Copy anything you need, then reload the page to continue from the latest version.`,
-		};
-	}
-
-	const revisionUnavailableNotice = {
-		title: "Page revision unknown",
-		message:
-			"The page's current revision could not be read from the server, so nothing was written. Your edits are still in the editor; reload the page and try again.",
-	};
-
 	async function handleSaveDraft() {
 		setIsSavingDraft(true);
 		const pageId = activePageIdRef.current;
 		try {
 			// F7: validate `root.props` then persist through the Page API,
-			// against the revision read when the page was opened. An invalid
-			// payload, an unknown revision or a stale one aborts the save —
-			// nothing is written and the edits stay in the editor.
-			const expectedPageRevision = await expectedRevisionFor(pageId);
-			if (expectedPageRevision === null) {
-				setPersistNotice(revisionUnavailableNotice);
-				console.error("[demo] save blocked — page revision unavailable");
-				return;
-			}
-			const result = await persistPage(
-				"draft",
-				liveDataRef.current ?? publishedData,
-				{ id: pageId, expectedPageRevision },
+			// against the page's settled revision. An invalid payload, an
+			// unknown revision or a stale one aborts the save — nothing is
+			// written and the edits stay in the editor.
+			const result = await guardedWrite(
+				pageId,
+				"save",
+				(expectedPageRevision) =>
+					persistPage("draft", liveDataRef.current ?? publishedData, {
+						id: pageId,
+						expectedPageRevision,
+					}),
 			);
 			if (!result.ok) {
-				if (result.conflict !== undefined) {
-					setPersistNotice(conflictNotice("save", result.conflict));
-				}
 				console.error("[demo] save blocked —", result.issue);
 				return;
 			}
-			if (result.pageRevision !== undefined) {
-				pageRevisionsRef.current.set(
-					pageId,
-					Promise.resolve(result.pageRevision),
-				);
-			}
-			setPersistNotice(null);
 			setLastSavedAt(new Date());
 			console.log("[demo] draft saved");
 		} finally {
@@ -932,30 +1008,16 @@ export default function PuckEditorPage() {
 		// navigation + state update, not analytics.
 		const typed = liveData as unknown as Data<DemoComponents, PageRootProps>;
 		const pageId = activePageIdRef.current;
-		const expectedPageRevision = await expectedRevisionFor(pageId);
-		if (expectedPageRevision === null) {
-			setPersistNotice(revisionUnavailableNotice);
-			console.error("[demo] publish blocked — page revision unavailable");
-			throw new Error("Publish blocked: page revision unavailable");
-		}
-		const result = await persistPage("publish", typed, {
-			id: pageId,
-			expectedPageRevision,
-		});
+		const result = await guardedWrite(
+			pageId,
+			"publish",
+			(expectedPageRevision) =>
+				persistPage("publish", typed, { id: pageId, expectedPageRevision }),
+		);
 		if (!result.ok) {
-			if (result.conflict !== undefined) {
-				setPersistNotice(conflictNotice("publish", result.conflict));
-			}
 			console.error("[demo] publish blocked —", result.issue);
 			throw new Error(`Publish blocked: ${result.issue ?? "invalid page"}`);
 		}
-		if (result.pageRevision !== undefined) {
-			pageRevisionsRef.current.set(
-				pageId,
-				Promise.resolve(result.pageRevision),
-			);
-		}
-		setPersistNotice(null);
 		handlePublish(liveData);
 	}
 
