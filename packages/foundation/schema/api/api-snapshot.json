@@ -18165,7 +18165,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "zod",
-													"packagePath": "v4/core/core.d.cts",
+													"packagePath": "v4/classic/in-out.d.cts",
 													"qualifiedName": "output"
 												},
 												"typeArguments": [
