@@ -117,6 +117,16 @@ const REVISION_UNAVAILABLE: PersistResult = {
 	ok: false,
 	issue: "page revision unavailable",
 };
+// A stored document the v2 guard refused (`guardDocumentForV2Editor` →
+// `blocked`): the editor shows its in-memory seed in place of the page and
+// writes nothing for it, so the stored document and its lock stay intact.
+const DOCUMENT_BLOCKED_TITLE = "Page cannot be opened for editing";
+const DOCUMENT_BLOCKED_MESSAGE =
+	"The stored document of this page could not be migrated for this editor, so the editor shows placeholder content instead of the page. Nothing will be saved or published for this page: the stored document and its component version lock stay as they are on the server. Open another page, or ask an administrator to repair this page's document.";
+const DOCUMENT_BLOCKED: PersistResult = {
+	ok: false,
+	issue: "page document blocked",
+};
 // `.Puck` is `@puckeditor/core`'s own root class — we don't render that
 // element, so it can only be reached via an arbitrary descendant selector.
 const editorPanel =
@@ -293,6 +303,9 @@ export default function PuckEditorPage() {
 	// reopened — never a blind write.
 	const pageRevisionsRef = useRef(new Map<string, Promise<number | null>>());
 	const openedPagesRef = useRef(new Set<string>());
+	// Pages whose stored document the v2 guard refused on open: every write of
+	// such a page is refused (see `DOCUMENT_BLOCKED`).
+	const blockedPagesRef = useRef(new Set<string>());
 	// Whether the active page's document base is settled (stored document
 	// loaded, or none to load); `<Studio>` seeds Puck only once, so it mounts
 	// after the read rather than with a document the read then replaces.
@@ -331,6 +344,14 @@ export default function PuckEditorPage() {
 			action: "save" | "publish" | PersistedPagesWriteAction,
 			perform: (expectedPageRevision: number) => Promise<PersistResult>,
 		): Promise<PersistResult> => {
+			if (blockedPagesRef.current.has(pageId)) {
+				setPersistNotice({
+					pageId,
+					title: WRITE_REFUSED_TITLE[action],
+					message: DOCUMENT_BLOCKED_MESSAGE,
+				});
+				return DOCUMENT_BLOCKED;
+			}
 			const previous =
 				pageRevisionsRef.current.get(pageId) ??
 				readStoredPage(pageId).then(storedPageRevision);
@@ -586,6 +607,12 @@ export default function PuckEditorPage() {
 					}
 					if (id === activePageIdRef.current) {
 						setPublishedData((current) => applyPatch(current));
+						// The open page's live document (unsaved edits) carries the
+						// patch too, so the next save persists both rather than
+						// the edits with the old root props.
+						if (liveDataRef.current !== null) {
+							liveDataRef.current = applyPatch(liveDataRef.current);
+						}
 					}
 				},
 			}),
@@ -632,15 +659,20 @@ export default function PuckEditorPage() {
 			const next = readActivePageIdEvent();
 			const prev = activePageIdRef.current;
 			if (next === prev) return;
-			// Stash the outgoing page's current document, then load the
+			// Stash the outgoing page's live document (its unsaved edits; the
+			// map otherwise holds the base Puck was seeded with), then load the
 			// incoming one (falling back to the default showcase for pages
-			// created at runtime). The functional updater reads the latest
-			// `publishedData` without re-subscribing on every edit.
+			// created at runtime). Coming back re-seeds Puck with that document
+			// at the revision the page settled on, so the edits survive the
+			// round trip and are never paired with an older document.
 			//
 			// P5-06 (§10.4): every document entering the v2 editor passes
 			// the guard — the in-memory seeds are v2-native (pass-through),
 			// but any future store-fed or imported document is migrated on
 			// read or refused here, never opened in sidecar form.
+			if (liveDataRef.current !== null) {
+				pageDataMap[prev] = liveDataRef.current;
+			}
 			const incoming = pageDataMap[next] ?? createDemoData();
 			const guarded = guardDocumentForV2Editor(
 				incoming as unknown as Data,
@@ -674,10 +706,19 @@ export default function PuckEditorPage() {
 	// its base revision (see `pageRevisionsRef`). A page the rail is still
 	// writing (just created or duplicated) is read after that write settles,
 	// so it opens at its committed revision. Every open starts with no live
-	// edits and no stale notice.
+	// edits and no stale notice; a page whose stored document was refused
+	// shows its notice again (`blockedPagesRef`).
 	useEffect(() => {
 		liveDataRef.current = null;
-		setPersistNotice(null);
+		setPersistNotice(
+			blockedPagesRef.current.has(activePageId)
+				? {
+						pageId: activePageId,
+						title: DOCUMENT_BLOCKED_TITLE,
+						message: DOCUMENT_BLOCKED_MESSAGE,
+					}
+				: null,
+		);
 		if (openedPagesRef.current.has(activePageId)) {
 			setDocumentReady(true);
 			return;
@@ -706,10 +747,19 @@ export default function PuckEditorPage() {
 					editorDemoConfig as unknown as Config,
 				);
 				if (guarded.kind === "blocked") {
+					// The page keeps its seed on screen but is written nothing:
+					// a save from here would replace the stored document (and
+					// its lock) with placeholder content at its own revision.
 					console.error(
 						"[demo] stored page blocked from the v2 editor — legacy document failed migration",
 						guarded.diagnostics,
 					);
+					blockedPagesRef.current.add(activePageId);
+					setPersistNotice({
+						pageId: activePageId,
+						title: DOCUMENT_BLOCKED_TITLE,
+						message: DOCUMENT_BLOCKED_MESSAGE,
+					});
 				} else {
 					const document = guarded.data as unknown as Data<
 						DemoComponents,
@@ -970,7 +1020,11 @@ export default function PuckEditorPage() {
 
 	async function handleSaveDraft() {
 		setIsSavingDraft(true);
+		// The page and the document to save are those of the click: a write
+		// queued behind another write of this page runs later, possibly after
+		// the author switched pages, and must not pick up that page's document.
 		const pageId = activePageIdRef.current;
+		const liveDocument = liveDataRef.current ?? publishedData;
 		try {
 			// F7: validate `root.props` then persist through the Page API,
 			// against the page's settled revision. An invalid payload, an
@@ -980,7 +1034,7 @@ export default function PuckEditorPage() {
 				pageId,
 				"save",
 				(expectedPageRevision) =>
-					persistPage("draft", liveDataRef.current ?? publishedData, {
+					persistPage("draft", liveDocument, {
 						id: pageId,
 						expectedPageRevision,
 					}),
@@ -1018,10 +1072,13 @@ export default function PuckEditorPage() {
 			console.error("[demo] publish blocked —", result.issue);
 			throw new Error(`Publish blocked: ${result.issue ?? "invalid page"}`);
 		}
-		handlePublish(liveData);
+		handlePublish(liveData, pageId);
 	}
 
-	function handlePublish(nextPublishedData: Data) {
+	function handlePublish(
+		nextPublishedData: Data,
+		pageId: string = activePageIdRef.current,
+	) {
 		// `<Studio>` narrows its callback to Puck's default `Data` type.
 		// The demo knows the shape is `Data<DemoComponents, PageRootProps>`
 		// because `demoConfig` is the source of truth; assert through `unknown`
@@ -1031,7 +1088,9 @@ export default function PuckEditorPage() {
 			DemoComponents,
 			PageRootProps
 		>;
-		setPublishedData(typedData);
+		// Only the page that was published adopts the document; when the author
+		// has switched pages meanwhile, the open page keeps its own.
+		if (pageId === activePageIdRef.current) setPublishedData(typedData);
 		// The Puck-drag E2E stays on the editor so the export hooks
 		// (`window.__puckExportTrigger`) survive for its export assertions;
 		// real publishing navigates to the render preview. The document was
