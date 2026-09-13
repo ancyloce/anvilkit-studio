@@ -1,4 +1,7 @@
+import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/better-sqlite3";
 import { describe, expect, it } from "vitest";
+import { ensureSchema } from "../../db/client";
 import { MemoryPageStorageAdapter } from "../memory-page-storage-adapter";
 import {
 	archivePage,
@@ -10,8 +13,14 @@ import {
 	saveDraft,
 	updateSettings,
 } from "../page-api";
+import { SqlitePageStorageAdapter } from "../sqlite-page-storage-adapter";
 import { type DemoPageData, selectPublishedPayload } from "../types";
-import { pageData } from "./adapter-contract";
+import {
+	localLibrary,
+	lockedPageData,
+	pageData,
+	remoteHeroLock,
+} from "./adapter-contract";
 
 let counter = 0;
 function freshStorage(): MemoryPageStorageAdapter {
@@ -55,6 +64,222 @@ describe("page-api: saveDraft", () => {
 		}
 		// Nothing was written.
 		expect(await storage.getBySlug("Bad Slug")).toBeNull();
+	});
+});
+
+/**
+ * S1-T04 (development plan 2026-09-12): the page API is the server-side
+ * authority for the expected page revision and the remote-component lock.
+ * These run against the SQLite adapter on a real in-memory connection — the
+ * default backend behind `POST /api/pages/draft` — so the conflict is decided
+ * by the store's `BEGIN IMMEDIATE` transaction, not by the caller.
+ */
+function sqliteStorage(): SqlitePageStorageAdapter {
+	const connection = new Database(":memory:");
+	ensureSchema(connection);
+	let n = 0;
+	return new SqlitePageStorageAdapter({
+		db: drizzle(connection),
+		idFactory: () => `page-${++n}`,
+	});
+}
+
+describe("page-api: expected page revision and remote component lock", () => {
+	it("returns the page revision with every write", async () => {
+		const storage = sqliteStorage();
+		const created = await saveDraft(storage, {
+			slug: "home",
+			data: lockedPageData("home"),
+		});
+		expect(created.status).toBe(200);
+		if (created.body.ok) expect(created.body.data.pageRevision).toBe(1);
+	});
+
+	it("commits exactly one of two concurrent saves from the same revision and answers the other with a recoverable 409", async () => {
+		const storage = sqliteStorage();
+		const created = await saveDraft(storage, {
+			slug: "home",
+			data: lockedPageData("home"),
+		});
+		if (!created.body.ok) throw new Error("setup failed");
+		const id = created.body.data.id;
+		const attempt = (headline: string) =>
+			saveDraft(storage, {
+				id,
+				slug: "home",
+				data: {
+					...lockedPageData("home"),
+					content: [{ type: "RemoteHero", props: { id: "r", headline } }],
+				},
+				expectedPageRevision: 1,
+			});
+		const results = await Promise.all([
+			attempt("editor A"),
+			attempt("editor B"),
+		]);
+		const statuses = results.map((r) => r.status).sort();
+		expect(statuses).toEqual([200, 409]);
+		const conflict = results.find((r) => r.status === 409);
+		expect(conflict?.body.ok).toBe(false);
+		if (conflict && !conflict.body.ok) {
+			expect(conflict.body.code).toBe("E_CONFLICT");
+			expect(conflict.body.issues?.[0]).toMatchObject({
+				code: "E_PAGE_REVISION_CONFLICT",
+				expectedPageRevision: 1,
+				currentPageRevision: 2,
+			});
+		}
+		// Recovery: reload at the current revision and save again.
+		const reloaded = await getPage(storage, id);
+		if (!reloaded.body.ok) throw new Error("reload failed");
+		expect(reloaded.body.data.pageRevision).toBe(2);
+		const retry = await attempt("editor B, merged");
+		expect(retry.status).toBe(409);
+		const merged = await saveDraft(storage, {
+			id,
+			slug: "home",
+			data: lockedPageData("home"),
+			expectedPageRevision: reloaded.body.data.pageRevision,
+		});
+		expect(merged.status).toBe(200);
+	});
+
+	it("rejects an expectedPageRevision that is not a non-negative integer", async () => {
+		const storage = sqliteStorage();
+		for (const expectedPageRevision of [
+			"1",
+			-1,
+			1.5,
+			Number.MAX_SAFE_INTEGER + 1,
+		]) {
+			const result = await saveDraft(storage, {
+				slug: "home",
+				data: pageData("home", "Home"),
+				expectedPageRevision,
+			});
+			expect(result.status).toBe(400);
+			if (!result.body.ok) {
+				expect(result.body.issues?.[0]).toMatchObject({
+					path: ["expectedPageRevision"],
+				});
+			}
+		}
+		expect(await storage.getBySlug("home")).toBeNull();
+	});
+
+	it("never writes a remoteComponentLock the host cannot read", async () => {
+		const storage = sqliteStorage();
+		const cases: unknown[] = [
+			{ schemaVersion: 2, entries: [] },
+			{ schemaVersion: 1, entries: [], extra: true },
+			{
+				schemaVersion: 1,
+				entries: [{ ...remoteHeroLock.entries[0], packageVersion: "^0.2.2" }],
+			},
+			{
+				schemaVersion: 1,
+				entries: [
+					{
+						...remoteHeroLock.entries[0],
+						releaseManifestDigest: "sha256:short",
+					},
+				],
+			},
+			{
+				schemaVersion: 1,
+				entries: [remoteHeroLock.entries[0], remoteHeroLock.entries[0]],
+			},
+			"a string",
+		];
+		for (const [index, lock] of cases.entries()) {
+			const result = await saveDraft(storage, {
+				slug: `bad-${index}`,
+				data: lockedPageData(`bad-${index}`, lock),
+			});
+			expect(result.status).toBe(400);
+			if (!result.body.ok) {
+				expect(result.body.code).toBe("E_VALIDATION");
+				expect(result.body.issues?.[0]).toMatchObject({
+					code: "E_PAGE_REMOTE_LOCK_INVALID",
+					path: ["data", "root", "props", "remoteComponentLock"],
+				});
+			}
+			expect(await storage.getBySlug(`bad-${index}`)).toBeNull();
+		}
+		// The publish path applies the same guard.
+		const published = await publish(storage, {
+			slug: "bad-publish",
+			data: lockedPageData("bad-publish", cases[0]),
+		});
+		expect(published.status).toBe(400);
+	});
+
+	it("saves and reopens the exact lock, local definitions and an unresolvable node", async () => {
+		const storage = sqliteStorage();
+		const data = lockedPageData("locked");
+		const created = await saveDraft(storage, { slug: "locked", data });
+		expect(created.status).toBe(200);
+		if (!created.body.ok) throw new Error("save failed");
+		expect(created.body.warnings).toBeUndefined();
+		const reopened = await getPage(storage, created.body.data.id);
+		if (!reopened.body.ok) throw new Error("reopen failed");
+		const props = reopened.body.data.draft?.root.props as Record<
+			string,
+			unknown
+		>;
+		expect(props.remoteComponentLock).toEqual(remoteHeroLock);
+		expect(props.componentLibrary).toEqual(localLibrary);
+		expect(reopened.body.data.draft?.content).toEqual(data.content);
+	});
+
+	it("preserves a stored lock it cannot read, reports it, and keeps the unresolvable node", async () => {
+		const storage = sqliteStorage();
+		// Legacy data reaches storage below the API, exactly as a row written
+		// by an earlier build would; the API itself refuses to write it.
+		const malformed = {
+			schemaVersion: 1,
+			entries: [{ puckType: "RemoteHero" }],
+		};
+		const legacy = await storage.saveDraft({
+			slug: "legacy",
+			data: lockedPageData("legacy", malformed),
+		});
+		const result = await saveDraft(storage, {
+			id: legacy.id,
+			slug: "legacy",
+			data: lockedPageData("legacy"),
+			expectedPageRevision: legacy.pageRevision,
+		});
+		expect(result.status).toBe(200);
+		if (!result.body.ok) throw new Error("save failed");
+		expect(result.body.warnings).toEqual([
+			expect.objectContaining({
+				code: "E_PAGE_REMOTE_LOCK_UNREADABLE",
+				path: ["draft", "root", "props", "remoteComponentLock"],
+			}),
+		]);
+		const props = result.body.data.draft?.root.props as Record<string, unknown>;
+		expect(props.remoteComponentLock).toEqual(malformed);
+		expect(props.componentLibrary).toEqual(localLibrary);
+		expect(result.body.data.draft?.content).toEqual(
+			lockedPageData("legacy").content,
+		);
+		// A plain settings edit (PATCH) leaves the lock and the nodes alone too.
+		const settings = await updateSettings(storage, legacy.id, {
+			...validRootProps("legacy", "Renamed"),
+			status: "draft",
+		});
+		expect(settings.status).toBe(200);
+		if (settings.body.ok) {
+			const after = settings.body.data.draft?.root.props as Record<
+				string,
+				unknown
+			>;
+			expect(after.remoteComponentLock).toEqual(malformed);
+			expect(after.componentLibrary).toEqual(localLibrary);
+			expect(after.title).toBe("Renamed");
+			expect(settings.body.data.pageRevision).toBe(3);
+		}
 	});
 });
 

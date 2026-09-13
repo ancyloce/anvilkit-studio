@@ -36,6 +36,19 @@ export interface PageRecord {
 	 * invariants, the three-way loader and the below-floor support policy.
 	 */
 	schemaRevision: number;
+	/**
+	 * **Storage metadata** (S1-T04, 2026-09-12): the record's concurrency
+	 * version. Starts at 1 when a record is created and advances by one on
+	 * every write of any kind; a record written before the field existed has
+	 * none and reads as 0 (`pageRevisionOf`), so the type keeps it optional.
+	 * A caller that passes `expectedPageRevision` on a save or publish commits
+	 * only if this value still matches, atomically with the write — Puck Data
+	 * and its `root.props.remoteComponentLock` land in one revision or not at
+	 * all. Unrelated to {@link PageRecord.version} (the authored product
+	 * version) and to {@link PageRecord.schemaRevision} (which migration
+	 * generation wrote the record); neither of those is a concurrency version.
+	 */
+	pageRevision?: number;
 	draft?: DemoPageData;
 	published?: DemoPageData;
 	createdAt: string;
@@ -53,7 +66,10 @@ export interface PageRecord {
  * naming `schemaRevision` fails to typecheck, and an adapter cannot persist a
  * built record without passing it through `stampSchemaRevision` first.
  */
-export type UnstampedPageRecord = Omit<PageRecord, "schemaRevision">;
+export type UnstampedPageRecord = Omit<
+	PageRecord,
+	"schemaRevision" | "pageRevision"
+>;
 
 /** A record without its heavy payloads — what `GET /api/pages` returns. */
 export type PageSummary = Omit<PageRecord, "draft" | "published">;
@@ -69,12 +85,22 @@ export interface SaveDraftInput {
 	slug: string;
 	title?: string;
 	data: DemoPageData;
+	/**
+	 * The {@link PageRecord.pageRevision} the caller last read. When present the
+	 * write commits only if the stored record still carries it (0 for a record
+	 * that does not exist yet or predates the field); otherwise the adapter
+	 * throws {@link PageRevisionConflictError} and writes nothing. Absent means
+	 * the caller made no claim and the legacy last-writer-wins behavior applies.
+	 */
+	expectedPageRevision?: number;
 }
 
 export interface PublishPageInput {
 	id?: string;
 	slug?: string;
 	data: DemoPageData;
+	/** As on {@link SaveDraftInput.expectedPageRevision}. */
+	expectedPageRevision?: number;
 }
 
 export interface DuplicatePageInput {
@@ -94,7 +120,9 @@ export interface PageStorageAdapter {
 	getBySlug(slug: string): Promise<PageRecord | null>;
 	getById(id: string): Promise<PageRecord | null>;
 	list(params?: ListPagesParams): Promise<PageRecord[]>;
+	/** Throws {@link PageRevisionConflictError} when `expectedPageRevision` is stale. */
 	saveDraft(input: SaveDraftInput): Promise<PageRecord>;
+	/** Throws {@link PageRevisionConflictError} when `expectedPageRevision` is stale. */
 	publish(input: PublishPageInput): Promise<PageRecord>;
 	/** Update page settings (root.props). Returns null when no record matches `id`. */
 	updateSettings(
@@ -127,4 +155,48 @@ export function selectPublishedPayload(
 	if (record === null || record === undefined) return null;
 	if (record.status === "archived") return null;
 	return record.published ?? null;
+}
+
+/** The revision a stored record carries; a record without the field reads as 0. */
+export function pageRevisionOf(record: PageRecord | null): number {
+	const declared = record?.pageRevision;
+	return typeof declared === "number" && Number.isSafeInteger(declared)
+		? declared
+		: 0;
+}
+
+/**
+ * Thrown by an adapter when a save or publish names an `expectedPageRevision`
+ * the stored record no longer carries. Nothing was written; the caller reloads
+ * the page at `currentPageRevision` and decides what to do with its edits.
+ */
+export class PageRevisionConflictError extends Error {
+	readonly expectedPageRevision: number;
+	readonly currentPageRevision: number;
+
+	constructor(expectedPageRevision: number, currentPageRevision: number) {
+		super(
+			`Page revision conflict: expected ${expectedPageRevision}, stored ${currentPageRevision}.`,
+		);
+		this.name = "PageRevisionConflictError";
+		this.expectedPageRevision = expectedPageRevision;
+		this.currentPageRevision = currentPageRevision;
+	}
+}
+
+/**
+ * The single expected-revision check every adapter runs between its read and
+ * its write. The adapter is responsible for making that read-check-write
+ * indivisible (a `BEGIN IMMEDIATE` transaction, a synchronous map update, an
+ * in-process write queue); this helper only decides.
+ */
+export function assertExpectedPageRevision(
+	existing: PageRecord | null,
+	expectedPageRevision: number | undefined,
+): void {
+	if (expectedPageRevision === undefined) return;
+	const current = pageRevisionOf(existing);
+	if (current !== expectedPageRevision) {
+		throw new PageRevisionConflictError(expectedPageRevision, current);
+	}
 }

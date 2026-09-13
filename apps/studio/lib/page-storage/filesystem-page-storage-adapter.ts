@@ -22,14 +22,15 @@ import {
 	stampSchemaRevision,
 	tolerateStoredRecord,
 } from "./schema-revision";
-import type {
-	DuplicatePageInput,
-	ListPagesParams,
-	PageRecord,
-	PageStorageAdapter,
-	PublishPageInput,
-	SaveDraftInput,
-	UnstampedPageRecord,
+import {
+	assertExpectedPageRevision,
+	type DuplicatePageInput,
+	type ListPagesParams,
+	type PageRecord,
+	type PageStorageAdapter,
+	type PublishPageInput,
+	type SaveDraftInput,
+	type UnstampedPageRecord,
 } from "./types";
 
 export interface FileSystemPageStorageAdapterOptions {
@@ -50,6 +51,13 @@ export interface FileSystemPageStorageAdapterOptions {
 export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 	private readonly dir: string;
 	private readonly ctx: RecordOpsContext;
+	/**
+	 * Every mutating path runs through this promise chain, so a read, its
+	 * expected-revision check and the rename that commits the write are never
+	 * interleaved with another write of this process (the demo's single-server
+	 * deployment; a second process writing the same directory is not covered).
+	 */
+	private writes: Promise<unknown> = Promise.resolve();
 
 	constructor(options: FileSystemPageStorageAdapterOptions) {
 		this.dir = options.dir;
@@ -86,29 +94,48 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 	}
 
 	async saveDraft(input: SaveDraftInput): Promise<PageRecord> {
-		const existing = await this.resolve(input.id, input.slug);
-		return this.writeRecord(buildDraftRecord(existing, input, this.ctx));
+		return this.serialized(async () => {
+			const existing = await this.resolve(input.id, input.slug);
+			assertExpectedPageRevision(existing, input.expectedPageRevision);
+			return this.writeRecord(
+				buildDraftRecord(existing, input, this.ctx),
+				existing,
+			);
+		});
 	}
 
 	async publish(input: PublishPageInput): Promise<PageRecord> {
 		const slug = input.slug ?? input.data.root?.props?.slug;
-		const existing = await this.resolve(input.id, slug);
-		return this.writeRecord(buildPublishRecord(existing, input, this.ctx));
+		return this.serialized(async () => {
+			const existing = await this.resolve(input.id, slug);
+			assertExpectedPageRevision(existing, input.expectedPageRevision);
+			return this.writeRecord(
+				buildPublishRecord(existing, input, this.ctx),
+				existing,
+			);
+		});
 	}
 
 	async updateSettings(
 		id: string,
 		rootProps: PageRootProps,
 	): Promise<PageRecord | null> {
-		const existing = await this.readRecord(id);
-		if (existing === null) return null;
-		return this.writeRecord(applySettings(existing, rootProps, this.ctx));
+		return this.serialized(async () => {
+			const existing = await this.readRecord(id);
+			if (existing === null) return null;
+			return this.writeRecord(
+				applySettings(existing, rootProps, this.ctx),
+				existing,
+			);
+		});
 	}
 
 	async archive(id: string): Promise<PageRecord | null> {
-		const existing = await this.readRecord(id);
-		if (existing === null) return null;
-		return this.writeRecord(applyArchive(existing, this.ctx));
+		return this.serialized(async () => {
+			const existing = await this.readRecord(id);
+			if (existing === null) return null;
+			return this.writeRecord(applyArchive(existing, this.ctx), existing);
+		});
 	}
 
 	async delete(id: string): Promise<void> {
@@ -119,9 +146,18 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 		id: string,
 		input?: DuplicatePageInput,
 	): Promise<PageRecord | null> {
-		const source = await this.readRecord(id);
-		if (source === null) return null;
-		return this.writeRecord(buildDuplicate(source, input, this.ctx));
+		return this.serialized(async () => {
+			const source = await this.readRecord(id);
+			if (source === null) return null;
+			return this.writeRecord(buildDuplicate(source, input, this.ctx), null);
+		});
+	}
+
+	/** Queue `work` behind every earlier write; its failure never breaks the chain. */
+	private serialized<T>(work: () => Promise<T>): Promise<T> {
+		const run = this.writes.then(work, work);
+		this.writes = run.catch(() => undefined);
+		return run;
 	}
 
 	async getVersion(
@@ -165,7 +201,9 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 			if (isNotFound(error)) return null;
 			throw error;
 		}
-		return requireStoredRecord(classifyStoredRecordJson(raw, this.filePath(id)));
+		return requireStoredRecord(
+			classifyStoredRecordJson(raw, this.filePath(id)),
+		);
 	}
 
 	private async readAll(): Promise<PageRecord[]> {
@@ -201,14 +239,18 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 
 	/**
 	 * The adapter's single persistence funnel — and therefore its single
-	 * `schemaRevision` stamp. All five write paths (`saveDraft`, `publish`,
-	 * `updateSettings`, `archive`, `duplicate`) route through it, and none of
-	 * them can bypass it: `record-ops` hands back an {@link UnstampedPageRecord},
-	 * which only `stampSchemaRevision` can turn into a storable
-	 * {@link PageRecord}.
+	 * `schemaRevision` and `pageRevision` stamp. All five write paths
+	 * (`saveDraft`, `publish`, `updateSettings`, `archive`, `duplicate`) route
+	 * through it, and none of them can bypass it: `record-ops` hands back an
+	 * {@link UnstampedPageRecord}, which only `stampSchemaRevision` can turn
+	 * into a storable {@link PageRecord}. `previous` is the record read under
+	 * the write queue (`null` when creating).
 	 */
-	private async writeRecord(draft: UnstampedPageRecord): Promise<PageRecord> {
-		const record = stampSchemaRevision(draft);
+	private async writeRecord(
+		draft: UnstampedPageRecord,
+		previous: PageRecord | null,
+	): Promise<PageRecord> {
+		const record = stampSchemaRevision(draft, previous);
 		await mkdir(this.dir, { recursive: true });
 		const finalPath = this.filePath(record.id);
 		const tempPath = `${finalPath}.${this.ctx.newId()}.tmp`;

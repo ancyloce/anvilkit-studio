@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
 	type DemoPageData,
+	PageRevisionConflictError,
 	type PageStatus,
 	type PageStorageAdapter,
 	selectPublishedPayload,
@@ -44,6 +45,53 @@ export function pageData(
 		},
 		content: [{ type: "Hero", props: { id: `${slug}-hero` } }],
 	} as unknown as DemoPageData;
+}
+
+/** A valid `RemoteComponentLockV1` pinning one remote Hero release. */
+export const remoteHeroLock = {
+	schemaVersion: 1,
+	entries: [
+		{
+			componentId: "cmp-hero-fixture",
+			puckType: "RemoteHero",
+			releaseId: "release-hero-0.2.2",
+			packageVersion: "0.2.2",
+			releaseManifestDigest: `sha256:${"a".repeat(64)}`,
+			hostProfileId: "studio-host-v1",
+		},
+	],
+} as const;
+
+/** A document-local reusable definition beside the lock (`componentLibrary`). */
+export const localLibrary = {
+	schemaVersion: 1,
+	definitions: [{ id: "def-1", name: "Local card", root: { type: "Text" } }],
+} as const;
+
+/**
+ * The S1-T04 save/reopen fixture (DD-05 §6.5.2): a remote component pinned by
+ * the lock, a local reusable definition, a node of a type the host cannot
+ * resolve (with private props), and, when `lock` is overridden, whatever lock
+ * value the caller wants stored.
+ */
+export function lockedPageData(
+	slug: string,
+	lock: unknown = remoteHeroLock,
+): DemoPageData {
+	const data = pageData(slug, "Locked") as unknown as {
+		root: { props: Record<string, unknown> };
+		content: unknown[];
+	};
+	data.root.props.componentLibrary = structuredClone(localLibrary);
+	data.root.props.remoteComponentLock = structuredClone(lock);
+	data.content = [
+		{ type: "RemoteHero", props: { id: `${slug}-remote`, headline: "Pinned" } },
+		{
+			type: "NotInstalledAnywhere",
+			props: { id: `${slug}-orphan`, keep: { exact: [42, "bytes"] } },
+		},
+	];
+	return data as unknown as DemoPageData;
 }
 
 /**
@@ -221,6 +269,175 @@ export function runAdapterContractTests(
 			);
 			expect(await storage.getVersion(created.id, "9.9.9")).toBeNull();
 			expect(await storage.getVersion("missing", "1.0.0")).toBeNull();
+		});
+
+		it("stamps pageRevision 1 on create and advances it on every write", async () => {
+			const storage = await createAdapter(freshOpts());
+			const created = await storage.saveDraft({
+				slug: "home",
+				data: pageData("home", "Home"),
+			});
+			expect(created.pageRevision).toBe(1);
+			const saved = await storage.saveDraft({
+				id: created.id,
+				slug: "home",
+				data: pageData("home", "Home again"),
+			});
+			expect(saved.pageRevision).toBe(2);
+			const published = await storage.publish({
+				id: created.id,
+				data: pageData("home", "Home", "published"),
+			});
+			expect(published.pageRevision).toBe(3);
+			expect((await storage.getById(created.id))?.pageRevision).toBe(3);
+		});
+
+		it("commits exactly one of two saves made from the same page revision", async () => {
+			const storage = await createAdapter(freshOpts());
+			const created = await storage.saveDraft({
+				slug: "home",
+				data: lockedPageData("home"),
+			});
+			const attempt = (headline: string) =>
+				storage
+					.saveDraft({
+						id: created.id,
+						slug: "home",
+						data: {
+							...lockedPageData("home"),
+							content: [{ type: "RemoteHero", props: { id: "x", headline } }],
+						} as unknown as DemoPageData,
+						expectedPageRevision: created.pageRevision,
+					})
+					.then(
+						(record) => ({ ok: true as const, record }),
+						(error: unknown) => ({ ok: false as const, error }),
+					);
+			const [first, second] = await Promise.all([
+				attempt("editor A"),
+				attempt("editor B"),
+			]);
+			const outcomes = [first, second];
+			const wins = outcomes.filter((o) => o.ok);
+			const losses = outcomes.filter((o) => !o.ok);
+			expect(wins).toHaveLength(1);
+			expect(losses).toHaveLength(1);
+			const loss = losses[0];
+			if (loss !== undefined && !loss.ok) {
+				expect(loss.error).toBeInstanceOf(PageRevisionConflictError);
+				const conflict = loss.error as PageRevisionConflictError;
+				expect(conflict.expectedPageRevision).toBe(1);
+				expect(conflict.currentPageRevision).toBe(2);
+			}
+			// The stored page is the winner's, at revision 2, and nothing of the
+			// loser landed.
+			const stored = await storage.getById(created.id);
+			expect(stored?.pageRevision).toBe(2);
+			const win = wins[0];
+			if (win?.ok) {
+				expect(stored?.draft).toEqual(win.record.draft);
+			}
+			// The loser recovers by reloading at the current revision.
+			const retry = await storage.saveDraft({
+				id: created.id,
+				slug: "home",
+				data: lockedPageData("home"),
+				expectedPageRevision: 2,
+			});
+			expect(retry.pageRevision).toBe(3);
+		});
+
+		it("refuses a stale expected revision on publish without writing", async () => {
+			const storage = await createAdapter(freshOpts());
+			const created = await storage.saveDraft({
+				slug: "home",
+				data: pageData("home", "Home"),
+			});
+			await expect(
+				storage.publish({
+					id: created.id,
+					data: pageData("home", "Home", "published"),
+					expectedPageRevision: 7,
+				}),
+			).rejects.toBeInstanceOf(PageRevisionConflictError);
+			const stored = await storage.getById(created.id);
+			expect(stored?.status).toBe("draft");
+			expect(stored?.pageRevision).toBe(1);
+		});
+
+		it("treats a record that does not exist yet as revision 0", async () => {
+			const storage = await createAdapter(freshOpts());
+			await expect(
+				storage.saveDraft({
+					slug: "new",
+					data: pageData("new", "New"),
+					expectedPageRevision: 1,
+				}),
+			).rejects.toBeInstanceOf(PageRevisionConflictError);
+			expect(await storage.getBySlug("new")).toBeNull();
+			const created = await storage.saveDraft({
+				slug: "new",
+				data: pageData("new", "New"),
+				expectedPageRevision: 0,
+			});
+			expect(created.pageRevision).toBe(1);
+		});
+
+		it("saves and reopens the exact lock, local definitions and unresolvable nodes", async () => {
+			const storage = await createAdapter(freshOpts());
+			const data = lockedPageData("locked");
+			const created = await storage.saveDraft({ slug: "locked", data });
+			const reopened = await storage.getById(created.id);
+			const props = reopened?.draft?.root.props as
+				| Record<string, unknown>
+				| undefined;
+			expect(props?.remoteComponentLock).toEqual(remoteHeroLock);
+			expect(props?.componentLibrary).toEqual(localLibrary);
+			expect(reopened?.draft?.content).toEqual(data.content);
+			// Publishing carries the same document into the live payload.
+			const published = await storage.publish({
+				id: created.id,
+				data: {
+					...data,
+					root: { props: { ...data.root.props, status: "published" } },
+				} as DemoPageData,
+				expectedPageRevision: created.pageRevision,
+			});
+			const live = selectPublishedPayload(published);
+			expect(live).not.toBeNull();
+			if (live === null) return;
+			expect(
+				(live.root.props as Record<string, unknown>).remoteComponentLock,
+			).toEqual(remoteHeroLock);
+			expect(live.content).toEqual(data.content);
+		});
+
+		it("preserves a stored lock it cannot read instead of replacing it", async () => {
+			const storage = await createAdapter(freshOpts());
+			const malformed = { schemaVersion: 2, entries: "not-an-array" };
+			// The malformed value reaches storage the way legacy data would: the
+			// adapter itself does not validate the lock (the page API does).
+			const created = await storage.saveDraft({
+				slug: "legacy",
+				data: lockedPageData("legacy", malformed),
+			});
+			const saved = await storage.saveDraft({
+				id: created.id,
+				slug: "legacy",
+				data: lockedPageData("legacy"),
+				expectedPageRevision: created.pageRevision,
+			});
+			const props = saved.draft?.root.props as
+				| Record<string, unknown>
+				| undefined;
+			expect(props?.remoteComponentLock).toEqual(malformed);
+			expect(props?.componentLibrary).toEqual(localLibrary);
+			expect(saved.draft?.content).toEqual(lockedPageData("legacy").content);
+			const reopened = await storage.getById(created.id);
+			const reopenedProps = reopened?.draft?.root.props as
+				| Record<string, unknown>
+				| undefined;
+			expect(reopenedProps?.remoteComponentLock).toEqual(malformed);
 		});
 
 		it("isolates internal state from returned records", async () => {

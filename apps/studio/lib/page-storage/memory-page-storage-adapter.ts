@@ -13,14 +13,15 @@ import {
 	requireStoredRecord,
 	stampSchemaRevision,
 } from "./schema-revision";
-import type {
-	DuplicatePageInput,
-	ListPagesParams,
-	PageRecord,
-	PageStorageAdapter,
-	PublishPageInput,
-	SaveDraftInput,
-	UnstampedPageRecord,
+import {
+	assertExpectedPageRevision,
+	type DuplicatePageInput,
+	type ListPagesParams,
+	type PageRecord,
+	type PageStorageAdapter,
+	type PublishPageInput,
+	type SaveDraftInput,
+	type UnstampedPageRecord,
 } from "./types";
 
 export interface MemoryPageStorageAdapterOptions {
@@ -96,15 +97,20 @@ export class MemoryPageStorageAdapter implements PageStorageAdapter {
 			.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 	}
 
+	// Read, expected-revision check and write run synchronously with no
+	// `await` between them, so two concurrent saves cannot both see the same
+	// stored revision and both commit.
 	async saveDraft(input: SaveDraftInput): Promise<PageRecord> {
-		const existing = await this.resolve(input.id, input.slug);
-		return this.put(buildDraftRecord(existing, input, this.ctx));
+		const existing = this.resolve(input.id, input.slug);
+		assertExpectedPageRevision(existing, input.expectedPageRevision);
+		return this.put(buildDraftRecord(existing, input, this.ctx), existing);
 	}
 
 	async publish(input: PublishPageInput): Promise<PageRecord> {
 		const slug = input.slug ?? input.data.root?.props?.slug;
-		const existing = await this.resolve(input.id, slug);
-		return this.put(buildPublishRecord(existing, input, this.ctx));
+		const existing = this.resolve(input.id, slug);
+		assertExpectedPageRevision(existing, input.expectedPageRevision);
+		return this.put(buildPublishRecord(existing, input, this.ctx), existing);
 	}
 
 	async updateSettings(
@@ -113,13 +119,13 @@ export class MemoryPageStorageAdapter implements PageStorageAdapter {
 	): Promise<PageRecord | null> {
 		const existing = this.records.get(id);
 		if (existing === undefined) return null;
-		return this.put(applySettings(existing, rootProps, this.ctx));
+		return this.put(applySettings(existing, rootProps, this.ctx), existing);
 	}
 
 	async archive(id: string): Promise<PageRecord | null> {
 		const existing = this.records.get(id);
 		if (existing === undefined) return null;
-		return this.put(applyArchive(existing, this.ctx));
+		return this.put(applyArchive(existing, this.ctx), existing);
 	}
 
 	async delete(id: string): Promise<void> {
@@ -132,7 +138,7 @@ export class MemoryPageStorageAdapter implements PageStorageAdapter {
 	): Promise<PageRecord | null> {
 		const source = this.records.get(id);
 		if (source === undefined) return null;
-		return this.put(buildDuplicate(source, input, this.ctx));
+		return this.put(buildDuplicate(source, input, this.ctx), null);
 	}
 
 	async getVersion(
@@ -146,28 +152,35 @@ export class MemoryPageStorageAdapter implements PageStorageAdapter {
 
 	/**
 	 * The adapter's single persistence funnel — and therefore its single
-	 * `schemaRevision` stamp. All five write paths (`saveDraft`, `publish`,
-	 * `updateSettings`, `archive`, `duplicate`) route through it, and none of
-	 * them can bypass it: `record-ops` hands back an {@link UnstampedPageRecord},
-	 * which only `stampSchemaRevision` can turn into a storable
-	 * {@link PageRecord}.
+	 * `schemaRevision` and `pageRevision` stamp. All five write paths
+	 * (`saveDraft`, `publish`, `updateSettings`, `archive`, `duplicate`) route
+	 * through it, and none of them can bypass it: `record-ops` hands back an
+	 * {@link UnstampedPageRecord}, which only `stampSchemaRevision` can turn
+	 * into a storable {@link PageRecord}. `previous` is the record the caller
+	 * read for this write (`null` when creating), whose page revision the new
+	 * record advances.
 	 */
-	private put(draft: UnstampedPageRecord): PageRecord {
-		const record = stampSchemaRevision(draft);
+	private put(
+		draft: UnstampedPageRecord,
+		previous: PageRecord | null,
+	): PageRecord {
+		const record = stampSchemaRevision(draft, previous);
 		this.records.set(record.id, clone(record));
 		return record;
 	}
 
-	private async resolve(
+	private resolve(
 		id: string | undefined,
 		slug: string | undefined,
-	): Promise<PageRecord | null> {
+	): PageRecord | null {
 		if (id !== undefined) {
 			const byId = this.records.get(id);
 			if (byId !== undefined) return clone(byId);
 		}
 		if (slug !== undefined && slug.length > 0) {
-			return this.getBySlug(slug);
+			for (const record of this.records.values()) {
+				if (record.slug === slug) return clone(record);
+			}
 		}
 		return null;
 	}

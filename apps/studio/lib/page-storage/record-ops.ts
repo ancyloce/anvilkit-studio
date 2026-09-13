@@ -1,4 +1,8 @@
 import type { PageRootProps } from "@anvilkit/schema";
+import {
+	REMOTE_COMPONENT_LOCK_KEY,
+	readRemoteComponentLock,
+} from "../host-abi/remote-component-lock";
 import type {
 	DemoPageData,
 	DuplicatePageInput,
@@ -50,6 +54,31 @@ function patchRootProps(
 }
 
 /**
+ * Refuse-to-overwrite guard for `root.props.remoteComponentLock` (DD-05
+ * §6.5.2, S1-T04). When the payload being replaced carries a lock this build
+ * cannot read, the exact stored value is carried into the next payload in
+ * place of whatever the caller sent, so a save never erases a lock it does not
+ * understand; the page API reports the preservation to the caller. A readable
+ * stored lock is replaced by the (validated) incoming value as usual, and a
+ * payload with no stored lock takes the incoming one verbatim. Mirrors the
+ * rule the local-definition writer applies to `componentLibrary`.
+ */
+function carryUnreadableRemoteLock(
+	stored: DemoPageData | undefined,
+	next: DemoPageData,
+): DemoPageData {
+	if (stored === undefined) return next;
+	const read = readRemoteComponentLock(stored);
+	if (read.state !== "unreadable") return next;
+	const props = (next.root?.props ?? {}) as Record<string, unknown>;
+	next.root = {
+		...next.root,
+		props: { ...props, [REMOTE_COMPONENT_LOCK_KEY]: clone(read.raw) },
+	} as unknown as DemoPageData["root"];
+	return next;
+}
+
+/**
  * Draft save. Updates `draft` and metadata (title/slug) but never the published
  * payload or `version` (which tracks the published version) — saving a draft on
  * a published page leaves the live document untouched.
@@ -59,7 +88,7 @@ export function buildDraftRecord(
 	input: SaveDraftInput,
 	ctx: RecordOpsContext,
 ): UnstampedPageRecord {
-	const data = clone(input.data);
+	const data = carryUnreadableRemoteLock(existing?.draft, clone(input.data));
 	const props = rootPropsOf(data);
 	const now = ctx.nowIso();
 	const slug = input.slug ?? props?.slug ?? existing?.slug ?? "";
@@ -98,14 +127,17 @@ export function buildPublishRecord(
 	const version = props?.version ?? existing?.version ?? "1.0.0";
 
 	if (existing !== null) {
+		// Each stored payload guards its own lock: the mirror into `draft`
+		// carries a draft lock this build cannot read, the live document one it
+		// cannot read in `published`.
 		return {
 			...existing,
 			slug,
 			title,
 			status: "published",
 			version,
-			draft: data,
-			published: data,
+			draft: carryUnreadableRemoteLock(existing.draft, clone(data)),
+			published: carryUnreadableRemoteLock(existing.published, data),
 			updatedAt: now,
 			publishedAt: now,
 			archivedAt: undefined,

@@ -8,6 +8,13 @@
 export interface ApiSuccess<T> {
 	readonly ok: true;
 	readonly data: T;
+	/**
+	 * Conditions the write honored but the caller should know about — today
+	 * only `E_PAGE_REMOTE_LOCK_UNREADABLE`, reported when a stored remote
+	 * component lock this build cannot parse was preserved instead of being
+	 * replaced by the request (S1-T04). Absent when there is nothing to report.
+	 */
+	readonly warnings?: readonly unknown[];
 }
 
 export interface ApiFailure {
@@ -27,8 +34,13 @@ export const API_ERROR = {
 	badRequest: "E_BAD_REQUEST",
 } as const;
 
-export function apiSuccess<T>(data: T): ApiSuccess<T> {
-	return { ok: true, data };
+export function apiSuccess<T>(
+	data: T,
+	warnings?: readonly unknown[],
+): ApiSuccess<T> {
+	return warnings === undefined || warnings.length === 0
+		? { ok: true, data }
+		: { ok: true, data, warnings };
 }
 
 export function apiFailure(

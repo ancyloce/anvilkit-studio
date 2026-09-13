@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { ensureSchema } from "../../db/client";
 import { SqlitePageStorageAdapter } from "../sqlite-page-storage-adapter";
 import type { DemoPageData } from "../types";
+import { runAdapterContractTests } from "./adapter-contract";
 
 /**
  * Parity coverage for the SQLite backend. It reuses the same `record-ops`
@@ -40,6 +41,12 @@ function makeAdapter() {
 		idFactory: () => `id-${++counter}`,
 	});
 }
+
+runAdapterContractTests("SqlitePageStorageAdapter", (opts) => {
+	const connection = new Database(":memory:");
+	ensureSchema(connection);
+	return new SqlitePageStorageAdapter({ db: drizzle(connection), ...opts });
+});
 
 describe("SqlitePageStorageAdapter", () => {
 	let adapter: SqlitePageStorageAdapter;

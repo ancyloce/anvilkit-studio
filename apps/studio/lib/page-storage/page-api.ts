@@ -7,6 +7,10 @@ import {
 } from "@anvilkit/validator";
 import { recordServerPagePublished } from "../analytics/server-events";
 import {
+	REMOTE_COMPONENT_LOCK_KEY,
+	readRemoteComponentLock,
+} from "../host-abi/remote-component-lock";
+import {
 	API_ERROR,
 	type ApiResponse,
 	apiFailure,
@@ -15,6 +19,7 @@ import {
 import {
 	type DemoPageData,
 	type PageRecord,
+	PageRevisionConflictError,
 	type PageStatus,
 	type PageStorageAdapter,
 	type PageSummary,
@@ -48,6 +53,93 @@ function validationFailure(
 		status: 400,
 		body: apiFailure(API_ERROR.validation, message, issues),
 	};
+}
+
+/**
+ * The page-revision and remote-lock checks a save or publish body passes
+ * before it reaches storage (S1-T04). `expectedPageRevision`, when present,
+ * must be a non-negative safe integer; a `root.props.remoteComponentLock`,
+ * when present, must satisfy the host's schema mirror — a request can never
+ * write a lock the host cannot read. Neither field is part of the shared
+ * `@anvilkit/validator` request schemas, which are non-strict and validate a
+ * stripped copy, so they are checked here against the raw body that storage
+ * persists.
+ */
+function checkWriteGuards(body: {
+	expectedPageRevision?: unknown;
+	data: DemoPageData;
+}): HandlerResult<never> | null {
+	const expected = body.expectedPageRevision;
+	if (
+		expected !== undefined &&
+		(typeof expected !== "number" ||
+			!Number.isSafeInteger(expected) ||
+			expected < 0)
+	) {
+		return validationFailure([
+			{
+				level: "error",
+				code: "E_PAGE_INVALID_TYPE",
+				message: "expectedPageRevision must be a non-negative integer.",
+				path: ["expectedPageRevision"],
+			},
+		]);
+	}
+	const lock = readRemoteComponentLock(body.data);
+	if (lock.state === "unreadable") {
+		return validationFailure([
+			{
+				level: "error",
+				code: "E_PAGE_REMOTE_LOCK_INVALID",
+				message: `remoteComponentLock is not a valid RemoteComponentLockV1: ${lock.reason}.`,
+				path: ["data", "root", "props", REMOTE_COMPONENT_LOCK_KEY],
+			},
+		]);
+	}
+	return null;
+}
+
+/** A stale `expectedPageRevision` is a recoverable 409 carrying the current revision. */
+function revisionConflict(
+	error: PageRevisionConflictError,
+): HandlerResult<never> {
+	return {
+		status: 409,
+		body: apiFailure(API_ERROR.conflict, error.message, [
+			{
+				level: "error",
+				code: "E_PAGE_REVISION_CONFLICT",
+				message: error.message,
+				path: ["expectedPageRevision"],
+				expectedPageRevision: error.expectedPageRevision,
+				currentPageRevision: error.currentPageRevision,
+			},
+		]),
+	};
+}
+
+/**
+ * The warnings a completed write reports: a stored lock this build cannot
+ * read was preserved (the request's value was validated, so an unreadable
+ * lock on the written record can only be a carried-over one).
+ */
+function writeWarnings(record: PageRecord): readonly unknown[] {
+	const warnings: unknown[] = [];
+	for (const [payload, data] of [
+		["draft", record.draft],
+		["published", record.published],
+	] as const) {
+		const lock = readRemoteComponentLock(data);
+		if (lock.state === "unreadable") {
+			warnings.push({
+				level: "warning",
+				code: "E_PAGE_REMOTE_LOCK_UNREADABLE",
+				message: `The stored ${payload} remoteComponentLock could not be read (${lock.reason}); it was preserved unchanged, not replaced.`,
+				path: [payload, "root", "props", REMOTE_COMPONENT_LOCK_KEY],
+			});
+		}
+	}
+	return warnings;
 }
 
 export async function listPages(
@@ -89,15 +181,27 @@ export async function saveDraft(
 		slug?: string;
 		title?: string;
 		data: DemoPageData;
+		expectedPageRevision?: number;
 	};
+	const guard = checkWriteGuards(input);
+	if (guard !== null) return guard;
 	const slug = input.slug ?? input.data.root?.props?.slug ?? "";
-	const record = await storage.saveDraft({
-		id: input.id,
-		slug,
-		title: input.title,
-		data: input.data,
-	});
-	return { status: 200, body: apiSuccess(record) };
+	let record: PageRecord;
+	try {
+		record = await storage.saveDraft({
+			id: input.id,
+			slug,
+			title: input.title,
+			data: input.data,
+			expectedPageRevision: input.expectedPageRevision,
+		});
+	} catch (error) {
+		if (error instanceof PageRevisionConflictError) {
+			return revisionConflict(error);
+		}
+		throw error;
+	}
+	return { status: 200, body: apiSuccess(record, writeWarnings(record)) };
 }
 
 export async function publish(
@@ -107,12 +211,28 @@ export async function publish(
 	const result = validatePublishRequest(body);
 	if (!result.valid) return validationFailure(result.issues);
 
-	const input = body as { id?: string; slug?: string; data: DemoPageData };
-	const record = await storage.publish({
-		id: input.id,
-		slug: input.slug,
-		data: input.data,
-	});
+	const input = body as {
+		id?: string;
+		slug?: string;
+		data: DemoPageData;
+		expectedPageRevision?: number;
+	};
+	const guard = checkWriteGuards(input);
+	if (guard !== null) return guard;
+	let record: PageRecord;
+	try {
+		record = await storage.publish({
+			id: input.id,
+			slug: input.slug,
+			data: input.data,
+			expectedPageRevision: input.expectedPageRevision,
+		});
+	} catch (error) {
+		if (error instanceof PageRevisionConflictError) {
+			return revisionConflict(error);
+		}
+		throw error;
+	}
 	// Server-side fallback analytics/audit event (PRD 0004). Recorded ONLY
 	// after a validated payload is durably written (200) — never on a
 	// validation or storage failure (those return/throw before this line).
@@ -124,7 +244,7 @@ export async function publish(
 		pageId: record.id,
 		at: Date.now(),
 	});
-	return { status: 200, body: apiSuccess(record) };
+	return { status: 200, body: apiSuccess(record, writeWarnings(record)) };
 }
 
 export async function updateSettings(

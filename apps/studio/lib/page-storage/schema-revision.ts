@@ -85,7 +85,11 @@
  */
 
 import { finalizeStoredDocument } from "@anvilkit/core/editor";
-import type { PageRecord, UnstampedPageRecord } from "./types";
+import {
+	type PageRecord,
+	pageRevisionOf,
+	type UnstampedPageRecord,
+} from "./types";
 
 /**
  * The revision the storage layer stamps on every record it writes.
@@ -158,17 +162,28 @@ export type StoredRecordLoad =
 	  };
 
 /**
- * Stamp a freshly built record with the current revision. **The only writer of
- * `schemaRevision` in the app.** Every adapter write path funnels through it,
- * and `record-ops.ts` cannot bypass it because its builders are typed to return
- * an {@link UnstampedPageRecord}.
+ * Stamp a freshly built record with the current revision and the next page
+ * revision. **The only writer of `schemaRevision` and `pageRevision` in the
+ * app.** Every adapter write path funnels through it, and `record-ops.ts`
+ * cannot bypass it because its builders are typed to return an
+ * {@link UnstampedPageRecord}.
  *
  * The spread order matters: an inbound `schemaRevision` carried over from an
  * `existing` record is overwritten, so re-saving a below-floor record promotes
- * it rather than preserving a stale revision.
+ * it rather than preserving a stale revision. `pageRevision` is derived from
+ * the record the adapter read under its write guard (`previous`), never from
+ * the draft, so a caller can neither pin nor rewind it; a legacy record with
+ * no `pageRevision` advances from 0 to 1 on its next write.
  */
-export function stampSchemaRevision(draft: UnstampedPageRecord): PageRecord {
-	return { ...draft, schemaRevision: STORE_SCHEMA_REVISION };
+export function stampSchemaRevision(
+	draft: UnstampedPageRecord,
+	previous: PageRecord | null,
+): PageRecord {
+	return {
+		...draft,
+		schemaRevision: STORE_SCHEMA_REVISION,
+		pageRevision: pageRevisionOf(previous) + 1,
+	};
 }
 
 /** The revision a stored value declares, or {@link PRE_STAMP_REVISION}. */
