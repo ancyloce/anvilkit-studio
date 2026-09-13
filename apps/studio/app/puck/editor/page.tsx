@@ -25,6 +25,7 @@ import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
 import { createCanvasExportPlugin } from "@anvilkit/plugin-export-canvas";
 import { createPageSeoPlugin } from "@anvilkit/plugin-page-seo";
 import type { PageRootProps } from "@anvilkit/schema";
+import { Alert, AlertDescription, AlertTitle } from "@anvilkit/ui/alert";
 import type { Config, Data } from "@puckeditor/core";
 import { useRouter } from "next/navigation";
 import {
@@ -55,7 +56,12 @@ import {
 } from "@/lib/lazy-plugins";
 import { guardDocumentForV2Editor } from "@/lib/migration/v2-guard";
 import { PREVIEW_SLOT_SLUG } from "@/lib/page-link";
-import { persistPage } from "@/lib/page-persistence";
+import {
+	type PageRevisionConflict,
+	persistPage,
+	readStoredPage,
+	storedPageRevision,
+} from "@/lib/page-persistence";
 import { pageValidationPlugin } from "@/lib/page-validation-plugin";
 import { createPersistedPagesSource } from "@/lib/persisted-pages-source";
 import {
@@ -245,6 +251,35 @@ export default function PuckEditorPage() {
 	// publish button.
 	const [isSavingDraft, setIsSavingDraft] = useState(false);
 	const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+	// Page-revision guard (S1-T04 write contract, wired into the editor):
+	// the stored record's `pageRevision` per page id, read together with the
+	// stored document when the page is first opened in this session and
+	// replaced by the revision each successful save/publish returns. The
+	// revision travels with the document base it was read with: a page
+	// switched away from and back keeps its in-session document (unsaved
+	// edits) and that base's revision, because pairing old edits with a newer
+	// revision would turn a conflict into a silent overwrite. A resolved
+	// `null` means the read failed and the page cannot be saved until it is
+	// reopened — never a blind write.
+	const pageRevisionsRef = useRef(new Map<string, Promise<number | null>>());
+	const openedPagesRef = useRef(new Set<string>());
+	// Whether the active page's document base is settled (stored document
+	// loaded, or none to load); `<Studio>` seeds Puck only once, so it mounts
+	// after the read rather than with a document the read then replaces.
+	const [documentReady, setDocumentReady] = useState(false);
+	// A `?data=` document is the explicit choice for this session; the stored
+	// document is not loaded over it (its revision still is).
+	const urlDocumentRef = useRef(false);
+	// The live Puck document (host `onChange`), so Save Draft persists what
+	// the author sees; `null` until the first edit of the open page, when the
+	// page's own document (`publishedData`) is what there is to save.
+	const liveDataRef = useRef<Data<DemoComponents, PageRootProps> | null>(null);
+	// Why the last save/publish wrote nothing, shown above the editor. The
+	// edits stay in the editor; nothing is retried, overwritten or merged.
+	const [persistNotice, setPersistNotice] = useState<{
+		title: string;
+		message: string;
+	} | null>(null);
 	const [assetManagerTestMode, setAssetManagerTestMode] = useState(false);
 	// `?e2e=demo-tools` surfaces the demo's auxiliary validation chrome — the
 	// HTML/React export buttons and the published-data snapshot — which the
@@ -524,6 +559,61 @@ export default function PuckEditorPage() {
 		return () => unsubscribe?.();
 	}, [pageDataMap, pagesSource]);
 
+	// Opening a page for the first time in this session reads its stored
+	// record: the draft (or the published document) becomes the document base
+	// the editor works on — the exact `root.props.remoteComponentLock` and
+	// `componentLibrary` included — and its `pageRevision` is what the next
+	// write presents. A page with no record yet keeps its in-memory seed at
+	// revision 0; a failed read keeps the seed with no revision (saves refuse).
+	// Reopening a page already opened in this session keeps its document and
+	// its base revision (see `pageRevisionsRef`). Every open starts with no
+	// live edits and no stale notice.
+	useEffect(() => {
+		liveDataRef.current = null;
+		setPersistNotice(null);
+		if (openedPagesRef.current.has(activePageId)) {
+			setDocumentReady(true);
+			return;
+		}
+		setDocumentReady(false);
+		let cancelled = false;
+		const read = readStoredPage(activePageId);
+		pageRevisionsRef.current.set(activePageId, read.then(storedPageRevision));
+		void read.then((page) => {
+			if (cancelled) return;
+			openedPagesRef.current.add(activePageId);
+			const stored =
+				page.status === "found"
+					? (page.record.draft ?? page.record.published)
+					: undefined;
+			if (stored !== undefined && !urlDocumentRef.current) {
+				// P5-06 (§10.4): a store-fed document is migrated on read or
+				// refused; it never enters the v2 editor in sidecar form.
+				const guarded = guardDocumentForV2Editor(
+					stored as unknown as Data,
+					editorDemoConfig as unknown as Config,
+				);
+				if (guarded.kind === "blocked") {
+					console.error(
+						"[demo] stored page blocked from the v2 editor — legacy document failed migration",
+						guarded.diagnostics,
+					);
+				} else {
+					const document = guarded.data as unknown as Data<
+						DemoComponents,
+						PageRootProps
+					>;
+					pageDataMap[activePageId] = document;
+					setPublishedData(document);
+				}
+			}
+			setDocumentReady(true);
+		});
+		return () => {
+			cancelled = true;
+		};
+	}, [activePageId, pageDataMap]);
+
 	// Mirror the active page's live document into the page-data map so the
 	// pages-source derives its title/SEO (from `root.props`) off fresh data
 	// without the source subscribing to Puck. Page swaps stash the outgoing
@@ -680,6 +770,7 @@ export default function PuckEditorPage() {
 			assetManagerE2E.setAssetManagerRogueUrl(rogueUrlParam);
 		}
 		if (incomingData !== null) {
+			urlDocumentRef.current = true;
 			setPublishedData(getDemoDataFromSearchParam(incomingData));
 		}
 		setCollabEnabled(params.get("collab") !== "0");
@@ -758,16 +849,70 @@ export default function PuckEditorPage() {
 		};
 	});
 
+	const handleLiveChange = useCallback((data: Data) => {
+		liveDataRef.current = data as unknown as Data<
+			DemoComponents,
+			PageRootProps
+		>;
+	}, []);
+
+	/** The revision the open page's next write must present (see `pageRevisionsRef`). */
+	function expectedRevisionFor(pageId: string): Promise<number | null> {
+		return (
+			pageRevisionsRef.current.get(pageId) ??
+			readStoredPage(pageId).then(storedPageRevision)
+		);
+	}
+
+	function conflictNotice(
+		action: "save" | "publish",
+		conflict: PageRevisionConflict,
+	): { title: string; message: string } {
+		return {
+			title: action === "save" ? "Draft not saved" : "Page not published",
+			message: `This page changed on the server after you opened it (you opened revision ${conflict.expectedPageRevision}; the server now holds revision ${conflict.currentPageRevision}). Nothing was written and your edits are still in the editor. Copy anything you need, then reload the page to continue from the latest version.`,
+		};
+	}
+
+	const revisionUnavailableNotice = {
+		title: "Page revision unknown",
+		message:
+			"The page's current revision could not be read from the server, so nothing was written. Your edits are still in the editor; reload the page and try again.",
+	};
+
 	async function handleSaveDraft() {
 		setIsSavingDraft(true);
+		const pageId = activePageIdRef.current;
 		try {
-			// F7: validate `root.props` then persist (localStorage / remote).
-			// An invalid payload aborts the save — nothing is written.
-			const result = await persistPage("draft", publishedData);
+			// F7: validate `root.props` then persist through the Page API,
+			// against the revision read when the page was opened. An invalid
+			// payload, an unknown revision or a stale one aborts the save —
+			// nothing is written and the edits stay in the editor.
+			const expectedPageRevision = await expectedRevisionFor(pageId);
+			if (expectedPageRevision === null) {
+				setPersistNotice(revisionUnavailableNotice);
+				console.error("[demo] save blocked — page revision unavailable");
+				return;
+			}
+			const result = await persistPage(
+				"draft",
+				liveDataRef.current ?? publishedData,
+				{ id: pageId, expectedPageRevision },
+			);
 			if (!result.ok) {
+				if (result.conflict !== undefined) {
+					setPersistNotice(conflictNotice("save", result.conflict));
+				}
 				console.error("[demo] save blocked —", result.issue);
 				return;
 			}
+			if (result.pageRevision !== undefined) {
+				pageRevisionsRef.current.set(
+					pageId,
+					Promise.resolve(result.pageRevision),
+				);
+			}
+			setPersistNotice(null);
 			setLastSavedAt(new Date());
 			console.log("[demo] draft saved");
 		} finally {
@@ -786,11 +931,31 @@ export default function PuckEditorPage() {
 		// successful publish). `handlePublish` below only does the demo's
 		// navigation + state update, not analytics.
 		const typed = liveData as unknown as Data<DemoComponents, PageRootProps>;
-		const result = await persistPage("publish", typed);
+		const pageId = activePageIdRef.current;
+		const expectedPageRevision = await expectedRevisionFor(pageId);
+		if (expectedPageRevision === null) {
+			setPersistNotice(revisionUnavailableNotice);
+			console.error("[demo] publish blocked — page revision unavailable");
+			throw new Error("Publish blocked: page revision unavailable");
+		}
+		const result = await persistPage("publish", typed, {
+			id: pageId,
+			expectedPageRevision,
+		});
 		if (!result.ok) {
+			if (result.conflict !== undefined) {
+				setPersistNotice(conflictNotice("publish", result.conflict));
+			}
 			console.error("[demo] publish blocked —", result.issue);
 			throw new Error(`Publish blocked: ${result.issue ?? "invalid page"}`);
 		}
+		if (result.pageRevision !== undefined) {
+			pageRevisionsRef.current.set(
+				pageId,
+				Promise.resolve(result.pageRevision),
+			);
+		}
+		setPersistNotice(null);
 		handlePublish(liveData);
 	}
 
@@ -1115,6 +1280,17 @@ export default function PuckEditorPage() {
 				/>
 			) : null}
 
+			{persistNotice !== null ? (
+				<Alert
+					variant="destructive"
+					className="mx-4 mt-4 w-auto"
+					data-testid="page-persist-notice"
+				>
+					<AlertTitle>{persistNotice.title}</AlertTitle>
+					<AlertDescription>{persistNotice.message}</AlertDescription>
+				</Alert>
+			) : null}
+
 			<section
 				className={editorPanel}
 				data-testid="studio-mount"
@@ -1134,56 +1310,61 @@ export default function PuckEditorPage() {
 				  needed; we render one `<Studio>` for both collab-on and
 				  collab-off paths.
 				*/}
-				<Studio
-					// Remount on page switch so Puck re-initializes its draft
-					// from the newly selected page's `data` (Puck owns its
-					// internal document state after mount; a prop change alone
-					// would not reset it). A *stable* `storeId` keeps the
-					// persisted editor UI slice (active rail tab, viewport)
-					// keyed consistently so it rehydrates across the remount
-					// instead of resetting to defaults.
-					// The visual-editor flag is a MOUNT-level decision (core
-					// convention: hosts re-target by key-remounting <Studio>,
-					// never by toggling `editor` in place) — `?editor=1` is
-					// read post-mount from the URL, so the flag joins the key.
-					key={visualEditorMode ? `${activePageId}::editor` : activePageId}
-					storeId="demo-editor"
-					puckConfig={localizedEditorConfig as unknown as Config}
-					data={publishedData}
-					plugins={plugins}
-					loading={<StudioLoadingScreen />}
-					onPublish={handlePublish}
-					onPublishClick={handlePublishClick}
-					onPreview={handlePreview}
-					onSaveDraft={handleSaveDraft}
-					isSavingDraft={isSavingDraft}
-					lastSavedAt={lastSavedAt}
-					onExport={handleExport}
-					analytics={analyticsAdapter}
-					chrome={chromeMode}
-					pages={pagesSource}
-					config={demoStudioConfig}
-					onLocaleChange={handleStudioLocaleChange}
-					editor={
-						visualEditorMode
-							? {
-									features: { enabled: true },
-									dataSourceAdapter: demoDataSourceAdapter,
-									pageAdapter: demoPageAdapter,
-								}
-							: undefined
-					}
-					// The AI proposal surface writes through `EditorApi`,
-					// which is built from the live `PuckApi` — so it has to
-					// render INSIDE the Puck subtree. `editorSlot` mounts
-					// beside it (`StudioEditorMount` wraps `<Puck>`), so the
-					// consumer `puck` override is the seam that reaches the
-					// API: composed around the chrome, and persistent for the
-					// life of the subtree (`p6-004`; see the component doc).
-					// The object is module-scope — `mergedOverrides` memoizes
-					// on its identity.
-					overrides={visualEditorMode ? demoAiProposalOverrides : undefined}
-				/>
+				{documentReady ? (
+					<Studio
+						// Remount on page switch so Puck re-initializes its draft
+						// from the newly selected page's `data` (Puck owns its
+						// internal document state after mount; a prop change alone
+						// would not reset it). A *stable* `storeId` keeps the
+						// persisted editor UI slice (active rail tab, viewport)
+						// keyed consistently so it rehydrates across the remount
+						// instead of resetting to defaults.
+						// The visual-editor flag is a MOUNT-level decision (core
+						// convention: hosts re-target by key-remounting <Studio>,
+						// never by toggling `editor` in place) — `?editor=1` is
+						// read post-mount from the URL, so the flag joins the key.
+						key={visualEditorMode ? `${activePageId}::editor` : activePageId}
+						storeId="demo-editor"
+						puckConfig={localizedEditorConfig as unknown as Config}
+						data={publishedData}
+						onChange={handleLiveChange}
+						plugins={plugins}
+						loading={<StudioLoadingScreen />}
+						onPublish={handlePublish}
+						onPublishClick={handlePublishClick}
+						onPreview={handlePreview}
+						onSaveDraft={handleSaveDraft}
+						isSavingDraft={isSavingDraft}
+						lastSavedAt={lastSavedAt}
+						onExport={handleExport}
+						analytics={analyticsAdapter}
+						chrome={chromeMode}
+						pages={pagesSource}
+						config={demoStudioConfig}
+						onLocaleChange={handleStudioLocaleChange}
+						editor={
+							visualEditorMode
+								? {
+										features: { enabled: true },
+										dataSourceAdapter: demoDataSourceAdapter,
+										pageAdapter: demoPageAdapter,
+									}
+								: undefined
+						}
+						// The AI proposal surface writes through `EditorApi`,
+						// which is built from the live `PuckApi` — so it has to
+						// render INSIDE the Puck subtree. `editorSlot` mounts
+						// beside it (`StudioEditorMount` wraps `<Puck>`), so the
+						// consumer `puck` override is the seam that reaches the
+						// API: composed around the chrome, and persistent for the
+						// life of the subtree (`p6-004`; see the component doc).
+						// The object is module-scope — `mergedOverrides` memoizes
+						// on its identity.
+						overrides={visualEditorMode ? demoAiProposalOverrides : undefined}
+					/>
+				) : (
+					<StudioLoadingScreen />
+				)}
 			</section>
 
 			{/*
