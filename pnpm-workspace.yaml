@@ -229,6 +229,13 @@ minimumReleaseAgeExclude:
   - react-konva@19.2.6
   - rsbuild-plugin-dts@1.0.0
 
+patchedDependencies:
+  # Guards base-ui's Composite root `event.getModifierState(key)` against the
+  # browser-autofill keydown that lacks it (packages/runtime/ui's
+  # base-ui-getmodifierstate-guard test fails whenever this stops applying).
+  # Keyed to the exact version pinned in `overrides` below.
+  "@base-ui/react@1.6.0": packages/extensions/components/patches/@base-ui__react@1.6.0.patch
+
 overrides:
   react: 19.2.8
   react-dom: 19.2.8

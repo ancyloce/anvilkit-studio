@@ -7,7 +7,7 @@ import {
 	statSync,
 	writeFileSync,
 } from "node:fs";
-import { basename, resolve } from "node:path";
+import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { CAC } from "cac";
 
@@ -163,9 +163,15 @@ function ensureTargetDirReady(targetDir: string, force: boolean): void {
 }
 
 function resolveScaffoldRoot(): string {
+	// Resolved from this module's directory with `path`, not with
+	// `new URL("…", import.meta.url)`: the bundler treats that literal form
+	// as an asset reference and refuses a directory target, while the built
+	// CLI needs a plain filesystem path (`dist/scaffolds/nextjs` after
+	// postbuild, or the source tree when run unbundled).
+	const here = dirname(fileURLToPath(import.meta.url));
 	const candidates = [
-		fileURLToPath(new URL("../scaffolds/nextjs", import.meta.url)),
-		fileURLToPath(new URL("../../src/scaffolds/nextjs", import.meta.url)),
+		resolve(here, "../scaffolds/nextjs"),
+		resolve(here, "../../src/scaffolds/nextjs"),
 	];
 
 	for (const candidate of candidates) {
