@@ -378,6 +378,44 @@ describe("page-api: settings", () => {
 		}
 	});
 
+	it("commits settings against the expected revision, strips the claim and 409s when stale", async () => {
+		const storage = freshStorage();
+		const created = await storage.publish({
+			slug: "home",
+			data: pageData("home", "Home", "published"),
+		});
+		const renamed = await updateSettings(storage, created.id, {
+			...validRootProps("home", "Renamed"),
+			expectedPageRevision: created.pageRevision,
+		});
+		expect(renamed.status).toBe(200);
+		if (renamed.body.ok) {
+			expect(renamed.body.data.pageRevision).toBe(2);
+			expect(renamed.body.data.published?.root.props).not.toHaveProperty(
+				"expectedPageRevision",
+			);
+		}
+		const stale = await updateSettings(storage, created.id, {
+			...validRootProps("home", "Stale"),
+			expectedPageRevision: created.pageRevision,
+		});
+		expect(stale.status).toBe(409);
+		if (!stale.body.ok) {
+			expect(stale.body.code).toBe("E_CONFLICT");
+			expect(stale.body.issues?.[0]).toMatchObject({
+				code: "E_PAGE_REVISION_CONFLICT",
+				expectedPageRevision: 1,
+				currentPageRevision: 2,
+			});
+		}
+		expect((await storage.getById(created.id))?.title).toBe("Renamed");
+		const invalid = await updateSettings(storage, created.id, {
+			...validRootProps("home", "Renamed"),
+			expectedPageRevision: -1,
+		});
+		expect(invalid.status).toBe(400);
+	});
+
 	it("rejects invalid settings and 404s on an unknown id", async () => {
 		const storage = freshStorage();
 		const bad = await updateSettings(storage, "id-1", {
@@ -418,5 +456,27 @@ describe("page-api: duplicate / archive / delete", () => {
 		expect(del.status).toBe(200);
 		expect(del.body.ok).toBe(true);
 		expect((await deletePage(storage, created.id)).status).toBe(404);
+	});
+
+	it("deletes only against the expected revision", async () => {
+		const storage = freshStorage();
+		const created = await storage.publish({
+			slug: "home",
+			data: pageData("home", "Home", "published"),
+		});
+		const stale = await deletePage(storage, created.id, 7);
+		expect(stale.status).toBe(409);
+		if (!stale.body.ok) {
+			expect(stale.body.issues?.[0]).toMatchObject({
+				code: "E_PAGE_REVISION_CONFLICT",
+				expectedPageRevision: 7,
+				currentPageRevision: 1,
+			});
+		}
+		expect(await storage.getById(created.id)).not.toBeNull();
+		expect((await deletePage(storage, created.id, "x")).status).toBe(400);
+		const del = await deletePage(storage, created.id, created.pageRevision);
+		expect(del.status).toBe(200);
+		expect(await storage.getById(created.id)).toBeNull();
 	});
 });

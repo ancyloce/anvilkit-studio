@@ -17,6 +17,8 @@ import type { PageRootProps } from "@anvilkit/schema";
 import type { Data } from "@puckeditor/core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+	deleteStoredPage,
+	patchPageSettings,
 	persistPage,
 	readStoredPage,
 	storedPageRevision,
@@ -215,6 +217,107 @@ describe("persistPage — page revision guard (S1-T04 wiring)", () => {
 		});
 
 		expect(result).toEqual({ ok: false, issue: "taken" });
+	});
+});
+
+describe("page rail writes — settings and delete carry the revision", () => {
+	const props = docWith({}).root.props as PageRootProps;
+
+	it("patches settings beside the expected revision and returns the new one", async () => {
+		fetchMock.mockResolvedValueOnce(
+			new Response(JSON.stringify({ ok: true, data: { pageRevision: 5 } }), {
+				status: 200,
+			}),
+		);
+
+		const result = await patchPageSettings("about", props, {
+			expectedPageRevision: 4,
+		});
+
+		expect(result).toEqual({ ok: true, pageRevision: 5 });
+		expect(fetchMock.mock.calls[0]?.[0]).toBe("/api/pages/about/settings");
+		const init = fetchMock.mock.calls[0]?.[1] as RequestInit;
+		expect(init.method).toBe("PATCH");
+		expect(JSON.parse(String(init.body))).toEqual({
+			...props,
+			expectedPageRevision: 4,
+		});
+	});
+
+	it("reports a stale settings write as a conflict", async () => {
+		fetchMock.mockResolvedValueOnce(
+			new Response(
+				JSON.stringify({
+					ok: false,
+					code: "E_CONFLICT",
+					message: "Page revision conflict: expected 4, stored 6.",
+					issues: [
+						{
+							code: "E_PAGE_REVISION_CONFLICT",
+							expectedPageRevision: 4,
+							currentPageRevision: 6,
+						},
+					],
+				}),
+				{ status: 409 },
+			),
+		);
+
+		const result = await patchPageSettings("about", props, {
+			expectedPageRevision: 4,
+		});
+
+		expect(result.ok).toBe(false);
+		expect(result.conflict).toEqual({
+			expectedPageRevision: 4,
+			currentPageRevision: 6,
+		});
+	});
+
+	it("deletes with the expected revision in the query and reports a stale one", async () => {
+		const deleted = await deleteStoredPage("about", {
+			expectedPageRevision: 4,
+		});
+
+		expect(deleted).toEqual({ ok: true });
+		expect(fetchMock.mock.calls[0]?.[0]).toBe(
+			"/api/pages/about?expectedPageRevision=4",
+		);
+		const init = fetchMock.mock.calls[0]?.[1] as RequestInit | undefined;
+		expect(init?.method).toBe("DELETE");
+
+		fetchMock.mockResolvedValueOnce(
+			new Response(
+				JSON.stringify({
+					ok: false,
+					code: "E_CONFLICT",
+					message: "stale",
+					issues: [
+						{
+							code: "E_PAGE_REVISION_CONFLICT",
+							expectedPageRevision: 4,
+							currentPageRevision: 5,
+						},
+					],
+				}),
+				{ status: 409 },
+			),
+		);
+		const stale = await deleteStoredPage("about", { expectedPageRevision: 4 });
+		expect(stale.conflict).toEqual({
+			expectedPageRevision: 4,
+			currentPageRevision: 5,
+		});
+	});
+
+	it("makes no claim without a revision", async () => {
+		await deleteStoredPage("about");
+		expect(fetchMock.mock.calls[0]?.[0]).toBe("/api/pages/about");
+		await patchPageSettings("about", props);
+		const patch = fetchMock.mock.calls[1]?.[1] as RequestInit | undefined;
+		expect(JSON.parse(String(patch?.body))).not.toHaveProperty(
+			"expectedPageRevision",
+		);
 	});
 });
 

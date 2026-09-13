@@ -65,25 +65,28 @@ function validationFailure(
  * stripped copy, so they are checked here against the raw body that storage
  * persists.
  */
+function invalidExpectedRevision(): HandlerResult<never> {
+	return validationFailure([
+		{
+			level: "error",
+			code: "E_PAGE_INVALID_TYPE",
+			message: "expectedPageRevision must be a non-negative integer.",
+			path: ["expectedPageRevision"],
+		},
+	]);
+}
+
+function isPageRevision(value: unknown): value is number {
+	return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+}
+
 function checkWriteGuards(body: {
 	expectedPageRevision?: unknown;
 	data: DemoPageData;
 }): HandlerResult<never> | null {
 	const expected = body.expectedPageRevision;
-	if (
-		expected !== undefined &&
-		(typeof expected !== "number" ||
-			!Number.isSafeInteger(expected) ||
-			expected < 0)
-	) {
-		return validationFailure([
-			{
-				level: "error",
-				code: "E_PAGE_INVALID_TYPE",
-				message: "expectedPageRevision must be a non-negative integer.",
-				path: ["expectedPageRevision"],
-			},
-		]);
+	if (expected !== undefined && !isPageRevision(expected)) {
+		return invalidExpectedRevision();
 	}
 	const lock = readRemoteComponentLock(body.data);
 	if (lock.state === "unreadable") {
@@ -247,6 +250,13 @@ export async function publish(
 	return { status: 200, body: apiSuccess(record, writeWarnings(record)) };
 }
 
+/**
+ * `PATCH /api/pages/:id/settings`: the body is the page's `root.props`, with an
+ * optional `expectedPageRevision` beside them (the same claim a save or publish
+ * makes); the non-strict root schema ignores the extra key and `parse` strips
+ * it, so it never lands in the stored props. A stale claim is the same 409 as
+ * on save and publish; a missing page is still 404.
+ */
 export async function updateSettings(
 	storage: PageStorageAdapter,
 	id: string,
@@ -254,10 +264,23 @@ export async function updateSettings(
 ): Promise<HandlerResult<PageRecord>> {
 	const result = validatePageRootProps(body);
 	if (!result.valid) return validationFailure(result.issues);
+	const expected = (body as { expectedPageRevision?: unknown })
+		.expectedPageRevision;
+	if (expected !== undefined && !isPageRevision(expected)) {
+		return invalidExpectedRevision();
+	}
 
 	// Already validated — `parse` only normalizes defaults (parentFolder, seo).
 	const rootProps = PageRootSchema.parse(body);
-	const record = await storage.updateSettings(id, rootProps);
+	let record: PageRecord | null;
+	try {
+		record = await storage.updateSettings(id, rootProps, expected);
+	} catch (error) {
+		if (error instanceof PageRevisionConflictError) {
+			return revisionConflict(error);
+		}
+		throw error;
+	}
 	if (record === null) {
 		return notFound(`No page found for id "${id}".`);
 	}
@@ -302,14 +325,33 @@ export async function archivePage(
 	return { status: 200, body: apiSuccess(record) };
 }
 
+/**
+ * `DELETE /api/pages/:id`: `expectedPageRevision` (the route reads it from the
+ * query string, a DELETE carrying no body) makes the delete conditional on the
+ * revision the caller last read; a stale claim is a 409 and nothing is deleted.
+ */
 export async function deletePage(
 	storage: PageStorageAdapter,
 	id: string,
+	expectedPageRevision?: unknown,
 ): Promise<HandlerResult<null>> {
+	if (
+		expectedPageRevision !== undefined &&
+		!isPageRevision(expectedPageRevision)
+	) {
+		return invalidExpectedRevision();
+	}
 	const existing = await storage.getById(id);
 	if (existing === null) {
 		return notFound(`No page found for id "${id}".`);
 	}
-	await storage.delete(id);
+	try {
+		await storage.delete(id, expectedPageRevision);
+	} catch (error) {
+		if (error instanceof PageRevisionConflictError) {
+			return revisionConflict(error);
+		}
+		throw error;
+	}
 	return { status: 200, body: apiSuccess(null) };
 }

@@ -116,9 +116,11 @@ export class MemoryPageStorageAdapter implements PageStorageAdapter {
 	async updateSettings(
 		id: string,
 		rootProps: PageRootProps,
+		expectedPageRevision?: number,
 	): Promise<PageRecord | null> {
 		const existing = this.records.get(id);
 		if (existing === undefined) return null;
+		assertExpectedPageRevision(existing, expectedPageRevision);
 		return this.put(applySettings(existing, rootProps, this.ctx), existing);
 	}
 
@@ -128,7 +130,10 @@ export class MemoryPageStorageAdapter implements PageStorageAdapter {
 		return this.put(applyArchive(existing, this.ctx), existing);
 	}
 
-	async delete(id: string): Promise<void> {
+	async delete(id: string, expectedPageRevision?: number): Promise<void> {
+		const existing = this.records.get(id);
+		if (existing === undefined) return;
+		assertExpectedPageRevision(existing, expectedPageRevision);
 		this.records.delete(id);
 	}
 

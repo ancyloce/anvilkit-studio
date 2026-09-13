@@ -164,12 +164,63 @@ export async function persistPage(
 			body.expectedPageRevision = options.expectedPageRevision;
 		}
 	}
+	const result = await requestWrite(`/api/pages/${kind}`, {
+		method: "POST",
+		headers: JSON_HEADERS,
+		body: JSON.stringify(body),
+	});
+	// The scratch slot's revision means nothing to the caller.
+	return kind === "preview" && result.ok ? { ok: true } : result;
+}
+
+/**
+ * The page rail's settings write (`PATCH /api/pages/:id/settings`, title /
+ * slug / status / SEO), against the revision the caller last read like a save.
+ * The claim travels beside the root props; the server strips it before storing.
+ */
+export async function patchPageSettings(
+	id: string,
+	rootProps: PageRootProps,
+	options: Pick<PersistOptions, "expectedPageRevision"> = {},
+): Promise<PersistResult> {
+	const body: Record<string, unknown> = { ...rootProps };
+	if (options.expectedPageRevision !== undefined) {
+		body.expectedPageRevision = options.expectedPageRevision;
+	}
+	return requestWrite(`/api/pages/${encodeURIComponent(id)}/settings`, {
+		method: "PATCH",
+		headers: JSON_HEADERS,
+		body: JSON.stringify(body),
+	});
+}
+
+/**
+ * The page rail's delete (`DELETE /api/pages/:id`), conditional on the revision
+ * the caller last read (`?expectedPageRevision=`); a stale claim deletes
+ * nothing and comes back as a conflict. A success carries no revision.
+ */
+export async function deleteStoredPage(
+	id: string,
+	options: Pick<PersistOptions, "expectedPageRevision"> = {},
+): Promise<PersistResult> {
+	const query =
+		options.expectedPageRevision === undefined
+			? ""
+			: `?expectedPageRevision=${options.expectedPageRevision}`;
+	return requestWrite(`/api/pages/${encodeURIComponent(id)}${query}`, {
+		method: "DELETE",
+	});
+}
+
+const JSON_HEADERS = { "content-type": "application/json" } as const;
+
+/** One Page API write: the envelope's revision on success, a typed conflict on 409, a reason otherwise. */
+async function requestWrite(
+	input: string,
+	init: RequestInit,
+): Promise<PersistResult> {
 	try {
-		const res = await fetch(`/api/pages/${kind}`, {
-			method: "POST",
-			headers: { "content-type": "application/json" },
-			body: JSON.stringify(body),
-		});
+		const res = await fetch(input, init);
 		const payload = (await res
 			.json()
 			.catch(() => null)) as ApiResponse<PageRecord | null> | null;
@@ -183,17 +234,14 @@ export async function persistPage(
 				? { ok: false, issue }
 				: { ok: false, issue, conflict };
 		}
-		if (kind !== "preview" && payload !== null && payload.ok) {
-			const pageRevision = payload.data?.pageRevision;
-			if (typeof pageRevision === "number") {
-				return { ok: true, pageRevision };
-			}
-		}
+		const pageRevision = payload?.ok ? payload.data?.pageRevision : undefined;
+		return typeof pageRevision === "number"
+			? { ok: true, pageRevision }
+			: { ok: true };
 	} catch (error) {
 		return {
 			ok: false,
 			issue: error instanceof Error ? error.message : "Persist request failed",
 		};
 	}
-	return { ok: true };
 }

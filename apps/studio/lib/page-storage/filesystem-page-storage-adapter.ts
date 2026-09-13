@@ -119,10 +119,12 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 	async updateSettings(
 		id: string,
 		rootProps: PageRootProps,
+		expectedPageRevision?: number,
 	): Promise<PageRecord | null> {
 		return this.serialized(async () => {
 			const existing = await this.readRecord(id);
 			if (existing === null) return null;
+			assertExpectedPageRevision(existing, expectedPageRevision);
 			return this.writeRecord(
 				applySettings(existing, rootProps, this.ctx),
 				existing,
@@ -138,8 +140,13 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 		});
 	}
 
-	async delete(id: string): Promise<void> {
-		await rm(this.filePath(id), { force: true });
+	async delete(id: string, expectedPageRevision?: number): Promise<void> {
+		return this.serialized(async () => {
+			const existing = await this.readRecord(id);
+			if (existing === null) return;
+			assertExpectedPageRevision(existing, expectedPageRevision);
+			await rm(this.filePath(id), { force: true });
+		});
 	}
 
 	async duplicate(

@@ -154,11 +154,13 @@ export class SqlitePageStorageAdapter implements PageStorageAdapter {
 	async updateSettings(
 		id: string,
 		rootProps: PageRootProps,
+		expectedPageRevision?: number,
 	): Promise<PageRecord | null> {
 		return this.db.transaction(
 			(tx) => {
 				const existing = this.readById(tx, id);
 				if (existing === null) return null;
+				assertExpectedPageRevision(existing, expectedPageRevision);
 				return this.writeRecord(
 					tx,
 					applySettings(existing, rootProps, this.ctx),
@@ -180,8 +182,16 @@ export class SqlitePageStorageAdapter implements PageStorageAdapter {
 		);
 	}
 
-	async delete(id: string): Promise<void> {
-		this.db.delete(pages).where(eq(pages.id, id)).run();
+	async delete(id: string, expectedPageRevision?: number): Promise<void> {
+		this.db.transaction(
+			(tx) => {
+				const existing = this.readById(tx, id);
+				if (existing === null) return;
+				assertExpectedPageRevision(existing, expectedPageRevision);
+				tx.delete(pages).where(eq(pages.id, id)).run();
+			},
+			{ behavior: "immediate" },
+		);
 	}
 
 	async duplicate(

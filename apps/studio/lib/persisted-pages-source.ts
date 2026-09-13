@@ -15,6 +15,13 @@
  * snapshot, and the server reconciles in the background. The store is seeded
  * (lib/page-store.ts `seedIfEmpty`) with these same stable ids, so settings /
  * rename / delete PATCH/DELETE by id land on the matching record.
+ *
+ * Every write presents the page's revision (S1-T04 write contract) when the
+ * host supplies a {@link PersistedPagesRevisionGuard}: the editor owns each
+ * page's revision, runs the write against it, adopts the revision the server
+ * returns and shows a notice on a conflict, so a rail rename followed by a
+ * draft save presents the renamed record's revision instead of a stale one.
+ * Without a guard the writes make no claim (last writer wins), as before.
  */
 import {
 	pageRootToStudioPageFields,
@@ -30,10 +37,35 @@ import type {
 } from "@anvilkit/core/types";
 import type { PageRootProps } from "@anvilkit/schema";
 import type { DemoPageRootAccessor } from "./demo-pages-source";
+import {
+	deleteStoredPage,
+	type PersistResult,
+	patchPageSettings,
+	persistPage,
+} from "./page-persistence";
 import type { DemoPageData } from "./page-storage/types";
 import { createDemoData } from "./puck-demo";
 
-const JSON_HEADERS = { "content-type": "application/json" } as const;
+/** The rail's write kinds, named in the editor's conflict notice. */
+export type PersistedPagesWriteAction =
+	| "create"
+	| "rename"
+	| "settings"
+	| "duplicate"
+	| "delete";
+
+/**
+ * Runs one write of page `id` against the revision the host retains for it —
+ * `perform` receives the revision to present — and settles the page's revision
+ * on the outcome. Supplied by the editor (`guardedWrite` in the editor page).
+ */
+export interface PersistedPagesRevisionGuard {
+	guardedWrite(
+		id: string,
+		action: PersistedPagesWriteAction,
+		perform: (expectedPageRevision: number) => Promise<PersistResult>,
+	): Promise<PersistResult>;
+}
 
 interface MutablePage {
 	id: string;
@@ -61,15 +93,6 @@ export interface PersistedPagesSource extends StudioPagesSource {
 
 const pathToSlug = (path: string): string =>
 	path.replace(/^\/+/, "").replace(/\/+$/, "");
-
-/** Fire-and-forget Page API write — never rejects into React render. */
-async function writeThrough(input: string, init: RequestInit): Promise<void> {
-	try {
-		await fetch(input, init);
-	} catch {
-		// Background reconciliation only; the rail already reflects the change.
-	}
-}
 
 /** Seed a fresh published document carrying the new page's title + slug. */
 function docFor(title: string, slug: string): DemoPageData {
@@ -105,11 +128,30 @@ function mergedRootProps(
 }
 
 export function createPersistedPagesSource(
-	accessor?: DemoPageRootAccessor,
+	accessor?: DemoPageRootAccessor & Partial<PersistedPagesRevisionGuard>,
 ): PersistedPagesSource {
 	const pages: MutablePage[] = SEED_PAGES.map((page) => ({ ...page }));
 	let activeId: string = pages[0]?.id ?? "";
 	const listeners = new Set<() => void>();
+
+	/**
+	 * Fire-and-forget Page API write — never rejects into React render. With
+	 * a revision guard the write presents the page's revision and the guard
+	 * settles it; without one it makes no claim.
+	 */
+	const writeThrough = (
+		id: string,
+		action: PersistedPagesWriteAction,
+		perform: (expectedPageRevision?: number) => Promise<PersistResult>,
+	): void => {
+		const write =
+			accessor?.guardedWrite !== undefined
+				? accessor.guardedWrite(id, action, perform)
+				: perform(undefined);
+		write.catch(() => {
+			// Background reconciliation only; the rail already reflects the change.
+		});
+	};
 
 	const notify = (): void => {
 		for (const listener of listeners) listener();
@@ -149,15 +191,14 @@ export function createPersistedPagesSource(
 	/** Push the page's current `root.props` (merged with `patch`) to storage. */
 	const patchSettingsThrough = (
 		id: string,
+		action: "rename" | "settings",
 		patch: Partial<PageRootProps>,
 		fallback: { title: string; slug: string },
 	): void => {
 		const merged = mergedRootProps(accessor?.getRootProps(id), patch, fallback);
-		void writeThrough(`/api/pages/${encodeURIComponent(id)}/settings`, {
-			method: "PATCH",
-			headers: JSON_HEADERS,
-			body: JSON.stringify(merged),
-		});
+		writeThrough(id, action, (expectedPageRevision) =>
+			patchPageSettings(id, merged, { expectedPageRevision }),
+		);
 	};
 
 	return {
@@ -188,12 +229,13 @@ export function createPersistedPagesSource(
 			activeId = id;
 			notify();
 			// Persist as a published document under the same id so `/render/<slug>`
-			// resolves it immediately.
-			void writeThrough("/api/pages/publish", {
-				method: "POST",
-				headers: JSON_HEADERS,
-				body: JSON.stringify({ id, slug, data: docFor(input.title, slug) }),
-			});
+			// resolves it immediately; the claim is revision 0 (no record yet).
+			writeThrough(id, "create", (expectedPageRevision) =>
+				persistPage("publish", docFor(input.title, slug), {
+					id,
+					expectedPageRevision,
+				}),
+			);
 		},
 		onRename(input: StudioPageRenameInput): void {
 			const page = requirePage(input.id);
@@ -204,6 +246,7 @@ export function createPersistedPagesSource(
 			accessor?.updateRootProps(input.id, { title: input.title });
 			patchSettingsThrough(
 				input.id,
+				"rename",
 				{
 					title: input.title,
 					...(input.path !== undefined ? { slug: pathToSlug(input.path) } : {}),
@@ -220,9 +263,9 @@ export function createPersistedPagesSource(
 				activeId = pages[index]?.id ?? pages[index - 1]?.id ?? "";
 			}
 			notify();
-			void writeThrough(`/api/pages/${encodeURIComponent(pageId)}`, {
-				method: "DELETE",
-			});
+			writeThrough(pageId, "delete", (expectedPageRevision) =>
+				deleteStoredPage(pageId, { expectedPageRevision }),
+			);
 		},
 		async onDuplicate(pageId: string): Promise<StudioPage> {
 			const source = requirePage(pageId);
@@ -241,15 +284,12 @@ export function createPersistedPagesSource(
 			// Persist the copy under the optimistic id (keeps the rail id and the
 			// stored record id aligned, unlike the server-minted `/duplicate` id).
 			const copySlug = `${slugFor(source)}-copy`;
-			void writeThrough("/api/pages/publish", {
-				method: "POST",
-				headers: JSON_HEADERS,
-				body: JSON.stringify({
+			writeThrough(id, "duplicate", (expectedPageRevision) =>
+				persistPage("publish", docFor(copy.title, copySlug), {
 					id,
-					slug: copySlug,
-					data: docFor(copy.title, copySlug),
+					expectedPageRevision,
 				}),
-			});
+			);
 			// PRD §3.3 — optimistic pre-select: return the created page so `PageRow`
 			// selects it before the subscribe round-trip.
 			return {
@@ -296,7 +336,7 @@ export function createPersistedPagesSource(
 				accessor.updateRootProps(input.id, patch);
 			}
 			if (patch.title !== undefined || patch.seo !== undefined) {
-				patchSettingsThrough(input.id, patch, {
+				patchSettingsThrough(input.id, "settings", patch, {
 					title: page.title,
 					slug: slugFor(page),
 				});

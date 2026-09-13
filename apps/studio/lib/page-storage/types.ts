@@ -124,14 +124,24 @@ export interface PageStorageAdapter {
 	saveDraft(input: SaveDraftInput): Promise<PageRecord>;
 	/** Throws {@link PageRevisionConflictError} when `expectedPageRevision` is stale. */
 	publish(input: PublishPageInput): Promise<PageRecord>;
-	/** Update page settings (root.props). Returns null when no record matches `id`. */
+	/**
+	 * Update page settings (root.props). Returns null when no record matches
+	 * `id`; throws {@link PageRevisionConflictError} when `expectedPageRevision`
+	 * is present and stale (as on {@link SaveDraftInput.expectedPageRevision}).
+	 */
 	updateSettings(
 		id: string,
 		rootProps: PageRootProps,
+		expectedPageRevision?: number,
 	): Promise<PageRecord | null>;
 	/** Hide from the public route. Returns null when no record matches `id`. */
 	archive(id: string): Promise<PageRecord | null>;
-	delete(id: string): Promise<void>;
+	/**
+	 * Remove the record; a missing record is a no-op. Throws
+	 * {@link PageRevisionConflictError} when `expectedPageRevision` is present
+	 * and the stored record no longer carries it — nothing is deleted then.
+	 */
+	delete(id: string, expectedPageRevision?: number): Promise<void>;
 	/** Clone a record under a new id+slug. Returns null when no record matches `id`. */
 	duplicate(id: string, input?: DuplicatePageInput): Promise<PageRecord | null>;
 	getVersion(pageId: string, version: string): Promise<PageRecord | null>;

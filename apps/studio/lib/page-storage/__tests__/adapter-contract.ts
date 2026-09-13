@@ -1,3 +1,4 @@
+import type { PageRootProps } from "@anvilkit/schema";
 import { describe, expect, it } from "vitest";
 import {
 	type DemoPageData,
@@ -363,6 +364,58 @@ export function runAdapterContractTests(
 			const stored = await storage.getById(created.id);
 			expect(stored?.status).toBe("draft");
 			expect(stored?.pageRevision).toBe(1);
+		});
+
+		it("commits settings only against the expected revision and advances it", async () => {
+			const storage = await createAdapter(freshOpts());
+			const created = await storage.publish({
+				slug: "home",
+				data: pageData("home", "Home", "published"),
+			});
+			const props = (title: string): PageRootProps => ({
+				title,
+				slug: "home",
+				status: "published",
+				version: "1.0.0",
+				parentFolder: "/",
+				seo: { noIndex: false },
+			});
+			const renamed = await storage.updateSettings(
+				created.id,
+				props("Renamed"),
+				created.pageRevision,
+			);
+			expect(renamed?.title).toBe("Renamed");
+			expect(renamed?.pageRevision).toBe(2);
+			// The revision the rename was made from is stale now: refused, unchanged.
+			await expect(
+				storage.updateSettings(
+					created.id,
+					props("Stale"),
+					created.pageRevision,
+				),
+			).rejects.toBeInstanceOf(PageRevisionConflictError);
+			const stored = await storage.getById(created.id);
+			expect(stored?.title).toBe("Renamed");
+			expect(stored?.pageRevision).toBe(2);
+			// A missing page is still "not found", not a conflict.
+			expect(await storage.updateSettings("missing", props("x"), 1)).toBeNull();
+		});
+
+		it("deletes only against the expected revision", async () => {
+			const storage = await createAdapter(freshOpts());
+			const created = await storage.saveDraft({
+				slug: "home",
+				data: pageData("home", "Home"),
+			});
+			await expect(storage.delete(created.id, 7)).rejects.toBeInstanceOf(
+				PageRevisionConflictError,
+			);
+			expect((await storage.getById(created.id))?.pageRevision).toBe(1);
+			await storage.delete(created.id, created.pageRevision);
+			expect(await storage.getById(created.id)).toBeNull();
+			// Deleting a missing record stays a no-op whatever the claim.
+			await expect(storage.delete("missing", 3)).resolves.toBeUndefined();
 		});
 
 		it("treats a record that does not exist yet as revision 0", async () => {
