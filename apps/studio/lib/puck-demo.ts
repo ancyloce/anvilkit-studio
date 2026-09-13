@@ -86,6 +86,7 @@ import {
 import { createTextConfig, type TextProps } from "@anvilkit/text";
 import { createVideoConfig, type VideoProps } from "@anvilkit/video";
 import type { Config, Data, Fields } from "@puckeditor/core";
+import { createElement, Fragment } from "react";
 
 import { demoCopySnippetPack } from "./demo-copy-snippet-pack";
 
@@ -147,8 +148,10 @@ function demoRootProps(
  * version, parentFolder. SEO (`root.props.seo`) is intentionally NOT an
  * inspector field: the F5 PageSeoPlugin owns SEO authoring. `PageRootProps`
  * makes `seo` required, so Puck's `Fields<PageRootProps>` would demand a `seo`
- * control; the cast omits it (the full field map is assignable to this 5-key
- * literal, so the assertion is sound) while keeping `RootProps = PageRootProps`.
+ * control; the cast omits it while keeping `RootProps = PageRootProps`. The
+ * host-owned `remoteComponentLock` root prop (declared below) is outside
+ * `PageRootProps` on purpose — it is not page metadata the schema package
+ * validates — so the cast goes through `unknown`.
  */
 const demoRootFields = {
 	title: { type: "text", label: "Title" },
@@ -164,7 +167,17 @@ const demoRootFields = {
 	},
 	version: { type: "text", label: "Version" },
 	parentFolder: { type: "text", label: "Parent folder" },
-} as Fields<PageRootProps>;
+	// `root.props.remoteComponentLock` (DD-05 §6.5.2, S1-T04): the host-owned
+	// remote-component release lock is a declared root prop so its survival
+	// rests on the page contract rather than on storage round-tripping unknown
+	// keys. It is machine-managed — the loader/page writer own it, and the
+	// page API validates it — so the inspector renders nothing for it.
+	remoteComponentLock: {
+		type: "custom",
+		label: "Remote components",
+		render: () => createElement(Fragment),
+	},
+} as unknown as Fields<PageRootProps>;
 
 /**
  * Build the demo Puck config for a locale. Component field/option labels
