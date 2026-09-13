@@ -42,6 +42,7 @@ import {
 	useRef,
 	useState,
 } from "react";
+import { createPortal } from "react-dom";
 import { toast } from "sonner";
 import { Windowed } from "@/primitives/windowed";
 import { cn } from "@/shared/cn";
@@ -469,13 +470,20 @@ export function LayerTree({ searchQuery }: LayerTreeProps = {}): ReactNode {
 					/>
 				)}
 			</div>
-			<DragOverlay>
-				{activeNode !== null ? (
-					<div className="flex h-8 items-center gap-1 rounded-md bg-[var(--editor-panel-raised)] px-2 text-xs text-[var(--ak-studio-fg)] shadow-[var(--shadow-floating)] ring-1 ring-[var(--ak-studio-border)]">
-						{activeNode.label}
-					</div>
-				) : null}
-			</DragOverlay>
+			{/* Portaled to <body> for the same reason as the Pages panel's
+			 * overlay: the enclosing tab panel keeps a `filter` after its
+			 * enter animation and would displace a fixed in-place overlay —
+			 * and dnd-kit collides with the overlay's rect. */}
+			{createPortal(
+				<DragOverlay>
+					{activeNode !== null ? (
+						<div className="flex h-8 items-center gap-1 rounded-md bg-[var(--editor-panel-raised)] px-2 text-xs text-[var(--ak-studio-fg)] shadow-[var(--shadow-floating)] ring-1 ring-[var(--ak-studio-border)]">
+							{activeNode.label}
+						</div>
+					) : null}
+				</DragOverlay>,
+				document.body,
+			)}
 		</DndContext>
 	);
 }

@@ -95,9 +95,12 @@ describe("DrawerItem — grid mode (default view)", () => {
 	it("falls back to the generic placeholder when nothing is supplied", () => {
 		componentsStub = { Hero: { label: "Hero" } };
 		const { container } = renderItem("Hero", "drawer-item-placeholder");
-		expect(
-			container.querySelector("svg[viewBox='0 0 160 120']"),
-		).not.toBeNull();
+		// Presence selector + attribute read rather than `svg[viewBox='…']`:
+		// jsdom 30's selector engine does not value-match the mixed-case
+		// SVG attribute name, although the attribute is set.
+		const placeholder = container.querySelector("svg[viewBox]");
+		expect(placeholder).not.toBeNull();
+		expect(placeholder?.getAttribute("viewBox")).toBe("0 0 160 120");
 	});
 
 	it("renders the component title", () => {

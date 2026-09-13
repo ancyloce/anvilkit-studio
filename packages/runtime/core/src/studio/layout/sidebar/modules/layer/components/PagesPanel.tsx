@@ -25,6 +25,7 @@ import {
 	useMemo,
 	useState,
 } from "react";
+import { createPortal } from "react-dom";
 import { useStudioPagesSourceOrDefault } from "@/context/pages-source";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
@@ -333,18 +334,31 @@ function usePagesPanelElement(): ReactNode {
 								/>
 							</ul>
 						</SortableContext>
-						<DragOverlay>
-							{dnd.activePage !== null ? (
-								<div
-									className="ak-pages-panel flex h-6 items-center gap-2 rounded-sm bg-[var(--ak-pages-muted,var(--ak-studio-muted))] px-2 text-xs text-[var(--ak-pages-fg,var(--ak-studio-fg))] shadow-lg ring-1 ring-[var(--ak-pages-ring,var(--ak-studio-ring))]"
-									data-testid="ak-layer-pages-drag-overlay"
-								>
-									{dnd.activePage.title.length > 0
-										? dnd.activePage.title
-										: (dnd.activePage.path ?? dnd.activePage.id)}
-								</div>
-							) : null}
-						</DragOverlay>
+						{/*
+						 * Portaled to <body>: the overlay is `position: fixed`, and
+						 * the enclosing tab panel keeps a `filter` after its enter
+						 * animation, which makes it the containing block for fixed
+						 * descendants — an in-place overlay renders offset from the
+						 * row, and since dnd-kit collides with the OVERLAY's rect,
+						 * every keyboard/pointer reorder then targets the wrong row.
+						 * Tokens resolve on `:root` / the overlay's own class, so the
+						 * portal stays themed.
+						 */}
+						{createPortal(
+							<DragOverlay>
+								{dnd.activePage !== null ? (
+									<div
+										className="ak-pages-panel flex h-6 items-center gap-2 rounded-sm bg-[var(--ak-pages-muted,var(--ak-studio-muted))] px-2 text-xs text-[var(--ak-pages-fg,var(--ak-studio-fg))] shadow-lg ring-1 ring-[var(--ak-pages-ring,var(--ak-studio-ring))]"
+										data-testid="ak-layer-pages-drag-overlay"
+									>
+										{dnd.activePage.title.length > 0
+											? dnd.activePage.title
+											: (dnd.activePage.path ?? dnd.activePage.id)}
+									</div>
+								) : null}
+							</DragOverlay>,
+							document.body,
+						)}
 					</DndContext>
 				)}
 			</div>
