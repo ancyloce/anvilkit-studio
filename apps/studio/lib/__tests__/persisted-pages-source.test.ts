@@ -118,6 +118,18 @@ describe("persisted pages source — guarded write-throughs", () => {
 		await Promise.all(guard.settled);
 
 		expect(guard.calls.map((c) => c.action)).toEqual(["create", "duplicate"]);
+		// Each new page's host document carries its own title/slug from the
+		// start (what gets persisted), never the showcase seed's.
+		expect(noop).toHaveBeenCalledWith(guard.calls[0]?.id, {
+			title: "Launch",
+			slug: "launch",
+			status: "published",
+		});
+		expect(noop).toHaveBeenCalledWith(guard.calls[1]?.id, {
+			title: "About (copy)",
+			slug: "about-copy",
+			status: "published",
+		});
 		expect(fetchMock.mock.calls[0]?.[0]).toBe("/api/pages/publish");
 		expect(sentBody(0)).toMatchObject({
 			id: guard.calls[0]?.id,

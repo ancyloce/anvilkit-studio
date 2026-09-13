@@ -87,12 +87,30 @@ const SEED_PAGES: readonly MutablePage[] = [
 ];
 
 export interface PersistedPagesSource extends StudioPagesSource {
+	// Every mutation handler `StudioPagesSource` leaves optional is implemented
+	// here, so callers (the editor page, tests) invoke them without narrowing.
+	onSelect(pageId: string): void;
+	onCreate(input: StudioPageCreateInput): void;
+	onRename(input: StudioPageRenameInput): void;
+	onDelete(pageId: string): void;
+	onDuplicate(pageId: string): Promise<StudioPage>;
+	onReorder(input: StudioPageReorderInput): void;
+	onUpdateSettings(input: StudioPageSettingsInput): void;
 	/** Manually set the active page id from outside the source. */
 	setActivePageId(id: string): void;
 }
 
-const pathToSlug = (path: string): string =>
-	path.replace(/^\/+/, "").replace(/\/+$/, "");
+/**
+ * A `PageRootSchema`-valid slug (`/^[a-z0-9]+(?:-[a-z0-9]+)*$/`) from a path
+ * (`/about-us` → `about-us`, `/docs/intro` → `docs-intro`) or a title
+ * (`QA Demo Page` → `qa-demo-page`). Empty when nothing slug-safe remains —
+ * callers fall back to the page id, which is always valid.
+ */
+const toSlug = (value: string): string =>
+	value
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/^-+|-+$/g, "");
 
 /** Seed a fresh published document carrying the new page's title + slug. */
 function docFor(title: string, slug: string): DemoPageData {
@@ -186,7 +204,7 @@ export function createPersistedPagesSource(
 
 	const slugFor = (page: MutablePage): string =>
 		accessor?.getRootProps(page.id)?.slug ??
-		(page.path !== undefined ? pathToSlug(page.path) : page.id);
+		(page.path !== undefined ? toSlug(page.path) || page.id : page.id);
 
 	/** Push the page's current `root.props` (merged with `patch`) to storage. */
 	const patchSettingsThrough = (
@@ -218,7 +236,11 @@ export function createPersistedPagesSource(
 		},
 		onCreate(input: StudioPageCreateInput): void {
 			const id = `page-${Date.now()}`;
-			const slug = pathToSlug(input.path.length > 0 ? input.path : input.title);
+			// A title like "QA Demo Page" must still yield a slug the page
+			// schema accepts, or the record is never written and the page
+			// cannot be saved.
+			const slug =
+				toSlug(input.path.length > 0 ? input.path : input.title) || id;
 			const next: MutablePage = {
 				id,
 				title: input.title,
@@ -226,6 +248,13 @@ export function createPersistedPagesSource(
 				...(input.route === true ? { route: true } : {}),
 			};
 			pages.push(next);
+			// The host document the page opens with carries its own title/slug
+			// (what `docFor` persists), not the showcase seed's.
+			accessor?.updateRootProps(id, {
+				title: input.title,
+				slug,
+				status: "published",
+			});
 			activeId = id;
 			notify();
 			// Persist as a published document under the same id so `/render/<slug>`
@@ -249,7 +278,9 @@ export function createPersistedPagesSource(
 				"rename",
 				{
 					title: input.title,
-					...(input.path !== undefined ? { slug: pathToSlug(input.path) } : {}),
+					...(input.path !== undefined
+						? { slug: toSlug(input.path) || input.id }
+						: {}),
 				},
 				{ title: input.title, slug: slugFor(page) },
 			);
@@ -280,10 +311,15 @@ export function createPersistedPagesSource(
 					: {}),
 			};
 			pages.push(copy);
+			const copySlug = `${slugFor(source)}-copy`;
+			accessor?.updateRootProps(id, {
+				title: copy.title,
+				slug: copySlug,
+				status: "published",
+			});
 			notify();
 			// Persist the copy under the optimistic id (keeps the rail id and the
 			// stored record id aligned, unlike the server-minted `/duplicate` id).
-			const copySlug = `${slugFor(source)}-copy`;
 			writeThrough(id, "duplicate", (expectedPageRevision) =>
 				persistPage("publish", docFor(copy.title, copySlug), {
 					id,
