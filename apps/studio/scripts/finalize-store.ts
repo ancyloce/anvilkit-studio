@@ -494,8 +494,11 @@ async function main(): Promise<number> {
 				store,
 				values.write === true,
 				(record) =>
+					// A rewrite is a write of the record it read, so its page
+					// revision advances from the stored one like any other write.
 					stampSchemaRevision(
 						record as unknown as Parameters<typeof stampSchemaRevision>[0],
+						record as unknown as Parameters<typeof stampSchemaRevision>[1],
 					) as unknown as Record<string, unknown>,
 				STORE_SCHEMA_REVISION,
 			),
