@@ -126,6 +126,15 @@ export default defineConfig({
 			url: "http://localhost:3000",
 			reuseExistingServer: !process.env.CI,
 			timeout: 180_000,
+			// Playwright's default teardown SIGKILLs the command's process group,
+			// which kills `dev-collab.mjs` before its own shutdown can signal the
+			// detached `next dev` and relay it supervises; those then outlive the
+			// run holding :3000, the relay port and the inherited stdio pipes, so
+			// Playwright never sees the server "close" (the run hangs after the
+			// last test) and the next run attaches to the stale server. A SIGTERM
+			// first lets the supervisor tear its children down; SIGKILL follows
+			// only if that takes longer than the timeout.
+			gracefulShutdown: { signal: "SIGTERM", timeout: 15_000 },
 			// Pin the page store to the ephemeral in-memory backend for E2E: the
 			// runtime default is now `sqlite` (durable), but tests assert on the
 			// client-seeded rail + per-run state, so memory keeps runs hermetic
