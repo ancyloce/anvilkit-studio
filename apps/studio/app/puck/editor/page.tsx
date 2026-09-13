@@ -14,6 +14,7 @@ import type { ExportPreflightResult } from "@anvilkit/core/editor";
 import type {
 	EditorExportCapabilities,
 	StudioPage,
+	StudioPluginContext,
 } from "@anvilkit/core/types";
 import { puckDataToIR } from "@anvilkit/ir";
 import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
@@ -79,6 +80,7 @@ import {
 	demoLayerQuickAddPlugin,
 	getDemoDataFromSearchParam,
 } from "@/lib/puck-demo";
+import { createPuckApiBridgePlugin } from "@/lib/puck-api-bridge-plugin";
 import { smokeTestPlugin } from "@/lib/smoke-test-plugin";
 import {
 	notifyPersistedStudioLocaleChanged,
@@ -317,6 +319,13 @@ export default function PuckEditorPage() {
 	// the author sees; `null` until the first edit of the open page, when the
 	// page's own document (`publishedData`) is what there is to save.
 	const liveDataRef = useRef<Data<DemoComponents, PageRootProps> | null>(null);
+	// The mounted editor's plugin context (`null` while no editor is mounted
+	// with its Puck API bound), so a host-side root-prop patch of the open
+	// page can be dispatched into the document Puck holds.
+	const puckCtxRef = useRef<StudioPluginContext | null>(null);
+	const [puckApiBridgePlugin] = useState(() =>
+		createPuckApiBridgePlugin(puckCtxRef),
+	);
 	// Why the last write of a page (save, publish or a page-rail write) wrote
 	// nothing, shown above the editor. The edits stay in the editor; nothing
 	// is retried, overwritten or merged.
@@ -601,10 +610,10 @@ export default function PuckEditorPage() {
 							props: { ...(doc.root.props as PageRootProps), ...patch },
 						},
 					});
-					const existing = pageDataMap[id];
-					if (existing !== undefined) {
-						pageDataMap[id] = applyPatch(existing);
-					}
+					// A page created at runtime has no document yet: seed one that
+					// carries its own root props, so the rail, the breadcrumb and
+					// the editor it opens in never show the showcase seed's.
+					pageDataMap[id] = applyPatch(pageDataMap[id] ?? createDemoData());
 					if (id === activePageIdRef.current) {
 						setPublishedData((current) => applyPatch(current));
 						// The open page's live document (unsaved edits) carries the
@@ -613,6 +622,25 @@ export default function PuckEditorPage() {
 						if (liveDataRef.current !== null) {
 							liveDataRef.current = applyPatch(liveDataRef.current);
 						}
+						// Puck holds the open page's document (`data` is initial-
+						// only) and its `onChange` hands back the whole document,
+						// so the patch has to reach Puck too or the next edit
+						// restores the old root props into `liveDataRef` and the
+						// next save/publish writes them. One functional
+						// `setData` (the repo's root-prop write path; recorded so
+						// undoing a later edit does not revert the rename) against
+						// whatever Puck holds by then — unsaved edits, lock and
+						// library included. Not dispatched while no editor is
+						// bound (page switch in flight): that editor seeds from
+						// the patched `publishedData`.
+						puckCtxRef.current?.getPuckApi().dispatch({
+							type: "setData",
+							recordHistory: true,
+							data: (previous) =>
+								applyPatch(
+									previous as unknown as Data<DemoComponents, PageRootProps>,
+								) as unknown as Data,
+						});
 					}
 				},
 			}),
@@ -902,6 +930,7 @@ export default function PuckEditorPage() {
 	const plugins = useMemo(() => {
 		const base = [
 			smokeTestPlugin,
+			puckApiBridgePlugin,
 			pageValidationPlugin,
 			lazyHtmlExportPlugin,
 			lazyReactExportPlugin,
@@ -918,7 +947,7 @@ export default function PuckEditorPage() {
 			demoLayerQuickAddPlugin,
 		];
 		return collabPlugins ? [...base, ...collabPlugins] : base;
-	}, [collabPlugins]);
+	}, [collabPlugins, puckApiBridgePlugin]);
 
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
