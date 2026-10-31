@@ -23,10 +23,10 @@ import * as AnvilkitUiLibUtils from "@anvilkit/ui/lib/utils";
 import * as AnvilkitUiRainbowButton from "@anvilkit/ui/rainbow-button";
 import * as PuckCore from "@puckeditor/core";
 import * as React from "react";
-import * as ReactDom from "react-dom";
-import * as ReactDomClient from "react-dom/client";
 import * as ReactJsxDevRuntime from "react/jsx-dev-runtime";
 import * as ReactJsxRuntime from "react/jsx-runtime";
+import * as ReactDom from "react-dom";
+import * as ReactDomClient from "react-dom/client";
 
 export const HOST_PROFILE_ID = "studio-host-v1";
 export const REGISTRY_ABI_VERSION = "1.0.0";

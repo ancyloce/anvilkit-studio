@@ -181,7 +181,7 @@ describe("page-api: expected page revision and remote component lock", () => {
 				entries: [
 					{
 						...remoteHeroLock.entries[0],
-						releaseManifestDigest: "sha256:short",
+						browserManifestDigest: "sha256:short",
 					},
 				],
 			},
@@ -280,6 +280,42 @@ describe("page-api: expected page revision and remote component lock", () => {
 			expect(after.title).toBe("Renamed");
 			expect(settings.body.data.pageRevision).toBe(3);
 		}
+	});
+
+	it("carries a complete lock of the earlier S1 shape byte-exact instead of upgrading it", async () => {
+		const storage = sqliteStorage();
+		// The S1-T04 shape: `releaseManifestDigest`, no `packageName`, no
+		// per-entry `schemaVersion`. No identity mapping is proven for it, so
+		// it stays unreadable and is never rewritten into the contract shape.
+		const s1Lock = {
+			schemaVersion: 1,
+			entries: [
+				{
+					componentId: "cmp-hero-fixture",
+					puckType: "RemoteHero",
+					releaseId: "release-hero-0.2.2",
+					packageVersion: "0.2.2",
+					releaseManifestDigest: `sha256:${"a".repeat(64)}`,
+					hostProfileId: "studio-host-v1",
+				},
+			],
+		};
+		const stored = await storage.saveDraft({
+			slug: "s1-lock",
+			data: lockedPageData("s1-lock", s1Lock),
+		});
+		const result = await saveDraft(storage, {
+			id: stored.id,
+			slug: "s1-lock",
+			data: lockedPageData("s1-lock"),
+			expectedPageRevision: stored.pageRevision,
+		});
+		expect(result.status).toBe(200);
+		if (!result.body.ok) throw new Error("save failed");
+		const props = result.body.data.draft?.root.props as Record<string, unknown>;
+		expect(JSON.stringify(props.remoteComponentLock)).toBe(
+			JSON.stringify(s1Lock),
+		);
 	});
 });
 

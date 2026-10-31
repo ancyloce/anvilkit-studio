@@ -48,16 +48,18 @@ export function pageData(
 	} as unknown as DemoPageData;
 }
 
-/** A valid `RemoteComponentLockV1` pinning one remote Hero release. */
+/** A valid page component lock (contracts `pageComponentLock`) pinning one remote Hero release. */
 export const remoteHeroLock = {
 	schemaVersion: 1,
 	entries: [
 		{
+			schemaVersion: 1,
 			componentId: "cmp-hero-fixture",
 			puckType: "RemoteHero",
 			releaseId: "release-hero-0.2.2",
+			packageName: "@anvilkit-fixtures/hero",
 			packageVersion: "0.2.2",
-			releaseManifestDigest: `sha256:${"a".repeat(64)}`,
+			browserManifestDigest: `sha256:${"a".repeat(64)}`,
 			hostProfileId: "studio-host-v1",
 		},
 	],

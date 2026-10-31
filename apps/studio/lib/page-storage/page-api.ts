@@ -94,7 +94,7 @@ function checkWriteGuards(body: {
 			{
 				level: "error",
 				code: "E_PAGE_REMOTE_LOCK_INVALID",
-				message: `remoteComponentLock is not a valid RemoteComponentLockV1: ${lock.reason}.`,
+				message: `remoteComponentLock is not a valid page component lock: ${lock.reason}.`,
 				path: ["data", "root", "props", REMOTE_COMPONENT_LOCK_KEY],
 			},
 		]);

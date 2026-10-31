@@ -56,15 +56,56 @@ export function resolveLocale(value: string | null | undefined): DemoLocale {
 		: DEFAULT_LOCALE;
 }
 
+/** Values for the `{name}` tokens of a message; numbers are rendered as given (format them first). */
+export type DemoMessageParams = Readonly<Record<string, string | number>>;
+
 /** A bound message resolver: missing keys back-fill from `en`, then the key. */
-export type DemoTranslator = (key: DemoMessageKey) => string;
+export type DemoTranslator = (
+	key: DemoMessageKey,
+	params?: DemoMessageParams,
+) => string;
+
+/**
+ * Replaces every `{name}` token of `template` with `params[name]`; a token
+ * without a value stays visible, so a missing parameter is noticed rather
+ * than rendered as an empty string. No plural or select syntax: counts are
+ * formatted by the caller (see {@link formatNumber}).
+ */
+export function interpolate(
+	template: string,
+	params?: DemoMessageParams,
+): string {
+	if (!params) return template;
+	return template.replace(/\{([A-Za-z0-9_]+)\}/g, (token, name: string) =>
+		name in params ? String(params[name]) : token,
+	);
+}
 
 /**
  * Build a translator for `locale`. Resolution order: active locale → `en`
  * baseline → the key itself (so a typo'd key renders visibly rather than as
- * an empty string).
+ * an empty string). Optional `params` fill the message's `{name}` tokens.
  */
 export function createTranslator(locale: DemoLocale): DemoTranslator {
 	const active = CATALOGS[locale] ?? CATALOGS[DEFAULT_LOCALE];
-	return (key) => active[key] ?? en[key] ?? key;
+	return (key, params) => interpolate(active[key] ?? en[key] ?? key, params);
+}
+
+/** A count in the locale's digits and grouping (`Intl.NumberFormat`). */
+export function formatNumber(
+	locale: DemoLocale,
+	value: number | string | bigint,
+): string {
+	const n = typeof value === "string" ? Number(value) : value;
+	return new Intl.NumberFormat(locale).format(n);
+}
+
+/** A timestamp in the locale's medium date and time style (`Intl.DateTimeFormat`). */
+export function formatDateTime(locale: DemoLocale, iso: string): string {
+	const date = new Date(iso);
+	if (Number.isNaN(date.getTime())) return iso;
+	return new Intl.DateTimeFormat(locale, {
+		dateStyle: "medium",
+		timeStyle: "medium",
+	}).format(date);
 }

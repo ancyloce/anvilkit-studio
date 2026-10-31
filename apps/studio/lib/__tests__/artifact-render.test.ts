@@ -115,11 +115,33 @@ describe("reading the reference", () => {
 
 	it.each([
 		["no headers at all", {}],
-		["missing url", { [ARTIFACT_ID_HEADER]: ARTIFACT_ID, [ARTIFACT_DIGEST_HEADER]: documentDigest }],
-		["a digest that is not sha256", { [ARTIFACT_ID_HEADER]: ARTIFACT_ID, [ARTIFACT_DIGEST_HEADER]: "md5:abc", [ARTIFACT_URL_HEADER]: `${ORIGIN}/x` }],
-		["an unbounded artifact id", { [ARTIFACT_ID_HEADER]: "a".repeat(129), [ARTIFACT_DIGEST_HEADER]: documentDigest, [ARTIFACT_URL_HEADER]: `${ORIGIN}/x` }],
+		[
+			"missing url",
+			{
+				[ARTIFACT_ID_HEADER]: ARTIFACT_ID,
+				[ARTIFACT_DIGEST_HEADER]: documentDigest,
+			},
+		],
+		[
+			"a digest that is not sha256",
+			{
+				[ARTIFACT_ID_HEADER]: ARTIFACT_ID,
+				[ARTIFACT_DIGEST_HEADER]: "md5:abc",
+				[ARTIFACT_URL_HEADER]: `${ORIGIN}/x`,
+			},
+		],
+		[
+			"an unbounded artifact id",
+			{
+				[ARTIFACT_ID_HEADER]: "a".repeat(129),
+				[ARTIFACT_DIGEST_HEADER]: documentDigest,
+				[ARTIFACT_URL_HEADER]: `${ORIGIN}/x`,
+			},
+		],
 	])("refuses %s", (_name, headers) => {
-		expect(readArtifactReference(new Headers(headers as Record<string, string>))).toBeNull();
+		expect(
+			readArtifactReference(new Headers(headers as Record<string, string>)),
+		).toBeNull();
 	});
 });
 
@@ -163,7 +185,9 @@ describe("the bytes must be the bytes the reference names", () => {
 	it("refuses when the served bytes hash to something else", async () => {
 		// The URL is allowed and the response is fine — only the content differs.
 		// Without this check the surface would render whatever the origin chose.
-		serve(Buffer.from(JSON.stringify({ ...documentFixture, zones: { a: [] } })));
+		serve(
+			Buffer.from(JSON.stringify({ ...documentFixture, zones: { a: [] } })),
+		);
 		await expect(loadArtifactRender(reference())).resolves.toEqual({
 			ok: false,
 			refusal: "digest-mismatch",
