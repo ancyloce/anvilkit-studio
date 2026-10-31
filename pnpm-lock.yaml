@@ -826,6 +826,9 @@ importers:
       '@anvilkit/plugin-canvas-studio':
         specifier: workspace:*
         version: link:../../packages/extensions/plugins/plugin-canvas-studio
+      '@anvilkit/plugin-code-editor':
+        specifier: workspace:*
+        version: link:../../packages/extensions/plugins/plugin-code-editor
       '@anvilkit/plugin-collab-yjs':
         specifier: workspace:*
         version: link:../../packages/extensions/plugins/plugin-collab-yjs
@@ -934,6 +937,9 @@ importers:
       yjs:
         specifier: ^13.6.32
         version: 13.6.32
+      zod:
+        specifier: ^4.5.4
+        version: 4.5.4
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
