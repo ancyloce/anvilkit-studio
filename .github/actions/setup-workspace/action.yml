@@ -1,7 +1,7 @@
 name: Setup pnpm workspace
 description: >-
-  Set up pnpm + Node.js, install the nested packages/extensions/components
-  workspace, then install the root workspace — in that order. Assumes the
+  Set up pnpm + Node.js and install the root workspace, whose lockfile also
+  locks packages/extensions/components and its leaves. Assumes the
   repository is already checked out with submodules — a local composite
   action can only run after checkout, so the checkout step stays in each job.
 
@@ -21,40 +21,22 @@ runs:
         cache: pnpm
         cache-dependency-path: pnpm-lock.yaml
 
-    # `packages/extensions/components` is a nested pnpm workspace (its own
-    # pnpm-workspace.yaml), so the root install doesn't populate its
-    # `node_modules`. Without this step, turbo's `pnpm run build` inside a
-    # component leaf triggers pnpm 11's verify-deps-before-run auto-install,
-    # which is both slow and subject to strict-dep-builds errors on first
-    # run.
-    #
-    # ORDER MATTERS — this install must run BEFORE the root install. Several
-    # packages (packages/runtime/ui, packages/capabilities/analytics/*,
-    # packages/tooling/configs/*, and the component leaves) are members of
-    # BOTH workspaces, so whichever install runs last owns their
-    # node_modules symlinks. The components store carries its own physical
-    # react copy and an UNPATCHED @base-ui/react (the root workspace's
-    # patchedDependencies don't apply to the nested workspace), so running
-    # the components install last makes every root-workspace test that
-    # renders @anvilkit/ui crash with "Cannot read properties of null
-    # (reading 'useRef')" — the classic duplicate-React failure. Root
-    # install last keeps the shared members linked to the root store.
-    #
-    # `--config.strictDepBuilds=false` overrides the pnpm 11 default that
-    # turns ignored install scripts (esbuild, msw) into an
-    # `[ERR_PNPM_IGNORED_BUILDS]` failure. The components workspace has no
-    # build approvals of its own, so the install would otherwise abort even
-    # though the ignored scripts are safe to skip.
-    - name: Install components workspace
-      shell: bash
-      run: pnpm --dir packages/extensions/components install --frozen-lockfile --config.strictDepBuilds=false
-
+    # The root pnpm-lock.yaml is the only lock: the root workspace includes
+    # packages/extensions/components and every component leaf (src/*), and the
+    # components repository has carried no lockfile since its commit 2cf30d4. A
+    # nested `pnpm --dir packages/extensions/components install` therefore cannot
+    # run frozen (ERR_PNPM_FROZEN_LOCKFILE_WITH_OUTDATED_LOCKFILE, every CI run
+    # since 2026-09-24) and must not run at all: it would put the shared members
+    # (runtime/ui, analytics/*, tooling/configs/*, the leaves) on a second store
+    # with a duplicate React and an unpatched @base-ui/react. The nested
+    # pnpm-workspace.yaml sets verifyDepsBeforeRun: false, so turbo's builds
+    # inside a leaf never auto-install either.
     - name: Install dependencies
       shell: bash
       run: pnpm install --frozen-lockfile
 
     # Fail fast if the duplicate-React landmine ever returns (e.g. a step
-    # reorder puts a components-workspace install after the root install):
+    # installs the nested components workspace again):
     # shared workspace members must resolve react from the ROOT store, never
     # from the components workspace store.
     - name: Verify single React instance
@@ -68,7 +50,7 @@ runs:
               echo "::error::$link resolves into the components workspace store ($target)." \
                 "This creates a second physical React copy and an unpatched @base-ui/react," \
                 "crashing every root-workspace test that renders @anvilkit/ui." \
-                "The root 'pnpm install' must run AFTER the components-workspace install."
+                "Only the root 'pnpm install' may install the workspace; never install packages/extensions/components on its own."
               exit 1
               ;;
           esac
