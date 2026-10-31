@@ -174,11 +174,13 @@ test.describe("Pages panel — multi-page management", () => {
 			schemaVersion: 1,
 			entries: [
 				{
+					schemaVersion: 1,
 					componentId: "cmp-hero-fixture",
 					puckType: "RemoteHero",
 					releaseId: "release-hero-0.2.2",
+					packageName: "@anvilkit-fixtures/hero",
 					packageVersion: "0.2.2",
-					releaseManifestDigest: `sha256:${"a".repeat(64)}`,
+					browserManifestDigest: `sha256:${"a".repeat(64)}`,
 					hostProfileId: "studio-host-v1",
 				},
 			],
