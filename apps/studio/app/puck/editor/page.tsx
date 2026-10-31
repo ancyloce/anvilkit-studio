@@ -45,6 +45,13 @@ import { createCopilotSidebarPlugin } from "@/lib/copilot-sidebar-plugin";
 import { demoDataSourceAdapter } from "@/lib/demo-data-source";
 import { demoPageAdapter } from "@/lib/demo-page-adapter";
 import {
+	addLockEntry,
+	REMOTE_COMPONENT_LOCK_KEY,
+	type RemoteComponentLockEntry,
+	readRemoteComponentLock,
+} from "@/lib/host-abi/remote-component-lock";
+import { withDocumentTypes } from "@/lib/host-abi/remote-loader";
+import {
 	createLazyDemoVersionHistoryPlugins,
 	getDemoAssetRegistry,
 	lazyAssetManagerNoHeaderPlugin,
@@ -69,6 +76,7 @@ import {
 	createPersistedPagesSource,
 	type PersistedPagesWriteAction,
 } from "@/lib/persisted-pages-source";
+import { createPuckApiBridgePlugin } from "@/lib/puck-api-bridge-plugin";
 import {
 	createDemoConfig,
 	createDemoData,
@@ -80,7 +88,6 @@ import {
 	demoLayerQuickAddPlugin,
 	getDemoDataFromSearchParam,
 } from "@/lib/puck-demo";
-import { createPuckApiBridgePlugin } from "@/lib/puck-api-bridge-plugin";
 import { smokeTestPlugin } from "@/lib/smoke-test-plugin";
 import {
 	notifyPersistedStudioLocaleChanged,
@@ -90,6 +97,7 @@ import {
 import { tokenSwatchComponentConfig } from "@/lib/token-swatch-component";
 import { AssetManagerE2EPanel } from "./asset-manager-e2e-panel";
 import { DemoToolsExportPanel } from "./demo-tools-export-panel";
+import { RemoteComponentsPanel, useSessionConfig } from "./remote-components";
 import { useAssetManagerE2E } from "./use-asset-manager-e2e";
 
 const editorShell = "flex flex-col min-h-svh [background:var(--demo-page-bg)]";
@@ -702,9 +710,11 @@ export default function PuckEditorPage() {
 				pageDataMap[prev] = liveDataRef.current;
 			}
 			const incoming = pageDataMap[next] ?? createDemoData();
+			// Locked remote and unknown node types are admitted structurally;
+			// the session Config gives them their release or a placeholder.
 			const guarded = guardDocumentForV2Editor(
 				incoming as unknown as Data,
-				editorDemoConfig as unknown as Config,
+				withDocumentTypes(editorDemoConfig as unknown as Config, incoming),
 			);
 			if (guarded.kind === "blocked") {
 				console.error(
@@ -772,7 +782,7 @@ export default function PuckEditorPage() {
 				// refused; it never enters the v2 editor in sidecar form.
 				const guarded = guardDocumentForV2Editor(
 					stored as unknown as Data,
-					editorDemoConfig as unknown as Config,
+					withDocumentTypes(editorDemoConfig as unknown as Config, stored),
 				);
 				if (guarded.kind === "blocked") {
 					// The page keeps its seed on screen but is written nothing:
@@ -803,6 +813,47 @@ export default function PuckEditorPage() {
 			cancelled = true;
 		};
 	}, [activePageId, pageDataMap]);
+
+	// StudioBridge session Config (P20, DD-05 §3): the open page's exact
+	// remote releases reserve their locked types before the built-ins, and
+	// anything unavailable or unlocked becomes a lossless placeholder. The
+	// editor mounts once it is resolved; it is rebuilt only when the page, its
+	// lock or its node types change.
+	const sessionConfig = useSessionConfig(
+		localizedEditorConfig as unknown as Config,
+		publishedData,
+		activePageId,
+		documentReady,
+	);
+	const [remoteNotice, setRemoteNotice] = useState<string | null>(null);
+	// Pins one exact catalog release in the open page's lock. The document the
+	// editor re-seeds from is the live one (unsaved edits included) with the
+	// new lock, because the rebuilt Config remounts Puck from `data`.
+	const handleAddRemoteComponent = useCallback(
+		(entry: RemoteComponentLockEntry) => {
+			const current = liveDataRef.current ?? publishedData;
+			const addition = addLockEntry(readRemoteComponentLock(current), entry);
+			if (addition.kind === "refused") {
+				setRemoteNotice(addition.reason);
+				return;
+			}
+			setRemoteNotice(null);
+			if (addition.kind === "present") return;
+			const next = {
+				...current,
+				root: {
+					...current.root,
+					props: {
+						...(current.root.props as PageRootProps),
+						[REMOTE_COMPONENT_LOCK_KEY]: addition.lock,
+					},
+				},
+			} as Data<DemoComponents, PageRootProps>;
+			if (liveDataRef.current !== null) liveDataRef.current = next;
+			setPublishedData(next);
+		},
+		[publishedData],
+	);
 
 	// Mirror the active page's live document into the page-data map so the
 	// pages-source derives its title/SEO (from `root.props`) off fresh data
@@ -1441,6 +1492,12 @@ export default function PuckEditorPage() {
 				</Alert>
 			) : null}
 
+			<RemoteComponentsPanel
+				session={sessionConfig}
+				onAdd={handleAddRemoteComponent}
+				notice={remoteNotice}
+			/>
+
 			<section
 				className={editorPanel}
 				data-testid="studio-mount"
@@ -1460,7 +1517,7 @@ export default function PuckEditorPage() {
 				  needed; we render one `<Studio>` for both collab-on and
 				  collab-off paths.
 				*/}
-				{documentReady ? (
+				{documentReady && sessionConfig !== null ? (
 					<Studio
 						// Remount on page switch so Puck re-initializes its draft
 						// from the newly selected page's `data` (Puck owns its
@@ -1475,7 +1532,7 @@ export default function PuckEditorPage() {
 						// read post-mount from the URL, so the flag joins the key.
 						key={visualEditorMode ? `${activePageId}::editor` : activePageId}
 						storeId="demo-editor"
-						puckConfig={localizedEditorConfig as unknown as Config}
+						puckConfig={sessionConfig.config}
 						data={publishedData}
 						onChange={handleLiveChange}
 						plugins={plugins}
