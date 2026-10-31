@@ -69,6 +69,7 @@ const nextConfig = {
 		"@anvilkit/plugin-ai-image",
 		"@anvilkit/plugin-asset-manager",
 		"@anvilkit/plugin-canvas-studio",
+		"@anvilkit/plugin-code-editor",
 		"@anvilkit/plugin-collab-yjs",
 		"@anvilkit/plugin-design-system",
 		"@anvilkit/plugin-page-seo",

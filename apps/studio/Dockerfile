@@ -32,25 +32,19 @@ WORKDIR /repo
 # context stays lean.
 COPY . .
 
-# Install with the committed lockfile. The nested `packages/extensions/components`
-# workspace has its own lockfile and is installed separately (mirrors CI).
-#
-# ORDER MATTERS: the components-workspace install must run BEFORE the root
-# install. `packages/extensions/components` is a nested pnpm workspace whose
-# own pnpm-workspace.yaml also claims packages/runtime/ui,
-# packages/capabilities/analytics/*, and packages/tooling/configs/* — so
-# those shared packages' node_modules get resolved by whichever `pnpm
-# install` runs LAST. The components store pins its own (unpatched, and for
-# analytics/*, a newer typescript@7.0.2 vs. the root's 7.0.2) dependency
-# tree, so running it last silently swaps in different deps for those shared
-# packages — for analytics/react this forces rsbuild-plugin-dts onto its
-# "tsgo" (TypeScript-Go native-preview) declaration backend, which fails
-# with spurious TS7016s resolving a sibling workspace package's types. Same
-# root cause as the duplicate-React landmine documented in
-# .github/actions/setup-workspace/action.yml — mirror its install order here.
+# Install with the committed root lockfile only.
+# The root pnpm-lock.yaml is the only lock: the root workspace includes
+# packages/extensions/components and every component leaf (src/*), and the
+# components repository has carried no lockfile since its commit 2cf30d4. A
+# nested `pnpm --dir packages/extensions/components install` therefore cannot
+# run frozen (ERR_PNPM_FROZEN_LOCKFILE_WITH_OUTDATED_LOCKFILE, every CI run
+# since 2026-09-24) and must not run at all: it would put the shared members
+# (runtime/ui, analytics/*, tooling/configs/*, the leaves) on a second store
+# with a duplicate React and an unpatched @base-ui/react. The nested
+# pnpm-workspace.yaml sets verifyDepsBeforeRun: false, so turbo's builds
+# inside a leaf never auto-install either.
 RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
-	pnpm --dir packages/extensions/components install --frozen-lockfile --config.strictDepBuilds=false \
-	&& pnpm install --frozen-lockfile
+	pnpm install --frozen-lockfile
 
 # Build the app and ONLY its workspace dependencies via Turbo (`^build`).
 # DOCKER_BUILD flips next.config.js to standalone output (see that file).

@@ -2,6 +2,9 @@
 	"$schema": "https://biomejs.dev/schemas/2.5.12/schema.json",
 	"root": false,
 	"extends": ["@anvilkit/biome-config/base", "@anvilkit/biome-config/next-js"],
+	"files": {
+		"includes": ["!lib/agent/generated"]
+	},
 	"css": {
 		"parser": {
 			"tailwindDirectives": true

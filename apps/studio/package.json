@@ -15,6 +15,7 @@
 		"build": "pnpm --filter @anvilkit/canvas-editor build:css && next build --turbopack",
 		"start": "next start",
 		"lint": "pnpm exec biome lint .",
+		"check:agent-contract": "node scripts/check-agent-contract.mjs",
 		"check:client-secret-leak": "node scripts/check-client-secret-leak.mjs",
 		"typecheck": "next typegen && tsc --noEmit",
 		"test": "vitest run",
@@ -56,6 +57,7 @@
 		"@anvilkit/plugin-ai-image": "workspace:*",
 		"@anvilkit/plugin-asset-manager": "workspace:*",
 		"@anvilkit/plugin-canvas-studio": "workspace:*",
+		"@anvilkit/plugin-code-editor": "workspace:*",
 		"@anvilkit/plugin-collab-yjs": "workspace:*",
 		"@anvilkit/plugin-design-system": "workspace:*",
 		"@anvilkit/plugin-export-canvas": "workspace:*",
@@ -91,7 +93,8 @@
 		"undici": "^8.10.0",
 		"y-protocols": "^1.0.7",
 		"y-websocket": "^3.1.0",
-		"yjs": "^13.6.32"
+		"yjs": "^13.6.32",
+		"zod": "^4.5.4"
 	},
 	"devDependencies": {
 		"@anvilkit/biome-config": "workspace:*",
