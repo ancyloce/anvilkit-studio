@@ -690,6 +690,12 @@ importers:
 
   apps/playground:
     dependencies:
+      '@anvilkit/canvas-core':
+        specifier: workspace:*
+        version: link:../../packages/capabilities/canvas/core
+      '@anvilkit/canvas-editor':
+        specifier: workspace:*
+        version: link:../../packages/capabilities/canvas/editor
       '@anvilkit/core':
         specifier: workspace:*
         version: link:../../packages/runtime/core
