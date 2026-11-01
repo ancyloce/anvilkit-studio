@@ -285,6 +285,14 @@ jobs:
       - name: Set up workspace
         uses: ./.github/actions/setup-workspace
 
+      # The Canvas packages resolve @anvilkit/ui, @anvilkit/canvas-core and
+      # @anvilkit/vitest-config/node through those packages' built dist/
+      # exports, and the direct `pnpm --filter` scripts below bypass turbo's
+      # `^build` (turbo.json). Build every workspace dependency of the editor
+      # first, as canvas-interaction-perf does.
+      - name: Build Canvas dependencies
+        run: pnpm --filter "@anvilkit/canvas-editor^..." build
+
       # PLAN-0039 E0-T5: this is the fast, merge-critical Canvas gate. The
       # workspace validate/package jobs own lint/build/release checks. Keeping
       # this job to type + unit coverage + named migration suites gives branch
@@ -392,6 +400,12 @@ jobs:
 
       - name: Set up workspace
         uses: ./.github/actions/setup-workspace
+
+      # Same reason as canvas-verify: the stress suites load
+      # @anvilkit/vitest-config/node and the editor's workspace dependencies
+      # from their dist/ exports, which the direct scripts do not build.
+      - name: Build Canvas dependencies
+        run: pnpm --filter "@anvilkit/canvas-editor^..." build
 
       - name: Run Canvas Core stress suite
         run: pnpm --filter @anvilkit/canvas-core test:stress
